@@ -1,0 +1,72 @@
+---
+import '../styles/site.css';
+import SiteFooter from '../components/SiteFooter.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import { createWebsiteJsonLd, getAbsoluteUrl, siteDescription, siteTitle } from '../lib/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+  canonicalPath?: string;
+  active?: 'home' | 'papers' | 'archive' | 'workflow';
+  ogType?: 'website' | 'article';
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+}
+
+const {
+  title = siteTitle,
+  description = siteDescription,
+  canonicalPath = Astro.url.pathname,
+  active = 'home',
+  ogType = 'website',
+  jsonLd = [],
+} = Astro.props;
+
+const canonicalUrl = getAbsoluteUrl(canonicalPath, Astro.site);
+const jsonLdItems = [
+  createWebsiteJsonLd(Astro.site),
+  ...(Array.isArray(jsonLd) ? jsonLd : [jsonLd]),
+].filter(Boolean);
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonicalUrl} />
+    <meta name="title" content={title} />
+    <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+    <meta property="og:site_name" content={siteTitle} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <title>{title}</title>
+    {jsonLdItems.map((item) => <script type="application/ld+json" set:html={JSON.stringify(item)} />)}
+    <script is:inline>
+      window.MathJax = {
+        tex: {
+          inlineMath: [['\\(', '\\)']],
+          displayMath: [['\\[', '\\]']],
+        },
+        options: {
+          skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+        },
+      };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+  </head>
+  <body>
+    <SiteHeader active={active} />
+    <main>
+      <slot />
+    </main>
+    <SiteFooter />
+  </body>
+</html>

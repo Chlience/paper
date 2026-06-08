@@ -1,0 +1,67 @@
+---
+import PaperRow from '../components/PaperRow.astro';
+import Layout from '../layouts/Layout.astro';
+import data from '../generated/paper-data.json';
+
+const recentPapers = data.papers.slice(0, 8);
+const tagCounts = data.tags.map((tag) => ({
+  tag,
+  count: data.papers.filter((paper) => paper.tags.includes(tag)).length,
+}));
+---
+
+<Layout active="home" canonicalPath="/">
+  <section class="home-hero container">
+    <div>
+      <p class="eyebrow mono">papers.chlience.com</p>
+      <h1>Paper Archive</h1>
+      <p class="deck">
+        LLM、RL、systems、safety 和 theory 方向的论文阅读档案。每篇笔记保留作者关系、论文脉络、证据强度、局限和跨论文关系。
+      </p>
+    </div>
+    <div class="stats-panel" aria-label="Archive stats">
+      <div>
+        <strong>{data.papers.length}</strong>
+        <span>notes</span>
+      </div>
+      <div>
+        <strong>{data.tags.length}</strong>
+        <span>themes</span>
+      </div>
+      <div>
+        <strong>{new Date(data.generatedAt).toISOString().slice(0, 10)}</strong>
+        <span>updated</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container section-header">
+      <div>
+        <h2>Recent Notes</h2>
+        <p>按最近沉淀时间排序，保留原始论文笔记和后续讨论补充。</p>
+      </div>
+      <a class="section-link" href="/papers/">View all</a>
+    </div>
+    <div class="container paper-list">
+      {recentPapers.map((paper) => <PaperRow paper={paper} />)}
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container section-header">
+      <div>
+        <h2>Themes</h2>
+        <p>主题标签由笔记内容自动推断，用于快速浏览研究脉络。</p>
+      </div>
+    </div>
+    <div class="container tag-grid">
+      {tagCounts.map(({ tag, count }) => (
+        <a class="tag-card" href={`/papers/#tag-${tag.toLowerCase()}`}>
+          <span class="mono">{count} notes</span>
+          <strong>{tag}</strong>
+        </a>
+      ))}
+    </div>
+  </section>
+</Layout>

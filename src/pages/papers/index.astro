@@ -1,0 +1,44 @@
+---
+import PaperRow from '../../components/PaperRow.astro';
+import Layout from '../../layouts/Layout.astro';
+import data from '../../generated/paper-data.json';
+
+const papersByTag = data.tags.map((tag) => ({
+  tag,
+  papers: data.papers.filter((paper) => paper.tags.includes(tag)),
+}));
+---
+
+<Layout active="papers" title="Papers | Chlience Paper Archive" canonicalPath="/papers/">
+  <section class="page-header container">
+    <p class="eyebrow mono">All notes</p>
+    <h1>论文笔记</h1>
+    <p class="deck">当前收录 {data.papers.length} 篇论文或技术文章，按阅读沉淀时间排序。</p>
+  </section>
+
+  <section class="section compact">
+    <div class="container paper-list">
+      {data.papers.map((paper) => <PaperRow paper={paper} />)}
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container section-header">
+      <div>
+        <h2>By Theme</h2>
+        <p>同一篇文章可出现在多个主题中。</p>
+      </div>
+    </div>
+
+    <div class="container theme-stack">
+      {papersByTag.map(({ tag, papers }) => (
+        <section class="theme-section" id={`tag-${tag.toLowerCase()}`}>
+          <h3>{tag}</h3>
+          <div class="theme-links">
+            {papers.map((paper) => <a href={paper.path}>{paper.title}</a>)}
+          </div>
+        </section>
+      ))}
+    </div>
+  </section>
+</Layout>

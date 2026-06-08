@@ -1,0 +1,58 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import data from '../../generated/paper-data.json';
+import { createArticleJsonLd, getAbsoluteUrl } from '../../lib/site';
+
+export function getStaticPaths() {
+  return data.papers.map((paper) => ({
+    params: { slug: paper.slug },
+    props: { paper },
+  }));
+}
+
+const { paper } = Astro.props;
+const canonicalPath = paper.path;
+const articleUrl = getAbsoluteUrl(canonicalPath, Astro.site);
+const h2Headings = paper.headings.filter((heading) => heading.depth === 2);
+---
+
+<Layout
+  active="papers"
+  title={`${paper.title} | Chlience Paper Archive`}
+  description={paper.summary}
+  canonicalPath={canonicalPath}
+  ogType="article"
+  jsonLd={createArticleJsonLd({
+    title: paper.title,
+    description: paper.summary,
+    url: articleUrl,
+    date: paper.date,
+    authors: paper.authors,
+  })}
+>
+  <article class="paper-page container">
+    <header class="paper-header">
+      <p class="eyebrow mono">{paper.slug}</p>
+      <h1>{paper.title}</h1>
+      <p class="deck">{paper.summary}</p>
+      <div class="paper-meta">
+        {paper.date && <span>{paper.date}</span>}
+        {paper.currentVersion && <span>{paper.currentVersion}</span>}
+        {paper.sourceUrl && <a href={paper.sourceUrl}>Source</a>}
+        {paper.tags.map((tag) => <a href={`/papers/#tag-${tag.toLowerCase()}`}>{tag}</a>)}
+      </div>
+    </header>
+
+    <div class="paper-layout">
+      {h2Headings.length > 0 && (
+        <aside class="toc" aria-label="目录">
+          <strong>目录</strong>
+          <nav>
+            {h2Headings.map((heading) => <a href={`#${heading.id}`}>{heading.text}</a>)}
+          </nav>
+        </aside>
+      )}
+      <div class="prose" set:html={paper.html} />
+    </div>
+  </article>
+</Layout>

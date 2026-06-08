@@ -1,0 +1,10 @@
+---
+import data from '../generated/paper-data.json';
+---
+
+<footer class="site-footer">
+  <div class="container site-footer-inner">
+    <p>Chlience Paper Archive</p>
+    <p class="muted">Generated {new Date(data.generatedAt).toISOString().slice(0, 10)} · {data.papers.length} notes</p>
+  </div>
+</footer>

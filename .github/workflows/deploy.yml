@@ -1,0 +1,112 @@
+name: Deploy Paper Archive
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-paper-archive
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    name: Build and deploy static site
+    runs-on: ubuntu-latest
+    env:
+      PUBLIC_SITE_URL: https://papers.chlience.com
+      ARTIFACT_NAME: papers-site-${{ github.sha }}.tar.gz
+      DEPLOY_HOST: chlience.com
+      DEPLOY_USER: chlience
+      DEPLOY_PORT: "22"
+      DEPLOY_ROOT: /var/www/papers
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build site
+        run: npm run build
+
+      - name: Check generated site
+        run: npm run check:site
+
+      - name: Pack static artifact
+        run: tar -C dist -czf "$ARTIFACT_NAME" .
+
+      - name: Configure SSH
+        run: |
+          set -euo pipefail
+
+          test -n "${{ secrets.CHLIENCE_SSH_PRIVATE_KEY }}"
+
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          printf '%s\n' "${{ secrets.CHLIENCE_SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -p "$DEPLOY_PORT" -H "$DEPLOY_HOST" >> ~/.ssh/known_hosts
+
+      - name: Upload artifact
+        run: |
+          set -euo pipefail
+
+          REMOTE_ARTIFACT="/tmp/${ARTIFACT_NAME}"
+
+          scp \
+            -i ~/.ssh/deploy_key \
+            -P "$DEPLOY_PORT" \
+            -o IdentitiesOnly=yes \
+            "$ARTIFACT_NAME" \
+            "$DEPLOY_USER@$DEPLOY_HOST:$REMOTE_ARTIFACT"
+
+      - name: Activate release
+        env:
+          RELEASE_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+
+          ssh \
+            -i ~/.ssh/deploy_key \
+            -p "$DEPLOY_PORT" \
+            -o IdentitiesOnly=yes \
+            "$DEPLOY_USER@$DEPLOY_HOST" \
+            "DEPLOY_ROOT='$DEPLOY_ROOT' RELEASE_SHA='$RELEASE_SHA' ARTIFACT_NAME='$ARTIFACT_NAME' bash -s" <<'REMOTE'
+          set -euo pipefail
+
+          case "$DEPLOY_ROOT" in
+            /var/www/papers|/var/www/papers/*) ;;
+            *)
+              echo "Refusing unsafe DEPLOY_ROOT: $DEPLOY_ROOT" >&2
+              exit 1
+              ;;
+          esac
+
+          ARTIFACT="/tmp/$ARTIFACT_NAME"
+          RELEASES_DIR="$DEPLOY_ROOT/releases"
+          RELEASE_DIR="$RELEASES_DIR/$RELEASE_SHA"
+
+          test -f "$ARTIFACT"
+          mkdir -p "$RELEASE_DIR"
+          tar -xzf "$ARTIFACT" -C "$RELEASE_DIR"
+          ln -sfn "$RELEASE_DIR" "$DEPLOY_ROOT/current"
+
+          find "$RELEASES_DIR" -mindepth 1 -maxdepth 1 -type d -printf '%T@ %p\n' \
+            | sort -rn \
+            | tail -n +6 \
+            | cut -d' ' -f2- \
+            | xargs -r rm -rf
+
+          rm -f "$ARTIFACT"
+          REMOTE

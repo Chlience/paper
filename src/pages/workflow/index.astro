@@ -1,0 +1,17 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import data from '../../generated/paper-data.json';
+
+const workflow = data.utilities.find((page) => page.slug === 'workflow');
+---
+
+<Layout active="workflow" title="Workflow | Chlience Paper Archive" canonicalPath="/workflow/">
+  <article class="utility-page container">
+    <header class="page-header slim">
+      <p class="eyebrow mono">SOP</p>
+      <h1>{workflow?.title}</h1>
+      <p class="deck">本目录用于论文阅读、分析、作者关系跟踪和 Markdown 存档的工作流。</p>
+    </header>
+    <div class="prose" set:html={workflow?.html ?? ''} />
+  </article>
+</Layout>

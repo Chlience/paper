@@ -1,0 +1,17 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import data from '../../generated/paper-data.json';
+
+const template = data.utilities.find((page) => page.slug === 'template');
+---
+
+<Layout active="workflow" title="Note Template | Chlience Paper Archive" canonicalPath="/template/">
+  <article class="utility-page container">
+    <header class="page-header slim">
+      <p class="eyebrow mono">Template</p>
+      <h1>{template?.title}</h1>
+      <p class="deck">新增论文笔记的章节结构。</p>
+    </header>
+    <div class="prose" set:html={template?.html ?? ''} />
+  </article>
+</Layout>

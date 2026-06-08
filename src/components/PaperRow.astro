@@ -1,0 +1,33 @@
+---
+import { formatDate } from '../lib/site';
+
+interface Paper {
+  slug: string;
+  path: string;
+  title: string;
+  date?: string;
+  sourceUrl?: string;
+  authors?: string;
+  summary?: string;
+  tags?: string[];
+}
+
+interface Props {
+  paper: Paper;
+}
+
+const { paper } = Astro.props;
+---
+
+<article class="paper-row">
+  <div class="paper-row-date mono">{formatDate(paper.date)}</div>
+  <div class="paper-row-main">
+    <h3><a href={paper.path}>{paper.title}</a></h3>
+    {paper.summary && <p>{paper.summary}</p>}
+    <div class="paper-row-meta">
+      <span>{paper.slug}</span>
+      {paper.sourceUrl && <a href={paper.sourceUrl}>Source</a>}
+      {paper.tags?.map((tag) => <a href={`/papers/#tag-${tag.toLowerCase()}`}>{tag}</a>)}
+    </div>
+  </div>
+</article>
