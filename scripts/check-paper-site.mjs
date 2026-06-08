@@ -6,6 +6,7 @@ const repoRoot = process.cwd();
 const generatedFile = path.join(repoRoot, 'src/generated/paper-data.json');
 const distDir = path.join(repoRoot, 'dist');
 const legacyLocalRoot = ['', 'home', 'chlience', 'paper'].join('/');
+const expectedSiteUrl = process.env.PUBLIC_SITE_URL ?? 'https://papers.chlience.com';
 
 const requiredSectionGroups = [
   { name: 'Source', headings: ['## Source'] },
@@ -79,6 +80,37 @@ for (const file of htmlFiles) {
   const content = await fs.readFile(file, 'utf8');
   if (content.includes(legacyLocalRoot)) {
     fail(`${path.relative(repoRoot, file)} contains a local absolute path.`);
+  }
+}
+
+const sitemapXmlPath = path.join(distDir, 'sitemap.xml');
+const sitemapShardPath = path.join(distDir, 'sitemap-0.xml');
+const robotsTxtPath = path.join(distDir, 'robots.txt');
+
+if (!(await exists(sitemapXmlPath))) {
+  fail('dist/sitemap.xml is missing.');
+}
+
+if (!(await exists(sitemapShardPath))) {
+  fail('dist/sitemap-0.xml is missing.');
+}
+
+if (!(await exists(robotsTxtPath))) {
+  fail('dist/robots.txt is missing.');
+}
+
+if ((await exists(sitemapXmlPath)) && (await exists(robotsTxtPath))) {
+  const sitemapXml = await fs.readFile(sitemapXmlPath, 'utf8');
+  const robotsTxt = await fs.readFile(robotsTxtPath, 'utf8');
+  const sitemapUrl = new URL('/sitemap.xml', expectedSiteUrl).href;
+  const sitemapShardUrl = new URL('/sitemap-0.xml', expectedSiteUrl).href;
+
+  if (!robotsTxt.includes(`Sitemap: ${sitemapUrl}`)) {
+    fail(`robots.txt must point to ${sitemapUrl}.`);
+  }
+
+  if (!sitemapXml.includes(sitemapShardUrl)) {
+    fail(`sitemap.xml must include ${sitemapShardUrl}.`);
   }
 }
 
