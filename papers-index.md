@@ -16,6 +16,7 @@ Date: 2026-06-08
 | 2605.14220 | Diagnosing Training Inference Mismatch in LLM Reinforcement Learning | [2605.14220-training-inference-mismatch-llm-rl.md](2605.14220-training-inference-mismatch-llm-rl.md) | Training-Inference Mismatch, zero-mismatch rollout, VeXact, RL stability, batch-invariant kernels | Tianle Zhong / ByteDance and University of Virginia; Neiwen Ling, Yifan Pi, Zijun Wei, Tianshu Yu, Peng Wu, Xiao Yu / ByteDance; Geoffrey Fox / University of Virginia |
 | 2503.14476 | DAPO: An Open-Source LLM Reinforcement Learning System at Scale | [2503.14476-dapo-long-cot-rl-system.md](2503.14476-dapo-long-cot-rl-system.md) | Long-CoT reasoning RL, DAPO, GRPO recipe, VERL, open-source reproduction | Qiying Yu, Weinan Dai, Yuxuan Tong, Hongli Yu, Yuxuan Song / ByteDance Seed, AIR Tsinghua, SIA-Lab; Guangming Sheng / ByteDance Seed and HKU; large ByteDance Seed and Tsinghua AIR/SIA-Lab collaboration |
 | 2501.09620 | Beyond Reward Hacking: Causal Rewards for Large Language Model Alignment | [2501.09620-causal-rewards-llm-alignment.md](2501.09620-causal-rewards-llm-alignment.md) | RLHF reward modeling, causal debiasing, counterfactual invariance, MMD regularization, reward hacking | Chaoqi Wang / Meta and University of Chicago; Zhuokai Zhao, Chen Zhu, Jiayi Liu, Lizhu Zhang, Xiangjun Fan, Hao Ma, Sinong Wang / Meta; Yibo Jiang, Zhaorun Chen, Yuxin Chen / University of Chicago |
+| 2403.03185 | Correlated Proxies: A New Definition and Improved Mitigation for Reward Hacking | [2403.03185-correlated-proxies-reward-hacking.md](2403.03185-correlated-proxies-reward-hacking.md) | Reward hacking, correlated proxy reward, occupancy measure regularization, ORPO, RLHF safety | Cassidy Laidlaw, Shivam Singhal, Anca Dragan / UC Berkeley EECS |
 | 2501.12948 | DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning | [2501.12948-deepseek-r1-rl-reasoning.md](2501.12948-deepseek-r1-rl-reasoning.md) | Pure RL reasoning, DeepSeek-R1/R1-Zero, GRPO, verifiable reward, distillation, RL safety | DeepSeek-AI and 199 other authors; core contributors include Daya Guo, Peiyi Wang, Junxiao Song, Zhibin Gou, Zhihong Shao, Xiao Bi, Xingkai Yu, Shirong Ma, Haowei Zhang, Ziyi Gao |
 | 2409.19256 | HybridFlow: A Flexible and Efficient RLHF Framework | [2409.19256-hybridflow-rlhf-framework.md](2409.19256-hybridflow-rlhf-framework.md) | RLHF systems, distributed post-training infrastructure, VERL | Guangming Sheng, Chuan Wu / The University of Hong Kong; Chi Zhang, Zilingfeng Ye, Xibin Wu, Wang Zhang, Ru Zhang, Yanghua Peng, Haibin Lin / ByteDance |
 | 2606.00135 | On Effectiveness and Efficiency of Agentic Tool-calling and RL Training | [2606.00135-agentic-tool-calling-rl-training.md](2606.00135-agentic-tool-calling-rl-training.md) | Agentic tool-calling, evaluation reproducibility, RL training efficiency | Tong Liu / LMU Munich and MCML; Cheng Qian / UIUC; Matej Cief, Yuan He, Daniele Dan, Gabriella Kazai / Amazon; Nikolaos Aletras / University of Sheffield |
@@ -127,8 +128,22 @@ Date: 2026-06-08
 - Internal relation: Chaoqi Wang、Zhuokai Zhao、Yibo Jiang、Zhaorun Chen 为 equal contribution；Chaoqi Wang 连接 Meta 与 University of Chicago，并带 Meta internship 脚注；Zhuokai Zhao、Chen Zhu、Jiayi Liu、Lizhu Zhang、Xiangjun Fan、Hao Ma、Sinong Wang 属 Meta 作者群；Yibo Jiang、Zhaorun Chen、Yuxin Chen 属 University of Chicago 作者群。
 - Theme relation: causal reward modeling, counterfactual invariance, MMD independence regularization, RLHF reward hacking, length bias, sycophancy bias, concept bias, discrimination bias, Causal-DPO objective。
 
+### Cluster O: Correlated Proxy Reward Hacking 与 Occupancy Regularization
+
+- Paper: `2403.03185`
+- Institutions: University of California, Berkeley EECS。
+- Internal relation: Cassidy Laidlaw 与 Shivam Singhal 为 equal contribution；Cassidy Laidlaw 为 arXiv submission history 中的提交者；三位作者同属 UC Berkeley EECS，Anca Dragan 关系判断上承担 Berkeley human-centered AI / robot learning / alignment 研究线的 senior author 角色。
+- Theme relation: correlated proxy reward, reference policy, reward hacking definition, occupancy measure regularization, $\chi^2$ divergence, ORPO, RLHF action-distribution regularization, multi-turn agent safety。
+
 ## 跨论文关系
 
+- `2403.03185` 新增 reward hacking 的 policy-optimization 分布控制节点。它把 proxy reward 的有效性限定在 reference policy occupancy 下，并用 Theorem 5.1 说明 true reward improvement 可以由 proxy improvement 和 occupancy shift penalty 共同控制。
+- `2403.03185` 和 `2501.09620` 形成 reward hacking 防御的两层结构。CRM 在 reward model 训练阶段约束 reward output 对人工指定 spurious factor $Z$ 的依赖；ORPO 在 policy optimization 阶段约束 $\mu_\pi$ 不要过度偏离 $\mu_{\pi_{\mathrm{ref}}}$。
+- `2403.03185` 和 `2606.04075` 都讨论 RL 如何利用 reward/规则缺口。SocioHack 展示规则环境中的制度漏洞搜索；correlated proxy 论文提供解释框架：proxy 在参考行为分布上可以正相关，优化后进入相关性失效区域。
+- `2403.03185` 和 `2606.00135` 的关系是后续 agentic RL 的关键连接。当前 RLHF contextual-bandit 设置中 action distribution 与 occupancy measure 接近等价；tool-calling RL 的多轮历史、工具返回和错误恢复状态会让 action KL 难以完整约束 state-action occupancy drift。
+- `2403.03185` 和 `2409.19256` 连接在 RLHF/RLVR 系统实现层。HybridFlow/VERL 可以承载 ORPO 类方法，但需要额外支持 reference trajectory sampling、occupancy discriminator training、$\chi^2$ estimate logging 和 augmented reward injection。
+- `2403.03185` 和 `2605.14220`、`TML-2025-09-10` 共同强调 RL 闭环里的分布一致性。前者关注 reference occupancy shift，TIM/VeXact 关注 rollout/trainer logprob mismatch，TML 文章关注 batch-invariant inference 和 sampler consistency。
+- `2403.03185` 和 `2501.12948`、`2503.14476` 连接在 verifiable reward / rule reward 的 residual hacking 风险上。rule-based verifier、format reward 和 overlong reward shaping 仍可被视为 proxy reward；当策略进入 verifier 覆盖不足或格式边界区域时，correlated proxy 视角可用于诊断。
 - `2501.09620` 补充本地档案中的 reward model debiasing 节点。它把 reward hacking 的一部分来源定位为 preference data 中的 spurious factor，并用 MMD regularization 约束 reward output 对 length、sycophancy phrase、concept 和 demographic bins 的依赖。
 - `2501.09620` 和 `2606.04075` 都讨论 reward hacking。前者处理 learned reward model 对已知伪相关变量的依赖，后者处理社会规则沙盒中制度意图和可测 reward 之间的缺口；两者合起来覆盖 reward model 层和环境规则层。
 - `2501.09620` 和 `2501.12948` 的关系是 learned reward model debiasing 与 rule/verifiable reward 的互补关系。DeepSeek-R1/R1-Zero 通过 rule-based reward 降低偏好 reward model 风险，CRM 适合审计和改造 helpfulness/safety reward model、format reward 或其他 learned feedback。
@@ -193,7 +208,7 @@ Date: 2026-06-08
 - `2606.04075` 和 `2605.31514` 都涉及 LLM 行为解释边界。前者关心优化过程如何产生制度漏洞发现，后者关心研究者如何避免把行为表现过度归因为人类式属性。
 - `2510.19315` 和 `2606.06453` 都解释 Transformer 的效率优势，但层级不同：前者是理论表示简洁性，后者是 serving 系统中 sparse attention 的工程效率。
 - `2606.06453` 和 `2606.04075` 都把 AI agent 放进闭环：前者让 agent 搜索稀疏注意力算法，后者模拟 RL 模型在社会规则中搜索漏洞。两者都显示“优化闭环 + 自动搜索”会改变研究或治理问题的形态。
-- 当前十三篇论文和一篇技术文章中，`2503.14476` 与 `2409.19256` 存在 Haibin Lin、Guangming Sheng、Chi Zhang、Wang Zhang 等直接作者重叠；`2605.30290` 和 `2606.06453` 共享 CMU 机构网络；`2501.09620` 新增 reward model causal debiasing 节点；`2606.04662` 新增 optimizer geometry / Muon 曲率机制节点；`2501.12948` 是 DAPO、TIM/VeXact、STV、tool-calling RL 等 reasoning RL 论文的上游背景节点；`2606.04101` 补充 MoE training/prefill serving 的 rack-scale load balancing 系统节点，并连接 Vortex、TIM/VeXact、DeepSeek-R1、DAPO 和 HybridFlow；`2409.19256` 和 `2606.00135` 通过 VERL/HybridFlow 基础设施形成直接方法关系；`2503.14476` 和 `2605.14220` 通过 DAPO/VeXact/VERL 形成强系统关系；`TML-2025-09-10` 与 `2606.06453` 通过 serving kernel 形成系统层关系，其余关系主要通过主题和方法连接。
+- 当前十四篇论文和一篇技术文章中，`2503.14476` 与 `2409.19256` 存在 Haibin Lin、Guangming Sheng、Chi Zhang、Wang Zhang 等直接作者重叠；`2605.30290` 和 `2606.06453` 共享 CMU 机构网络；`2501.09620` 新增 reward model causal debiasing 节点；`2403.03185` 新增 correlated proxy reward hacking / occupancy regularization 节点；`2606.04662` 新增 optimizer geometry / Muon 曲率机制节点；`2501.12948` 是 DAPO、TIM/VeXact、STV、tool-calling RL 等 reasoning RL 论文的上游背景节点；`2606.04101` 补充 MoE training/prefill serving 的 rack-scale load balancing 系统节点，并连接 Vortex、TIM/VeXact、DeepSeek-R1、DAPO 和 HybridFlow；`2409.19256` 和 `2606.00135` 通过 VERL/HybridFlow 基础设施形成直接方法关系；`2503.14476` 和 `2605.14220` 通过 DAPO/VeXact/VERL 形成强系统关系；`TML-2025-09-10` 与 `2606.06453` 通过 serving kernel 形成系统层关系，其余关系主要通过主题和方法连接。
 
 ## 后续新增论文沉淀规范
 
