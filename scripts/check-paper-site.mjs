@@ -7,6 +7,8 @@ const generatedFile = path.join(repoRoot, 'src/generated/paper-data.json');
 const distDir = path.join(repoRoot, 'dist');
 const legacyLocalRoot = ['', 'home', 'chlience', 'paper'].join('/');
 const expectedSiteUrl = process.env.PUBLIC_SITE_URL ?? 'https://papers.chlience.com';
+const expectedUmamiScriptSrc = 'https://umami.chlience.com/script.js';
+const expectedUmamiWebsiteId = 'adb2da68-eff5-4878-9124-14cbde61f171';
 
 const requiredSectionGroups = [
   { name: 'Source', headings: ['## Source'] },
@@ -75,11 +77,19 @@ for (const utility of data.utilities) {
   }
 }
 
-const htmlFiles = await scanFiles(distDir, (file) => file.endsWith('.html') || file.endsWith('.xml') || file.endsWith('.txt'));
-for (const file of htmlFiles) {
+const distFiles = await scanFiles(distDir, (file) => file.endsWith('.html') || file.endsWith('.xml') || file.endsWith('.txt'));
+for (const file of distFiles) {
   const content = await fs.readFile(file, 'utf8');
   if (content.includes(legacyLocalRoot)) {
     fail(`${path.relative(repoRoot, file)} contains a local absolute path.`);
+  }
+}
+
+const htmlFiles = distFiles.filter((file) => file.endsWith('.html'));
+for (const file of htmlFiles) {
+  const content = await fs.readFile(file, 'utf8');
+  if (!content.includes(`src="${expectedUmamiScriptSrc}"`) || !content.includes(`data-website-id="${expectedUmamiWebsiteId}"`)) {
+    fail(`${path.relative(repoRoot, file)} is missing the Umami analytics script.`);
   }
 }
 

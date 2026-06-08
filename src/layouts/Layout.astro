@@ -48,6 +48,12 @@ const jsonLdItems = [
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <title>{title}</title>
+    <script
+      is:inline
+      defer
+      src="https://umami.chlience.com/script.js"
+      data-website-id="adb2da68-eff5-4878-9124-14cbde61f171"
+    ></script>
     {jsonLdItems.map((item) => <script type="application/ld+json" set:html={JSON.stringify(item)} />)}
   </head>
   <body>
