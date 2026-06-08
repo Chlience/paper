@@ -14,9 +14,10 @@ interface Paper {
 
 interface Props {
   paper: Paper;
+  showProvenance?: boolean;
 }
 
-const { paper } = Astro.props;
+const { paper, showProvenance = true } = Astro.props;
 ---
 
 <article class="paper-row">
@@ -24,10 +25,11 @@ const { paper } = Astro.props;
   <div class="paper-row-main">
     <h3><a href={paper.path}>{paper.title}</a></h3>
     {paper.summary && <p>{paper.summary}</p>}
+    {paper.authors && <p class="paper-row-authors">{paper.authors}</p>}
     <div class="paper-row-meta">
-      <span>{paper.slug}</span>
-      {paper.sourceUrl && <a href={paper.sourceUrl}>Source</a>}
-      {paper.tags?.map((tag) => <a href={`/papers/#tag-${tag.toLowerCase()}`}>{tag}</a>)}
+      {showProvenance && <span>{paper.slug}</span>}
+      {showProvenance && paper.sourceUrl && <a class="source-link" href={paper.sourceUrl}>Source</a>}
+      {paper.tags?.slice(0, 3).map((tag) => <a class="topic-link" href={`/papers/#tag-${tag.toLowerCase()}`}>{tag}</a>)}
     </div>
   </div>
 </article>

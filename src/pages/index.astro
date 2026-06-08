@@ -14,45 +14,49 @@ const tagCounts = data.tags.map((tag) => ({
   <section class="home-hero container">
     <div>
       <p class="eyebrow mono">papers.chlience.com</p>
-      <h1>Paper Archive</h1>
+      <h1>Chlience Paper Archive</h1>
       <p class="deck">
-        LLM、RL、systems、safety 和 theory 方向的论文阅读档案。每篇笔记保留作者关系、论文脉络、证据强度、局限和跨论文关系。
+        面向 LLM、RL、systems、safety、theory 和 optimizer 的论文阅读档案。每篇笔记保留来源、作者关系、证据边界、局限，以及它和其它论文的连接。
       </p>
     </div>
-    <div class="stats-panel" aria-label="Archive stats">
-      <div>
-        <strong>{data.papers.length}</strong>
-        <span>notes</span>
-      </div>
-      <div>
-        <strong>{data.tags.length}</strong>
-        <span>themes</span>
-      </div>
-      <div>
-        <strong>{new Date(data.generatedAt).toISOString().slice(0, 10)}</strong>
-        <span>updated</span>
-      </div>
+    <div class="archive-panel" aria-label="Archive reading contract">
+      <h2>Reading Contract</h2>
+      <p>每篇笔记都把论文主张、本地判断和后续讨论分开记录。</p>
+      <dl>
+        <div>
+          <dt>{data.papers.length} notes</dt>
+          <dd>独立 Markdown 档案</dd>
+        </div>
+        <div>
+          <dt>{data.tags.length} routes</dt>
+          <dd>主题入口</dd>
+        </div>
+        <div>
+          <dt>{new Date(data.generatedAt).toISOString().slice(0, 10)}</dt>
+          <dd>最近构建</dd>
+        </div>
+      </dl>
     </div>
   </section>
 
   <section class="section">
     <div class="container section-header">
       <div>
-        <h2>Recent Notes</h2>
-        <p>按最近沉淀时间排序，保留原始论文笔记和后续讨论补充。</p>
+        <h2>Latest Notes</h2>
+        <p>最近沉淀的论文和技术文章，按更新时间排序。</p>
       </div>
       <a class="section-link" href="/papers/">View all</a>
     </div>
     <div class="container paper-list">
-      {recentPapers.map((paper) => <PaperRow paper={paper} />)}
+      {recentPapers.map((paper) => <PaperRow paper={paper} showProvenance={false} />)}
     </div>
   </section>
 
   <section class="section">
     <div class="container section-header">
       <div>
-        <h2>Themes</h2>
-        <p>主题标签由笔记内容自动推断，用于快速浏览研究脉络。</p>
+        <h2>Research Routes</h2>
+        <p>主题入口用于快速进入同一问题域，数量来自当前归档。</p>
       </div>
     </div>
     <div class="container tag-grid">

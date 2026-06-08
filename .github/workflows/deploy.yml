@@ -43,6 +43,9 @@ jobs:
       - name: Check generated site
         run: npm run check:site
 
+      - name: Check Markdown math
+        run: npm run check:math
+
       - name: Pack static artifact
         run: tar -C dist -czf "$ARTIFACT_NAME" .
 

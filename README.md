@@ -22,6 +22,7 @@ http://localhost:4321
 ```bash
 npm run build
 npm run check:site
+npm run check:math
 ```
 
 The static output is written to:

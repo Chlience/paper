@@ -11,13 +11,16 @@
     "dev": "npm run build:content && astro dev",
     "build": "npm run build:content && astro build",
     "check:site": "node scripts/check-paper-site.mjs",
+    "check:math": "npm run build:content && node scripts/check-markdown-math.mjs",
     "preview": "astro preview",
     "astro": "astro"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",
     "astro": "^6.2.2",
+    "katex": "^0.17.0",
     "markdown-it": "^14.1.0",
-    "markdown-it-anchor": "^9.2.0"
+    "markdown-it-anchor": "^9.2.0",
+    "markdown-it-texmath": "^1.0.0"
   }
 }

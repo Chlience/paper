@@ -13,7 +13,7 @@ const papersByTag = data.tags.map((tag) => ({
   <section class="page-header container">
     <p class="eyebrow mono">All notes</p>
     <h1>论文笔记</h1>
-    <p class="deck">当前收录 {data.papers.length} 篇论文或技术文章，按阅读沉淀时间排序。</p>
+    <p class="deck">当前收录 {data.papers.length} 篇论文或技术文章。列表保留摘要和作者线索，主题入口用于横向比较。</p>
   </section>
 
   <section class="section compact">
@@ -25,8 +25,8 @@ const papersByTag = data.tags.map((tag) => ({
   <section class="section">
     <div class="container section-header">
       <div>
-        <h2>By Theme</h2>
-        <p>同一篇文章可出现在多个主题中。</p>
+        <h2>Topic Routes</h2>
+        <p>同一篇文章可以进入多个问题域，但每个入口只保留和该主题直接相关的论文。</p>
       </div>
     </div>
 

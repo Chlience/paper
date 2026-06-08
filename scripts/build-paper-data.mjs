@@ -1,8 +1,10 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import process from 'node:process';
+import katex from 'katex';
 import MarkdownIt from 'markdown-it';
 import markdownItAnchor from 'markdown-it-anchor';
+import markdownItTexmath from 'markdown-it-texmath';
 
 const repoRoot = process.cwd();
 const generatedDir = path.join(repoRoot, 'src/generated');
@@ -15,12 +17,28 @@ const utilityFiles = new Map([
   ['paper-note-template.md', { slug: 'template', title: 'Paper Note Template', path: '/template/' }],
 ]);
 
+const tagOverrides = new Map([
+  ['2025-09-10-defeating-nondeterminism-llm-inference', ['Systems', 'RL', 'Methodology']],
+  ['2409.19256-hybridflow-rlhf-framework', ['Systems', 'RL']],
+  ['2501.12948-deepseek-r1-rl-reasoning', ['RL', 'Safety', 'Methodology']],
+  ['2503.14476-dapo-long-cot-rl-system', ['RL', 'Systems', 'Methodology']],
+  ['2510.19315-transformers-inherently-succinct', ['Theory']],
+  ['2605.14220-training-inference-mismatch-llm-rl', ['RL', 'Systems', 'Methodology']],
+  ['2605.30290-self-trained-verification', ['RL', 'Methodology']],
+  ['2605.31514-age-of-empires-anthropomorphism', ['Methodology']],
+  ['2606.00135-agentic-tool-calling-rl-training', ['RL', 'Systems', 'Methodology']],
+  ['2606.04075-llms-hack-rewards-and-society', ['Safety', 'RL']],
+  ['2606.04101-ultraep-rack-scale-moe-load-balancing', ['Systems']],
+  ['2606.04662-muon-outperforms-adam-curvature', ['Optimizer', 'Theory']],
+  ['2606.06453-vortex-sparse-attention-serving', ['Systems']],
+]);
+
 const internalFilePaths = new Map([
   ['AGENTS.md', '/workflow/'],
   ['README.md', '/'],
 ]);
 
-const excludedPaperFiles = new Set(['AGENTS.md', 'README.md', ...utilityFiles.keys()]);
+const excludedPaperFiles = new Set(['AGENTS.md', 'DESIGN.md', 'PRODUCT.md', 'README.md', ...utilityFiles.keys()]);
 
 const slugCounts = new Map();
 const slugify = (value) => {
@@ -43,6 +61,14 @@ const md = new MarkdownIt({
   linkify: true,
   typographer: false,
 })
+  .use(markdownItTexmath, {
+    engine: katex,
+    delimiters: ['brackets', 'dollars', 'beg_end'],
+    katexOptions: {
+      output: 'htmlAndMathml',
+      throwOnError: false,
+    },
+  })
   .use(markdownItAnchor, {
     slugify,
     permalink: markdownItAnchor.permalink.linkInsideHeader({
@@ -117,6 +143,12 @@ const inferTags = (markdown, filename) => {
   return [...new Set(tags)].slice(0, 5);
 };
 
+const stripPageChrome = (markdown) =>
+  markdown
+    .replace(/^#\s+.+\n+/, '')
+    .replace(/^Date:\s*.+\n+/m, '')
+    .trim();
+
 const fileToWebPath = (file, paperFiles) => {
   if (paperFiles.has(file)) return `/papers/${file.replace(/\.md$/, '')}/`;
   if (internalFilePaths.has(file)) return internalFilePaths.get(file);
@@ -189,6 +221,7 @@ const build = async () => {
       getSourceField(raw, ['arXiv', 'URL', 'PDF', 'Source']) ||
       getSourceField(raw, 'DOI');
 
+    const pageMarkdown = stripPageChrome(raw);
     papers.push({
       slug,
       file,
@@ -199,10 +232,10 @@ const build = async () => {
       authors: getSourceField(raw, ['Authors', 'Author']) || 'Unknown',
       subjects: getSourceField(raw, 'Subjects'),
       currentVersion: getSourceField(raw, 'Current version read'),
-      tags: inferTags(raw, file),
+      tags: tagOverrides.get(slug) ?? inferTags(raw, file),
       summary: excerpt(oneSentence || getSection(raw, '论文脉络')),
-      headings: collectHeadings(raw),
-      html: renderMarkdown(raw, paperFiles),
+      headings: collectHeadings(pageMarkdown),
+      html: renderMarkdown(pageMarkdown, paperFiles),
     });
   }
 
@@ -215,13 +248,14 @@ const build = async () => {
   for (const [file, meta] of utilityFiles) {
     const sourcePath = path.join(repoRoot, file);
     const raw = await fs.readFile(sourcePath, 'utf8');
+    const pageMarkdown = stripPageChrome(raw);
     utilities.push({
       ...meta,
       file,
       date: getDate(raw),
       summary: excerpt(raw, 180),
-      headings: collectHeadings(raw),
-      html: renderMarkdown(raw, paperFiles),
+      headings: collectHeadings(pageMarkdown),
+      html: renderMarkdown(pageMarkdown, paperFiles),
     });
   }
 
