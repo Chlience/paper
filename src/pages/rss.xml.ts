@@ -16,7 +16,10 @@ export const GET: APIRoute = ({ site }) => {
     .slice(0, 30)
     .map((paper) => {
       const url = getAbsoluteUrl(paper.path, origin);
-      const pubDate = paper.date ? new Date(paper.date).toUTCString() : new Date(data.generatedAt).toUTCString();
+      const publicationTime = paper.sortTime ?? paper.date;
+      const pubDate = publicationTime
+        ? new Date(publicationTime.replace(' ', 'T')).toUTCString()
+        : new Date(data.generatedAt).toUTCString();
       return `<item>
   <title>${escapeXml(paper.title)}</title>
   <link>${escapeXml(url)}</link>

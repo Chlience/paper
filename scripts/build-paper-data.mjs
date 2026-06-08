@@ -103,7 +103,13 @@ const getFirstHeading = (markdown, fallback) => {
   return match[1].replace(/\s+(论文笔记|技术文章笔记)\s*$/, '').trim();
 };
 
-const getDate = (markdown) => markdown.match(/^Date:\s*(.+)$/m)?.[1]?.trim() ?? '';
+const getTopLevelField = (markdown, name) => {
+  const escaped = escapeRegExp(name);
+  return markdown.match(new RegExp(`^${escaped}:\\s*(.+)$`, 'm'))?.[1]?.trim() ?? '';
+};
+
+const getDate = (markdown) => getTopLevelField(markdown, 'Date');
+const getSortTime = (markdown) => getTopLevelField(markdown, 'Sort-Time') || getDate(markdown);
 
 const getSection = (markdown, heading) => {
   const lines = markdown.split('\n');
@@ -149,6 +155,7 @@ const stripPageChrome = (markdown) =>
   markdown
     .replace(/^#\s+.+\n+/, '')
     .replace(/^Date:\s*.+\n+/m, '')
+    .replace(/^Sort-Time:\s*.+\n+/m, '')
     .trim();
 
 const fileToWebPath = (file, paperFiles) => {
@@ -224,12 +231,15 @@ const build = async () => {
       getSourceField(raw, 'DOI');
 
     const pageMarkdown = stripPageChrome(raw);
+    const date = getDate(raw);
+    const sortTime = getSortTime(raw);
     papers.push({
       slug,
       file,
       path: `/papers/${slug}/`,
       title,
-      date: getDate(raw),
+      date,
+      sortTime,
       sourceUrl,
       authors: getSourceField(raw, ['Authors', 'Author']) || 'Unknown',
       subjects: getSourceField(raw, 'Subjects'),
@@ -242,8 +252,8 @@ const build = async () => {
   }
 
   papers.sort((a, b) => {
-    const dateCompare = String(b.date).localeCompare(String(a.date));
-    return dateCompare || b.slug.localeCompare(a.slug);
+    const timeCompare = String(b.sortTime).localeCompare(String(a.sortTime));
+    return timeCompare || b.slug.localeCompare(a.slug);
   });
 
   const utilities = [];
