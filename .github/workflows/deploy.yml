@@ -46,11 +46,22 @@ jobs:
       - name: Pack static artifact
         run: tar -C dist -czf "$ARTIFACT_NAME" .
 
-      - name: Configure SSH
+      - name: Check deploy key
+        id: deploy-key
         run: |
           set -euo pipefail
 
-          test -n "${{ secrets.CHLIENCE_SSH_PRIVATE_KEY }}"
+          if [ -n "${{ secrets.CHLIENCE_SSH_PRIVATE_KEY }}" ]; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+            echo "CHLIENCE_SSH_PRIVATE_KEY is not set; build completed and deploy is skipped."
+          fi
+
+      - name: Configure SSH
+        if: steps.deploy-key.outputs.enabled == 'true'
+        run: |
+          set -euo pipefail
 
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
@@ -59,6 +70,7 @@ jobs:
           ssh-keyscan -p "$DEPLOY_PORT" -H "$DEPLOY_HOST" >> ~/.ssh/known_hosts
 
       - name: Upload artifact
+        if: steps.deploy-key.outputs.enabled == 'true'
         run: |
           set -euo pipefail
 
@@ -72,6 +84,7 @@ jobs:
             "$DEPLOY_USER@$DEPLOY_HOST:$REMOTE_ARTIFACT"
 
       - name: Activate release
+        if: steps.deploy-key.outputs.enabled == 'true'
         env:
           RELEASE_SHA: ${{ github.sha }}
         run: |
