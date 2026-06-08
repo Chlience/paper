@@ -15,6 +15,7 @@ Date: 2026-06-08
 | TML-2025-09-10 | Defeating Nondeterminism in LLM Inference | [2025-09-10-defeating-nondeterminism-llm-inference.md](2025-09-10-defeating-nondeterminism-llm-inference.md) | LLM inference determinism, batch-invariant kernels, reproducible serving, true on-policy RL | Horace He / Thinking Machines Lab |
 | 2605.14220 | Diagnosing Training Inference Mismatch in LLM Reinforcement Learning | [2605.14220-training-inference-mismatch-llm-rl.md](2605.14220-training-inference-mismatch-llm-rl.md) | Training-Inference Mismatch, zero-mismatch rollout, VeXact, RL stability, batch-invariant kernels | Tianle Zhong / ByteDance and University of Virginia; Neiwen Ling, Yifan Pi, Zijun Wei, Tianshu Yu, Peng Wu, Xiao Yu / ByteDance; Geoffrey Fox / University of Virginia |
 | 2503.14476 | DAPO: An Open-Source LLM Reinforcement Learning System at Scale | [2503.14476-dapo-long-cot-rl-system.md](2503.14476-dapo-long-cot-rl-system.md) | Long-CoT reasoning RL, DAPO, GRPO recipe, VERL, open-source reproduction | Qiying Yu, Weinan Dai, Yuxuan Tong, Hongli Yu, Yuxuan Song / ByteDance Seed, AIR Tsinghua, SIA-Lab; Guangming Sheng / ByteDance Seed and HKU; large ByteDance Seed and Tsinghua AIR/SIA-Lab collaboration |
+| 2501.09620 | Beyond Reward Hacking: Causal Rewards for Large Language Model Alignment | [2501.09620-causal-rewards-llm-alignment.md](2501.09620-causal-rewards-llm-alignment.md) | RLHF reward modeling, causal debiasing, counterfactual invariance, MMD regularization, reward hacking | Chaoqi Wang / Meta and University of Chicago; Zhuokai Zhao, Chen Zhu, Jiayi Liu, Lizhu Zhang, Xiangjun Fan, Hao Ma, Sinong Wang / Meta; Yibo Jiang, Zhaorun Chen, Yuxin Chen / University of Chicago |
 | 2501.12948 | DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning | [2501.12948-deepseek-r1-rl-reasoning.md](2501.12948-deepseek-r1-rl-reasoning.md) | Pure RL reasoning, DeepSeek-R1/R1-Zero, GRPO, verifiable reward, distillation, RL safety | DeepSeek-AI and 199 other authors; core contributors include Daya Guo, Peiyi Wang, Junxiao Song, Zhibin Gou, Zhihong Shao, Xiao Bi, Xingkai Yu, Shirong Ma, Haowei Zhang, Ziyi Gao |
 | 2409.19256 | HybridFlow: A Flexible and Efficient RLHF Framework | [2409.19256-hybridflow-rlhf-framework.md](2409.19256-hybridflow-rlhf-framework.md) | RLHF systems, distributed post-training infrastructure, VERL | Guangming Sheng, Chuan Wu / The University of Hong Kong; Chi Zhang, Zilingfeng Ye, Xibin Wu, Wang Zhang, Ru Zhang, Yanghua Peng, Haibin Lin / ByteDance |
 | 2606.00135 | On Effectiveness and Efficiency of Agentic Tool-calling and RL Training | [2606.00135-agentic-tool-calling-rl-training.md](2606.00135-agentic-tool-calling-rl-training.md) | Agentic tool-calling, evaluation reproducibility, RL training efficiency | Tong Liu / LMU Munich and MCML; Cheng Qian / UIUC; Matej Cief, Yuan He, Daniele Dan, Gabriella Kazai / Amazon; Nikolaos Aletras / University of Sheffield |
@@ -119,8 +120,22 @@ Date: 2026-06-08
 - Internal relation: Shuche Wang 与 Fengzhuo Zhang 为 equal contribution；Fengzhuo Zhang 为 project lead；Fengzhuo Zhang 与 Zhuoran Yang 为 corresponding authors；Yale University 作者群包含 Fengzhuo Zhang、Dirk Bergemann、Zhuoran Yang。
 - Theme relation: Muon, Adam, optimizer geometry, second-order Taylor approximation, curvature penalty, Normalized Directional Sharpness, data imbalance, Zipf-PCFG, within-layer/cross-layer Hessian decomposition, structured matrix-block quadratic model。本地讨论已扩展 optimizer design space 对比，覆盖 AdamW、Muon、Shampoo、SOAP、Adafactor、8-bit AdamW、GaLore、APOLLO、Lion、SGD/Momentum 的计算方法、成本来源和性能来源。
 
+### Cluster N: Reward Modeling Causal Debiasing 与 RLHF Alignment
+
+- Paper: `2501.09620`
+- Institutions: Meta, University of Chicago。
+- Internal relation: Chaoqi Wang、Zhuokai Zhao、Yibo Jiang、Zhaorun Chen 为 equal contribution；Chaoqi Wang 连接 Meta 与 University of Chicago，并带 Meta internship 脚注；Zhuokai Zhao、Chen Zhu、Jiayi Liu、Lizhu Zhang、Xiangjun Fan、Hao Ma、Sinong Wang 属 Meta 作者群；Yibo Jiang、Zhaorun Chen、Yuxin Chen 属 University of Chicago 作者群。
+- Theme relation: causal reward modeling, counterfactual invariance, MMD independence regularization, RLHF reward hacking, length bias, sycophancy bias, concept bias, discrimination bias, Causal-DPO objective。
+
 ## 跨论文关系
 
+- `2501.09620` 补充本地档案中的 reward model debiasing 节点。它把 reward hacking 的一部分来源定位为 preference data 中的 spurious factor，并用 MMD regularization 约束 reward output 对 length、sycophancy phrase、concept 和 demographic bins 的依赖。
+- `2501.09620` 和 `2606.04075` 都讨论 reward hacking。前者处理 learned reward model 对已知伪相关变量的依赖，后者处理社会规则沙盒中制度意图和可测 reward 之间的缺口；两者合起来覆盖 reward model 层和环境规则层。
+- `2501.09620` 和 `2501.12948` 的关系是 learned reward model debiasing 与 rule/verifiable reward 的互补关系。DeepSeek-R1/R1-Zero 通过 rule-based reward 降低偏好 reward model 风险，CRM 适合审计和改造 helpfulness/safety reward model、format reward 或其他 learned feedback。
+- `2501.09620` 和 `2503.14476` 都处理 RL 后训练中的 reward design。DAPO 用 rule-based verifier、overlong reward shaping 和 dynamic sampling 管理 long-CoT RL 的 reward noise；CRM 用 causal regularization 降低 reward model 对长度、概念和人口属性的伪相关依赖。
+- `2501.09620` 和 `2605.30290` 都服务 feedback quality。STV 关注 verifier 自训练和自然语言反馈是否能推动 self-improvement，CRM 关注 reward model 是否利用偏好数据捷径；未来 verifier/reward model 可以同时记录 calibration、bias dependence 和 policy-level behavior drift。
+- `2501.09620` 和 `2605.14220` 都把隐藏偏差显式化为 RL 优化目标偏移。TIM/VeXact 关注 rollout/trainer 数值分布不一致，CRM 关注 reward model 对 spurious factor 的统计依赖；两者都说明表面 on-policy 的 RL 仍可能优化偏离意图的目标。
+- `2501.09620` 和 `2606.00135` 都提示 harness artifact 会进入能力测量和训练信号。Tool-calling RL 中的 tool schema、history retention、tool-call count 和 judge prompt 都可以作为 CRM 式 $Z$ 变量纳入 reward/judge debiasing。
 - `2606.04662` 补充本地档案中的 optimizer-level mechanism。DeepSeek-R1、DAPO、tool-calling RL 等论文讨论 RL/post-training recipe 和系统效率，Muon 曲率论文解释 pretraining optimizer update direction 如何通过更低 NDS 减少 second-order curvature penalty。
 - `2606.04662` 和 `2503.14476` 都把训练收益拆成可诊断项。DAPO 关注 long-CoT RL 的有效梯度、长度约束和 reward noise；Muon 论文关注 optimizer update 的 first-order gain、curvature penalty、update norm 和 NDS。
 - `2606.04662` 和 `2605.14220` 从不同层面解释训练不稳定。TIM/VeXact 关注 rollout/trainer 数值概率景观错位，Muon 论文关注 update direction 暴露在 Hessian 高曲率方向的程度；未来 RL training optimizer 可能需要同时监控 logprob mismatch 与 NDS。
@@ -178,7 +193,7 @@ Date: 2026-06-08
 - `2606.04075` 和 `2605.31514` 都涉及 LLM 行为解释边界。前者关心优化过程如何产生制度漏洞发现，后者关心研究者如何避免把行为表现过度归因为人类式属性。
 - `2510.19315` 和 `2606.06453` 都解释 Transformer 的效率优势，但层级不同：前者是理论表示简洁性，后者是 serving 系统中 sparse attention 的工程效率。
 - `2606.06453` 和 `2606.04075` 都把 AI agent 放进闭环：前者让 agent 搜索稀疏注意力算法，后者模拟 RL 模型在社会规则中搜索漏洞。两者都显示“优化闭环 + 自动搜索”会改变研究或治理问题的形态。
-- 当前十二篇论文和一篇技术文章中，`2503.14476` 与 `2409.19256` 存在 Haibin Lin、Guangming Sheng、Chi Zhang、Wang Zhang 等直接作者重叠；`2605.30290` 和 `2606.06453` 共享 CMU 机构网络；`2606.04662` 新增 optimizer geometry / Muon 曲率机制节点；`2501.12948` 是 DAPO、TIM/VeXact、STV、tool-calling RL 等 reasoning RL 论文的上游背景节点；`2606.04101` 补充 MoE training/prefill serving 的 rack-scale load balancing 系统节点，并连接 Vortex、TIM/VeXact、DeepSeek-R1、DAPO 和 HybridFlow；`2409.19256` 和 `2606.00135` 通过 VERL/HybridFlow 基础设施形成直接方法关系；`2503.14476` 和 `2605.14220` 通过 DAPO/VeXact/VERL 形成强系统关系；`TML-2025-09-10` 与 `2606.06453` 通过 serving kernel 形成系统层关系，其余关系主要通过主题和方法连接。
+- 当前十三篇论文和一篇技术文章中，`2503.14476` 与 `2409.19256` 存在 Haibin Lin、Guangming Sheng、Chi Zhang、Wang Zhang 等直接作者重叠；`2605.30290` 和 `2606.06453` 共享 CMU 机构网络；`2501.09620` 新增 reward model causal debiasing 节点；`2606.04662` 新增 optimizer geometry / Muon 曲率机制节点；`2501.12948` 是 DAPO、TIM/VeXact、STV、tool-calling RL 等 reasoning RL 论文的上游背景节点；`2606.04101` 补充 MoE training/prefill serving 的 rack-scale load balancing 系统节点，并连接 Vortex、TIM/VeXact、DeepSeek-R1、DAPO 和 HybridFlow；`2409.19256` 和 `2606.00135` 通过 VERL/HybridFlow 基础设施形成直接方法关系；`2503.14476` 和 `2605.14220` 通过 DAPO/VeXact/VERL 形成强系统关系；`TML-2025-09-10` 与 `2606.06453` 通过 serving kernel 形成系统层关系，其余关系主要通过主题和方法连接。
 
 ## 后续新增论文沉淀规范
 

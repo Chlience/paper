@@ -20,6 +20,7 @@ const utilityFiles = new Map([
 const tagOverrides = new Map([
   ['2025-09-10-defeating-nondeterminism-llm-inference', ['Systems', 'RL', 'Methodology']],
   ['2409.19256-hybridflow-rlhf-framework', ['Systems', 'RL']],
+  ['2501.09620-causal-rewards-llm-alignment', ['RL', 'Safety', 'Methodology']],
   ['2501.12948-deepseek-r1-rl-reasoning', ['RL', 'Safety', 'Methodology']],
   ['2503.14476-dapo-long-cot-rl-system', ['RL', 'Systems', 'Methodology']],
   ['2510.19315-transformers-inherently-succinct', ['Theory']],
