@@ -31,6 +31,7 @@ const tagOverrides = new Map([
   ['2509.25123-rl-compositional-skill-acquisition', ['RL', 'Methodology']],
   ['2506.10947-spurious-rewards-rethinking-rlvr', ['RL', 'Safety', 'Methodology']],
   ['2506.19248-inference-time-reward-hacking-llms', ['RL', 'Safety', 'Methodology']],
+  ['2604.04648-caution-pessimism-best-of-n-reward-hacking', ['RL', 'Safety', 'Methodology']],
   ['2510.20270-impossiblebench-test-case-exploitation', ['Safety', 'Methodology', 'Systems']],
   ['2510.19315-transformers-inherently-succinct', ['Theory']],
   ['2605.14220-training-inference-mismatch-llm-rl', ['RL', 'Systems', 'Methodology']],
