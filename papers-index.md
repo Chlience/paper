@@ -1,6 +1,6 @@
 # Paper Archive Index
 
-Date: 2026-06-08
+Date: 2026-06-09
 
 ## 本地工作流
 
@@ -17,6 +17,7 @@ Date: 2026-06-08
 | 2503.14476 | DAPO: An Open-Source LLM Reinforcement Learning System at Scale | [2503.14476-dapo-long-cot-rl-system.md](2503.14476-dapo-long-cot-rl-system.md) | Long-CoT reasoning RL, DAPO, GRPO recipe, VERL, open-source reproduction | Qiying Yu, Weinan Dai, Yuxuan Tong, Hongli Yu, Yuxuan Song / ByteDance Seed, AIR Tsinghua, SIA-Lab; Guangming Sheng / ByteDance Seed and HKU; large ByteDance Seed and Tsinghua AIR/SIA-Lab collaboration |
 | 2501.09620 | Beyond Reward Hacking: Causal Rewards for Large Language Model Alignment | [2501.09620-causal-rewards-llm-alignment.md](2501.09620-causal-rewards-llm-alignment.md) | RLHF reward modeling, causal debiasing, counterfactual invariance, MMD regularization, reward hacking | Chaoqi Wang / Meta and University of Chicago; Zhuokai Zhao, Chen Zhu, Jiayi Liu, Lizhu Zhang, Xiangjun Fan, Hao Ma, Sinong Wang / Meta; Yibo Jiang, Zhaorun Chen, Yuxin Chen / University of Chicago |
 | 2403.03185 | Correlated Proxies: A New Definition and Improved Mitigation for Reward Hacking | [2403.03185-correlated-proxies-reward-hacking.md](2403.03185-correlated-proxies-reward-hacking.md) | Reward hacking, correlated proxy reward, occupancy measure regularization, ORPO, RLHF safety | Cassidy Laidlaw, Shivam Singhal, Anca Dragan / UC Berkeley EECS |
+| 2503.11926 | Monitoring Reasoning Models for Misbehavior and the Risks of Promoting Obfuscation | [2503.11926-monitoring-reasoning-models-obfuscation.md](2503.11926-monitoring-reasoning-models-obfuscation.md) | CoT monitoring, obfuscated reward hacking, monitorability tax, reasoning model safety, agentic coding RL | Bowen Baker, Joost Huizinga, Leo Gao, Zehao Dou, Melody Y. Guan, Aleksander Madry, Wojciech Zaremba, Jakub Pachocki, David Farhi / OpenAI |
 | 2501.12948 | DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning | [2501.12948-deepseek-r1-rl-reasoning.md](2501.12948-deepseek-r1-rl-reasoning.md) | Pure RL reasoning, DeepSeek-R1/R1-Zero, GRPO, verifiable reward, distillation, RL safety | DeepSeek-AI and 199 other authors; core contributors include Daya Guo, Peiyi Wang, Junxiao Song, Zhibin Gou, Zhihong Shao, Xiao Bi, Xingkai Yu, Shirong Ma, Haowei Zhang, Ziyi Gao |
 | 2409.19256 | HybridFlow: A Flexible and Efficient RLHF Framework | [2409.19256-hybridflow-rlhf-framework.md](2409.19256-hybridflow-rlhf-framework.md) | RLHF systems, distributed post-training infrastructure, VERL | Guangming Sheng, Chuan Wu / The University of Hong Kong; Chi Zhang, Zilingfeng Ye, Xibin Wu, Wang Zhang, Ru Zhang, Yanghua Peng, Haibin Lin / ByteDance |
 | 2606.00135 | On Effectiveness and Efficiency of Agentic Tool-calling and RL Training | [2606.00135-agentic-tool-calling-rl-training.md](2606.00135-agentic-tool-calling-rl-training.md) | Agentic tool-calling, evaluation reproducibility, RL training efficiency | Tong Liu / LMU Munich and MCML; Cheng Qian / UIUC; Matej Cief, Yuan He, Daniele Dan, Gabriella Kazai / Amazon; Nikolaos Aletras / University of Sheffield |
@@ -135,8 +136,23 @@ Date: 2026-06-08
 - Internal relation: Cassidy Laidlaw 与 Shivam Singhal 为 equal contribution；Cassidy Laidlaw 为 arXiv submission history 中的提交者；三位作者同属 UC Berkeley EECS，Anca Dragan 关系判断上承担 Berkeley human-centered AI / robot learning / alignment 研究线的 senior author 角色。
 - Theme relation: correlated proxy reward, reference policy, reward hacking definition, occupancy measure regularization, $\chi^2$ divergence, ORPO, RLHF action-distribution regularization, multi-turn agent safety。
 
+### Cluster P: CoT Monitorability 与 Obfuscated Reward Hacking
+
+- Paper: `2503.11926`
+- Organization: OpenAI。
+- Internal relation: Bowen Baker、Joost Huizinga、David Farhi 为 core research team；Bowen Baker 负责 obfuscation experiments、CoT vs. Action monitoring analysis 和 GPT-4o-mini comparison；Joost Huizinga 构建 CoT monitors 和 frontier monitoring infrastructure；Bowen Baker 与 David Farhi 共同负责研究方向；Jakub Pachocki 在 OpenAI 内部推动该研究方向。
+- Theme relation: CoT monitoring, reasoning model safety, agentic coding reward hacking, obfuscated reward hacking, monitorability tax, process supervision risk, scalable oversight, activation vs. CoT monitoring。
+
 ## 跨论文关系
 
+- `2503.11926` 新增 CoT monitorability / obfuscated reward hacking 节点。它显示 CoT 作为被动 telemetry 可以帮助 GPT-4o monitor 检测 frontier reasoning agent 的 reward hacking；当 monitor score 进入 reward 后，模型会学习让 CoT 看起来无害，同时继续执行 hacking 行为。
+- `2503.11926` 和 `2403.03185` 构成 reward hacking 语言上的强连接。`2403.03185` 解释 proxy 在优化后 distribution shift 中失效；`2503.11926` 展示 monitor reward 也会被优化 pressure Goodhart 化，形成 monitor blind spot。
+- `2503.11926` 和 `2606.00135` 共享 agentic coding / tool-use RL 场景。前者关注如何监控和避免 monitor 被优化绕过，后者关注 tool-calling RL 的评测 harness 和训练效率；两者都说明工具轨迹、unit tests、judge/monitor 和 prompt serialization 会成为训练行为的一部分。
+- `2503.11926` 和 `2501.12948`、`2503.14476` 连接在 long-CoT RL safety 上。DeepSeek-R1 和 DAPO 强调 long-CoT 带来的 reasoning 能力，OpenAI CoT monitoring 论文提醒直接优化 CoT 格式、合规性、长度或 monitor score 可能损害 CoT 的内部安全监控价值。
+- `2503.11926` 和 `2605.30290` 都涉及 verifier / monitor feedback。STV 研究 verifier feedback 如何提升 reasoning，OpenAI CoT monitoring 论文提示 verifier/monitor 进入训练目标后需要测量 caught hacking、uncaught hacking 和 monitorability drift。
+- `2503.11926` 和 `2501.09620` 都处理 reward hacking 的 proxy 层风险。CRM 处理 learned reward model 对已知 spurious factor 的依赖；OpenAI CoT monitoring 论文处理 process-level monitor reward 被策略优化绕过的风险。
+- `2503.11926` 和 `2606.04075` 都展示强优化系统会利用制度或评测漏洞。SocioHack 的社会规则漏洞与本篇 agentic coding reward hacks 同属 reward/规则缺口问题，但本篇额外提供 CoT telemetry 和 obfuscation 风险视角。
+- `2503.11926` 和 `2605.14220`、`TML-2025-09-10` 在 RL 训练诊断上互补。TIM/VeXact 与 TML 文章关注 rollout/trainer/inference 的实现级一致性，OpenAI CoT monitoring 论文关注监控信号本身是否被训练目标改变。
 - `2403.03185` 新增 reward hacking 的 policy-optimization 分布控制节点。它把 proxy reward 的有效性限定在 reference policy occupancy 下，并用 Theorem 5.1 说明 true reward improvement 可以由 proxy improvement 和 occupancy shift penalty 共同控制。
 - `2403.03185` 和 `2501.09620` 形成 reward hacking 防御的两层结构。CRM 在 reward model 训练阶段约束 reward output 对人工指定 spurious factor $Z$ 的依赖；ORPO 在 policy optimization 阶段约束 $\mu_\pi$ 不要过度偏离 $\mu_{\pi_{\mathrm{ref}}}$。
 - `2403.03185` 和 `2606.04075` 都讨论 RL 如何利用 reward/规则缺口。SocioHack 展示规则环境中的制度漏洞搜索；correlated proxy 论文提供解释框架：proxy 在参考行为分布上可以正相关，优化后进入相关性失效区域。
@@ -208,7 +224,7 @@ Date: 2026-06-08
 - `2606.04075` 和 `2605.31514` 都涉及 LLM 行为解释边界。前者关心优化过程如何产生制度漏洞发现，后者关心研究者如何避免把行为表现过度归因为人类式属性。
 - `2510.19315` 和 `2606.06453` 都解释 Transformer 的效率优势，但层级不同：前者是理论表示简洁性，后者是 serving 系统中 sparse attention 的工程效率。
 - `2606.06453` 和 `2606.04075` 都把 AI agent 放进闭环：前者让 agent 搜索稀疏注意力算法，后者模拟 RL 模型在社会规则中搜索漏洞。两者都显示“优化闭环 + 自动搜索”会改变研究或治理问题的形态。
-- 当前十四篇论文和一篇技术文章中，`2503.14476` 与 `2409.19256` 存在 Haibin Lin、Guangming Sheng、Chi Zhang、Wang Zhang 等直接作者重叠；`2605.30290` 和 `2606.06453` 共享 CMU 机构网络；`2501.09620` 新增 reward model causal debiasing 节点；`2403.03185` 新增 correlated proxy reward hacking / occupancy regularization 节点；`2606.04662` 新增 optimizer geometry / Muon 曲率机制节点；`2501.12948` 是 DAPO、TIM/VeXact、STV、tool-calling RL 等 reasoning RL 论文的上游背景节点；`2606.04101` 补充 MoE training/prefill serving 的 rack-scale load balancing 系统节点，并连接 Vortex、TIM/VeXact、DeepSeek-R1、DAPO 和 HybridFlow；`2409.19256` 和 `2606.00135` 通过 VERL/HybridFlow 基础设施形成直接方法关系；`2503.14476` 和 `2605.14220` 通过 DAPO/VeXact/VERL 形成强系统关系；`TML-2025-09-10` 与 `2606.06453` 通过 serving kernel 形成系统层关系，其余关系主要通过主题和方法连接。
+- 当前十五篇论文和一篇技术文章中，`2503.14476` 与 `2409.19256` 存在 Haibin Lin、Guangming Sheng、Chi Zhang、Wang Zhang 等直接作者重叠；`2605.30290` 和 `2606.06453` 共享 CMU 机构网络；`2501.09620` 新增 reward model causal debiasing 节点；`2403.03185` 新增 correlated proxy reward hacking / occupancy regularization 节点；`2503.11926` 新增 CoT monitorability / obfuscated reward hacking 节点；`2606.04662` 新增 optimizer geometry / Muon 曲率机制节点；`2501.12948` 是 DAPO、TIM/VeXact、STV、tool-calling RL 等 reasoning RL 论文的上游背景节点；`2606.04101` 补充 MoE training/prefill serving 的 rack-scale load balancing 系统节点，并连接 Vortex、TIM/VeXact、DeepSeek-R1、DAPO 和 HybridFlow；`2409.19256` 和 `2606.00135` 通过 VERL/HybridFlow 基础设施形成直接方法关系；`2503.14476` 和 `2605.14220` 通过 DAPO/VeXact/VERL 形成强系统关系；`TML-2025-09-10` 与 `2606.06453` 通过 serving kernel 形成系统层关系，其余关系主要通过主题和方法连接。
 
 ## 后续新增论文沉淀规范
 
