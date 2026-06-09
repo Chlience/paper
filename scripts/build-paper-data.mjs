@@ -28,6 +28,7 @@ const tagOverrides = new Map([
   ['2504.13837-rlvr-reasoning-boundary-base-model', ['RL', 'Methodology']],
   ['2505.24864-prorl-prolonged-rl-reasoning-boundaries', ['RL', 'Systems', 'Methodology']],
   ['2506.10947-spurious-rewards-rethinking-rlvr', ['RL', 'Safety', 'Methodology']],
+  ['2506.19248-inference-time-reward-hacking-llms', ['RL', 'Safety', 'Methodology']],
   ['2510.19315-transformers-inherently-succinct', ['Theory']],
   ['2605.14220-training-inference-mismatch-llm-rl', ['RL', 'Systems', 'Methodology']],
   ['2605.30290-self-trained-verification', ['RL', 'Methodology']],
