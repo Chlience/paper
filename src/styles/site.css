@@ -368,29 +368,11 @@ h3 {
   font-size: 12px;
 }
 
-.paper-row-meta a.source-link,
-.paper-meta a.source-link {
-  padding-inline: 0;
-  border-color: transparent;
-  border-radius: 0;
-  color: oklch(38% 0.105 155);
-  background: transparent;
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 3px;
-}
-
 .paper-row-meta .topic-link,
 .paper-meta a[href*="#tag-"] {
   border-color: oklch(80% 0.045 155);
   color: oklch(36% 0.1 155);
   background: oklch(96% 0.025 155);
-}
-
-.paper-row-meta a.source-link:hover,
-.paper-meta a.source-link:hover {
-  color: var(--fg);
-  border-color: transparent;
 }
 
 .paper-row-meta a:hover,

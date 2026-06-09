@@ -6,7 +6,6 @@ interface Paper {
   path: string;
   title: string;
   date?: string;
-  sourceUrl?: string;
   authors?: string;
   summary?: string;
   tags?: string[];
@@ -28,7 +27,6 @@ const { paper, showProvenance = true } = Astro.props;
     {paper.authors && <p class="paper-row-authors">{paper.authors}</p>}
     <div class="paper-row-meta">
       {showProvenance && <span>{paper.slug}</span>}
-      {showProvenance && paper.sourceUrl && <a class="source-link" href={paper.sourceUrl}>Source</a>}
       {paper.tags?.slice(0, 3).map((tag) => <a class="topic-link" href={`/papers/#tag-${tag.toLowerCase()}`}>{tag}</a>)}
     </div>
   </div>
