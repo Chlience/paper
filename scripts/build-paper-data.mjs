@@ -25,6 +25,7 @@ const tagOverrides = new Map([
   ['2501.12948-deepseek-r1-rl-reasoning', ['RL', 'Safety', 'Methodology']],
   ['2503.11926-monitoring-reasoning-models-obfuscation', ['RL', 'Safety', 'Methodology']],
   ['2503.14476-dapo-long-cot-rl-system', ['RL', 'Systems', 'Methodology']],
+  ['2504.13837-rlvr-reasoning-boundary-base-model', ['RL', 'Methodology']],
   ['2510.19315-transformers-inherently-succinct', ['Theory']],
   ['2605.14220-training-inference-mismatch-llm-rl', ['RL', 'Systems', 'Methodology']],
   ['2605.30290-self-trained-verification', ['RL', 'Methodology']],
