@@ -27,6 +27,7 @@ const tagOverrides = new Map([
   ['2503.14476-dapo-long-cot-rl-system', ['RL', 'Systems', 'Methodology']],
   ['2504.13837-rlvr-reasoning-boundary-base-model', ['RL', 'Methodology']],
   ['2505.24864-prorl-prolonged-rl-reasoning-boundaries', ['RL', 'Systems', 'Methodology']],
+  ['2509.25123-rl-compositional-skill-acquisition', ['RL', 'Methodology']],
   ['2506.10947-spurious-rewards-rethinking-rlvr', ['RL', 'Safety', 'Methodology']],
   ['2506.19248-inference-time-reward-hacking-llms', ['RL', 'Safety', 'Methodology']],
   ['2510.20270-impossiblebench-test-case-exploitation', ['Safety', 'Methodology', 'Systems']],
