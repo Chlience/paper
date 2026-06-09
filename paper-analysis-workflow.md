@@ -109,7 +109,7 @@ papers-index.md
 
 ## 笔记结构
 
-新增论文笔记使用 [paper-note-template.md](paper-note-template.md)。若论文是纯理论、系统、方法论或安全评测，可调整章节名，但必须保留以下核心章节：
+新增论文笔记使用 [paper-note-template.md](/template/)。若论文是纯理论、系统、方法论或安全评测，可调整章节名，但必须保留以下核心章节：
 
 - `Source`
 - `作者与关系`
@@ -123,6 +123,21 @@ papers-index.md
 若阅读后的交流产生了有效补充，必须加入或更新：
 
 - `本地讨论补充`
+
+## 站点链接规范
+
+面向站点展示的内部链接在 Markdown 源文件中直接使用站点路径：
+
+- 已存档论文：`[2504.13837](/papers/2504.13837-rlvr-reasoning-boundary-base-model/)`。
+- 索引页：`[papers-index.md](/archive/)`。
+- 工作流页：`[paper-analysis-workflow.md](/workflow/)`。
+- 模板页：`[paper-note-template.md](/template/)`。
+
+写作要求：
+
+- 论文笔记、`papers-index.md` 和跨论文关系中的已存档论文链接必须使用 `/papers/<slug>/`，避免写成相对 `.md` 链接。
+- 当文本是在说明本地要编辑的文件名时，使用代码样式，例如 `2504.13837-rlvr-reasoning-boundary-base-model.md`。
+- 新增论文后，若其它笔记或索引提到该论文并需要跳转，也同步补成 `/papers/<slug>/` 链接。
 
 ## Markdown 公式写法
 
@@ -151,7 +166,7 @@ $$
 
 ## 索引更新
 
-更新 [papers-index.md](papers-index.md) 时必须同步处理：
+更新 [papers-index.md](/archive/) 时必须同步处理：
 
 1. `当前收录` 表格新增或更新该论文。
 2. `作者关系图谱` 新增 cluster 或更新已有 cluster。
@@ -180,6 +195,7 @@ $$
 - 是否把阅读后的有效交流提炼进对应笔记。
 - 是否存在先否定前项、再强调后项的对照式中文表达。
 - 是否避免长段复制论文原文。
+- 面向站点展示的内部链接是否使用 `/papers/<slug>/`、`/archive/`、`/workflow/` 或 `/template/`。
 
 ## 最终回复
 

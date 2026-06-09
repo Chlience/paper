@@ -121,12 +121,14 @@ Sort-Time: YYYY-MM-DD HH:mm
 - 与已有论文的方法或系统关系：
 - 新增后应更新的索引 cluster：
 
+链接规范：若指向已存档论文，使用 `[2504.13837](/papers/2504.13837-rlvr-reasoning-boundary-base-model/)` 这类站点路径；本地文件名只用代码样式。
+
 ## Reference Intake Brief
 
 ### Target
 
 - Intended target system: 新增论文笔记 / 具体专题文档。
-- Existing related assets: `papers-index.md`。
+- Existing related assets: `papers-index.md`；已存档论文链接使用 `/papers/<slug>/`。
 - Proposed form: 新建独立 Markdown 文档 / 更新已有文档。
 
 ### Reusable Elements
