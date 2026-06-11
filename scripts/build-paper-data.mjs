@@ -30,6 +30,8 @@ const tagOverrides = new Map([
   ['2505.24864-prorl-prolonged-rl-reasoning-boundaries', ['RL', 'Systems', 'Methodology']],
   ['2510.01180-brorl-broadened-rl-exploration', ['RL', 'Systems', 'Methodology']],
   ['2509.25123-rl-compositional-skill-acquisition', ['RL', 'Methodology']],
+  ['2511.02749-span-queries-cache-attention-locality', ['Systems', 'Methodology']],
+  ['2512.07783-interplay-pretraining-midtraining-rl-reasoning', ['RL', 'Methodology']],
   ['2506.10947-spurious-rewards-rethinking-rlvr', ['RL', 'Safety', 'Methodology']],
   ['2506.19248-inference-time-reward-hacking-llms', ['RL', 'Safety', 'Methodology']],
   ['2604.04648-caution-pessimism-best-of-n-reward-hacking', ['RL', 'Safety', 'Methodology']],
