@@ -18,6 +18,7 @@ const utilityFiles = new Map([
 ]);
 
 const tagOverrides = new Map([
+  ['2001.08361-scaling-laws-neural-language-models', ['Methodology', 'Theory']],
   ['2025-09-10-defeating-nondeterminism-llm-inference', ['Systems', 'RL', 'Methodology']],
   ['2403.03185-correlated-proxies-reward-hacking', ['RL', 'Safety', 'Methodology']],
   ['2405.19888-parrot-semantic-variable-llm-serving', ['Systems', 'Methodology']],
