@@ -12,6 +12,7 @@ Date: 2026-06-16
 
 | arXiv | Title | Local Note | Theme | Authors / Institutions |
 | --- | --- | --- | --- | --- |
+| 2405.17381 | Various Lengths, Constant Speed: Efficient Language Modeling with Lightning Attention | [2405.17381-various-lengths-constant-speed-lightning-attention.md](/papers/2405.17381-various-lengths-constant-speed-lightning-attention/) | Lightning Attention, TransNormerLLM, causal linear attention, IO-aware tiling, long-context architecture | Zhen Qin / TapTap; Weigao Sun, Dong Li, Xuyang Shen, Weixuan Sun, Yiran Zhong / OpenNLPLab and Shanghai AI Lab; Yiran Zhong corresponding author |
 | 2506.13585 | MiniMax-M1: Scaling Test-Time Compute Efficiently with Lightning Attention | [2506.13585-minimax-m1-cispo-lightning-attention.md](/papers/2506.13585-minimax-m1-cispo-lightning-attention/) | MiniMax-M1, Lightning Attention, CISPO, long-output reasoning RL, 1M context, software engineering and tool-use RL | MiniMax; title page lists MiniMax as author and appendix lists Aili Chen plus 125 other contributors alphabetically; no per-author affiliations exposed in v1 |
 | 2001.08361 | Scaling Laws for Neural Language Models | [2001.08361-scaling-laws-neural-language-models.md](/papers/2001.08361-scaling-laws-neural-language-models/) | Pretraining scaling laws, compute-efficient training, model/data/compute power laws, WebText2 | Jared Kaplan / Johns Hopkins University and OpenAI; Sam McCandlish, Tom Henighan, Tom B. Brown, Benjamin Chess, Rewon Child, Scott Gray, Alec Radford, Jeffrey Wu, Dario Amodei / OpenAI |
 | 2203.15556 | Training Compute-Optimal Large Language Models | [2203.15556-training-compute-optimal-large-language-models.md](/papers/2203.15556-training-compute-optimal-large-language-models/) | Chinchilla scaling, compute-optimal pretraining, data-optimal training, model/token allocation, MassiveText | Jordan Hoffmann, Sebastian Borgeaud, Arthur Mensch, Laurent Sifre / DeepMind, equal contribution and corresponding authors; Elena Buchatskaya, Trevor Cai, Eliza Rutherford, Diego de Las Casas, Lisa Anne Hendricks, Johannes Welbl, Aidan Clark, Tom Hennigan, Eric Noland, Katie Millican, George van den Driessche, Bogdan Damoc, Aurelia Guy, Simon Osindero, Karen Simonyan, Erich Elsen, Jack W. Rae, Oriol Vinyals / DeepMind |
@@ -231,11 +232,22 @@ Date: 2026-06-16
 
 - Paper: `2506.13585`
 - Institution: MiniMax。
-- Internal relation: title page 以 MiniMax 为作者，appendix 将 Aili Chen 等 126 位 contributors 按字母序列出；论文没有给逐作者 affiliation 或贡献角色。当前只记录 MiniMax 组织关系，不根据同名作者推断与其它论文的直接作者重叠。
+- Internal relation: title page 以 MiniMax 为作者，appendix 将 Aili Chen 等 126 位 contributors 按字母序列出；论文没有给逐作者 affiliation 或贡献角色。当前记录 MiniMax 组织关系；与 [2405.17381](/papers/2405.17381-various-lengths-constant-speed-lightning-attention/) 存在 Dong Li、Xuyang Shen、Yiran Zhong 同名线索，待作者主页或官方说明确认身份。
 - Theme relation: MiniMax-M1, hybrid MoE, Lightning Attention, 1M input context, 40K / 80K output budget, CISPO, clipped IS-weight policy optimization, long-output reasoning RL, train/inference precision mismatch, GenRM length bias, software engineering sandbox RL, TAU-bench, long-context evaluation。
+
+### Cluster AB: Lightning Attention 与 TransNormerLLM
+
+- Paper: `2405.17381`
+- Institutions: TapTap, OpenNLPLab, Shanghai AI Lab。
+- Internal relation: Zhen Qin 属 TapTap；Weigao Sun、Dong Li、Xuyang Shen、Weixuan Sun、Yiran Zhong 属 OpenNLPLab / Shanghai AI Lab；Yiran Zhong 为 corresponding author 和 arXiv submitter。该作者列表与 `2401.04658` Lightning Attention-2 完全相同。
+- Theme relation: Lightning Attention, causal linear attention, block-wise left/right product, IO-aware tiling, Triton kernel, TransNormerLLM, Gated Linear Attention, LRPE-d, SGLU, SRMSNorm, long-context training speed。
 
 ## 跨论文关系
 
+- `2405.17381` 新增 Lightning Attention / TransNormerLLM 节点。它解释了 MiniMax-M1 中 Lightning Attention 的上游机制：causal linear attention 的长序列效率来自 block-wise intra-block left product、inter-block $KV$ recurrent state 和 IO-aware tiling，而 TNL 通过 LRPE-d、GLA、SGLU、SRMSNorm 补齐 linear attention 的架构侧能力。
+- `2405.17381` 和 [2506.13585](/papers/2506.13585-minimax-m1-cispo-lightning-attention/) 是上游算法架构与下游 long-output reasoning system 的关系。前者证明 Lightning Attention / TNL 可以提升长序列训练和推理效率；后者把该系统线放进 hybrid MoE + RL recipe，并报告 train/inference probability mismatch、FP32 LM head 和 CISPO 等 RL 侧问题。
+- `2405.17381` 和 [2605.14220](/papers/2605.14220-training-inference-mismatch-llm-rl/) 连接在 long-context architecture 进入 RL 后的数值一致性。Lightning Attention 解决 attention 计算路径效率；TIM/VeXact 提醒 rollout engine 与 trainer engine 的 logprob mismatch 会改变 RL 更新的实际分布。
+- `2405.17381` 和 [2606.06453](/papers/2606.06453-vortex-sparse-attention-serving/)、[2511.02749](/papers/2511.02749-span-queries-cache-attention-locality/)、[2405.19888](/papers/2405.19888-parrot-semantic-variable-llm-serving/) 共同组成 long-context efficiency 图谱。Lightning Attention 从模型架构和 kernel 层降低长序列成本；Vortex、Span Query、Parrot 分别从 sparse attention、attention/cache locality、application DAG 暴露降低真实 serving workload 成本。
 - `2506.13585` 新增 MiniMax-M1 / CISPO / Lightning Attention 节点。它把 long-output reasoning RL 的 scaling 拆成 architecture efficiency、objective efficiency、reward/data curriculum 和 staged length expansion 四部分，是本地 RLVR 系统图谱中的重要补充。
 - `2506.13585` 和 [2503.14476](/papers/2503.14476-dapo-long-cot-rl-system/) 直接对话。DAPO 提出 Dynamic Sampling、Token-level Policy Gradient Loss、Clip-Higher 和 Overlong Reward Shaping；MiniMax-M1 沿用 dynamic sampling 与 length penalty，同时提出 CISPO，把 clipping 从 token update 转到 IS weight。
 - `2506.13585` 和 [2605.14220](/papers/2605.14220-training-inference-mismatch-llm-rl/) 连接在 train/inference probability consistency。TIM/VeXact 将 rollout/trainer logprob mismatch 定义为 RL collapse 风险；MiniMax-M1 在 hybrid architecture 中观察到 training-mode 与 inference-mode token probability mismatch，并用 FP32 LM head 提升相关性。
