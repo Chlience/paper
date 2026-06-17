@@ -11,13 +11,49 @@ This SOP was reverse-engineered from successful verification of slime (2026-06-1
 - Reusable across the entire paper archive (cross-reference papers-index.md and linked notes).
 
 ## Tools (in this environment)
-- `x_user_search` (name, handle, "name + org" variants)
-- `x_keyword_search` (critical: `from:handle` + keywords; also general mentions)
-- `x_semantic_search` (for context around role/project)
-- `x_thread_fetch` (on promising post IDs for replies/context)
-- `web_search` + `browse_page` / `open_page` / `web_fetch` (GitHub profiles, personal sites, blogs, community credits)
+- **Default search driver**: Grok via the local `grok-subagent` wrapper. Use `--mode search`, which routes to `grok-build` with web/search enabled.
+- `x_user_search` / `x_keyword_search` / `x_semantic_search` / `x_thread_fetch` when directly available, mainly for follow-up verification on promising handles.
+- `web_search` + `browse_page` / `open_page` / `web_fetch` for independent cross-validation: GitHub profiles, personal sites, blogs, community credits, institutional pages.
 - Local: `read_file`, `grep` on target .md + papers-index.md + other notes
 - Optional: GitHub web pages for bios, Zhihu links, lmsys-style blogs
+
+## Default Grok Search Protocol
+
+Use Grok first for broad discovery and candidate expansion. This SOP was written in a style that can be passed directly to Grok; give Grok the SOP, the target paper note, and the extracted candidate list so it can reuse the same verification criteria.
+
+Recommended command shape:
+
+```bash
+python3 /home/chlience/.agents/skills/grok-subagent/scripts/grok_subagent.py \
+  --mode search \
+  --prompt-file /tmp/author-x-search-task.md
+```
+
+Recommended prompt-file structure:
+
+```text
+Today is YYYY-MM-DD.
+
+You are searching for high-confidence personal X/Twitter accounts for authors in this paper archive.
+
+Read and follow this SOP exactly:
+<paste author-x-account-search-sop.md>
+
+Target paper note:
+<paste Source + 作者与关系 sections, or a concise extracted summary>
+
+Candidate authors:
+<English name, Chinese name if known, affiliation, GitHub/homepage/project clues>
+
+Output contract:
+1. Table: author, candidate X handle, confidence, personal/project/lab account, final decision.
+2. Evidence bullets with URLs for every medium/high candidate.
+3. "None found" for authors without enough evidence.
+4. Separate non-personal project/lab accounts.
+5. Do not rely on name similarity alone.
+```
+
+After Grok returns candidates, **do not write results directly**. Re-check high and medium candidates with independent sources before updating `authors.json`.
 
 ## High-Confidence Criteria (Strict)
 Report an account **only if** there are **multiple independent strong signals** (ideally 3+):
@@ -57,7 +93,19 @@ Confidence labels: **High** (strong multi-signal) | **Plausible / Medium** (nota
 - Chengxing Xie — citation + core contributor
 - Xin Lv — corresponding author, GLM-5 tech lead
 
-### Phase 2: Enrich External Profiles (Parallelizable)
+### Phase 2: Grok Broad Search (Default First Pass)
+Run Grok with the SOP and the candidate list before direct manual X searches. Ask it to search broadly across X, web, GitHub, personal sites, Chinese-language sources, lab/project announcements, and community mentions.
+
+Grok should return:
+- candidate handles, including rejected weak matches;
+- direct URLs for evidence;
+- whether each account is personal, project, lab, or unrelated;
+- exact reasons for confidence;
+- missing evidence that prevents a high-confidence decision.
+
+Use Grok's result as a hypothesis set, then proceed to manual cross-validation.
+
+### Phase 3: Enrich External Profiles (Parallelizable)
 For each candidate:
 - GitHub: 
   - `web_search` or direct browse `https://github.com/{handle}` or `"name" github`.
@@ -69,8 +117,8 @@ For each candidate:
   - Project announcement pages (lmsys.org blog, GitHub release notes).
 - Note any Chinese platform signals (Zhihu username patterns often match GitHub).
 
-### Phase 3: X Discovery (Broad → Targeted)
-1. Run multiple `x_user_search` in parallel:
+### Phase 4: Direct X Discovery (Broad → Targeted, If Needed)
+1. If Grok did not produce enough evidence, run multiple `x_user_search` in parallel:
    - Pure name: "Zilin Zhu", "Chengxing Xie", "Xin Lv"
    - Name + strong context: "Zilin Zhu Z.ai", "Chengxing Xie Tsinghua", "Xin Lv GLM OR Zhipu OR slime"
    - GitHub handle as query: "zhuzilin"
@@ -81,7 +129,7 @@ For each candidate:
 
 **Useful pattern**: One early hit had the exact GitHub bio copied into an X profile — treat as strong hypothesis to verify next.
 
-### Phase 4: Verification via Posts & Behavior (Most Important Phase)
+### Phase 5: Verification via Posts & Behavior (Most Important Phase)
 For every promising handle, execute deep checks:
 
 - Basic activity: `x_keyword_search` with query `from:handle` (mode=Latest, limit 5–10). Read the actual content.
@@ -97,7 +145,7 @@ For every promising handle, execute deep checks:
 
 **Key verification mindset**: Does the person talk about the project **as if they build/maintain it**? Does activity align with known GitHub actions (releases, specific PRs)?
 
-### Phase 5: Cross-Validation & Final Confidence Decision
+### Phase 6: Cross-Validation & Final Confidence Decision
 Combine signals across sources:
 - Bio match + self-post = very strong.
 - GitHub PR activity echoed in X comment + community credit = strong.
@@ -113,7 +161,7 @@ Always separate:
 - Personal author accounts.
 - Project accounts (e.g. @slime_framework — document its bio/followers/credit style but label as non-personal).
 
-### Phase 6: Document Results
+### Phase 7: Document Results
 Recommended output format (add to the paper note or a tracking section):
 
 **Author: Chengxing Xie**
@@ -143,7 +191,7 @@ Recommended output format (add to the paper note or a tracking section):
 Also note the project account separately if useful:
 - @slime_framework: Official framework account (bio + follower count). Frequently credits individual contributors.
 
-### Phase 7: Follow-ups & Archival
+### Phase 8: Follow-ups & Archival
 - If new high-confidence links appear, update the paper note's "作者与关系" and papers-index.md author clusters.
 - Optionally re-check low-activity candidates later (new posts can appear).
 - For future papers: Repeat from Phase 1; reuse the same query templates.

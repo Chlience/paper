@@ -112,7 +112,7 @@ authors.json
 - 与当前 `papers-index.md` 中已有作者是否重叠。
 - 与已有论文是否存在同主题、同方法、同系统、同数据集、同机构或引用关系。
 - 若作者已有 `/authors/<slug>/` 页面，在相关论文笔记和索引中优先使用作者页链接。
-- 若作者个人信息经过核验，更新 `authors.json`；账号搜索过程参考 `author-x-account-search-sop.md`，并记录 confidence。
+- 若作者个人信息经过核验，更新 `authors.json`；账号搜索默认使用 Grok，并参考 `author-x-account-search-sop.md` 记录 evidence 与 confidence。
 
 判断要求：
 
@@ -204,7 +204,7 @@ $$
 维护原则：
 
 - 作者页存放稳定身份信息和跨论文聚合；论文页保留该论文语境下的作者关系、机构桥接和主题判断。
-- 账号、主页、机构、中文姓名等事实必须有来源链接。X 账号使用 `high`、`medium`、`lab-account`、`not-found` 等 confidence 标记。
+- 账号、主页、机构、中文姓名等事实必须有来源链接。X 账号默认先用 Grok 搜索，再用网页、GitHub、主页、X 帖文或机构页面交叉验证；使用 `high`、`medium`、`lab-account`、`not-found` 等 confidence 标记。
 - 若作者有已核验中文姓名，在 `authors.json` 写入 `chineseName`；站点展示为 `English Name (中文姓名)`。
 - 无法可靠拆分的团队署名、大规模 author list、文档贡献者列表先保留在论文页，不自动拆成作者页。
 - 新增作者档案后运行 `npm run build` 与 `npm run check:site`，确认 `/authors/` 和 `/authors/<slug>/` 已生成。
