@@ -1,7 +1,7 @@
-# Author X/Twitter Account Discovery & High-Confidence Verification SOP
+# Author Profile, GitHub, Homepage & X Account Discovery SOP
 
 **Purpose**  
-Find **personal X (Twitter) accounts** belonging to paper/project authors (especially AI/ML systems, Chinese research teams) with **high confidence only**. Rely on bios, self-referential posts/comments, GitHub signals, and cross-attributions rather than name similarity alone. Explicitly document "no high-confidence account found" when evidence is insufficient.
+Build stable author profiles for paper/project authors, including **personal homepage**, **GitHub account**, **Google Scholar / DBLP / institutional profile**, and **personal X (Twitter) account** when available. For X accounts, use high-confidence standards only. Rely on bios, self-referential posts/comments, GitHub signals, institutional pages, personal websites, paper/project pages, and cross-attributions rather than name similarity alone. Explicitly document "no high-confidence account found" when evidence is insufficient.
 
 This SOP was reverse-engineered from successful verification of slime (2026-06-17-slime-rl-scaling-framework.md) + GLM-5 overlapping authors (Zilin Zhu / zhuzilin, Chengxing Xie, Xin Lv).
 
@@ -9,13 +9,15 @@ This SOP was reverse-engineered from successful verification of slime (2026-06-1
 - Immediately after drafting or updating any paper note that contains an "作者与关系" (or equivalent Authors) section.
 - For citation authors, corresponding authors, GitHub release owners/maintainers, core contributors, tech leads, and direct org overlaps.
 - Reusable across the entire paper archive (cross-reference papers-index.md and linked notes).
+- Also apply when the user asks to process existing papers or enrich author pages, even if the target task mentions only X, GitHub, or homepage.
 
 ## Tools (in this environment)
 - **Default search driver**: Grok via the local `grok-subagent` wrapper. Use `--mode search`, which routes to `grok-build` with web/search enabled.
 - `x_user_search` / `x_keyword_search` / `x_semantic_search` / `x_thread_fetch` when directly available, mainly for follow-up verification on promising handles.
 - `web_search` + `browse_page` / `open_page` / `web_fetch` for independent cross-validation: GitHub profiles, personal sites, blogs, community credits, institutional pages.
 - Local: `read_file`, `grep` on target .md + papers-index.md + other notes
-- Optional: GitHub web pages for bios, Zhihu links, lmsys-style blogs
+- GitHub web pages and repository metadata for bios, organization membership, pinned repos, project commits, issues, PRs, release authorship, and homepage links.
+- Personal homepage / academic profile pages: `.github.io`, university homepages, lab pages, Google Scholar, DBLP, OpenReview, Semantic Scholar, ORCID, LinkedIn, Zhihu, conference speaker pages, and project blogs.
 
 ## Default Grok Search Protocol
 
@@ -34,7 +36,7 @@ Recommended prompt-file structure:
 ```text
 Today is YYYY-MM-DD.
 
-You are searching for high-confidence personal X/Twitter accounts for authors in this paper archive.
+You are searching for stable author profile evidence and high-confidence personal X/Twitter accounts for authors in this paper archive.
 
 Read and follow this SOP exactly:
 <paste author-x-account-search-sop.md>
@@ -46,17 +48,17 @@ Candidate authors:
 <English name, Chinese name if known, affiliation, GitHub/homepage/project clues>
 
 Output contract:
-1. Table: author, candidate X handle, confidence, personal/project/lab account, final decision.
-2. Evidence bullets with URLs for every medium/high candidate.
-3. "None found" for authors without enough evidence.
+1. Table: author, personal homepage, GitHub, Scholar/DBLP/OpenReview, institution/lab page, candidate X handle, X confidence, final decision.
+2. Evidence bullets with URLs for every homepage/GitHub/profile/X candidate.
+3. "None found" for X accounts without enough evidence; still report verified GitHub/homepage/profile sources when available.
 4. Separate non-personal project/lab accounts.
 5. Do not rely on name similarity alone.
 ```
 
-After Grok returns candidates, **do not write results directly**. Re-check high and medium candidates with independent sources before updating `authors.json`.
+After Grok returns candidates, **do not write results directly**. Re-check high and medium candidates with independent sources before updating `authors.json`. If no high-confidence X exists, still update `authors.json` with verified homepage/GitHub/Scholar/institution sources.
 
-## High-Confidence Criteria (Strict)
-Report an account **only if** there are **multiple independent strong signals** (ideally 3+):
+## High-Confidence Criteria for X Accounts (Strict)
+Report an X account **only if** there are **multiple independent strong signals** (ideally 3+):
 - Exact/near-exact bio match to known GitHub or personal homepage self-description + project/org.
 - Self-identification in posts (first-person "I am a slime contributor", "our main focus is RL training for chat.z.ai", roadmap statements, direct comments on the project's CI/PRs).
 - GitHub activity (release publisher, specific PRs) mirrored in X behavior.
@@ -71,6 +73,22 @@ Report an account **only if** there are **multiple independent strong signals** 
 
 Confidence labels: **High** (strong multi-signal) | **Plausible / Medium** (notable signals but gaps — document explicitly) | None found.
 
+## Profile Evidence Criteria
+
+For non-X author profile fields, use the strongest stable sources available:
+
+- **Homepage**: personal domain, university/lab page, `.github.io`, or clearly self-authored site. Prefer pages that list publications, affiliation, email, GitHub, Scholar, or project links.
+- **GitHub**: profile name, bio, organization membership, repository ownership, release authorship, PR/issue activity, pinned repos, linked homepage, and avatar/name consistency. GitHub alone can be enough for a stable `homepage` field if no personal site exists.
+- **Institution/lab page**: university department pages, lab author pages, official company author pages, conference speaker pages, and project team pages.
+- **Scholar/DBLP/OpenReview/Semantic Scholar/ORCID**: useful for disambiguating publication records, but usually not enough alone to assign an X account.
+- **Chinese name**: record `chineseName` only when a reliable source explicitly maps it to the English author identity. Personal homepage, Tsinghua faculty page, LinkedIn, conference profile, or project announcement are acceptable; weak web snippets and same-name pages are not enough.
+
+When evidence strength varies across authors:
+
+- Add rich profile fields for authors with strong homepage/GitHub/institution evidence.
+- For sparse authors, create a minimal `authors.json` entry if they are important to the paper graph, with `xConfidence: "not-found"` and notes saying evidence currently comes from paper/team credits.
+- Do not invent homepage/GitHub/X fields from name similarity.
+
 ## Step-by-Step Workflow
 
 ### Phase 1: Extract & Normalize Authors (Start Here)
@@ -79,10 +97,13 @@ Confidence labels: **High** (strong multi-signal) | **Plausible / Medium** (nota
    - Citation authors (exact list).
    - Corresponding author(s).
    - GitHub signals (release owner, top contributors from text or implied).
+   - Homepage, Scholar, DBLP, OpenReview, ORCID, LinkedIn, Zhihu, conference speaker pages, and institutional pages if mentioned or easy to infer.
    - Overlaps from linked notes (e.g., GLM-5 tech leads / core contributors).
 3. Normalize variants for each person:
    - English full name
    - GitHub handle (if mentioned)
+   - Personal homepage or lab page
+   - Scholar / DBLP / OpenReview / ORCID identifiers
    - Possible Chinese characters / pinyin (from homepages or later discovery, e.g. 吕鑫, 朱子林/朱小霖, 谢程兴)
    - Org/role shorthand ("RL infra @Z.ai", "PhD Tsinghua slime", "corresponding author slime")
 4. Quick local grep across papers-index.md and related notes for additional context or duplicates.
@@ -94,9 +115,10 @@ Confidence labels: **High** (strong multi-signal) | **Plausible / Medium** (nota
 - Xin Lv — corresponding author, GLM-5 tech lead
 
 ### Phase 2: Grok Broad Search (Default First Pass)
-Run Grok with the SOP and the candidate list before direct manual X searches. Ask it to search broadly across X, web, GitHub, personal sites, Chinese-language sources, lab/project announcements, and community mentions.
+Run Grok with the SOP and the candidate list before direct manual X searches. Ask it to search broadly across X, web, GitHub, personal sites, Chinese-language sources, lab/project announcements, institution pages, Scholar/DBLP/OpenReview, and community mentions.
 
 Grok should return:
+- verified homepage, GitHub, Scholar/DBLP/OpenReview, institution/lab pages;
 - candidate handles, including rejected weak matches;
 - direct URLs for evidence;
 - whether each account is personal, project, lab, or unrelated;
@@ -107,11 +129,25 @@ Use Grok's result as a hypothesis set, then proceed to manual cross-validation.
 
 ### Phase 3: Enrich External Profiles (Parallelizable)
 For each candidate:
-- GitHub: 
+- GitHub:
   - `web_search` or direct browse `https://github.com/{handle}` or `"name" github`.
-  - Capture bio (often the gold signal: "☀️ RL infra @Z.ai, ex WeChat AI"), location, pinned repos (slime), links (Zhihu, .github.io), "No Twitter Username" note (does **not** rule anything out).
-- Personal / academic sites: Search `"name" github.io` or follow links from collaborator pages. Extract role statements (e.g., "I lead the O Team... maintains slime").
+  - Capture display name, bio, location, organization membership, pinned repos, project ownership, release/PR/issue activity, linked homepage, social links, and "No Twitter Username" note, which does **not** rule anything out.
+  - If GitHub links to a homepage, open that homepage and verify that the identity loops back through name, affiliation, publications, or projects.
+- Personal / academic sites:
+  - Search `"Full Name" homepage`, `"Full Name" github.io`, `"Full Name" site:edu`, `"Full Name" lab`, and follow links from collaborator pages.
+  - Extract role statements, project ownership, publications, emails, GitHub links, Scholar links, and Chinese names.
+- Scholar / DBLP / OpenReview:
+  - Search `"Full Name" "paper title" scholar`, `"Full Name" DBLP`, `"Full Name" OpenReview`.
+  - Use these primarily to disambiguate publication records and affiliations.
+- Institutional / conference pages:
+  - Search university/lab/company speaker pages and official project pages.
+  - Prefer these for affiliation, role, email, and Chinese name verification.
 - Web search templates (run several):
+  - `"Full Name" homepage OR github OR scholar OR DBLP OR OpenReview`
+  - `"Full Name" "Paper Title"`
+  - `"Full Name" "ProjectName" GitHub`
+  - `"Full Name" "Institution" homepage`
+  - `"Full Name" 中文名`
   - `"Full Name" OR "GitHubHandle" (Twitter OR "X.com" OR @) (project OR org)`
   - `"Name" (slime OR GLM OR "Z.ai" OR Tsinghua) (Twitter OR X)`
   - Project announcement pages (lmsys.org blog, GitHub release notes).
@@ -160,9 +196,22 @@ Combine signals across sources:
 Always separate:
 - Personal author accounts.
 - Project accounts (e.g. @slime_framework — document its bio/followers/credit style but label as non-personal).
+- Stable non-X profile evidence from X-account evidence. A strong GitHub/homepage match supports author identity, but it does not automatically prove an X account.
 
 ### Phase 7: Document Results
 Recommended output format (add to the paper note or a tracking section):
+
+**Author: Ruoyu Qin**
+- Homepage: https://qinruoyu.com/
+- GitHub: https://github.com/chestnut-Q
+- Scholar: https://scholar.google.com/citations?user=mwBB0U4AAAAJ
+- X: None found with high confidence.
+- Confidence: **High profile evidence / X not-found**
+- Reasons:
+  - Homepage self-identifies Ruoyu Qin and lists Tsinghua Ph.D. / MADSys context.
+  - GitHub bio states MADSys at Tsinghua and Moonshot AI internship.
+  - Scholar and arXiv author list align with Seer / Mooncake publication record.
+  - No X account had sufficient profile/post/project evidence.
 
 **Author: Chengxing Xie**
 - X: [@Chengxing_Xie](https://x.com/Chengxing_Xie)
@@ -192,12 +241,15 @@ Also note the project account separately if useful:
 - @slime_framework: Official framework account (bio + follower count). Frequently credits individual contributors.
 
 ### Phase 8: Follow-ups & Archival
-- If new high-confidence links appear, update the paper note's "作者与关系" and papers-index.md author clusters.
+- If verified homepage/GitHub/Scholar/institution or high-confidence X links appear, update `authors.json`, the paper note's "作者与关系", and papers-index.md author clusters.
+- If no high-confidence X exists, still write `xConfidence: "not-found"` and preserve profile evidence in `authors.json`.
 - Optionally re-check low-activity candidates later (new posts can appear).
 - For future papers: Repeat from Phase 1; reuse the same query templates.
 
 ## Common Patterns & Chinese AI Community Nuances
 - GitHub bios are often the highest-signal single source (copy-paste into X sometimes).
+- Personal homepages may expose Chinese names, GitHub handles, Scholar links, and advisor/lab relationships that are absent from arXiv.
+- MADSys / Tsinghua / company speaker pages and conference pages are often more reliable than social search for Chinese systems researchers.
 - X follower counts can be very low (0–100) for serious infra people; do not dismiss.
 - "No Twitter Username" in third-party GitHub rankings is common even when an account exists.
 - Many researchers prioritize Zhihu + GitHub + internal comms. X may be lightly used for non-tech + occasional tech notes.

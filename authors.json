@@ -497,5 +497,272 @@
         "url": "https://scholar.google.com/citations?user=-v5DbrMAAAAJ"
       }
     ]
+  },
+  {
+    "slug": "ruoyu-qin",
+    "name": "Ruoyu Qin",
+    "chineseName": "秦若愚",
+    "aliases": ["Ruoyu Qin", "Qin Ruoyu", "chestnut-Q"],
+    "affiliations": ["Moonshot AI", "Tsinghua University", "MADSys Lab"],
+    "homepage": "https://qinruoyu.com/",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["LLM serving", "synchronous RL rollout", "KVCache", "Mooncake", "Seer"],
+    "notes": "Seer first author and arXiv submitter; homepage, GitHub, Scholar, MADSys context, and Mooncake/Seer authorship align with Moonshot AI plus Tsinghua MADSys. Grok/SOP search found no high-confidence personal X account.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://qinruoyu.com/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/chestnut-Q"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=mwBB0U4AAAAJ"
+      },
+      {
+        "label": "arXiv Seer",
+        "url": "https://arxiv.org/abs/2511.14617"
+      }
+    ]
+  },
+  {
+    "slug": "weiran-he",
+    "name": "Weiran He",
+    "aliases": ["Weiran He"],
+    "affiliations": ["Moonshot AI", "MADSys Lab"],
+    "homepage": "https://madsys.cs.tsinghua.edu.cn/author/weiran-he/",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["LLM serving", "KVCache", "Mooncake", "Seer"],
+    "notes": "Seer and Mooncake author connected to Moonshot AI and MADSys publication pages. No high-confidence personal X account was found.",
+    "sources": [
+      {
+        "label": "MADSys Author Page",
+        "url": "https://madsys.cs.tsinghua.edu.cn/author/weiran-he/"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=mIAJwKkAAAAJ"
+      },
+      {
+        "label": "arXiv Seer",
+        "url": "https://arxiv.org/abs/2511.14617"
+      }
+    ]
+  },
+  {
+    "slug": "weixiao-huang",
+    "name": "Weixiao Huang",
+    "aliases": ["Weixiao Huang", "weixiao-huang"],
+    "affiliations": ["Moonshot AI", "Tsinghua University", "MADSys Lab"],
+    "homepage": "https://github.com/weixiao-huang",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["cloud-native systems", "AI infrastructure", "LLM serving", "Seer"],
+    "notes": "Seer author; GitHub profile states Tsinghua graduation and cloud-native / AI infra focus, and MADSys author page connects the same name to disaggregated LLM serving work. No high-confidence personal X account was found.",
+    "sources": [
+      {
+        "label": "GitHub",
+        "url": "https://github.com/weixiao-huang"
+      },
+      {
+        "label": "MADSys Author Page",
+        "url": "https://madsys.cs.tsinghua.edu.cn/author/weixiao-huang/"
+      },
+      {
+        "label": "arXiv Seer",
+        "url": "https://arxiv.org/abs/2511.14617"
+      }
+    ]
+  },
+  {
+    "slug": "yangkun-zhang",
+    "name": "Yangkun Zhang",
+    "aliases": ["Yangkun Zhang"],
+    "affiliations": ["Moonshot AI"],
+    "homepage": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["Moonshot AI", "Kimi", "synchronous RL rollout", "Seer"],
+    "notes": "Seer author with Moonshot AI affiliation. Public profile evidence beyond paper/team credits is currently sparse, and no high-confidence personal X account was found.",
+    "sources": [
+      {
+        "label": "arXiv Seer",
+        "url": "https://arxiv.org/abs/2511.14617"
+      },
+      {
+        "label": "Kimi-K2 Repository",
+        "url": "https://github.com/MoonshotAI/Kimi-K2"
+      }
+    ]
+  },
+  {
+    "slug": "yikai-zhao",
+    "name": "Yikai Zhao",
+    "chineseName": "赵一开",
+    "aliases": ["Yikai Zhao", "Zhao Yikai"],
+    "affiliations": ["Moonshot AI", "Tsinghua University", "MADSys Lab"],
+    "homepage": "https://madsys.cs.tsinghua.edu.cn/author/yikai-zhao/",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["LLM serving", "disaggregated systems", "Kimi", "Seer"],
+    "notes": "Seer author; MADSys author page and public professional profile align with Tsinghua and Kimi/Moonshot AI. No high-confidence personal X account was found.",
+    "sources": [
+      {
+        "label": "MADSys Author Page",
+        "url": "https://madsys.cs.tsinghua.edu.cn/author/yikai-zhao/"
+      },
+      {
+        "label": "LinkedIn",
+        "url": "https://cn.linkedin.com/in/yikai-zhao-303479165"
+      },
+      {
+        "label": "arXiv Seer",
+        "url": "https://arxiv.org/abs/2511.14617"
+      }
+    ]
+  },
+  {
+    "slug": "bo-pang",
+    "name": "Bo Pang",
+    "aliases": ["Bo Pang"],
+    "affiliations": ["Moonshot AI"],
+    "homepage": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["Moonshot AI", "Kimi", "synchronous RL rollout", "Seer"],
+    "notes": "Seer author with Moonshot AI affiliation. Public profile evidence beyond paper/team credits is currently sparse, and no high-confidence personal X account was found.",
+    "sources": [
+      {
+        "label": "arXiv Seer",
+        "url": "https://arxiv.org/abs/2511.14617"
+      },
+      {
+        "label": "Kimi-K2 Repository",
+        "url": "https://github.com/MoonshotAI/Kimi-K2"
+      }
+    ]
+  },
+  {
+    "slug": "xinran-xu",
+    "name": "Xinran Xu",
+    "chineseName": "许欣然",
+    "aliases": ["Xinran Xu", "xxr3376"],
+    "affiliations": ["Moonshot AI"],
+    "homepage": "https://china2024.gosim.org/speakers/xinran-xu.html",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["Moonshot AI", "Kimi", "LLM infrastructure", "vLLM", "Mooncake", "Seer"],
+    "notes": "Seer and Mooncake author; GOSIM profile identifies Xinran Xu as VP of Engineering at Moonshot AI in charge of training, inference, and infrastructure, and GitHub identity xxr3376 matches public project activity. No high-confidence personal X account was found.",
+    "sources": [
+      {
+        "label": "GOSIM China 2024",
+        "url": "https://china2024.gosim.org/speakers/xinran-xu.html"
+      },
+      {
+        "label": "GOSIM China 2024 Chinese",
+        "url": "https://china2024.gosim.org/zh/speakers/xinran-xu.html"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/xxr3376"
+      },
+      {
+        "label": "USENIX FAST 25",
+        "url": "https://www.usenix.org/conference/fast25/speaker-or-organizer/xinran-xu-moonshot-ai"
+      },
+      {
+        "label": "arXiv Seer",
+        "url": "https://arxiv.org/abs/2511.14617"
+      }
+    ]
+  },
+  {
+    "slug": "yingdi-shan",
+    "name": "Yingdi Shan",
+    "chineseName": "闪英迪",
+    "aliases": ["Yingdi Shan", "Shan Yingdi"],
+    "affiliations": ["Tsinghua University", "MADSys Lab", "Zhongguancun Laboratory"],
+    "homepage": "https://madsys.cs.tsinghua.edu.cn/~yingdi-shan/",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["distributed systems", "storage systems", "LLM serving", "Seer"],
+    "notes": "Seer author; Tsinghua and MADSys pages confirm assistant researcher role, distributed/storage systems focus, and homepage. No high-confidence personal X account was found.",
+    "sources": [
+      {
+        "label": "MADSys Homepage",
+        "url": "https://madsys.cs.tsinghua.edu.cn/~yingdi-shan/"
+      },
+      {
+        "label": "Tsinghua English Faculty Page",
+        "url": "https://www.cs.tsinghua.edu.cn/csen/info/1302/4557.htm"
+      },
+      {
+        "label": "Tsinghua Chinese Faculty Page",
+        "url": "https://www.cs.tsinghua.edu.cn/info/1257/6372.htm"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=cdASqTMAAAAJ"
+      }
+    ]
+  },
+  {
+    "slug": "yongwei-wu",
+    "name": "Yongwei Wu",
+    "aliases": ["Yongwei Wu", "YongWei Wu"],
+    "affiliations": ["Tsinghua University", "MADSys Lab"],
+    "homepage": "https://madsys.cs.tsinghua.edu.cn/author/yongwei-wu/",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["parallel systems", "distributed systems", "storage systems", "LLM serving", "Seer"],
+    "notes": "Seer author; MADSys and Tsinghua pages identify Yongwei Wu as professor, vice department head, and IEEE Fellow. No high-confidence personal X account was found.",
+    "sources": [
+      {
+        "label": "MADSys Author Page",
+        "url": "https://madsys.cs.tsinghua.edu.cn/author/yongwei-wu/"
+      },
+      {
+        "label": "Tsinghua Faculty Page",
+        "url": "https://www.cs.tsinghua.edu.cn/csen/info/1300/4373.htm"
+      },
+      {
+        "label": "DBLP",
+        "url": "https://dblp.org/pid/38/880"
+      }
+    ]
+  },
+  {
+    "slug": "mingxing-zhang",
+    "name": "Mingxing Zhang",
+    "chineseName": "章明星",
+    "aliases": ["Mingxing Zhang", "Zhang Mingxing"],
+    "affiliations": ["Tsinghua University", "MADSys Lab"],
+    "homepage": "http://madsys.cs.tsinghua.edu.cn/~zhangmx/",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["memory systems", "distributed systems", "KVCache", "Mooncake", "KTransformers", "Seer"],
+    "notes": "Seer corresponding author; MADSys homepage, Tsinghua faculty page, Scholar, and paper email align with Tsinghua memory/distributed systems and KVCache.AI projects. No high-confidence personal X account was found.",
+    "sources": [
+      {
+        "label": "MADSys Homepage",
+        "url": "http://madsys.cs.tsinghua.edu.cn/~zhangmx/"
+      },
+      {
+        "label": "Tsinghua Faculty Page",
+        "url": "https://www.cs.tsinghua.edu.cn/csen/info/1301/4666.htm"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=akQ4TOYAAAAJ"
+      },
+      {
+        "label": "arXiv Seer",
+        "url": "https://arxiv.org/abs/2511.14617"
+      }
+    ]
   }
 ]
