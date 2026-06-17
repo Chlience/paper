@@ -507,8 +507,8 @@
     "homepage": "https://qinruoyu.com/",
     "x": "",
     "xConfidence": "not-found",
-    "topics": ["LLM serving", "synchronous RL rollout", "KVCache", "Mooncake", "Seer"],
-    "notes": "Seer first author and arXiv submitter; homepage, GitHub, Scholar, MADSys context, and Mooncake/Seer authorship align with Moonshot AI plus Tsinghua MADSys. Grok/SOP search found no high-confidence personal X account.",
+    "topics": ["LLM serving", "synchronous RL rollout", "KVCache", "Mooncake", "Seer", "Kimi K2.5"],
+    "notes": "Seer first author and arXiv submitter; homepage, GitHub, Scholar, MADSys context, and Mooncake/Seer authorship align with Moonshot AI plus Tsinghua MADSys. Kimi K2.5 appendix contributor list also includes this author. Grok/SOP search found no high-confidence personal X account.",
     "sources": [
       {
         "label": "Homepage",
@@ -525,6 +525,10 @@
       {
         "label": "arXiv Seer",
         "url": "https://arxiv.org/abs/2511.14617"
+      },
+      {
+        "label": "arXiv Kimi K2.5",
+        "url": "https://arxiv.org/abs/2602.02276"
       }
     ]
   },
@@ -536,8 +540,8 @@
     "homepage": "https://madsys.cs.tsinghua.edu.cn/author/weiran-he/",
     "x": "",
     "xConfidence": "not-found",
-    "topics": ["LLM serving", "KVCache", "Mooncake", "Seer"],
-    "notes": "Seer and Mooncake author connected to Moonshot AI and MADSys publication pages. No high-confidence personal X account was found.",
+    "topics": ["LLM serving", "KVCache", "Mooncake", "Seer", "Kimi K2.5"],
+    "notes": "Seer and Mooncake author connected to Moonshot AI and MADSys publication pages. Kimi K2.5 appendix contributor list also includes this author. No high-confidence personal X account was found.",
     "sources": [
       {
         "label": "MADSys Author Page",
@@ -550,6 +554,10 @@
       {
         "label": "arXiv Seer",
         "url": "https://arxiv.org/abs/2511.14617"
+      },
+      {
+        "label": "arXiv Kimi K2.5",
+        "url": "https://arxiv.org/abs/2602.02276"
       }
     ]
   },
@@ -561,8 +569,8 @@
     "homepage": "https://github.com/weixiao-huang",
     "x": "",
     "xConfidence": "not-found",
-    "topics": ["cloud-native systems", "AI infrastructure", "LLM serving", "Seer"],
-    "notes": "Seer author; GitHub profile states Tsinghua graduation and cloud-native / AI infra focus, and MADSys author page connects the same name to disaggregated LLM serving work. No high-confidence personal X account was found.",
+    "topics": ["cloud-native systems", "AI infrastructure", "LLM serving", "Seer", "Kimi K2.5"],
+    "notes": "Seer author; GitHub profile states Tsinghua graduation and cloud-native / AI infra focus, and MADSys author page connects the same name to disaggregated LLM serving work. Kimi K2.5 appendix contributor list also includes this author. No high-confidence personal X account was found.",
     "sources": [
       {
         "label": "GitHub",
@@ -575,6 +583,10 @@
       {
         "label": "arXiv Seer",
         "url": "https://arxiv.org/abs/2511.14617"
+      },
+      {
+        "label": "arXiv Kimi K2.5",
+        "url": "https://arxiv.org/abs/2602.02276"
       }
     ]
   },
@@ -586,8 +598,8 @@
     "homepage": "",
     "x": "",
     "xConfidence": "not-found",
-    "topics": ["Moonshot AI", "Kimi", "synchronous RL rollout", "Seer"],
-    "notes": "Seer author with Moonshot AI affiliation. Public profile evidence beyond paper/team credits is currently sparse, and no high-confidence personal X account was found.",
+    "topics": ["Moonshot AI", "Kimi", "Kimi K2.5", "synchronous RL rollout", "Seer"],
+    "notes": "Seer author with Moonshot AI affiliation. Kimi K2.5 appendix contributor list also includes this author. Public profile evidence beyond paper/team credits is currently sparse, and no high-confidence personal X account was found.",
     "sources": [
       {
         "label": "arXiv Seer",
@@ -596,6 +608,10 @@
       {
         "label": "Kimi-K2 Repository",
         "url": "https://github.com/MoonshotAI/Kimi-K2"
+      },
+      {
+        "label": "arXiv Kimi K2.5",
+        "url": "https://arxiv.org/abs/2602.02276"
       }
     ]
   },
@@ -608,8 +624,8 @@
     "homepage": "https://madsys.cs.tsinghua.edu.cn/author/yikai-zhao/",
     "x": "",
     "xConfidence": "not-found",
-    "topics": ["LLM serving", "disaggregated systems", "Kimi", "Seer"],
-    "notes": "Seer author; MADSys author page and public professional profile align with Tsinghua and Kimi/Moonshot AI. No high-confidence personal X account was found.",
+    "topics": ["LLM serving", "disaggregated systems", "Kimi", "Seer", "Kimi K2.5"],
+    "notes": "Seer author; MADSys author page and public professional profile align with Tsinghua and Kimi/Moonshot AI. Kimi K2.5 appendix contributor list also includes this author. No high-confidence personal X account was found.",
     "sources": [
       {
         "label": "MADSys Author Page",
@@ -622,6 +638,10 @@
       {
         "label": "arXiv Seer",
         "url": "https://arxiv.org/abs/2511.14617"
+      },
+      {
+        "label": "arXiv Kimi K2.5",
+        "url": "https://arxiv.org/abs/2602.02276"
       }
     ]
   },
@@ -633,8 +653,8 @@
     "homepage": "",
     "x": "",
     "xConfidence": "not-found",
-    "topics": ["Moonshot AI", "Kimi", "synchronous RL rollout", "Seer"],
-    "notes": "Seer author with Moonshot AI affiliation. Public profile evidence beyond paper/team credits is currently sparse, and no high-confidence personal X account was found.",
+    "topics": ["Moonshot AI", "Kimi", "Kimi K2.5", "synchronous RL rollout", "Seer"],
+    "notes": "Seer author with Moonshot AI affiliation. Kimi K2.5 appendix contributor list also includes this author. Public profile evidence beyond paper/team credits is currently sparse, and no high-confidence personal X account was found.",
     "sources": [
       {
         "label": "arXiv Seer",
@@ -643,6 +663,10 @@
       {
         "label": "Kimi-K2 Repository",
         "url": "https://github.com/MoonshotAI/Kimi-K2"
+      },
+      {
+        "label": "arXiv Kimi K2.5",
+        "url": "https://arxiv.org/abs/2602.02276"
       }
     ]
   },
@@ -655,8 +679,8 @@
     "homepage": "https://china2024.gosim.org/speakers/xinran-xu.html",
     "x": "",
     "xConfidence": "not-found",
-    "topics": ["Moonshot AI", "Kimi", "LLM infrastructure", "vLLM", "Mooncake", "Seer"],
-    "notes": "Seer and Mooncake author; GOSIM profile identifies Xinran Xu as VP of Engineering at Moonshot AI in charge of training, inference, and infrastructure, and GitHub identity xxr3376 matches public project activity. No high-confidence personal X account was found.",
+    "topics": ["Moonshot AI", "Kimi", "Kimi K2.5", "LLM infrastructure", "vLLM", "Mooncake", "Seer"],
+    "notes": "Seer and Mooncake author; GOSIM profile identifies Xinran Xu as VP of Engineering at Moonshot AI in charge of training, inference, and infrastructure, and GitHub identity xxr3376 matches public project activity. Kimi K2.5 appendix contributor list also includes this author. No high-confidence personal X account was found.",
     "sources": [
       {
         "label": "GOSIM China 2024",
@@ -677,6 +701,10 @@
       {
         "label": "arXiv Seer",
         "url": "https://arxiv.org/abs/2511.14617"
+      },
+      {
+        "label": "arXiv Kimi K2.5",
+        "url": "https://arxiv.org/abs/2602.02276"
       }
     ]
   },
