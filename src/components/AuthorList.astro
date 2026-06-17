@@ -1,0 +1,33 @@
+---
+interface AuthorEntry {
+  name: string;
+  path?: string;
+}
+
+interface Props {
+  authors?: string;
+  authorEntries?: AuthorEntry[];
+  limit?: number;
+}
+
+const { authors = '', authorEntries = [], limit } = Astro.props;
+const entries = typeof limit === 'number' ? authorEntries.slice(0, limit) : authorEntries;
+const hiddenCount = typeof limit === 'number' ? Math.max(authorEntries.length - limit, 0) : 0;
+const hasEntries = entries.length > 0;
+---
+
+{
+  hasEntries ? (
+    <>
+      {entries.map((author, index) => (
+        <>
+          {author.path ? <a href={author.path}>{author.name}</a> : <span>{author.name}</span>}
+          {index < entries.length - 1 && <span>, </span>}
+        </>
+      ))}
+      {hiddenCount > 0 && <span>{`, +${hiddenCount} more`}</span>}
+    </>
+  ) : (
+    <span>{authors}</span>
+  )
+}

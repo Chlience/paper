@@ -32,6 +32,10 @@ const tagCounts = data.tags.map((tag) => ({
           <dd>主题入口</dd>
         </div>
         <div>
+          <dt>{data.authors.length} authors</dt>
+          <dd>作者档案</dd>
+        </div>
+        <div>
           <dt>{new Date(data.generatedAt).toISOString().slice(0, 10)}</dt>
           <dd>最近构建</dd>
         </div>
@@ -58,6 +62,7 @@ const tagCounts = data.tags.map((tag) => ({
         <h2>Research Routes</h2>
         <p>主题入口用于快速进入同一问题域，数量来自当前归档。</p>
       </div>
+      <a class="section-link" href="/authors/">Authors</a>
     </div>
     <div class="container tag-grid">
       {tagCounts.map(({ tag, count }) => (

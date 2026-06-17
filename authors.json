@@ -1,0 +1,111 @@
+[
+  {
+    "slug": "tri-dao",
+    "name": "Tri Dao",
+    "aliases": ["Tri Dao"],
+    "affiliations": [
+      "Princeton University",
+      "Together AI",
+      "Stanford University (FlashAttention paper affiliation)"
+    ],
+    "homepage": "https://tridao.me/",
+    "x": "https://x.com/tri_dao",
+    "xConfidence": "high",
+    "topics": ["FlashAttention", "efficient attention", "GPU kernels", "LLM systems"],
+    "notes": "FlashAttention first author; current public profile connects Princeton, Together AI, and the FlashAttention implementation line.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://tridao.me/"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/tri_dao"
+      }
+    ]
+  },
+  {
+    "slug": "daniel-y-fu",
+    "name": "Daniel Y. Fu",
+    "aliases": ["Daniel Y. Fu", "Dan Fu"],
+    "affiliations": [
+      "UC San Diego",
+      "Together AI",
+      "Stanford University (FlashAttention paper affiliation)"
+    ],
+    "homepage": "https://danfu.org/",
+    "x": "https://x.com/realDanFu",
+    "xConfidence": "high",
+    "topics": ["FlashAttention", "efficient sequence modeling", "LLM systems"],
+    "notes": "FlashAttention coauthor; public homepage links the realDanFu X account and lists FlashAttention-related work.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://danfu.org/"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/realDanFu"
+      }
+    ]
+  },
+  {
+    "slug": "stefano-ermon",
+    "name": "Stefano Ermon",
+    "aliases": ["Stefano Ermon"],
+    "affiliations": ["Stanford University"],
+    "homepage": "https://cs.stanford.edu/~ermon/",
+    "x": "https://x.com/StefanoErmon",
+    "xConfidence": "high",
+    "topics": ["machine learning", "generative models", "FlashAttention"],
+    "notes": "Stanford professor and FlashAttention coauthor.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://cs.stanford.edu/~ermon/"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/StefanoErmon"
+      }
+    ]
+  },
+  {
+    "slug": "atri-rudra",
+    "name": "Atri Rudra",
+    "aliases": ["Atri Rudra"],
+    "affiliations": ["University at Buffalo, SUNY"],
+    "homepage": "https://cse.buffalo.edu/faculty/atri/",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["theory", "algorithms", "IO lower bounds", "FlashAttention"],
+    "notes": "FlashAttention coauthor from University at Buffalo; no high-confidence personal X account found in the local search pass.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://cse.buffalo.edu/faculty/atri/"
+      }
+    ]
+  },
+  {
+    "slug": "christopher-re",
+    "name": "Christopher Ré",
+    "aliases": ["Christopher Ré", "Christopher Re", "Chris Ré", "Chris Re"],
+    "affiliations": ["Stanford University", "Hazy Research"],
+    "homepage": "https://cs.stanford.edu/~chrismre/",
+    "x": "https://x.com/HazyResearch",
+    "xConfidence": "lab-account",
+    "topics": ["Hazy Research", "data-centric AI", "LLM systems", "FlashAttention"],
+    "notes": "FlashAttention coauthor and Hazy Research lead; current high-confidence social link is the Hazy Research lab account.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://cs.stanford.edu/~chrismre/"
+      },
+      {
+        "label": "Hazy Research X",
+        "url": "https://x.com/HazyResearch"
+      }
+    ]
+  }
+]

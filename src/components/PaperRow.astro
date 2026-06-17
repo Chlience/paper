@@ -1,4 +1,5 @@
 ---
+import AuthorList from './AuthorList.astro';
 import { formatDate } from '../lib/site';
 
 interface Paper {
@@ -7,6 +8,7 @@ interface Paper {
   title: string;
   date?: string;
   authors?: string;
+  authorEntries?: { name: string; path?: string }[];
   summary?: string;
   tags?: string[];
 }
@@ -24,7 +26,11 @@ const { paper, showProvenance = true } = Astro.props;
   <div class="paper-row-main">
     <h3><a href={paper.path}>{paper.title}</a></h3>
     {paper.summary && <p>{paper.summary}</p>}
-    {paper.authors && <p class="paper-row-authors">{paper.authors}</p>}
+    {paper.authors && paper.authors !== 'Unknown' && (
+      <p class="paper-row-authors">
+        <AuthorList authors={paper.authors} authorEntries={paper.authorEntries} limit={10} />
+      </p>
+    )}
     <div class="paper-row-meta">
       {showProvenance && <span>{paper.slug}</span>}
       {paper.tags?.slice(0, 3).map((tag) => <a class="topic-link" href={`/papers/#tag-${tag.toLowerCase()}`}>{tag}</a>)}

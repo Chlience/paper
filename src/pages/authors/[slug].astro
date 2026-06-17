@@ -1,0 +1,99 @@
+---
+import PaperRow from '../../components/PaperRow.astro';
+import Layout from '../../layouts/Layout.astro';
+import data from '../../generated/paper-data.json';
+import { createPersonJsonLd, getAbsoluteUrl } from '../../lib/site';
+
+export function getStaticPaths() {
+  return data.authors.map((author) => ({
+    params: { slug: author.slug },
+    props: { author },
+  }));
+}
+
+const { author } = Astro.props;
+const canonicalPath = author.path;
+const authorUrl = getAbsoluteUrl(canonicalPath, Astro.site);
+const sameAs = [...new Set([author.homepage, author.x, ...(author.sources ?? []).map((source) => source.url)].filter(Boolean))];
+---
+
+<Layout
+  active="authors"
+  title={`${author.name} | Chlience Paper Archive`}
+  description={`${author.name} 的作者档案、公开账号和本站相关论文。`}
+  canonicalPath={canonicalPath}
+  jsonLd={createPersonJsonLd({
+    name: author.name,
+    url: authorUrl,
+    description: author.notes,
+    sameAs,
+  })}
+>
+  <article class="author-page container">
+    <header class="paper-header author-header">
+      <p class="eyebrow mono">{author.profileStatus === 'tracked' ? 'tracked author' : 'recurring author'}</p>
+      <h1>{author.name}</h1>
+      {author.notes && <p class="deck">{author.notes}</p>}
+      <div class="paper-meta">
+        <span>{author.paperCount} archived notes</span>
+        {author.xConfidence && <span>X: {author.xConfidence}</span>}
+        {author.homepage && <a href={author.homepage}>Homepage</a>}
+        {author.x && <a href={author.x}>X</a>}
+      </div>
+    </header>
+
+    <div class="author-layout">
+      <aside class="author-side">
+        {author.affiliations.length > 0 && (
+          <section>
+            <h2>Affiliations</h2>
+            <ul>
+              {author.affiliations.map((affiliation) => <li>{affiliation}</li>)}
+            </ul>
+          </section>
+        )}
+
+        {author.topics.length > 0 && (
+          <section>
+            <h2>Topics</h2>
+            <div class="author-topic-row">
+              {author.topics.map((topic) => <span>{topic}</span>)}
+            </div>
+          </section>
+        )}
+
+        {author.coauthors.length > 0 && (
+          <section>
+            <h2>Coauthors</h2>
+            <div class="author-link-list">
+              {author.coauthors.map((coauthor) => (
+                coauthor.path ? <a href={coauthor.path}>{coauthor.name}</a> : <span>{coauthor.name}</span>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {author.sources.length > 0 && (
+          <section>
+            <h2>Sources</h2>
+            <div class="author-link-list">
+              {author.sources.map((source) => <a href={source.url}>{source.label}</a>)}
+            </div>
+          </section>
+        )}
+      </aside>
+
+      <section class="author-main">
+        <div class="section-header">
+          <div>
+            <h2>Related Notes</h2>
+            <p>按论文归档时间排序，展示该作者在本站已经出现的材料。</p>
+          </div>
+        </div>
+        <div class="paper-list">
+          {author.papers.map((paper) => <PaperRow paper={paper} showProvenance={true} />)}
+        </div>
+      </section>
+    </div>
+  </article>
+</Layout>

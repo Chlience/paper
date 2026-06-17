@@ -58,6 +58,10 @@ if (!Array.isArray(data.papers) || data.papers.length === 0) {
   fail('No generated paper pages found.');
 }
 
+if (!Array.isArray(data.authors)) {
+  fail('No generated author pages found.');
+}
+
 for (const paper of data.papers) {
   const source = await fs.readFile(path.join(repoRoot, paper.file), 'utf8');
   for (const group of requiredSectionGroups) {
@@ -96,6 +100,7 @@ for (const file of htmlFiles) {
 const sitemapXmlPath = path.join(distDir, 'sitemap.xml');
 const sitemapShardPath = path.join(distDir, 'sitemap-0.xml');
 const robotsTxtPath = path.join(distDir, 'robots.txt');
+const authorsIndexPath = path.join(distDir, 'authors', 'index.html');
 
 if (!(await exists(sitemapXmlPath))) {
   fail('dist/sitemap.xml is missing.');
@@ -107,6 +112,17 @@ if (!(await exists(sitemapShardPath))) {
 
 if (!(await exists(robotsTxtPath))) {
   fail('dist/robots.txt is missing.');
+}
+
+if (data.authors.length > 0 && !(await exists(authorsIndexPath))) {
+  fail('dist/authors/index.html is missing.');
+}
+
+for (const author of data.authors) {
+  const authorPage = path.join(distDir, author.path.replace(/^\//, ''), 'index.html');
+  if (!(await exists(authorPage))) {
+    fail(`${path.relative(repoRoot, authorPage)} is missing.`);
+  }
 }
 
 if ((await exists(sitemapXmlPath)) && (await exists(robotsTxtPath))) {

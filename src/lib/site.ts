@@ -8,6 +8,7 @@ export const fallbackSiteUrl = 'https://papers.chlience.com';
 export const paths = {
   home: '/',
   papers: '/papers/',
+  authors: '/authors/',
   archive: '/archive/',
   workflow: '/workflow/',
   template: '/template/',
@@ -63,4 +64,23 @@ export const createArticleJsonLd = ({
         name,
       }))
     : undefined,
+});
+
+export const createPersonJsonLd = ({
+  name,
+  url,
+  description,
+  sameAs = [],
+}: {
+  name: string;
+  url: string;
+  description?: string;
+  sameAs?: string[];
+}) => ({
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name,
+  url,
+  description,
+  sameAs: sameAs.filter(Boolean),
 });

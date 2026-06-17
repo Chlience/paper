@@ -42,6 +42,14 @@ Date: 2026-06-07
 papers-index.md
 ```
 
+若论文作者已有档案，或新论文让某位作者在当前归档中跨论文重复出现，同步维护：
+
+```text
+authors.json
+```
+
+`authors.json` 只记录相对稳定的作者事实：姓名、别名、机构、主页、X 账号、账号核验状态、主题标签和来源链接。论文语境下的关系判断仍写入对应论文笔记的 `作者与关系` 章节。
+
 ## 阅读顺序
 
 1. 打开 arXiv abstract 页面，记录标题、作者、提交日期、版本、主题分类、项目链接。
@@ -103,6 +111,8 @@ papers-index.md
 - equal contribution、corresponding author、实验室或项目组织线索。
 - 与当前 `papers-index.md` 中已有作者是否重叠。
 - 与已有论文是否存在同主题、同方法、同系统、同数据集、同机构或引用关系。
+- 若作者已有 `/authors/<slug>/` 页面，在相关论文笔记和索引中优先使用作者页链接。
+- 若作者个人信息经过核验，更新 `authors.json`；账号搜索过程参考 `author-x-account-search-sop.md`，并记录 confidence。
 
 判断要求：
 
@@ -138,13 +148,14 @@ papers-index.md
 面向站点展示的内部链接在 Markdown 源文件中直接使用站点路径：
 
 - 已存档论文：`[2504.13837](/papers/2504.13837-rlvr-reasoning-boundary-base-model/)`。
+- 作者页：`[Tri Dao](/authors/tri-dao/)`。
 - 索引页：`[papers-index.md](/archive/)`。
 - 工作流页：`[paper-analysis-workflow.md](/workflow/)`。
 - 模板页：`[paper-note-template.md](/template/)`。
 
 写作要求：
 
-- 论文笔记、`papers-index.md` 和跨论文关系中的已存档论文链接必须使用 `/papers/<slug>/`，避免写成相对 `.md` 链接。
+- 论文笔记、`papers-index.md` 和跨论文关系中的已存档论文链接必须使用 `/papers/<slug>/`，作者链接必须使用 `/authors/<slug>/`，避免写成相对 `.md` 链接。
 - 当文本是在说明本地要编辑的文件名时，使用代码样式，例如 `2504.13837-rlvr-reasoning-boundary-base-model.md`。
 - 新增论文后，若其它笔记或索引提到该论文并需要跳转，也同步补成 `/papers/<slug>/` 链接。
 
@@ -183,6 +194,20 @@ $$
 4. 若论文属于新主题，建立新的 cluster。
 5. 若论文延续已有主题，写清楚它补充了什么视角。
 
+## 作者页维护
+
+作者页由构建脚本从两类信息生成：
+
+1. `authors.json` 中的人类维护档案，适合记录主页、X、机构、主题和核验来源。
+2. 论文 `Source -> Authors` 中跨论文重复出现的作者，适合自动汇总相关论文。
+
+维护原则：
+
+- 作者页存放稳定身份信息和跨论文聚合；论文页保留该论文语境下的作者关系、机构桥接和主题判断。
+- 账号、主页、机构等事实必须有来源链接。X 账号使用 `high`、`medium`、`lab-account`、`not-found` 等 confidence 标记。
+- 无法可靠拆分的团队署名、大规模 author list、文档贡献者列表先保留在论文页，不自动拆成作者页。
+- 新增作者档案后运行 `npm run build` 与 `npm run check:site`，确认 `/authors/` 和 `/authors/<slug>/` 已生成。
+
 ## 安全与双用途处理
 
 涉及安全、漏洞、攻击、绕过、滥用、社会制度套利、模型越狱或 agent 工具滥用时：
@@ -198,6 +223,7 @@ $$
 
 - 文件是否落盘。
 - `papers-index.md` 是否更新。
+- 作者页相关信息是否同步到 `authors.json`。
 - 每篇论文是否包含作者关系。
 - 是否保留来源 URL 和版本日期。
 - 是否区分来源事实、作者主张和本地推论。
@@ -205,7 +231,7 @@ $$
 - 是否把阅读后的有效交流提炼进对应笔记。
 - 是否存在先否定前项、再强调后项的对照式中文表达。
 - 是否避免长段复制论文原文。
-- 面向站点展示的内部链接是否使用 `/papers/<slug>/`、`/archive/`、`/workflow/` 或 `/template/`。
+- 面向站点展示的内部链接是否使用 `/papers/<slug>/`、`/authors/<slug>/`、`/archive/`、`/workflow/` 或 `/template/`。
 
 ## 最终回复
 

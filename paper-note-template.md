@@ -23,7 +23,7 @@ Sort-Time: YYYY-MM-DD HH:mm
 
 - 同机构作者群：
 - 跨机构桥接：
-- 与已存档作者重叠：
+- 与已存档作者重叠：若作者已有页面，使用 `[Author Name](/authors/<slug>/)`。
 - 与已存档论文的主题或方法关系：
 - 需要后续确认：
 
@@ -127,7 +127,7 @@ Sort-Time: YYYY-MM-DD HH:mm
 - 与已有论文的方法或系统关系：
 - 新增后应更新的索引 cluster：
 
-链接规范：若指向已存档论文，使用 `[2504.13837](/papers/2504.13837-rlvr-reasoning-boundary-base-model/)` 这类站点路径；本地文件名只用代码样式。
+链接规范：若指向已存档论文，使用 `[2504.13837](/papers/2504.13837-rlvr-reasoning-boundary-base-model/)` 这类站点路径；本地文件名只用代码样式。若指向已建档作者，使用 `[Tri Dao](/authors/tri-dao/)` 这类作者页路径。
 
 ## Reference Intake Brief
 

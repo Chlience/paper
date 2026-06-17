@@ -1,4 +1,5 @@
 ---
+import AuthorList from '../../components/AuthorList.astro';
 import Layout from '../../layouts/Layout.astro';
 import data from '../../generated/paper-data.json';
 import { createArticleJsonLd, getAbsoluteUrl } from '../../lib/site';
@@ -35,6 +36,12 @@ const h2Headings = paper.headings.filter((heading) => heading.depth === 2);
       <p class="eyebrow mono">{paper.slug}</p>
       <h1>{paper.title}</h1>
       <p class="deck">{paper.summary}</p>
+      {paper.authors && paper.authors !== 'Unknown' && (
+        <p class="paper-authors">
+          <span class="paper-authors-label mono">Authors</span>
+          <AuthorList authors={paper.authors} authorEntries={paper.authorEntries} />
+        </p>
+      )}
       <div class="paper-meta">
         {paper.date && <span>{paper.date}</span>}
         {paper.currentVersion && <span>{paper.currentVersion}</span>}
