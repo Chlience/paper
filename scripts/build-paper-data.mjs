@@ -136,6 +136,8 @@ const slugifyAuthor = (value = '') =>
     .replace(/-+/g, '-')
     .replace(/^-|-$/g, '') || 'author';
 
+const formatAuthorDisplayName = (name, chineseName = '') => (chineseName ? `${name} (${chineseName})` : name);
+
 const authorTextIsParseable = (value = '') => {
   const text = value.trim();
   if (!text || /^unknown$/i.test(text)) return false;
@@ -359,6 +361,7 @@ const build = async () => {
   const authorRecordsByKey = new Map();
   const addAuthorRecord = (key, profile, mention) => {
     const name = profile?.name ?? mention?.name;
+    const chineseName = profile?.chineseName ?? '';
     const slug = profile?.slug ?? slugifyAuthor(name);
     const aliasKeys = [name, ...(profile?.aliases ?? [])].filter(Boolean).map(normalizeAuthorKey);
     const paperSlugs = new Set();
@@ -390,6 +393,8 @@ const build = async () => {
       slug,
       path: `/authors/${slug}/`,
       name,
+      chineseName,
+      displayName: formatAuthorDisplayName(name, chineseName),
       aliases: profile?.aliases ?? [],
       affiliations: profile?.affiliations ?? [],
       homepage: profile?.homepage ?? '',
@@ -430,7 +435,7 @@ const build = async () => {
         if (!key || ownKeys.includes(key)) continue;
         const linked = authorRecordsByKey.get(key);
         coauthorsByKey.set(key, {
-          name: linked?.name ?? coauthorName,
+          name: linked?.displayName ?? coauthorName,
           path: linked?.path ?? '',
         });
       }
@@ -452,7 +457,9 @@ const build = async () => {
   for (const paper of papers) {
     paper.authorEntries = paper.parsedAuthors.map((name) => {
       const author = authorRecordsByKey.get(normalizeAuthorKey(name));
-      return author ? { name, path: author.path, slug: author.slug, profileStatus: author.profileStatus } : { name };
+      return author
+        ? { name: author.displayName, path: author.path, slug: author.slug, profileStatus: author.profileStatus }
+        : { name };
     });
     delete paper.parsedAuthors;
   }

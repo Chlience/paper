@@ -48,7 +48,7 @@ const recurringAuthors = data.authors.filter((author) => author.profileStatus ==
       {trackedAuthors.map((author) => (
         <a class="author-card" href={author.path}>
           <span class="mono">{author.paperCount} notes</span>
-          <strong>{author.name}</strong>
+          <strong>{author.displayName ?? author.name}</strong>
           {author.affiliations.length > 0 && <p>{author.affiliations.slice(0, 2).join(' / ')}</p>}
           {author.topics.length > 0 && (
             <div class="author-topic-row">
@@ -71,7 +71,7 @@ const recurringAuthors = data.authors.filter((author) => author.profileStatus ==
       <div class="container author-list">
         {recurringAuthors.map((author) => (
           <a href={author.path}>
-            <strong>{author.name}</strong>
+            <strong>{author.displayName ?? author.name}</strong>
             <span class="mono">{author.paperCount} notes</span>
           </a>
         ))}

@@ -48,7 +48,7 @@ papers-index.md
 authors.json
 ```
 
-`authors.json` 只记录相对稳定的作者事实：姓名、别名、机构、主页、X 账号、账号核验状态、主题标签和来源链接。论文语境下的关系判断仍写入对应论文笔记的 `作者与关系` 章节。
+`authors.json` 只记录相对稳定的作者事实：英文姓名、中文姓名、别名、机构、主页、X 账号、账号核验状态、主题标签和来源链接。论文语境下的关系判断仍写入对应论文笔记的 `作者与关系` 章节。
 
 ## 阅读顺序
 
@@ -204,7 +204,8 @@ $$
 维护原则：
 
 - 作者页存放稳定身份信息和跨论文聚合；论文页保留该论文语境下的作者关系、机构桥接和主题判断。
-- 账号、主页、机构等事实必须有来源链接。X 账号使用 `high`、`medium`、`lab-account`、`not-found` 等 confidence 标记。
+- 账号、主页、机构、中文姓名等事实必须有来源链接。X 账号使用 `high`、`medium`、`lab-account`、`not-found` 等 confidence 标记。
+- 若作者有已核验中文姓名，在 `authors.json` 写入 `chineseName`；站点展示为 `English Name (中文姓名)`。
 - 无法可靠拆分的团队署名、大规模 author list、文档贡献者列表先保留在论文页，不自动拆成作者页。
 - 新增作者档案后运行 `npm run build` 与 `npm run check:site`，确认 `/authors/` 和 `/authors/<slug>/` 已生成。
 

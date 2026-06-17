@@ -12,6 +12,7 @@ export function getStaticPaths() {
 }
 
 const { author } = Astro.props;
+const authorDisplayName = author.displayName ?? author.name;
 const canonicalPath = author.path;
 const authorUrl = getAbsoluteUrl(canonicalPath, Astro.site);
 const sameAs = [...new Set([author.homepage, author.x, ...(author.sources ?? []).map((source) => source.url)].filter(Boolean))];
@@ -19,11 +20,11 @@ const sameAs = [...new Set([author.homepage, author.x, ...(author.sources ?? [])
 
 <Layout
   active="authors"
-  title={`${author.name} | Chlience Paper Archive`}
-  description={`${author.name} 的作者档案、公开账号和本站相关论文。`}
+  title={`${authorDisplayName} | Chlience Paper Archive`}
+  description={`${authorDisplayName} 的作者档案、公开账号和本站相关论文。`}
   canonicalPath={canonicalPath}
   jsonLd={createPersonJsonLd({
-    name: author.name,
+    name: authorDisplayName,
     url: authorUrl,
     description: author.notes,
     sameAs,
@@ -32,7 +33,7 @@ const sameAs = [...new Set([author.homepage, author.x, ...(author.sources ?? [])
   <article class="author-page container">
     <header class="paper-header author-header">
       <p class="eyebrow mono">{author.profileStatus === 'tracked' ? 'tracked author' : 'recurring author'}</p>
-      <h1>{author.name}</h1>
+      <h1>{authorDisplayName}</h1>
       {author.notes && <p class="deck">{author.notes}</p>}
       <div class="paper-meta">
         <span>{author.paperCount} archived notes</span>
