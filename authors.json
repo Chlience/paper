@@ -11,8 +11,8 @@
     "homepage": "https://tridao.me/",
     "x": "https://x.com/tri_dao",
     "xConfidence": "high",
-    "topics": ["FlashAttention", "efficient attention", "GPU kernels", "LLM systems"],
-    "notes": "FlashAttention first author; current public profile connects Princeton, Together AI, and the FlashAttention implementation line.",
+    "topics": ["FlashAttention", "FlashAttention-2", "efficient attention", "GPU kernels", "LLM systems"],
+    "notes": "FlashAttention first author and FlashAttention-2 single author; current public profile connects Princeton, Together AI, and the FlashAttention implementation line.",
     "sources": [
       {
         "label": "Homepage",
