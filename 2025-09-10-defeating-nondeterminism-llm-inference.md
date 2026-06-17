@@ -1,7 +1,7 @@
 # Defeating Nondeterminism in LLM Inference 技术文章笔记
 
-Date: 2026-06-07
-Sort-Time: 2026-06-07 11:00
+Date: 2026-01-30
+Sort-Time: 2026-01-30 15:10
 
 ## Source
 
@@ -11,7 +11,7 @@ Sort-Time: 2026-06-07 11:00
 - Code/Project: https://github.com/thinking-machines-lab/batch_invariant_ops
 - Author: Horace He, in collaboration with others at Thinking Machines Lab
 - Published: 2025-09-10
-- Current version read: web article accessed 2026-06-07
+- Current version read: web article accessed 2026-01-30
 - DOI: https://doi.org/10.64434/tml.20250910
 - Type: technical blog / engineering note
 

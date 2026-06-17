@@ -1,7 +1,7 @@
 # DeepSeek-V4: Towards Highly Efficient Million-Token Context Intelligence 论文笔记
 
-Date: 2026-06-16
-Sort-Time: 2026-06-16 17:22
+Date: 2026-04-25
+Sort-Time: 2026-04-25 14:30
 
 ## Source
 
@@ -13,7 +13,7 @@ Sort-Time: 2026-06-16 17:22
 - Inference code: https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro/tree/main/inference
 - Authors: DeepSeek-AI；appendix author list alphabetically by first name.
 - Released: 2026-04-24
-- Current version read: PDF and Hugging Face model card, accessed 2026-06-16.
+- Current version read: PDF and Hugging Face model card, accessed 2026-04-25.
 - Subjects: model architecture, MoE systems, long-context inference, post-training, agentic AI.
 
 ## 作者与关系
