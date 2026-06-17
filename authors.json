@@ -107,5 +107,395 @@
         "url": "https://x.com/HazyResearch"
       }
     ]
+  },
+  {
+    "slug": "aditi-raghunathan",
+    "name": "Aditi Raghunathan",
+    "aliases": ["Aditi Raghunathan"],
+    "affiliations": ["Carnegie Mellon University", "AI Reliability at CMU"],
+    "homepage": "https://www.cs.cmu.edu/~aditirag/",
+    "x": "https://x.com/AdtRaghunathan",
+    "xConfidence": "high",
+    "topics": ["AI safety", "robust machine learning", "verification", "reward hacking"],
+    "notes": "CMU assistant professor and recurring author across Self-Trained Verification and ImpossibleBench; homepage, X bio, Scholar/OpenReview, and project context align.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://www.cs.cmu.edu/~aditirag/"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/AdtRaghunathan"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=Ch9iRwQAAAAJ"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Aditi_Raghunathan1"
+      }
+    ]
+  },
+  {
+    "slug": "ziqian-zhong",
+    "name": "Ziqian Zhong",
+    "aliases": ["Ziqian Zhong"],
+    "affiliations": ["Carnegie Mellon University", "Transluce"],
+    "homepage": "https://fjzzq2002.github.io/",
+    "x": "https://x.com/fjzzq2002",
+    "xConfidence": "high",
+    "topics": ["AI safety", "interpretability", "coding agents", "reward hacking"],
+    "notes": "ImpossibleBench first author; homepage, X handle, GitHub handle, and CMU affiliation use the same fjzzq2002 identity.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://fjzzq2002.github.io/"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/fjzzq2002"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/fjzzq2002"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=iZpSjEYAAAAJ"
+      }
+    ]
+  },
+  {
+    "slug": "chen-henry-wu",
+    "name": "Chen Henry Wu",
+    "aliases": ["Chen Henry Wu", "Chen Wu"],
+    "affiliations": ["Carnegie Mellon University", "Tsinghua University (undergraduate)"],
+    "homepage": "https://chenwu.io/",
+    "x": "https://x.com/ChenHenryWu",
+    "xConfidence": "high",
+    "topics": ["language agents", "verification", "reward shaping", "AI safety"],
+    "notes": "Self-Trained Verification first author; homepage, X bio, GitHub, and CMU/Tsinghua education signals align.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://chenwu.io/"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/ChenHenryWu"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/ChenWu98"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=WFKit_4AAAAJ"
+      }
+    ]
+  },
+  {
+    "slug": "guangming-sheng",
+    "name": "Guangming Sheng",
+    "aliases": ["Guangming Sheng"],
+    "affiliations": ["The University of Hong Kong", "ByteDance Seed"],
+    "homepage": "https://github.com/PeterSH6",
+    "x": "https://x.com/PeterSheng66",
+    "xConfidence": "high",
+    "topics": ["VERL", "HybridFlow", "RLHF systems", "post-training infrastructure"],
+    "notes": "HybridFlow first author and DAPO infrastructure contributor; GitHub links the X handle and pins VERL/HybridFlow-related work.",
+    "sources": [
+      {
+        "label": "GitHub",
+        "url": "https://github.com/PeterSH6"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/PeterSheng66"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=yCKicYcAAAAJ"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Guangming_Sheng1"
+      }
+    ]
+  },
+  {
+    "slug": "haibin-lin",
+    "name": "Haibin Lin",
+    "aliases": ["Haibin Lin"],
+    "affiliations": ["ByteDance Seed"],
+    "homepage": "https://sites.google.com/view/haibinlin/",
+    "x": "https://x.com/eric_haibin_lin",
+    "xConfidence": "high",
+    "topics": ["VERL", "HybridFlow", "LLM systems", "post-training infrastructure"],
+    "notes": "ByteDance Seed LLM systems researcher; homepage and GitHub both connect Haibin Lin to VERL and the eric_haibin_lin X handle.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://sites.google.com/view/haibinlin/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/eric-haibin-lin"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/eric_haibin_lin"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=jx9u_y4AAAAJ"
+      }
+    ]
+  },
+  {
+    "slug": "chi-zhang",
+    "name": "Chi Zhang",
+    "aliases": ["Chi Zhang"],
+    "affiliations": ["ByteDance", "University of Southern California"],
+    "homepage": "https://sites.google.com/view/chizhang-usc/",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["VERL", "HybridFlow", "RLHF systems", "model engine"],
+    "notes": "HybridFlow and DAPO recurring author; GitHub and homepage align with USC-to-ByteDance RLHF infrastructure work, but no high-confidence personal X account was found.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://sites.google.com/view/chizhang-usc/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/vermouth1992"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=z83Itm8AAAAJ"
+      }
+    ]
+  },
+  {
+    "slug": "wang-zhang",
+    "name": "Wang Zhang",
+    "aliases": ["Wang Zhang"],
+    "affiliations": ["ByteDance"],
+    "homepage": "https://zw0610.github.io/",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["VERL", "HybridFlow", "RL systems", "GPU systems"],
+    "notes": "HybridFlow and DAPO recurring author; GitHub and Scholar align with ByteDance ML systems/RL work, but no high-confidence personal X account was found.",
+    "sources": [
+      {
+        "label": "GitHub",
+        "url": "https://github.com/zw0610"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=h4VxTNUAAAAJ"
+      }
+    ]
+  },
+  {
+    "slug": "ximing-lu",
+    "name": "Ximing Lu",
+    "aliases": ["Ximing Lu", "Gloria Ximing Lu"],
+    "affiliations": ["NVIDIA Research", "University of Washington"],
+    "homepage": "https://gloriaximinglu.github.io/",
+    "x": "https://x.com/GXiming",
+    "xConfidence": "high",
+    "topics": ["ProRL", "BroRL", "reinforcement learning", "reasoning models"],
+    "notes": "ProRL/BroRL recurring author; homepage lists NVIDIA ProRL work and links the GXiming X identity.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://gloriaximinglu.github.io/"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/GXiming"
+      },
+      {
+        "label": "NVIDIA Blog Author",
+        "url": "https://developer.nvidia.com/blog/author/ximingl/"
+      },
+      {
+        "label": "NVIDIA LPR",
+        "url": "https://research.nvidia.com/labs/lpr/author/ximing-lu/"
+      }
+    ]
+  },
+  {
+    "slug": "shizhe-diao",
+    "name": "Shizhe Diao",
+    "aliases": ["Shizhe Diao"],
+    "affiliations": ["Thinking Machines Lab", "NVIDIA Research", "Hong Kong University of Science and Technology"],
+    "homepage": "https://shizhediao.github.io/",
+    "x": "https://x.com/shizhediao",
+    "xConfidence": "high",
+    "topics": ["ProRL", "BroRL", "post-training", "efficient language models"],
+    "notes": "ProRL/BroRL recurring author; homepage, X bio, OpenReview, and NVIDIA pages consistently identify the same researcher.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://shizhediao.github.io/"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/shizhediao"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Shizhe_Diao2"
+      },
+      {
+        "label": "NVIDIA Blog Author",
+        "url": "https://developer.nvidia.com/blog/author/sdiao/"
+      }
+    ]
+  },
+  {
+    "slug": "yejin-choi",
+    "name": "Yejin Choi",
+    "aliases": ["Yejin Choi"],
+    "affiliations": ["Stanford University", "NVIDIA", "University of Washington"],
+    "homepage": "https://yejinc.github.io/",
+    "x": "https://x.com/YejinChoinka",
+    "xConfidence": "high",
+    "topics": ["language models", "reasoning", "commonsense AI", "ProRL"],
+    "notes": "ProRL/BroRL senior author; homepage, X bio, OpenReview, Stanford HAI, and NVIDIA pages align.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://yejinc.github.io/"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/YejinChoinka"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Yejin_Choi1"
+      },
+      {
+        "label": "NVIDIA Blog Author",
+        "url": "https://developer.nvidia.com/blog/author/yejinc/"
+      }
+    ]
+  },
+  {
+    "slug": "jan-kautz",
+    "name": "Jan Kautz",
+    "aliases": ["Jan Kautz"],
+    "affiliations": ["NVIDIA"],
+    "homepage": "https://jankautz.com/",
+    "x": "https://x.com/jankautz",
+    "xConfidence": "high",
+    "topics": ["NVIDIA Research", "machine learning", "computer vision", "ProRL"],
+    "notes": "ProRL/BroRL senior author; homepage, X bio, NVIDIA Research, and Scholar consistently identify NVIDIA Learning and Perception Research leadership.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://jankautz.com/"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/jankautz"
+      },
+      {
+        "label": "NVIDIA Research",
+        "url": "https://research.nvidia.com/person/jan-kautz"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=P9FclNEAAAAJ"
+      }
+    ]
+  },
+  {
+    "slug": "yi-dong",
+    "name": "Yi Dong",
+    "aliases": ["Yi Dong"],
+    "affiliations": ["NVIDIA"],
+    "homepage": "https://yidong72.github.io/",
+    "x": "https://x.com/doyend",
+    "xConfidence": "high",
+    "topics": ["NVIDIA Research", "reasoning models", "virtual agents", "ProRL"],
+    "notes": "ProRL/BroRL senior author; NVIDIA blog author page, GitHub, homepage, and X activity align with NVIDIA reasoning model work.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://yidong72.github.io/"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/doyend"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/yidong72"
+      },
+      {
+        "label": "NVIDIA Blog Author",
+        "url": "https://developer.nvidia.com/blog/author/yidong/"
+      }
+    ]
+  },
+  {
+    "slug": "jian-hu",
+    "name": "Jian Hu",
+    "aliases": ["Jian Hu"],
+    "affiliations": ["NVIDIA", "National Taiwan University", "HKUST(GZ)"],
+    "homepage": "https://hijkzzz.notion.site/",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["ProRL", "BroRL", "OpenRLHF", "RLHF systems"],
+    "notes": "ProRL/BroRL recurring author; NVIDIA author page and personal blog align with OpenRLHF/REINFORCE++ and RLHF/RLVR systems work, but no high-confidence personal X account was found.",
+    "sources": [
+      {
+        "label": "Blog",
+        "url": "https://hijkzzz.notion.site/"
+      },
+      {
+        "label": "NVIDIA Blog Author",
+        "url": "https://developer.nvidia.com/blog/author/jianh/"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Jian_Hu5"
+      },
+      {
+        "label": "NVIDIA LPR",
+        "url": "https://research.nvidia.com/labs/lpr/author/jian-hu/"
+      }
+    ]
+  },
+  {
+    "slug": "mingjie-liu",
+    "name": "Mingjie Liu",
+    "aliases": ["Mingjie Liu"],
+    "affiliations": ["NVIDIA", "University of Texas at Austin"],
+    "homepage": "https://research.nvidia.com/person/mingjie-liu",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["ProRL", "BroRL", "reinforcement learning", "reasoning models"],
+    "notes": "ProRL/BroRL recurring author; NVIDIA profile and blog author page confirm NVIDIA reasoning/RL work, but no high-confidence personal X account was found.",
+    "sources": [
+      {
+        "label": "NVIDIA Research",
+        "url": "https://research.nvidia.com/person/mingjie-liu"
+      },
+      {
+        "label": "NVIDIA Blog Author",
+        "url": "https://developer.nvidia.com/blog/author/mingjiel/"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=-v5DbrMAAAAJ"
+      }
+    ]
   }
 ]
