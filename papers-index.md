@@ -1,6 +1,6 @@
 # Paper Archive Index
 
-Date: 2026-06-17
+Date: 2026-06-18
 
 ## 本地工作流
 
@@ -12,6 +12,7 @@ Date: 2026-06-17
 
 | arXiv | Title | Local Note | Theme | Authors / Institutions |
 | --- | --- | --- | --- | --- |
+| GLM52-2026-06-16 | GLM-5.2: Built for Long-Horizon Tasks | [2026-06-16-glm-5-2-long-horizon-tasks.md](/papers/2026-06-16-glm-5-2-long-horizon-tasks/) | GLM-5.2, 1M context, long-horizon coding agent, IndexShare, IndexCache, DSA, MTP, KVShare, speculative decoding, slime, compact trajectory, OPD, PPO, anti-hack | Z.ai / GLM-5 Team; same GLM-5 series line as [2602.15763](/papers/2602.15763-glm-5-agentic-engineering/); direct engineering relation with slime / THUDM and IndexCache authors Yushi Bai, Qian Dong, Ting Jiang, Xin Lv, Zhengxiao Du, Aohan Zeng, Jie Tang, Juanzi Li |
 | 2602.02276 | Kimi K2.5: Visual Agentic Intelligence | [2602.02276-kimi-k2-5-visual-agentic-intelligence.md](/papers/2602.02276-kimi-k2-5-visual-agentic-intelligence/) | Kimi K2.5, visual agentic intelligence, MoonViT-3D, joint text-vision optimization, zero-vision SFT, visual RL, Agent Swarm, PARL, Toggle token-efficient RL, DEP, 256K context | Kimi Team / Moonshot AI; arXiv lists Tongtong Bai and 324 other authors; contributor appendix overlaps with Seer authors [Ruoyu Qin](/authors/ruoyu-qin/), [Weiran He](/authors/weiran-he/), [Weixiao Huang](/authors/weixiao-huang/), [Yangkun Zhang](/authors/yangkun-zhang/), [Yikai Zhao](/authors/yikai-zhao/), [Bo Pang](/authors/bo-pang/), [Xinran Xu](/authors/xinran-xu/); Tao Yu marked The University of Hong Kong in appendix |
 | 2307.08691 | FlashAttention-2: Faster Attention with Better Parallelism and Work Partitioning | [2307.08691-flashattention-2-parallelism-work-partitioning.md](/papers/2307.08691-flashattention-2-parallelism-work-partitioning/) | FlashAttention-2, exact softmax attention, sequence parallelism, warp-level work partitioning, non-matmul FLOPs, CUTLASS/CuTe, A100/H100 attention kernel | [Tri Dao](/authors/tri-dao/) / Stanford Hazy Research and Dao-AILab implementation line |
 | SLIME-2026-06-17 | slime v0.3.0 / main 文档快照：RL Scaling 后训练框架分析 | [2026-06-17-slime-rl-scaling-framework.md](/papers/2026-06-17-slime-rl-scaling-framework/) | slime, RL scaling, Megatron, SGLang, Data Buffer, agentic RL, fully async, dynamic sampling, partial rollout, TIS, train-rollout consistency | slime Team / THUDM; citation authors Zilin Zhu, Chengxing Xie, Xin Lv and slime Contributors; direct ecosystem relation with GLM / Z.ai / Tsinghua and SGLang / Megatron-LM |
@@ -259,12 +260,12 @@ Date: 2026-06-17
 - Internal relation: report 以 DeepSeek-AI 为作者；appendix 将 Research & Engineering authors 按 first name 字母序列出，并标记已离队成员。与 [2501.12948](/papers/2501.12948-deepseek-r1-rl-reasoning/) 共享大量 DeepSeek-R1 / V3 系列核心作者线索，包括 Wenfeng Liang、Xiao Bi、Xingkai Yu、Junxiao Song、Peiyi Wang、Shirong Ma、Zhibin Gou、Zhihong Shao、Ziyi Gao 等。
 - Theme relation: DeepSeek-V4-Pro, DeepSeek-V4-Flash, 1M context, Compressed Sparse Attention, Heavily Compressed Attention, DeepSeekMoE, mHC, Muon, TileLang, deterministic kernels, heterogeneous KV cache, on-disk KV cache, FP4 QAT, on-policy distillation, agent sandbox, million-token RL/OPD infrastructure。
 
-### Cluster AD: GLM-5、Agentic Engineering 与 Asynchronous RL Systems
+### Cluster AD: GLM-5 / GLM-5.2、Agentic Engineering 与 Long-Horizon Coding Agents
 
-- Paper: `2602.15763`
+- Paper / Material: `2602.15763`, `GLM52-2026-06-16`
 - Institutions: Zhipu AI, Tsinghua University。
-- Internal relation: title page 以 GLM-5 Team 署名，贡献表按 first name 字母序列出；tech leads 为 Aohan Zeng、Xin Lv、Zhenyu Hou、Zhengxiao Du、Qinkai Zheng、Bin Chen、Da Yin；advisors 为 Jie Tang、Yuxiao Dong、Juanzi Li、Hongning Wang、Minlie Huang、Bin Xu。该团队线与 GLM / Zhipu / Tsinghua 大模型工程生态直接相关。
-- Theme relation: GLM-5, agentic engineering, 744B total / 40B active MoE, Multi-latent Attention, Muon Split, parameter-sharing MTP, DeepSeek Sparse Attention, 200K mid-training, slime asynchronous RL, TITO gateway, direct double-sided importance sampling, stale sample dropping, DP-aware routing, PD disaggregation, CC-Bench-V2, Agent-as-a-Judge, Chinese chip adaptation。
+- Internal relation: `2602.15763` title page 以 GLM-5 Team 署名，贡献表按 first name 字母序列出；tech leads 为 Aohan Zeng、Xin Lv、Zhenyu Hou、Zhengxiao Du、Qinkai Zheng、Bin Chen、Da Yin；advisors 为 Jie Tang、Yuxiao Dong、Juanzi Li、Hongning Wang、Minlie Huang、Bin Xu。GLM-5.2 blog/model card/GitHub README 延续同一 GLM-5 series citation，并把 GLM-5.2、GLM-5.1、GLM-5 放在同一仓库维护。IndexCache / IndexShare 论文 `2603.12201` 的作者 Yushi Bai、Qian Dong、Ting Jiang、Xin Lv、Zhengxiao Du、Aohan Zeng、Jie Tang、Juanzi Li 与 GLM-5 团队存在明显人员重叠。
+- Theme relation: GLM-5, GLM-5.2, agentic engineering, 744B total / 40B active MoE, Multi-latent Attention, Muon Split, parameter-sharing MTP, DeepSeek Sparse Attention, IndexShare / IndexCache, 1M context, MTP KVShare, speculative decoding, rejection sampling, TV loss, slime asynchronous RL, compact trajectory, sub-agent workflow, parallel OPD, critic-based PPO, anti-hack coding RL, TITO gateway, direct double-sided importance sampling, stale sample dropping, DP-aware routing, PD disaggregation, CC-Bench-V2, long-horizon coding agent。
 
 ### Cluster AE: Seer、Synchronous RL Rollout 与 Group-Aware Context Learning
 
@@ -318,6 +319,14 @@ Date: 2026-06-17
 
 ## 跨论文关系
 
+- `GLM52-2026-06-16` 新增 GLM-5.2 release 节点。它把 GLM-5 系列从 [2602.15763](/papers/2602.15763-glm-5-agentic-engineering/) 的 200K agentic engineering 推进到 1M long-horizon coding agent，新增 IndexShare / IndexCache、MTP KVShare、rejection sampling、TV loss、compact trajectory PPO 和 coding anti-hack。
+- `GLM52-2026-06-16` 和 [2602.15763](/papers/2602.15763-glm-5-agentic-engineering/) 是同一 GLM-5 series 的技术报告与后续 release blog 关系。GLM-5.2 延续 744B-A40B、DSA、MTP、slime 和 agentic RL，把重点转向 1M context、long-horizon coding benchmark 和 production serving。
+- `GLM52-2026-06-16` 和 [2026-06-17](/papers/2026-06-17-slime-rl-scaling-framework/) 互相印证。slime 文档说明 GLM-5.2 是其 production RL framework 支撑对象；GLM-5.2 blog 给出 slime 在 compact trajectory、sub-agent workflow、parallel OPD、KV-cache FP8 和 training-serving 配置复用中的具体使用。
+- `GLM52-2026-06-16` 和 [2606.12370](/papers/2606.12370-bebop-mtp-rejection-sampling-rl-training/) 直接相连。GLM-5.2 的 MTP 明确采用 rejection sampling 和 end-to-end TV loss，提高 speculative decoding acceptance length；Bebop 提供这套 MTP rejection sampling / TV loss 的理论与 rollout acceleration 语境。
+- `GLM52-2026-06-16` 和 [2605.14220](/papers/2605.14220-training-inference-mismatch-llm-rl/)、[2025-09-10](/papers/2025-09-10-defeating-nondeterminism-llm-inference/) 连接在 train-inference consistency。GLM-5.2 的 MTP KVShare 目标之一是降低 GLM-5.1 MTP layer 的训练-推理路径差异；IndexShare 和 DSA top-k reuse 也需要审计 rollout/trainer/inference 一致性。
+- `GLM52-2026-06-16` 和 [2511.14617](/papers/2511.14617-seer-online-context-learning-llm-rl/) 形成 rollout 系统对照。Seer 在同步 RL 中压低 group rollout tail；GLM-5.2/slime 支持 compact trajectory、sub-agent workflow、black-box/white-box rollout 和 production serving 复用。
+- `GLM52-2026-06-16` 和 [2026-04-24](/papers/2026-04-24-deepseek-v4-million-token-context-intelligence/) 共同代表 1M context system reports。DeepSeek-V4 关注 CSA/HCA、mHC、OPD、deterministic kernels 和 agent sandbox；GLM-5.2 关注 DSA + IndexShare、MTP/KVShare、slime、anti-hack coding RL 和 long-horizon coding agent。
+- `GLM52-2026-06-16` 和 [2506.19248](/papers/2506.19248-inference-time-reward-hacking-llms/)、[2510.20270](/papers/2510.20270-impossiblebench-test-case-exploitation/)、[2503.11926](/papers/2503.11926-monitoring-reasoning-models-obfuscation/) 共享 reward hacking / monitorability 风险。GLM-5.2 的 online anti-hack guard 说明 coding-agent reward hacking 已经进入 production RL 训练路径，需要同时记录防御召回、误拦截和绕过行为。
 - `2602.02276` 新增 Kimi K2.5 / visual agentic intelligence 节点。它把 1T MoE backbone、MoonViT-3D、早期低比例 text-vision joint pretraining、zero-vision SFT、visual RL、Token Efficient RL Toggle、DEP 和 Agent Swarm 放在同一条 production multimodal agentic RL pipeline 中。
 - `2602.02276` 和 [2511.14617](/papers/2511.14617-seer-online-context-learning-llm-rl/) 共享 Moonshot/Kimi 生态和多位作者。Seer 解释 synchronous RL rollout 中 group-aware context learning、global KVCache、LFS 和 grouped speculative decoding；K2.5 展示上层 multimodal agentic RL workload、Unified Agentic RL Environment 和 Agent Swarm 对 rollout system 的需求。
 - `2602.02276` 和 [2602.15763](/papers/2602.15763-glm-5-agentic-engineering/)、[2026-06-17](/papers/2026-06-17-slime-rl-scaling-framework/) 构成 production agentic RL pipeline 对照。GLM/slime 强调 TITO、async RL、direct double-sided IS、Data Buffer 和 SGLang/Megatron 控制面；K2.5 强调视觉 agent、MoonViT-3D、visual RL、LLM Gateway、100,000 concurrent agent tasks 和 swarm orchestration。
