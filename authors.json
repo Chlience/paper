@@ -1118,5 +1118,172 @@
         "url": "https://www.amazon.science/author/pieter-abbeel"
       }
     ]
+  },
+  {
+    "slug": "chenggang-zhao",
+    "name": "Chenggang Zhao",
+    "aliases": ["Chenggang Zhao", "LyricZhao"],
+    "affiliations": ["DeepSeek-AI", "NVIDIA (previous public profile)", "SenseTime (previous public profile)", "Tsinghua University (previous public profile)"],
+    "homepage": "https://github.com/LyricZhao",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["DeepEP", "DeepGEMM", "MoE systems", "GPU kernels", "LLM infrastructure"],
+    "notes": "DeepEP and DeepGEMM citation author; GitHub profile identifies DeepSeek-AI infra affiliation and prior NVIDIA, SenseTime and Tsinghua background. Profile pass also found Scholar/OpenReview records tied to DeepSeek AI.",
+    "sources": [
+      {
+        "label": "GitHub",
+        "url": "https://github.com/LyricZhao"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=4125Hi0AAAAJ"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Chenggang_Zhao1"
+      },
+      {
+        "label": "DeepEP",
+        "url": "https://github.com/deepseek-ai/DeepEP"
+      },
+      {
+        "label": "DeepGEMM",
+        "url": "https://github.com/deepseek-ai/DeepGEMM"
+      }
+    ]
+  },
+  {
+    "slug": "shangyan-zhou",
+    "name": "Shangyan Zhou",
+    "aliases": ["Shangyan Zhou", "sphish"],
+    "affiliations": ["DeepSeek-AI"],
+    "homepage": "https://github.com/sphish",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["DeepEP", "MoE systems", "LLM infrastructure"],
+    "notes": "DeepEP citation author; GitHub profile identifies DeepSeek-AI affiliation and links sy-zhou.com. Individual publication/profile evidence beyond GitHub should be rechecked before adding more fields.",
+    "sources": [
+      {
+        "label": "GitHub",
+        "url": "https://github.com/sphish"
+      },
+      {
+        "label": "DeepEP",
+        "url": "https://github.com/deepseek-ai/DeepEP"
+      }
+    ]
+  },
+  {
+    "slug": "chengqi-deng",
+    "name": "Chengqi Deng",
+    "aliases": ["Chengqi Deng", "KinglittleQ"],
+    "affiliations": ["DeepSeek-AI", "ZJULearning"],
+    "homepage": "https://github.com/KinglittleQ",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["DeepEP", "DeepSeek systems", "similarity search", "GPU infrastructure"],
+    "notes": "DeepEP citation author and DeepSeek systems contributor; GitHub profile identifies DeepSeek-AI and ZJULearning membership, and Scholar/OpenReview records include DeepSeek-related papers.",
+    "sources": [
+      {
+        "label": "GitHub",
+        "url": "https://github.com/KinglittleQ"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=m4JxPdwAAAAJ"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Chengqi_Deng1"
+      },
+      {
+        "label": "DeepEP",
+        "url": "https://github.com/deepseek-ai/DeepEP"
+      }
+    ]
+  },
+  {
+    "slug": "zhean-xu",
+    "name": "Zhean Xu",
+    "aliases": ["Zhean Xu", "zheanxu"],
+    "affiliations": ["DeepSeek AI", "Tsinghua University (verified email on Scholar)"],
+    "homepage": "https://scholar.google.com/citations?user=N_tFHSEAAAAJ",
+    "x": "https://x.com/zheanxu",
+    "xConfidence": "high",
+    "topics": ["DeepEP", "DeepGEMM", "AI infrastructure", "GPU kernels", "MoE systems"],
+    "notes": "DeepEP and DeepGEMM citation author; Scholar profile identifies DeepSeek AI and a verified Tsinghua email, and X bio states AI infra at DeepSeek.",
+    "sources": [
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=N_tFHSEAAAAJ"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/zheanxu"
+      },
+      {
+        "label": "DeepEP",
+        "url": "https://github.com/deepseek-ai/DeepEP"
+      },
+      {
+        "label": "DeepGEMM",
+        "url": "https://github.com/deepseek-ai/DeepGEMM"
+      }
+    ]
+  },
+  {
+    "slug": "chenhao-xu",
+    "name": "Chenhao Xu",
+    "aliases": ["Chenhao Xu", "bucket-xv"],
+    "affiliations": ["DeepSeek-AI", "Peking University"],
+    "homepage": "https://bucket-xv.github.io/",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["DeepGEMM", "TileKernels", "GPU kernels", "LLM infrastructure", "deterministic kernels"],
+    "notes": "DeepGEMM citation author; homepage identifies him as a Peking University undergraduate and DeepSeek system engineer focused on LLM infra and GPU kernels.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://bucket-xv.github.io/"
+      },
+      {
+        "label": "DeepGEMM",
+        "url": "https://github.com/deepseek-ai/DeepGEMM"
+      },
+      {
+        "label": "TileKernels",
+        "url": "https://github.com/deepseek-ai/TileKernels"
+      }
+    ]
+  },
+  {
+    "slug": "shengyu-liu",
+    "name": "Shengyu Liu",
+    "chineseName": "刘胜与",
+    "aliases": ["Shengyu Liu", "Liu Shengyu", "interestingLSY"],
+    "affiliations": ["DeepSeek-AI"],
+    "homepage": "https://interestinglsy.github.io/",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["DeepGEMM", "FlashMLA", "MLSys", "kernel design", "AI infrastructure"],
+    "notes": "DeepGEMM citation author; homepage identifies him as working at DeepSeek-AI on MLSys and kernel design, and profile pass found a Scholar profile with DeepSeek AI verified email.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://interestinglsy.github.io/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/interestingLSY"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=tkx4NIUAAAAJ"
+      },
+      {
+        "label": "DeepGEMM",
+        "url": "https://github.com/deepseek-ai/DeepGEMM"
+      }
+    ]
   }
 ]
