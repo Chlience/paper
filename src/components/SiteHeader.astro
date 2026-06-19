@@ -1,4 +1,5 @@
 ---
+import PaperSearchDialog from './PaperSearchDialog.astro';
 import { paths } from '../lib/site';
 
 interface Props {
@@ -28,6 +29,11 @@ const navItems = [
         <a href={item.href} class:list={[active === item.id && 'is-active']}>{item.label}</a>
       ))}
       <a href={paths.mainSite}>主站</a>
+      <button type="button" class="site-search-trigger" data-paper-search-open>
+        <span>搜索</span>
+        <kbd>⌘K</kbd>
+      </button>
     </nav>
+    <PaperSearchDialog />
   </div>
 </header>

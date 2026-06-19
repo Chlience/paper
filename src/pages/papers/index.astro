@@ -3,22 +3,6 @@ import PaperRow from '../../components/PaperRow.astro';
 import Layout from '../../layouts/Layout.astro';
 import data from '../../generated/paper-data.json';
 
-const searchablePapers = data.papers.map((paper) => ({
-  paper,
-  searchText: [
-    paper.title,
-    paper.summary,
-    paper.authors,
-    paper.slug,
-    paper.subjects,
-    paper.currentVersion,
-    ...(paper.tags ?? []),
-  ]
-    .filter(Boolean)
-    .join(' ')
-    .toLocaleLowerCase(),
-}));
-
 const papersByTag = data.tags.map((tag) => ({
   tag,
   papers: data.papers.filter((paper) => paper.tags.includes(tag)),
@@ -33,31 +17,8 @@ const papersByTag = data.tags.map((tag) => ({
   </section>
 
   <section class="section compact">
-    <div class="container paper-search" data-paper-search>
-      <div class="paper-search-field">
-        <label for="paper-search-input">搜索论文</label>
-        <div class="paper-search-control">
-          <input
-            id="paper-search-input"
-            data-paper-search-input
-            type="search"
-            inputmode="search"
-            autocomplete="off"
-            spellcheck="false"
-            placeholder="标题、作者、主题或 slug"
-            aria-describedby="paper-search-status"
-          />
-          <button type="button" data-paper-search-clear hidden>清空</button>
-        </div>
-      </div>
-      <p id="paper-search-status" class="paper-search-status mono" data-paper-search-status>
-        共 {data.papers.length} 篇
-      </p>
-    </div>
-
     <div class="container paper-list">
-      {searchablePapers.map(({ paper, searchText }) => <PaperRow paper={paper} searchText={searchText} />)}
-      <p class="paper-search-empty" data-paper-search-empty hidden>没有匹配的论文。</p>
+      {data.papers.map((paper) => <PaperRow paper={paper} />)}
     </div>
   </section>
 
@@ -81,63 +42,4 @@ const papersByTag = data.tags.map((tag) => ({
     </div>
   </section>
 
-  <script is:inline>
-    (() => {
-      const searchRoot = document.querySelector('[data-paper-search]');
-      const input = searchRoot?.querySelector('[data-paper-search-input]');
-      const status = searchRoot?.querySelector('[data-paper-search-status]');
-      const clearButton = searchRoot?.querySelector('[data-paper-search-clear]');
-      const rows = Array.from(document.querySelectorAll('[data-paper-row]'));
-      const emptyState = document.querySelector('[data-paper-search-empty]');
-
-      if (!(input instanceof HTMLInputElement) || !status || !clearButton || !emptyState) return;
-
-      const total = rows.length;
-      const normalize = (value) => value.trim().toLocaleLowerCase();
-      const getTerms = (value) => normalize(value).split(/\s+/).filter(Boolean);
-
-      const setUrlQuery = (query) => {
-        const url = new URL(window.location.href);
-        if (query) {
-          url.searchParams.set('q', query);
-        } else {
-          url.searchParams.delete('q');
-        }
-        window.history.replaceState(null, '', `${url.pathname}${url.search}${url.hash}`);
-      };
-
-      const applySearch = () => {
-        const query = normalize(input.value);
-        const terms = getTerms(input.value);
-        let visibleCount = 0;
-
-        rows.forEach((row) => {
-          if (!(row instanceof HTMLElement)) return;
-          const searchText = row.dataset.search ?? '';
-          const isVisible = terms.every((term) => searchText.includes(term));
-          row.hidden = !isVisible;
-          if (isVisible) visibleCount += 1;
-        });
-
-        clearButton.hidden = query.length === 0;
-        emptyState.hidden = visibleCount > 0;
-        status.textContent = query ? `匹配 ${visibleCount} / ${total} 篇` : `共 ${total} 篇`;
-        setUrlQuery(query);
-      };
-
-      clearButton.addEventListener('click', () => {
-        input.value = '';
-        input.focus();
-        applySearch();
-      });
-
-      input.addEventListener('input', applySearch);
-
-      const initialQuery = new URLSearchParams(window.location.search).get('q');
-      if (initialQuery) {
-        input.value = initialQuery;
-        applySearch();
-      }
-    })();
-  </script>
 </Layout>

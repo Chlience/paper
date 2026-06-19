@@ -1,0 +1,184 @@
+---
+import data from '../generated/paper-data.json';
+import { buildPaperSearchItems } from '../lib/paper-search.mjs';
+
+const searchItems = buildPaperSearchItems(data.papers);
+const searchJson = JSON.stringify(searchItems).replace(/</g, '\\u003c');
+---
+
+<dialog class="paper-search-dialog" data-paper-search-dialog aria-label="搜索论文">
+  <div class="paper-search-panel">
+    <div class="paper-search-head">
+      <label for="paper-search-command">搜索论文</label>
+      <button type="button" class="paper-search-close" data-paper-search-close aria-label="关闭搜索">关闭</button>
+    </div>
+    <input
+      id="paper-search-command"
+      class="paper-search-input"
+      data-paper-search-input
+      type="search"
+      inputmode="search"
+      autocomplete="off"
+      spellcheck="false"
+      placeholder="标题、作者、主题或 slug"
+      aria-describedby="paper-search-command-status"
+      aria-controls="paper-search-command-results"
+    />
+    <p id="paper-search-command-status" class="paper-search-command-status mono" data-paper-search-status>
+      输入关键词搜索 {searchItems.length} 篇论文
+    </p>
+    <div
+      id="paper-search-command-results"
+      class="paper-search-results"
+      data-paper-search-results
+      role="listbox"
+      aria-label="搜索结果"
+    >
+    </div>
+  </div>
+</dialog>
+<script id="paper-search-data" type="application/json" set:html={searchJson}></script>
+
+<script>
+  import { searchPaperItems } from '../lib/paper-search.mjs';
+
+  const dialog = document.querySelector('[data-paper-search-dialog]');
+  const input = dialog?.querySelector('[data-paper-search-input]');
+  const status = dialog?.querySelector('[data-paper-search-status]');
+  const closeButton = dialog?.querySelector('[data-paper-search-close]');
+  const resultsRoot = dialog?.querySelector('[data-paper-search-results]');
+  const triggers = Array.from(document.querySelectorAll('[data-paper-search-open]'));
+  const dataNode = document.getElementById('paper-search-data');
+
+  if (
+    dialog instanceof HTMLDialogElement &&
+    input instanceof HTMLInputElement &&
+    status instanceof HTMLElement &&
+    closeButton instanceof HTMLButtonElement &&
+    resultsRoot instanceof HTMLElement &&
+    dataNode?.textContent
+  ) {
+    const items = JSON.parse(dataNode.textContent);
+    let activeIndex = -1;
+    let results = [];
+
+    const escapeHtml = (value = '') =>
+      String(value).replace(
+        /[&<>"']/g,
+        (character) =>
+          ({
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#39;',
+          })[character],
+      );
+
+    const openSearch = () => {
+      if (!dialog.open) dialog.showModal();
+      requestAnimationFrame(() => {
+        input.focus();
+        input.select();
+      });
+    };
+
+    const closeSearch = () => {
+      dialog.close();
+    };
+
+    const setActiveResult = (nextIndex) => {
+      if (results.length === 0) {
+        activeIndex = -1;
+        return;
+      }
+      activeIndex = (nextIndex + results.length) % results.length;
+      for (const result of resultsRoot.querySelectorAll('[data-paper-search-result]')) {
+        const isActive = Number(result.getAttribute('data-index')) === activeIndex;
+        result.classList.toggle('is-active', isActive);
+        result.setAttribute('aria-selected', String(isActive));
+        if (isActive) result.scrollIntoView({ block: 'nearest' });
+      }
+    };
+
+    const renderResults = () => {
+      const query = input.value.trim();
+      results = searchPaperItems(items, query, 12);
+      activeIndex = results.length > 0 ? 0 : -1;
+
+      if (!query) {
+        status.textContent = `输入关键词搜索 ${items.length} 篇论文`;
+        resultsRoot.innerHTML = '';
+        return;
+      }
+
+      status.textContent = results.length > 0 ? `匹配 ${results.length} 篇` : '没有匹配的论文';
+      resultsRoot.innerHTML =
+        results.length > 0
+          ? results
+              .map(
+                (item, index) => `
+                  <a
+                    class="paper-search-result${index === activeIndex ? ' is-active' : ''}"
+                    data-paper-search-result
+                    data-index="${index}"
+                    href="${escapeHtml(item.path)}"
+                    role="option"
+                    aria-selected="${index === activeIndex ? 'true' : 'false'}"
+                  >
+                    <span class="paper-search-result-title">${escapeHtml(item.title)}</span>
+                    <span class="paper-search-result-summary">${escapeHtml(item.summary)}</span>
+                    <span class="paper-search-result-meta mono">
+                      ${escapeHtml(item.date)}
+                      ${item.authors ? ` · ${escapeHtml(item.authors)}` : ''}
+                    </span>
+                  </a>
+                `,
+              )
+              .join('')
+          : '<p class="paper-search-no-results">没有匹配的论文。</p>';
+    };
+
+    for (const trigger of triggers) {
+      trigger.addEventListener('click', openSearch);
+    }
+
+    closeButton.addEventListener('click', closeSearch);
+    input.addEventListener('input', renderResults);
+
+    dialog.addEventListener('click', (event) => {
+      if (event.target === dialog) closeSearch();
+    });
+
+    dialog.addEventListener('close', () => {
+      const trigger = triggers.find((item) => item instanceof HTMLElement);
+      if (trigger instanceof HTMLElement) trigger.focus();
+    });
+
+    document.addEventListener('keydown', (event) => {
+      const isSearchShortcut = (event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k';
+      if (isSearchShortcut) {
+        event.preventDefault();
+        openSearch();
+        return;
+      }
+
+      if (!dialog.open) return;
+
+      if (event.key === 'ArrowDown') {
+        event.preventDefault();
+        setActiveResult(activeIndex + 1);
+      }
+
+      if (event.key === 'ArrowUp') {
+        event.preventDefault();
+        setActiveResult(activeIndex - 1);
+      }
+
+      if (event.key === 'Enter' && activeIndex >= 0) {
+        event.preventDefault();
+        window.location.href = results[activeIndex].path;
+      }
+    });
+  }
+</script>
