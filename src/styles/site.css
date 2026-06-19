@@ -65,6 +65,19 @@ body {
   overflow-x: clip;
 }
 
+html.is-search-locked {
+  overflow: hidden;
+}
+
+html.is-search-locked body {
+  position: fixed;
+  right: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
 a {
   color: inherit;
   text-decoration: none;
@@ -204,6 +217,7 @@ pre,
   border-radius: 12px;
   color: var(--fg);
   background: var(--surface);
+  overflow: hidden;
   box-shadow: 0 8px 8px oklch(24% 0.03 235 / 0.1);
 }
 
@@ -214,8 +228,9 @@ pre,
 
 .paper-search-panel {
   display: grid;
-  max-height: min(78vh, 760px);
+  max-height: calc(min(78vh, 760px) - 2px);
   grid-template-rows: auto auto auto minmax(0, 1fr);
+  overflow: hidden;
 }
 
 .paper-search-head {

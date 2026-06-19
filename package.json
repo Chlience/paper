@@ -11,6 +11,8 @@
     "dev": "npm run build:content && astro dev",
     "build": "npm run build:content && astro build",
     "test:search": "node scripts/check-paper-search.mjs",
+    "test:dialog-scroll": "node scripts/check-paper-dialog-scroll.mjs",
+    "test:dialog-interaction": "node scripts/check-paper-dialog-interaction.mjs",
     "check:site": "node scripts/check-paper-site.mjs",
     "check:math": "npm run build:content && node scripts/check-markdown-math.mjs",
     "preview": "astro preview",

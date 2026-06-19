@@ -61,6 +61,8 @@ const searchJson = JSON.stringify(searchItems).replace(/</g, '\\u003c');
     const items = JSON.parse(dataNode.textContent);
     let activeIndex = -1;
     let results = [];
+    let lockedScrollY = 0;
+    let lockedScrollbarWidth = 0;
 
     const escapeHtml = (value = '') =>
       String(value).replace(
@@ -75,8 +77,28 @@ const searchJson = JSON.stringify(searchItems).replace(/</g, '\\u003c');
           })[character],
       );
 
+    const lockPageScroll = () => {
+      if (document.documentElement.classList.contains('is-search-locked')) return;
+      lockedScrollY = window.scrollY;
+      lockedScrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+      document.body.style.top = `-${lockedScrollY}px`;
+      document.body.style.paddingRight = lockedScrollbarWidth > 0 ? `${lockedScrollbarWidth}px` : '';
+      document.documentElement.classList.add('is-search-locked');
+    };
+
+    const unlockPageScroll = () => {
+      if (!document.documentElement.classList.contains('is-search-locked')) return;
+      document.documentElement.classList.remove('is-search-locked');
+      document.body.style.top = '';
+      document.body.style.paddingRight = '';
+      window.scrollTo(0, lockedScrollY);
+    };
+
     const openSearch = () => {
-      if (!dialog.open) dialog.showModal();
+      if (!dialog.open) {
+        lockPageScroll();
+        dialog.showModal();
+      }
       requestAnimationFrame(() => {
         input.focus();
         input.select();
@@ -87,7 +109,7 @@ const searchJson = JSON.stringify(searchItems).replace(/</g, '\\u003c');
       dialog.close();
     };
 
-    const setActiveResult = (nextIndex) => {
+    const setActiveResult = (nextIndex, shouldScroll = true) => {
       if (results.length === 0) {
         activeIndex = -1;
         return;
@@ -97,7 +119,7 @@ const searchJson = JSON.stringify(searchItems).replace(/</g, '\\u003c');
         const isActive = Number(result.getAttribute('data-index')) === activeIndex;
         result.classList.toggle('is-active', isActive);
         result.setAttribute('aria-selected', String(isActive));
-        if (isActive) result.scrollIntoView({ block: 'nearest' });
+        if (isActive && shouldScroll) result.scrollIntoView({ block: 'nearest' });
       }
     };
 
@@ -145,12 +167,18 @@ const searchJson = JSON.stringify(searchItems).replace(/</g, '\\u003c');
 
     closeButton.addEventListener('click', closeSearch);
     input.addEventListener('input', renderResults);
+    resultsRoot.addEventListener('pointermove', (event) => {
+      const result = event.target instanceof Element ? event.target.closest('[data-paper-search-result]') : null;
+      if (!(result instanceof HTMLElement)) return;
+      setActiveResult(Number(result.dataset.index), false);
+    });
 
     dialog.addEventListener('click', (event) => {
       if (event.target === dialog) closeSearch();
     });
 
     dialog.addEventListener('close', () => {
+      unlockPageScroll();
       const trigger = triggers.find((item) => item instanceof HTMLElement);
       if (trigger instanceof HTMLElement) trigger.focus();
     });
