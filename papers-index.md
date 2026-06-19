@@ -57,6 +57,7 @@ Date: 2026-06-19
 | 2606.06453 | Vortex: Efficient and Programmable Sparse Attention Serving for AI Agents | [2606.06453-vortex-sparse-attention-serving.md](/papers/2606.06453-vortex-sparse-attention-serving/) | LLM serving, sparse attention, AI-agent-assisted systems research | CMU core team with Rice and NUS collaborators |
 | 2606.04101 | UltraEP: Unleash MoE Training and Inference on Rack-Scale Nodes with Near-Optimal Load Balancing | [2606.04101-ultraep-rack-scale-moe-load-balancing.md](/papers/2606.04101-ultraep-rack-scale-moe-load-balancing/) | MoE systems, expert parallelism, rack-scale nodes, exact-load balancing, training and prefill serving | Xinming Wei, Chao Jin, Yinmin Zhong, Bingyang Wu, Zili Zhang, Jing Mai, Guojie Luo / Peking University; Tuo Dai / RedNote; Shan Yu / Shanghai AI Laboratory; Chengxu Yang, Qianchao Zhu, Zhouyang Li, Yuliang Liu / Independent Researcher |
 | 2606.04662 | Why Muon Outperforms Adam: A Curvature Perspective | [2606.04662-muon-outperforms-adam-curvature.md](/papers/2606.04662-muon-outperforms-adam-curvature/) | Optimizer geometry, Muon vs Adam, curvature penalty, normalized directional sharpness, LLM pretraining | Shuche Wang / National University of Singapore; Fengzhuo Zhang, Dirk Bergemann, Zhuoran Yang / Yale University; Jiaxiang Li / University of Minnesota |
+| MUON-2026-06-19 | Muon Optimizer 技术博客与资料综合分析 | [2026-06-19-muon-optimizer-keller-jordan-synthesis.md](/papers/2026-06-19-muon-optimizer-keller-jordan-synthesis/) | Muon, Newton-Schulz orthogonalization, hidden-layer matrix optimizer, AdamW/Muon hybrid, Moonlight, MuonClip, Muown, Gram Newton-Schulz | [Keller Jordan](/authors/keller-jordan/) / personal research blog and KellerJordan GitHub; Kimi Team / Moonshot AI; Dao-AILab / [Tri Dao](/authors/tri-dao/); connected to [2606.04662](/papers/2606.04662-muon-outperforms-adam-curvature/) |
 
 ## 作者关系图谱
 
@@ -146,10 +147,10 @@ Date: 2026-06-19
 
 ### Cluster M: Optimizer Geometry 与 Muon 曲率机制
 
-- Paper: `2606.04662`
+- Paper/Material: `2606.04662`, `MUON-2026-06-19`
 - Institutions: National University of Singapore, Yale University, University of Minnesota。
-- Internal relation: Shuche Wang 与 Fengzhuo Zhang 为 equal contribution；Fengzhuo Zhang 为 project lead；Fengzhuo Zhang 与 Zhuoran Yang 为 corresponding authors；Yale University 作者群包含 Fengzhuo Zhang、Dirk Bergemann、Zhuoran Yang。
-- Theme relation: Muon, Adam, optimizer geometry, second-order Taylor approximation, curvature penalty, Normalized Directional Sharpness, data imbalance, Zipf-PCFG, within-layer/cross-layer Hessian decomposition, structured matrix-block quadratic model。本地讨论已扩展 optimizer design space 对比，覆盖 AdamW、Muon、Shampoo、SOAP、Adafactor、8-bit AdamW、GaLore、APOLLO、Lion、SGD/Momentum 的计算方法、成本来源和性能来源。
+- Internal relation: Shuche Wang 与 Fengzhuo Zhang 为 equal contribution；Fengzhuo Zhang 为 project lead；Fengzhuo Zhang 与 Zhuoran Yang 为 corresponding authors；Yale University 作者群包含 Fengzhuo Zhang、Dirk Bergemann、Zhuoran Yang。Muon 综合条目由 [Keller Jordan](/authors/keller-jordan/) 原始技术博客、KellerJordan/Muon 实现、Kimi Team / Moonshot AI 的 Moonlight 和 Kimi K2 资料、Dao-AILab 的 Gram Newton-Schulz 资料共同构成。
+- Theme relation: Muon, Adam, optimizer geometry, second-order Taylor approximation, curvature penalty, Normalized Directional Sharpness, data imbalance, Zipf-PCFG, within-layer/cross-layer Hessian decomposition, structured matrix-block quadratic model, Newton-Schulz orthogonalization, hidden-layer matrix parameters, AdamW/Muon hybrid recipe, weight decay, update RMS, Distributed Muon, MuonClip, Muown, Gram Newton-Schulz。本地讨论已扩展 optimizer design space 对比，覆盖 AdamW、Muon、Shampoo、SOAP、Adafactor、8-bit AdamW、GaLore、APOLLO、Lion、SGD/Momentum 的计算方法、成本来源和性能来源。
 
 ### Cluster N: Reward Modeling Causal Debiasing 与 RLHF Alignment
 
@@ -581,6 +582,10 @@ Date: 2026-06-19
 - `2501.09620` 和 `2605.30290` 都服务 feedback quality。STV 关注 verifier 自训练和自然语言反馈是否能推动 self-improvement，CRM 关注 reward model 是否利用偏好数据捷径；未来 verifier/reward model 可以同时记录 calibration、bias dependence 和 policy-level behavior drift。
 - `2501.09620` 和 `2605.14220` 都把隐藏偏差显式化为 RL 优化目标偏移。TIM/VeXact 关注 rollout/trainer 数值分布不一致，CRM 关注 reward model 对 spurious factor 的统计依赖；两者都说明表面 on-policy 的 RL 仍可能优化偏离意图的目标。
 - `2501.09620` 和 `2606.00135` 都提示 harness artifact 会进入能力测量和训练信号。Tool-calling RL 中的 tool schema、history retention、tool-call count 和 judge prompt 都可以作为 CRM 式 $Z$ 变量纳入 reward/judge debiasing。
+- `MUON-2026-06-19` 新增 Muon optimizer 综合节点。它把 [Keller Jordan](/authors/keller-jordan/) 的原始技术博客、KellerJordan/Muon 实现、Moonlight scale-up、Kimi K2 MuonClip、Convergence with Newton-Schulz、Muown、Gram Newton-Schulz 和 Shampoo/SOAP 关系合并为一条 optimizer design / engineering 主线。
+- `MUON-2026-06-19` 和 [2606.04662](/papers/2606.04662-muon-outperforms-adam-curvature/) 是 Muon 的设计实现与机制解释关系。综合条目解释 momentum + Newton-Schulz orthogonalization、AdamW/Muon 参数分组、weight decay、update RMS 和 QK-Clip；曲率论文解释 lower NDS 和 second-order curvature penalty。
+- `MUON-2026-06-19` 和 [2026-04-24 DeepSeek-V4](/papers/2026-04-24-deepseek-v4-million-token-context-intelligence/)、[2602.15763 GLM-5](/papers/2602.15763-glm-5-agentic-engineering/) 连接在 production-scale optimizer recipe。DeepSeek-V4 和 GLM-5 把 Muon / Muon Split 放入 trillion-scale MoE、long-context 和 agentic training 系统；Muon 综合条目提供这些系统选择背后的矩阵正交化与 scale-control 背景。
+- `MUON-2026-06-19` 和 [2205.14135](/papers/2205.14135-flashattention-io-aware-exact-attention/)、[2307.08691](/papers/2307.08691-flashattention-2-parallelism-work-partitioning/) 共享 GPU kernel co-design 主题。FlashAttention 优化 attention IO 路径，Gram Newton-Schulz 优化 Muon 正交化 step；两者都把算法形式改写成更适合现代 GPU 的矩阵计算。
 - `2606.04662` 补充本地档案中的 optimizer-level mechanism。DeepSeek-R1、DAPO、tool-calling RL 等论文讨论 RL/post-training recipe 和系统效率，Muon 曲率论文解释 pretraining optimizer update direction 如何通过更低 NDS 减少 second-order curvature penalty。
 - `2606.04662` 和 `2503.14476` 都把训练收益拆成可诊断项。DAPO 关注 long-CoT RL 的有效梯度、长度约束和 reward noise；Muon 论文关注 optimizer update 的 first-order gain、curvature penalty、update norm 和 NDS。
 - `2606.04662` 和 `2605.14220` 从不同层面解释训练不稳定。TIM/VeXact 关注 rollout/trainer 数值概率景观错位，Muon 论文关注 update direction 暴露在 Hessian 高曲率方向的程度；未来 RL training optimizer 可能需要同时监控 logprob mismatch 与 NDS。
