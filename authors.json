@@ -792,5 +792,194 @@
         "url": "https://arxiv.org/abs/2511.14617"
       }
     ]
+  },
+  {
+    "slug": "amey-agrawal",
+    "name": "Amey Agrawal",
+    "aliases": ["Amey Agrawal", "Amey"],
+    "affiliations": [
+      "Georgia Institute of Technology",
+      "Microsoft Research India (Sarathi internship)"
+    ],
+    "homepage": "https://ameya.info/",
+    "x": "https://x.com/agrawalamey12",
+    "xConfidence": "high",
+    "topics": ["LLM serving", "Systems for AI", "Sarathi", "Sarathi-Serve", "KV cache"],
+    "notes": "Sarathi first author; personal homepage and GitHub connect Georgia Tech Systems for AI, MSR India internship with Ramachandran Ramjee and Bhargav Gulavani, and the Sarathi/Sarathi-Serve/Vidur serving line.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://ameya.info/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/agrawalamey"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/agrawalamey12"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=CXqdg3oAAAAJ"
+      },
+      {
+        "label": "arXiv Sarathi",
+        "url": "https://arxiv.org/abs/2308.16369"
+      }
+    ]
+  },
+  {
+    "slug": "ashish-panwar",
+    "name": "Ashish Panwar",
+    "aliases": ["Ashish Panwar"],
+    "affiliations": ["Microsoft Research India", "Indian Institute of Science (PhD)"],
+    "homepage": "https://apanwariisc.github.io/",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["LLM serving", "systems", "memory management", "Sarathi", "Sarathi-Serve"],
+    "notes": "Sarathi coauthor; Microsoft Research profile and personal homepage identify him as a Principal Researcher in MSR India Systems working on ML/LLM workload performance. No high-confidence personal X account was found.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://apanwariisc.github.io/"
+      },
+      {
+        "label": "Microsoft Research",
+        "url": "https://www.microsoft.com/en-us/research/people/ashishpanwar/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/apanwariisc"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=2navLOMAAAAJ"
+      },
+      {
+        "label": "DBLP",
+        "url": "https://dblp.org/pid/175/5750"
+      }
+    ]
+  },
+  {
+    "slug": "jayashree-mohan",
+    "name": "Jayashree Mohan",
+    "aliases": ["Jayashree Mohan"],
+    "affiliations": ["Microsoft Research India", "University of Texas at Austin (PhD)"],
+    "homepage": "https://www.microsoft.com/en-us/research/people/jamohan/",
+    "x": "https://x.com/jayashree2912",
+    "xConfidence": "high",
+    "topics": ["LLM serving", "systems", "storage systems", "Sarathi", "Sarathi-Serve"],
+    "notes": "Sarathi coauthor; Microsoft Research profile identifies her as a Senior Researcher in the Systems group with current interests in efficient and reliable LLM inference serving. X account confidence is high from bio/profile and Sarathi-Serve-related activity.",
+    "sources": [
+      {
+        "label": "Microsoft Research",
+        "url": "https://www.microsoft.com/en-us/research/people/jamohan/"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/jayashree2912"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=5akTCHoAAAAJ"
+      },
+      {
+        "label": "DBLP",
+        "url": "https://dblp.org/pid/168/3415"
+      }
+    ]
+  },
+  {
+    "slug": "nipun-kwatra",
+    "name": "Nipun Kwatra",
+    "aliases": ["Nipun Kwatra"],
+    "affiliations": ["Microsoft Research India", "Stanford University (PhD)"],
+    "homepage": "https://www.microsoft.com/en-us/research/people/nkwatra/",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["LLM serving", "deep learning systems", "AI infrastructure", "Sarathi", "Sarathi-Serve"],
+    "notes": "Sarathi coauthor; Microsoft Research profile identifies him as a Principal Researcher at MSR India working at the intersection of deep learning and systems. No high-confidence personal X account was found.",
+    "sources": [
+      {
+        "label": "Microsoft Research",
+        "url": "https://www.microsoft.com/en-us/research/people/nkwatra/"
+      },
+      {
+        "label": "Microsoft Research Publications",
+        "url": "https://www.microsoft.com/en-us/research/people/nkwatra/publications/"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=NKtRqvYAAAAJ"
+      },
+      {
+        "label": "DBLP",
+        "url": "https://dblp.org/pid/53/6666"
+      }
+    ]
+  },
+  {
+    "slug": "bhargav-s-gulavani",
+    "name": "Bhargav S. Gulavani",
+    "aliases": ["Bhargav S. Gulavani", "Bhargav Gulavani", "B. S. Gulavani"],
+    "affiliations": ["Microsoft Research India", "Microsoft"],
+    "homepage": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["LLM serving", "systems", "Sarathi", "Sarathi-Serve", "program analysis"],
+    "notes": "Sarathi coauthor; stable public evidence comes from arXiv/USENIX Sarathi pages, Google Scholar, DBLP, GitHub, and Microsoft publication/project listings. No high-confidence personal X account or dedicated Microsoft people page was found.",
+    "sources": [
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=uzsg2HsAAAAJ"
+      },
+      {
+        "label": "DBLP",
+        "url": "https://dblp.org/pid/46/396.html"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/bhargav-gulavani"
+      },
+      {
+        "label": "USENIX Sarathi-Serve",
+        "url": "https://www.usenix.org/conference/osdi24/presentation/agrawal"
+      }
+    ]
+  },
+  {
+    "slug": "ramachandran-ramjee",
+    "name": "Ramachandran Ramjee",
+    "aliases": ["Ramachandran Ramjee", "Ram Ramjee"],
+    "affiliations": ["Microsoft Research India", "University of Massachusetts Amherst (PhD)"],
+    "homepage": "https://www.microsoft.com/en-us/research/people/ramjee/",
+    "x": "https://x.com/ramaramjee",
+    "xConfidence": "high",
+    "topics": ["AI infrastructure", "LLM serving", "systems", "Sarathi", "Sarathi-Serve"],
+    "notes": "Sarathi coauthor and MSR India AI Infrastructure lead; Microsoft Research profile identifies him as Partner Research Manager focused on efficient AI infrastructure and links the ramaramjee X account.",
+    "sources": [
+      {
+        "label": "Microsoft Research",
+        "url": "https://www.microsoft.com/en-us/research/people/ramjee/"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/ramaramjee"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=0P35aLUAAAAJ"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Ramachandran_Ramjee1"
+      },
+      {
+        "label": "DBLP",
+        "url": "https://dblp.org/pid/97/117"
+      }
+    ]
   }
 ]

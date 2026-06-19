@@ -1,6 +1,6 @@
 # Paper Archive Index
 
-Date: 2026-06-18
+Date: 2026-06-19
 
 ## 本地工作流
 
@@ -12,6 +12,7 @@ Date: 2026-06-18
 
 | arXiv | Title | Local Note | Theme | Authors / Institutions |
 | --- | --- | --- | --- | --- |
+| 2308.16369 | SARATHI: Efficient LLM Inference by Piggybacking Decodes with Chunked Prefills | [2308.16369-sarathi-chunked-prefill-decode-maximal-batching.md](/papers/2308.16369-sarathi-chunked-prefill-decode-maximal-batching/) | LLM serving, chunked prefill, decode-maximal batching, prefill/decode scheduling, pipeline bubbles, tensor/pipeline parallel inference | [Amey Agrawal](/authors/amey-agrawal/) / Georgia Institute of Technology and Microsoft Research India internship; [Ashish Panwar](/authors/ashish-panwar/), [Jayashree Mohan](/authors/jayashree-mohan/), [Nipun Kwatra](/authors/nipun-kwatra/), [Bhargav S. Gulavani](/authors/bhargav-s-gulavani/), [Ramachandran Ramjee](/authors/ramachandran-ramjee/) / Microsoft Research India; direct follow-up line with Sarathi-Serve, Vidur and MSR India AI Infrastructure serving systems |
 | 1910.02054 | ZeRO: Memory Optimizations Toward Training Trillion Parameter Models | [1910.02054-zero-memory-optimizations-trillion-parameter-models.md](/papers/1910.02054-zero-memory-optimizations-trillion-parameter-models/) | ZeRO, DeepSpeed, data parallelism, optimizer state partitioning, gradient partitioning, parameter partitioning, residual memory, activation partitioning, trillion-parameter training | Samyam Rajbhandari, Jeff Rasley, Olatunji Ruwase, Yuxiong He / Microsoft; Samyam Rajbhandari and Jeff Rasley equal contributors; no current author overlap found |
 | GLM52-2026-06-16 | GLM-5.2: Built for Long-Horizon Tasks | [2026-06-16-glm-5-2-long-horizon-tasks.md](/papers/2026-06-16-glm-5-2-long-horizon-tasks/) | GLM-5.2, 1M context, long-horizon coding agent, IndexShare, IndexCache, DSA, MTP, KVShare, speculative decoding, slime, compact trajectory, OPD, PPO, anti-hack | Z.ai / GLM-5 Team; same GLM-5 series line as [2602.15763](/papers/2602.15763-glm-5-agentic-engineering/); direct engineering relation with slime / THUDM and IndexCache authors Yushi Bai, Qian Dong, Ting Jiang, Xin Lv, Zhengxiao Du, Aohan Zeng, Jie Tang, Juanzi Li |
 | 2602.02276 | Kimi K2.5: Visual Agentic Intelligence | [2602.02276-kimi-k2-5-visual-agentic-intelligence.md](/papers/2602.02276-kimi-k2-5-visual-agentic-intelligence/) | Kimi K2.5, visual agentic intelligence, MoonViT-3D, joint text-vision optimization, zero-vision SFT, visual RL, Agent Swarm, PARL, Toggle token-efficient RL, DEP, 256K context | Kimi Team / Moonshot AI; arXiv lists Tongtong Bai and 324 other authors; contributor appendix overlaps with Seer authors [Ruoyu Qin](/authors/ruoyu-qin/), [Weiran He](/authors/weiran-he/), [Weixiao Huang](/authors/weixiao-huang/), [Yangkun Zhang](/authors/yangkun-zhang/), [Yikai Zhao](/authors/yikai-zhao/), [Bo Pang](/authors/bo-pang/), [Xinran Xu](/authors/xinran-xu/); Tao Yu marked The University of Hong Kong in appendix |
@@ -325,8 +326,21 @@ Date: 2026-06-18
 - Internal relation: Samyam Rajbhandari、Jeff Rasley、Olatunji Ruwase、Yuxiong He 均使用 Microsoft 邮箱；Samyam Rajbhandari 与 Jeff Rasley 为 equal contributors；论文实现与开源计划落在 Microsoft DeepSpeed 项目中。当前未发现与已存档作者的直接重叠。
 - Theme relation: ZeRO, DeepSpeed, data parallelism, model-state redundancy, optimizer state partitioning, gradient partitioning, parameter partitioning, reduce-scatter, all-gather, activation checkpoint partitioning, constant-size buffers, memory defragmentation, trillion-parameter memory feasibility, Turing-NLG 17B。
 
+### Cluster AM: Sarathi、Chunked Prefill 与 Prefill/Decode Scheduling
+
+- Paper: `2308.16369`
+- Institutions: Georgia Institute of Technology, Microsoft Research India。
+- Internal relation: [Amey Agrawal](/authors/amey-agrawal/) 署名 Georgia Institute of Technology，并在标题页标注工作完成于 Microsoft Research India internship；[Ashish Panwar](/authors/ashish-panwar/)、[Jayashree Mohan](/authors/jayashree-mohan/)、[Nipun Kwatra](/authors/nipun-kwatra/)、[Bhargav S. Gulavani](/authors/bhargav-s-gulavani/)、[Ramachandran Ramjee](/authors/ramachandran-ramjee/) 属 Microsoft Research India。后续 Sarathi-Serve、Vidur、Metron/Etalon、POD-Attention、QoServe、ModServe、SUTRADHARA 显示同一 MSR India / Georgia Tech LLM serving research line 持续扩展。
+- Theme relation: Sarathi, chunked-prefills, decode-maximal batching, prefill/decode scheduling, P:D ratio, tile quantization, pipeline bubbles, tensor parallelism, pipeline parallelism, Orca comparison, LLaMA-13B/A6000, LLaMA-33B/A100, GPT-3 simulation, Sarathi-Serve follow-up。
+
 ## 跨论文关系
 
+- `2308.16369` 新增 Sarathi / chunked prefill serving 节点。它把 prefill 的 compute-saturating 特性和 decode 的 memory-bound 低利用率放进同一个 batch construction 问题：切分 prefill 为多个 compute-sized chunks，再用 decode-maximal batching 让 decodes piggyback 在 prefill chunk 的 linear operations 上，从而复用模型权重加载并降低 pipeline bubbles。
+- `2308.16369` 和 [2205.14135](/papers/2205.14135-flashattention-io-aware-exact-attention/)、[2307.08691](/papers/2307.08691-flashattention-2-parallelism-work-partitioning/) 共同形成 inference efficiency 的跨层图谱。FlashAttention 系列处理 attention kernel 的 HBM/SRAM IO、non-matmul FLOPs、SM occupancy 和 warp-level work partition；Sarathi 处理 serving batch composition、prefill/decode phase mixing 和 pipeline microbatch 均匀性。
+- `2308.16369` 和 [2405.19888](/papers/2405.19888-parrot-semantic-variable-llm-serving/)、[2511.02749](/papers/2511.02749-span-queries-cache-attention-locality/) 构成 serving structure optimization 的不同层级。Sarathi 从单请求内部的 prefill/decode 阶段挖掘结构；Parrot 从应用 DAG / Semantic Variable 暴露结构；Span Query 从 expression tree / commutativity constraints 暴露 cache 与 attention locality。
+- `2308.16369` 和 [2606.06453](/papers/2606.06453-vortex-sparse-attention-serving/) 都面向 LLM serving 中 attention/KV/cache 相关瓶颈。Sarathi 在 dense path 下通过 chunked prefill 与 decode piggyback 改善权重读取和 PP bubble；Vortex 让 sparse attention algorithm 在真实 paged/ragged serving layout 中可编程部署。
+- `2308.16369` 和 [2025-09-10](/papers/2025-09-10-defeating-nondeterminism-llm-inference/)、[2605.14220](/papers/2605.14220-training-inference-mismatch-llm-rl/) 连接在 rollout/inference backend consistency。Sarathi-style mixed batching 可以提升 serving throughput；若用于 RL rollout 或评测，需要额外记录 batch composition、kernel path、precision path、logprob 路径和 batch-invariant behavior。
+- `2308.16369` 和 [2409.19256](/papers/2409.19256-hybridflow-rlhf-framework/)、[2026-06-16](/papers/2026-06-16-verl-rl-optimization-algorithms/)、[2026-06-17](/papers/2026-06-17-slime-rl-scaling-framework/) 在 post-training infrastructure 中相连。HybridFlow/verl/slime 负责训练-生成 dataflow；Sarathi 解释 rollout/inference engine 内部 prefill/decode scheduling 如何影响吞吐、tail 和潜在一致性审计。
 - `1910.02054` 新增 ZeRO / DeepSpeed training memory optimization 基础节点。它把 data parallelism 中重复保存的 optimizer states、gradients、parameters 拆成三阶段分片，并补充 ZeRO-R 处理 activations、temporary buffers 和 fragmentation，是理解后续大模型训练框架中 FSDP / ZeRO / distributed optimizer 的上游语言。
 - `1910.02054` 和 [2001.08361](/papers/2001.08361-scaling-laws-neural-language-models/)、[2203.15556](/papers/2203.15556-training-compute-optimal-large-language-models/) 构成能力 scaling 与系统 feasibility 的上下游关系。Scaling laws 解释为什么参数、数据和计算继续扩大有价值；ZeRO 解释如何在当时硬件上把 aggregate GPU memory 转化为更大模型可用的 model-state memory。
 - `1910.02054` 和 [2205.14135](/papers/2205.14135-flashattention-io-aware-exact-attention/)、[2307.08691](/papers/2307.08691-flashattention-2-parallelism-work-partitioning/) 共同形成 memory-centric systems 基础层。ZeRO 优化分布式训练里的 model-state residency 和 communication schedule；FlashAttention 系列优化 attention kernel 的 HBM/SRAM traffic 和 work partitioning。
