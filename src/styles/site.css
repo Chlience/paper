@@ -101,7 +101,7 @@ pre,
 }
 
 .container {
-  width: min(100% - 32px, var(--page-width));
+  width: min(calc(100% - 32px), var(--page-width));
   margin-inline: auto;
 }
 
@@ -299,6 +299,92 @@ h3 {
   white-space: nowrap;
 }
 
+.paper-search {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--space-md);
+  align-items: end;
+  margin-bottom: var(--space-md);
+  padding: 18px 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.paper-search-field {
+  display: grid;
+  gap: 8px;
+}
+
+.paper-search label {
+  color: var(--fg);
+  font-size: 14px;
+  font-weight: 720;
+}
+
+.paper-search-control {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.paper-search input {
+  width: min(100%, 620px);
+  min-height: 42px;
+  padding: 0 13px;
+  border: 1px solid oklch(78% 0.026 178);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--fg);
+  font: inherit;
+}
+
+.paper-search input::placeholder {
+  color: oklch(42% 0.026 235);
+}
+
+.paper-search input:focus {
+  border-color: oklch(62% 0.095 155);
+  outline: 3px solid var(--accent-soft);
+  outline-offset: 2px;
+}
+
+.paper-search button {
+  min-height: 42px;
+  padding: 0 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: oklch(99% 0.003 178);
+  color: var(--muted);
+  font: inherit;
+  cursor: pointer;
+}
+
+.paper-search button:hover {
+  border-color: oklch(72% 0.06 145);
+  color: var(--fg);
+}
+
+.paper-search-status {
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.paper-search-empty {
+  margin: 0;
+  padding: 24px 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  color: var(--muted);
+}
+
+.paper-row[hidden],
+.paper-search-empty[hidden],
+[data-paper-search-clear][hidden] {
+  display: none;
+}
+
 .paper-list {
   display: grid;
 }
@@ -324,8 +410,20 @@ h3 {
   font-size: 12px;
 }
 
+.paper-row-main {
+  min-width: 0;
+}
+
 .paper-row-main h3 {
   font-size: clamp(19px, 2.2vw, 25px);
+  overflow-wrap: anywhere;
+}
+
+.paper-row-main h3 a {
+  display: inline-block;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .paper-row-main p {
@@ -389,6 +487,8 @@ h3 {
   background: oklch(99% 0.003 178);
   font-family: var(--font-mono);
   font-size: 12px;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .paper-row-meta .topic-link,
@@ -887,6 +987,21 @@ h3 {
   .site-footer-inner {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .paper-search {
+    grid-template-columns: 1fr;
+  }
+
+  .paper-search-control {
+    align-items: stretch;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .paper-search input,
+  .paper-search button {
+    width: 100%;
   }
 }
 

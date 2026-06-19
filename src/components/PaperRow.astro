@@ -16,12 +16,13 @@ interface Paper {
 interface Props {
   paper: Paper;
   showProvenance?: boolean;
+  searchText?: string;
 }
 
-const { paper, showProvenance = true } = Astro.props;
+const { paper, showProvenance = true, searchText = '' } = Astro.props;
 ---
 
-<article class="paper-row">
+<article class="paper-row" data-paper-row data-search={searchText}>
   <div class="paper-row-date mono">{formatDate(paper.date)}</div>
   <div class="paper-row-main">
     <h3><a href={paper.path}>{paper.title}</a></h3>
