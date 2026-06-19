@@ -22,6 +22,7 @@ const tagOverrides = new Map([
   ['2001.08361-scaling-laws-neural-language-models', ['Methodology', 'Theory']],
   ['2203.15556-training-compute-optimal-large-language-models', ['Methodology', 'Theory']],
   ['2205.14135-flashattention-io-aware-exact-attention', ['Systems', 'Theory', 'Methodology']],
+  ['2310.01889-ring-attention-blockwise-transformers-near-infinite-context', ['Systems', 'Methodology', 'Theory']],
   ['2308.16369-sarathi-chunked-prefill-decode-maximal-batching', ['Systems', 'Methodology']],
   ['2025-09-10-defeating-nondeterminism-llm-inference', ['Systems', 'RL', 'Methodology']],
   ['2403.03185-correlated-proxies-reward-hacking', ['RL', 'Safety', 'Methodology']],

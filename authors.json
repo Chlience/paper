@@ -981,5 +981,142 @@
         "url": "https://dblp.org/pid/97/117"
       }
     ]
+  },
+  {
+    "slug": "hao-liu",
+    "name": "Hao Liu",
+    "aliases": ["Hao Liu", "haoliuhl"],
+    "affiliations": [
+      "Google DeepMind",
+      "Carnegie Mellon University",
+      "University of California, Berkeley (PhD / Ring Attention paper affiliation)"
+    ],
+    "homepage": "https://www.haoliu.ai/",
+    "github": "https://github.com/haoliuhl",
+    "x": "https://x.com/haoliuhl",
+    "xConfidence": "high",
+    "topics": ["Ring Attention", "Blockwise Parallel Transformer", "long-context training", "reinforcement learning", "large world models"],
+    "notes": "Ring Attention first and corresponding author; homepage, GitHub and OpenReview connect the Berkeley PhD, Google DeepMind role, Ring Attention code, and Pieter Abbeel advisor relation. Current GitHub username is haoliuhl; the arXiv code URL redirects from the historical lhao499 path.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://www.haoliu.ai/"
+      },
+      {
+        "label": "Publications",
+        "url": "https://www.haoliu.ai/pub.html"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/haoliuhl"
+      },
+      {
+        "label": "Ring Attention code",
+        "url": "https://github.com/haoliuhl/ringattention"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/haoliuhl"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=wtK4Yh4AAAAJ"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Hao_Liu1"
+      },
+      {
+        "label": "DBLP",
+        "url": "https://dblp.org/pid/09/3214-55"
+      }
+    ]
+  },
+  {
+    "slug": "matei-zaharia",
+    "name": "Matei Zaharia",
+    "aliases": ["Matei Zaharia", "Matei A. Zaharia", "mateiz"],
+    "affiliations": ["University of California, Berkeley", "Sky Lab", "Databricks"],
+    "homepage": "https://people.eecs.berkeley.edu/~matei/",
+    "github": "https://github.com/mateiz",
+    "x": "https://x.com/matei_zaharia",
+    "xConfidence": "high",
+    "topics": ["distributed systems", "data systems", "AI systems", "Ring Attention", "Databricks", "Apache Spark"],
+    "notes": "Ring Attention coauthor; Berkeley homepage identifies him as UC Berkeley EECS associate professor working in Sky Lab and Databricks co-founder/CTO. Homepage links the Twitter/X account and Scholar profile; GitHub mateiz is a stable public profile.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://people.eecs.berkeley.edu/~matei/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/mateiz"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/matei_zaharia"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=I1EvjZsAAAAJ"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Matei_Zaharia1"
+      },
+      {
+        "label": "DBLP",
+        "url": "https://dblp.org/pid/36/2133"
+      },
+      {
+        "label": "UC Berkeley Research",
+        "url": "https://vcresearch.berkeley.edu/faculty/matei-zaharia"
+      }
+    ]
+  },
+  {
+    "slug": "pieter-abbeel",
+    "name": "Pieter Abbeel",
+    "aliases": ["Pieter Abbeel", "Pabbeel"],
+    "affiliations": ["University of California, Berkeley", "Berkeley Robot Learning Lab", "BAIR", "Amazon"],
+    "homepage": "https://people.eecs.berkeley.edu/~pabbeel/",
+    "x": "https://x.com/pabbeel",
+    "xConfidence": "high",
+    "topics": ["robot learning", "reinforcement learning", "AI", "Ring Attention", "long-context learning"],
+    "notes": "Ring Attention coauthor and Hao Liu's PhD advisor according to OpenReview. UC Berkeley pages identify him as professor, Berkeley Robot Learning Lab director and BAIR co-director. No high-confidence personal GitHub account is recorded.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://people.eecs.berkeley.edu/~pabbeel/"
+      },
+      {
+        "label": "UC Berkeley EECS",
+        "url": "https://www2.eecs.berkeley.edu/Faculty/Homepages/abbeel.html"
+      },
+      {
+        "label": "UC Berkeley Research",
+        "url": "https://vcresearch.berkeley.edu/faculty/pieter-abbeel"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/pabbeel"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=vtwH6GkAAAAJ"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Pieter_Abbeel2"
+      },
+      {
+        "label": "DBLP",
+        "url": "https://dblp.org/pid/a/PieterAbbeel"
+      },
+      {
+        "label": "Amazon Science",
+        "url": "https://www.amazon.science/author/pieter-abbeel"
+      }
+    ]
   }
 ]
