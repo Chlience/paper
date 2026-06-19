@@ -1,10 +1,36 @@
 # Paper Analysis Workflow
 
-Date: 2026-06-07
+Date: 2026-06-19
 
 ## 目标
 
-本流程用于 `paper archive root` 目录内的论文分析与长期存档。每次用户给出 arXiv、PDF、论文项目页或论文标题时，按同一流程产出可追溯的 Markdown 笔记，并维护作者关系和跨论文关系。
+本页说明这个论文档案如何把一次阅读变成可追溯、可更新、可连接的长期记录。它面向两类读者：公开网页上的读者可以看到笔记质量如何被约束；后续维护者可以按同一套流程继续新增论文、作者档案和跨论文关系。
+
+每次用户给出 arXiv、PDF、论文项目页、技术博客或论文标题时，本目录按同一流程产出独立 Markdown 笔记，并维护 `papers-index.md`、`authors.json` 和相关站点链接。
+
+## 公开归档原则
+
+这个 archive 的目标是保留一条可以复查的理解链路，而摘要只承担入口作用。每篇笔记都要回答论文想解决什么问题、此前方法留下什么空白、作者可能如何从已有失败模式中想到当前 idea、证据链支撑到什么程度，以及这些结论和已存档论文如何连接。
+
+归档时遵循几条原则：
+
+- 先确认来源，再写判断。外部 URL、arXiv、项目页和框架文档都要记录版本、日期、作者和链接。
+- 先重建问题，再解释方法。方法分析前必须写出研究问题、已有方案不足和作者可能的思考路径。
+- 区分论文事实、作者主张和本地分析。本地讨论后的收敛要明确标注，避免写成论文原始结论。
+- 作者关系和主题关系同样重要。论文笔记保留该论文语境下的作者分工、机构桥接和主题判断；作者页聚合稳定身份信息和跨论文出现记录。
+- 读后交流要回写。用户后续提出的概念修正、反例、工程判断和跨论文联系，只要有长期价值，都要沉淀到对应笔记。
+
+## 公开页面展示什么
+
+网页优先展示会影响读者信任和检索效率的信息：
+
+- 每篇论文的来源、版本、作者、归档时间和站点内链接。
+- 一句话结论、论文脉络、关键实验或定理、主要启发和局限。
+- 作者与关系，包括机构、同机构作者群、跨机构桥接、通讯作者、共同一作、代码或项目组织线索。
+- 已存档论文之间的主题、方法、系统、机构、作者和引用关系。
+- 作者页中的稳定公开信息：主页、GitHub、Scholar/DBLP/OpenReview、机构页、X 账号及核验状态。
+
+更细的检索命令、Grok prompt、账号判定细节和临时 scratch 信息留在内部 SOP 中。网页展示结论、证据来源和 confidence，保留可复查性，同时避免把维护过程噪声暴露给普通读者。
 
 ## 输入
 
@@ -59,6 +85,7 @@ authors.json
 5. 在正式进入 method / system / theory 前，先重建研究问题、已有工作不足和作者可能的思考路径。
 6. 再读 method / system / theory / experiment，梳理证据链。
 7. 最后读 limitation、ethics、appendix 和 project README，补齐边界条件。
+8. 完成论文初稿后，执行作者 profile pass：抽取核心作者、通讯作者、维护者、跨论文重复作者和项目组织线索；按 `author-x-account-search-sop.md` 获取 homepage、GitHub、Scholar/DBLP/OpenReview、机构页和 X 候选；交叉验证后决定是否更新 `authors.json`、论文笔记和 `papers-index.md`。
 
 ## 分析维度
 
@@ -113,6 +140,9 @@ authors.json
 - 与已有论文是否存在同主题、同方法、同系统、同数据集、同机构或引用关系。
 - 若作者已有 `/authors/<slug>/` 页面，在相关论文笔记和索引中优先使用作者页链接。
 - 若作者个人信息经过核验，更新 `authors.json`；账号搜索默认使用 Grok，并参考 `author-x-account-search-sop.md` 记录 evidence 与 confidence。
+- 完成 `作者与关系` 章节后，必须做作者页决策：`tracked`、`recurring`、`skip/team` 或 `needs-follow-up`。
+- 对核心作者、通讯作者、代码仓库维护者、项目 tech lead、跨论文重复作者，打开 `author-x-account-search-sop.md`，默认用 Grok 做 broad search，再用网页、GitHub、主页、X 帖文或机构页面交叉验证。
+- 若证据只支持部分字段，仍记录已验证 homepage、GitHub、Scholar/DBLP/OpenReview、机构页或 `xConfidence: "not-found"`；证据不足的字段留空并在论文笔记中写明待查项。
 
 判断要求：
 
@@ -209,6 +239,15 @@ $$
 - 无法可靠拆分的团队署名、大规模 author list、文档贡献者列表先保留在论文页，不自动拆成作者页。
 - 新增作者档案后运行 `npm run build` 与 `npm run check:site`，确认 `/authors/` 和 `/authors/<slug>/` 已生成。
 
+每次新增或更新论文时按以下顺序执行作者页维护：
+
+1. 从 `Source -> Authors`、`作者与关系`、项目页、代码仓库和 appendix 中抽取候选作者与角色。
+2. 在 `authors.json`、`papers-index.md` 和已有论文笔记中搜索候选作者，确认已有档案、别名、中文姓名和跨论文重复情况。
+3. 对需要补充档案的作者，按 `author-x-account-search-sop.md` 运行 Grok broad search，并保存可复查来源。
+4. 交叉验证后更新 `authors.json`；若找到作者页，在论文笔记和索引中使用 `/authors/<slug>/` 链接。
+5. 对团队署名、超大作者列表或证据稀疏作者，记录跳过原因或 `needs-follow-up`，避免用弱匹配创建档案。
+6. 运行 `npm run build` 与 `npm run check:site`，确认作者页和论文页链接可生成。
+
 ## 安全与双用途处理
 
 涉及安全、漏洞、攻击、绕过、滥用、社会制度套利、模型越狱或 agent 工具滥用时：
@@ -224,7 +263,8 @@ $$
 
 - 文件是否落盘。
 - `papers-index.md` 是否更新。
-- 作者页相关信息是否同步到 `authors.json`。
+- 是否完成作者 profile pass：候选作者清单、已有档案复用、新档案创建或跳过原因、`authors.json` 更新、`xConfidence` 与来源链接是否明确。
+- 作者页相关信息是否同步到 `authors.json`，论文笔记和 `papers-index.md` 是否使用 `/authors/<slug>/` 链接。
 - 每篇论文是否包含作者关系。
 - 是否保留来源 URL 和版本日期。
 - 是否区分来源事实、作者主张和本地推论。

@@ -5,12 +5,17 @@ import data from '../../generated/paper-data.json';
 const workflow = data.utilities.find((page) => page.slug === 'workflow');
 ---
 
-<Layout active="workflow" title="Workflow | Chlience Paper Archive" canonicalPath="/workflow/">
+<Layout
+  active="workflow"
+  title="Workflow | Chlience Paper Archive"
+  description="论文阅读、作者档案、跨论文关系和本地讨论回写的公开归档方法。"
+  canonicalPath="/workflow/"
+>
   <article class="utility-page container">
     <header class="page-header slim">
-      <p class="eyebrow mono">SOP</p>
+      <p class="eyebrow mono">Archive method</p>
       <h1>{workflow?.title}</h1>
-      <p class="deck">本目录用于论文阅读、分析、作者关系跟踪和 Markdown 存档的工作流。</p>
+      <p class="deck">这里公开这个论文档案如何确认来源、拆解论文脉络、维护作者档案、连接相关工作，并把后续讨论回写到长期笔记。</p>
     </header>
     <div class="prose" set:html={workflow?.html ?? ''} />
   </article>
