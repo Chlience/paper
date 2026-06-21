@@ -1858,5 +1858,157 @@
         "url": "https://alignment.openai.com/beneficial-rl"
       }
     ]
+  },
+  {
+    "slug": "zhewei-kang",
+    "name": "Zhewei Kang",
+    "aliases": ["Zhewei Kang"],
+    "affiliations": ["UC Berkeley", "University of Hong Kong"],
+    "homepage": "https://openreview.net/profile?id=~Zhewei_Kang1",
+    "github": "https://github.com/backprop07",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["RLVR", "reasoning LLMs", "value-implicit policy optimization", "self-certainty"],
+    "notes": "VIMPO first author and arXiv submitter; OpenReview profile lists UC Berkeley and University of Hong Kong education history plus Self-Certainty and Learning to Reason without External Rewards. GitHub backprop07 hosts the VIMPO and Self-Certainty code repositories.",
+    "sources": [
+      {
+        "label": "OpenReview profile",
+        "url": "https://openreview.net/profile?id=~Zhewei_Kang1"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/backprop07"
+      },
+      {
+        "label": "VIMPO code",
+        "url": "https://github.com/backprop07/VIMPO"
+      },
+      {
+        "label": "VIMPO paper",
+        "url": "https://arxiv.org/abs/2606.20008"
+      }
+    ]
+  },
+  {
+    "slug": "aosong-feng",
+    "name": "Aosong Feng",
+    "aliases": ["Aosong Feng", "asFeng"],
+    "affiliations": ["Yale University", "AWS Bedrock"],
+    "homepage": "https://asfeng.github.io/",
+    "github": "https://github.com/asFeng",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["agentic AI", "long-horizon human-AI interaction", "LLM routing", "RLVR"],
+    "notes": "VIMPO coauthor. Homepage identifies him as an AWS Bedrock Applied Scientist and Yale PhD working on long-horizon human-AI interaction, agentic systems, persistent memory, planning and reflection. OpenReview profile connects him to Yale ECE and Learning to Reason without External Rewards.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://asfeng.github.io/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/asFeng"
+      },
+      {
+        "label": "OpenReview profile",
+        "url": "https://openreview.net/profile?id=~Aosong_Feng1"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=hFhhrmgAAAAJ"
+      },
+      {
+        "label": "VIMPO paper",
+        "url": "https://arxiv.org/abs/2606.20008"
+      }
+    ]
+  },
+  {
+    "slug": "sergey-levine",
+    "name": "Sergey Levine",
+    "aliases": ["Sergey Levine"],
+    "affiliations": ["UC Berkeley EECS", "RAIL Lab"],
+    "homepage": "https://people.eecs.berkeley.edu/~svlevine/",
+    "x": "https://x.com/svlevine",
+    "xConfidence": "high",
+    "topics": ["reinforcement learning", "robot learning", "decision making", "policy optimization"],
+    "notes": "VIMPO coauthor. UC Berkeley EECS homepage identifies him as an associate professor, RAIL Lab researcher, and deep reinforcement learning / robotics / decision-making scholar; homepage directly links the @svlevine Twitter/X account.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://people.eecs.berkeley.edu/~svlevine/"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/svlevine"
+      },
+      {
+        "label": "VIMPO paper",
+        "url": "https://arxiv.org/abs/2606.20008"
+      }
+    ]
+  },
+  {
+    "slug": "dawn-song",
+    "name": "Dawn Song",
+    "aliases": ["Dawn Song", "Dawn Xiaodong Song"],
+    "affiliations": ["UC Berkeley", "BAIR", "Berkeley RDI", "CHAI"],
+    "homepage": "https://dawnsong.io/",
+    "x": "https://x.com/dawnsongtweets",
+    "xConfidence": "high",
+    "topics": ["AI safety", "AI security", "agentic AI", "deep learning", "privacy"],
+    "notes": "VIMPO coauthor and Berkeley professor. Homepage identifies research interests in AI safety and security, Agentic AI, deep learning, decentralization technology, security and privacy, and links the @dawnsongtweets Twitter/X account.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://dawnsong.io/"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/dawnsongtweets"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=qb9FQ_YAAAAJ"
+      },
+      {
+        "label": "VIMPO paper",
+        "url": "https://arxiv.org/abs/2606.20008"
+      }
+    ]
+  },
+  {
+    "slug": "xuandong-zhao",
+    "name": "Xuandong Zhao",
+    "aliases": ["Xuandong Zhao", "XuandongZhao"],
+    "affiliations": ["UC Berkeley", "BAIR", "Berkeley RDI", "UC Santa Barbara"],
+    "homepage": "https://xuandongzhao.github.io/",
+    "github": "https://github.com/XuandongZhao",
+    "x": "https://x.com/xuandongzhao",
+    "xConfidence": "high",
+    "topics": ["AI safety", "reasoning LLMs", "scalable reinforcement learning", "self-improvement", "frontier AI reliability"],
+    "notes": "VIMPO coauthor and recurring Berkeley reasoning RL/RLIF author. Homepage identifies him as a UC Berkeley postdoctoral researcher in BAIR/RDI working with Dawn Song, focused on machine learning, NLP, AI safety, scalable reinforcement learning and self-improvement; GitHub links the same homepage and X handle.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://xuandongzhao.github.io/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/XuandongZhao"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/xuandongzhao"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=4-FELdQAAAAJ"
+      },
+      {
+        "label": "VIMPO paper",
+        "url": "https://arxiv.org/abs/2606.20008"
+      }
+    ]
   }
 ]
