@@ -1524,5 +1524,225 @@
         "url": "https://x.com/stingning"
       }
     ]
+  },
+  {
+    "slug": "yingru-li",
+    "name": "Yingru Li",
+    "chineseName": "李英儒",
+    "aliases": ["Yingru Li", "Richard Li", "Richard Y. Li", "szrlee"],
+    "affiliations": ["xAI", "The Chinese University of Hong Kong", "ByteDance"],
+    "homepage": "https://richardli.xyz/",
+    "github": "https://github.com/szrlee",
+    "x": "https://x.com/RichardYRLi",
+    "xConfidence": "high",
+    "topics": ["LLM reinforcement learning", "rollout correction", "trust region masking", "verl", "long-horizon RL"],
+    "notes": "TRM equal contribution author and arXiv/blog author. Homepage identifies him as xAI Member of Technical Staff, CUHK 2025 PhD and previously ByteDance; GitHub profile links the same homepage and X account, and is associated with verl-related work.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://richardli.xyz/"
+      },
+      {
+        "label": "TRM blog",
+        "url": "https://richardli.xyz/post/trust-region-masking/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/szrlee"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Yingru_Li1"
+      },
+      {
+        "label": "TRM paper",
+        "url": "https://arxiv.org/abs/2512.23075"
+      }
+    ]
+  },
+  {
+    "slug": "jiacai-liu",
+    "name": "Jiacai Liu",
+    "chineseName": "刘佳材",
+    "aliases": ["Jiacai Liu", "skydownacai"],
+    "affiliations": ["Fudan University"],
+    "homepage": "https://www.jiacailiu.cn/",
+    "github": "https://github.com/skydownacai",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["reinforcement learning", "LLM post-training", "reasoning models", "RLVR", "trust region masking"],
+    "notes": "TRM equal contribution author. Homepage identifies him as a Fudan University PhD student with reinforcement learning and LLM post-training interests, and lists related works including RL Collapse and DAPO.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://www.jiacailiu.cn/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/skydownacai"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Jiacai_Liu1"
+      },
+      {
+        "label": "DBLP",
+        "url": "https://dblp.org/pid/142/6601"
+      },
+      {
+        "label": "TRM paper",
+        "url": "https://arxiv.org/abs/2512.23075"
+      }
+    ]
+  },
+  {
+    "slug": "jiawei-xu",
+    "name": "Jiawei Xu",
+    "aliases": ["Jiawei Xu"],
+    "affiliations": ["The Chinese University of Hong Kong, Shenzhen"],
+    "homepage": "https://sds.cuhk.edu.cn/en/student-search?page=9",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["reinforcement learning", "LLM reinforcement learning", "trust region masking"],
+    "notes": "TRM equal contribution author. CUHK-Shenzhen SDS student search lists Jiawei Xu as a 2023 PhD student supervised by Baoxiang Wang, with Reinforcement Learning as research field.",
+    "sources": [
+      {
+        "label": "CUHK-Shenzhen SDS student search",
+        "url": "https://sds.cuhk.edu.cn/en/student-search?page=9"
+      },
+      {
+        "label": "Baoxiang Wang teaching page",
+        "url": "https://bxiangwang.github.io/teaching/"
+      },
+      {
+        "label": "TRM paper",
+        "url": "https://arxiv.org/abs/2512.23075"
+      }
+    ]
+  },
+  {
+    "slug": "yuxuan-tong",
+    "name": "Yuxuan Tong",
+    "chineseName": "童雨轩",
+    "aliases": ["Yuxuan Tong", "Shawn Tong", "tongyx361"],
+    "affiliations": ["Tsinghua University", "ByteDance Seed"],
+    "homepage": "https://tongyx361.github.io/",
+    "github": "https://github.com/tongyx361",
+    "x": "https://x.com/tongyx361",
+    "xConfidence": "high",
+    "topics": ["verl", "DAPO", "LLM reinforcement learning", "rollout systems", "post-training infrastructure"],
+    "notes": "TRM coauthor and recurring verl/DAPO infrastructure contributor. Homepage and GitHub identify him as Shawn/Yuxuan Tong, Tsinghua DCST student and ByteDance Seed AI Researcher; GitHub links the same homepage and X account.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://tongyx361.github.io/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/tongyx361"
+      },
+      {
+        "label": "TRM paper",
+        "url": "https://arxiv.org/abs/2512.23075"
+      },
+      {
+        "label": "verl PR #4544",
+        "url": "https://github.com/verl-project/verl/pull/4544"
+      },
+      {
+        "label": "DAPO paper",
+        "url": "https://arxiv.org/abs/2503.14476"
+      }
+    ]
+  },
+  {
+    "slug": "ziniu-li",
+    "name": "Ziniu Li",
+    "chineseName": "李子牛",
+    "aliases": ["Ziniu Li"],
+    "affiliations": ["Tencent Hunyuan", "The Chinese University of Hong Kong, Shenzhen", "ByteDance Seed"],
+    "homepage": "https://www.liziniu.org/",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["large language models", "reinforcement learning", "post-training", "trust region masking"],
+    "notes": "TRM coauthor. Homepage and OpenReview profile connect him to Tencent Hunyuan, CUHK-Shenzhen and a ByteDance Seed internship line; research topics include LLMs and RL.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://www.liziniu.org/"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Ziniu_Li1"
+      },
+      {
+        "label": "TRM paper",
+        "url": "https://arxiv.org/abs/2512.23075"
+      }
+    ]
+  },
+  {
+    "slug": "qian-liu",
+    "name": "Qian Liu",
+    "chineseName": "刘乾",
+    "aliases": ["Qian Liu", "SivilTaram"],
+    "affiliations": ["TikTok AI Innovation Center", "xAI", "Beihang University", "Microsoft Research Asia"],
+    "homepage": "https://siviltaram.github.io/",
+    "github": "https://github.com/SivilTaram",
+    "x": "https://x.com/sivil_taram",
+    "xConfidence": "high",
+    "topics": ["natural language processing", "code intelligence", "LLM agents", "reinforcement learning", "post-training"],
+    "notes": "TRM coauthor. Homepage identifies him as a researcher at TikTok AI Innovation Center and links GitHub/Twitter; GitHub profile currently shows `coding @xai-org`, so the archive keeps both TikTok and xAI as current-public-profile signals.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://siviltaram.github.io/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/SivilTaram"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Qian_Liu2"
+      },
+      {
+        "label": "TRM paper",
+        "url": "https://arxiv.org/abs/2512.23075"
+      }
+    ]
+  },
+  {
+    "slug": "baoxiang-wang",
+    "name": "Baoxiang Wang",
+    "chineseName": "王宝祥",
+    "aliases": ["Baoxiang Wang", "Wang Baoxiang", "wangbx66"],
+    "affiliations": ["The Chinese University of Hong Kong, Shenzhen", "Vector Institute"],
+    "homepage": "https://bxiangwang.github.io/",
+    "github": "https://github.com/wangbx66",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["reinforcement learning", "game theory", "machine learning", "trust region masking"],
+    "notes": "TRM coauthor and Jiawei Xu's public supervisor. Homepage identifies him as Assistant Professor at CUHK-Shenzhen School of Data Science with reinforcement learning and game theory interests, and as a visiting researcher at Vector Institute.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://bxiangwang.github.io/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/wangbx66"
+      },
+      {
+        "label": "DBLP",
+        "url": "https://dblp.org/pid/145/9873"
+      },
+      {
+        "label": "TRM paper",
+        "url": "https://arxiv.org/abs/2512.23075"
+      }
+    ]
   }
 ]
