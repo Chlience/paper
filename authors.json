@@ -1744,5 +1744,119 @@
         "url": "https://arxiv.org/abs/2512.23075"
       }
     ]
+  },
+  {
+    "slug": "akshay-v-jagadeesh",
+    "name": "Akshay V. Jagadeesh",
+    "aliases": ["Akshay V. Jagadeesh", "Akshay Jagadeesh", "akjags"],
+    "affiliations": ["OpenAI", "Stanford University", "Harvard University"],
+    "homepage": "https://www.akshayjagadeesh.com/",
+    "github": "https://github.com/akjags",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["AI alignment", "beneficial AI", "health AI", "computational neuroscience"],
+    "notes": "Corresponding author of OpenAI's Beneficial RL paper. Homepage identifies him as an OpenAI Research Scientist working on deeply and persistently beneficial AI with a focus on health and medicine; earlier research line connects computational neuroscience, Stanford and Harvard.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://www.akshayjagadeesh.com/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/akjags"
+      },
+      {
+        "label": "Beneficial RL paper",
+        "url": "https://alignment.openai.com/beneficial-rl"
+      }
+    ]
+  },
+  {
+    "slug": "rahul-k-arora",
+    "name": "Rahul K. Arora",
+    "aliases": ["Rahul K. Arora", "Rahul Arora"],
+    "affiliations": ["OpenAI", "University of Calgary"],
+    "homepage": "https://rahularora.io/",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["health AI", "reinforcement learning", "LLM evaluation", "clinical AI"],
+    "notes": "Beneficial RL coauthor. Homepage identifies him as an OpenAI researcher working on health and RL, a University of Calgary faculty member, and an early member of OpenAI's Health AI team; public work includes HealthBench and health model performance improvements.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://rahularora.io/"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=en&user=OYTQDKAAAAAJ"
+      },
+      {
+        "label": "Beneficial RL paper",
+        "url": "https://alignment.openai.com/beneficial-rl"
+      }
+    ]
+  },
+  {
+    "slug": "khaled-saab",
+    "name": "Khaled Saab",
+    "aliases": ["Khaled Saab", "Khaled K. Saab", "Khaled K Saab"],
+    "affiliations": ["OpenAI", "Google DeepMind", "Stanford University", "Georgia Tech"],
+    "homepage": "https://khaledsaab.github.io/",
+    "github": "https://github.com/khaledsaab",
+    "x": "https://x.com/_khaledsaab",
+    "xConfidence": "high",
+    "topics": ["biomedical intelligence", "health AI", "medical AI", "AI alignment"],
+    "notes": "Beneficial RL coauthor. Homepage identifies him as OpenAI Member of Technical Staff, previously Google DeepMind Research Scientist, Stanford PhD, and focused on accelerating biomedical intelligence; public X search shows the same transition to OpenAI and biomedical intelligence context.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://khaledsaab.github.io/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/khaledsaab"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=en&user=W77CiNUAAAAJ"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/_khaledsaab"
+      },
+      {
+        "label": "Beneficial RL paper",
+        "url": "https://alignment.openai.com/beneficial-rl"
+      }
+    ]
+  },
+  {
+    "slug": "karan-singhal",
+    "name": "Karan Singhal",
+    "aliases": ["Karan Singhal", "thekaransinghal"],
+    "affiliations": ["OpenAI", "Google Research", "Google DeepMind"],
+    "homepage": "https://www.karansinghal.com/",
+    "x": "https://x.com/thekaransinghal",
+    "xConfidence": "high",
+    "topics": ["health AI", "AGI benefits", "AI safety", "medical AI", "beneficial AI"],
+    "notes": "Corresponding author of OpenAI's Beneficial RL paper. Homepage states he leads the Health AI and AGI Benefits teams at OpenAI, with work spanning human health, deeply beneficial models and tangible AGI benefits; previous work includes Med-PaLM and Med-PaLM 2.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://www.karansinghal.com/"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/thekaransinghal"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=en&user=nMfflL0AAAAJ"
+      },
+      {
+        "label": "Beneficial RL paper",
+        "url": "https://alignment.openai.com/beneficial-rl"
+      }
+    ]
   }
 ]
