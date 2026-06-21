@@ -1152,5 +1152,107 @@
         "url": "https://x.com/kellerjordan0"
       }
     ]
+  },
+  {
+    "slug": "sam-ade-jacobs",
+    "name": "Sam Ade Jacobs",
+    "aliases": ["Sam Ade Jacobs", "S. A. Jacobs", "samadejacobs"],
+    "affiliations": ["Microsoft Research", "Texas A&M University (Ph.D.)"],
+    "homepage": "https://www.microsoft.com/en-us/research/people/samjacobs/",
+    "github": "https://github.com/samadejacobs",
+    "x": "https://x.com/samadejacobs",
+    "xConfidence": "high",
+    "topics": ["DeepSpeed", "DeepSpeed Ulysses", "HPC", "AI systems", "large-scale training"],
+    "notes": "DeepSpeed Ulysses first author and arXiv submitter. Microsoft Research profile identifies him as Principal Researcher and Tech Lead focused on HPC and AI system optimizations; GitHub and X handles align with the same name and DeepSpeed/Ulysses activity.",
+    "sources": [
+      {
+        "label": "Microsoft Research profile",
+        "url": "https://www.microsoft.com/en-us/research/people/samjacobs/"
+      },
+      {
+        "label": "Microsoft Research publications",
+        "url": "https://www.microsoft.com/en-us/research/people/samjacobs/publications/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/samadejacobs"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/samadejacobs"
+      },
+      {
+        "label": "DeepSpeed Ulysses",
+        "url": "https://arxiv.org/abs/2309.14509"
+      }
+    ]
+  },
+  {
+    "slug": "samyam-rajbhandari",
+    "name": "Samyam Rajbhandari",
+    "aliases": ["Samyam Rajbhandari", "S. Rajbhandari", "samyamrb"],
+    "affiliations": ["Snowflake AI Research", "Microsoft (DeepSpeed / ZeRO papers)"],
+    "homepage": "",
+    "github": "",
+    "x": "https://x.com/samyamrb",
+    "xConfidence": "high",
+    "topics": ["DeepSpeed", "ZeRO", "DeepSpeed Ulysses", "distributed training", "AI systems"],
+    "notes": "Recurring DeepSpeed author in the local archive: ZeRO coauthor and DeepSpeed Ulysses coauthor. Public sources identify him as DeepSpeed co-founder / system architect at Microsoft and later AI Systems Lead at Snowflake; X bio aligns with Snowflake and MSFT DeepSpeed.",
+    "sources": [
+      {
+        "label": "ZeRO paper",
+        "url": "https://arxiv.org/abs/1910.02054"
+      },
+      {
+        "label": "DeepSpeed Ulysses",
+        "url": "https://arxiv.org/abs/2309.14509"
+      },
+      {
+        "label": "MLOps Community video",
+        "url": "https://home.mlops.community/public/videos/do-more-with-less-large-model-training-and-inference-with-deepspeed"
+      },
+      {
+        "label": "Microsoft Research video",
+        "url": "https://www.microsoft.com/en-us/research/video/zero-fastest-bert-increasing-the-scale-and-speed-of-deep-learning-training-in-deepspeed/"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/samyamrb"
+      }
+    ]
+  },
+  {
+    "slug": "yuxiong-he",
+    "name": "Yuxiong He",
+    "aliases": ["Yuxiong He", "He Yuxiong"],
+    "affiliations": ["Snowflake AI Research", "Microsoft (DeepSpeed / ZeRO papers)"],
+    "homepage": "https://www.snowflake.com/en/blog/authors/yuxiong-he/",
+    "github": "",
+    "x": "https://x.com/yuxionghe",
+    "xConfidence": "high",
+    "topics": ["DeepSpeed", "ZeRO", "DeepSpeed Ulysses", "AI systems", "large-scale training"],
+    "notes": "Recurring DeepSpeed author in the local archive: ZeRO coauthor and DeepSpeed Ulysses coauthor. Snowflake author page identifies her as former Microsoft Partner Research and Product Manager who co-founded and led DeepSpeed; X bio directly references Microsoft and deepspeed.ai.",
+    "sources": [
+      {
+        "label": "Snowflake author profile",
+        "url": "https://www.snowflake.com/en/blog/authors/yuxiong-he/"
+      },
+      {
+        "label": "ZeRO paper",
+        "url": "https://arxiv.org/abs/1910.02054"
+      },
+      {
+        "label": "DeepSpeed Ulysses",
+        "url": "https://arxiv.org/abs/2309.14509"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=en&user=SB3_eb0AAAAJ"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/yuxionghe"
+      }
+    ]
   }
 ]
