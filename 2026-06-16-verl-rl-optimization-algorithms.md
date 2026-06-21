@@ -1,7 +1,7 @@
 # verl 当前 RL 优化算法与异步训练流水线技术笔记
 
-Date: 2026-06-16
-Sort-Time: 2026-06-16 18:19
+First-Archived-At: 2026-06-16 18:19
+Updated-At: 2026-06-16 18:19
 
 ## Source
 

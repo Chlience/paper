@@ -31,7 +31,7 @@ export const buildPaperSearchItems = (papers = []) =>
     return {
       title: paper.title ?? '',
       path: paper.path ?? '',
-      date: paper.date ?? '',
+      firstArchivedAt: paper.firstArchivedAt ?? '',
       authors: paper.authors ?? '',
       summary: compactText(paper.summary ?? ''),
       tags,

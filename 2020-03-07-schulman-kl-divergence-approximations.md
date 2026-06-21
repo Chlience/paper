@@ -1,7 +1,7 @@
 # Approximating KL Divergence 技术博客笔记
 
-Date: 2026-06-21
-Sort-Time: 2026-06-21 10:17
+First-Archived-At: 2026-06-21 10:17
+Updated-At: 2026-06-21 10:17
 
 ## Source
 

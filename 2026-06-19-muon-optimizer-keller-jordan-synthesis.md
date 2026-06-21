@@ -1,7 +1,7 @@
 # Muon Optimizer 技术博客与资料综合分析
 
-Date: 2026-06-19
-Sort-Time: 2026-06-19 22:20
+First-Archived-At: 2026-06-19 22:20
+Updated-At: 2026-06-19 22:20
 
 ## Source
 

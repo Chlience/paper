@@ -1,7 +1,7 @@
 # <Paper Title> 论文笔记
 
-Date: YYYY-MM-DD
-Sort-Time: YYYY-MM-DD HH:mm
+First-Archived-At: YYYY-MM-DD HH:mm
+Updated-At: YYYY-MM-DD HH:mm
 
 ## Source
 

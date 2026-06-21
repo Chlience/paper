@@ -1,7 +1,7 @@
 # GLM-5.2: Built for Long-Horizon Tasks 技术文章笔记
 
-Date: 2026-06-18
-Sort-Time: 2026-06-18 13:45
+First-Archived-At: 2026-06-18 13:45
+Updated-At: 2026-06-18 13:45
 
 ## Source
 

@@ -6,7 +6,7 @@ interface Paper {
   slug: string;
   path: string;
   title: string;
-  date?: string;
+  firstArchivedAt?: string;
   authors?: string;
   authorEntries?: { name: string; path?: string; slug?: string; profileStatus?: string }[];
   summary?: string;
@@ -22,7 +22,7 @@ const { paper, showProvenance = true } = Astro.props;
 ---
 
 <article class="paper-row">
-  <div class="paper-row-date mono">{formatDate(paper.date)}</div>
+  <div class="paper-row-date mono">{formatDate(paper.firstArchivedAt)}</div>
   <div class="paper-row-main">
     <h3><a href={paper.path}>{paper.title}</a></h3>
     {paper.summary && <p>{paper.summary}</p>}

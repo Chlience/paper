@@ -27,7 +27,8 @@ const h2Headings = paper.headings.filter((heading) => heading.depth === 2);
     title: paper.title,
     description: paper.summary,
     url: articleUrl,
-    date: paper.date,
+    firstArchivedAt: paper.firstArchivedAt,
+    updatedAt: paper.updatedAt,
     authors: paper.authors,
   })}
 >
@@ -43,7 +44,8 @@ const h2Headings = paper.headings.filter((heading) => heading.depth === 2);
         </p>
       )}
       <div class="paper-meta">
-        {paper.date && <span>{paper.date}</span>}
+        {paper.firstArchivedAt && <span>{paper.firstArchivedAt}</span>}
+        {paper.updatedAt && paper.updatedAt !== paper.firstArchivedAt && <span>Updated {paper.updatedAt}</span>}
         {paper.currentVersion && <span>{paper.currentVersion}</span>}
         {paper.sourceUrl && <a href={paper.sourceUrl}>Source</a>}
         {paper.tags.map((tag) => <a href={`/papers/#tag-${tag.toLowerCase()}`}>{tag}</a>)}

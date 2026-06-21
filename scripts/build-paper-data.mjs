@@ -198,8 +198,17 @@ const getTopLevelField = (markdown, name) => {
   return markdown.match(new RegExp(`^${escaped}:\\s*(.+)$`, 'm'))?.[1]?.trim() ?? '';
 };
 
-const getDate = (markdown) => getTopLevelField(markdown, 'Date');
-const getSortTime = (markdown) => getTopLevelField(markdown, 'Sort-Time') || getDate(markdown);
+const getFirstArchivedAt = (markdown) =>
+  getTopLevelField(markdown, 'First-Archived-At') ||
+  getTopLevelField(markdown, 'Archive-Time') ||
+  getTopLevelField(markdown, 'Sort-Time') ||
+  getTopLevelField(markdown, 'Date');
+const getUpdatedAt = (markdown) =>
+  getTopLevelField(markdown, 'Updated-At') ||
+  getTopLevelField(markdown, 'Sort-Time') ||
+  getTopLevelField(markdown, 'Archive-Time') ||
+  getTopLevelField(markdown, 'Date') ||
+  getFirstArchivedAt(markdown);
 
 const getSection = (markdown, heading) => {
   const lines = markdown.split('\n');
@@ -244,7 +253,10 @@ const inferTags = (markdown, filename) => {
 const stripPageChrome = (markdown) =>
   markdown
     .replace(/^#\s+.+\n+/, '')
+    .replace(/^First-Archived-At:\s*.+\n+/m, '')
+    .replace(/^Updated-At:\s*.+\n+/m, '')
     .replace(/^Date:\s*.+\n+/m, '')
+    .replace(/^Archive-Time:\s*.+\n+/m, '')
     .replace(/^Sort-Time:\s*.+\n+/m, '')
     .trim();
 
@@ -322,16 +334,16 @@ const build = async () => {
       getSourceField(raw, 'DOI');
 
     const pageMarkdown = stripPageChrome(raw);
-    const date = getDate(raw);
-    const sortTime = getSortTime(raw);
+    const firstArchivedAt = getFirstArchivedAt(raw);
+    const updatedAt = getUpdatedAt(raw);
     const authors = getSourceField(raw, ['Authors', 'Author']) || 'Unknown';
     papers.push({
       slug,
       file,
       path: `/papers/${slug}/`,
       title,
-      date,
-      sortTime,
+      firstArchivedAt,
+      updatedAt,
       sourceUrl,
       authors,
       parsedAuthors: splitAuthorNames(authors),
@@ -345,7 +357,7 @@ const build = async () => {
   }
 
   papers.sort((a, b) => {
-    const timeCompare = String(b.sortTime).localeCompare(String(a.sortTime));
+    const timeCompare = String(b.firstArchivedAt).localeCompare(String(a.firstArchivedAt));
     return timeCompare || b.slug.localeCompare(a.slug);
   });
 
@@ -379,12 +391,12 @@ const build = async () => {
 
     const paperList = papers
       .filter((paper) => paperSlugs.has(paper.slug))
-      .map(({ slug: paperSlug, path: paperPath, title, date, sortTime, summary, tags }) => ({
+      .map(({ slug: paperSlug, path: paperPath, title, firstArchivedAt, updatedAt, summary, tags }) => ({
         slug: paperSlug,
         path: paperPath,
         title,
-        date,
-        sortTime,
+        firstArchivedAt,
+        updatedAt,
         summary,
         tags,
       }));
@@ -474,7 +486,8 @@ const build = async () => {
     utilities.push({
       ...meta,
       file,
-      date: getDate(raw),
+      firstArchivedAt: getFirstArchivedAt(raw),
+      updatedAt: getUpdatedAt(raw),
       summary: excerpt(raw, 180),
       headings: collectHeadings(pageMarkdown),
       html: renderMarkdown(pageMarkdown, paperFiles),

@@ -1,7 +1,7 @@
 # slime v0.3.0 / main 文档快照：RL Scaling 后训练框架分析
 
-Date: 2026-06-17
-Sort-Time: 2026-06-17 13:26
+First-Archived-At: 2026-06-17 13:26
+Updated-At: 2026-06-17 13:26
 Version: slime latest release `v0.3.0`; docs snapshot `main@243773c`; docs last updated 2026-06-17
 
 ## Source

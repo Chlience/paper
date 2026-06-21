@@ -43,13 +43,15 @@ export const createArticleJsonLd = ({
   title,
   description,
   url,
-  date,
+  firstArchivedAt,
+  updatedAt,
   authors,
 }: {
   title: string;
   description: string;
   url: string;
-  date?: string;
+  firstArchivedAt?: string;
+  updatedAt?: string;
   authors?: string;
 }) => ({
   '@context': 'https://schema.org',
@@ -57,7 +59,8 @@ export const createArticleJsonLd = ({
   headline: title,
   description,
   url,
-  dateModified: date,
+  datePublished: firstArchivedAt,
+  dateModified: updatedAt ?? firstArchivedAt,
   author: authors
     ? authors.split(/,\s*/).slice(0, 12).map((name) => ({
         '@type': 'Person',

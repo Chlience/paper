@@ -16,7 +16,7 @@ export const GET: APIRoute = ({ site }) => {
     .slice(0, 30)
     .map((paper) => {
       const url = getAbsoluteUrl(paper.path, origin);
-      const publicationTime = paper.sortTime ?? paper.date;
+      const publicationTime = paper.firstArchivedAt;
       const pubDate = publicationTime
         ? new Date(publicationTime.replace(' ', 'T')).toUTCString()
         : new Date(data.generatedAt).toUTCString();

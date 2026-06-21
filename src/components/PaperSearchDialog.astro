@@ -151,7 +151,7 @@ const searchJson = JSON.stringify(searchItems).replace(/</g, '\\u003c');
                     <span class="paper-search-result-title">${escapeHtml(item.title)}</span>
                     <span class="paper-search-result-summary">${escapeHtml(item.summary)}</span>
                     <span class="paper-search-result-meta mono">
-                      ${escapeHtml(item.date)}
+                      ${escapeHtml(item.firstArchivedAt)}
                       ${item.authors ? ` · ${escapeHtml(item.authors)}` : ''}
                     </span>
                   </a>

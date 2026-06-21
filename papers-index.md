@@ -1,6 +1,7 @@
 # Paper Archive Index
 
-Date: 2026-06-21
+First-Archived-At: 2026-06-21
+Updated-At: 2026-06-21
 
 ## 本地工作流
 
