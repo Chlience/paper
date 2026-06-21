@@ -1293,5 +1293,236 @@
         "url": "https://x.com/yuxionghe"
       }
     ]
+  },
+  {
+    "slug": "ganqu-cui",
+    "name": "Ganqu Cui",
+    "aliases": ["Ganqu Cui"],
+    "affiliations": ["Shanghai AI Laboratory", "Tsinghua University / THUNLP"],
+    "homepage": "https://cgq15.github.io/",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["RLVR", "LLM alignment", "reinforcement learning", "PRIME-RL", "entropy mechanism"],
+    "notes": "Entropy Mechanism equal-contribution author and corresponding author of related RL compositionality / PRIME-RL work. Homepage identifies Tsinghua Ph.D. background, Shanghai AI Lab role, LLM alignment and reinforcement learning research interests, and lists Entropy Mechanism, PRIME, ImplicitPRM and RL compositionality papers.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://cgq15.github.io/"
+      },
+      {
+        "label": "OpenReview profile",
+        "url": "https://openreview.net/profile?id=~Ganqu_Cui1"
+      },
+      {
+        "label": "Entropy Mechanism paper",
+        "url": "https://arxiv.org/abs/2505.22617"
+      }
+    ]
+  },
+  {
+    "slug": "yuchen-zhang",
+    "name": "Yuchen Zhang",
+    "aliases": ["Yuchen Zhang", "Raf-Chen"],
+    "affiliations": ["Peking University", "Shanghai AI Laboratory", "THU-C3I"],
+    "homepage": "https://yuczhang.com/",
+    "github": "https://github.com/Raf-Chen",
+    "x": "https://x.com/yuchenzhan84564",
+    "xConfidence": "high",
+    "topics": ["RLVR", "reasoning models", "agents", "scalable reinforcement learning"],
+    "notes": "Entropy Mechanism equal-contribution author. Homepage identifies him as a PKU Ph.D. student advised by Ning Ding and Bowen Zhou, working closely with Ganqu Cui and Yu Cheng; GitHub profile links the same homepage, Scholar, and X handle.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://yuczhang.com/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/Raf-Chen"
+      },
+      {
+        "label": "OpenReview profile",
+        "url": "https://openreview.net/profile?id=~Yuchen_Zhang8"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/yuchenzhan84564"
+      }
+    ]
+  },
+  {
+    "slug": "jiacheng-chen",
+    "name": "Jiacheng Chen",
+    "aliases": ["Jiacheng Chen", "JC-Chen1"],
+    "affiliations": ["The Chinese University of Hong Kong", "Shanghai AI Laboratory", "MiniMax"],
+    "homepage": "https://jc-chen1.github.io/",
+    "github": "https://github.com/JC-Chen1",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["RLVR", "reasoning in NLP", "reinforcement learning", "MiniMax", "PRIME-RL"],
+    "notes": "Entropy Mechanism equal-contribution author. Homepage identifies him as a CUHK CSE Ph.D. student advised by Yu Cheng and Weiyang Liu, with MiniMax and Shanghai AI Lab internship/project work; page lists Entropy Mechanism and P1/MaxProof related reasoning RL work.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://jc-chen1.github.io/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/JC-Chen1"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=en&user=knvJGuQAAAAJ"
+      },
+      {
+        "label": "Entropy Mechanism paper",
+        "url": "https://arxiv.org/abs/2505.22617"
+      }
+    ]
+  },
+  {
+    "slug": "lifan-yuan",
+    "name": "Lifan Yuan",
+    "chineseName": "袁立凡",
+    "aliases": ["Lifan Yuan", "Yuan Lifan"],
+    "affiliations": ["University of Illinois Urbana-Champaign", "Tsinghua University / THUNLP"],
+    "homepage": "https://lifan-yuan.github.io/",
+    "github": "https://github.com/lifan-yuan",
+    "x": "https://x.com/lifan__yuan",
+    "xConfidence": "high",
+    "topics": ["RLVR", "PRIME-RL", "process reward", "scalable interaction", "RL compositionality"],
+    "notes": "Recurring RLVR author in this archive: Entropy Mechanism coauthor and first author of RL compositional skill acquisition. Homepage identifies him as a UIUC Ph.D. student advised by Hao Peng, previously working with Zhiyuan Liu at THUNLP, and links Twitter/X, GitHub and Scholar.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://lifan-yuan.github.io/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/lifan-yuan"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/lifan__yuan"
+      },
+      {
+        "label": "RL compositionality paper",
+        "url": "https://arxiv.org/abs/2509.25123"
+      }
+    ]
+  },
+  {
+    "slug": "huayu-chen",
+    "name": "Huayu Chen",
+    "chineseName": "陈华玉",
+    "aliases": ["Huayu Chen"],
+    "affiliations": ["Tsinghua University", "NVIDIA Deep Imagination Research group (internship)"],
+    "homepage": "https://chendrag.github.io/",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["reinforcement learning", "deep generative models", "Tianshou", "LLM/VLM RL", "PRIME-RL"],
+    "notes": "Entropy Mechanism coauthor and ImplicitPRM/PRIME-related author. Homepage identifies Tsinghua Ph.D. background, deep RL and generative model focus, Tianshou authorship, and current work on self-evolving and coding agents.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://chendrag.github.io/"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=en&user=0FBCHc4AAAAJ"
+      },
+      {
+        "label": "Entropy Mechanism paper",
+        "url": "https://arxiv.org/abs/2505.22617"
+      }
+    ]
+  },
+  {
+    "slug": "yu-cheng",
+    "name": "Yu Cheng",
+    "aliases": ["Yu Cheng"],
+    "affiliations": ["The Chinese University of Hong Kong", "Shanghai AI Laboratory", "Skywork AI"],
+    "homepage": "https://ych133.github.io/",
+    "github": "",
+    "x": "https://x.com/YuCheng348997",
+    "xConfidence": "high",
+    "topics": ["efficient architectures", "model compression", "multimodal learning", "RLVR", "reasoning models"],
+    "notes": "Entropy Mechanism corresponding author. Homepage identifies him as CUHK CSE associate professor, Chief Scientist at Kunlun Wanwei / Skywork AI, and Lead Scientist/Professor at Shanghai AI Lab and Shanghai Innovation Institute; X profile links the same homepage.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://ych133.github.io/"
+      },
+      {
+        "label": "CUHK faculty profile",
+        "url": "https://www.cse.cuhk.edu.hk/people/faculty/yu-cheng/"
+      },
+      {
+        "label": "OpenReview profile",
+        "url": "https://openreview.net/profile?id=~Yu_Cheng1"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/YuCheng348997"
+      }
+    ]
+  },
+  {
+    "slug": "bowen-zhou",
+    "name": "Bowen Zhou",
+    "aliases": ["Bowen Zhou", "Zhou Bowen"],
+    "affiliations": ["Tsinghua University", "Shanghai AI Laboratory", "TsinghuaC3I"],
+    "homepage": "https://c3i.ee.tsinghua.edu.cn/en/author/bowen-zhou/",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["reasoning intelligence", "natural language processing", "multimodal AI", "trustworthy AI", "RLVR"],
+    "notes": "Entropy Mechanism corresponding author. TsinghuaC3I page identifies him as Tsinghua Department of Electronics permanent professor, Huiyan Chair Professor, IEEE Fellow and CAAI Fellow; Google Scholar identifies him as Director of Shanghai AI Lab and Chair Professor at Tsinghua.",
+    "sources": [
+      {
+        "label": "TsinghuaC3I profile",
+        "url": "https://c3i.ee.tsinghua.edu.cn/en/author/bowen-zhou/"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=en&user=h3Nsz6YAAAAJ"
+      },
+      {
+        "label": "Entropy Mechanism paper",
+        "url": "https://arxiv.org/abs/2505.22617"
+      }
+    ]
+  },
+  {
+    "slug": "ning-ding",
+    "name": "Ning Ding",
+    "chineseName": "丁宁",
+    "aliases": ["Ning Ding", "StingNing", "dingn42"],
+    "affiliations": ["Tsinghua University", "Shanghai AI Laboratory", "THU-C3I"],
+    "homepage": "https://www.stingning.cn/",
+    "github": "https://github.com/dingn42",
+    "x": "https://x.com/stingning",
+    "xConfidence": "high",
+    "topics": ["reasoning intelligence", "scalable reinforcement learning", "PRIME-RL", "RLVR", "LLM alignment"],
+    "notes": "Entropy Mechanism corresponding author and recurring RLVR author in the archive. Homepage identifies him as tenure-track Assistant Professor at Tsinghua EE, links GitHub/X/Scholar, and lists Entropy Mechanism, TTRL, ImplicitPRM and PRIME.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://www.stingning.cn/"
+      },
+      {
+        "label": "Tsinghua profile",
+        "url": "https://web.ee.tsinghua.edu.cn/dingning/en/index.htm"
+      },
+      {
+        "label": "OpenReview profile",
+        "url": "https://openreview.net/profile?id=~Ning_Ding5"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/stingning"
+      }
+    ]
   }
 ]
