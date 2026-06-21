@@ -1,7 +1,7 @@
 # Paper Analysis Workflow
 
 First-Archived-At: 2026-06-19
-Updated-At: 2026-06-19
+Updated-At: 2026-06-21
 
 ## 目标
 
@@ -27,6 +27,7 @@ Updated-At: 2026-06-19
 
 - 每篇论文的来源、版本、作者、归档时间和站点内链接。
 - 一句话结论、论文脉络、关键实验或定理、主要启发和局限。
+- 公开审稿状态和 reviewer 意见吸收：venue status、review 数量、rating / confidence、主要认可点、主要质疑点、作者 rebuttal 和可信度影响。
 - 作者与关系，包括机构、同机构作者群、跨机构桥接、通讯作者、共同一作、代码或项目组织线索。
 - 已存档论文之间的主题、方法、系统、机构、作者和引用关系。
 - 作者页中的稳定公开信息：主页、GitHub、Scholar/DBLP/OpenReview、机构页、X 账号及核验状态。
@@ -86,7 +87,8 @@ authors.json
 5. 在正式进入 method / system / theory 前，先重建研究问题、已有工作不足和作者可能的思考路径。
 6. 再读 method / system / theory / experiment，梳理证据链。
 7. 最后读 limitation、ethics、appendix 和 project README，补齐边界条件。
-8. 完成论文初稿后，执行作者 profile pass：抽取核心作者、通讯作者、维护者、跨论文重复作者和项目组织线索；按 `author-x-account-search-sop.md` 获取 homepage、GitHub、Scholar/DBLP/OpenReview、机构页和 X 候选；交叉验证后决定是否更新 `authors.json`、论文笔记和 `papers-index.md`。
+8. 搜索公开审稿意见。若论文有 OpenReview、ARR、会议投稿页或可匹配的公开 peer review，按 `审稿意见搜索与吸收` 章节记录 venue status、review 数量、rating / confidence、主要认可点、主要质疑点、作者回应和可信度影响；若未发现公开审稿，写入 `Reference Intake Brief -> Skipped`。
+9. 完成论文初稿后，执行作者 profile pass：抽取核心作者、通讯作者、维护者、跨论文重复作者和项目组织线索；按 `author-x-account-search-sop.md` 获取 homepage、GitHub、Scholar/DBLP/OpenReview、机构页和 X 候选；交叉验证后决定是否更新 `authors.json`、论文笔记和 `papers-index.md`。
 
 ## 分析维度
 
@@ -101,6 +103,54 @@ authors.json
 - 哪些结论证据强，哪些需要谨慎。
 - 对 LLM 安全、系统、理论、评测或产品有什么可复用启发。
 - 论文的外部有效性、实验范围和实现限制是什么。
+- 公开审稿意见如何改变可信度判断：哪些 reviewer 认可了问题价值，哪些 reviewer 指出了 theory、baseline、统计显著性、presentation 或 novelty 的硬伤；作者 rebuttal 是否实际回应了这些问题。
+
+## 审稿意见搜索与吸收
+
+每篇论文都要做 reviewer opinion check。这个检查服务可信度校准，不服务“找背书”。写作时要把社区传播热度、工程采用、公开审稿认可和最终录用状态分开。
+
+### 搜索顺序
+
+1. 优先使用论文 `Source` 中已经出现的 OpenReview / ARR / conference submission URL。
+2. 若只有 arXiv 或 PDF，用标题、作者和年份搜索公开投稿页：
+   - `"Paper Title" OpenReview`
+   - `"Paper Title" "Official Review"`
+   - `"Paper Title" ICLR OR NeurIPS OR ICML OR ACL OR ARR`
+   - `"arxiv_id" OpenReview`
+3. 若标题改动或存在匿名投稿，用作者组合、摘要关键词和 arXiv id 交叉匹配。匹配证据不足时，只写“未能可靠匹配公开 review”，避免弱匹配。
+4. 对 OpenReview forum，优先拉取 API 而非只读网页正文：
+
+```text
+https://api2.openreview.net/notes?forum=<forum_id>&details=replyCount,directReplies,replies
+```
+
+5. 在返回 notes 中重点筛选这些 invitation 或字段：
+   - `Official_Review`
+   - `Author_Response` / `Rebuttal`
+   - `Meta_Review`
+   - `Decision`
+   - `Withdrawal`
+   - `Comment`
+6. 若 API v2 无结果，再尝试网页可见内容、OpenReview revisions、会议 proceedings 页面、ACL Anthology review attachment 或 ARR 页面。仍无公开结果时，记录跳过原因。
+
+### 记录内容
+
+若找到公开审稿，论文笔记中新增或更新 `OpenReview / 审稿意见吸收` 小节，至少记录：
+
+- Venue status: submitted / withdrawn / accepted / rejected / under review / unknown，以及观察日期。
+- Public reviews: review 数量；若公开 rating / soundness / confidence，记录分布或范围。
+- Reviewer consensus: 主要认可点，例如问题重要性、方法新意、实验覆盖、工程可用性。
+- Main criticisms: 主要质疑点，例如理论假设、baseline 不完整、统计显著性、ablation 不足、泛化边界、写作或 novelty。
+- Author response: 是否公开 rebuttal；作者是否补充实验、承认限制或澄清误解。
+- 对本文可信度的影响: 明确哪些主张应上调可信度，哪些主张应降级为待复验。
+
+写法要求：
+
+- 只摘取少量必要短语，不复制大段 reviewer 原文。
+- 将 reviewer 意见转写成可复查的技术判断，避免把单个 reviewer 的措辞写成定论。
+- rating 低但工程生态采用强时，明确区分“实践参考价值”和“正式审稿认可度”。
+- 若论文已撤稿或无公开决定，不能写成已获会议背书。
+- 若未找到公开审稿，在 `Reference Intake Brief -> Skipped` 写入 `公开 reviewer comments` 和原因，例如“未发现 OpenReview/ARR/会议公开审稿页”。
 
 ## 交流沉淀
 
@@ -160,6 +210,7 @@ authors.json
 - `一句话结论`
 - `论文脉络`
 - `关键实验/定理`
+- `OpenReview / 审稿意见吸收`，若无公开审稿则在 `Reference Intake Brief -> Skipped` 记录
 - `主要启发`
 - `局限`
 - `Reference Intake Brief`
@@ -268,6 +319,7 @@ $$
 - 作者页相关信息是否同步到 `authors.json`，论文笔记和 `papers-index.md` 是否使用 `/authors/<slug>/` 链接。
 - 每篇论文是否包含作者关系。
 - 是否保留来源 URL 和版本日期。
+- 是否完成公开审稿意见搜索；若有公开 review，是否吸收 reviewer consensus、主要质疑、作者回应和可信度影响；若无公开 review，是否在 `Skipped` 记录原因。
 - 是否区分来源事实、作者主张和本地推论。
 - 是否在方法前回答研究问题、已有工作不足，并重建作者可能的思考路径。
 - 是否把阅读后的有效交流提炼进对应笔记。

@@ -9,6 +9,7 @@ Updated-At: YYYY-MM-DD HH:mm
 - arXiv:
 - PDF:
 - Code/Project:
+- OpenReview / Review page:
 - Authors:
 - Submitted:
 - Current version read:
@@ -94,6 +95,16 @@ Updated-At: YYYY-MM-DD HH:mm
 
 - 
 
+## OpenReview / 审稿意见吸收
+
+- Venue status:
+- Public reviews:
+- Ratings / confidence:
+- Reviewer consensus:
+- Main criticisms:
+- Author response:
+- 对本文可信度的影响:
+
 ## 本地讨论补充
 
 ### 1. 讨论收敛点
@@ -155,6 +166,7 @@ Updated-At: YYYY-MM-DD HH:mm
 
 | Material | Reason |
 | --- | --- |
+| 公开 reviewer comments | 未发现 OpenReview/ARR/会议公开审稿页，或无法可靠匹配到当前论文版本。 |
 |  |  |
 
 ### Recommendation
