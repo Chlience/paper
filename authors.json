@@ -1154,6 +1154,45 @@
     ]
   },
   {
+    "slug": "john-schulman",
+    "name": "John Schulman",
+    "aliases": ["John Schulman", "J. Schulman", "joschu", "johnschulman2"],
+    "affiliations": [
+      "Thinking Machines",
+      "Anthropic (former)",
+      "OpenAI (cofounder)",
+      "UC Berkeley (Ph.D.)"
+    ],
+    "homepage": "http://joschu.net/",
+    "github": "",
+    "x": "https://x.com/johnschulman2",
+    "xConfidence": "high",
+    "topics": ["PPO", "TRPO", "RLHF", "post-training", "KL divergence", "policy optimization"],
+    "notes": "Approximating KL Divergence blog author and PPO/TRPO/RLHF key researcher. Homepage identifies him as Thinking Machines cofounder and chief scientist, former Anthropic Alignment Science researcher, OpenAI cofounder, and former OpenAI post-training co-lead; X profile search result links the same joschu.net website.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "http://joschu.net/"
+      },
+      {
+        "label": "Approximating KL Divergence",
+        "url": "http://joschu.net/blog/kl-approx.html"
+      },
+      {
+        "label": "PPO paper",
+        "url": "https://arxiv.org/abs/1707.06347"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=en&user=itSa94cAAAAJ"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/johnschulman2"
+      }
+    ]
+  },
+  {
     "slug": "sam-ade-jacobs",
     "name": "Sam Ade Jacobs",
     "aliases": ["Sam Ade Jacobs", "S. A. Jacobs", "samadejacobs"],

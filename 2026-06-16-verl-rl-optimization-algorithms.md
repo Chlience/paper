@@ -236,6 +236,7 @@ MTP 在 verl 文档里既可用于训练，也可用于 rollout speculative deco
 
 ## 与已存档材料的关系
 
+- [2020-03-07 Schulman KL approximation](/papers/2020-03-07-schulman-kl-divergence-approximations/) 提供 `K3` 指标的数学来源：$k_3=(r-1)-\log r$ 是无偏、非负、低方差 KL value estimator。verl 中记录 KL/K3/chi2 时，应继续区分 drift 诊断值、KL reward penalty 和可微 KL loss。
 - [2409.19256](/papers/2409.19256-hybridflow-rlhf-framework/) 提供 verl 的原始系统抽象：RLHF 被看作多模型 dataflow，single-controller 编排模型间流程，multi-controller 处理模型内分布式执行。当前 one-step-off、fully async、TransferQueue 是这条系统线在 post-training workloads 上继续扩展。
 - [2503.14476](/papers/2503.14476-dapo-long-cot-rl-system/) 是 DAPO recipe 的论文背景。verl 当前 DAPO 文档把 Clip-Higher、dynamic sampling、token-level loss、overlong reward shaping 落到了配置和代码层。
 - [2605.14220](/papers/2605.14220-training-inference-mismatch-llm-rl/) 与 rollout correction 强相关。verl 当前文档把 TIM 风险工程化为三策略框架、TIS、RS、bypass/decoupled mode 和 mismatch 指标。
