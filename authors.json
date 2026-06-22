@@ -1535,8 +1535,8 @@
     "github": "https://github.com/szrlee",
     "x": "https://x.com/RichardYRLi",
     "xConfidence": "high",
-    "topics": ["LLM reinforcement learning", "rollout correction", "trust region masking", "verl", "long-horizon RL"],
-    "notes": "TRM equal contribution author and arXiv/blog author. Homepage identifies him as xAI Member of Technical Staff, CUHK 2025 PhD and previously ByteDance; GitHub profile links the same homepage and X account, and is associated with verl-related work.",
+    "topics": ["LLM reinforcement learning", "rollout correction", "trust region masking", "optimal token baseline", "verl", "long-horizon RL"],
+    "notes": "TRM equal contribution author and OTB project lead / co-first author. Homepage identifies him as xAI Member of Technical Staff, CUHK 2025 PhD and previously ByteDance; GitHub profile links the same homepage and X account, and is associated with verl-related work.",
     "sources": [
       {
         "label": "Homepage",
@@ -1557,6 +1557,14 @@
       {
         "label": "TRM paper",
         "url": "https://arxiv.org/abs/2512.23075"
+      },
+      {
+        "label": "OTB paper",
+        "url": "https://arxiv.org/abs/2602.07078"
+      },
+      {
+        "label": "OTB project page",
+        "url": "https://yingru.notion.site/The-Optimal-Token-Baseline-399211a558b782cfa936014c0d42dfb8"
       }
     ]
   },
@@ -1570,8 +1578,8 @@
     "github": "https://github.com/skydownacai",
     "x": "",
     "xConfidence": "not-found",
-    "topics": ["reinforcement learning", "LLM post-training", "reasoning models", "RLVR", "trust region masking"],
-    "notes": "TRM equal contribution author. Homepage identifies him as a Fudan University PhD student with reinforcement learning and LLM post-training interests, and lists related works including RL Collapse and DAPO.",
+    "topics": ["reinforcement learning", "LLM post-training", "reasoning models", "RLVR", "trust region masking", "optimal token baseline"],
+    "notes": "TRM equal contribution author and OTB coauthor. Homepage identifies him as a Fudan University PhD student with reinforcement learning and LLM post-training interests, and lists related works including RL Collapse and DAPO.",
     "sources": [
       {
         "label": "Homepage",
@@ -1592,6 +1600,10 @@
       {
         "label": "TRM paper",
         "url": "https://arxiv.org/abs/2512.23075"
+      },
+      {
+        "label": "OTB paper",
+        "url": "https://arxiv.org/abs/2602.07078"
       }
     ]
   },
@@ -1600,12 +1612,12 @@
     "name": "Jiawei Xu",
     "aliases": ["Jiawei Xu"],
     "affiliations": ["The Chinese University of Hong Kong, Shenzhen"],
-    "homepage": "https://sds.cuhk.edu.cn/en/student-search?page=9",
-    "github": "",
+    "homepage": "https://jiawei415.github.io/",
+    "github": "https://github.com/jiawei415",
     "x": "",
     "xConfidence": "not-found",
-    "topics": ["reinforcement learning", "LLM reinforcement learning", "trust region masking"],
-    "notes": "TRM equal contribution author. CUHK-Shenzhen SDS student search lists Jiawei Xu as a 2023 PhD student supervised by Baoxiang Wang, with Reinforcement Learning as research field.",
+    "topics": ["reinforcement learning", "LLM reinforcement learning", "trust region masking", "optimal token baseline", "verl"],
+    "notes": "TRM equal contribution author and OTB co-first author. OpenReview profile identifies him as a CUHK-Shenzhen PhD student with LLM post-training and reinforcement learning expertise; CUHK-Shenzhen SDS student search lists him as a 2023 PhD student supervised by Baoxiang Wang; GitHub `jiawei415` authored the merged verl OTB PR.",
     "sources": [
       {
         "label": "CUHK-Shenzhen SDS student search",
@@ -1616,8 +1628,24 @@
         "url": "https://bxiangwang.github.io/teaching/"
       },
       {
+        "label": "OpenReview profile",
+        "url": "https://openreview.net/profile?id=~Jiawei_Xu1"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/jiawei415"
+      },
+      {
         "label": "TRM paper",
         "url": "https://arxiv.org/abs/2512.23075"
+      },
+      {
+        "label": "OTB paper",
+        "url": "https://arxiv.org/abs/2602.07078"
+      },
+      {
+        "label": "verl OTB PR #4678",
+        "url": "https://github.com/verl-project/verl/pull/4678"
       }
     ]
   },
@@ -1631,8 +1659,8 @@
     "github": "https://github.com/tongyx361",
     "x": "https://x.com/tongyx361",
     "xConfidence": "high",
-    "topics": ["verl", "DAPO", "LLM reinforcement learning", "rollout systems", "post-training infrastructure"],
-    "notes": "TRM coauthor and recurring verl/DAPO infrastructure contributor. Homepage and GitHub identify him as Shawn/Yuxuan Tong, Tsinghua DCST student and ByteDance Seed AI Researcher; GitHub links the same homepage and X account.",
+    "topics": ["verl", "DAPO", "LLM reinforcement learning", "rollout systems", "post-training infrastructure", "optimal token baseline"],
+    "notes": "TRM and OTB coauthor and recurring verl/DAPO infrastructure contributor. Homepage and GitHub identify him as Shawn/Yuxuan Tong, Tsinghua DCST student and ByteDance Seed AI Researcher; GitHub links the same homepage and X account.",
     "sources": [
       {
         "label": "Homepage",
@@ -1653,6 +1681,10 @@
       {
         "label": "DAPO paper",
         "url": "https://arxiv.org/abs/2503.14476"
+      },
+      {
+        "label": "OTB paper",
+        "url": "https://arxiv.org/abs/2602.07078"
       }
     ]
   },
@@ -1663,11 +1695,11 @@
     "aliases": ["Ziniu Li"],
     "affiliations": ["Tencent Hunyuan", "The Chinese University of Hong Kong, Shenzhen", "ByteDance Seed"],
     "homepage": "https://www.liziniu.org/",
-    "github": "",
+    "github": "https://github.com/liziniu",
     "x": "",
     "xConfidence": "not-found",
-    "topics": ["large language models", "reinforcement learning", "post-training", "trust region masking"],
-    "notes": "TRM coauthor. Homepage and OpenReview profile connect him to Tencent Hunyuan, CUHK-Shenzhen and a ByteDance Seed internship line; research topics include LLMs and RL.",
+    "topics": ["large language models", "reinforcement learning", "post-training", "trust region masking", "optimal token baseline"],
+    "notes": "TRM coauthor and OTB co-first author. Homepage and OpenReview profile connect him to Tencent Hunyuan, CUHK-Shenzhen and a ByteDance Seed internship line; research topics include LLMs and RL.",
     "sources": [
       {
         "label": "Homepage",
@@ -1678,8 +1710,16 @@
         "url": "https://openreview.net/profile?id=~Ziniu_Li1"
       },
       {
+        "label": "GitHub",
+        "url": "https://github.com/liziniu"
+      },
+      {
         "label": "TRM paper",
         "url": "https://arxiv.org/abs/2512.23075"
+      },
+      {
+        "label": "OTB paper",
+        "url": "https://arxiv.org/abs/2602.07078"
       }
     ]
   },
@@ -1693,8 +1733,8 @@
     "github": "https://github.com/SivilTaram",
     "x": "https://x.com/sivil_taram",
     "xConfidence": "high",
-    "topics": ["natural language processing", "code intelligence", "LLM agents", "reinforcement learning", "post-training"],
-    "notes": "TRM coauthor. Homepage identifies him as a researcher at TikTok AI Innovation Center and links GitHub/Twitter; GitHub profile currently shows `coding @xai-org`, so the archive keeps both TikTok and xAI as current-public-profile signals.",
+    "topics": ["natural language processing", "code intelligence", "LLM agents", "reinforcement learning", "post-training", "optimal token baseline"],
+    "notes": "TRM and OTB coauthor. Homepage identifies him as a researcher at TikTok AI Innovation Center and links GitHub/Twitter; GitHub profile currently shows `coding @xai-org`, so the archive keeps both TikTok and xAI as current-public-profile signals.",
     "sources": [
       {
         "label": "Homepage",
@@ -1711,6 +1751,10 @@
       {
         "label": "TRM paper",
         "url": "https://arxiv.org/abs/2512.23075"
+      },
+      {
+        "label": "OTB paper",
+        "url": "https://arxiv.org/abs/2602.07078"
       }
     ]
   },
@@ -1724,8 +1768,8 @@
     "github": "https://github.com/wangbx66",
     "x": "",
     "xConfidence": "not-found",
-    "topics": ["reinforcement learning", "game theory", "machine learning", "trust region masking"],
-    "notes": "TRM coauthor and Jiawei Xu's public supervisor. Homepage identifies him as Assistant Professor at CUHK-Shenzhen School of Data Science with reinforcement learning and game theory interests, and as a visiting researcher at Vector Institute.",
+    "topics": ["reinforcement learning", "game theory", "machine learning", "trust region masking", "optimal token baseline"],
+    "notes": "TRM and OTB coauthor and Jiawei Xu's public supervisor. Homepage identifies him as Assistant Professor at CUHK-Shenzhen School of Data Science with reinforcement learning and game theory interests, and as a visiting researcher at Vector Institute.",
     "sources": [
       {
         "label": "Homepage",
@@ -1742,6 +1786,166 @@
       {
         "label": "TRM paper",
         "url": "https://arxiv.org/abs/2512.23075"
+      },
+      {
+        "label": "OTB paper",
+        "url": "https://arxiv.org/abs/2602.07078"
+      }
+    ]
+  },
+  {
+    "slug": "wei-liu-hkust",
+    "name": "Wei Liu",
+    "chineseName": "刘威",
+    "aliases": ["Wei Liu", "VPeterV"],
+    "affiliations": ["HKUST", "DeepSeek", "Moonshot AI", "TikTok AI Innovation Center", "Shanghai AI Laboratory", "Alibaba DAMO Academy"],
+    "homepage": "https://vpeterv.github.io/",
+    "github": "https://github.com/VPeterV",
+    "x": "https://x.com/WeiLiu99",
+    "xConfidence": "high",
+    "topics": ["LLM reinforcement learning", "coding agents", "agentic systems", "scalable methods", "synthetic data"],
+    "notes": "OTB coauthor. Homepage identifies him as a HKUST PhD student supervised by Junxian He, currently contributing to coding agents at DeepSeek, with prior experience at Moonshot AI, TikTok AI Innovation Center, Shanghai AI Laboratory and Alibaba DAMO Academy; homepage lists OTB as ICML 2026 and links GitHub/X.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://vpeterv.github.io/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/VPeterV"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/WeiLiu99"
+      },
+      {
+        "label": "OTB paper",
+        "url": "https://arxiv.org/abs/2602.07078"
+      }
+    ]
+  },
+  {
+    "slug": "longtao-zheng",
+    "name": "Longtao Zheng",
+    "chineseName": "郑龙韬",
+    "aliases": ["Longtao Zheng", "ltzheng"],
+    "affiliations": ["ByteDance", "Nanyang Technological University", "University of Science and Technology of China"],
+    "homepage": "https://ltzheng.github.io/",
+    "github": "https://github.com/ltzheng",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["LLM reinforcement learning", "coding agents", "multi-agent reinforcement learning", "open-ended agents", "tool-integrated reasoning"],
+    "notes": "OTB coauthor. Homepage identifies him as a ByteDance researcher doing RL research for coding agents, an NTU PhD supervised by Bo An, and a USTC undergraduate alumnus; homepage lists OTB as ICML 2026.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://ltzheng.github.io/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/ltzheng"
+      },
+      {
+        "label": "OTB paper",
+        "url": "https://arxiv.org/abs/2602.07078"
+      }
+    ]
+  },
+  {
+    "slug": "zhenghai-xue",
+    "name": "Zhenghai Xue",
+    "aliases": ["Zhenghai Xue", "AIDefender"],
+    "affiliations": ["Nanyang Technological University", "Moonshot AI", "TikTok AI Innovation Center", "Nanjing University"],
+    "homepage": "https://aidefender.github.io/",
+    "github": "https://github.com/AIDefender",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["reinforcement learning", "LLM agents", "tool-integrated reasoning", "decision making"],
+    "notes": "OTB coauthor. Homepage identifies him as a fourth-year NTU PhD student supervised by Bo An, previously a TikTok research intern with Qian Liu and currently a Moonshot AI research intern; homepage lists work on RL, LLM agents and tool-integrated reasoning.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://aidefender.github.io/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/AIDefender"
+      },
+      {
+        "label": "OTB paper",
+        "url": "https://arxiv.org/abs/2602.07078"
+      }
+    ]
+  },
+  {
+    "slug": "yaxiang-zhang",
+    "name": "Yaxiang Zhang",
+    "aliases": ["Yaxiang Zhang"],
+    "affiliations": ["National University of Singapore"],
+    "homepage": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["LLM reinforcement learning", "optimal token baseline", "machine learning"],
+    "notes": "OTB coauthor. TeX source lists National University of Singapore as affiliation; Google Scholar search result for the public profile lists OTB among publications.",
+    "sources": [
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=K13yC7sAAAAJ"
+      },
+      {
+        "label": "OTB paper",
+        "url": "https://arxiv.org/abs/2602.07078"
+      }
+    ]
+  },
+  {
+    "slug": "tianle-cai",
+    "name": "Tianle Cai",
+    "chineseName": "蔡天乐",
+    "aliases": ["Tianle Cai"],
+    "affiliations": ["Princeton University", "Together AI", "Google DeepMind", "Microsoft Research", "Peking University"],
+    "homepage": "https://www.tianle.website/",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["systems and architecture co-design", "large language models", "efficient training", "reinforcement learning"],
+    "notes": "OTB coauthor. Homepage identifies him as a Princeton PhD candidate advised by Kai Li and Jason D. Lee, a part-time researcher at Together AI with Tri Dao, and a researcher focused on systems/architecture co-design.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://www.tianle.website/"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=CvwLRSMAAAAJ"
+      },
+      {
+        "label": "OTB paper",
+        "url": "https://arxiv.org/abs/2602.07078"
+      }
+    ]
+  },
+  {
+    "slug": "ge-zhang",
+    "name": "Ge Zhang",
+    "aliases": ["Ge Zhang"],
+    "affiliations": ["M-A-P", "ByteDance Seed", "University of Waterloo"],
+    "homepage": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["natural language processing", "multimodal intelligence", "LLM reinforcement learning"],
+    "notes": "OTB coauthor. Public Google Scholar and DBLP records connect him to M-A-P, ByteDance Seed and University of Waterloo, and list OTB among publications.",
+    "sources": [
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=qyTrq4kAAAAJ"
+      },
+      {
+        "label": "DBLP",
+        "url": "https://dblp.org/pid/70/6366-9"
+      },
+      {
+        "label": "OTB paper",
+        "url": "https://arxiv.org/abs/2602.07078"
       }
     ]
   },

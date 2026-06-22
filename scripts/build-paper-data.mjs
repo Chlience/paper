@@ -43,6 +43,7 @@ const tagOverrides = new Map([
   ['2604.04648-caution-pessimism-best-of-n-reward-hacking', ['RL', 'Safety', 'Methodology']],
   ['2510.20270-impossiblebench-test-case-exploitation', ['Safety', 'Methodology', 'Systems']],
   ['2510.19315-transformers-inherently-succinct', ['Theory']],
+  ['2602.07078-optimal-token-baseline-long-horizon-llm-rl', ['RL', 'Systems', 'Methodology']],
   ['2605.14220-training-inference-mismatch-llm-rl', ['RL', 'Systems', 'Methodology']],
   ['2605.30290-self-trained-verification', ['RL', 'Methodology']],
   ['2605.31514-age-of-empires-anthropomorphism', ['Methodology']],
