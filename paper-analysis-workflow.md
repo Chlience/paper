@@ -82,7 +82,7 @@ authors.json
 
 1. 打开 arXiv abstract 页面，记录标题、作者、提交日期、版本、主题分类、项目链接。
 2. 下载 PDF 和 arXiv source。优先读 TeX source；PDF 用于核对页数、图表和排版信息。
-3. 抽取章节结构、摘要、图表标题、定理、表格、实验设置和结论。
+3. 抽取章节结构、摘要、图表标题、定理、表格、实验设置、baseline 设置和结论。
 4. 先读 introduction 和 conclusion，确认论文真实目标。
 5. 在正式进入 method / system / theory 前，先重建研究问题、已有工作不足和作者可能的思考路径。
 6. 再读 method / system / theory / experiment，梳理证据链。
@@ -100,10 +100,44 @@ authors.json
 - 作者的核心假设是什么。
 - 方法或系统设计如何工作。
 - 关键实验、定理或案例支撑什么结论。
+- 实验设置是否写清楚：模型、数据、训练预算、rollout / batch / context length / reward / KL / entropy / optimizer / 系统配置、评测协议、baseline 选择和 baseline 强度。
 - 哪些结论证据强，哪些需要谨慎。
 - 对 LLM 安全、系统、理论、评测或产品有什么可复用启发。
 - 论文的外部有效性、实验范围和实现限制是什么。
 - 公开审稿意见如何改变可信度判断：哪些 reviewer 认可了问题价值，哪些 reviewer 指出了 theory、baseline、统计显著性、presentation 或 novelty 的硬伤；作者 rebuttal 是否实际回应了这些问题。
+
+## 实验设置与 baseline 审计
+
+LLM RL、post-training、systems、serving、optimizer 和评测类论文都必须把实验设置写到足够可复查。baseline 的选择和强度会直接改变结论可信度，不能只记录最终分数。
+
+### 必须记录的实验设置
+
+每个核心实验至少记录：
+
+1. 模型与初始化：base / instruct / aligned checkpoint，参数规模，MoE active / total 参数，context length，是否使用 reference model 或 value model。
+2. 数据与任务：训练集、过滤规则、prompt 数量、验证 / 测试集、是否去重、是否含合成数据、是否和 benchmark 有污染风险。
+3. RL / 训练配置：PPO / GRPO / DAPO / RLOO / REINFORCE / actor-critic 等目标；rollout group size；batch size；max prompt / response length；采样温度、top-p、top-k；KL penalty / KL loss；entropy bonus；reward shaping；optimizer、learning rate、warmup、训练步数和 token budget。
+4. 系统配置：GPU 数量和型号，parallelism / sharding，rollout engine 与 trainer engine，是否异步，是否使用 vLLM / SGLang / Megatron / FSDP / ZeRO，是否有 fused kernel 或 logprob consistency 设置。
+5. 评测协议：pass@1、avg@k、pass@$k$、majority vote、Best-of-N、temperature、top-p、样本数、判题器、工具环境、是否报告 peak / final / average checkpoint。
+6. 统计报告：seed 数量、误差线、置信区间、显著性检验、曲线平滑方式；若缺失，明确写入局限。
+
+### baseline 强度判断
+
+每个核心表格或图都要记录 baseline 相关判断：
+
+- baseline 名称和版本：GRPO、DAPO、PPO、RLOO、OPO、VAPO、SimpleTIR、verl recipe、官方实现、作者复现或本地复现。
+- baseline 是否 tuned：学习率、KL、clip、batch、rollout group size、max length、reward shaping、token-level loss aggregation 等关键超参是否和新方法同等调参。
+- baseline 是否 compute-matched：训练 token、rollout 数、GPU hours、wall-clock、batch size、采样预算、评测样本数是否相同或可比。
+- baseline 是否 implementation-matched：同一数据、同一 trainer、同一 rollout engine、同一 reward / verifier、同一 logprob 计算路径。
+- baseline 是否覆盖强替代方案：LLM RL 论文尤其要检查是否包含 DAPO / GRPO tuned recipe、actor-critic / value baseline、rollout correction、rejection / filtering、sequence-level trust region、larger group size 或更强 sampling baseline。
+- baseline 是否存在弱化风险：旧 checkpoint、未调参、短 context、少 rollout、不同 evaluator、不同训练预算、缺少 strong recipe、只比较 naive GRPO/PPO。
+- baseline 结论边界：若 baseline 选择弱或 compute 不匹配，结论写成“相对这些 baseline 成立”，避免扩展成对整个方向的胜出。
+
+### 写入位置
+
+- `关键实验/定理` 中每个结果都要有 `设置`、`Baseline`、`指标`、`结果`、`解读`。
+- 若 baseline 选择影响可信度，在 `证据链强度评估 -> 需要谨慎的推论` 和 `局限` 中重复点明。
+- 若 reviewer 批评 baseline 不完整、统计显著性不足或实验设置不公平，在 `OpenReview / 审稿意见吸收` 中明确写入，并说明作者 rebuttal 是否补充实验。
 
 ## 审稿意见搜索与吸收
 
@@ -210,6 +244,7 @@ https://api2.openreview.net/notes?forum=<forum_id>&details=replyCount,directRepl
 - `一句话结论`
 - `论文脉络`
 - `关键实验/定理`
+- `证据链强度评估`，其中必须包含实验设置与 baseline 强度判断
 - `OpenReview / 审稿意见吸收`，若无公开审稿则在 `Reference Intake Brief -> Skipped` 记录
 - `主要启发`
 - `局限`
@@ -320,6 +355,7 @@ $$
 - 每篇论文是否包含作者关系。
 - 是否保留来源 URL 和版本日期。
 - 是否完成公开审稿意见搜索；若有公开 review，是否吸收 reviewer consensus、主要质疑、作者回应和可信度影响；若无公开 review，是否在 `Skipped` 记录原因。
+- 是否在核心实验中写清楚实验设置、baseline 名称/版本/调参强度、compute 是否匹配、实现是否匹配和评测协议。
 - 是否区分来源事实、作者主张和本地推论。
 - 是否在方法前回答研究问题、已有工作不足，并重建作者可能的思考路径。
 - 是否把阅读后的有效交流提炼进对应笔记。

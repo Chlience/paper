@@ -70,6 +70,7 @@ Updated-At: YYYY-MM-DD HH:mm
 ### 结果 1
 
 - 设置：
+- Baseline：
 - 指标：
 - 结果：
 - 解读：
@@ -77,9 +78,26 @@ Updated-At: YYYY-MM-DD HH:mm
 ### 结果 2
 
 - 设置：
+- Baseline：
 - 指标：
 - 结果：
 - 解读：
+
+### 实验设置与 baseline 审计
+
+- 模型与初始化：
+- 数据与任务：
+- RL / 训练配置：
+- 系统配置：
+- 评测协议：
+- 统计报告：
+- Baseline 强度：
+  - 是否 tuned：
+  - 是否 compute-matched：
+  - 是否 implementation-matched：
+  - 是否覆盖强替代方案：
+  - 是否存在弱化风险：
+  - 结论边界：
 
 ## 证据链强度评估
 
