@@ -210,6 +210,7 @@ const getUpdatedAt = (markdown) =>
   getTopLevelField(markdown, 'Archive-Time') ||
   getTopLevelField(markdown, 'Date') ||
   getFirstArchivedAt(markdown);
+const getPinned = (markdown) => /^(true|yes|1)$/i.test(getTopLevelField(markdown, 'Pinned'));
 
 const getSection = (markdown, heading) => {
   const lines = markdown.split('\n');
@@ -256,6 +257,7 @@ const stripPageChrome = (markdown) =>
     .replace(/^#\s+.+\n+/, '')
     .replace(/^First-Archived-At:\s*.+\n+/m, '')
     .replace(/^Updated-At:\s*.+\n+/m, '')
+    .replace(/^Pinned:\s*.+\n+/m, '')
     .replace(/^Date:\s*.+\n+/m, '')
     .replace(/^Archive-Time:\s*.+\n+/m, '')
     .replace(/^Sort-Time:\s*.+\n+/m, '')
@@ -337,6 +339,7 @@ const build = async () => {
     const pageMarkdown = stripPageChrome(raw);
     const firstArchivedAt = getFirstArchivedAt(raw);
     const updatedAt = getUpdatedAt(raw);
+    const pinned = getPinned(raw);
     const authors = getSourceField(raw, ['Authors', 'Author']) || 'Unknown';
     papers.push({
       slug,
@@ -345,6 +348,7 @@ const build = async () => {
       title,
       firstArchivedAt,
       updatedAt,
+      pinned,
       sourceUrl,
       authors,
       parsedAuthors: splitAuthorNames(authors),
@@ -358,6 +362,8 @@ const build = async () => {
   }
 
   papers.sort((a, b) => {
+    const pinnedCompare = Number(b.pinned) - Number(a.pinned);
+    if (pinnedCompare) return pinnedCompare;
     const timeCompare = String(b.firstArchivedAt).localeCompare(String(a.firstArchivedAt));
     return timeCompare || b.slug.localeCompare(a.slug);
   });
@@ -392,12 +398,13 @@ const build = async () => {
 
     const paperList = papers
       .filter((paper) => paperSlugs.has(paper.slug))
-      .map(({ slug: paperSlug, path: paperPath, title, firstArchivedAt, updatedAt, summary, tags }) => ({
+      .map(({ slug: paperSlug, path: paperPath, title, firstArchivedAt, updatedAt, pinned, summary, tags }) => ({
         slug: paperSlug,
         path: paperPath,
         title,
         firstArchivedAt,
         updatedAt,
+        pinned,
         summary,
         tags,
       }));

@@ -7,6 +7,7 @@ interface Paper {
   path: string;
   title: string;
   firstArchivedAt?: string;
+  pinned?: boolean;
   authors?: string;
   authorEntries?: { name: string; path?: string; slug?: string; profileStatus?: string }[];
   summary?: string;
@@ -32,6 +33,7 @@ const { paper, showProvenance = true } = Astro.props;
       </p>
     )}
     <div class="paper-row-meta">
+      {paper.pinned && <span class="paper-row-pin">Pinned</span>}
       {showProvenance && <span>{paper.slug}</span>}
       {paper.tags?.slice(0, 3).map((tag) => <a class="topic-link" href={`/papers/#tag-${tag.toLowerCase()}`}>{tag}</a>)}
     </div>

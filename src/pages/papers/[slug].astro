@@ -44,6 +44,7 @@ const h2Headings = paper.headings.filter((heading) => heading.depth === 2);
         </p>
       )}
       <div class="paper-meta">
+        {paper.pinned && <span class="paper-pin">Pinned</span>}
         {paper.firstArchivedAt && <span>{paper.firstArchivedAt}</span>}
         {paper.updatedAt && paper.updatedAt !== paper.firstArchivedAt && <span>Updated {paper.updatedAt}</span>}
         {paper.currentVersion && <span>{paper.currentVersion}</span>}
