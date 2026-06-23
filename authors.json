@@ -1167,8 +1167,8 @@
     "github": "",
     "x": "https://x.com/johnschulman2",
     "xConfidence": "high",
-    "topics": ["PPO", "TRPO", "RLHF", "post-training", "KL divergence", "policy optimization"],
-    "notes": "Approximating KL Divergence blog author and PPO/TRPO/RLHF key researcher. Homepage identifies him as Thinking Machines cofounder and chief scientist, former Anthropic Alignment Science researcher, OpenAI cofounder, and former OpenAI post-training co-lead; X profile search result links the same joschu.net website.",
+    "topics": ["PPO", "TRPO", "RLHF", "post-training", "KL divergence", "policy optimization", "process supervision", "verifiers"],
+    "notes": "Approximating KL Divergence blog author and PPO/TRPO/RLHF key researcher. Homepage identifies him as Thinking Machines cofounder and chief scientist, former Anthropic Alignment Science researcher, OpenAI cofounder, and former OpenAI post-training co-lead; X profile search result links the same joschu.net website. Also coauthor of Let's Verify Step by Step and Training Verifiers to Solve Math Word Problems.",
     "sources": [
       {
         "label": "Homepage",
@@ -1181,6 +1181,10 @@
       {
         "label": "PPO paper",
         "url": "https://arxiv.org/abs/1707.06347"
+      },
+      {
+        "label": "Let's Verify Step by Step",
+        "url": "https://arxiv.org/abs/2305.20050"
       },
       {
         "label": "Google Scholar",
@@ -2502,6 +2506,289 @@
       {
         "label": "Imbalanced Gradients paper",
         "url": "https://aclanthology.org/2026.findings-eacl.164/"
+      }
+    ]
+  },
+  {
+    "slug": "hunter-lightman",
+    "name": "Hunter Lightman",
+    "aliases": ["Hunter Lightman", "hunterlightman"],
+    "affiliations": ["OpenAI"],
+    "homepage": "https://www.hunterlightman.com/",
+    "x": "https://x.com/hunterlightman",
+    "xConfidence": "high",
+    "topics": ["process supervision", "mathematical reasoning", "LLM reliability", "reasoning models"],
+    "notes": "Let's Verify Step by Step first author. OpenAI Forum event profile identifies him as an OpenAI researcher focused on reasoning and reliability in large language models; personal homepage links GitHub, LinkedIn and Twitter.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://www.hunterlightman.com/"
+      },
+      {
+        "label": "OpenAI Forum event profile",
+        "url": "https://forum.openai.com/public/events/improving-mathematical-reasoning-with-process-supervision-2023-07-26?agenda_day=64838927a171ef1023f8c37e&agenda_filter_view=track&agenda_stage=64838927a171ef1023f8c384&agenda_track=64838927a171ef1023f8c393&agenda_view=list"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=en&user=trHka_UAAAAJ"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/hunterlightman"
+      },
+      {
+        "label": "Let's Verify Step by Step",
+        "url": "https://arxiv.org/abs/2305.20050"
+      }
+    ]
+  },
+  {
+    "slug": "vineet-kosaraju",
+    "name": "Vineet Kosaraju",
+    "aliases": ["Vineet Kosaraju"],
+    "affiliations": ["OpenAI", "Stanford University"],
+    "homepage": "https://vineetkosaraju.com/",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["mathematical reasoning", "verifiers", "general-purpose reasoning", "trajectory forecasting"],
+    "notes": "Let's Verify Step by Step coauthor and GSM8K verifier coauthor. Personal homepage identifies him as an OpenAI researcher working on general-purpose reasoning in language models, with prior Mathgen, RL team and robotics/self-play work.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://vineetkosaraju.com/"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=en&user=wldNQHoAAAAJ"
+      },
+      {
+        "label": "Training Verifiers to Solve Math Word Problems",
+        "url": "https://arxiv.org/abs/2110.14168"
+      },
+      {
+        "label": "Let's Verify Step by Step",
+        "url": "https://arxiv.org/abs/2305.20050"
+      }
+    ]
+  },
+  {
+    "slug": "yura-burda",
+    "name": "Yura Burda",
+    "aliases": ["Yura Burda", "Yuri Burda"],
+    "affiliations": ["OpenAI", "University of Toronto"],
+    "homepage": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["mathematical reasoning", "reinforcement learning", "exploration", "random network distillation", "generative models"],
+    "notes": "Let's Verify Step by Step coauthor. MathAI4ED speaker page identifies Yuri Burda as an OpenAI research scientist with a University of Toronto mathematics PhD, focused on applying machine learning to mathematical reasoning; earlier OpenAI pages connect him to generative models and RND/exploration work.",
+    "sources": [
+      {
+        "label": "MathAI4ED speaker profile",
+        "url": "https://mathai4ed.github.io/speakers/"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=en&user=Amky96kAAAAJ"
+      },
+      {
+        "label": "OpenAI Team++",
+        "url": "https://openai.com/index/team-plus-plus/"
+      },
+      {
+        "label": "Random Network Distillation",
+        "url": "https://arxiv.org/abs/1810.12894"
+      },
+      {
+        "label": "Let's Verify Step by Step",
+        "url": "https://arxiv.org/abs/2305.20050"
+      }
+    ]
+  },
+  {
+    "slug": "harri-edwards",
+    "name": "Harri Edwards",
+    "aliases": ["Harri Edwards", "Harrison Edwards", "Harri L. Edwards"],
+    "affiliations": ["OpenAI (paper affiliation)", "Google DeepMind", "University of Edinburgh"],
+    "homepage": "",
+    "x": "https://x.com/HarriLEdwards",
+    "xConfidence": "medium",
+    "topics": ["process supervision", "reinforcement learning", "random network distillation", "grokking", "generalization"],
+    "notes": "Let's Verify Step by Step coauthor. OpenReview uses Harrison Edwards spelling. OpenAI team update identifies Harri as a University of Edinburgh PhD student researching fast-adapting models; Scholar profile uses OpenAI verified email; public X search result says previously OpenAI reasoning/superalignment.",
+    "sources": [
+      {
+        "label": "OpenAI team update",
+        "url": "https://openai.com/index/team-update-august/"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=en&user=0o470HsAAAAJ"
+      },
+      {
+        "label": "Random Network Distillation",
+        "url": "https://arxiv.org/abs/1810.12894"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/HarriLEdwards"
+      },
+      {
+        "label": "Let's Verify Step by Step",
+        "url": "https://arxiv.org/abs/2305.20050"
+      }
+    ]
+  },
+  {
+    "slug": "bowen-baker",
+    "name": "Bowen Baker",
+    "aliases": ["Bowen Baker", "bobabowen"],
+    "affiliations": ["OpenAI", "MIT"],
+    "homepage": "https://bowenbaker.github.io/",
+    "github": "https://github.com/bowenbaker",
+    "x": "https://x.com/bobabowen",
+    "xConfidence": "high",
+    "topics": ["multi-agent reinforcement learning", "chain-of-thought monitoring", "reasoning model safety", "process supervision", "robotics"],
+    "notes": "Let's Verify Step by Step coauthor and Monitoring Reasoning Models for Misbehavior core author. Homepage identifies him as an OpenAI research scientist with multi-agent RL and robotics background; later public profile snippets connect him to OpenAI Chain-of-Thought Interpretability.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://bowenbaker.github.io/"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=en&user=bMfPYdYAAAAJ"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/bobabowen"
+      },
+      {
+        "label": "Monitoring Reasoning Models for Misbehavior",
+        "url": "https://arxiv.org/abs/2503.11926"
+      },
+      {
+        "label": "Let's Verify Step by Step",
+        "url": "https://arxiv.org/abs/2305.20050"
+      }
+    ]
+  },
+  {
+    "slug": "teddy-lee",
+    "name": "Teddy Lee",
+    "aliases": ["Teddy Lee"],
+    "affiliations": ["OpenAI (paper affiliation)"],
+    "homepage": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["human data", "process supervision", "model fine-tuning", "alignment data"],
+    "notes": "Let's Verify Step by Step coauthor. Public profile evidence is sparse; Scholar and LinkedIn search results connect the name to OpenAI and human data / fine-tuning data work, but no stable personal homepage or high-confidence X account was found.",
+    "sources": [
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=en&user=S5x4xYUAAAAJ"
+      },
+      {
+        "label": "OpenReview author listing",
+        "url": "https://openreview.net/forum?id=v8L0pN6EOi"
+      },
+      {
+        "label": "Let's Verify Step by Step",
+        "url": "https://arxiv.org/abs/2305.20050"
+      }
+    ]
+  },
+  {
+    "slug": "jan-leike",
+    "name": "Jan Leike",
+    "aliases": ["Jan Leike", "Jan Hendrik Leike", "janleike"],
+    "affiliations": ["Anthropic", "OpenAI (former)", "DeepMind (former)", "Australian National University (Ph.D.)"],
+    "homepage": "https://jan.leike.name/",
+    "x": "https://x.com/janleike",
+    "xConfidence": "high",
+    "topics": ["AI alignment", "RLHF", "scalable oversight", "superalignment", "process supervision"],
+    "notes": "Let's Verify Step by Step coauthor. Homepage identifies him as leading Alignment Science at Anthropic, formerly co-leading OpenAI Superalignment, involved in InstructGPT, ChatGPT and GPT-4 alignment, and previously working on empirical AI safety at DeepMind.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://jan.leike.name/"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=en&user=beiWcokAAAAJ"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/janleike"
+      },
+      {
+        "label": "Let's Verify Step by Step",
+        "url": "https://arxiv.org/abs/2305.20050"
+      }
+    ]
+  },
+  {
+    "slug": "ilya-sutskever",
+    "name": "Ilya Sutskever",
+    "aliases": ["Ilya Sutskever", "ilyasut"],
+    "affiliations": ["Safe Superintelligence Inc.", "OpenAI (cofounder, former chief scientist)", "Google Brain (former)", "University of Toronto (Ph.D.)"],
+    "homepage": "https://www.cs.toronto.edu/~ilya/",
+    "x": "https://x.com/ilyasut",
+    "xConfidence": "high",
+    "topics": ["deep learning", "scaling", "OpenAI", "safe superintelligence", "alignment", "process supervision"],
+    "notes": "Let's Verify Step by Step coauthor. University of Toronto homepage records OpenAI cofounder/chief scientist, Google Brain, DNNresearch and Geoffrey Hinton group background; SSI official site records the Safe Superintelligence Inc. mission.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://www.cs.toronto.edu/~ilya/"
+      },
+      {
+        "label": "Safe Superintelligence Inc.",
+        "url": "https://ssi.inc/"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=en&user=x04W_mMAAAAJ"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/ilyasut"
+      },
+      {
+        "label": "Let's Verify Step by Step",
+        "url": "https://arxiv.org/abs/2305.20050"
+      }
+    ]
+  },
+  {
+    "slug": "karl-cobbe",
+    "name": "Karl Cobbe",
+    "aliases": ["Karl Cobbe", "kcobbe", "karlcobbe"],
+    "affiliations": ["OpenAI", "Stanford University"],
+    "homepage": "",
+    "github": "https://github.com/kcobbe",
+    "x": "https://x.com/karlcobbe",
+    "xConfidence": "high",
+    "topics": ["mathematical reasoning", "verifiers", "GSM8K", "PRM800K", "reinforcement learning benchmarks"],
+    "notes": "Let's Verify Step by Step corresponding author and Training Verifiers to Solve Math Word Problems first author. Google Scholar identifies him as OpenAI research scientist; GitHub account hosts earlier OpenAI RL benchmark code such as CoinRun.",
+    "sources": [
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=en&user=stCljMYAAAAJ"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/kcobbe"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/karlcobbe"
+      },
+      {
+        "label": "Training Verifiers to Solve Math Word Problems",
+        "url": "https://arxiv.org/abs/2110.14168"
+      },
+      {
+        "label": "Let's Verify Step by Step",
+        "url": "https://arxiv.org/abs/2305.20050"
       }
     ]
   }
