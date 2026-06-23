@@ -3165,5 +3165,36 @@
         "url": "https://x.com/tengyangx"
       }
     ]
+  },
+  {
+    "slug": "chenchen-zhang",
+    "name": "Chenchen Zhang",
+    "aliases": ["Chenchen Zhang", "xxzcc"],
+    "affiliations": ["Independent Researcher"],
+    "homepage": "",
+    "github": "https://github.com/xxzcc",
+    "huggingFace": "https://huggingface.co/xxzcc",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["LLM reinforcement learning", "credit assignment", "agentic RL", "multi-agent systems", "long-context language modeling"],
+    "notes": "Single author of arXiv 2604.09459 From Reasoning to Agentic: Credit Assignment in Reinforcement Learning for Large Language Models. arXiv title page lists Independent Researcher and zcc1959339538@gmail.com. GitHub profile identifies Chenchen Zhang with handle xxzcc and pins Awesome-Credit-Assignment-in-LLM-RL plus awesome-llm-mas-rl. Hugging Face profile uses the same handle and links Google Scholar user WmzUNaQAAAAJ. Search surfaced @chenchenzh, but that account is tied to an international relations scholar with the same name, so no X account is recorded.",
+    "sources": [
+      {
+        "label": "arXiv 2604.09459",
+        "url": "https://arxiv.org/abs/2604.09459"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/xxzcc"
+      },
+      {
+        "label": "Hugging Face",
+        "url": "https://huggingface.co/xxzcc"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=zh-CN&user=WmzUNaQAAAAJ"
+      }
+    ]
   }
 ]
