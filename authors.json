@@ -2791,5 +2791,282 @@
         "url": "https://arxiv.org/abs/2305.20050"
       }
     ]
+  },
+  {
+    "slug": "peiyi-wang",
+    "name": "Peiyi Wang",
+    "aliases": ["Peiyi Wang", "Wang Peiyi", "Wangpeiyi9979", "peiyi9979"],
+    "affiliations": ["DeepSeek AI", "Peking University"],
+    "github": "https://github.com/Wangpeiyi9979",
+    "x": "https://x.com/sybilhyz",
+    "xConfidence": "high",
+    "topics": ["Math-Shepherd", "DeepSeekMath", "DeepSeek-R1", "reasoning RL", "process reward models"],
+    "notes": "Math-Shepherd first author and DeepSeek-R1 core contributor. OpenReview records Peking University PhD training under Zhifang Sui; GitHub and Hugging Face use the wangpeiyi9979 / peiyi9979 handle family. X search result self-identifies DeepSeek, MathShepherd and DeepSeekMath work.",
+    "sources": [
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Peiyi_Wang1"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=zh-CN&user=K0uQ3ygAAAAJ"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/Wangpeiyi9979"
+      },
+      {
+        "label": "Hugging Face",
+        "url": "https://huggingface.co/peiyi9979"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/sybilhyz"
+      },
+      {
+        "label": "Math-Shepherd",
+        "url": "https://arxiv.org/abs/2312.08935"
+      }
+    ]
+  },
+  {
+    "slug": "lei-li-hku",
+    "name": "Lei Li",
+    "aliases": ["Lei Li", "Tobias Lee", "TobiasLee"],
+    "affiliations": ["The University of Hong Kong", "Peking University"],
+    "homepage": "https://lilei-nlp.github.io/",
+    "github": "https://github.com/tobiaslee",
+    "x": "https://x.com/_TobiasLee",
+    "xConfidence": "high",
+    "topics": ["multimodal LLMs", "in-context learning", "LLM-as-a-judge", "Math-Shepherd"],
+    "notes": "Math-Shepherd coauthor. Homepage and GitHub identify him as an HKU PhD student, former Peking University MSc student, and link the same GitHub/X profiles.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://lilei-nlp.github.io/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/tobiaslee"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Lei_Li14"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=zh-CN&user=MeV4GGsAAAAJ"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/_TobiasLee"
+      }
+    ]
+  },
+  {
+    "slug": "zhihong-shao",
+    "name": "Zhihong Shao",
+    "chineseName": "邵智宏",
+    "aliases": ["Zhihong Shao", "ZhihongShao"],
+    "affiliations": ["DeepSeek AI", "Tsinghua University"],
+    "homepage": "https://zhihongshao.github.io/",
+    "github": "https://github.com/ZhihongShao",
+    "x": "https://x.com/zhs05232838",
+    "xConfidence": "high",
+    "topics": ["DeepSeekMath", "DeepSeek-R1", "DeepSeek-Prover", "ToRA", "reasoning RL", "tool use"],
+    "notes": "Math-Shepherd coauthor and DeepSeek reasoning researcher. Homepage lists DeepSeek, Tsinghua PhD under Minlie Huang, Math-Shepherd, DeepSeekMath, DeepSeek-R1, DeepSeek-Prover and ToRA.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://zhihongshao.github.io/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/ZhihongShao"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Zhihong_Shao1"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=zh-CN&user=PZy4HEIAAAAJ"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/zhs05232838"
+      }
+    ]
+  },
+  {
+    "slug": "runxin-xu",
+    "name": "Runxin Xu",
+    "chineseName": "许润昕",
+    "aliases": ["Runxin Xu", "R.X. Xu", "RunxinXu"],
+    "affiliations": ["DeepSeek AI", "Peking University"],
+    "homepage": "https://runxinxu.github.io/aboutme/",
+    "github": "https://github.com/RunxinXu",
+    "x": "https://x.com/pigjunebaba",
+    "xConfidence": "high",
+    "topics": ["DeepSeek-R1", "DeepSeek-V3", "DeepSeekMath", "DeepSeek Coder", "efficient language models", "reasoning RL"],
+    "notes": "Math-Shepherd coauthor and DeepSeek-R1 core contributor. Homepage identifies him as a DeepSeek researcher involved in DeepSeek-R1, V1/V2/V3, Math, Coder and MoE; X search result links the same homepage.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://runxinxu.github.io/aboutme/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/RunxinXu"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=en&user=dRp21l4AAAAJ"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/pigjunebaba"
+      }
+    ]
+  },
+  {
+    "slug": "damai-dai",
+    "name": "Damai Dai",
+    "aliases": ["Damai Dai", "DeepSeekDDM"],
+    "affiliations": ["DeepSeek AI", "Peking University"],
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["DeepSeekMoE", "DeepSeek-V3", "mixture-of-experts", "large language models", "Math-Shepherd"],
+    "notes": "Math-Shepherd coauthor and DeepSeek MoE / LLM researcher. OpenReview records DeepSeek-AI researcher, Peking University PhD and undergraduate background, and Zhifang Sui as PhD advisor. No high-confidence personal X account found in this pass.",
+    "sources": [
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Damai_Dai1"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=zh-CN&user=8b-ysf0NWVoC"
+      },
+      {
+        "label": "Hugging Face",
+        "url": "https://huggingface.co/DeepSeekDDM"
+      },
+      {
+        "label": "DeepSeekMoE",
+        "url": "https://arxiv.org/abs/2401.06066"
+      }
+    ]
+  },
+  {
+    "slug": "yifei-li-osu",
+    "name": "Yifei Li",
+    "aliases": ["Yifei Li", "flyhero99", "YifeiLiPKU"],
+    "affiliations": ["The Ohio State University", "Peking University", "Northeastern University (China)"],
+    "homepage": "https://flyhero99.github.io/",
+    "github": "https://github.com/flyhero99",
+    "x": "https://x.com/YifeiLiPKU",
+    "xConfidence": "high",
+    "topics": ["LLM agents", "scientific coding agents", "Math-Shepherd", "AutoSDT", "ScienceAgentBench"],
+    "notes": "Math-Shepherd coauthor. Homepage and GitHub identify him as an Ohio State PhD student advised by Huan Sun, with prior Peking University MSc and Northeastern University undergraduate background.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://flyhero99.github.io/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/flyhero99"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=en&user=-9Kle0YAAAAJ"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/YifeiLiPKU"
+      }
+    ]
+  },
+  {
+    "slug": "deli-chen",
+    "name": "Deli Chen",
+    "chineseName": "陈德里",
+    "aliases": ["Deli Chen", "Chen Deli", "victorchen96"],
+    "affiliations": ["DeepSeek AI", "Peking University", "Tencent WeChat AI"],
+    "homepage": "https://victorchen96.github.io/",
+    "github": "https://github.com/victorchen96",
+    "x": "https://x.com/victor207755822",
+    "xConfidence": "high",
+    "topics": ["DeepSeek series", "reasoning RL", "step-by-step verification", "LLM safety", "GNNs"],
+    "notes": "Math-Shepherd coauthor and DeepSeek senior researcher. Homepage links GitHub, X, Scholar and DBLP, and lists DeepSeek-R1, DeepSeek-V series, DeepSeek-Coder and step-by-step verification.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://victorchen96.github.io/"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Deli_Chen1"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=zh-CN&user=8YpGRDcAAAAJ"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/victor207755822"
+      }
+    ]
+  },
+  {
+    "slug": "yu-wu-deepseek",
+    "name": "Yu Wu",
+    "chineseName": "吴俣",
+    "aliases": ["Yu Wu", "Y. Wu", "Mark Wu"],
+    "affiliations": ["DeepSeek AI", "Microsoft Research Asia", "Beihang University"],
+    "homepage": "https://sites.google.com/view/wuyu/home",
+    "x": "https://x.com/YuWu78356266",
+    "xConfidence": "high",
+    "topics": ["DeepSeek-R1", "GRPO", "LLM alignment", "post-training", "speech", "reasoning RL"],
+    "notes": "Math-Shepherd coauthor and DeepSeek LLM Alignment Team lead. Homepage states that his team pioneered GRPO and DeepSeek-R1-Zero; Google Scholar identifies him as Yu Wu (吴俣), DeepSeek AI. X search result matches the same name and DeepSeek technical-staff role.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://sites.google.com/view/wuyu/home"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=zh-CN&user=aQizmzsAAAAJ"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/YuWu78356266"
+      }
+    ]
+  },
+  {
+    "slug": "zhifang-sui",
+    "name": "Zhifang Sui",
+    "aliases": ["Zhifang Sui", "Sui Zhifang", "Zhifang SUI"],
+    "affiliations": ["Peking University"],
+    "homepage": "https://cs.pku.edu.cn/info/1237/2101.htm",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["natural language processing", "computational linguistics", "Math-Shepherd", "in-context learning"],
+    "notes": "Math-Shepherd coauthor and Peking University professor at the Institute of Computational Linguistics. OpenReview records Damai Dai and Peiyi Wang advisor relations; no high-confidence personal X account found in this pass.",
+    "sources": [
+      {
+        "label": "Peking University profile",
+        "url": "https://cs.pku.edu.cn/info/1237/2101.htm"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Zhifang_Sui1"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=zh-CN&user=y2EaftAAAAAJ"
+      }
+    ]
   }
 ]
