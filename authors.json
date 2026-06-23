@@ -2214,5 +2214,295 @@
         "url": "https://arxiv.org/abs/2606.20008"
       }
     ]
+  },
+  {
+    "slug": "ankur-samanta",
+    "name": "Ankur Samanta",
+    "aliases": ["Ankur Samanta", "Ankur-Samanta"],
+    "affiliations": ["Columbia University", "Meta AI"],
+    "github": "https://github.com/Ankur-Samanta",
+    "x": "https://x.com/Ankur_Samanta_",
+    "xConfidence": "high",
+    "topics": ["LLM reasoning", "RLVR", "self-improvement", "multimodal foundation models"],
+    "notes": "Credit Assignment with Resets first author and corresponding contact. GitHub profile identifies him as an AI PhD Candidate at Columbia University and Research @ MetaAI, and directly links the @Ankur_Samanta_ X account. The paper marks work done at Meta and uses a Columbia correspondence email.",
+    "sources": [
+      {
+        "label": "GitHub",
+        "url": "https://github.com/Ankur-Samanta"
+      },
+      {
+        "label": "X linked from GitHub",
+        "url": "https://x.com/Ankur_Samanta_"
+      },
+      {
+        "label": "Credit Assignment with Resets paper",
+        "url": "https://arxiv.org/abs/2605.25507"
+      },
+      {
+        "label": "MACA paper",
+        "url": "https://arxiv.org/abs/2509.15172"
+      }
+    ]
+  },
+  {
+    "slug": "akshayaa-magesh",
+    "name": "Akshayaa Magesh",
+    "aliases": ["Akshayaa Magesh"],
+    "affiliations": ["Meta AI", "University of Illinois Urbana-Champaign"],
+    "homepage": "https://sites.google.com/view/akshayaamagesh/home",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["reinforcement learning", "robust machine learning", "statistical inference", "LLM reasoning"],
+    "notes": "Credit Assignment with Resets coauthor. Personal site identifies her UIUC ECE / CSL PhD profile and research interests in statistical inference, robust machine learning, reinforcement learning, and information theory; the target paper lists her under Meta AI.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://sites.google.com/view/akshayaamagesh/home"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=yxCftt0AAAAJ"
+      },
+      {
+        "label": "Credit Assignment with Resets paper",
+        "url": "https://arxiv.org/abs/2605.25507"
+      },
+      {
+        "label": "Structure Enables Self-Localization paper",
+        "url": "https://arxiv.org/abs/2602.02416"
+      }
+    ]
+  },
+  {
+    "slug": "ayush-jain",
+    "name": "Ayush Jain",
+    "aliases": ["Ayush Jain", "Ayushj240"],
+    "affiliations": ["Meta AI", "Meta Applied Reinforcement Learning"],
+    "homepage": "https://ayushj240.github.io/",
+    "x": "https://twitter.com/Ayushj240",
+    "xConfidence": "high",
+    "topics": ["reinforcement learning", "LLM reasoning", "agents", "robotics", "recommender systems"],
+    "notes": "Meta Applied RL research scientist and recurring coauthor across Credit Assignment with Resets, Structure Enables Effective Self-Localization of Errors in LLMs, MACA, and Imbalanced Gradients. Homepage directly links Twitter, Scholar, CV and LinkedIn.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://ayushj240.github.io/"
+      },
+      {
+        "label": "Twitter linked from homepage",
+        "url": "https://twitter.com/Ayushj240"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=ow2pl-8AAAAJ"
+      },
+      {
+        "label": "Credit Assignment with Resets paper",
+        "url": "https://arxiv.org/abs/2605.25507"
+      }
+    ]
+  },
+  {
+    "slug": "youliang-yu",
+    "name": "Youliang Yu",
+    "aliases": ["Youliang Yu", "Youliang Y."],
+    "affiliations": ["Meta AI"],
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["reinforcement learning", "LLM post-training", "self-improvement"],
+    "notes": "Credit Assignment with Resets coauthor under Meta AI. Public evidence is currently sparse; LinkedIn and repeated coauthorship across MACA, Structure Enables Self-Localization, and Imbalanced Gradients connect him to the same Meta LLM RL line. No high-confidence personal X account found.",
+    "sources": [
+      {
+        "label": "LinkedIn",
+        "url": "https://www.linkedin.com/in/youliangyu"
+      },
+      {
+        "label": "Credit Assignment with Resets paper",
+        "url": "https://arxiv.org/abs/2605.25507"
+      },
+      {
+        "label": "MACA paper",
+        "url": "https://arxiv.org/abs/2509.15172"
+      },
+      {
+        "label": "Imbalanced Gradients paper",
+        "url": "https://aclanthology.org/2026.findings-eacl.164/"
+      }
+    ]
+  },
+  {
+    "slug": "daniel-r-jiang",
+    "name": "Daniel R. Jiang",
+    "aliases": ["Daniel Jiang", "Daniel R. Jiang", "danielrjiang"],
+    "affiliations": ["Meta AI", "University of Pittsburgh", "Princeton University"],
+    "homepage": "https://danielrjiang.github.io/",
+    "x": "https://twitter.com/danielrjiang",
+    "xConfidence": "high",
+    "topics": ["reinforcement learning", "RLHF", "long-horizon agents", "LLM post-training"],
+    "notes": "Meta AI research scientist working on reinforcement learning and RLHF. Homepage states interests in AI agents that plan over long horizons and acquire information under uncertainty, and directly links Twitter, Scholar and LinkedIn.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://danielrjiang.github.io/"
+      },
+      {
+        "label": "Twitter linked from homepage",
+        "url": "https://twitter.com/danielrjiang"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=i7h17hwAAAAJ"
+      },
+      {
+        "label": "Credit Assignment with Resets paper",
+        "url": "https://arxiv.org/abs/2605.25507"
+      }
+    ]
+  },
+  {
+    "slug": "kavosh-asadi",
+    "name": "Kavosh Asadi",
+    "aliases": ["Kavosh Asadi", "AsadiKavosh"],
+    "affiliations": ["Meta AI", "Amazon", "Brown University", "University of Alberta"],
+    "homepage": "https://kavosh8.github.io/",
+    "x": "https://twitter.com/AsadiKavosh",
+    "xConfidence": "high",
+    "topics": ["reinforcement learning", "value function optimization", "RL theory", "assistive AI agents"],
+    "notes": "Meta RL team senior scientist. Homepage states a PhD background in theoretical and empirical reinforcement learning, value-function optimization interests, and affiliation history from Meta, Amazon, Brown and University of Alberta; homepage directly links Twitter, Scholar, LinkedIn and DBLP.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://kavosh8.github.io/"
+      },
+      {
+        "label": "Twitter linked from homepage",
+        "url": "https://twitter.com/AsadiKavosh"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=-2qyBJEAAAAJ"
+      },
+      {
+        "label": "Credit Assignment with Resets paper",
+        "url": "https://arxiv.org/abs/2605.25507"
+      }
+    ]
+  },
+  {
+    "slug": "kaveh-hassani",
+    "name": "Kaveh Hassani",
+    "aliases": ["Kaveh Hassani", "KavehHassani"],
+    "affiliations": ["Meta Superintelligence Labs", "Meta", "University of Ottawa", "University of Toronto"],
+    "homepage": "https://kavehhassani.github.io/",
+    "github": "https://github.com/KavehHassani",
+    "x": "https://twitter.com/kavehhassani",
+    "xConfidence": "high",
+    "topics": ["self-improving LLMs", "LLM reasoning", "multi-agent reinforcement learning", "post-training"],
+    "notes": "Meta Superintelligence Labs research scientist. Homepage states current focus on self-improving LLMs, LLM reasoning, multi-agent RL and post-training, and directly links Google Scholar, GitHub, LinkedIn and X.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://kavehhassani.github.io/"
+      },
+      {
+        "label": "GitHub linked from homepage",
+        "url": "https://github.com/KavehHassani"
+      },
+      {
+        "label": "X linked from homepage",
+        "url": "https://twitter.com/kavehhassani"
+      },
+      {
+        "label": "Credit Assignment with Resets paper",
+        "url": "https://arxiv.org/abs/2605.25507"
+      }
+    ]
+  },
+  {
+    "slug": "paul-sajda",
+    "name": "Paul Sajda",
+    "aliases": ["Paul Sajda", "Paul Sajda PhD"],
+    "affiliations": ["Columbia University", "LIINC Lab", "Data Science Institute"],
+    "homepage": "https://liinc.bme.columbia.edu/people/paul-sajda",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["brain-computer interfaces", "neuroengineering", "machine learning", "decision-making"],
+    "notes": "Columbia professor and LIINC lab PI. Columbia LIINC page lists Biomedical Engineering, Electrical Engineering and Radiology appointments; OpenReview profile confirms full professor status and personal links. No high-confidence personal X account found.",
+    "sources": [
+      {
+        "label": "LIINC profile",
+        "url": "https://liinc.bme.columbia.edu/people/paul-sajda"
+      },
+      {
+        "label": "Columbia Engineering profile",
+        "url": "https://www.engineering.columbia.edu/faculty-staff/directory/paul-sajda"
+      },
+      {
+        "label": "OpenReview profile",
+        "url": "https://openreview.net/profile?id=~Paul_Sajda3"
+      },
+      {
+        "label": "Credit Assignment with Resets paper",
+        "url": "https://arxiv.org/abs/2605.25507"
+      }
+    ]
+  },
+  {
+    "slug": "jalaj-bhandari",
+    "name": "Jalaj Bhandari",
+    "aliases": ["Jalaj Bhandari"],
+    "affiliations": ["Meta AI", "Columbia University"],
+    "homepage": "https://www.columbia.edu/~jb3618/",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["reinforcement learning", "optimization theory", "policy gradient", "temporal difference learning"],
+    "notes": "Credit Assignment with Resets coauthor. Columbia homepage identifies him as an Operations Research PhD student working on foundations of modern RL algorithms using optimization theory; Google Scholar currently shows a Meta verified email. No high-confidence personal X account found.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://www.columbia.edu/~jb3618/"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=HkEQWYcAAAAJ"
+      },
+      {
+        "label": "Credit Assignment with Resets paper",
+        "url": "https://arxiv.org/abs/2605.25507"
+      },
+      {
+        "label": "Structure Enables Self-Localization paper",
+        "url": "https://arxiv.org/abs/2602.02416"
+      }
+    ]
+  },
+  {
+    "slug": "yonathan-efroni",
+    "name": "Yonathan Efroni",
+    "aliases": ["Yonathan Efroni", "yefroni"],
+    "affiliations": ["Tel Aviv University", "AAI Technologies", "Meta", "Microsoft Research"],
+    "homepage": "https://sites.google.com/view/yonathan-efroni/home",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["interactive learning", "reinforcement learning", "sequential decision making", "agentic systems", "language models"],
+    "notes": "Tel Aviv University School of Computer Science and AI assistant professor. Personal site states research interests in interactive learning, reinforcement learning, sequential decision making, agentic systems and language models; TAU profile notes prior Meta and Microsoft Research roles. No high-confidence personal X account found.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://sites.google.com/view/yonathan-efroni/home"
+      },
+      {
+        "label": "TAU profile",
+        "url": "https://datascience.tau.ac.il/yonathan-efroni"
+      },
+      {
+        "label": "Credit Assignment with Resets paper",
+        "url": "https://arxiv.org/abs/2605.25507"
+      },
+      {
+        "label": "Imbalanced Gradients paper",
+        "url": "https://aclanthology.org/2026.findings-eacl.164/"
+      }
+    ]
   }
 ]
