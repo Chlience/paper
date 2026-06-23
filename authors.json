@@ -3068,5 +3068,102 @@
         "url": "https://scholar.google.com/citations?hl=zh-CN&user=y2EaftAAAAAJ"
       }
     ]
+  },
+  {
+    "slug": "zeyu-jia",
+    "name": "Zeyu Jia",
+    "chineseName": "贾泽宇",
+    "aliases": ["Zeyu Jia", "ZeyuJia"],
+    "affiliations": ["Massachusetts Institute of Technology", "Peking University"],
+    "homepage": "https://www.mit.edu/~zyjia/",
+    "x": "https://x.com/ZeyuJia",
+    "xConfidence": "high",
+    "topics": ["reinforcement learning theory", "machine learning theory", "optimization", "information theory", "process supervision", "outcome supervision"],
+    "notes": "ICML 2025 Do We Need to Verify Step by Step? first author. Homepage identifies him as Zeyu Jia (贾泽宇), MIT EECS PhD candidate advised by Yury Polyanskiy and Alexander Rakhlin, with Peking University undergraduate background. OpenReview confirms MIT PhD status, PKU/MIT emails and advisor relation. X profile search result links the same MIT homepage and a post announcing this paper.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://www.mit.edu/~zyjia/"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Zeyu_Jia1"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=en&user=8TkJbjgAAAAJ"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/ZeyuJia"
+      }
+    ]
+  },
+  {
+    "slug": "alexander-rakhlin",
+    "name": "Alexander Rakhlin",
+    "aliases": ["Alexander Rakhlin", "Sasha Rakhlin"],
+    "affiliations": ["Massachusetts Institute of Technology", "University of Pennsylvania"],
+    "homepage": "https://www.mit.edu/~rakhlin/",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["reinforcement learning theory", "online learning", "statistical learning", "optimization", "large language models"],
+    "notes": "ICML 2025 Do We Need to Verify Step by Step? coauthor and Zeyu Jia's PhD advisor. MIT homepage identifies him as Sasha Rakhlin, Professor at MIT Statistics and Data Science Center / IDSS, Department of Brain & Cognitive Sciences and LIDS. OpenReview confirms Full Professor at MIT and links homepage, Scholar and DBLP. Name-matched X/GitHub search results were dominated by a different Kaggle-oriented Alexander Rakhlin, so no high-confidence personal X account was recorded.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://www.mit.edu/~rakhlin/"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Alexander_Rakhlin1"
+      },
+      {
+        "label": "DBLP",
+        "url": "https://dblp.org/pid/59/407"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=en&user=fds2VpgAAAAJ"
+      }
+    ]
+  },
+  {
+    "slug": "tengyang-xie",
+    "name": "Tengyang Xie",
+    "aliases": ["Tengyang Xie", "tengyangx", "tengyangxie"],
+    "affiliations": ["University of Wisconsin-Madison", "Microsoft Research", "University of Illinois Urbana-Champaign", "University of Science and Technology of China"],
+    "homepage": "https://mdp.sh/",
+    "github": "https://github.com/tengyangxie",
+    "x": "https://x.com/tengyangx",
+    "xConfidence": "high",
+    "topics": ["reinforcement learning", "machine learning", "artificial intelligence", "long-horizon planning", "RLHF", "preference optimization", "process supervision"],
+    "notes": "ICML 2025 Do We Need to Verify Step by Step? coauthor. Homepage identifies him as Assistant Professor of Computer Science at University of Wisconsin-Madison, previously Microsoft Research postdoc and UIUC PhD advised by Nan Jiang. OpenReview confirms UW-Madison assistant professor role and links homepage, Scholar and DBLP. X search result bio matches UW-Madison, former Microsoft Research and Illinois background.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://mdp.sh/"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Tengyang_Xie1"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=en&user=rlmROVsAAAAJ"
+      },
+      {
+        "label": "DBLP",
+        "url": "https://dblp.org/pid/227/3335"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/tengyangxie"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/tengyangx"
+      }
+    ]
   }
 ]
