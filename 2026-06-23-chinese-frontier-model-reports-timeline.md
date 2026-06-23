@@ -1,7 +1,7 @@
 # 国产前沿模型技术报告时间线总览
 
 First-Archived-At: 2026-06-23 18:40
-Updated-At: 2026-06-23 18:40
+Updated-At: 2026-06-23 19:04
 Pinned: true
 
 ## Source
@@ -34,21 +34,21 @@ DeepSeek 线从 V2 的 MLA / DeepSeekMoE 走向 V3 的 FP8 / DualPipe / MTP，�
 
 如果只看单篇报告的排行榜，国产模型技术路线很容易被读成一串分数刷新。MMLU、AIME、LiveCodeBench、SWE-bench、RULER、TAU-bench 都在表格里发光，但真正的变化藏在表格下面：每一代报告都在回答同一个更硬的问题，怎样把更长的上下文、更稀疏的参数、更长的推理、更复杂的工具环境放进一个可训练、可推理、可复现调试的系统。
 
-这条线从 2024 年 5 月的 DeepSeek-V2 开始变得清楚。V2 的意义不只是 236B total / 21B active 的 MoE 规模，它先把服务成本中的两个硬瓶颈拆开了。attention 侧用 MLA 压缩 KV cache，FFN 侧用 DeepSeekMoE 扩大 total capacity 并控制 active compute。论文报告相对 DeepSeek 67B 节省 42.5% 训练成本、减少 93.3% KV cache、最大生成吞吐提升到 5.76 倍。这里出现了后续多篇技术报告反复继承的底层判断：开放模型要继续放大，能力、显存、通信、推理吞吐必须同时进入模型设计。
+这条线从 2024 年 5 月的 DeepSeek-V2 开始变得清楚。V2 先把服务成本中的两个硬瓶颈拆开：attention 侧用 MLA 将每个 token 的 KV 压成 latent KV，并用 decoupled RoPE 单独保存位置分支，使低秩 KV 压缩和 RoPE 位置能力可以同时存在；FFN 侧用 DeepSeekMoE 的 shared/routed experts 扩大 total capacity，再用 device-limited routing、expert/device/communication balance losses 和训练期 token dropping 控制专家负载与跨设备通信。论文报告相对 DeepSeek 67B 节省 42.5% 训练成本、减少 93.3% KV cache、最大生成吞吐提升到 5.76 倍。这里出现了后续多篇技术报告反复继承的底层判断：开放模型要继续放大，能力、显存、通信、推理吞吐必须同时进入模型设计。
 
-到 2024 年 12 月，Qwen2.5 和 DeepSeek-V3 代表了两种不同的扩展方式。Qwen2.5 更像模型族工程：18T tokens、统一 tokenizer、dense/API MoE、数学/代码/工具/长上下文/偏好对齐一起推进，形成 Qwen2.5-Math、Qwen2.5-Coder、QwQ 和后续 Qwen RL 论文的基础底座。DeepSeek-V3 则更像单条 MoE 系统线的深挖：671B total / 37B active，继承 MLA 和 DeepSeekMoE，加入 auxiliary-loss-free load balancing、MTP、FP8 和 DualPipe，把训练成本、专家负载、低精度数值和通信重叠一起处理。V3 的 2.788M H800 GPU hours 训练账本让这类报告开始具有系统审计价值，模型分数之外，训练经济性本身成为技术论点。
+到 2024 年 12 月，Qwen2.5 和 DeepSeek-V3 代表两种扩展方式。Qwen2.5 是模型族工程：open-weight dense family、proprietary API MoE、18T token 分阶段数据 mixture、151K BBPE tokenizer、SFT/DPO/GRPO/offline-online RL、Qwen2.5-Math/Coder/QwQ 和长上下文扩展放在同一条发布线里。它需要区分 128K open-weight context 与 Turbo / Qwen2.5-1M 的 1M context，后者依赖 progressive context expansion、YaRN 和 DCA。DeepSeek-V3 沿 V2 的 MLA / DeepSeekMoE 系统线继续放大到 671B total / 37B active：auxiliary-loss-free balance 用 expert bias 影响 top-K routing，减少辅助损失梯度对专家专门化的干扰；MTP 在主 next-token loss 之外增加未来 token 预测信号；DualPipe 把 pipeline communication 和 MoE all-to-all 放进计算间隙；FP8 用 fine-grained scaling 和高精度 accumulation 降低训练成本。V3 的 2.788M H800 GPU hours 训练账本让这类报告开始具有系统审计价值，模型分数之外，训练经济性本身成为技术论点。
 
-2025 年 1 月的两篇报告把焦点从 base model 转到 post-training。DeepSeek-R1 证明 strong base model 上的 outcome-based RL 可以诱导 long-CoT、反思、验证和策略切换。R1-Zero 从 V3-Base 出发，用 rule-based verifiable reward 和 GRPO 训练，AIME 2024 pass@1 从 15.6% 提升到 77.9%；R1 再用 cold-start SFT、两阶段 RL、rejection sampling、general SFT 和 safety/helpfulness reward model 把这种能力整理成更可读、更通用的产品形态。Kimi k1.5 在同一时间把问题推向更长上下文和更复杂任务：128K context、long-CoT、OMD-style RL、partial rollout、Mooncake/vLLM/Megatron 和 long2short 组合在一起，展示 RL 不只服务数学，也能进入多模态、代码和系统协同。
+2025 年 1 月的两篇报告把焦点从 base model 转到 post-training。DeepSeek-R1 证明 strong base model 上的 outcome-based RL 可以诱导 long-CoT、反思、验证和策略切换。R1-Zero 从 V3-Base 出发，用 rule-based verifiable reward 和 GRPO 训练，AIME 2024 pass@1 从 15.6% 提升到 77.9%；R1 再用 cold-start SFT、两阶段 RL、rejection sampling、general SFT 和 safety/helpfulness reward model 把这种能力整理成更可读、更通用的产品形态。Kimi k1.5 在同一时间把问题推向更长上下文和更复杂任务：先用高难 prompt、可靠 verifier 和 long-CoT warmup 抬高可奖励轨迹的概率，再用 OMD-style policy optimization、sampled reward baseline、length penalty 和 curriculum 推动长推理策略，随后用 partial rollout 复用长轨迹 prefix，最后通过 model merging、shortest rejection sampling、DPO 和第二阶段 RL 做 long2short。这里的重点是把 RL 写成 prompt/reward、采样分布、rollout 系统和部署 token budget 的联合工程，单个 objective 只覆盖其中一层。
 
 这一阶段最容易产生一个误解：只要 final-answer reward 足够可靠，推理能力就会自然增长。后续报告很快暴露了更具体的成本。长 CoT 会提高输出长度，rollout 会占据训练 wall-clock，代码 reward 依赖测试质量，工具轨迹会产生长尾，低概率 reflection token 会被 clipping 吃掉，训练 engine 和 inference engine 的 logprob 还可能不一致。于是从 2025 年中开始，国产模型报告逐渐把 RL objective、rollout infrastructure 和 serving kernel 写进同一张图里。
 
-Qwen3 代表的是控制接口的系统化。它将 dense/MoE 模型族、thinking / non-thinking 双模式、thinking budget、36T token 多语预训练、四阶段后训练和 strong-to-weak distillation 组织在一起。Qwen3-235B-A22B 负责开源旗舰，Qwen3-8B 等小模型通过 teacher logits distillation 获得 reasoning 能力。最值得关注的是 distillation vs RL 对照：同一 8B 起点上，on-policy distillation 报告 AIME'24 74.4、pass@64 93.3、GPU hours 1800；直接 RL 为 67.6、pass@64 90.0、GPU hours 17920。这里的转向很明确：reasoning 能力不只靠训练更久，也靠把大模型搜索到的分布更有效地转移给小模型。
+Qwen3 代表控制接口的系统化。它将 dense/MoE 模型族、thinking / non-thinking 双模式、thinking budget、36T token 多语预训练、四阶段后训练和 strong-to-weak distillation 组织在一起：Long-CoT cold start 先塑造 `<think>...</think>` 轨迹，Reasoning RL 用 3,995 个 query-verifier pairs 和 GRPO 强化可验证推理，Thinking Mode Fusion 用 `/think`、`/no_think` 和空 `<think></think>` block 把低延迟回答和长推理合入同一模型，General RL 再补 instruction following、format、agent、RAG 和偏好对齐。Qwen3-235B-A22B 负责开源旗舰，Qwen3-8B 等小模型通过 off-policy response distillation 和 on-policy logits KL distillation 获得 reasoning 能力。最值得关注的是 distillation vs RL 对照：同一 8B 起点上，on-policy distillation 报告 AIME'24 74.4、pass@64 93.3、GPU hours 1800；直接 RL 为 67.6、pass@64 90.0、GPU hours 17920。这里的转向很明确：reasoning 能力来自训练步数，也来自把大模型搜索到的分布更有效地转移给小模型。
 
 MiniMax-M1 则沿另一条路径处理长输出成本。它把 Lightning Attention + MoE 作为长上下文和长输出底座，用 CISPO 修改 PPO/GRPO 类 token clipping 的学习信号。作者观察到 long-CoT 中的 `Wait`、`Recheck`、`However` 等 reflection token 往往初始概率低，更新后 ratio 高，容易被 token-level clipping 排除。CISPO 把 clipping 从 token update 转为 clipped importance weight，使这些 token 继续通过 log probability 提供梯度。这个报告的价值在于，它把 long-output reasoning RL 的问题写成架构效率、objective efficiency、reward/data curriculum 和 staged length expansion 的联合问题。
 
-Kimi K2 进一步把重点从推理题移到 agentic workload。它是 1.04T total / 32B active 的 open-weight MoE，使用 MuonClip 稳定大规模训练，再用 3000+ real MCP tools、20000+ synthetic tools、Verifiable Rewards Gym、自评 rubric reward、checkpoint engine 和 partial rollout 做 agentic post-training。K2 的强项集中在 software engineering 和 tool-use：SWE-bench Verified agentic single 65.8 / multi 71.6，Tau2 micro 66.1，ACEBench 76.5。这里模型报告已经不再只描述一个网络结构；它在描述一个数据生成系统、一个工具模拟系统、一个 reward 系统和一个训练/推理切换系统。
+Kimi K2 进一步把重点从推理题移到 agentic workload。它是 1.04T total / 32B active 的 open-weight MoE，预训练侧用 MuonClip 稳定大规模训练：在 Muon 的矩阵更新上加入 weight decay、update RMS matching 和 QK-Clip，监控每个 attention head 的最大 QK logit，并在 optimizer step 后缩放 query/key projection weights，约束后续 forward 的 attention logit 范围。post-training 侧先构造 3000+ real MCP tools 和 20000+ synthetic tools，再生成 agents、tasks 和 simulator trajectories，用 tests、环境状态和规则过滤成功轨迹；RL 阶段把 Verifiable Rewards Gym、自评 rubric reward、Budget Control、PTX loss、temperature decay、checkpoint engine 和 partial rollout 接成闭环。K2 的强项集中在 software engineering 和 tool-use：SWE-bench Verified agentic single 65.8 / multi 71.6，Tau2 micro 66.1，ACEBench 76.5。这里模型报告描述的对象扩展为数据生成系统、工具模拟系统、reward 系统和训练/推理切换系统。
 
-进入 2026 年，Kimi K2.5 和 GLM-5 把 agentic 能力继续向两个方向拉开。K2.5 建在 K2 之上，加入 MoonViT-3D、256K context、zero-vision SFT、visual RL、Token Efficient RL、DEP 和 Agent Swarm。它关心的任务不再只是单轮文本或代码，而是视觉理解、长视频、浏览搜索、OS 操作、并行 sub-agent orchestration。GLM-5 则把“agentic engineering”明确定义为从 vibe coding 到 autonomous engineering 的迁移：744B total / 40B active MoE、MLA、Muon Split、parameter-sharing MTP、DSA、200K context、slime 异步 RL、TITO、direct double-sided IS、DP-aware routing 和 PD disaggregation 共同服务长轨迹工具任务。
+进入 2026 年，Kimi K2.5 和 GLM-5 把 agentic 能力继续向两个方向拉开。K2.5 建在 K2 之上，加入 MoonViT-3D、256K context、zero-vision SFT、visual RL、Token Efficient RL、DEP 和 Agent Swarm。它关心的任务范围从单轮文本和代码扩展到视觉理解、长视频、浏览搜索、OS 操作、并行 sub-agent orchestration。GLM-5 则把“agentic engineering”明确定义为从 vibe coding 到 autonomous engineering 的迁移：744B total / 40B active MoE、MLA、Muon Split、parameter-sharing MTP、DSA、200K context、slime 异步 RL、TITO、direct double-sided IS、DP-aware routing 和 PD disaggregation 共同服务长轨迹工具任务。
 
 DeepSeek-V4 和 GLM-5.2 又把长上下文推到 million-token 级别。DeepSeek-V4 用 1.6T total / 49B active 的 V4-Pro 和 284B total / 13B active 的 V4-Flash 组成双模型路线，通过 CSA/HCA hybrid attention、mHC、Muon、deterministic kernels、heterogeneous KV cache、on-disk KV cache 和 OPD 处理 1M context 下的 FLOPs、KV cache、serving memory 和 post-training consistency。GLM-5.2 则把 1M context 明确落在 long-horizon coding agent 上，用 IndexShare / IndexCache 降低 DSA indexer 成本，用 MTP IndexShare + KVShare + rejection sampling + TV loss 提高 speculative decoding acceptance，用 slime 和 critic-based PPO 处理 compaction 后的超长轨迹训练，并把 anti-hack module 纳入 coding RL。
 
@@ -62,14 +62,14 @@ DeepSeek-V4 和 GLM-5.2 又把长上下文推到 million-token 级别。DeepSeek
 
 | 时间 | 报告 | 关键技术点 | 报告中最有用的证据 | 需要谨慎的地方 |
 | --- | --- | --- | --- | --- |
-| 2024-05 | DeepSeek-V2 | MLA, DeepSeekMoE, 236B total / 21B active, 128K context | 42.5% training cost saving, 93.3% KV cache reduction, 5.76x max generation throughput | baseline 是 2024 生态；长上下文主要由 NIAH 支撑 |
-| 2024-12 | Qwen2.5 | 18T pretraining, SFT/DPO/GRPO, Qwen2.5-Math/Coder/QwQ, 128K/1M context | 72B-Instruct MATH 83.1, LiveCodeBench 55.5, RULER 128K 88.4 | API MoE、训练预算和 RL 细节公开有限 |
-| 2024-12 | DeepSeek-V3 | 671B total / 37B active, FP8, DualPipe, MTP, aux-loss-free balance | 2.788M H800 GPU hours；MTP / FP8 / load balance proxy ablation | 成本表排除研发和消融；chat 对比受闭源 API 影响 |
+| 2024-05 | DeepSeek-V2 | MLA latent KV + decoupled RoPE, DeepSeekMoE shared/routed experts, device-limited routing, 236B total / 21B active | 42.5% training cost saving, 93.3% KV cache reduction, 5.76x max generation throughput | baseline 是 2024 生态；长上下文主要由 NIAH 支撑 |
+| 2024-12 | Qwen2.5 | 18T staged pretraining, open dense/API MoE family, SFT/DPO/GRPO, Qwen2.5-Math/Coder/QwQ, YaRN/DCA context extension | 72B-Instruct MATH 83.1, LiveCodeBench 55.5, RULER 128K 88.4 | API MoE、训练预算和 RL 细节公开有限；128K open-weight 与 1M Turbo 需要区分 |
+| 2024-12 | DeepSeek-V3 | 671B total / 37B active, aux-loss-free bias routing, MTP, FP8 fine-grained scaling, DualPipe | 2.788M H800 GPU hours；MTP / FP8 / load balance proxy ablation | 成本表排除研发和消融；chat 对比受闭源 API 影响 |
 | 2025-01 | DeepSeek-R1 | V3-Base 上的 outcome RL, GRPO, R1-Zero, distillation | R1-Zero AIME 2024 pass@1 15.6% -> 77.9%，cons@16 86.7% | 完整训练数据和内部框架未公开 |
-| 2025-01 | Kimi k1.5 | 128K long-CoT RL, OMD-style update, partial rollout, long2short | long-CoT MATH-500 96.2, AIME 77.5, LiveCodeBench 62.5 | 组件消融和系统收益多数依赖内部环境 |
-| 2025-05 | Qwen3 | thinking/non-thinking, thinking budget, strong-to-weak distillation, Qwen3 MoE | Qwen3-8B distillation vs RL: 1800 GPU hours vs 17920 GPU hours，且 AIME 更高 | Qwen3 v1 和后续 2507 系列需要区分 |
+| 2025-01 | Kimi k1.5 | 128K long-CoT RL, OMD-style update, length penalty, partial rollout, long2short | long-CoT MATH-500 96.2, AIME 77.5, LiveCodeBench 62.5 | 组件消融和系统收益多数依赖内部环境 |
+| 2025-05 | Qwen3 | thinking/non-thinking, thinking budget, four-stage post-training, strong-to-weak logits distillation, Qwen3 MoE | Qwen3-8B distillation vs RL: 1800 GPU hours vs 17920 GPU hours，且 AIME 更高 | Qwen3 v1 和后续 2507 系列需要区分 |
 | 2025-06 | MiniMax-M1 | Lightning Attention, long-output RL, CISPO, 1M context | CISPO 解释 clipping 下 reflection token 梯度丢失；M1-80K 长输出 recipe | CISPO 需要更多公开模型和 reward 设置复验 |
-| 2025-07 | Kimi K2 | 1.04T MoE, MuonClip, MCP tools, self-critique reward, checkpoint engine | SWE-bench Verified agentic single 65.8 / multi 71.6；MuonClip 避免 logits 爆炸 | agentic harness、tool data 和 rubric reward 可复验性有限 |
+| 2025-07 | Kimi K2 | 1.04T MoE, MuonClip/QK-Clip, MCP/synthetic tools, Verifiable Rewards Gym, self-critique rubric, checkpoint engine | SWE-bench Verified agentic single 65.8 / multi 71.6；MuonClip 避免 logits 爆炸 | agentic harness、tool data 和 rubric reward 可复验性有限 |
 | 2026-02 | Kimi K2.5 | MoonViT-3D, visual RL, Agent Swarm, 256K context | 将 K2 backbone 扩展到视觉、长视频、OS/browser/search 和并行 agent | swarm / visual agent 依赖复杂工具环境 |
 | 2026-02 | GLM-5 | 744B-A40B, DSA, Muon Split, MTP, slime async RL | agentic engineering pipeline 与 200K context / async rollout / TITO 结合 | 内部 benchmark、reward 和 harness 占比较高 |
 | 2026-04 | DeepSeek-V4 | 1M context, CSA/HCA, mHC, Muon, deterministic kernels, OPD | V4-Pro 1.6T / 49B active；V4-Flash 284B / 13B active；系统层覆盖 KV、kernel、sandbox | 预览报告，关键 ablation 尚不完整 |
@@ -93,7 +93,7 @@ DeepSeek-V4 和 GLM-5.2 又把长上下文推到 million-token 级别。DeepSeek
 
 1. 国产模型技术报告从 base model efficiency 到 reasoning RL，再到 agentic production system 的三阶段脉络。
 2. DeepSeek / Qwen / Kimi / GLM / MiniMax 的组织级路线对照。
-3. 后续阅读模型报告时的 baseline / harness / rollout / reward / serving 审计框架。
+3. 后续阅读模型报告时的方法机制 / 继承关系 / baseline / harness / rollout / reward / serving 审计框架。
 
 ### Risks
 
