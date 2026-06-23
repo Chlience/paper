@@ -1,7 +1,7 @@
 # Paper Analysis Workflow
 
 First-Archived-At: 2026-06-19
-Updated-At: 2026-06-21
+Updated-At: 2026-06-23
 
 ## 目标
 
@@ -105,6 +105,19 @@ authors.json
 - 对 LLM 安全、系统、理论、评测或产品有什么可复用启发。
 - 论文的外部有效性、实验范围和实现限制是什么。
 - 公开审稿意见如何改变可信度判断：哪些 reviewer 认可了问题价值，哪些 reviewer 指出了 theory、baseline、统计显著性、presentation 或 novelty 的硬伤；作者 rebuttal 是否实际回应了这些问题。
+
+## 术语与缩写处理
+
+重要缩写首次进入正文分析时必须展开。尤其是领域内常见但普通读者未必默认知道的缩写，例如 ORM、PRM、RFT、STV、OTB、VIMPO、TIS、TV、KL、RLVR、GRPO、DAPO、MTP、KV Cache 等。
+
+写法要求：
+
+- 首次出现使用 `缩写 (English Full Name，中文译名或功能定义)`。例如 `PRM (Process Reward Model，过程奖励模型，用于给中间推理步骤打分)`，`ORM (Outcome Reward Model，结果奖励模型，用于判断整条解答最终是否正确)`。
+- 若缩写出现在论文标题、Source、作者原文标题或引用标题中，可以保留原文；进入“一句话结论”“论文脉络”“关键实验/定理”等分析正文时再展开。
+- 若一个段落或表格会集中使用多个缩写，先加一小段“术语预备”或在表格前用短句列出定义，避免读者读到中途才看到解释。
+- 展开时给出该缩写在当前论文语境下的具体含义。相同缩写跨论文可能含义不同，例如 TV 可以表示 total variation，也可能表示 token-level variance；必须结合原文确认。
+- 极常见工程缩写如 GPU、CPU、API、URL 可不强制展开；若缩写直接影响论文结论或实验设置，优先展开。
+- 若无法确认全称，写明“不确定原文全称”，并用功能定义替代猜测。
 
 ## 实验设置与 baseline 审计
 
