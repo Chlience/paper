@@ -3196,5 +3196,640 @@
         "url": "https://scholar.google.com/citations?hl=zh-CN&user=WmzUNaQAAAAJ"
       }
     ]
+  },
+  {
+    "slug": "huazuo-gao",
+    "name": "Huazuo Gao",
+    "aliases": ["Huazuo Gao"],
+    "affiliations": ["DeepSeek AI"],
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["DeepSeek-V2", "MLA", "DeepSeekMoE", "efficient language models", "foundation models"],
+    "notes": "DeepSeekMoE coauthor and one of the two contributors explicitly credited by the DeepSeek-V2 appendix for MLA architecture innovations. Public profile evidence beyond DeepSeek paper/team credits is currently sparse, so no personal X account is recorded.",
+    "sources": [
+      {
+        "label": "DeepSeek-V2 arXiv",
+        "url": "https://arxiv.org/abs/2405.04434"
+      },
+      {
+        "label": "DeepSeekMoE arXiv",
+        "url": "https://arxiv.org/abs/2401.06066"
+      }
+    ]
+  },
+  {
+    "slug": "wangding-zeng",
+    "name": "Wangding Zeng",
+    "aliases": ["Wangding Zeng", "zwd973-deepseek"],
+    "affiliations": ["DeepSeek AI", "Beijing University of Posts and Telecommunications"],
+    "huggingFace": "https://huggingface.co/zwd973-deepseek",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["MLA", "DeepSeek-V2", "DeepSeekMoE", "Engram", "efficient language models"],
+    "notes": "DeepSeek researcher, DeepSeekMoE coauthor, DeepSeek-V2 MLA architecture innovations contributor, and Engram coauthor. OpenReview lists DeepSeek researcher with confirmed DeepSeek and BUPT emails; Scholar and Hugging Face profiles align with the DeepSeek identity. No high-confidence personal X account was found.",
+    "sources": [
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Wangding_Zeng1"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=en&user=RXE7hCoAAAAJ"
+      },
+      {
+        "label": "Hugging Face",
+        "url": "https://huggingface.co/zwd973-deepseek"
+      },
+      {
+        "label": "DeepSeek-V2 arXiv",
+        "url": "https://arxiv.org/abs/2405.04434"
+      },
+      {
+        "label": "Engram arXiv",
+        "url": "https://arxiv.org/abs/2601.07372"
+      }
+    ]
+  },
+  {
+    "slug": "xingkai-yu",
+    "name": "Xingkai Yu",
+    "chineseName": "俞星凯",
+    "aliases": ["Xingkai Yu", "GeeeekExplorer"],
+    "affiliations": ["DeepSeek AI", "Nanjing University"],
+    "github": "https://github.com/GeeeekExplorer",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["DeepSeek-R1", "DeepSeekMoE", "Engram", "MLSys", "LLM systems", "vLLM"],
+    "notes": "DeepSeekMoE, DeepSeek-R1 and Engram recurring author. GitHub profile identifies Xingkai Yu and pins DeepSeek-V3, DeepSeek-R1 and nano-vllm; Scholar records DeepSeek AI publications. No high-confidence personal X account was found.",
+    "sources": [
+      {
+        "label": "GitHub",
+        "url": "https://github.com/GeeeekExplorer"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=zh-CN&user=AvFMXasAAAAJ"
+      },
+      {
+        "label": "DeepSeek-R1 arXiv",
+        "url": "https://arxiv.org/abs/2501.12948"
+      },
+      {
+        "label": "Engram arXiv",
+        "url": "https://arxiv.org/abs/2601.07372"
+      }
+    ]
+  },
+  {
+    "slug": "zhenda-xie",
+    "name": "Zhenda Xie",
+    "chineseName": "解振达",
+    "aliases": ["Zhenda Xie", "zdaxie"],
+    "affiliations": ["DeepSeek AI", "Tsinghua University", "Microsoft Research Asia"],
+    "github": "https://github.com/zdaxie",
+    "x": "https://x.com/zdaxie",
+    "xConfidence": "high",
+    "topics": ["foundation models", "pretraining", "self-supervised learning", "DeepSeek", "Engram"],
+    "notes": "DeepSeek researcher and recurring DeepSeekMoE / Engram / V-series author. GitHub identifies the same handle as Researcher @deepseek-ai, Scholar verifies a deepseek.com email, DBLP links his earlier self-supervised learning work, and X bio matches Researcher @ DeepSeek AI plus foundation-model pretraining/scaling.",
+    "sources": [
+      {
+        "label": "GitHub",
+        "url": "https://github.com/zdaxie"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=zh-CN&user=0C4cDloAAAAJ"
+      },
+      {
+        "label": "DBLP",
+        "url": "https://dblp.org/pid/239/8676"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/zdaxie"
+      },
+      {
+        "label": "Engram arXiv",
+        "url": "https://arxiv.org/abs/2601.07372"
+      }
+    ]
+  },
+  {
+    "slug": "wenfeng-liang",
+    "name": "Wenfeng Liang",
+    "chineseName": "梁文锋",
+    "aliases": ["Wenfeng Liang", "Liang Wenfeng"],
+    "affiliations": ["DeepSeek AI", "High-Flyer"],
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["DeepSeek", "foundation models", "efficient language models", "reasoning models", "High-Flyer"],
+    "notes": "DeepSeek founder / senior organization signal and repeated submitter-author across DeepSeek-V2, DeepSeek-V3, DeepSeek-R1, DeepSeek-V4 and Engram. Public social-profile evidence is not strong enough for a personal X account.",
+    "sources": [
+      {
+        "label": "DeepSeek-V2 arXiv",
+        "url": "https://arxiv.org/abs/2405.04434"
+      },
+      {
+        "label": "DeepSeek-R1 arXiv",
+        "url": "https://arxiv.org/abs/2501.12948"
+      },
+      {
+        "label": "Engram arXiv",
+        "url": "https://arxiv.org/abs/2601.07372"
+      },
+      {
+        "label": "Business Insider profile",
+        "url": "https://www.businessinsider.com/what-is-deepseek-r1-china-ai-2025-1"
+      }
+    ]
+  },
+  {
+    "slug": "xin-cheng-deepseek",
+    "name": "Xin Cheng",
+    "aliases": ["Xin Cheng"],
+    "affiliations": ["Peking University", "DeepSeek AI"],
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["Engram", "conditional memory", "sparse language models", "long-context retrieval"],
+    "notes": "First author and arXiv submitter of Engram / Conditional Memory via Scalable Lookup, with Peking University and DeepSeek-AI affiliation on the paper. Public profile evidence beyond Engram and publication-index pages is sparse, so no personal X account is recorded.",
+    "sources": [
+      {
+        "label": "Engram arXiv",
+        "url": "https://arxiv.org/abs/2601.07372"
+      },
+      {
+        "label": "Engram HTML",
+        "url": "https://arxiv.org/html/2601.07372v1"
+      }
+    ]
+  },
+  {
+    "slug": "huishuai-zhang",
+    "name": "Huishuai Zhang",
+    "aliases": ["Huishuai Zhang", "huishuai-git"],
+    "affiliations": ["Peking University", "Microsoft Research Asia"],
+    "homepage": "https://huishuai-git.github.io/",
+    "github": "https://github.com/huishuai-git",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["large language models", "optimization", "differential privacy", "Engram"],
+    "notes": "Peking University assistant professor and Engram coauthor. Homepage and PKU AI page identify him as assistant professor at Wangxuan Institute of Computer Technology, previously Principal Researcher at Microsoft Research Asia; GitHub and OpenReview provide matching profile evidence. No high-confidence personal X account was found.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://huishuai-git.github.io/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/huishuai-git"
+      },
+      {
+        "label": "PKU AI profile",
+        "url": "https://www.ai.pku.edu.cn/en/info/1405/2085.htm"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Huishuai_Zhang3"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=en&user=w1srHyIAAAAJ"
+      }
+    ]
+  },
+  {
+    "slug": "dongyan-zhao",
+    "name": "Dongyan Zhao",
+    "chineseName": "赵东岩",
+    "aliases": ["Dongyan Zhao", "Dongyan ZHAO", "Zhao Dongyan"],
+    "affiliations": ["Peking University", "Wangxuan Institute of Computer Technology"],
+    "homepage": "https://www.icst.pku.edu.cn/zhaodongyan/en/",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["natural language processing", "semantic data management", "Peking University NLP", "Engram"],
+    "notes": "Peking University professor and Engram coauthor. PKU AI and ICST pages identify him as professor at Wangxuan Institute of Computer Technology with NLP and semantic data management interests; OpenReview and Scholar corroborate the PKU identity. No high-confidence personal X account was found.",
+    "sources": [
+      {
+        "label": "PKU AI profile",
+        "url": "https://www.ai.pku.edu.cn/en/info/1405/1802.htm"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://www.icst.pku.edu.cn/zhaodongyan/en/"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Dongyan_Zhao2"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=zh-CN&user=wxs4n20AAAAJ"
+      },
+      {
+        "label": "Engram arXiv",
+        "url": "https://arxiv.org/abs/2601.07372"
+      }
+    ]
+  },
+  {
+    "slug": "an-yang-qwen",
+    "name": "An Yang",
+    "aliases": ["An Yang"],
+    "affiliations": ["Qwen Team", "Alibaba Group", "Peking University"],
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["Qwen", "large language models", "foundation models", "post-training"],
+    "notes": "Recurring Qwen author across Qwen2.5, Qwen3 and Bebop. Scholar verifies Alibaba email and Qwen/Peking University affiliation; OpenReview records Alibaba researcher and Peking University education. No high-confidence personal X account was found.",
+    "sources": [
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=zh-CN&user=vO9FZekAAAAJ"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~An_Yang1"
+      },
+      {
+        "label": "Qwen2.5 arXiv",
+        "url": "https://arxiv.org/abs/2412.15115"
+      },
+      {
+        "label": "Qwen3 arXiv",
+        "url": "https://arxiv.org/abs/2505.09388"
+      },
+      {
+        "label": "Bebop arXiv",
+        "url": "https://arxiv.org/abs/2606.12370"
+      }
+    ]
+  },
+  {
+    "slug": "binyuan-hui",
+    "name": "Binyuan Hui",
+    "aliases": ["Binyuan Hui", "huybery"],
+    "affiliations": ["Qwen Team", "Alibaba Group", "Meta Superintelligence Labs"],
+    "homepage": "https://huybery.github.io/",
+    "github": "https://github.com/huybery",
+    "x": "https://x.com/huybery",
+    "xConfidence": "high",
+    "topics": ["Qwen", "Qwen-Coder", "code LLMs", "reasoning", "agents"],
+    "notes": "Qwen2.5/Qwen3 submitter and Qwen-Coder lead. Homepage lists Qwen Team recruiting contact, GitHub profile identifies Qwen Team / Alibaba Group and links the same homepage plus X handle, and Scholar verifies Alibaba email. ACL tutorial bio describes him as leading Qwen-Coder development.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://huybery.github.io/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/huybery"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=zh-CN&user=RBb3ItMAAAAJ"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/huybery"
+      },
+      {
+        "label": "ACL tutorial bio",
+        "url": "https://aclanthology.org/2025.emnlp-tutorials.4.pdf"
+      }
+    ]
+  },
+  {
+    "slug": "bo-zheng-qwen",
+    "name": "Bo Zheng",
+    "aliases": ["Bo Zheng", "bzheng"],
+    "affiliations": ["Qwen Team", "Alibaba Group"],
+    "huggingFace": "https://huggingface.co/bzheng",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["Qwen", "large language models", "foundation models", "post-training"],
+    "notes": "Recurring Qwen author across Qwen2.5, Qwen3 and Bebop. Scholar/Hugging Face and Qwen technical reports provide stable Qwen Team linkage, but public personal profile evidence is sparse. No high-confidence personal X account was found.",
+    "sources": [
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=en&user=3gHhO9QAAAAJ"
+      },
+      {
+        "label": "Hugging Face",
+        "url": "https://huggingface.co/bzheng"
+      },
+      {
+        "label": "Qwen2.5 arXiv",
+        "url": "https://arxiv.org/abs/2412.15115"
+      },
+      {
+        "label": "Qwen3 arXiv",
+        "url": "https://arxiv.org/abs/2505.09388"
+      }
+    ]
+  },
+  {
+    "slug": "bowen-yu-qwen",
+    "name": "Bowen Yu",
+    "chineseName": "郁博文",
+    "aliases": ["Bowen Yu"],
+    "affiliations": ["Qwen Team", "Alibaba Group", "Institute of Information Engineering, Chinese Academy of Sciences"],
+    "homepage": "https://yubowen-ph.github.io/",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["Qwen", "post-training", "automated alignment", "instruction tuning", "LLM evaluation"],
+    "notes": "Qwen post-training lead and recurring Qwen2.5/Qwen3/Bebop author. Homepage identifies him as Algorithm Expert of Qwen, Alibaba Group, leading Qwen post-training research and Qwen-Instruct development. No high-confidence personal X account was found.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://yubowen-ph.github.io/"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=zh-CN&user=oHoEp34AAAAJ"
+      },
+      {
+        "label": "Qwen2.5 arXiv",
+        "url": "https://arxiv.org/abs/2412.15115"
+      },
+      {
+        "label": "Bebop arXiv",
+        "url": "https://arxiv.org/abs/2606.12370"
+      }
+    ]
+  },
+  {
+    "slug": "dayiheng-liu",
+    "name": "Dayiheng Liu",
+    "chineseName": "刘大一恒",
+    "aliases": ["Dayiheng Liu"],
+    "affiliations": ["Qwen Team", "Alibaba Group", "Alibaba DAMO Academy", "Sichuan University"],
+    "homepage": "https://liudayiheng.github.io/",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["Qwen", "large language models", "text generation", "natural language processing"],
+    "notes": "Recurring Qwen author across Qwen2.5, Qwen3 and Bebop. Homepage identifies him as Algorithm Expert at Alibaba DAMO and former DICALab PhD; Scholar verifies Qwen Team / Alibaba email. No high-confidence personal X account was found.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://liudayiheng.github.io/"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=zh-CN&user=pPLQrX4AAAAJ"
+      },
+      {
+        "label": "Qwen2.5 arXiv",
+        "url": "https://arxiv.org/abs/2412.15115"
+      },
+      {
+        "label": "Bebop arXiv",
+        "url": "https://arxiv.org/abs/2606.12370"
+      }
+    ]
+  },
+  {
+    "slug": "fei-huang-qwen",
+    "name": "Fei Huang",
+    "aliases": ["Fei Huang"],
+    "affiliations": ["Qwen Team", "Alibaba Group", "Alibaba DAMO Academy", "Tongyi Lab"],
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["Qwen", "Tongyi Lab", "large language models", "multimodal models", "foundation models"],
+    "notes": "Senior Qwen/Tongyi recurring author across Qwen2.5, Qwen3 and Bebop. Scholar and DBLP distinguish the Alibaba/Qwen identity, and arXiv reports provide the Qwen Team context. No high-confidence personal X account was found.",
+    "sources": [
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=en&user=7udAEzMAAAAJ"
+      },
+      {
+        "label": "DBLP",
+        "url": "https://dblp.uni-trier.de/pid/h/FeiHuang-2.html"
+      },
+      {
+        "label": "Qwen2.5 arXiv",
+        "url": "https://arxiv.org/abs/2412.15115"
+      },
+      {
+        "label": "Qwen3 arXiv",
+        "url": "https://arxiv.org/abs/2505.09388"
+      }
+    ]
+  },
+  {
+    "slug": "jianwei-zhang-qwen",
+    "name": "Jianwei Zhang",
+    "aliases": ["Jianwei Zhang", "jianwei zhang"],
+    "affiliations": ["Qwen Team", "Alibaba Group", "Soochow University"],
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["Qwen", "large language models", "foundation models"],
+    "notes": "Recurring Qwen author across Qwen2.5, Qwen3 and Bebop. OpenReview records an Alibaba Group researcher profile with confirmed alibaba-inc.com email and Google Scholar link. No high-confidence personal X account was found.",
+    "sources": [
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~jianwei_zhang13"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=zh-CN&user=LvkN3rAAAAAJ"
+      },
+      {
+        "label": "Qwen2.5 arXiv",
+        "url": "https://arxiv.org/abs/2412.15115"
+      },
+      {
+        "label": "Bebop arXiv",
+        "url": "https://arxiv.org/abs/2606.12370"
+      }
+    ]
+  },
+  {
+    "slug": "jianxin-yang-qwen",
+    "name": "Jianxin Yang",
+    "aliases": ["Jianxin Yang"],
+    "affiliations": ["Qwen Team", "Alibaba Group"],
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["Qwen", "large language models", "MTP", "RL rollout acceleration"],
+    "notes": "Qwen2.5/Qwen3/Bebop recurring author. Public individual profile evidence is sparse, so this profile is intentionally minimal and grounded in Qwen technical reports plus Bebop author lists. No high-confidence personal X account was found.",
+    "sources": [
+      {
+        "label": "Qwen2.5 arXiv",
+        "url": "https://arxiv.org/abs/2412.15115"
+      },
+      {
+        "label": "Qwen3 arXiv",
+        "url": "https://arxiv.org/abs/2505.09388"
+      },
+      {
+        "label": "Bebop arXiv",
+        "url": "https://arxiv.org/abs/2606.12370"
+      }
+    ]
+  },
+  {
+    "slug": "jingren-zhou-qwen",
+    "name": "Jingren Zhou",
+    "aliases": ["Jingren Zhou", "Zhou Jingren"],
+    "affiliations": ["Alibaba Group", "Alibaba Cloud", "Qwen Team"],
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["Qwen", "Alibaba Cloud", "foundation models", "AI infrastructure"],
+    "notes": "Senior Alibaba / Qwen recurring author across Qwen2.5, Qwen3 and Bebop. Scholar and DBLP identify the Alibaba/Qwen publication record. Public reports describe him as a senior Alibaba AI leader, but no high-confidence personal X account was found.",
+    "sources": [
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=en&user=64zxhRUAAAAJ"
+      },
+      {
+        "label": "DBLP",
+        "url": "https://dblp.org/pid/84/2644-1"
+      },
+      {
+        "label": "Qwen2.5 arXiv",
+        "url": "https://arxiv.org/abs/2412.15115"
+      },
+      {
+        "label": "Qwen3 arXiv",
+        "url": "https://arxiv.org/abs/2505.09388"
+      }
+    ]
+  },
+  {
+    "slug": "junyang-lin",
+    "name": "Junyang Lin",
+    "aliases": ["Junyang Lin", "JustinLin610", "Lin Junyang"],
+    "affiliations": ["Qwen Team", "Alibaba Group", "Alibaba DAMO Academy", "Peking University"],
+    "homepage": "https://justinlin610.github.io/",
+    "x": "https://x.com/JustinLin610",
+    "xConfidence": "high",
+    "topics": ["Qwen", "large language models", "multimodal systems", "agentic learning", "foundation models"],
+    "notes": "Qwen technical lead and recurring Qwen2.5/Qwen3/Bebop author. OpenReview records Principal Researcher at Qwen Team, Alibaba Group; homepage identifies Junyang Lin and recent work on language models, multimodal systems and agentic learning; X handle matches the homepage alias and posts on model reasoning/agentic thinking.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://justinlin610.github.io/"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Junyang_Lin1"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=zh-CN&user=qp6IwtgAAAAJ"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/JustinLin610"
+      }
+    ]
+  },
+  {
+    "slug": "rui-men",
+    "name": "Rui Men",
+    "aliases": ["Rui Men"],
+    "affiliations": ["Qwen Team", "Alibaba Group", "Peking University"],
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["Qwen", "pretraining", "large language models", "natural language processing"],
+    "notes": "Recurring Qwen author across Qwen2.5, Qwen3 and Bebop. OpenReview records Alibaba engineer, Peking University education and LLM/pretraining expertise; Scholar verifies Qwen Team / Alibaba and Peking University affiliation. No high-confidence personal X account was found.",
+    "sources": [
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Rui_Men2"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=zh-CN&user=_0aiq2YAAAAJ"
+      },
+      {
+        "label": "Qwen2.5 arXiv",
+        "url": "https://arxiv.org/abs/2412.15115"
+      },
+      {
+        "label": "Bebop arXiv",
+        "url": "https://arxiv.org/abs/2606.12370"
+      }
+    ]
+  },
+  {
+    "slug": "flood-sung",
+    "name": "Flood Sung",
+    "aliases": ["Flood Sung", "RotekSong"],
+    "affiliations": ["XVI Robotics", "Moonshot AI", "ByteDance"],
+    "homepage": "https://floodsung.github.io/",
+    "x": "https://x.com/RotekSong",
+    "xConfidence": "high",
+    "topics": ["Kimi", "reinforcement learning", "agentic systems", "robotics", "Moonshot AI"],
+    "notes": "Kimi k1.5 arXiv submitter and Kimi K2/K2.5 contributor. Homepage identifies him as AI researcher and robotics founder; X bio states XVI Robotics founder/CEO, ex-RL lead at Moonshot and ex-ByteDance research scientist. Scholar verifies XVI Robotics email and Kimi report authorship.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://floodsung.github.io/"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=zh-CN&user=s11zFYQAAAAJ"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/RotekSong"
+      },
+      {
+        "label": "Kimi k1.5 arXiv",
+        "url": "https://arxiv.org/abs/2501.12599"
+      }
+    ]
+  },
+  {
+    "slug": "yifan-bai-kimi",
+    "name": "Yifan Bai",
+    "aliases": ["Yifan Bai"],
+    "affiliations": ["Kimi Team", "Moonshot AI"],
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["Kimi K2", "Kimi K2.5", "Moonshot AI", "agentic intelligence"],
+    "notes": "First listed named author after Kimi Team on Kimi K2 and recurring Kimi K2.5 contributor. Public individual profile evidence is sparse, so this profile is grounded in Moonshot/Kimi report authorship. No high-confidence personal X account was found.",
+    "sources": [
+      {
+        "label": "Kimi K2 arXiv",
+        "url": "https://arxiv.org/abs/2507.20534"
+      },
+      {
+        "label": "Kimi K2 repository",
+        "url": "https://github.com/MoonshotAI/Kimi-K2"
+      },
+      {
+        "label": "Kimi K2.5 arXiv",
+        "url": "https://arxiv.org/abs/2602.02276"
+      }
+    ]
+  },
+  {
+    "slug": "yulun-du",
+    "name": "Yulun Du",
+    "aliases": ["Yulun Du"],
+    "affiliations": ["Moonshot AI", "Carnegie Mellon University"],
+    "x": "https://x.com/Yulun_Du",
+    "xConfidence": "plausible",
+    "topics": ["Kimi K2", "Kimi K2.5", "pretraining", "Moonshot AI", "agentic intelligence"],
+    "notes": "Kimi K2 arXiv submitter and Kimi K2/K2.5 contributor. Scholar profile lists Carnegie Mellon University email and Kimi K2.5 authorship; public reports associate Yulun Du with Moonshot pretraining. The X account uses the exact name and posts/reposts Moonshot/Kimi material, but this pass records it as plausible rather than high-confidence.",
+    "sources": [
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=en&user=dBu32jIAAAAJ"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/Yulun_Du"
+      },
+      {
+        "label": "Kimi K2 arXiv",
+        "url": "https://arxiv.org/abs/2507.20534"
+      },
+      {
+        "label": "Kimi K2.5 arXiv",
+        "url": "https://arxiv.org/abs/2602.02276"
+      }
+    ]
   }
 ]
