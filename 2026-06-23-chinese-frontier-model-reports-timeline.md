@@ -1,11 +1,12 @@
 # 国产前沿模型技术报告时间线总览
 
 First-Archived-At: 2026-06-23 18:40
-Updated-At: 2026-06-23 19:04
+Updated-At: 2026-06-24 16:40
 Pinned: true
 
 ## Source
 
+- Local archive: [2401.06066 DeepSeekMoE](/papers/2401.06066-deepseekmoe-expert-specialization/)
 - Local archive: [2405.04434 DeepSeek-V2](/papers/2405.04434-deepseek-v2-mla-moe-efficient-llm/)
 - Local archive: [2412.15115 Qwen2.5](/papers/2412.15115-qwen2-5-technical-report/)
 - Local archive: [2412.19437 DeepSeek-V3](/papers/2412.19437-deepseek-v3-technical-report/)
@@ -24,7 +25,7 @@ Pinned: true
 
 这条时间线主要由五个国产模型组织构成：DeepSeek-AI、Qwen Team / Alibaba、Kimi Team / Moonshot AI、MiniMax、GLM-5 Team / Z.ai / Zhipu AI / Tsinghua University。它们的报告大多采用团队署名，作者列表按字母序或贡献组呈现，因此更适合按组织、技术路线和系统依赖建图，逐人关系只在跨论文重复出现且已核验的作者上保留。
 
-DeepSeek 线从 V2 的 MLA / DeepSeekMoE 走向 V3 的 FP8 / DualPipe / MTP，再经过 R1 的 reasoning RL，最后在 V4 汇合到 million-token context、Muon、deterministic kernels 和 agent sandbox。Qwen 线从 Qwen2.5 的模型族和 reward / long-context 基座，走到 Qwen3 的 thinking control 与 strong-to-weak distillation，再由 Bebop 补上 MTP rollout acceleration。Kimi 线从 k1.5 的 long-context RL recipe，走到 K2 的 open agentic intelligence，再到 K2.5 的 visual agentic intelligence，并由 Seer 解释 Moonshot 生态里同步 RL rollout 的系统压力。GLM 线从 GLM-5 的 agentic engineering 与 slime 异步 RL，走到 GLM-5.2 的 1M long-horizon coding agent。MiniMax-M1 则提供另一条长输出路线，用 Lightning Attention 和 CISPO 处理 test-time compute 与 RL objective 的成本。
+DeepSeek 线从 [DeepSeekMoE](/papers/2401.06066-deepseekmoe-expert-specialization/) 的 fine-grained experts / shared experts 走向 V2 的 MLA + sparse FFN 合流，再走向 V3 的 FP8 / DualPipe / MTP，经过 R1 的 reasoning RL，最后在 V4 汇合到 million-token context、Muon、deterministic kernels 和 agent sandbox。Qwen 线从 Qwen2.5 的模型族和 reward / long-context 基座，走到 Qwen3 的 thinking control 与 strong-to-weak distillation，再由 Bebop 补上 MTP rollout acceleration。Kimi 线从 k1.5 的 long-context RL recipe，走到 K2 的 open agentic intelligence，再到 K2.5 的 visual agentic intelligence，并由 Seer 解释 Moonshot 生态里同步 RL rollout 的系统压力。GLM 线从 GLM-5 的 agentic engineering 与 slime 异步 RL，走到 GLM-5.2 的 1M long-horizon coding agent。MiniMax-M1 则提供另一条长输出路线，用 Lightning Attention 和 CISPO 处理 test-time compute 与 RL objective 的成本。
 
 ## 一句话结论
 
@@ -34,9 +35,11 @@ DeepSeek 线从 V2 的 MLA / DeepSeekMoE 走向 V3 的 FP8 / DualPipe / MTP，�
 
 如果只看单篇报告的排行榜，国产模型技术路线很容易被读成一串分数刷新。MMLU、AIME、LiveCodeBench、SWE-bench、RULER、TAU-bench 都在表格里发光，但真正的变化藏在表格下面：每一代报告都在回答同一个更硬的问题，怎样把更长的上下文、更稀疏的参数、更长的推理、更复杂的工具环境放进一个可训练、可推理、可复现调试的系统。
 
-这条线从 2024 年 5 月的 DeepSeek-V2 开始变得清楚。V2 先把服务成本中的两个硬瓶颈拆开：attention 侧用 MLA 将每个 token 的 KV 压成 latent KV，并用 decoupled RoPE 单独保存位置分支，使低秩 KV 压缩和 RoPE 位置能力可以同时存在；FFN 侧用 DeepSeekMoE 的 shared/routed experts 扩大 total capacity，再用 device-limited routing、expert/device/communication balance losses 和训练期 token dropping 控制专家负载与跨设备通信。论文报告相对 DeepSeek 67B 节省 42.5% 训练成本、减少 93.3% KV cache、最大生成吞吐提升到 5.76 倍。这里出现了后续多篇技术报告反复继承的底层判断：开放模型要继续放大，能力、显存、通信、推理吞吐必须同时进入模型设计。
+DeepSeek 线的起点可以前移到 2024 年 1 月的 [DeepSeekMoE](/papers/2401.06066-deepseekmoe-expert-specialization/)。这篇 ACL 论文先把 MoE 的效率问题拆成专家专门化问题：fine-grained expert segmentation 把 full-size FFN expert 切成更多 smaller experts，并同步增加激活专家数，使 total / active compute 大致守恒；shared expert isolation 用固定激活的 shared experts 承载通用知识，让 routed experts 更集中地学习差异化模式。2B controlled validation 说明它优于 Hash Layer / Switch / GShard，16B / 145B 实验把这条 sparse FFN 路线推到可扩展模型设置。
 
-到 2024 年 12 月，Qwen2.5 和 DeepSeek-V3 代表两种扩展方式。Qwen2.5 是模型族工程：open-weight dense family、proprietary API MoE、18T token 分阶段数据 mixture、151K BBPE tokenizer、SFT/DPO/GRPO/offline-online RL、Qwen2.5-Math/Coder/QwQ 和长上下文扩展放在同一条发布线里。它需要区分 128K open-weight context 与 Turbo / Qwen2.5-1M 的 1M context，后者依赖 progressive context expansion、YaRN 和 DCA。DeepSeek-V3 沿 V2 的 MLA / DeepSeekMoE 系统线继续放大到 671B total / 37B active：auxiliary-loss-free balance 用 expert bias 影响 top-K routing，减少辅助损失梯度对专家专门化的干扰；MTP 在主 next-token loss 之外增加未来 token 预测信号；DualPipe 把 pipeline communication 和 MoE all-to-all 放进计算间隙；FP8 用 fine-grained scaling 和高精度 accumulation 降低训练成本。V3 的 2.788M H800 GPU hours 训练账本让这类报告开始具有系统审计价值，模型分数之外，训练经济性本身成为技术论点。
+到 2024 年 5 月，DeepSeek-V2 把服务成本中的两个瓶颈拆开：attention 侧用 MLA 将每个 token 的 KV 压成 latent KV，并用 decoupled RoPE 单独保存位置分支，使低秩 KV 压缩和 RoPE 位置能力可以同时存在；FFN 侧用 [DeepSeekMoE](/papers/2401.06066-deepseekmoe-expert-specialization/) 的 shared/routed experts 扩大 total capacity，再用 device-limited routing、expert/device/communication balance losses 和训练期 token dropping 控制专家负载与跨设备通信。论文报告相对 DeepSeek 67B 节省 42.5% 训练成本、减少 93.3% KV cache、最大生成吞吐提升到 5.76 倍。这里出现了后续多篇技术报告反复继承的底层判断：开放模型要继续放大，能力、显存、通信、推理吞吐必须同时进入模型设计。
+
+到 2024 年 12 月，Qwen2.5 和 DeepSeek-V3 代表两种扩展方式。Qwen2.5 是模型族工程：open-weight dense family、proprietary API MoE、18T token 分阶段数据 mixture、151K BBPE tokenizer、SFT/DPO/GRPO/offline-online RL、Qwen2.5-Math/Coder/QwQ 和长上下文扩展放在同一条发布线里。它需要区分 128K open-weight context 与 Turbo / Qwen2.5-1M 的 1M context，后者依赖 progressive context expansion、YaRN 和 DCA。DeepSeek-V3 沿 V2 的 MLA / [DeepSeekMoE](/papers/2401.06066-deepseekmoe-expert-specialization/) 系统线继续放大到 671B total / 37B active：auxiliary-loss-free balance 用 expert bias 影响 top-K routing，减少辅助损失梯度对专家专门化的干扰；MTP 在主 next-token loss 之外增加未来 token 预测信号；DualPipe 把 pipeline communication 和 MoE all-to-all 放进计算间隙；FP8 用 fine-grained scaling 和高精度 accumulation 降低训练成本。V3 的 2.788M H800 GPU hours 训练账本让这类报告开始具有系统审计价值，模型分数之外，训练经济性本身成为技术论点。
 
 2025 年 1 月的两篇报告把焦点从 base model 转到 post-training。DeepSeek-R1 证明 strong base model 上的 outcome-based RL 可以诱导 long-CoT、反思、验证和策略切换。R1-Zero 从 V3-Base 出发，用 rule-based verifiable reward 和 GRPO 训练，AIME 2024 pass@1 从 15.6% 提升到 77.9%；R1 再用 cold-start SFT、两阶段 RL、rejection sampling、general SFT 和 safety/helpfulness reward model 把这种能力整理成更可读、更通用的产品形态。Kimi k1.5 在同一时间把问题推向更长上下文和更复杂任务：先用高难 prompt、可靠 verifier 和 long-CoT warmup 抬高可奖励轨迹的概率，再用 OMD-style policy optimization、sampled reward baseline、length penalty 和 curriculum 推动长推理策略，随后用 partial rollout 复用长轨迹 prefix，最后通过 model merging、shortest rejection sampling、DPO 和第二阶段 RL 做 long2short。这里的重点是把 RL 写成 prompt/reward、采样分布、rollout 系统和部署 token budget 的联合工程，单个 objective 只覆盖其中一层。
 
@@ -62,7 +65,8 @@ DeepSeek-V4 和 GLM-5.2 又把长上下文推到 million-token 级别。DeepSeek
 
 | 时间 | 报告 | 关键技术点 | 报告中最有用的证据 | 需要谨慎的地方 |
 | --- | --- | --- | --- | --- |
-| 2024-05 | DeepSeek-V2 | MLA latent KV + decoupled RoPE, DeepSeekMoE shared/routed experts, device-limited routing, 236B total / 21B active | 42.5% training cost saving, 93.3% KV cache reduction, 5.76x max generation throughput | baseline 是 2024 生态；长上下文主要由 NIAH 支撑 |
+| 2024-01 | [DeepSeekMoE](/papers/2401.06066-deepseekmoe-expert-specialization/) | fine-grained expert segmentation, shared expert isolation, 2B validation, 16B / 145B scaling | 2B controlled validation 优于 Hash Layer / Switch / GShard；16B 用约 40% FLOPs 接近 DeepSeek 7B / LLaMA2 7B | 16B 对 LLaMA2 受数据差异影响；145B 只训练 245B tokens |
+| 2024-05 | DeepSeek-V2 | MLA latent KV + decoupled RoPE, [DeepSeekMoE](/papers/2401.06066-deepseekmoe-expert-specialization/) shared/routed experts, device-limited routing, 236B total / 21B active | 42.5% training cost saving, 93.3% KV cache reduction, 5.76x max generation throughput | baseline 是 2024 生态；长上下文主要由 NIAH 支撑 |
 | 2024-12 | Qwen2.5 | 18T staged pretraining, open dense/API MoE family, SFT/DPO/GRPO, Qwen2.5-Math/Coder/QwQ, YaRN/DCA context extension | 72B-Instruct MATH 83.1, LiveCodeBench 55.5, RULER 128K 88.4 | API MoE、训练预算和 RL 细节公开有限；128K open-weight 与 1M Turbo 需要区分 |
 | 2024-12 | DeepSeek-V3 | 671B total / 37B active, aux-loss-free bias routing, MTP, FP8 fine-grained scaling, DualPipe | 2.788M H800 GPU hours；MTP / FP8 / load balance proxy ablation | 成本表排除研发和消融；chat 对比受闭源 API 影响 |
 | 2025-01 | DeepSeek-R1 | V3-Base 上的 outcome RL, GRPO, R1-Zero, distillation | R1-Zero AIME 2024 pass@1 15.6% -> 77.9%，cons@16 86.7% | 完整训练数据和内部框架未公开 |
@@ -86,7 +90,7 @@ DeepSeek-V4 和 GLM-5.2 又把长上下文推到 million-token 级别。DeepSeek
 ### Target
 
 - Intended target system: 新增国产模型技术报告时间线总览。
-- Existing related assets: `papers-index.md`，DeepSeek、Qwen、Kimi、MiniMax、GLM 系列独立笔记。
+- Existing related assets: `papers-index.md`，[DeepSeekMoE](/papers/2401.06066-deepseekmoe-expert-specialization/)、DeepSeek、Qwen、Kimi、MiniMax、GLM 系列独立笔记。
 - Proposed form: 根目录 Markdown 综合条目，并在 archive index 中提供入口。
 
 ### Reusable Elements

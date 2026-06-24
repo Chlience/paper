@@ -65,7 +65,7 @@ DeepSeek-V4 的问题定义是：如果未来模型需要常态化支持 1M cont
 DeepSeek-V4 保留 DeepSeek-V3 的几条主线：
 
 - Transformer decoder 架构。
-- DeepSeekMoE：细粒度 routed experts + shared expert。
+- [DeepSeekMoE](/papers/2401.06066-deepseekmoe-expert-specialization/)：细粒度 routed experts + shared expert。
 - MTP, Multi-Token Prediction，深度仍为 1。
 - auxiliary-loss-free load balancing，并加入轻量 sequence-wise balance loss 防止单序列极端不平衡。
 
@@ -404,7 +404,7 @@ Instruct / Max mode：
 
 ## 主要启发
 
-- 长上下文模型的关键不只在 attention formula，还在 KV cache layout、prefix reuse、state cache、disk cache、kernel determinism、rollout recovery 和 post-training data format。
+- 长上下文模型的关键同时覆盖 attention formula、KV cache layout、prefix reuse、state cache、disk cache、kernel determinism、rollout recovery 和 post-training data format。
 - V4 提供了 DeepSeek 对“百万上下文智能”的系统定义：1M context 是 architecture + systems + post-training + product routing 的结果。
 - Specialist RL + OPD 是一个值得跟踪的 post-training 方向。它把“多领域专家”合进一个 unified model，规避 weight merging 和 mixed RL 的退化风险。
 - Tool-use 和 agentic training 的正确性进入系统层：WAL 避免抢占导致 length bias，sandbox trajectory log 避免非幂等命令重放错误。
