@@ -4223,5 +4223,101 @@
         "url": "https://arxiv.org/abs/2506.13585"
       }
     ]
+  },
+  {
+    "slug": "yaniv-leviathan",
+    "name": "Yaniv Leviathan",
+    "aliases": ["Yaniv Leviathan", "yanivle"],
+    "affiliations": ["Google Research", "Google"],
+    "homepage": "https://yanivle.github.io/",
+    "github": "https://github.com/yanivle",
+    "x": "https://x.com/yanivle",
+    "xConfidence": "high",
+    "topics": ["speculative decoding", "transformer efficiency", "generative UI", "LLM inference"],
+    "notes": "Fast Inference from Transformers via Speculative Decoding equal-contribution and corresponding author. Public homepage identifies him as a Google Fellow and AI research lab lead, links the yanivle social profile, and lists speculative decoding as one of his major works.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://yanivle.github.io/about/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/yanivle"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/yanivle"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Yaniv_Leviathan1"
+      },
+      {
+        "label": "Google Research retrospective",
+        "url": "https://research.google/blog/looking-back-at-speculative-decoding/"
+      }
+    ]
+  },
+  {
+    "slug": "matan-kalman",
+    "name": "Matan Kalman",
+    "aliases": ["Matan Kalman"],
+    "affiliations": ["Google Research", "Google"],
+    "homepage": "https://research.google/people/108191/",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["speculative decoding", "transformer efficiency", "image editing", "LLM inference"],
+    "notes": "Fast Inference from Transformers via Speculative Decoding equal-contribution author. Google Research profile and DBLP/OpenReview records connect him to speculative decoding and subsequent Google Research transformer-efficiency papers. No high-confidence personal X or GitHub account was found in this pass.",
+    "sources": [
+      {
+        "label": "Google Research profile",
+        "url": "https://research.google/people/108191/"
+      },
+      {
+        "label": "DBLP",
+        "url": "https://dblp.org/pid/57/2086"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Matan_Kalman1"
+      },
+      {
+        "label": "PMLR paper page",
+        "url": "https://proceedings.mlr.press/v202/leviathan23a.html"
+      }
+    ]
+  },
+  {
+    "slug": "yossi-matias",
+    "name": "Yossi Matias",
+    "aliases": ["Yossi Matias", "Y. Matias"],
+    "affiliations": ["Google Research", "Google", "Tel Aviv University"],
+    "homepage": "https://research.google/people/yossimatias/",
+    "x": "https://x.com/ymatias",
+    "xConfidence": "high",
+    "topics": ["Google Research", "speculative decoding", "algorithms", "LLM inference", "AI for science"],
+    "notes": "Fast Inference from Transformers via Speculative Decoding coauthor. Google Research profile identifies him as Vice President, Google and Head of Google Research and lists speculative decoding among recent research breakthroughs. X profile snippets and external Google-related mentions align with the same role.",
+    "sources": [
+      {
+        "label": "Google Research profile",
+        "url": "https://research.google/people/yossimatias/"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/ymatias"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Yossi_Matias2"
+      },
+      {
+        "label": "Google Research retrospective",
+        "url": "https://research.google/blog/looking-back-at-speculative-decoding/"
+      },
+      {
+        "label": "PMLR paper page",
+        "url": "https://proceedings.mlr.press/v202/leviathan23a.html"
+      }
+    ]
   }
 ]
