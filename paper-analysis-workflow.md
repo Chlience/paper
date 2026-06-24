@@ -1,7 +1,7 @@
 # Paper Analysis Workflow
 
 First-Archived-At: 2026-06-19
-Updated-At: 2026-06-23
+Updated-At: 2026-06-24
 
 ## 目标
 
@@ -149,6 +149,15 @@ LLM RL、post-training、systems、serving、optimizer 和评测类论文都必�
 4. 系统配置：GPU 数量和型号，parallelism / sharding，rollout engine 与 trainer engine，是否异步，是否使用 vLLM / SGLang / Megatron / FSDP / ZeRO，是否有 fused kernel 或 logprob consistency 设置。
 5. 评测协议：pass@1、avg@k、pass@$k$、majority vote、Best-of-N、temperature、top-p、样本数、判题器、工具环境、是否报告 peak / final / average checkpoint。
 6. 统计报告：seed 数量、误差线、置信区间、显著性检验、曲线平滑方式；若缺失，明确写入局限。
+
+技术报告、模型报告和系统报告还必须单独写清训练相关信息：
+
+- 训练硬件：GPU / TPU 数量、型号、节点数、每节点卡数、NVLink / NVSwitch / InfiniBand / Ethernet 等拓扑。
+- 并行方式：PP / TP / EP / DP / SP / FSDP / ZeRO / sequence parallel / expert parallel 的度数、跨节点范围、是否异步、是否使用自研调度或 fused kernels。
+- 训练数据：pretraining tokens、数据组成变化、语言覆盖、代码 / 数学 / 多模态比例线索、去重 / 过滤 / packing、FIM 或合成数据比例；SFT / RL 数据量、来源、生成器和人工校验方式。
+- 训练过程：sequence length、context extension 阶段、batch size schedule、optimizer、learning-rate schedule、warmup、gradient clipping、训练步数、token budget、checkpoint / rollback 情况。
+- 训练时间与成本：GPU hours、wall-clock time、每 trillion tokens 成本、pretraining / context extension / post-training 分项成本、公开成本是否排除研究试错和 ablations。
+- 未披露项：若卡数、并行、数据、训练时间或成本缺失，明确写“未披露”，并把它放入可信度边界或局限。
 
 ### baseline 强度判断
 
