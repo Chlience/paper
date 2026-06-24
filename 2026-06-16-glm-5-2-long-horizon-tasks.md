@@ -1,7 +1,7 @@
 # GLM-5.2: Built for Long-Horizon Tasks 技术文章笔记
 
 First-Archived-At: 2026-06-18 13:45
-Updated-At: 2026-06-24 19:50
+Updated-At: 2026-06-24 21:18
 
 ## Source
 
@@ -146,6 +146,8 @@ GLM-5.2 的 MTP 目标有两个：
 - KVShare：后续 MTP step 复用第一步的 target-model KV，减少由 draft hidden state 产生的 KV 混入。
 - 参数仍沿用 GLM-5.1 的 MTP step parameter sharing。
 - 引入 [2606.12370](/papers/2606.12370-bebop-mtp-rejection-sampling-rl-training/) Bebop 式 rejection sampling，并用 end-to-end TV loss 训练。
+
+这里要和 GLM-5 的 parameter-sharing MTP 分开读。参数共享只复用 MTP step/layer weights；KV cache 的内容还取决于每一步输入 hidden state。KVShare 处理的是另一层问题：后续 MTP step 如果继续用 draft hidden state 生成 $K/V$，会增加 draft KV 计算，也会让 draft path 和 target-model path 偏离。复用 target-model KV 可以同时减少部分 draft KV 混入和训练-推理路径差异。
 
 博文给出的 ablation：
 
@@ -302,7 +304,7 @@ GLM-5.2 的结论链可以概括为：
 
 - GLM-5.2 的关键是围绕 1M context 改造 indexer、MTP、serving、RL data shape 和 anti-hack。
 - IndexShare / IndexCache 和 DSA 的关系是：DSA 降低主 attention 成本，IndexShare 进一步降低 sparse indexer 成本。
-- MTP/KVShare 的核心是降低 draft path 和 target path 的不一致，让 speculative decoding 的 acceptance length 上升。
+- MTP/KVShare 的核心是降低 draft path 和 target path 的不一致，让 speculative decoding 的 acceptance length 上升；它补的是 GLM-5 parameter-sharing MTP 无法自然解决的 KV/activation path 问题。
 - 长轨迹 compaction 改变了 RL 样本结构，使 critic-based PPO 比固定 group structure 更自然。
 
 ### 2. 修正后的理解
