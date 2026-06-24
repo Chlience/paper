@@ -1,7 +1,7 @@
 # GLM-5.2: Built for Long-Horizon Tasks 技术文章笔记
 
 First-Archived-At: 2026-06-18 13:45
-Updated-At: 2026-06-18 13:45
+Updated-At: 2026-06-24 18:18
 
 ## Source
 
@@ -13,9 +13,10 @@ Updated-At: 2026-06-18 13:45
 - ModelScope: https://modelscope.cn/models/ZhipuAI/GLM-5.2
 - Authors: Z.ai / GLM-5 Team
 - Published: 2026-06-16
-- Current version read: blog bundle last modified 2026-06-17; accessed 2026-06-18
+- Current version read: blog bundle last modified 2026-06-17; official docs and Hugging Face model card accessed 2026-06-24
 - Related paper: [2602.15763](/papers/2602.15763-glm-5-agentic-engineering/)
 - Subjects: long-horizon coding agents, 1M context, sparse attention, speculative decoding, agentic RL, anti-hack training
+- Review / OpenReview: 未发现 GLM-5.2 release blog 对应的官方公开审稿 forum；OpenReview 检索主要返回其它论文/材料引用 GLM-5.2 或相关 GLM-5 系列。
 
 ## 作者与关系
 
@@ -31,10 +32,11 @@ Updated-At: 2026-06-18 13:45
 - 与已存档作者重叠：当前没有为 GLM-5 大团队拆分个人作者页；本笔记沿用团队级关系，避免从大规模 author list 自动生成低质量作者档案。
 - 与已存档论文的主题或方法关系：强连接 [2602.15763](/papers/2602.15763-glm-5-agentic-engineering/)、[2026-06-17](/papers/2026-06-17-slime-rl-scaling-framework/)、[2606.12370](/papers/2606.12370-bebop-mtp-rejection-sampling-rl-training/)、[2511.14617](/papers/2511.14617-seer-online-context-learning-llm-rl/)、[2026-04-24](/papers/2026-04-24-deepseek-v4-million-token-context-intelligence/)、[2605.14220](/papers/2605.14220-training-inference-mismatch-llm-rl/)、[2506.19248](/papers/2506.19248-inference-time-reward-hacking-llms/)、[2510.20270](/papers/2510.20270-impossiblebench-test-case-exploitation/)。
 - 需要后续确认：是否会发布独立 GLM-5.2 技术报告、IndexShare 和 IndexCache 命名边界、anti-hack module 的评测细节、parallel OPD 的 expert 来源和融合目标。
+- 作者 profile pass：GLM-5.2 是团队级 release blog / model card，没有新增逐作者署名表；本轮沿用 [2602.15763](/papers/2602.15763-glm-5-agentic-engineering/) 的 GLM-5 Team 关系，并记录 IndexCache / IndexShare 论文 `2603.12201` 的高置信作者线索。Yushi Bai、Qian Dong、Ting Jiang、Xin Lv、Zhengxiao Du、Aohan Zeng、Jie Tang、Juanzi Li 等后续若在独立论文、机构页、OpenReview 或项目仓库中重复出现，应按 author profile SOP 逐人建档或补强；当前不从团队 release 自动生成低置信作者页。
 
 ## 一句话结论
 
-GLM-5.2 是 GLM-5 系列从 200K 长上下文 agentic engineering 推进到 1M 长上下文 coding agent 的 release：它用 IndexShare 降低 DSA indexer 成本，用 MTP IndexShare + KVShare + rejection sampling + TV loss 提升 speculative decoding acceptance，用 slime 承载更复杂的 agentic RL / OPD，用 critic-based PPO 适配 compaction 后的长轨迹训练，并把 anti-hack module 放入 coding RL 和 evaluation，目标是让 1M context 在真实长时工程任务中可用、可训、可服务。
+GLM-5.2 是 GLM-5 系列从 200K 长上下文 agentic engineering 推进到 1M 长上下文 coding agent 的 release：它用 IndexShare 降低 DeepSeek Sparse Attention (DSA) indexer 成本，用 Multi-Token Prediction (MTP) IndexShare + KVShare + rejection sampling + total variation (TV) loss 提升 speculative decoding acceptance，用 slime 承载更复杂的 agentic RL / On-Policy Distillation (OPD)，用 critic-based Proximal Policy Optimization (PPO) 适配 compaction 后的长轨迹训练，并把 anti-hack module 放入 coding RL 和 evaluation，目标是让 1M context 在真实长时工程任务中可用、可训、可服务。
 
 ## 阅读目标与判断边界
 
@@ -75,7 +77,7 @@ GLM-5 已经提供 744B total / 40B active MoE、DSA、slime 异步 RL 和 200K 
 3. MTP speculative decoding 有训练-推理差异，draft acceptance 仍可提升。
 4. coding RL 的 pass/fail reward 容易被 agent 通过环境或评测漏洞优化，导致 reward 上升但能力没有同步提升。
 
-已有 RLVR / GRPO 类 group-wise 方法也面临形态错配。长轨迹经过 compaction 后，一个 prompt 下的 rollout 会被切成数量不定、长度不同的 sub-traces，组内比较的结构变弱；这会推动系统从 group-wise optimization 转向 critic-based PPO。
+已有 Reinforcement Learning with Verifiable Rewards (RLVR) / Group Relative Policy Optimization (GRPO) 类 group-wise 方法也面临形态错配。长轨迹经过 compaction 后，一个 prompt 下的 rollout 会被切成数量不定、长度不同的 sub-traces，组内比较的结构变弱；这会推动系统从 group-wise optimization 转向 critic-based PPO。
 
 ### 3. 作者可能的思考路径
 
@@ -228,6 +230,7 @@ GLM-5.2 的结论链可以概括为：
 ### 结果 1：GLM-5.2 在长时 coding agent benchmark 上接近闭源 frontier
 
 - 设置：FrontierSWE、PostTrainBench、SWE-Marathon，使用 1M context、max effort、128K max output tokens；FrontierSWE dominance score 截止 2026-06-16。
+- Baseline：主要闭源强基线是 Claude Opus 4.8 和 GPT-5.5；同类 open / open-weight 基线来自 GLM-5.1、DeepSeek-V4-Pro、Kimi K2.5 等官方表格对照。长时 coding agent 的 baseline 强度高度依赖统一 harness、工具权限、max output tokens、effort level、judge 和任务时间预算。
 - 指标：官方 benchmark score / dominance。
 - 结果：FrontierSWE 为 74.4，接近 Claude Opus 4.8 的 75.1，并高于 GPT-5.5 的 72.6；PostTrainBench 为 34.3，低于 Opus 4.8 的 37.2，高于 GPT-5.5 的 28.4；SWE-Marathon 为 13.0，低于 Opus 4.8 的 26.0，高于 GPT-5.5 的 12.0。
 - 解读：GLM-5.2 在 long-horizon coding 上已经进入闭源 frontier 附近，但 SWE-Marathon 显示超长工程交付还有明显差距。
@@ -235,12 +238,14 @@ GLM-5.2 的结论链可以概括为：
 ### 结果 2：标准 coding benchmark 相对 GLM-5.1 大幅提升
 
 - 设置：官方 full benchmark table。
+- Baseline：GLM-5.1 是直接前代基线；Terminal Bench、SWE-bench Pro、DeepSWE、ProgramBench 同时提供跨模型表格对照。这个结果最能说明 GLM 系列内部迭代收益，但仍不能把收益完全归因到 IndexShare、MTP、slime 或 anti-hack 的某个单点。
 - 指标与结果：Terminal Bench 2.1 (Terminus-2) 从 GLM-5.1 的 63.5 提升到 81.0；SWE-bench Pro 从 58.4 到 62.1；DeepSWE 从 18 到 46.2；ProgramBench 从 50.9 到 63.7。
 - 解读：提升集中在需要工具、终端、仓库级操作的 coding agent tasks，和“long-horizon coding agent”定位一致。
 
 ### 结果 3：MTP acceptance ablation
 
 - 设置：使用 GLM-5.1 backbone 和训练数据，MTP steps 为 7。
+- Baseline：baseline 4.56 是未加入 IndexShare/KVShare/rejection sampling/TV loss 的 MTP 路径；后续逐项叠加构成相对清晰的机制 ablation。局限是该 ablation 使用 GLM-5.1 backbone / data，和最终 GLM-5.2 release 仍有差异。
 - 指标：acceptance length。
 - 结果：baseline 4.56；IndexShare + KVShare 5.10；加入 rejection sampling 5.29；加入 end-to-end TV loss 后 5.47，提升 20%。
 - 解读：MTP speculative decoding 的收益来自结构路径一致性和分布训练共同作用。IndexShare/KVShare 处理路径差异，rejection sampling / TV loss 处理采样分布差异。
@@ -248,8 +253,17 @@ GLM-5.2 的结论链可以概括为：
 ### 结果 4：reasoning / agentic benchmark surface
 
 - 设置：官方 full benchmark table。
+- Baseline：reasoning / tool-use 表格包含 DeepSeek-V4-Pro、Claude Opus 4.8、GPT-5.5 等强模型；这些任务的可比性同样受 effort level、工具配置、prompt 和 judge 影响。Tool-Decathlon 上 GLM-5.2 低于多个强基线，提供了一个重要负向信号。
 - 代表性结果：HLE 40.5，HLE with tools 54.7，AIME 2026 99.2，GPQA-Diamond 91.2，MCP-Atlas public set 76.8，Tool-Decathlon 48.2。
 - 解读：GLM-5.2 不只提升 coding，也维持了高 reasoning / tool-use surface。Tool-Decathlon 仍低于 DeepSeek-V4-Pro、Claude Opus 4.8、GPT-5.5，说明工具泛化仍有提升空间。
+
+### 实验设置与 baseline 审计
+
+- 模型设置：GLM-5.2 是 744B total / A40B active open-weight MoE，发布 BF16/FP8 权重，支持 1M context、SGLang/vLLM/Transformers/KTransformers 等 serving 路径，并提供 max/high reasoning effort 控制。
+- 架构/系统设置：核心新增包括 DSA IndexShare / IndexCache、MTP IndexShare + KVShare、Bebop 式 rejection sampling、end-to-end TV loss、LayerSplit memory management、cache transfer / CPU scheduling 优化、slime compact trajectory / sub-agent workflow / parallel OPD，以及 online anti-hack guard。
+- 训练设置：release blog 没有公开完整 pretraining、post-training、critic training、reward、expert source 和 anti-hack classifier 细节；只能按 release 级信息记录机制与结果。
+- baseline 强度：MTP acceptance ablation 是最清楚的机制证据；GLM-5.1 对照能说明系列迭代收益；闭源 frontier 对照能说明实用位置，但受 harness、effort、context、tool、judge、budget 影响较大。
+- 统计限制：官方表格主要给单点结果，缺少多 seed、置信区间、第三方复验、完整 ablation grid、online guard precision/recall 和统一 agent harness 配置。
 
 ## 证据链强度评估
 
@@ -270,6 +284,13 @@ GLM-5.2 的结论链可以概括为：
 - “最高开源模型”这类排名高度依赖 benchmark set、harness、effort level 和发布时间，需要持续复核。
 - critic-based PPO 对 compaction 的适配性合理，但博客没有给出与 GRPO / group-wise objective 的直接 ablation。
 - online anti-hack guard 能稳定训练的说法需要看 rollout continuation、dummy observation 分布和模型是否学习绕过 guard。
+
+## OpenReview / 审稿意见吸收
+
+- 公开状态：截至 2026-06-24，本轮检索未发现 GLM-5.2 release blog 对应的官方 OpenReview forum 或公开 reviewer 评分；公开讨论主要来自模型卡、blog、Reddit/HN/社区转发和第三方榜单收录。
+- Venue 判断：当前按 release blog + model card + GitHub/weights 处理，证据强度来自官方发布材料、公开权重、GLM-5 技术报告和 slime / Bebop / IndexCache 等相关文档互相印证。
+- 可吸收的外部审稿式问题：IndexShare 的质量损失是否有完整 ablation；critic-based PPO 相对 GRPO / group-wise objective 的收益是否有直接比较；anti-hack guard 的召回、精度、误拦截率和绕过行为是否公开；FrontierSWE/PostTrainBench/SWE-Marathon 的 harness 是否可复现；1M context serving 是否有端到端吞吐和成本表。
+- 对本文档的影响：把 GLM-5.2 作为 GLM-5 系列 release 节点、long-horizon coding agent 和 production RL 系统材料引用时价值较高；把 benchmark 排名或单个模块的独立收益当作严格结论时，需要外部复验和更完整 ablation。
 
 ## 本地讨论补充
 
@@ -325,9 +346,9 @@ GLM-5.2 的结论链可以概括为：
 
 ### Target
 
-- Intended target system: 新增 GLM-5.2 技术博客笔记，更新 `papers-index.md` 中 GLM / slime / long-horizon agentic RL 关系。
+- Intended target system: 维护 GLM-5.2 技术博客笔记，并同步 `papers-index.md` 中 GLM / slime / long-horizon agentic RL 关系。
 - Existing related assets: [2602.15763](/papers/2602.15763-glm-5-agentic-engineering/)；[2026-06-17](/papers/2026-06-17-slime-rl-scaling-framework/)；[2606.12370](/papers/2606.12370-bebop-mtp-rejection-sampling-rl-training/)；[2026-04-24](/papers/2026-04-24-deepseek-v4-million-token-context-intelligence/)。
-- Proposed form: 新建 `2026-06-16-glm-5-2-long-horizon-tasks.md`；更新 `papers-index.md`。
+- Proposed form: 维护 `2026-06-16-glm-5-2-long-horizon-tasks.md`；同步 `papers-index.md`。
 
 ### Reusable Elements
 
@@ -354,6 +375,6 @@ GLM-5.2 的结论链可以概括为：
 
 ### Recommendation
 
-Decision: merge
+Decision: maintain
 
 Why: GLM-5.2 是 GLM-5 / slime / long-horizon agentic RL 线的关键后续节点，补充了 1M context、IndexShare、MTP/KVShare、compaction PPO 和 online anti-hack 这些此前本地档案尚未完整覆盖的 production 设计。
