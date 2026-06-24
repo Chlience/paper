@@ -83,7 +83,7 @@ authors.json
 ## 阅读顺序
 
 1. 打开 arXiv abstract 页面，记录标题、作者、提交日期、版本、主题分类、项目链接。
-2. 下载 PDF 和 arXiv source。优先读 TeX source；PDF 用于核对页数、图表和排版信息。
+2. 优先读取 HTML 或 TeX source。若 arXiv / publisher / project page 提供 HTML 版本或源码包，先读这些结构化来源；PDF 主要用于核对页数、图表和排版信息。尽量避免把 PDF parser 作为主要信息来源，因为公式、表格、脚注、作者信息和多栏排版容易在解析中丢失或错乱。
 3. 抽取章节结构、摘要、图表标题、定理、表格、实验设置、baseline 设置和结论。
 4. 先读 introduction 和 conclusion，确认论文真实目标。
 5. 在正式进入 method / system / theory 前，先重建研究问题、已有工作不足和作者可能的思考路径。
