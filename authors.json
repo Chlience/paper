@@ -3831,5 +3831,397 @@
         "url": "https://arxiv.org/abs/2602.02276"
       }
     ]
+  },
+  {
+    "slug": "xunhao-lai",
+    "name": "Xunhao Lai",
+    "chineseName": "赖勋豪",
+    "aliases": ["Xunhao Lai", "XunhaoLai"],
+    "affiliations": ["MiniMax", "Peking University"],
+    "homepage": "https://xunhaolai.github.io/",
+    "github": "https://github.com/XunhaoLai",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["MiniMax Sparse Attention", "MiniMax-M3", "FlexPrefill", "long-context inference", "sparse attention"],
+    "notes": "First author of MiniMax Sparse Attention. Homepage identifies him as a Peking University master's student working on long-context models and efficient attention; GitHub links the same homepage and FlexPrefill / sparse-attention projects. No high-confidence personal X account was found.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://xunhaolai.github.io/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/XunhaoLai"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=zh-CN&user=SEYdIMUAAAAJ"
+      },
+      {
+        "label": "MiniMax Sparse Attention arXiv",
+        "url": "https://arxiv.org/abs/2606.13392"
+      }
+    ]
+  },
+  {
+    "slug": "weiqi-xu-minimax",
+    "name": "Weiqi Xu",
+    "aliases": ["Weiqi Xu", "xiaoxiaoOWO"],
+    "affiliations": ["MiniMax"],
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["MiniMax Sparse Attention", "MiniMax-M3", "MiniMax"],
+    "notes": "MiniMax Sparse Attention coauthor. Public profile evidence found in this pass is limited to the Hugging Face paper-authorship profile and MiniMax technical reports; no high-confidence personal X account was found.",
+    "sources": [
+      {
+        "label": "Hugging Face profile",
+        "url": "https://huggingface.co/xiaoxiaoOWO"
+      },
+      {
+        "label": "MiniMax Sparse Attention arXiv",
+        "url": "https://arxiv.org/abs/2606.13392"
+      },
+      {
+        "label": "MiniMax-M2 arXiv",
+        "url": "https://arxiv.org/abs/2605.26494"
+      }
+    ]
+  },
+  {
+    "slug": "yufeng-yang-minimax",
+    "name": "Yufeng Yang",
+    "aliases": ["Yufeng Yang"],
+    "affiliations": ["MiniMax"],
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["MiniMax Sparse Attention", "MiniMax-M3", "MiniMax-M1", "MiniMax-01"],
+    "notes": "MiniMax Sparse Attention coauthor and recurring MiniMax contributor across MiniMax-01/M1/M2/M3 public author lists. Public individual homepage/GitHub/X evidence was not found with enough confidence in this pass.",
+    "sources": [
+      {
+        "label": "MiniMax Sparse Attention arXiv",
+        "url": "https://arxiv.org/abs/2606.13392"
+      },
+      {
+        "label": "MiniMax-M1 arXiv",
+        "url": "https://arxiv.org/abs/2506.13585"
+      },
+      {
+        "label": "MiniMax-01 arXiv",
+        "url": "https://arxiv.org/abs/2501.08313"
+      }
+    ]
+  },
+  {
+    "slug": "qiaorui-chen",
+    "name": "Qiaorui Chen",
+    "aliases": ["Qiaorui Chen"],
+    "affiliations": ["NVIDIA"],
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["MiniMax Sparse Attention", "GPU kernels", "CUDA", "sparse attention"],
+    "notes": "MiniMax Sparse Attention coauthor with NVIDIA affiliation. Search surfaced a likely matching NVIDIA Shanghai / ORCID signal from ByteQC, but no personal homepage, GitHub, or high-confidence X account was found.",
+    "sources": [
+      {
+        "label": "MiniMax Sparse Attention arXiv",
+        "url": "https://arxiv.org/abs/2606.13392"
+      },
+      {
+        "label": "ByteQC Wiley record",
+        "url": "https://wires.onlinelibrary.wiley.com/doi/abs/10.1002/wcms.70034"
+      }
+    ]
+  },
+  {
+    "slug": "yang-xu-minimax",
+    "name": "Yang Xu",
+    "chineseName": "徐旸",
+    "aliases": ["Yang Xu", "Superposition09m", "YangXu_09"],
+    "affiliations": ["MiniMax", "Zhejiang University"],
+    "homepage": "https://superposition09m.github.io/",
+    "github": "https://github.com/Superposition09m",
+    "x": "https://x.com/YangXu_09",
+    "xConfidence": "high",
+    "topics": ["MiniMax Sparse Attention", "MiniMax-M3", "model architecture", "efficient attention", "mechanistic interpretability"],
+    "notes": "MiniMax Sparse Attention coauthor. Homepage identifies him as a Zhejiang University undergraduate and MiniMax intern working on LLM pretraining and model architecture; GitHub links the same homepage, Scholar and X handle. This Yang Xu is kept separate from other same-name authors unless future evidence proves identity overlap.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://superposition09m.github.io/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/Superposition09m"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/YangXu_09"
+      },
+      {
+        "label": "MiniMax Sparse Attention arXiv",
+        "url": "https://arxiv.org/abs/2606.13392"
+      }
+    ]
+  },
+  {
+    "slug": "lunbin-zeng",
+    "name": "Lunbin Zeng",
+    "aliases": ["Lunbin Zeng", "xiazhi1"],
+    "affiliations": ["MiniMax", "Huazhong University of Science and Technology"],
+    "homepage": "https://xiazhi1.github.io",
+    "github": "https://github.com/xiazhi1",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["MiniMax Sparse Attention", "MiniMax-M3", "MiniMax-M1", "MLLM", "long-context models"],
+    "notes": "MiniMax Sparse Attention coauthor and MiniMax-M1 recurring contributor. GitHub identifies Lunbin Zeng as a HUST master's student supervised by Xinggang Wang, with LLM/MLLM interests and a Scholar link. No high-confidence personal X account was found.",
+    "sources": [
+      {
+        "label": "GitHub",
+        "url": "https://github.com/xiazhi1"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=zh-CN&user=ZVhrxywAAAAJ"
+      },
+      {
+        "label": "MiniMax Sparse Attention arXiv",
+        "url": "https://arxiv.org/abs/2606.13392"
+      },
+      {
+        "label": "MiniMax-M1 arXiv",
+        "url": "https://arxiv.org/abs/2506.13585"
+      }
+    ]
+  },
+  {
+    "slug": "xiaolong-li-minimax",
+    "name": "Xiaolong Li",
+    "aliases": ["Xiaolong Li"],
+    "affiliations": ["MiniMax", "Zhejiang University"],
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["MiniMax Sparse Attention", "MiniMax-M3", "sparse attention"],
+    "notes": "MiniMax Sparse Attention coauthor. Public individual profile evidence beyond the paper affiliation was not found with enough confidence in this pass.",
+    "sources": [
+      {
+        "label": "MiniMax Sparse Attention arXiv",
+        "url": "https://arxiv.org/abs/2606.13392"
+      }
+    ]
+  },
+  {
+    "slug": "haohai-sun-minimax",
+    "name": "Haohai Sun",
+    "aliases": ["Haohai Sun", "HaohaiSun"],
+    "affiliations": ["MiniMax"],
+    "x": "https://x.com/HaohaiSun",
+    "xConfidence": "high",
+    "topics": ["MiniMax Sparse Attention", "MiniMax-M3", "MiniMax-M1", "MiniMax-01", "pretraining"],
+    "notes": "MiniMax Sparse Attention coauthor and recurring MiniMax contributor. Together AI event materials identify Haohai Sun as a MiniMax research scientist and MiniMax official social posts tag @HaohaiSun in the MiniMax-M3 context; no separate homepage was found in this pass.",
+    "sources": [
+      {
+        "label": "Together AI event post",
+        "url": "https://x.com/togethercompute/status/2061271569956061295"
+      },
+      {
+        "label": "MiniMax official M3 post",
+        "url": "https://x.com/MiniMax_AI/status/2061944355896885502"
+      },
+      {
+        "label": "MiniMax Sparse Attention arXiv",
+        "url": "https://arxiv.org/abs/2606.13392"
+      },
+      {
+        "label": "MiniMax-M1 arXiv",
+        "url": "https://arxiv.org/abs/2506.13585"
+      },
+      {
+        "label": "MiniMax-01 arXiv",
+        "url": "https://arxiv.org/abs/2501.08313"
+      }
+    ]
+  },
+  {
+    "slug": "haichao-zhu-minimax",
+    "name": "Haichao Zhu",
+    "aliases": ["Haichao Zhu"],
+    "affiliations": ["MiniMax"],
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["MiniMax Sparse Attention", "MiniMax-M3", "MiniMax-M1", "MiniMax-M2"],
+    "notes": "MiniMax Sparse Attention coauthor and recurring MiniMax contributor across M1/M2/M3 author lists. Public individual homepage/GitHub/X evidence was not found with enough confidence in this pass.",
+    "sources": [
+      {
+        "label": "MiniMax Sparse Attention arXiv",
+        "url": "https://arxiv.org/abs/2606.13392"
+      },
+      {
+        "label": "MiniMax-M1 arXiv",
+        "url": "https://arxiv.org/abs/2506.13585"
+      },
+      {
+        "label": "MiniMax-M2 arXiv",
+        "url": "https://arxiv.org/abs/2605.26494"
+      }
+    ]
+  },
+  {
+    "slug": "vito-zhang-minimax",
+    "name": "Vito Zhang",
+    "aliases": ["Vito Zhang"],
+    "affiliations": ["MiniMax", "Peking University"],
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["MiniMax Sparse Attention", "MiniMax-M3", "sparse attention"],
+    "notes": "MiniMax Sparse Attention coauthor with MiniMax and Peking University affiliation. Public individual profile evidence beyond the paper affiliation was not found with enough confidence in this pass.",
+    "sources": [
+      {
+        "label": "MiniMax Sparse Attention arXiv",
+        "url": "https://arxiv.org/abs/2606.13392"
+      }
+    ]
+  },
+  {
+    "slug": "jinkai-hu-minimax",
+    "name": "Jinkai Hu",
+    "aliases": ["Jinkai Hu"],
+    "affiliations": ["MiniMax"],
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["MiniMax Sparse Attention", "MiniMax-M3", "inference kernels"],
+    "notes": "MiniMax Sparse Attention coauthor in the inference infrastructure author group. Public individual profile evidence beyond the paper affiliation was not found with enough confidence in this pass.",
+    "sources": [
+      {
+        "label": "MiniMax Sparse Attention arXiv",
+        "url": "https://arxiv.org/abs/2606.13392"
+      }
+    ]
+  },
+  {
+    "slug": "jiayao-li-minimax",
+    "name": "Jiayao Li",
+    "aliases": ["Jiayao Li"],
+    "affiliations": ["MiniMax"],
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["MiniMax Sparse Attention", "MiniMax-M3", "MiniMax-M2", "inference kernels"],
+    "notes": "MiniMax Sparse Attention coauthor in the inference infrastructure author group and MiniMax-M2 contributor. Public individual profile evidence beyond MiniMax author lists was not found with enough confidence in this pass.",
+    "sources": [
+      {
+        "label": "MiniMax Sparse Attention arXiv",
+        "url": "https://arxiv.org/abs/2606.13392"
+      },
+      {
+        "label": "MiniMax-M2 arXiv",
+        "url": "https://arxiv.org/abs/2605.26494"
+      }
+    ]
+  },
+  {
+    "slug": "rui-gao-minimax",
+    "name": "Rui Gao",
+    "aliases": ["Rui Gao"],
+    "affiliations": ["MiniMax", "Nanjing University"],
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["MiniMax Sparse Attention", "MiniMax-M3", "inference kernels"],
+    "notes": "MiniMax Sparse Attention coauthor with MiniMax and Nanjing University affiliation. Public individual profile evidence beyond the paper affiliation was not found with enough confidence in this pass.",
+    "sources": [
+      {
+        "label": "MiniMax Sparse Attention arXiv",
+        "url": "https://arxiv.org/abs/2606.13392"
+      }
+    ]
+  },
+  {
+    "slug": "zekun-li-minimax",
+    "name": "Zekun Li",
+    "aliases": ["Zekun Li"],
+    "affiliations": ["MiniMax"],
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["MiniMax Sparse Attention", "MiniMax-M3", "inference kernels"],
+    "notes": "MiniMax Sparse Attention coauthor in the inference infrastructure author group. Public individual profile evidence beyond the paper affiliation was not found with enough confidence in this pass.",
+    "sources": [
+      {
+        "label": "MiniMax Sparse Attention arXiv",
+        "url": "https://arxiv.org/abs/2606.13392"
+      }
+    ]
+  },
+  {
+    "slug": "songquan-zhu-minimax",
+    "name": "Songquan Zhu",
+    "aliases": ["Songquan Zhu"],
+    "affiliations": ["MiniMax"],
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["MiniMax Sparse Attention", "MiniMax-M3", "MiniMax-M1", "MiniMax-01"],
+    "notes": "MiniMax Sparse Attention coauthor and recurring MiniMax contributor across MiniMax-01/M1/M2/M3 author lists. Public individual homepage/GitHub/X evidence was not found with enough confidence in this pass.",
+    "sources": [
+      {
+        "label": "MiniMax Sparse Attention arXiv",
+        "url": "https://arxiv.org/abs/2606.13392"
+      },
+      {
+        "label": "MiniMax-M1 arXiv",
+        "url": "https://arxiv.org/abs/2506.13585"
+      },
+      {
+        "label": "MiniMax-01 arXiv",
+        "url": "https://arxiv.org/abs/2501.08313"
+      }
+    ]
+  },
+  {
+    "slug": "jingkai-zhou",
+    "name": "Jingkai Zhou",
+    "aliases": ["Jingkai Zhou"],
+    "affiliations": ["MiniMax", "Hangzhou Dianzi University"],
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["MiniMax Sparse Attention", "MiniMax-M3", "inference kernels"],
+    "notes": "MiniMax Sparse Attention coauthor with MiniMax and Hangzhou Dianzi University affiliation. A LinkedIn search result matches this name, school and MiniMax context, but no open homepage/GitHub/X evidence was found with enough confidence.",
+    "sources": [
+      {
+        "label": "MiniMax Sparse Attention arXiv",
+        "url": "https://arxiv.org/abs/2606.13392"
+      },
+      {
+        "label": "LinkedIn search result",
+        "url": "https://cn.linkedin.com/in/jingkai-zhou-912893357"
+      }
+    ]
+  },
+  {
+    "slug": "pengyu-zhao-minimax",
+    "name": "Pengyu Zhao",
+    "aliases": ["Pengyu Zhao", "zpysky1125"],
+    "affiliations": ["MiniMax"],
+    "x": "https://x.com/zpysky1125",
+    "xConfidence": "high",
+    "topics": ["MiniMax Sparse Attention", "MiniMax-M3", "MiniMax-M2", "MiniMax-M1", "LLM pretraining", "agentic models"],
+    "notes": "Lead author marker in the MiniMax Sparse Attention TeX comments and recurring senior MiniMax author. Public evidence identifies him as LLM Lead / Head of Research at MiniMax; the X account bio and posts align with MiniMax M-series work.",
+    "sources": [
+      {
+        "label": "X",
+        "url": "https://x.com/zpysky1125"
+      },
+      {
+        "label": "MiniMax LinkedIn AMA post",
+        "url": "https://www.linkedin.com/posts/minimax-ai_ask-us-anything-were-going-live-on-activity-7396516767591849984-ae8K"
+      },
+      {
+        "label": "MiniMax Sparse Attention arXiv",
+        "url": "https://arxiv.org/abs/2606.13392"
+      },
+      {
+        "label": "MiniMax-M2 arXiv",
+        "url": "https://arxiv.org/abs/2605.26494"
+      },
+      {
+        "label": "MiniMax-M1 arXiv",
+        "url": "https://arxiv.org/abs/2506.13585"
+      }
+    ]
   }
 ]
