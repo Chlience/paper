@@ -1,7 +1,7 @@
 # DeepSeek-V4: Towards Highly Efficient Million-Token Context Intelligence 论文笔记
 
 First-Archived-At: 2026-04-25 14:30
-Updated-At: 2026-06-24 19:49
+Updated-At: 2026-06-24 20:20
 
 ## Source
 
@@ -81,13 +81,13 @@ DeepSeek-V4 面对的是长上下文和 reasoning scaling 共同放大的系统�
 
 ### 3. 作者可能的思考路径
 
-作者的设计路径可以理解为五步：
+V4 的出发点是一个成本曲线判断：1M context 如果只作为 demo，可以靠 serving trick 撑住；如果要进入 reasoning、agentic coding 和 enterprise workflow，训练、post-training、KV cache、prefill、decode 和复现一致性都会同时承压。单独扩大窗口会把 dense attention、KV cache 和工具轨迹的成本一起放大。
 
-1. 先承认 1M context 会成为 reasoning、agentic coding、enterprise workflow 的常态需求，因此只做 serving trick 无法覆盖训练和 post-training。
-2. 在 attention 侧把历史信息分为两类：局部精细依赖由 sliding window / uncompressed tail 保留，远距离依赖由 CSA top-k compressed entries 和 HCA global compressed memory 承载。
-3. 在深层 MoE 训练侧引入 mHC、Muon、Anticipatory Routing 和 SwiGLU Clamping，处理 residual propagation、优化器几何和 router/backbone 动态稳定性。
-4. 在系统侧实现 deterministic kernels、heterogeneous KV cache、on-disk prefix cache、TileLang 和 MegaMoE，让长上下文效率能进入真实推理和 post-training。
-5. 在 post-training 侧把 specialist models 先训练好，再用 full-vocabulary OPD 合并到统一 student，减少 mixed RL 在多领域目标上的相互干扰。
+attention 侧的自然分解是把历史信息分层处理。局部邻近 token 需要精细表示，适合 sliding window / uncompressed tail；远距离证据需要可寻址，但不能让每个 query dense attend 全部历史，于是 CSA top-k compressed entries 和 HCA global compressed memory 承担长程访问。
+
+规模继续上去后，稳定性又成为独立压力。深层 MoE 的 residual propagation、optimizer geometry、router/backbone 同步更新和 activation outlier 都可能触发 loss spike，所以 mHC、Muon、Anticipatory Routing 和 SwiGLU Clamping 服务的是训练动态稳定性。
+
+最后，百万上下文的能力需要在 post-training 和 serving 中保持一致。batch-dependent kernels、KV cache 层级、on-disk prefix cache、TileLang / MegaMoE 和 specialist -> OPD pipeline 共同解决同一个问题：让长上下文能力从预训练设置迁移到多领域 RL、agent sandbox 和真实部署。
 
 ### 4. 核心假设或切入点
 
@@ -375,7 +375,7 @@ Instruct / Max mode：
 - Baseline：DeepSeek-V3.2 是同系列前代强基线，BF16 GQA8 / head dimension 128 是 KV cache 理论参照。这个实验的 baseline 较清楚，能直接回答 CSA/HCA 与新 KV layout 对 1M context 成本曲线的影响。
 - 指标：等效 FP8 FLOPs、KV cache size。
 - 结果：V4-Pro 为 V3.2 的 27% FLOPs 和 10% KV cache；V4-Flash 为 V3.2 的 10% FLOPs 和 7% KV cache。
-- 解读：这是本文最核心的系统证据。V4 的价值首先来自长上下文成本曲线改变，再由更大模型和 post-training 转化为能力。
+- 解读：这是这篇报告最核心的系统证据。V4 的价值首先来自长上下文成本曲线改变，再由更大模型和 post-training 转化为能力。
 
 ### 结果 2：Base model 能力与 parameter efficiency
 
@@ -448,7 +448,7 @@ Instruct / Max mode：
 - 公开状态：截至 2026-06-24，本轮检索未发现 DeepSeek-V4 对应的官方 OpenReview forum 或公开 reviewer 评分；OpenReview 搜索结果主要是其它论文引用 DeepSeek-V4 技术报告。
 - Venue 判断：当前按 arXiv 技术报告 + 官方 release/model card 处理，证据强度来自 arXiv HTML/TeX/PDF、Hugging Face 权重与推理代码、官方 API docs release 和后续第三方引用。
 - 可吸收的外部审稿式问题：CSA/HCA/mHC/Muon 的单独 ablation 是否充分；1M context benchmark 是否能代表真实 repo、enterprise workflow 和 multi-session agent；Max mode 的 token budget 与普通部署是否可比；FP4/FP8 low-precision path 对 rare-token retrieval、indexer top-k 和 train/inference logprob consistency 的影响；agent benchmark harness 是否透明。
-- 对本文档的影响：把 DeepSeek-V4 作为 million-token context system report 和 DeepSeek 系列节点引用时证据较强；把具体组件的独立因果收益作为结论时，需要额外消融、统一 benchmark 或第三方复现支撑。
+- 对归档判断的影响：把 DeepSeek-V4 作为 million-token context system report 和 DeepSeek 系列节点引用时证据较强；把具体组件的独立因果收益作为结论时，需要额外消融、统一 benchmark 或第三方复现支撑。
 
 ## 本地讨论补充
 
@@ -518,7 +518,7 @@ Instruct / Max mode：
 - Unsourced or unverifiable claims: 主要事实来自 DeepSeek official release、Hugging Face model card 和 PDF 技术报告；内部评测结论按官方报告记录，独立复验另行标注。
 - Tone/brand mismatch: 按本目录论文笔记风格，区分作者报告、证据强度和本地判断。
 - Safety/compliance issues: 涉及 agent sandbox 和 tool-use infra，仅记录系统设计与评测，不沉淀可滥用的操作细节。
-- Overlap with existing assets: 与 DeepSeek-R1、Muon、TIM、Lightning Attention、MiniMax-M1、UltraEP 存在强关系，但本文新增的是 DeepSeek-V4 百万上下文系统节点。
+- Overlap with existing assets: 与 DeepSeek-R1、Muon、TIM、Lightning Attention、MiniMax-M1、UltraEP 存在强关系；这篇归档新增 DeepSeek-V4 百万上下文系统节点。
 
 ### Skipped
 
