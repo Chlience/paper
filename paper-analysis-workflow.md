@@ -159,6 +159,8 @@ LLM RL、post-training、systems、serving、optimizer 和评测类论文都必�
 - 训练时间与成本：GPU hours、wall-clock time、每 trillion tokens 成本、pretraining / context extension / post-training 分项成本、公开成本是否排除研究试错和 ablations。
 - 未披露项：若卡数、并行、数据、训练时间或成本缺失，明确写“未披露”，并把它放入可信度边界或局限。
 
+数字密集的训练配置、成本、benchmark 和 ablation 信息优先使用 Markdown 表格；正文只保留判断、条件和边界。
+
 ### baseline 强度判断
 
 每个核心表格或图都要记录 baseline 相关判断：
