@@ -1,7 +1,7 @@
 # DeepSeek-V4: Towards Highly Efficient Million-Token Context Intelligence 论文笔记
 
 First-Archived-At: 2026-04-25 14:30
-Updated-At: 2026-06-24 18:15
+Updated-At: 2026-06-24 19:49
 
 ## Source
 
@@ -411,12 +411,16 @@ Instruct / Max mode：
 
 ### 实验设置与 baseline 审计
 
-- 模型设置：DeepSeek-V4-Pro 为 1.6T total / 49B active MoE，DeepSeek-V4-Flash 为 284B total / 13B active MoE，二者支持 1M context，并使用 CSA/HCA hybrid attention、mHC、Muon、MTP、DeepSeekMoE 与 low-precision KV/cache path。
-- 训练设置：Flash 使用 32T tokens，Pro 使用 33T tokens；sequence length 从 4K 渐进到 16K、64K、1M；Flash 前 1T tokens 做 dense attention warmup，后续引入 sparse / compressed attention 训练。
-- post-training 设置：按 mathematics、coding、agent、instruction following 等域做 specialist SFT + GRPO，再通过 full-vocabulary OPD 合并到统一 student；同时引入 Generative Reward Model (GRM)、tool-call schema、interleaved thinking、Quick Instruction、FP4 QAT、token-granular WAL rollout 和 DSec sandbox。
-- baseline 强度：1M context efficiency 的基线最直接；base model 和 reasoning modes 有同系列强对照；agent benchmark baseline 覆盖强模型但受 harness 影响；infra 部分提供关键数值但公开消融有限。
-- 可比性限制：大量 benchmark 使用官方或内部 evaluation framework；prompt、sampling、reasoning effort、tool budget、timeout、judge、context management 和 Max mode token budget 会改变横向排名。
-- 统计限制：报告主要给单点结果和系统指标，较少提供多 seed、置信区间、完整 ablation grid、第三方复现脚本和统一 agent harness 配置。
+| 维度 | 记录 |
+| --- | --- |
+| 模型设置 | DeepSeek-V4-Pro 为 1.6T total / 49B active MoE；DeepSeek-V4-Flash 为 284B total / 13B active MoE；二者支持 1M context，并使用 CSA/HCA hybrid attention、mHC、Muon、MTP、DeepSeekMoE 与 low-precision KV/cache path |
+| 训练设置 | Flash 使用 32T tokens；Pro 使用 33T tokens；sequence length 从 4K 渐进到 16K、64K、1M；Flash 前 1T tokens 做 dense attention warmup，后续引入 sparse / compressed attention 训练 |
+| post-training 设置 | mathematics、coding、agent、instruction following 等域做 specialist SFT + GRPO，再通过 full-vocabulary OPD 合并到统一 student；同时引入 GRM、tool-call schema、interleaved thinking、Quick Instruction、FP4 QAT、token-granular WAL rollout 和 DSec sandbox |
+| 技术报告训练配置 | 披露 Flash/Pro token budget、batch size / LR schedule、dense warmup、sparse attention 引入、Anticipatory Routing 与 SwiGLU Clamping；预览报告尚未给完整训练账本 |
+| 未披露项 | 训练 GPU 数、硬件型号、节点数、并行度、wall-clock、GPU hours、美元成本、完整 OPD / GRM / RL 超参和 ablation grid |
+| baseline 强度 | 1M context efficiency 的基线最直接；base model 和 reasoning modes 有同系列强对照；agent benchmark baseline 覆盖强模型但受 harness 影响；infra 部分提供关键数值但公开消融有限 |
+| 可比性限制 | 大量 benchmark 使用官方或内部 evaluation framework；prompt、sampling、reasoning effort、tool budget、timeout、judge、context management 和 Max mode token budget 会改变横向排名 |
+| 统计限制 | 报告主要给单点结果和系统指标，较少提供多 seed、置信区间、完整 ablation grid、第三方复现脚本和统一 agent harness 配置 |
 
 ## 证据链强度评估
 

@@ -1,7 +1,7 @@
 # GLM-5.2: Built for Long-Horizon Tasks 技术文章笔记
 
 First-Archived-At: 2026-06-18 13:45
-Updated-At: 2026-06-24 18:18
+Updated-At: 2026-06-24 19:50
 
 ## Source
 
@@ -259,11 +259,15 @@ GLM-5.2 的结论链可以概括为：
 
 ### 实验设置与 baseline 审计
 
-- 模型设置：GLM-5.2 是 744B total / A40B active open-weight MoE，发布 BF16/FP8 权重，支持 1M context、SGLang/vLLM/Transformers/KTransformers 等 serving 路径，并提供 max/high reasoning effort 控制。
-- 架构/系统设置：核心新增包括 DSA IndexShare / IndexCache、MTP IndexShare + KVShare、Bebop 式 rejection sampling、end-to-end TV loss、LayerSplit memory management、cache transfer / CPU scheduling 优化、slime compact trajectory / sub-agent workflow / parallel OPD，以及 online anti-hack guard。
-- 训练设置：release blog 没有公开完整 pretraining、post-training、critic training、reward、expert source 和 anti-hack classifier 细节；只能按 release 级信息记录机制与结果。
-- baseline 强度：MTP acceptance ablation 是最清楚的机制证据；GLM-5.1 对照能说明系列迭代收益；闭源 frontier 对照能说明实用位置，但受 harness、effort、context、tool、judge、budget 影响较大。
-- 统计限制：官方表格主要给单点结果，缺少多 seed、置信区间、第三方复验、完整 ablation grid、online guard precision/recall 和统一 agent harness 配置。
+| 维度 | 记录 |
+| --- | --- |
+| 模型设置 | GLM-5.2 是 744B total / A40B active open-weight MoE；发布 BF16 / FP8 权重；支持 1M context、SGLang / vLLM / Transformers / KTransformers 等 serving 路径，并提供 max / high reasoning effort 控制 |
+| 架构 / 系统设置 | DSA IndexShare / IndexCache、MTP IndexShare + KVShare、Bebop 式 rejection sampling、end-to-end TV loss、LayerSplit memory management、cache transfer / CPU scheduling 优化、slime compact trajectory / sub-agent workflow / parallel OPD、online anti-hack guard |
+| 训练设置 | release blog 没有公开完整 pretraining、post-training、critic training、reward、expert source 和 anti-hack classifier 细节；只能按 release 级信息记录机制与结果 |
+| 技术报告训练配置 | 披露 parallel OPD 约两天完成、MTP acceptance ablation、critic-based PPO / compact trajectory / anti-hack guard 等机制；缺少完整训练资源和数据表 |
+| 未披露项 | pretraining tokens、训练 GPU 数、硬件型号、并行方式、GPU hours、wall-clock、美元成本、critic training 数据、reward weights、anti-hack precision / recall |
+| baseline 强度 | MTP acceptance ablation 是最清楚的机制证据；GLM-5.1 对照能说明系列迭代收益；闭源 frontier 对照能说明实用位置，但受 harness、effort、context、tool、judge、budget 影响较大 |
+| 统计限制 | 官方表格主要给单点结果，缺少多 seed、置信区间、第三方复验、完整 ablation grid、online guard precision/recall 和统一 agent harness 配置 |
 
 ## 证据链强度评估
 

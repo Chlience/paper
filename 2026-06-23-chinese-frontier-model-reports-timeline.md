@@ -1,7 +1,7 @@
 # 国产前沿模型技术报告时间线总览
 
 First-Archived-At: 2026-06-23 18:40
-Updated-At: 2026-06-24 16:40
+Updated-At: 2026-06-24 19:54
 Pinned: true
 
 ## Source
@@ -78,6 +78,24 @@ DeepSeek-V4 和 GLM-5.2 又把长上下文推到 million-token 级别。DeepSeek
 | 2026-02 | GLM-5 | 744B-A40B, DSA, Muon Split, MTP, slime async RL | agentic engineering pipeline 与 200K context / async rollout / TITO 结合 | 内部 benchmark、reward 和 harness 占比较高 |
 | 2026-04 | DeepSeek-V4 | 1M context, CSA/HCA, mHC, Muon, deterministic kernels, OPD | V4-Pro 1.6T / 49B active；V4-Flash 284B / 13B active；系统层覆盖 KV、kernel、sandbox | 预览报告，关键 ablation 尚不完整 |
 | 2026-06 | GLM-5.2 | 1M long-horizon coding agent, IndexShare, KVShare, slime, anti-hack | 把 1M context、MTP、critic-based PPO、anti-hack 放入 release surface | release blog 粒度低于完整技术报告 |
+
+### 训练配置披露审计
+
+| 报告 | 训练数据 / 阶段 | 硬件与并行公开度 | 训练时间 / 成本公开度 | 当前归档判断 |
+| --- | --- | --- | --- | --- |
+| DeepSeek-V2 | 8.1T pretraining tokens；long-context 1000 steps；SFT 1.5M instances | H800 cluster；16-way zero-bubble PP；8-way EP；ZeRO-1；不使用 TP | 每 1T tokens 172.8K H800 GPU hours；完整 GPU 数、wall-clock 和美元成本未披露 | 训练效率信息较强，完整成本账本不足 |
+| Qwen2.5 | 18T pretraining tokens；SFT / DPO / GRPO；Turbo progressive context expansion | 训练硬件、并行方式和 API MoE 规格未完整公开 | GPU hours、wall-clock、美元成本未披露 | 模型族报告强，成本复查弱 |
+| DeepSeek-V3 | 14.8T pretraining；YaRN context extension；SFT + RM + GRPO | 2048 H800；16-way PP；64-way EP spanning 8 nodes；ZeRO-1 DP | total 2.788M H800 GPU hours；5.576M USD；成本排除研发和消融 | 当前样本中训练账本最完整 |
+| DeepSeek-R1 | R1-Zero 10,400 steps；max length 32,768 -> 65,536；R1 多阶段 SFT/RL/distillation | vLLM rollout、DualPipe、跨节点 EP、MTP 等系统模块公开；具体硬件/并行度未完整公开 | GPU hours、wall-clock、美元成本未披露 | RL recipe 细，资源账本不足 |
+| Kimi k1.5 | long-CoT warmup、OMD-style RL、partial rollout、long2short | Megatron + vLLM + Mooncake/RDMA；集群规模未披露 | GPU hours、wall-clock、美元成本未披露 | recipe 价值高，成本审计弱 |
+| Qwen3 | 36T tokens；S1 >30T、S2 ~5T、S3 数千亿 long-context tokens | 训练硬件和并行方式未完整公开 | distillation vs RL 报告 1,800 vs 17,920 GPU hours；主训练成本未披露 | distillation 对照强，主训练账本弱 |
+| MiniMax-M1 | 7.5T continual pretraining；1M context extension；40K -> 80K RL | 训练硬件和并行方式未完整公开 | GPU hours、wall-clock、美元成本未披露 | long-output RL recipe 强，资源账本不足 |
+| Kimi K2 | 15.5T pretraining；400B at 4K + 60B at 32K annealing | H800 cluster；PP16；EP16；ZeRO-1；FP8 activations；CPU offload | 完整 GPU 数、wall-clock、GPU hours、美元成本未披露 | 系统配置较清楚，成本账本不足 |
+| Kimi K2.5 | text/vision joint pretraining、long-context mid-training、visual / agentic RL | DEP、LLM Gateway、100,000 concurrent agent tasks；集群规模未披露 | GPU hours、wall-clock、美元成本未披露 | multimodal/agentic 系统强，训练资源弱 |
+| GLM-5 | 28.5T pretraining + mid-training；32K / 128K / 200K 三段 | Megatron-LM / SGLang / slime；PD disaggregation、DP attention、FP8 rollout；具体 GPU 数未披露 | GPU hours、wall-clock、美元成本未披露 | pipeline 细，成本账本不足 |
+| DeepSeek-V4 | Flash 32T；Pro 33T；4K -> 16K -> 64K -> 1M | 关键 kernel / CP / deterministic infra 公开；训练集群和并行度未完整公开 | GPU hours、wall-clock、美元成本未披露 | 预览报告，资源账本待补 |
+| GLM-5.2 | release blog 未公开完整 pretraining；parallel OPD 约两天 | serving / slime / OPD 机制公开；训练硬件和并行方式未完整公开 | pretraining GPU hours、wall-clock、美元成本未披露 | release 级信息，等待完整技术报告 |
+| MiniMax-M3 / MSA | 109B 实验 3T tokens；MSA-CPT 400B；long-context 140B；M3 428B 完整训练未展开 | 109B 效率实验报告 H800；开源 repo 主要面向 SM100 | M3 完整 GPU hours、wall-clock、美元成本未披露 | MSA 机制强，M3 训练账本待补 |
 
 ## 局限
 
