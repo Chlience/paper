@@ -1,7 +1,7 @@
 # DeepSeek-V4: Towards Highly Efficient Million-Token Context Intelligence 论文笔记
 
 First-Archived-At: 2026-04-25 14:30
-Updated-At: 2026-06-24 20:20
+Updated-At: 2026-06-24 20:58
 
 ## Source
 
@@ -18,7 +18,7 @@ Updated-At: 2026-06-24 20:20
 - Authors: DeepSeek-AI and 318 other authors; arXiv submitter Wenfeng Liang.
 - Released: 2026-04-24
 - arXiv submitted: 2026-04-26
-- Current version read: arXiv v1, official release, PDF, HTML/TeX source and Hugging Face model card, accessed 2026-06-24.
+- Current version read: arXiv v1, official release, PDF, HTML/TeX source, Hugging Face model card and inference `config.json` / `model.py`, accessed 2026-06-24.
 - Subjects: Computation and Language (cs.CL); Artificial Intelligence (cs.AI); model architecture, MoE systems, long-context inference, post-training, agentic AI.
 - Review / OpenReview: 未发现 DeepSeek-V4 官方公开审稿 forum；OpenReview 检索主要返回引用该报告的其它论文或附件。
 
@@ -34,7 +34,7 @@ Updated-At: 2026-06-24 20:20
 - 同机构作者群：论文以 DeepSeek-AI 作为统一署名，未给逐作者机构拆分。
 - 跨机构桥接：title page 和 appendix 没有展示跨机构 affiliation；当前按 DeepSeek-AI 内部研究工程组织记录。
 - 与已存档作者重叠：与 [2501.12948](/papers/2501.12948-deepseek-r1-rl-reasoning/) 直接重叠明显，是 DeepSeek-R1 / V3 / V3.2 系谱的后续系统报告；与 [2606.04101](/papers/2606.04101-ultraep-rack-scale-moe-load-balancing/) 存在 Yinmin Zhong 同名线索，但 UltraEP 中 Yinmin Zhong 属 Peking University，需要后续确认是否同一人；与 [2405.19888](/papers/2405.19888-parrot-semantic-variable-llm-serving/) 存在 Chaofan Lin 同名线索，机构不同，需要后续确认。
-- 与已存档论文的主题或方法关系：强连接 [2501.12948](/papers/2501.12948-deepseek-r1-rl-reasoning/)、[2606.04101](/papers/2606.04101-ultraep-rack-scale-moe-load-balancing/)、[2606.04662](/papers/2606.04662-muon-outperforms-adam-curvature/)、[2025-09-10](/papers/2025-09-10-defeating-nondeterminism-llm-inference/)、[2605.14220](/papers/2605.14220-training-inference-mismatch-llm-rl/)、[2405.17381](/papers/2405.17381-various-lengths-constant-speed-lightning-attention/)、[2506.13585](/papers/2506.13585-minimax-m1-cispo-lightning-attention/)、[2606.06453](/papers/2606.06453-vortex-sparse-attention-serving/)、[2409.19256](/papers/2409.19256-hybridflow-rlhf-framework/) 和 [2606.00135](/papers/2606.00135-agentic-tool-calling-rl-training/)。
+- 与已存档论文的主题或方法关系：强连接 [2501.12948](/papers/2501.12948-deepseek-r1-rl-reasoning/)、[DSA-2025-09-29](/papers/2025-09-29-deepseek-v3-2-exp-dsa-long-context-efficiency/)、[2606.04101](/papers/2606.04101-ultraep-rack-scale-moe-load-balancing/)、[2606.04662](/papers/2606.04662-muon-outperforms-adam-curvature/)、[2025-09-10](/papers/2025-09-10-defeating-nondeterminism-llm-inference/)、[2605.14220](/papers/2605.14220-training-inference-mismatch-llm-rl/)、[2405.17381](/papers/2405.17381-various-lengths-constant-speed-lightning-attention/)、[2506.13585](/papers/2506.13585-minimax-m1-cispo-lightning-attention/)、[2606.06453](/papers/2606.06453-vortex-sparse-attention-serving/)、[2409.19256](/papers/2409.19256-hybridflow-rlhf-framework/) 和 [2606.00135](/papers/2606.00135-agentic-tool-calling-rl-training/)。
 - 需要后续确认：是否会有 Nature/会议版本；V4-Pro / V4-Flash 后续正式版是否改变架构、权重精度、tool schema 或 benchmark 设置；mHC / CSA / HCA 各自的独立论文是否补充更完整 ablation。
 - 作者 profile pass：这是 DeepSeek-AI 319 作者团队型技术报告；本轮复用已建档 DeepSeek 系列关键作者与重叠作者，包括 [Wenfeng Liang](/authors/wenfeng-liang/)、[Damai Dai](/authors/damai-dai/)、[Deli Chen](/authors/deli-chen/)、[Runxin Xu](/authors/runxin-xu/)、[Wangding Zeng](/authors/wangding-zeng/)、[Huazuo Gao](/authors/huazuo-gao/)、[Xingkai Yu](/authors/xingkai-yu/)、[Yu Wu](/authors/yu-wu-deepseek/)、[Zhenda Xie](/authors/zhenda-xie/)、[Peiyi Wang](/authors/peiyi-wang/) 等。完整 319 人列表缺逐人机构和贡献映射，不批量建档，避免低置信作者图；后续若作者在独立论文、OpenReview、项目仓库或机构页中重复出现，再按 author profile SOP 逐人补强。
 
@@ -126,7 +126,7 @@ MoE 配置：
 
 - Flash: 1 shared expert + 256 routed experts；每 token 激活 6 routed experts；expert intermediate hidden dimension 2048。
 - Pro: 1 shared expert + 384 routed experts；每 token 激活 6 routed experts；expert intermediate hidden dimension 3072。
-- 前 3 个 MoE layers 使用 Hash routing。
+- 前 3 个 MoE layers 使用 Hash routing，按 input token ID 的预定义 hash 选择 target experts。
 - router affinity activation 从 `Sigmoid` 改为 `Sqrt(Softplus)`。
 
 ### 6. mHC：把 residual stream 扩展成受约束的多槽状态
@@ -197,7 +197,9 @@ C^{SprsComp}_t
 \{C^{Comp}_s\mid I_{t,s}\in \mathrm{Top}\text{-}k(I_{t,:})\}.
 $$
 
-core attention 使用 shared key-value MQA：compressed KV entry 同时作为 key 和 value。为保持局部精细依赖，CSA 还加入 sliding window branch，让 query 额外访问最近 $n_{\mathrm{win}}$ 个 uncompressed KV entries。
+core attention 使用 shared key-value MQA：compressed KV entry 同时作为 key 和 value。由于 V4 的 query heads 很多，CSA/HCA 还使用 grouped output projection：先把 core attention 的多头输出按组分块，每组投到一个中间输出，再合并投回 hidden state。公开 inference config 中 Flash 的 `o_groups=8`，Pro 的 `o_groups=16`，`o_lora_rank=1024`；这一步减少大 head 数下的输出投影成本。
+
+为保持局部精细依赖，CSA 还加入 sliding window branch，让 query 额外访问最近 $n_{\mathrm{win}}$ 个 uncompressed KV entries。
 
 ### 8. HCA：更重压缩后 dense attention
 
@@ -228,7 +230,22 @@ C^{Comp}_i
 S_j\odot C_j.
 $$
 
-HCA 的角色是用极低 KV 长度保留全局粗粒度信息；CSA 的角色是用较轻压缩 + top-k 选择保留更强的可寻址性。二者 interleaved 使用，构成 hybrid attention。
+HCA 的角色是用极低 KV 长度保留全局粗粒度信息；CSA 的角色是用较轻压缩 + top-k 选择保留更强的可寻址性。报告正文说二者采用 interleaved hybrid configuration，公开 inference config 把这件事落实成每层一个 `compress_ratio`：
+
+| `compress_ratio` | 层内路径 | 含义 |
+| ---: | --- | --- |
+| `4` | CSA | overlap compressor 产生 compressed KV，lightning indexer 选择 top-k compressed entries，再与 sliding-window uncompressed KV 一起进入 core attention。 |
+| `128` | HCA | non-overlap compressor 产生更粗的 compressed KV，省去 DSA top-k，对全部 compressed entries 加上 sliding-window uncompressed KV 做 attention。 |
+| `0` | compressed branch disabled | 只保留 sliding-window/uncompressed local path；公开 config 主要用于模型开头或 MTP block。 |
+
+按公开 `compress_ratios` 展开，V4 的 hybrid attention 是跨层交错：
+
+| Model | Main Transformer layers | CSA layers | HCA layers | `0` ratio main layers | Extra MTP slot |
+| --- | ---: | ---: | ---: | ---: | --- |
+| DeepSeek-V4-Flash | 43 | 21 层：2,4,...,42 | 20 层：3,5,...,41 | 2 层：0,1 | 1 个 `0` ratio slot |
+| DeepSeek-V4-Pro | 61 | 30 层：2,4,...,60 | 31 层：0,1,3,5,...,59 | 0 | 1 个 `0` ratio slot |
+
+这意味着 “hybrid” 的主要实现方式是层级交错：CSA 层负责可寻址的稀疏远程访问，HCA 层负责低成本的全局粗粒度汇聚，所有 compressed attention 层都叠加 128-token sliding-window local branch。V4-Pro 前两层先用 HCA 压缩，V4-Flash 前两层关闭 compressed branch；这类层级配比来自 inference config，报告正文没有给出消融解释。
 
 ### 9. CSA/HCA 其它细节
 
@@ -274,15 +291,39 @@ Hybrid Newton-Schulz 总共 10 步：前 8 步用 $(a,b,c)=(3.4445,-4.7750,2.031
 
 ### 11. General infrastructures
 
-DeepSeek-V4 的系统贡献很重，报告几乎把模型架构和 infra 绑定起来：
+DeepSeek-V4 的系统贡献很重，报告几乎把模型架构和 infra 绑定起来。这里需要把 expert waves、KV cache 和 rollout infra 写到机制层，否则只保留加速数字会丢掉这篇技术报告最有价值的部分。
 
-- Fine-grained EP mega-kernel：把 MoE dispatch、Linear-1、activation、Linear-2、combine 拆成 expert waves，在单个 fused pipeline 中重叠通信、计算和内存访问。相对 non-fused baselines，一般 inference workloads 加速 1.50 到 1.73x，RL rollout / agent serving 等 latency-sensitive 场景最高 1.96x。
-- TileLang：用于快速开发 fused kernels，支持 host codegen、SMT solver assisted integer analysis、可控数值精度和 bitwise reproducibility。
-- Batch-invariant deterministic kernels：attention、matmul、attention backward、MoE backward、mHC small matrix multiplication 都做确定性处理，目标是 pretraining、post-training、inference 的 bitwise alignment。
-- Contextual parallelism for CSA/HCA：处理 sequence packing、压缩边界跨 CP rank、compressed KV length 不一致等问题，通过 two-stage communication 先传边界 uncompressed KV，再 all-gather compressed KV。
-- Tensor-level activation checkpointing：基于 TorchFX 自动追踪 minimal recomputation graph，避免手写 backward，同时实现细粒度 recomputation。
-- Heterogeneous KV cache layout：把 classical KV cache 和 state cache 拆开，分别管理 CSA/HCA compressed KV、CSA indexer KV、SWA KV 和未满压缩 block 的 uncompressed tail states。
-- On-disk KV cache storage：对 CSA/HCA 存 compressed KV entries，对 SWA 提供 full caching、periodic checkpointing、zero caching 三种策略，在 shared-prefix request 中减少重复 prefill。
+| 子系统 | 原始瓶颈 | V4 做法 | 直接收益 |
+| --- | --- | --- | --- |
+| Fine-grained Expert Parallelism (EP) / MegaMoE | MoE dispatch、expert GEMM、combine 之间存在批级等待，小 batch rollout 更难隐藏通信 | 把 experts 切成多个 expert waves，并在 mega-kernel 内调度 wave 级 pipeline | 一般 inference workloads 相对 non-fused baselines 加速 1.50 到 1.73x；RL rollout / agent serving 最高 1.96x |
+| TileLang kernel stack | 手写 fused kernel 成本高，数值一致性和 host 调用也要一起处理 | 支持 host codegen、SMT solver assisted integer analysis、精度控制和 bitwise reproducibility | 更快迭代 fused kernels，并服务 exact KL、deterministic kernel 等路径 |
+| Batch-invariant deterministic kernels | attention / matmul / sparse backward / MoE backward 的 batch 形状和并行归约会改变 bit pattern | attention、matmul、attention backward、MoE backward、mHC small matmul 都做确定性实现 | 支撑 pretraining、post-training、rollout、debug 和 train/inference alignment |
+| Contextual Parallelism (CP) for CSA/HCA | sequence packing 后 compressed KV length 不齐，压缩块还会跨 CP rank 边界 | two-stage communication：先传边界 uncompressed KV，再 all-gather compressed KV，并用 fused select-and-pad 重排 | 让 compressed attention 在长序列训练中继续使用 CP |
+| KV cache / on-disk prefix cache | CSA、HCA、SWA、indexer 和 uncompressed tail 的 cache 尺寸、更新规则不同，PagedAttention 假设被破坏 | 分成 classical KV cache 与 state cache；磁盘只完整存 compressed KV，SWA 提供三种存储策略 | 降低 1M context serving memory，并支持 shared-prefix request 复用 |
+| RL / OPD rollout infra | 百万 token rollout 的 per-token 字段、teacher logits、抢占和 sandbox 状态都会放大内存与正确性风险 | teacher hidden-state cache、token-granular WAL、metadata/heavy fields 分离、DSec trajectory log | 让 OPD、长上下文 RL、agentic evaluation 在生产集群里可恢复、可追溯 |
+
+Fine-grained EP 的关键在 expert waves。常规 EP 路径会把 token all-to-all、expert 计算和结果回传组织成较粗的阶段；当 batch 足够大时，GEMM 可以覆盖一部分通信，RL rollout 和高吞吐 agent serving 中的长尾小 batch 会让通信暴露出来。V4 把专家集合切成多个 wave，每个 wave 只包含一小部分 experts；某个 wave 内专家的通信完成后，就立刻启动 Linear-1、activation、Linear-2，无需等待其它 experts。
+
+wave pipeline 的 steady state 可以写成下表：
+
+| 时刻 | 当前 wave | 下一 wave | 已完成 wave |
+| --- | --- | --- | --- |
+| warmup | 接收 routed tokens | 等待调度 | 无 |
+| steady state | 执行 expert compute | 继续 token transfer | 发送 combine 结果 |
+| drain | 完成剩余 compute | 无 | 完成结果回传 |
+
+这样，MoE 路径从“批级 all-to-all + GEMM + combine”变成 wave 级流水线。报告强调 full overlap 取决于 computation-communication ratio，而不只取决于带宽；按 V4-Pro 的 token-expert pair 计算量和通信量估算，每 1 GBps interconnect bandwidth 可以隐藏约 6.1 TFLOP/s compute。报告还记录了几个硬件/实现启发：dispatch 阶段采用 pull-based remote read 以避免细粒度 push 的通知延迟；mega-kernel 会同时拉高 compute、memory、network 负载，因此 power headroom 也会限制性能；更低延迟的跨 GPU signaling 会让未来的 push primitive 更自然。
+
+KV cache 也需要单独读。DeepSeek-V4 的 hybrid attention 同时引入 CSA/HCA compressed KV、CSA lightning indexer KV、Sliding Window Attention (SWA) KV 和未满压缩块的 uncompressed tail state。它们的大小、可见范围、eviction 规则和对齐要求都不同，所以不能简单套用单一 PagedAttention block abstraction。V4 把 cache 拆成两类：
+
+| Cache 类型 | 存储内容 | 关键约束 |
+| --- | --- | --- |
+| classical KV cache | CSA/HCA compressed KV entries；每个 cache block 覆盖一段原始 tokens 并产生对应 compressed entries | block 大小需要兼容 CSA ratio 4 与 HCA ratio 128；可用二者 least common multiple 的倍数处理不同层 |
+| state cache | 最近 SWA KV entries，以及 CSA/HCA 尚未凑满压缩块的 uncompressed tail states | 每个 sequence 分配固定大小 state cache，状态随当前位置更新 |
+| on-disk compressed cache | 共享前缀的 CSA/HCA compressed KV entries | 命中前缀时可直接读 compressed entries；末尾不完整压缩块需要重新 prefill |
+| on-disk SWA cache | full caching、periodic checkpointing、zero caching 三种策略 | SWA 体积约为 compressed CSA/HCA KV 的 8 倍，需要在存储写入量和重算量之间取舍 |
+
+Post-training infra 的几个细节也应保留。full-vocabulary OPD 采用 teacher hidden-state cache：系统缓存 teacher last-layer hidden states，训练时按 teacher head 重构 logits，避免物化所有 teacher logits；样本按 teacher index dispatch，使一个 mini-batch 内最多只加载一个 teacher head，并用 TileLang kernel 计算 exact KL。rollout service 使用 token-granular Write-Ahead Log (WAL)：每生成一个 token 就写日志，抢占时保存未完成请求的 KV cache；硬件错误后可用 WAL tokens 重建 KV cache。报告特别指出，从头重采未完成请求会引入 length bias，因为短回复更容易在中断前完成。DSec sandbox 再用 Function Call、Container、microVM、fullVM 四种 substrate 和 trajectory log 处理 agent 任务的非幂等执行、抢占恢复和 provenance。
 
 这些内容和本地已存档的 inference determinism / TIM 主题高度相关：V4 明确把 batch invariance、bitwise deterministic 和 train/inference alignment 当成生产级基础设施，debug 只是其中一个使用场景。
 
@@ -403,17 +444,18 @@ Instruct / Max mode：
 
 ### 结果 5：Infrastructure ablations in spirit
 
-- 设置：MegaMoE fused EP、mHC optimized implementation、deterministic kernels、FP4 QAT、OPD teacher scheduling、WAL rollout service。
-- Baseline：MegaMoE 使用 non-fused EP 作为吞吐基线；mHC 报告 optimized implementation 的 wall-time overhead；FP4 top-k selector 对比更高精度/更慢路径；OPD 和 WAL rollout 主要是机制描述，缺少完整公开消融。该组证据适合记录工程可行性，严格组件因果仍需独立 ablation。
+- 设置：MegaMoE fused EP / expert waves、mHC optimized implementation、deterministic kernels、FP4 QAT、OPD teacher scheduling、WAL rollout service。
+- Baseline：MegaMoE 使用 non-fused EP 作为吞吐基线；expert waves 的对照重点是粗粒度 dispatch/compute/combine path 是否能隐藏通信；mHC 报告 optimized implementation 的 wall-time overhead；FP4 top-k selector 对比更高精度/更慢路径；OPD 和 WAL rollout 主要是机制描述，缺少完整公开消融。该组证据适合记录工程可行性，严格组件因果仍需独立 ablation。
 - 指标：wall-clock overhead、speedup、memory pressure、stability。
-- 结果：fine-grained EP 相对 non-fused baselines 加速 1.50 到 1.73x，latency-sensitive 最高 1.96x；mHC overhead 控制到 6.7%；FP4 top-k selector 2x 加速且 KV recall 99.7%。
-- 解读：这类证据偏工程报告，但对理解大模型落地很关键。V4 的 long-context 能力来自架构和 infra 共同闭环。
+- 结果：fine-grained EP 相对 non-fused baselines 加速 1.50 到 1.73x，latency-sensitive 最高 1.96x；报告给出 1 GBps interconnect bandwidth 可隐藏约 6.1 TFLOP/s compute 的 V4-Pro 平衡点；mHC overhead 控制到 6.7%；FP4 top-k selector 2x 加速且 KV recall 99.7%。
+- 解读：这类证据偏工程报告，但对理解大模型落地很关键。expert waves 说明 V4 的 MoE serving 优化重点在于把通信暴露窗口缩到 wave 级，并让小 batch rollout 也能持续重叠通信、计算和 combine。
 
 ### 实验设置与 baseline 审计
 
 | 维度 | 记录 |
 | --- | --- |
 | 模型设置 | DeepSeek-V4-Pro 为 1.6T total / 49B active MoE；DeepSeek-V4-Flash 为 284B total / 13B active MoE；二者支持 1M context，并使用 CSA/HCA hybrid attention、mHC、Muon、MTP、DeepSeekMoE 与 low-precision KV/cache path |
+| Attention layer schedule | Flash main Transformer layers: ratio `0,0,4,128,4,128,...,4`，对应 21 个 CSA 层、20 个 HCA 层和前 2 个 compressed branch disabled 层；Pro main Transformer layers: `128,128,4,128,4,128,...,4`，对应 30 个 CSA 层和 31 个 HCA 层。两者公开 config 还为 MTP block 保留 1 个 `0` ratio slot。 |
 | 训练设置 | Flash 使用 32T tokens；Pro 使用 33T tokens；sequence length 从 4K 渐进到 16K、64K、1M；Flash 前 1T tokens 做 dense attention warmup，后续引入 sparse / compressed attention 训练 |
 | post-training 设置 | mathematics、coding、agent、instruction following 等域做 specialist SFT + GRPO，再通过 full-vocabulary OPD 合并到统一 student；同时引入 GRM、tool-call schema、interleaved thinking、Quick Instruction、FP4 QAT、token-granular WAL rollout 和 DSec sandbox |
 | 技术报告训练配置 | 披露 Flash/Pro token budget、batch size / LR schedule、dense warmup、sparse attention 引入、Anticipatory Routing 与 SwiGLU Clamping；预览报告尚未给完整训练账本 |
@@ -458,13 +500,27 @@ Instruct / Max mode：
 - V4 的 attention 仍保留 softmax-style core attention，只是在 KV 维度和可见 blocks 上做压缩与选择。它和 Lightning Attention 的差异是：V4 牺牲 token-level完整 KV 可见性，通过学习压缩、top-k indexer、sliding window 和 HCA global compressed memory 来换取 1M context 可用性。
 - V4 的 deterministic / batch-invariant kernels 说明 inference determinism 不再只是服务端复现问题，也直接进入 post-training、RL rollout、OPD、debug 和 train/inference alignment。
 
-### 2. 后续复验指标
+### 2. CSA/HCA interleaved 检查补充
+
+- CSA/HCA 的 interleaved 使用需要写成层级 schedule。公开 inference config 显示，V4-Pro 在 main Transformer blocks 中使用 31 个 HCA 层和 30 个 CSA 层；V4-Flash 使用 21 个 CSA 层、20 个 HCA 层，并在前两层关闭 compressed branch。
+- `compress_ratio=4` 对应 CSA，触发 overlap compression 和 lightning indexer top-k；`compress_ratio=128` 对应 HCA，使用更重压缩和 compressed entries dense attention；`compress_ratio=0` 关闭 compressed branch，只走 sliding-window local path。
+- 这次补充把 DSA 原始报告和 V4 连接得更清楚：V4 的 CSA 是 DSA 在 compressed KV entries 上的后续形态，HCA 负责另一条极重压缩的全局记忆路径。
+
+### 3. expert waves / KV cache / rollout infra 检查补充
+
+- expert waves 应该写入正文。它解释了 MegaMoE 的加速来源：按 expert wave 切分后，当前 wave 的 Linear-1/activation/Linear-2、下一 wave 的 token transfer、上一 wave 的 result sending 可以同时进行。该机制尤其服务 RL rollout 和高速 agent serving 中的长尾小 batch。
+- V4 的 infra 还包含 kernel speedup 之外的系统判断。报告把 computation-communication ratio、pull-based dispatch、power headroom、communication primitive 延迟写成硬件协同建议；这些细节能帮助后续和 UltraEP、DeepEP、MoE serving 系统对照。
+- heterogeneous KV cache 需要和 CSA/HCA 一起读：classical KV cache 存 compressed entries，state cache 存 SWA 与未满压缩块的 tail states；on-disk prefix cache 对 compressed KV 直接复用，对 SWA 在 full caching / periodic checkpointing / zero caching 之间取舍。
+- OPD / WAL / DSec 的细节也有长期价值。teacher hidden-state caching 解决 full-vocabulary OPD 的 logits 物化问题；token-granular WAL 避免抢占后的 length bias；DSec trajectory log 处理 agent sandbox 的非幂等命令与 deterministic replay。
+
+### 4. 后续复验指标
 
 - 在公开权重上复测 MRCR、CorpusQA、needle-in-haystack、multi-hop QA、long-context code repo tasks，区分 compression error 与模型能力。
 - 比较 V4-Pro / V4-Flash 在相同 reasoning token budget 下的 knowledge、reasoning、agent 差距，避免把 Max mode budget 当成模型本体能力。
-- 对 CSA/HCA 做可解释性探针：top-k compressed block recall、sliding window dependence、HCA global memory 是否覆盖关键证据。
+- 对 CSA/HCA 做可解释性探针：layer-wise CSA top-k compressed block recall、sliding window dependence、HCA global memory 是否覆盖关键证据，以及 CSA/HCA/ratio-0 层级交错对不同任务的贡献。
 - 对 OPD 做教师选择敏感性测试：不同 teacher weights $w_i$、full-vocab KL vs token-level KL、on-policy sample distribution 对最终能力的影响。
 - 对 FP4 QAT 和 native FP4 rollout 做 train/deploy consistency 检查，特别是 CSA indexer QK path。
+- 对 MegaMoE 做小 batch stress test：比较 expert wave 数量、EP group、interconnect bandwidth、pull/push dispatch primitive、power cap 对 RL rollout 和 agent serving latency 的影响。
 
 ## 主要启发
 
@@ -486,9 +542,10 @@ Instruct / Max mode：
 ## 跨论文关系
 
 - 与 [2501.12948](/papers/2501.12948-deepseek-r1-rl-reasoning/)：DeepSeek-R1 是 reasoning RL / GRPO / verifiable reward 的上游节点；DeepSeek-V4 把这条路线推向 1M context、agentic tool-use、specialist RL 和 OPD 统一模型。
+- 与 [DSA-2025-09-29](/papers/2025-09-29-deepseek-v3-2-exp-dsa-long-context-efficiency/)：V4 的 CSA 是 DeepSeek Sparse Attention 在 compressed KV entries 上的后续形态。CSA 层使用 `compress_ratio=4`、lightning indexer 和 top-k sparse selection；HCA 层使用 `compress_ratio=128` 和 dense compressed attention，二者跨层交错构成 V4 的 hybrid attention stack。
 - 与 [2606.04662](/papers/2606.04662-muon-outperforms-adam-curvature/)：V4 是 Muon 大规模 LLM 训练的系统应用案例；Muon 论文解释其曲率优势，V4 报告展示其在 trillion-scale MoE 中的工程化使用。
 - 与 [2025-09-10](/papers/2025-09-10-defeating-nondeterminism-llm-inference/) 和 [2605.14220](/papers/2605.14220-training-inference-mismatch-llm-rl/)：V4 明确把 batch-invariant / deterministic kernels 和 train-inference bitwise alignment 做成内核库目标，和这两篇关于 nondeterminism / TIM 的问题定义直接相接。
-- 与 [2606.04101](/papers/2606.04101-ultraep-rack-scale-moe-load-balancing/)：UltraEP 讨论 MoE training / serving prefill 的 expert load balancing，V4 报告展示 DeepSeek 自身在 fine-grained EP、MegaMoE、communication-computation overlap、MoE determinism 上的工程方案。
+- 与 [2606.04101](/papers/2606.04101-ultraep-rack-scale-moe-load-balancing/)：UltraEP 讨论 MoE training / serving prefill 的 expert load balancing，V4 报告展示 DeepSeek 自身在 fine-grained EP、MegaMoE expert waves、communication-computation overlap、MoE determinism 上的工程方案。
 - 与 [2405.17381](/papers/2405.17381-various-lengths-constant-speed-lightning-attention/) 和 [2506.13585](/papers/2506.13585-minimax-m1-cispo-lightning-attention/)：三者都服务 long context / long output。Lightning Attention 用 recurrent/linear attention 降低长序列成本；MiniMax-M1 把 Lightning Attention 放进 long-output RL；DeepSeek-V4 用 CSA/HCA compressed attention 与 KV cache systems 支撑 1M context。
 - 与 [2606.06453](/papers/2606.06453-vortex-sparse-attention-serving/)、[2511.02749](/papers/2511.02749-span-queries-cache-attention-locality/) 和 [2405.19888](/papers/2405.19888-parrot-semantic-variable-llm-serving/)：V4 从模型内部压缩 KV 和 attention；这些 serving 论文从 sparse attention DSL、span query/cache locality、application DAG 显式化角度降低真实 workload 成本。
 - 与 [2409.19256](/papers/2409.19256-hybridflow-rlhf-framework/) 和 [2606.00135](/papers/2606.00135-agentic-tool-calling-rl-training/)：V4 post-training 展示了 ultra-long-context RL/OPD、rollout WAL、sandbox infra 和 tool-call schema 的生产级实现，补充了 RLHF/RLVR systems 与 tool-use RL 的工程侧细节。
@@ -504,13 +561,15 @@ Instruct / Max mode：
 
 ### Reusable Elements
 
-1. CSA / HCA hybrid attention 的压缩、sparse top-k、sliding window、attention sink 分解。
+1. CSA / HCA hybrid attention 的压缩、sparse top-k、sliding window、attention sink、layer-wise interleaving 分解。
 2. 1M context FLOPs 和 KV cache reduction 数值。
 3. mHC residual stream 扩展与 Birkhoff polytope/Sinkhorn 稳定性语言。
 4. Muon 在 trillion-scale MoE 中的工程配置。
-5. deterministic / batch-invariant kernels 和 TIM / inference determinism 的关系。
-6. specialist training + full-vocabulary OPD 的 post-training recipe。
-7. token-granular WAL rollout 和 DSec sandbox 的 agentic training system 设计。
+5. fine-grained EP / MegaMoE expert waves，把 dispatch、expert compute 和 combine 变成 wave-level pipeline。
+6. deterministic / batch-invariant kernels 和 TIM / inference determinism 的关系。
+7. heterogeneous KV cache 与 on-disk prefix cache 的 layout 设计。
+8. specialist training + full-vocabulary OPD 的 post-training recipe。
+9. token-granular WAL rollout 和 DSec sandbox 的 agentic training system 设计。
 
 ### Risks
 
