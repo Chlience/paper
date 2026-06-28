@@ -4963,5 +4963,111 @@
         "url": "https://arxiv.org/abs/2510.00206"
       }
     ]
+  },
+  {
+    "slug": "jian-chen-ucsd",
+    "name": "Jian Chen",
+    "aliases": ["Jian Chen", "jianc99"],
+    "affiliations": ["UC San Diego", "Z Lab", "Carnegie Mellon University", "Zhejiang University"],
+    "homepage": "https://jianchen.me/",
+    "github": "https://github.com/jianc99",
+    "x": "https://x.com/jianchen1799",
+    "xConfidence": "high",
+    "topics": ["DFlash", "MagicDec", "speculative decoding", "efficient LLM inference", "long-context inference"],
+    "notes": "DFlash first author. Homepage identifies Jian Chen as a UC San Diego PhD student working with Zhijian Liu, previously at CMU with Beidi Chen, and links Google Scholar, GitHub jianc99, and X jianchen1799.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://jianchen.me/"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=hjxFO34AAAAJ&hl=en"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/jianc99"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/jianchen1799"
+      },
+      {
+        "label": "DFlash arXiv",
+        "url": "https://arxiv.org/abs/2602.06036"
+      }
+    ]
+  },
+  {
+    "slug": "yesheng-liang",
+    "name": "Yesheng Liang",
+    "aliases": ["Yesheng Liang", "liang2kl"],
+    "affiliations": ["UC San Diego", "Z Lab", "Tsinghua University", "National University of Singapore"],
+    "homepage": "https://liang2kl.github.io/",
+    "github": "https://github.com/liang2kl",
+    "x": "https://x.com/yesheng_liang",
+    "xConfidence": "high",
+    "topics": ["DFlash", "ParoQuant", "efficient machine learning", "LLM inference", "quantization"],
+    "notes": "DFlash coauthor and ParoQuant first author. Homepage identifies Yesheng Liang as a UC San Diego Z Lab PhD student supervised by Zhijian Liu, with UCSD master's and Tsinghua bachelor's background; it links GitHub liang2kl, X yesheng_liang, LinkedIn, and Google Scholar.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://liang2kl.github.io/"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=3RSY9TMAAAAJ"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/liang2kl"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/yesheng_liang"
+      },
+      {
+        "label": "DFlash arXiv",
+        "url": "https://arxiv.org/abs/2602.06036"
+      }
+    ]
+  },
+  {
+    "slug": "zhijian-liu",
+    "name": "Zhijian Liu",
+    "aliases": ["Zhijian Liu"],
+    "affiliations": ["UC San Diego", "Z Lab", "NVIDIA", "MIT HAN Lab"],
+    "homepage": "https://zhijianliu.com/",
+    "github": "https://github.com/zhijian-liu",
+    "x": "https://x.com/zhijianliu_",
+    "xConfidence": "high",
+    "topics": ["DFlash", "efficient AI", "LLM inference", "model compression", "AI systems", "vision-language models"],
+    "notes": "DFlash corresponding author. Homepage identifies Zhijian Liu as UC San Diego Assistant Professor, Z Lab director, and NVIDIA Research Scientist, with MIT PhD advised by Song Han; it links Google Scholar, GitHub zhijian-liu, and X zhijianliu_.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://zhijianliu.com/"
+      },
+      {
+        "label": "Z Lab",
+        "url": "https://z-lab.ai/"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=mwzYYPgAAAAJ"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/zhijian-liu"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/zhijianliu_"
+      },
+      {
+        "label": "DFlash arXiv",
+        "url": "https://arxiv.org/abs/2602.06036"
+      }
+    ]
   }
 ]
