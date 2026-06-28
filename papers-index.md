@@ -1,7 +1,7 @@
 # Paper Archive Index
 
 First-Archived-At: 2026-06-21
-Updated-At: 2026-06-24
+Updated-At: 2026-06-28
 
 ## 本地工作流
 
@@ -81,6 +81,7 @@ Updated-At: 2026-06-24
 | 2510.19315 | Transformers are Inherently Succinct | [2510.19315-transformers-inherently-succinct.md](/papers/2510.19315-transformers-inherently-succinct/) | Transformer theory, formal languages, verification complexity | Pascal Bergsträßer / RPTU; Ryan Cotterell / ETH Zürich; Anthony W. Lin / RPTU and MPI-SWS |
 | 2606.06453 | Vortex: Efficient and Programmable Sparse Attention Serving for AI Agents | [2606.06453-vortex-sparse-attention-serving.md](/papers/2606.06453-vortex-sparse-attention-serving/) | LLM serving, sparse attention, AI-agent-assisted systems research | CMU core team with Rice and NUS collaborators |
 | 2606.04101 | UltraEP: Unleash MoE Training and Inference on Rack-Scale Nodes with Near-Optimal Load Balancing | [2606.04101-ultraep-rack-scale-moe-load-balancing.md](/papers/2606.04101-ultraep-rack-scale-moe-load-balancing/) | MoE systems, expert parallelism, rack-scale nodes, exact-load balancing, training and prefill serving | Xinming Wei, Chao Jin, Yinmin Zhong, Bingyang Wu, Zili Zhang, Jing Mai, Guojie Luo / Peking University; Tuo Dai / RedNote; Shan Yu / Shanghai AI Laboratory; Chengxu Yang, Qianchao Zhu, Zhouyang Li, Yuliang Liu / Independent Researcher |
+| 2505.11432 | MegaScale-MoE: Large-Scale Communication-Efficient Training of Mixture-of-Experts Models in Production | [2505.11432-megascale-moe-communication-efficient-training.md](/papers/2505.11432-megascale-moe-communication-efficient-training/) | MoE training systems, communication-efficient parallelism, SP attention, EP FFN, communication-computation overlap, selective activation rematerialization, BF16/FP8 communication compression, Megatron-LM baseline | [Chao Jin](/authors/chao-jin-pku/) / Peking University equal contribution; [Ziheng Jiang](/authors/ziheng-jiang/) / ByteDance Seed equal contribution; [Xin Jin](/authors/xin-jin-pku/) / Peking University and Xin Liu / ByteDance Seed corresponding authors; [Yanghua Peng](/authors/yanghua-peng/) and [Haibin Lin](/authors/haibin-lin/) connect HybridFlow/VERL ByteDance systems line |
 | 2606.04662 | Why Muon Outperforms Adam: A Curvature Perspective | [2606.04662-muon-outperforms-adam-curvature.md](/papers/2606.04662-muon-outperforms-adam-curvature/) | Optimizer geometry, Muon vs Adam, curvature penalty, normalized directional sharpness, LLM pretraining | Shuche Wang / National University of Singapore; Fengzhuo Zhang, Dirk Bergemann, Zhuoran Yang / Yale University; Jiaxiang Li / University of Minnesota |
 | MUON-2026-06-19 | Muon Optimizer 技术博客与资料综合分析 | [2026-06-19-muon-optimizer-keller-jordan-synthesis.md](/papers/2026-06-19-muon-optimizer-keller-jordan-synthesis/) | Muon, Newton-Schulz orthogonalization, hidden-layer matrix optimizer, AdamW/Muon hybrid, Moonlight, MuonClip, Muown, Gram Newton-Schulz | [Keller Jordan](/authors/keller-jordan/) / personal research blog and KellerJordan GitHub; Kimi Team / Moonshot AI; Dao-AILab / [Tri Dao](/authors/tri-dao/); connected to [2606.04662](/papers/2606.04662-muon-outperforms-adam-curvature/) |
 
@@ -164,12 +165,12 @@ Updated-At: 2026-06-24
 - Cross-paper relation: [2312.08935 Math-Shepherd](/papers/2312.08935-math-shepherd-automatic-process-supervision/) 提供 DeepSeek / PKU 作者网络在数学 reasoning verifier、automatic process supervision 和 step-level reward 上的早期技术节点；[Peiyi Wang](/authors/peiyi-wang/)、[Runxin Xu](/authors/runxin-xu/)、[Zhihong Shao](/authors/zhihong-shao/) 和 [Yu Wu](/authors/yu-wu-deepseek/) 将 Math-Shepherd 与 DeepSeek-R1 系谱连接起来。
 - Theme relation: DeepSeek-R1-Zero, DeepSeek-R1, pure RL reasoning, GRPO, group mean/std advantage, verifiable reward, long-CoT emergence, cold-start SFT, two-stage RL, rejection sampling, distillation, reward hacking, safety risk control。
 
-### Cluster L: MoE Expert Parallelism 与 Rack-Scale Load Balancing
+### Cluster L: MoE Training Systems、Expert Parallelism 与 Rack-Scale Load Balancing
 
-- Paper: `2606.04101`
-- Institutions: Peking University, RedNote, Shanghai AI Laboratory, Independent Researcher。
-- Internal relation: Peking University 作者群为核心；Xinming Wei 带 RedNote internship 脚注，连接 PKU 与 RedNote；Tuo Dai 代表 RedNote；Shan Yu 连接 Shanghai AI Laboratory；Yuliang Liu 与 Guojie Luo 为 corresponding authors，分别连接 independent researcher 作者群与 PKU 作者群。
-- Theme relation: UltraEP, MoE expert parallelism, exact-load real-time balancing, rack-scale nodes, quota-driven replication and reroute, persistent tile streaming, chunk streaming relay, Megatron-LM, SGLang, DeepEP, training and serving prefill。
+- Paper: `2505.11432`, `2606.04101`
+- Institutions: Peking University, ByteDance Seed, RedNote, Shanghai AI Laboratory, Independent Researcher。
+- Internal relation: `2505.11432` 中 [Chao Jin](/authors/chao-jin-pku/) 与 [Ziheng Jiang](/authors/ziheng-jiang/) 为 equal contribution，连接 PKU 与 ByteDance Seed；[Xin Jin](/authors/xin-jin-pku/) 与 Xin Liu 为 corresponding authors；[Yanghua Peng](/authors/yanghua-peng/) 和 [Haibin Lin](/authors/haibin-lin/) 连接 HybridFlow/VERL ByteDance 系统线。`2606.04101` 中 Peking University 作者群为核心，[Chao Jin](/authors/chao-jin-pku/) 与 MegaScale-MoE 直接重叠；Xinming Wei 带 RedNote internship 脚注，Tuo Dai 代表 RedNote，Shan Yu 连接 Shanghai AI Laboratory，Yuliang Liu 与 Guojie Luo 为 corresponding authors。
+- Theme relation: MegaScale-MoE, UltraEP, MoE training systems, communication-efficient parallelism, sequence parallel attention, expert parallel FFN, communication-computation overlap, selective activation rematerialization, BF16/FP8 communication compression, exact-load real-time balancing, rack-scale nodes, quota-driven replication and reroute, persistent tile streaming, chunk streaming relay, Megatron-LM, DeepSpeed Ulysses, DeepEP, DualPipe, SGLang, training and serving prefill。
 
 ### Cluster M: Optimizer Geometry 与 Muon 曲率机制
 
@@ -826,6 +827,12 @@ Updated-At: 2026-06-24
 - `2606.04662` 和 `2501.12948` 的关系是 pretraining optimizer 与 reasoning RL 的上下游关系。DeepSeek-R1/R1-Zero 依赖强 base model 的 latent capability，Muon 论文解释 base model pretraining 中 optimizer 几何如何影响训练效率。
 - `2606.04662` 和 `2606.06453` 无作者重叠，但共享 National University of Singapore 机构网络。Vortex 的 Michael Qizhe Shieh 来自 NUS，Muon 论文的 Shuche Wang 来自 NUS；主题上一个是 serving systems，一个是 optimizer geometry。
 - `2606.04662` 和 `2510.19315` 都偏理论解释。前者分析 optimizer curvature geometry，后者分析 Transformer 表达简洁性和验证复杂度；两者可作为本地档案的理论侧材料。
+- `2505.11432` 新增 MegaScale-MoE 节点。它把 MoE training communication bottleneck 拆成 parallelism choice、operator scheduling、tile-level overlap、activation rematerialization 和 BF16/FP8 communication compression 五层问题，并在 352B MoE / 1440 H800 上报告 1.41M tokens/s，相对 Megatron-LM commit `f1f03922` 提升 1.88x。
+- `2505.11432` 和 [2309.14509 DeepSpeed Ulysses](/papers/2309.14509-deepspeed-ulysses-long-sequence-training/) 存在直接方法承接。Ulysses-style SP attention 原本面向极长序列 attention，MegaScale-MoE 将其用于 MoE training 中的 intra-node attention communication reduction，并结合 EP experts 保持 GroupedGEMM 效率。
+- `2505.11432` 和 [2412.19437 DeepSeek-V3](/papers/2412.19437-deepseek-v3-technical-report/) 是 production MoE training communication 的两条对照路线。DeepSeek-V3 强调 DeepEP cross-node all-to-all 与 DualPipe pipeline overlap；MegaScale-MoE 强调每个 MoE layer 映射到单节点 NVLink 域、SP+EP intra-node parallelism 和单个 microbatch forward/backward 内 overlap。
+- `2505.11432` 和 `2606.04101` 构成 MoE systems 连续线。[Chao Jin](/authors/chao-jin-pku/) 直接重叠；MegaScale-MoE 先降低 MoE layer 内通信量并隐藏 critical-path communication，UltraEP 后续处理 post-gating exact load、replica/reroute 和 rack-scale expert state movement。
+- `2505.11432` 和 [2409.19256 HybridFlow](/papers/2409.19256-hybridflow-rlhf-framework/) / [2503.14476 DAPO](/papers/2503.14476-dapo-long-cot-rl-system/) 共享 ByteDance Seed 系统基础设施线。[Haibin Lin](/authors/haibin-lin/) 和 [Yanghua Peng](/authors/yanghua-peng/) 连接 MegaScale-MoE 与 HybridFlow/VERL；MegaScale-MoE 可视为大 MoE actor/trainer 的底层 training backend 线索。
+- `2505.11432` 和 [2605.14220 TIM/VeXact](/papers/2605.14220-training-inference-mismatch-llm-rl/) / [TML-2025-09-10 inference determinism](/papers/2025-09-10-defeating-nondeterminism-llm-inference/) 形成后续复验问题。SP+EP routing、BF16/FP8 communication compression 和 fused communication kernels 提升训练吞吐；进入 RL rollout/trainer 闭环时，需要额外验证 logprob consistency、batch-invariant execution 和低精度数值路径。
 - `2606.04101` 和 `2606.06453` 同属 LLM serving systems efficiency。Vortex 处理 sparse attention serving 与 decode/KV-cache 侧瓶颈，UltraEP 处理 MoE training 与 prefill serving 中 expert load、token all-to-all 和 expert-state transfer；两者都接触 SGLang、Qwen3/GLM 系列和长上下文/agent workload。
 - `2606.04101` 和 `2605.14220` 都把 MoE 系统实现细节提升为训练稳定性变量。TIM/VeXact 关注 rollout/trainer logprob mismatch 与 batch-invariant MoE kernels，UltraEP 关注 exact-load balancing 和 token-to-physical-expert reroute；未来 MoE RL 系统需要同时验证 load balancing 与 zero-mismatch consistency。
 - `2606.04101` 和 `2501.12948` 通过 DeepSeek-V3/R1 MoE 系统线强连接。DeepSeek-R1 依赖 DeepSeek-V3-Base MoE 和大规模 rollout/training infrastructure，UltraEP 评估 DeepSeek-V3-671B-A37B 并引用 DeepSeek-V3/R1、EPLB、DeepEP、DeepGEMM 等生态组件。

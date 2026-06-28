@@ -232,8 +232,8 @@
     "homepage": "https://sites.google.com/view/haibinlin/",
     "x": "https://x.com/eric_haibin_lin",
     "xConfidence": "high",
-    "topics": ["VERL", "HybridFlow", "LLM systems", "post-training infrastructure"],
-    "notes": "ByteDance Seed LLM systems researcher; homepage and GitHub both connect Haibin Lin to VERL and the eric_haibin_lin X handle.",
+    "topics": ["VERL", "HybridFlow", "MegaScale", "MegaScale-MoE", "LLM systems", "post-training infrastructure"],
+    "notes": "ByteDance Seed LLM systems researcher; homepage and GitHub both connect Haibin Lin to VERL and the eric_haibin_lin X handle. Recurs across HybridFlow, DAPO, MegaScale, and MegaScale-MoE system lines.",
     "sources": [
       {
         "label": "Homepage",
@@ -4317,6 +4317,147 @@
       {
         "label": "PMLR paper page",
         "url": "https://proceedings.mlr.press/v202/leviathan23a.html"
+      }
+    ]
+  },
+  {
+    "slug": "chao-jin-pku",
+    "name": "Chao Jin",
+    "aliases": ["Chao Jin"],
+    "affiliations": ["Peking University", "Key Laboratory of High Confidence Software Technologies, Peking University"],
+    "homepage": "https://chaojin0310.github.io/",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["MegaScale-MoE", "UltraEP", "MoE systems", "LLM training systems", "distributed systems"],
+    "notes": "Peking University PhD student advised by Xin Jin. Equal-contribution author of MegaScale-MoE and recurring PKU systems author across UltraEP / ReLibra-style MoE training systems. No high-confidence personal X account found in this pass.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://chaojin0310.github.io/"
+      },
+      {
+        "label": "DBLP",
+        "url": "https://dblp.dagstuhl.de/pid/19/4764-7.html"
+      },
+      {
+        "label": "MegaScale-MoE ACM",
+        "url": "https://dl.acm.org/doi/10.1145/3767295.3769325"
+      }
+    ]
+  },
+  {
+    "slug": "ziheng-jiang",
+    "name": "Ziheng Jiang",
+    "aliases": ["Ziheng Jiang"],
+    "affiliations": ["ByteDance Seed", "ByteDance"],
+    "homepage": "https://scholar.google.com/citations?hl=en&user=tuRCeekAAAAJ",
+    "x": "https://x.com/ZihengJiang",
+    "xConfidence": "high",
+    "topics": ["MegaScale", "MegaScale-MoE", "VERL", "LLM systems", "distributed training"],
+    "notes": "ByteDance Seed research scientist and engineering/research lead in LLM systems. Equal-contribution author of MegaScale-MoE; public speaker and Scholar records connect him to MegaScale and verl. X profile evidence aligns with ByteDance Seed and LLM systems identity.",
+    "sources": [
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=en&user=tuRCeekAAAAJ"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/ZihengJiang"
+      },
+      {
+        "label": "PyTorch Conference speaker page",
+        "url": "https://pytorchconference.sched.com/event/27QDu/verl-a-flexible-and-efficient-rl-framework-for-llms-hongpeng-guo-ziheng-jiang-bytedance-seed"
+      },
+      {
+        "label": "MegaScale OpenReview revision history",
+        "url": "https://openreview.net/revisions?id=E1YH1NuDD4"
+      }
+    ]
+  },
+  {
+    "slug": "xin-jin-pku",
+    "name": "Xin Jin",
+    "aliases": ["Xin Jin"],
+    "affiliations": ["Peking University", "Key Laboratory of High Confidence Software Technologies, Peking University"],
+    "homepage": "https://xinjin.github.io/",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["computer systems", "computer networking", "LLM training systems", "MegaScale-MoE", "UltraEP"],
+    "notes": "Associate Professor in the School of Computer Science at Peking University. Corresponding author of MegaScale-MoE and senior author in PKU systems work on cloud computing, LLM training, and LLM serving. No high-confidence personal X account found in this pass.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://xinjin.github.io/"
+      },
+      {
+        "label": "Peking University faculty page",
+        "url": "https://cs.pku.edu.cn/info/1217/1991.htm"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Xin_Jin10"
+      }
+    ]
+  },
+  {
+    "slug": "size-zheng",
+    "name": "Size Zheng",
+    "aliases": ["Size Zheng", "Si-Ze Zheng"],
+    "affiliations": ["ByteDance Seed", "Peking University", "Tsinghua University", "University of Washington"],
+    "homepage": "https://sizezheng.github.io/",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["distributed AI systems", "compute-communication overlap", "Triton-distributed", "TileLink", "MegaScale-MoE"],
+    "notes": "ByteDance Seed systems/compiler researcher. Homepage, Scholar, OpenReview, and DBLP connect Size Zheng to MegaScale-MoE, TileLink, Triton-distributed, and distributed AI systems. No high-confidence personal X account found in this pass.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://sizezheng.github.io/"
+      },
+      {
+        "label": "Publications",
+        "url": "https://sizezheng.github.io/publications/"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=en&user=TMZWR1gAAAAJ"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Size_Zheng1"
+      },
+      {
+        "label": "DBLP",
+        "url": "https://dblp.org/pid/254/6617-1"
+      }
+    ]
+  },
+  {
+    "slug": "yanghua-peng",
+    "name": "Yanghua Peng",
+    "aliases": ["Yanghua Peng"],
+    "affiliations": ["ByteDance Seed", "ByteDance", "The University of Hong Kong"],
+    "homepage": "https://sites.google.com/view/yanghuapeng/",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["Seed Infra", "MegaScale", "MegaScale-MoE", "HybridFlow", "LLM systems", "GPU scheduling"],
+    "notes": "Research scientist and engineering lead at Seed Infra, ByteDance. Recurs across MegaScale, HybridFlow/VERL, and MegaScale-MoE infrastructure lines. No high-confidence personal X account found in this pass.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://sites.google.com/view/yanghuapeng/"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=en&user=Gf9amnoAAAAJ"
+      },
+      {
+        "label": "DBLP",
+        "url": "https://dblp.org/pid/195/5934"
+      },
+      {
+        "label": "HybridFlow arXiv HTML",
+        "url": "https://arxiv.org/html/2409.19256v1"
       }
     ]
   }
