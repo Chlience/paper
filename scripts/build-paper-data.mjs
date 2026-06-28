@@ -51,7 +51,6 @@ const tagOverrides = new Map([
   ['2606.04075-llms-hack-rewards-and-society', ['Safety', 'RL']],
   ['2606.04101-ultraep-rack-scale-moe-load-balancing', ['Systems']],
   ['2606.04662-muon-outperforms-adam-curvature', ['Optimizer', 'Theory']],
-  ['2606.06453-vortex-sparse-attention-serving', ['Systems']],
 ]);
 
 const internalFilePaths = new Map([
