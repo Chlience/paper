@@ -3380,8 +3380,8 @@
     "github": "https://github.com/GeeeekExplorer",
     "x": "",
     "xConfidence": "not-found",
-    "topics": ["DeepSeek-R1", "DeepSeekMoE", "Engram", "MLSys", "LLM systems", "vLLM"],
-    "notes": "DeepSeekMoE, DeepSeek-R1 and Engram recurring author. GitHub profile identifies Xingkai Yu and pins DeepSeek-V3, DeepSeek-R1 and nano-vllm; Scholar records DeepSeek AI publications. No high-confidence personal X account was found.",
+    "topics": ["DeepSeek-R1", "DeepSeekMoE", "Engram", "DSpark", "speculative decoding", "MLSys", "LLM systems", "vLLM"],
+    "notes": "DeepSeekMoE, DeepSeek-R1, Engram and DSpark recurring author. GitHub profile identifies Xingkai Yu and pins DeepSeek-V3, DeepSeek-R1 and nano-vllm; Scholar records DeepSeek AI publications. No high-confidence personal X account was found.",
     "sources": [
       {
         "label": "GitHub",
@@ -3398,6 +3398,10 @@
       {
         "label": "Engram arXiv",
         "url": "https://arxiv.org/abs/2601.07372"
+      },
+      {
+        "label": "DSpark PDF",
+        "url": "https://github.com/deepseek-ai/DeepSpec/blob/main/DSpark_paper.pdf"
       }
     ]
   },
@@ -3471,8 +3475,8 @@
     "affiliations": ["Peking University", "DeepSeek AI"],
     "x": "",
     "xConfidence": "not-found",
-    "topics": ["Engram", "conditional memory", "sparse language models", "long-context retrieval"],
-    "notes": "First author and arXiv submitter of Engram / Conditional Memory via Scalable Lookup, with Peking University and DeepSeek-AI affiliation on the paper. Public profile evidence beyond Engram and publication-index pages is sparse, so no personal X account is recorded.",
+    "topics": ["Engram", "DSpark", "speculative decoding", "conditional memory", "sparse language models", "long-context retrieval"],
+    "notes": "First author and arXiv submitter of Engram / Conditional Memory via Scalable Lookup, and equal-contribution contact author of DSpark, with Peking University and DeepSeek-AI affiliation on both papers. Public profile evidence beyond paper/project pages is sparse, so no personal X account is recorded.",
     "sources": [
       {
         "label": "Engram arXiv",
@@ -3481,6 +3485,93 @@
       {
         "label": "Engram HTML",
         "url": "https://arxiv.org/html/2601.07372v1"
+      },
+      {
+        "label": "DSpark PDF",
+        "url": "https://github.com/deepseek-ai/DeepSpec/blob/main/DSpark_paper.pdf"
+      },
+      {
+        "label": "DeepSpec",
+        "url": "https://github.com/deepseek-ai/DeepSpec"
+      }
+    ]
+  },
+  {
+    "slug": "chenze-shao",
+    "name": "Chenze Shao",
+    "aliases": ["Chenze Shao", "shaochenze"],
+    "affiliations": ["DeepSeek AI", "Tencent WeChat AI", "Institute of Computing Technology, Chinese Academy of Sciences"],
+    "homepage": "http://nlp.ict.ac.cn/~shaochenze/",
+    "github": "https://github.com/shaochenze",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["DSpark", "speculative decoding", "non-autoregressive generation", "natural language generation"],
+    "notes": "Equal-contribution contact author of DSpark. OpenReview records confirmed ICT CAS, Tencent and DeepSeek emails, ICT CAS PhD background, Tencent WeChat AI researcher history and Yang Feng advisor relation. GitHub profile uses shaochenze, lists DeepSeek as company and links a personal homepage. No high-confidence personal X account was found.",
+    "sources": [
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Chenze_Shao1"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/shaochenze"
+      },
+      {
+        "label": "Homepage",
+        "url": "http://nlp.ict.ac.cn/~shaochenze/"
+      },
+      {
+        "label": "DSpark PDF",
+        "url": "https://github.com/deepseek-ai/DeepSpec/blob/main/DSpark_paper.pdf"
+      }
+    ]
+  },
+  {
+    "slug": "jiashi-li",
+    "name": "Jiashi Li",
+    "aliases": ["Jiashi Li", "beginlner"],
+    "affiliations": ["DeepSeek AI", "Peking University"],
+    "github": "https://github.com/beginlner",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["DSpark", "DeepSeekMoE", "speculative decoding", "LLM systems"],
+    "notes": "Equal-contribution contact author of DSpark and DeepSeekMoE coauthor. OpenReview records Jiashi Li as a DeepSeek researcher with Peking University undergraduate background and a high-flyer.cn confirmed email; GitHub beginlner matches the OpenReview homepage and display name. No high-confidence personal X account was found.",
+    "sources": [
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Jiashi_Li2"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/beginlner"
+      },
+      {
+        "label": "DeepSeekMoE arXiv",
+        "url": "https://arxiv.org/abs/2401.06066"
+      },
+      {
+        "label": "DSpark PDF",
+        "url": "https://github.com/deepseek-ai/DeepSpec/blob/main/DSpark_paper.pdf"
+      }
+    ]
+  },
+  {
+    "slug": "yunfan-xiong",
+    "name": "Yunfan Xiong",
+    "aliases": ["Yunfan Xiong"],
+    "affiliations": ["Peking University", "DeepSeek AI"],
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["DSpark", "speculative decoding", "LLM serving"],
+    "notes": "Equal-contribution contact author of DSpark. OpenReview records Yunfan Xiong as a Peking University MS student and undergraduate; DSpark title page provides a deepseek.com contact email. No stable personal homepage, GitHub, Scholar profile or high-confidence personal X account was found in this pass.",
+    "sources": [
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Yunfan_Xiong1"
+      },
+      {
+        "label": "DSpark PDF",
+        "url": "https://github.com/deepseek-ai/DeepSpec/blob/main/DSpark_paper.pdf"
       }
     ]
   },
