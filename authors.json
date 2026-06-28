@@ -1513,8 +1513,8 @@
     "github": "",
     "x": "",
     "xConfidence": "not-found",
-    "topics": ["reasoning intelligence", "natural language processing", "multimodal AI", "trustworthy AI", "RLVR"],
-    "notes": "Entropy Mechanism corresponding author. TsinghuaC3I page identifies him as Tsinghua Department of Electronics permanent professor, Huiyan Chair Professor, IEEE Fellow and CAAI Fellow; Google Scholar identifies him as Director of Shanghai AI Lab and Chair Professor at Tsinghua.",
+    "topics": ["reasoning intelligence", "natural language processing", "multimodal AI", "trustworthy AI", "RLVR", "self-improving agents"],
+    "notes": "Entropy Mechanism corresponding author and Self-Improving Agents survey corresponding author. TsinghuaC3I page identifies him as Tsinghua Department of Electronics permanent professor, Huiyan Chair Professor, IEEE Fellow and CAAI Fellow; Google Scholar identifies him as Director of Shanghai AI Lab and Chair Professor at Tsinghua.",
     "sources": [
       {
         "label": "TsinghuaC3I profile",
@@ -1527,6 +1527,10 @@
       {
         "label": "Entropy Mechanism paper",
         "url": "https://arxiv.org/abs/2505.22617"
+      },
+      {
+        "label": "Self-Improving Agents OpenReview",
+        "url": "https://openreview.net/forum?id=IUltZSgLMm"
       }
     ]
   },
@@ -1540,8 +1544,8 @@
     "github": "https://github.com/dingn42",
     "x": "https://x.com/stingning",
     "xConfidence": "high",
-    "topics": ["reasoning intelligence", "scalable reinforcement learning", "PRIME-RL", "RLVR", "LLM alignment"],
-    "notes": "Entropy Mechanism corresponding author and recurring RLVR author in the archive. Homepage identifies him as tenure-track Assistant Professor at Tsinghua EE, links GitHub/X/Scholar, and lists Entropy Mechanism, TTRL, ImplicitPRM and PRIME.",
+    "topics": ["reasoning intelligence", "scalable reinforcement learning", "PRIME-RL", "RLVR", "LLM alignment", "self-improving agents"],
+    "notes": "Entropy Mechanism corresponding author, Self-Improving Agents survey corresponding author, and recurring RLVR author in the archive. Homepage identifies him as tenure-track Assistant Professor at Tsinghua EE, links GitHub/X/Scholar, and lists Entropy Mechanism, TTRL, ImplicitPRM and PRIME.",
     "sources": [
       {
         "label": "Homepage",
@@ -1558,6 +1562,83 @@
       {
         "label": "X",
         "url": "https://x.com/stingning"
+      },
+      {
+        "label": "Self-Improving Agents OpenReview",
+        "url": "https://openreview.net/forum?id=IUltZSgLMm"
+      }
+    ]
+  },
+  {
+    "slug": "che-jiang",
+    "name": "Che Jiang",
+    "aliases": ["Che Jiang"],
+    "affiliations": ["Tsinghua University", "Horizon Research", "Frontis.AI"],
+    "homepage": "https://openreview.net/profile?id=~Che_Jiang1",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["self-improving agents", "agent harness", "runtime adaptation", "agentic AI", "meta-evolution"],
+    "notes": "Project lead and core contributor for the Self-Improving Agents survey. OpenReview profile records Che Jiang as a Tsinghua University PhD student advised by Bowen Zhou, with Google Scholar and DBLP profile links; no high-confidence personal X account was found in this pass.",
+    "sources": [
+      {
+        "label": "OpenReview profile",
+        "url": "https://openreview.net/profile?id=~Che_Jiang1"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=vJ8g_VAAAAAJ&hl=en&oi=sra"
+      },
+      {
+        "label": "DBLP",
+        "url": "https://dblp.org/pid/314/9950"
+      },
+      {
+        "label": "Self-Improving Agents OpenReview",
+        "url": "https://openreview.net/forum?id=IUltZSgLMm"
+      },
+      {
+        "label": "Awesome-Self-Improving-Agents GitHub",
+        "url": "https://github.com/FrontisAI/Awesome-Self-Improving-Agents"
+      }
+    ]
+  },
+  {
+    "slug": "kaiyan-zhang",
+    "name": "Kaiyan Zhang",
+    "chineseName": "张开颜",
+    "aliases": ["Kaiyan Zhang", "OkhayIea", "iseesaw"],
+    "affiliations": ["Frontis.AI", "Tsinghua University", "Harbin Institute of Technology"],
+    "homepage": "https://iseesaw.github.io/",
+    "github": "https://github.com/iseesaw",
+    "x": "https://x.com/OkhayIea",
+    "xConfidence": "high",
+    "topics": ["self-improving agents", "self-evolving agents", "scalable reinforcement learning", "collective intelligence", "process reward models"],
+    "notes": "Project lead and corresponding author for the Self-Improving Agents survey. Homepage identifies Kaiyan Zhang as a final-year Tsinghua PhD candidate advised by Bowen Zhou, links Google Scholar, GitHub iseesaw, and X OkhayIea; OpenReview profile records Frontis.AI principal researcher from 2026 and Tsinghua PhD history.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://iseesaw.github.io/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/iseesaw"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=3RjM7L8AAAAJ"
+      },
+      {
+        "label": "OpenReview profile",
+        "url": "https://openreview.net/profile?id=~Kaiyan_Zhang1"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/OkhayIea"
+      },
+      {
+        "label": "Self-Improving Agents OpenReview",
+        "url": "https://openreview.net/forum?id=IUltZSgLMm"
       }
     ]
   },
