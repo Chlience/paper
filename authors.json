@@ -203,8 +203,8 @@
     "homepage": "https://github.com/PeterSH6",
     "x": "https://x.com/PeterSheng66",
     "xConfidence": "high",
-    "topics": ["VERL", "HybridFlow", "RLHF systems", "post-training infrastructure"],
-    "notes": "HybridFlow first author and DAPO infrastructure contributor; GitHub links the X handle and pins VERL/HybridFlow-related work.",
+    "topics": ["VERL", "HybridFlow", "Laminar", "asynchronous RL", "RLHF systems", "post-training infrastructure"],
+    "notes": "HybridFlow first author, DAPO infrastructure contributor, and Laminar equal-contribution author; GitHub links the X handle and pins VERL/HybridFlow-related work.",
     "sources": [
       {
         "label": "GitHub",
@@ -221,6 +221,14 @@
       {
         "label": "OpenReview",
         "url": "https://openreview.net/profile?id=~Guangming_Sheng1"
+      },
+      {
+        "label": "Laminar arXiv",
+        "url": "https://arxiv.org/abs/2510.12633"
+      },
+      {
+        "label": "Laminar DOI",
+        "url": "https://doi.org/10.1145/3767295.3803580"
       }
     ]
   },
@@ -232,8 +240,8 @@
     "homepage": "https://sites.google.com/view/haibinlin/",
     "x": "https://x.com/eric_haibin_lin",
     "xConfidence": "high",
-    "topics": ["VERL", "HybridFlow", "MegaScale", "MegaScale-MoE", "LLM systems", "post-training infrastructure"],
-    "notes": "ByteDance Seed LLM systems researcher; homepage and GitHub both connect Haibin Lin to VERL and the eric_haibin_lin X handle. Recurs across HybridFlow, DAPO, MegaScale, and MegaScale-MoE system lines.",
+    "topics": ["VERL", "HybridFlow", "Laminar", "asynchronous RL", "MegaScale", "MegaScale-MoE", "LLM systems", "post-training infrastructure"],
+    "notes": "ByteDance Seed LLM systems researcher; homepage and GitHub both connect Haibin Lin to VERL and the eric_haibin_lin X handle. Recurs across HybridFlow, DAPO, MegaScale, MegaScale-MoE, and Laminar system lines.",
     "sources": [
       {
         "label": "Homepage",
@@ -250,6 +258,14 @@
       {
         "label": "Google Scholar",
         "url": "https://scholar.google.com/citations?user=jx9u_y4AAAAJ"
+      },
+      {
+        "label": "Laminar arXiv",
+        "url": "https://arxiv.org/abs/2510.12633"
+      },
+      {
+        "label": "Laminar DOI",
+        "url": "https://doi.org/10.1145/3767295.3803580"
       }
     ]
   },
@@ -261,8 +277,8 @@
     "homepage": "https://sites.google.com/view/chizhang-usc/",
     "x": "",
     "xConfidence": "not-found",
-    "topics": ["VERL", "HybridFlow", "RLHF systems", "model engine"],
-    "notes": "HybridFlow and DAPO recurring author; GitHub and homepage align with USC-to-ByteDance RLHF infrastructure work, but no high-confidence personal X account was found.",
+    "topics": ["VERL", "HybridFlow", "Laminar", "asynchronous RL", "RLHF systems", "model engine"],
+    "notes": "HybridFlow, DAPO, and Laminar recurring author; GitHub and homepage align with USC-to-ByteDance RLHF infrastructure work, but no high-confidence personal X account was found.",
     "sources": [
       {
         "label": "Homepage",
@@ -275,6 +291,14 @@
       {
         "label": "Google Scholar",
         "url": "https://scholar.google.com/citations?user=z83Itm8AAAAJ"
+      },
+      {
+        "label": "Laminar arXiv",
+        "url": "https://arxiv.org/abs/2510.12633"
+      },
+      {
+        "label": "Laminar DOI",
+        "url": "https://doi.org/10.1145/3767295.3803580"
       }
     ]
   },
@@ -286,8 +310,8 @@
     "homepage": "https://zw0610.github.io/",
     "x": "",
     "xConfidence": "not-found",
-    "topics": ["VERL", "HybridFlow", "RL systems", "GPU systems"],
-    "notes": "HybridFlow and DAPO recurring author; GitHub and Scholar align with ByteDance ML systems/RL work, but no high-confidence personal X account was found.",
+    "topics": ["VERL", "HybridFlow", "Laminar", "asynchronous RL", "RL systems", "GPU systems"],
+    "notes": "HybridFlow, DAPO, and Laminar recurring author; GitHub and Scholar align with ByteDance ML systems/RL work, but no high-confidence personal X account was found.",
     "sources": [
       {
         "label": "GitHub",
@@ -296,6 +320,14 @@
       {
         "label": "Google Scholar",
         "url": "https://scholar.google.com/citations?user=h4VxTNUAAAAJ"
+      },
+      {
+        "label": "Laminar arXiv",
+        "url": "https://arxiv.org/abs/2510.12633"
+      },
+      {
+        "label": "Laminar DOI",
+        "url": "https://doi.org/10.1145/3767295.3803580"
       }
     ]
   },
@@ -1663,8 +1695,8 @@
     "github": "https://github.com/tongyx361",
     "x": "https://x.com/tongyx361",
     "xConfidence": "high",
-    "topics": ["verl", "DAPO", "LLM reinforcement learning", "rollout systems", "post-training infrastructure", "optimal token baseline"],
-    "notes": "TRM and OTB coauthor and recurring verl/DAPO infrastructure contributor. Homepage and GitHub identify him as Shawn/Yuxuan Tong, Tsinghua DCST student and ByteDance Seed AI Researcher; GitHub links the same homepage and X account.",
+    "topics": ["verl", "DAPO", "Laminar", "asynchronous RL", "LLM reinforcement learning", "rollout systems", "post-training infrastructure", "optimal token baseline"],
+    "notes": "TRM and OTB coauthor, recurring verl/DAPO infrastructure contributor, and Laminar equal-contribution author. Homepage and GitHub identify him as Shawn/Yuxuan Tong, Tsinghua DCST student and ByteDance Seed AI Researcher; GitHub links the same homepage and X account.",
     "sources": [
       {
         "label": "Homepage",
@@ -1689,6 +1721,14 @@
       {
         "label": "OTB paper",
         "url": "https://arxiv.org/abs/2602.07078"
+      },
+      {
+        "label": "Laminar arXiv",
+        "url": "https://arxiv.org/abs/2510.12633"
+      },
+      {
+        "label": "Laminar DOI",
+        "url": "https://doi.org/10.1145/3767295.3803580"
       }
     ]
   },
@@ -4440,8 +4480,8 @@
     "homepage": "https://sites.google.com/view/yanghuapeng/",
     "x": "",
     "xConfidence": "not-found",
-    "topics": ["Seed Infra", "MegaScale", "MegaScale-MoE", "HybridFlow", "LLM systems", "GPU scheduling"],
-    "notes": "Research scientist and engineering lead at Seed Infra, ByteDance. Recurs across MegaScale, HybridFlow/VERL, and MegaScale-MoE infrastructure lines. No high-confidence personal X account found in this pass.",
+    "topics": ["Seed Infra", "MegaScale", "MegaScale-MoE", "HybridFlow", "Laminar", "asynchronous RL", "LLM systems", "GPU scheduling"],
+    "notes": "Research scientist and engineering lead at Seed Infra, ByteDance. Recurs across MegaScale, HybridFlow/VERL, MegaScale-MoE, and Laminar infrastructure lines. No high-confidence personal X account found in this pass.",
     "sources": [
       {
         "label": "Homepage",
@@ -4458,6 +4498,233 @@
       {
         "label": "HybridFlow arXiv HTML",
         "url": "https://arxiv.org/html/2409.19256v1"
+      },
+      {
+        "label": "Laminar arXiv",
+        "url": "https://arxiv.org/abs/2510.12633"
+      },
+      {
+        "label": "Laminar DOI",
+        "url": "https://doi.org/10.1145/3767295.3803580"
+      }
+    ]
+  },
+  {
+    "slug": "borui-wan",
+    "name": "Borui Wan",
+    "aliases": ["Borui Wan"],
+    "affiliations": ["The University of Hong Kong", "ByteDance Seed"],
+    "homepage": "https://openreview.net/profile?id=~Borui_Wan1",
+    "github": "https://github.com/raywan-110",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["Laminar", "ByteCheckpoint", "machine learning systems", "checkpointing systems", "LLM inference"],
+    "notes": "Laminar coauthor and HKU PhD student; OpenReview lists Chuan Wu as PhD advisor and ML systems/checkpointing/LLM inference expertise. GitHub profile pins ByteDance-Seed/ByteCheckpoint. No high-confidence personal X account was found.",
+    "sources": [
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Borui_Wan1"
+      },
+      {
+        "label": "DBLP",
+        "url": "https://dblp.org/pid/315/5731"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/raywan-110"
+      },
+      {
+        "label": "Laminar arXiv",
+        "url": "https://arxiv.org/abs/2510.12633"
+      },
+      {
+        "label": "Laminar DOI",
+        "url": "https://doi.org/10.1145/3767295.3803580"
+      }
+    ]
+  },
+  {
+    "slug": "chaobo-jia",
+    "name": "Chaobo Jia",
+    "chineseName": "贾超博",
+    "aliases": ["Chaobo Jia"],
+    "affiliations": ["The Chinese University of Hong Kong", "ByteDance Seed", "Kimi RL Team"],
+    "homepage": "https://jcbjcbjc.github.io/",
+    "github": "https://github.com/jcbjcbjc",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["Laminar", "asynchronous RL", "agent swarm", "long-horizon agents", "machine learning systems"],
+    "notes": "Laminar coauthor; personal homepage identifies him as a CUHK PhD student advised by Hong Xu, current Kimi RL Team member, and former ByteDance Seed research intern focused on Async RL and Hyper-scale Pre-train. No high-confidence personal X account was found.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://jcbjcbjc.github.io/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/jcbjcbjc"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=PSoql2sAAAAJ&hl=zh-CN"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Chaobo_Jia1"
+      },
+      {
+        "label": "Laminar arXiv",
+        "url": "https://arxiv.org/abs/2510.12633"
+      },
+      {
+        "label": "Laminar DOI",
+        "url": "https://doi.org/10.1145/3767295.3803580"
+      }
+    ]
+  },
+  {
+    "slug": "xibin-wu",
+    "name": "Xibin Wu",
+    "aliases": ["Xibin Wu", "wuxibin89"],
+    "affiliations": ["ByteDance", "ByteDance Seed", "University of Science and Technology Beijing"],
+    "homepage": "https://github.com/wuxibin89",
+    "github": "https://github.com/wuxibin89",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["Laminar", "HybridFlow", "OpenRLHF", "verl", "machine learning systems"],
+    "notes": "ByteDance researcher and recurring HybridFlow/Laminar author; OpenReview and GitHub connect him to OpenRLHF, verl, and ML systems work. No high-confidence personal X account was found.",
+    "sources": [
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Xibin_Wu1"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/wuxibin89"
+      },
+      {
+        "label": "OpenRLHF GitHub",
+        "url": "https://github.com/OpenRLHF/OpenRLHF"
+      },
+      {
+        "label": "HybridFlow arXiv",
+        "url": "https://arxiv.org/abs/2409.19256"
+      },
+      {
+        "label": "Laminar arXiv",
+        "url": "https://arxiv.org/abs/2510.12633"
+      },
+      {
+        "label": "Laminar DOI",
+        "url": "https://doi.org/10.1145/3767295.3803580"
+      }
+    ]
+  },
+  {
+    "slug": "yuqi-wu",
+    "name": "Yuqi Wu",
+    "aliases": ["Yuqi Wu"],
+    "affiliations": ["ByteDance Seed", "Shanghai Jiao Tong University"],
+    "homepage": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["Laminar", "asynchronous RL", "post-training systems"],
+    "notes": "Laminar coauthor; arXiv title page lists ByteDance Seed, while Crossref lists Shanghai Jiao Tong University and ORCID 0009-0004-6144-7399. No high-confidence homepage, GitHub, DBLP profile, or personal X account was found; a DBLP same-name disambiguation page was not used as a stable profile.",
+    "sources": [
+      {
+        "label": "Laminar arXiv",
+        "url": "https://arxiv.org/abs/2510.12633"
+      },
+      {
+        "label": "Laminar DOI",
+        "url": "https://doi.org/10.1145/3767295.3803580"
+      }
+    ]
+  },
+  {
+    "slug": "xiang-li-bytedance",
+    "name": "Xiang Li",
+    "aliases": ["Xiang Li"],
+    "affiliations": ["ByteDance Seed", "ByteDance"],
+    "homepage": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["Laminar", "MegaScale", "MegaScale-MoE", "LLM systems", "post-training infrastructure"],
+    "notes": "ByteDance systems author appearing in Laminar and MegaScale/MegaScale-MoE lines. Crossref gives Laminar affiliation as Bytedance Tokyo and ORCID 0009-0002-8751-4655. Personal profile and X account were not confirmed because the name is common.",
+    "sources": [
+      {
+        "label": "Laminar arXiv",
+        "url": "https://arxiv.org/abs/2510.12633"
+      },
+      {
+        "label": "Laminar DOI",
+        "url": "https://doi.org/10.1145/3767295.3803580"
+      },
+      {
+        "label": "MegaScale-MoE arXiv",
+        "url": "https://arxiv.org/abs/2505.11432"
+      }
+    ]
+  },
+  {
+    "slug": "xin-liu-bytedance",
+    "name": "Xin Liu",
+    "aliases": ["Xin Liu"],
+    "affiliations": ["ByteDance Seed", "ByteDance"],
+    "homepage": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["Laminar", "DAPO", "MegaScale-MoE", "LLM systems", "post-training infrastructure"],
+    "notes": "ByteDance systems author; Laminar coauthor, DAPO infrastructure author, and MegaScale-MoE ByteDance corresponding author. Crossref gives Laminar ORCID 0009-0000-8346-3323 and ByteDance Seattle affiliation. Personal homepage and X account were not confirmed because the name is common.",
+    "sources": [
+      {
+        "label": "Laminar arXiv",
+        "url": "https://arxiv.org/abs/2510.12633"
+      },
+      {
+        "label": "Laminar DOI",
+        "url": "https://doi.org/10.1145/3767295.3803580"
+      },
+      {
+        "label": "MegaScale-MoE arXiv",
+        "url": "https://arxiv.org/abs/2505.11432"
+      },
+      {
+        "label": "DAPO arXiv",
+        "url": "https://arxiv.org/abs/2503.14476"
+      }
+    ]
+  },
+  {
+    "slug": "chuan-wu",
+    "name": "Chuan Wu",
+    "aliases": ["Chuan Wu"],
+    "affiliations": ["The University of Hong Kong", "University of Toronto", "Tsinghua University"],
+    "homepage": "https://i.cs.hku.hk/~cwu/",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["Laminar", "HybridFlow", "distributed systems", "cloud computing", "machine learning systems"],
+    "notes": "HKU professor and HybridFlow/Laminar senior author; Borui Wan's OpenReview profile lists Chuan Wu as PhD advisor. No high-confidence personal X account was found.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://i.cs.hku.hk/~cwu/"
+      },
+      {
+        "label": "DBLP",
+        "url": "https://dblp.org/pid/34/3772-1"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Chuan_Wu1"
+      },
+      {
+        "label": "Laminar arXiv",
+        "url": "https://arxiv.org/abs/2510.12633"
+      },
+      {
+        "label": "Laminar DOI",
+        "url": "https://doi.org/10.1145/3767295.3803580"
       }
     ]
   },
