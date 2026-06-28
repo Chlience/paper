@@ -4460,5 +4460,160 @@
         "url": "https://arxiv.org/html/2409.19256v1"
       }
     ]
+  },
+  {
+    "slug": "zhanda-zhu",
+    "name": "Zhanda Zhu",
+    "aliases": ["Zhanda Zhu"],
+    "affiliations": ["University of Toronto", "Vector Institute", "NVIDIA"],
+    "homepage": "https://openreview.net/profile?id=~Zhanda_Zhu1",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["LoRAFusion", "LLM systems", "GPU systems", "LoRA fine-tuning", "kernel fusion"],
+    "notes": "LoRAFusion first author. arXiv title page lists University of Toronto, Vector Institute, and NVIDIA; OpenReview and DBLP records connect Zhanda Zhu to LLM systems and GPU/system optimization work. No high-confidence personal X account found in this pass.",
+    "sources": [
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Zhanda_Zhu1"
+      },
+      {
+        "label": "DBLP",
+        "url": "https://dblp.org/pid/414/2142.html"
+      },
+      {
+        "label": "LoRAFusion arXiv",
+        "url": "https://arxiv.org/abs/2510.00206"
+      }
+    ]
+  },
+  {
+    "slug": "qidong-su",
+    "name": "Qidong Su",
+    "aliases": ["Qidong Su"],
+    "affiliations": ["University of Toronto", "Vector Institute", "NVIDIA"],
+    "homepage": "https://sites.google.com/view/qidong-su",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["LoRAFusion", "machine learning systems", "compilers", "distributed systems", "kernel fusion"],
+    "notes": "LoRAFusion coauthor. Personal homepage presents Qidong Su as a University of Toronto PhD student working on machine learning systems, compilers, and distributed systems; paper title page lists University of Toronto, Vector Institute, and NVIDIA. No high-confidence personal X account found in this pass.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://sites.google.com/view/qidong-su"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Qidong_Su1"
+      },
+      {
+        "label": "LoRAFusion arXiv",
+        "url": "https://arxiv.org/abs/2510.00206"
+      }
+    ]
+  },
+  {
+    "slug": "yaoyao-ding",
+    "name": "Yaoyao Ding",
+    "aliases": ["Yaoyao Ding"],
+    "affiliations": ["University of Toronto", "Vector Institute", "NVIDIA"],
+    "homepage": "https://scholar.google.com/citations?user=C7uVZaAAAAAJ",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["LoRAFusion", "GPU kernels", "ML systems", "Hidet", "compiler optimization"],
+    "notes": "LoRAFusion coauthor. Scholar and DBLP signals connect Yaoyao Ding to ML systems, Hidet, and compiler/kernel optimization; paper title page lists University of Toronto, Vector Institute, and NVIDIA. No high-confidence personal X account found in this pass.",
+    "sources": [
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=C7uVZaAAAAAJ"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Yaoyao_Ding1"
+      },
+      {
+        "label": "LoRAFusion arXiv",
+        "url": "https://arxiv.org/abs/2510.00206"
+      }
+    ]
+  },
+  {
+    "slug": "kevin-song",
+    "name": "Kevin Song",
+    "aliases": ["Kevin Song", "Xinyang Song"],
+    "affiliations": ["University of Toronto", "Vector Institute", "NVIDIA"],
+    "homepage": "https://kevins981.github.io/",
+    "github": "https://github.com/kevins981",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["LoRAFusion", "computer systems", "machine learning systems", "GPU systems"],
+    "notes": "LoRAFusion coauthor. Paper title page uses Kevin Song with xinyang.song@utoronto.ca; personal homepage uses Kevin Song / Xinyang Song and links the kevins981 GitHub identity. No high-confidence personal X account found in this pass.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://kevins981.github.io/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/kevins981"
+      },
+      {
+        "label": "LoRAFusion arXiv",
+        "url": "https://arxiv.org/abs/2510.00206"
+      }
+    ]
+  },
+  {
+    "slug": "shang-wang-centml",
+    "name": "Shang Wang",
+    "aliases": ["Shang Wang"],
+    "affiliations": ["University of Toronto", "Vector Institute", "NVIDIA", "CentML"],
+    "homepage": "https://www.cs.toronto.edu/~shang/",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["LoRAFusion", "CentML", "machine learning systems", "GPU systems", "model batching"],
+    "notes": "LoRAFusion coauthor and CentML co-founder / CTO. Public homepage and CentML context connect Shang Wang to the University of Toronto EcoSystem line and ML systems work. No high-confidence personal X account found in this pass.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://www.cs.toronto.edu/~shang/"
+      },
+      {
+        "label": "LoRAFusion GitHub",
+        "url": "https://github.com/CentML/lorafusion"
+      },
+      {
+        "label": "LoRAFusion arXiv",
+        "url": "https://arxiv.org/abs/2510.00206"
+      }
+    ]
+  },
+  {
+    "slug": "gennady-pekhimenko",
+    "name": "Gennady Pekhimenko",
+    "aliases": ["Gennady Pekhimenko"],
+    "affiliations": ["University of Toronto", "Vector Institute", "NVIDIA", "CentML"],
+    "homepage": "https://www.cs.toronto.edu/~pekhimenko/",
+    "x": "https://x.com/Dr_GGP",
+    "xConfidence": "high",
+    "topics": ["LoRAFusion", "CentML", "EcoSystem", "machine learning systems", "computer architecture"],
+    "notes": "LoRAFusion senior coauthor. University of Toronto homepage presents Gennady Pekhimenko as professor and EcoSystem group lead; public profiles connect him to CentML. X handle Dr_GGP matches name, role, and CentML/UofT systems identity.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://www.cs.toronto.edu/~pekhimenko/"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Gennady_Pekhimenko1"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/Dr_GGP"
+      },
+      {
+        "label": "LoRAFusion arXiv",
+        "url": "https://arxiv.org/abs/2510.00206"
+      }
+    ]
   }
 ]
