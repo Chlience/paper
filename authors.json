@@ -3717,8 +3717,8 @@
     "huggingFace": "https://huggingface.co/bzheng",
     "x": "",
     "xConfidence": "not-found",
-    "topics": ["Qwen", "large language models", "foundation models", "post-training"],
-    "notes": "Recurring Qwen author across Qwen2.5, Qwen3 and Bebop. Scholar/Hugging Face and Qwen technical reports provide stable Qwen Team linkage, but public personal profile evidence is sparse. No high-confidence personal X account was found.",
+    "topics": ["Qwen", "large language models", "foundation models", "post-training", "agentic RL systems", "ROLL"],
+    "notes": "Recurring Qwen author across Qwen2.5, Qwen3 and Bebop; RollArt adds Alibaba ROLL / agentic RL infrastructure linkage. Scholar/Hugging Face and Qwen technical reports provide stable Qwen Team linkage, but public personal profile evidence is sparse. No high-confidence personal X account was found.",
     "sources": [
       {
         "label": "Google Scholar",
@@ -3735,6 +3735,10 @@
       {
         "label": "Qwen3 arXiv",
         "url": "https://arxiv.org/abs/2505.09388"
+      },
+      {
+        "label": "RollArt arXiv",
+        "url": "https://arxiv.org/abs/2512.22560"
       }
     ]
   },
@@ -5158,6 +5162,139 @@
       {
         "label": "DFlash arXiv",
         "url": "https://arxiv.org/abs/2602.06036"
+      }
+    ]
+  },
+  {
+    "slug": "wei-gao-hkust",
+    "name": "Wei Gao",
+    "aliases": ["Wei Gao", "gaow0007"],
+    "affiliations": ["HKUST", "Alibaba Group"],
+    "homepage": "https://gaow0007.github.io/",
+    "github": "https://github.com/gaow0007",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["RollArt", "ROLL", "RollPacker", "agentic RL systems", "distributed systems", "AI infrastructure"],
+    "notes": "RollArt equal-contribution author and ROLL core contributor. Homepage identifies Wei Gao as an HKUST postdoctoral fellow advised by Wei Wang and a researcher at Alibaba Group, with research interests in AI infrastructure, distributed systems, RL post-training systems and agentic AI infrastructure.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://gaow0007.github.io/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/gaow0007"
+      },
+      {
+        "label": "RollArt arXiv",
+        "url": "https://arxiv.org/abs/2512.22560"
+      },
+      {
+        "label": "ROLL repository",
+        "url": "https://github.com/alibaba/ROLL"
+      }
+    ]
+  },
+  {
+    "slug": "yuheng-zhao",
+    "name": "Yuheng Zhao",
+    "aliases": ["Yuheng Zhao", "farrrrland"],
+    "affiliations": ["HKUST", "Alibaba Group"],
+    "homepage": "https://farrrrland.github.io/",
+    "github": "https://github.com/farrrrland",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["RollArt", "ROLL", "RollPacker", "agentic RL systems", "AI infrastructure"],
+    "notes": "RollArt equal-contribution author. Homepage identifies Yuheng Zhao as a Ph.D. candidate in HKUST CSE supervised by Wei Wang and a research intern at Alibaba Group working on the ROLL project.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://farrrrland.github.io/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/farrrrland"
+      },
+      {
+        "label": "RollArt arXiv",
+        "url": "https://arxiv.org/abs/2512.22560"
+      },
+      {
+        "label": "ROLL repository",
+        "url": "https://github.com/alibaba/ROLL"
+      }
+    ]
+  },
+  {
+    "slug": "shaopan-xiong",
+    "name": "Shaopan Xiong",
+    "aliases": ["Shaopan Xiong"],
+    "affiliations": ["Alibaba Group"],
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["RollArt", "RollPacker", "ROLL Flash", "agentic RL systems", "RL post-training"],
+    "notes": "RollArt equal-contribution author from Alibaba Group. Public profile evidence is sparse; Google Scholar search results and the RollArt/RollPacker/ROLL Flash author lines provide the current stable linkage. No high-confidence personal X account was found.",
+    "sources": [
+      {
+        "label": "RollArt arXiv",
+        "url": "https://arxiv.org/abs/2512.22560"
+      },
+      {
+        "label": "USENIX OSDI 2026 presentation",
+        "url": "https://www.usenix.org/conference/osdi26/presentation/gao"
+      },
+      {
+        "label": "ROLL repository",
+        "url": "https://github.com/alibaba/ROLL"
+      }
+    ]
+  },
+  {
+    "slug": "weixun-wang-alibaba",
+    "name": "Weixun Wang",
+    "aliases": ["Weixun Wang"],
+    "affiliations": ["Alibaba Group"],
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["RollArt", "RollPacker", "ROLL Flash", "agentic RL systems", "RL post-training"],
+    "notes": "RollArt equal-contribution author from Alibaba Group. Stable evidence comes from the RollArt, RollPacker and ROLL Flash author lines; no high-confidence personal homepage or X account was found in this pass.",
+    "sources": [
+      {
+        "label": "RollArt arXiv",
+        "url": "https://arxiv.org/abs/2512.22560"
+      },
+      {
+        "label": "USENIX OSDI 2026 presentation",
+        "url": "https://www.usenix.org/conference/osdi26/presentation/gao"
+      },
+      {
+        "label": "ROLL repository",
+        "url": "https://github.com/alibaba/ROLL"
+      }
+    ]
+  },
+  {
+    "slug": "wei-wang-hkust",
+    "name": "Wei Wang",
+    "aliases": ["Wei Wang"],
+    "affiliations": ["HKUST", "HKUST Big Data Institute", "HKUST-Alibaba Joint Lab on Big Data and AI"],
+    "homepage": "https://www.cse.ust.hk/~weiwa/",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["RollArt", "ROLL", "RollPacker", "distributed systems", "AI infrastructure", "serverless computing", "RL systems"],
+    "notes": "RollArt senior HKUST author. HKUST homepage identifies Wei Wang as an associate professor in HKUST CSE, associate director of HKUST Big Data Institute, and associate director of HKUST-Alibaba Joint Lab on Big Data and AI; homepage lists cloud/AI infrastructure and RL systems publications including RollArt.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://www.cse.ust.hk/~weiwa/"
+      },
+      {
+        "label": "RollArt arXiv",
+        "url": "https://arxiv.org/abs/2512.22560"
+      },
+      {
+        "label": "USENIX OSDI 2026 presentation",
+        "url": "https://www.usenix.org/conference/osdi26/presentation/gao"
       }
     ]
   }
