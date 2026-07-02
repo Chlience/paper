@@ -23,15 +23,6 @@ Updated-At: 2026-06-28 14:18
 - [Kaiyan Zhang](/authors/kaiyan-zhang/): project lead and corresponding author；OpenReview profile records Frontis.AI principal researcher from 2026 and Tsinghua PhD background；homepage links GitHub `iseesaw`, Google Scholar and X `OkhayIea`.
 - [Bowen Zhou](/authors/bowen-zhou/): corresponding author；Tsinghua University / Shanghai AI Laboratory / TsinghuaC3I profile in local archive；advisor relation appears in Che Jiang and Kaiyan Zhang OpenReview profiles.
 
-关系判断：
-
-- 同机构作者群：title page lists Tsinghua University and Horizon Research / Frontis.AI as the two affiliations. 作者贡献表显示 Che Jiang 与 Kaiyan Zhang 共同牵头，Ning Ding、Kaiyan Zhang、Bowen Zhou 负责 correspondence。
-- 跨机构桥接：Kaiyan Zhang 的 OpenReview profile 把 Frontis.AI principal researcher 和 Tsinghua PhD 经历连在一起；Che Jiang 的 profile 将 Tsinghua PhD 与 Bowen Zhou advisor 关系连在一起；项目仓库由 `FrontisAI` 组织维护。
-- 与已存档作者重叠：[Ning Ding](/authors/ning-ding/) 和 [Bowen Zhou](/authors/bowen-zhou/) 已在 Entropy Mechanism、RL compositional skill acquisition、OpenPRM/TTRL 系列中出现；Kaiyan Zhang 本次新增 profile，并与 TsinghuaC3I / Frontis.AI 的 self-evolving agent 线关联。
-- 与已存档论文的主题或方法关系：本 survey 是 [SLIME-2026-06-17](/papers/2026-06-17-slime-rl-scaling-framework/)、[2602.15763 GLM-5](/papers/2602.15763-glm-5-agentic-engineering/)、[2511.14617 Seer](/papers/2511.14617-seer-online-context-learning-llm-rl/)、[2606.00135 tool-calling RL](/papers/2606.00135-agentic-tool-calling-rl-training/)、[2605.30290 STV](/papers/2605.30290-self-trained-verification/) 和 [2604.09459 credit assignment survey](/papers/2604.09459-credit-assignment-reasoning-agentic-llm-rl/) 的上层地图。
-- 作者 profile pass：本次更新 `authors.json` 中 Che Jiang、Kaiyan Zhang，并补充 Ning Ding、Bowen Zhou 与本 survey 的来源。其余非 lead / non-corresponding 作者保留在本文作者列表和索引关系中，暂未逐一建 profile，原因是该 survey 作者规模较大，当前跨论文图谱主要需要项目负责人和通讯作者节点。
-- 需要后续确认：README citation stub 使用 `FrontisAI and Tsinghua University` 组织作者，占位标题也与 OpenReview / PDF 标题略有差异；引用时以 OpenReview / PDF full author list 为准。
-
 ## 一句话结论
 
 这篇 survey 把 self-improving agents 从模型自我训练扩展为部署后 runtime system 的 trace-to-capability 问题：harness 将交互 trace 编译成可验证 experience，再分别写入 skills、memory、environment/tool boundary、model parameters 或 meta-layer。它的主要贡献是给 self-improvement 提供系统分层、评测目标和安全攻击面语言；主要边界是综述性 taxonomy 强，实证证据和 benchmark protocol 依赖被引用工作。
@@ -331,7 +322,6 @@ meta-evolution 处理“谁控制更新”和“更新什么”。论文区分�
 ### Risks
 
 - Copyright/over-copying: 本笔记使用 paraphrase 和少量公式，不复制 PDF 大段文本。
-- Unsourced or unverifiable claims: OpenReview / GitHub / README / author profile evidence 已记录；Grok broad search 因 403 额度限制失败，作者 X 证据以主页和 OpenReview profile 为准。
 - Tone/brand mismatch: 使用本 archive 的论文分析语气，区分 paper facts、author claims 和 local analysis。
 - Safety/compliance issues: 安全部分保留风险面和防御方向，省略可操作滥用步骤。
 - Overlap with existing assets: 与 `Awesome-Self-Improving-Agents` 网站功能不同，本笔记提供本地 cross-paper graph 和可信度边界。
@@ -342,7 +332,6 @@ meta-evolution 处理“谁控制更新”和“更新什么”。论文区分�
 | --- | --- |
 | 公开 reviewer comments | OpenReview API `replyCount = 0`，未发现公开 review / rebuttal。 |
 | 全 27 位作者逐一 profile | 当前跨论文图谱只需要 project leads、corresponding authors 和已有重复作者；其余作者保留在本文作者列表。 |
-| Grok broad discovery result | Grok CLI 返回 403 spending-limit，改用 OpenReview API、作者主页、GitHub / README 和普通 web search。 |
 
 ### Recommendation
 

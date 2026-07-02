@@ -26,14 +26,6 @@ Updated-At: 2026-06-28 14:28
 - [Damai Dai](/authors/damai-dai/), [Runxin Xu](/authors/runxin-xu/), [Yu Wu](/authors/yu-wu-deepseek/), [Wenfeng Liang](/authors/wenfeng-liang/): DeepSeek 系列、MoE、R1 / alignment 或组织层高频作者。
 - [Huishuai Zhang](/authors/huishuai-zhang/), [Dongyan Zhao](/authors/dongyan-zhao/): Peking University；也出现在 Engram，提供 PKU 学术侧连接。
 
-关系判断：
-
-- 同机构作者群：DeepSeek-AI 是主体机构，覆盖 draft 架构、DeepSpec 训练框架、DeepSeek-V4 serving 和线上部署；Peking University 通过 Xin Cheng、Yunfan Xiong、Huishuai Zhang、Dongyan Zhao 形成学术侧连接。
-- 跨机构桥接：Xin Cheng 同时署名 Peking University 与 DeepSeek-AI；Yunfan Xiong 的 OpenReview profile 是 PKU，论文邮箱显示 DeepSeek；Chenze Shao 连接 ICT CAS / Tencent WeChat AI / DeepSeek；Jiashi Li 连接 PKU / DeepSeek。
-- 与已存档作者重叠：与 [Engram](/papers/2601.07372-conditional-memory-engram-scalable-lookup/) 重叠 Xin Cheng、Damai Dai、Qinyu Chen、Xingkai Yu、Zhewen Hao、Huishuai Zhang、Dongyan Zhao、Wenfeng Liang；与 [DeepSeekMoE](/papers/2401.06066-deepseekmoe-expert-specialization/) 重叠 Damai Dai、Chengqi Deng、Jiashi Li、Xingkai Yu、Runxin Xu、Yu Wu、Wenfeng Liang 等；与 [DeepSeek-R1](/papers/2501.12948-deepseek-r1-rl-reasoning/) 重叠 Xingkai Yu、Runxin Xu、Yu Wu、Xiao Bi、Shirong Ma、Xiaokang Zhang 等系统与 RL pipeline 作者线索。
-- 与已存档论文的主题或方法关系：DSpark 直接建立在 [2211.17192 Speculative Decoding](/papers/2211.17192-fast-inference-transformers-speculative-decoding/) 的 lossless target verification 机制上，以 [2602.06036 DFlash](/papers/2602.06036-dflash-block-diffusion-speculative-decoding/) 作为并行 backbone，并在 DeepSeek-V4 production serving 中解决固定长度验证造成的吞吐浪费；它也连接 [2606.12370 Bebop](/papers/2606.12370-bebop-mtp-rejection-sampling-rl-training/) 的 total variation acceptance 语言、[2511.14617 Seer](/papers/2511.14617-seer-online-context-learning-llm-rl/) 的 rollout speculative acceleration，以及 [2605.14220 TIM/VeXact](/papers/2605.14220-training-inference-mismatch-llm-rl/) 的分布一致性审计。
-- 作者 profile pass：已按 `author-x-account-search-sop.md` 对等贡 / contact authors 和已有 DeepSeek 核心作者做本地与外部 profile pass。新增 [Chenze Shao](/authors/chenze-shao/)、[Jiashi Li](/authors/jiashi-li/)、[Yunfan Xiong](/authors/yunfan-xiong/) 档案；[Xin Cheng](/authors/xin-cheng-deepseek/) 与 [Xingkai Yu](/authors/xingkai-yu/) 补 DSpark 来源。未对完整 33 人逐一建档，原因是多数 DeepSeek 内部作者缺少公开稳定 homepage / GitHub / X 交叉证据，本轮保留在论文级作者关系中。
-
 ## 一句话结论
 
 DSpark 是 DeepSeek 把并行 drafter 推向生产 serving 的一套完整方案：用 DFlash 式 parallel backbone 先一次生成长候选块，再用低秩 Markov head 注入块内局部自回归依赖，随后用 calibrated confidence head 和硬件感知 prefix scheduler 按请求与负载动态裁剪 target verification 长度。离线 Qwen3 / Gemma 实验显示 accepted length 稳定超过 Eagle3 和 DFlash；DeepSeek-V4 线上流量显示 DSpark 在中等 SLA 下把 aggregate throughput 提升约 51%--52%，并在更高 tok/s/user 约束下维持 MTP-1 基线难以达到的并发区间。

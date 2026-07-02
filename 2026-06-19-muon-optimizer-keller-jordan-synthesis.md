@@ -36,19 +36,6 @@ Updated-At: 2026-06-19 22:20
 - Dao-AILab / Tri Dao 资料线: Gram Newton-Schulz 由 Jack Zhang、Noah Amsel、Berlin Chen、Tri Dao 署名，目标是降低 Muon 中 Newton-Schulz 正交化步骤的 kernel 开销。[Tri Dao](/authors/tri-dao/) 已有本地作者档案。
 - 曲率机制资料线: [2606.04662](/papers/2606.04662-muon-outperforms-adam-curvature/) 的 Shuche Wang、Fengzhuo Zhang、Jiaxiang Li、Dirk Bergemann、Zhuoran Yang 从 Hessian / NDS 角度解释 Muon 相比 Adam 的局部几何收益。
 
-关系判断：
-
-- Muon 的早期证据来自 Keller Jordan 维护的 competitive training tasks，尤其 NanoGPT speedrunning 和 CIFAR-10 speedrunning；后续 Moonshot AI / Kimi Team 把它推进到 billion / trillion-token LLM pretraining。
-- Jeremy Bernstein / Laker Newhouse 的 norm-constrained / spectral steepest descent 资料线给 Muon 提供理论解释和 Newton-Schulz 计算背景；Shampoo/SOAP 是结构化矩阵优化器的直接邻近路线。
-- Moonlight 和 Kimi K2 显示 Muon 扩展到大模型时，optimizer 本体之外还需要 weight decay、update RMS scaling、分布式 full-matrix update、QK-Clip 等工程约束。
-- 与已存档论文关系：本篇是 [2606.04662](/papers/2606.04662-muon-outperforms-adam-curvature/) 的上游设计与下游工程综合；也连接 [2026-04-24 DeepSeek-V4](/papers/2026-04-24-deepseek-v4-million-token-context-intelligence/) 和 [2602.15763 GLM-5](/papers/2602.15763-glm-5-agentic-engineering/) 中的 production-scale Muon / Muon Split 应用。
-
-作者页决策：
-
-- Keller Jordan: tracked。已新增 `authors.json` 精简档案，来源包括个人博客 About、GitHub 和 X 链接。
-- Kimi Team / Moonshot AI: skip/team。团队署名和大规模作者列表不在本篇拆分为个人作者页。
-- Muon citation contributors: needs-follow-up。除 Keller Jordan 外，本篇不为所有贡献者建立作者档案；后续若单独分析 Bernstein/Newhouse 理论文章或 Moonlight 论文，再按对应论文作者 profile pass 处理。
-
 ## 一句话结论
 
 Muon 的核心技术含量在于把隐藏层矩阵参数的 momentum update 映射到近似半正交方向：它用低精度 Newton-Schulz 近似 polar factor，让更新能量更均匀地覆盖矩阵奇异方向；后续大模型实践表明，Muon 想稳定扩展到 LLM pretraining，还需要 weight decay、shape-aware update scale、AdamW/Muon 参数分组、分布式 full-matrix orthogonalization 和 attention logit 控制。

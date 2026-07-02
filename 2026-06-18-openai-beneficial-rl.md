@@ -38,15 +38,6 @@ Related public materials used in the 2026-06-21 update:
 - Johannes Heidecke: OpenAI；公开会议资料显示其关注 AI safety 与 reinforcement learning，并担任 OpenAI Safety Systems 相关角色；该论文与 HealthBench Professional 参考文献也出现其署名。
 - [Karan Singhal](/authors/karan-singhal/): OpenAI；个人主页显示其领导 Health AI and AGI Benefits teams，研究目标覆盖 health AI、deeply beneficial models 和 tangible AGI benefits；论文通讯作者，邮箱 `karan@openai.com`。
 
-关系判断：
-
-- 同机构作者群：全部作者均标注 OpenAI，属于 OpenAI Health AI / AGI Benefits / Safety Systems 交叉研究线。
-- 跨机构桥接：论文署名中没有跨机构合著；作者个人经历连接 Stanford、University of Calgary、Google DeepMind、Google Health、Harvard/Stanford neuroscience 和 OpenAI。
-- 项目组织：Akshay V. Jagadeesh 与 Karan Singhal 为通讯作者；Rahul K. Arora、Khaled Saab、Mikhail Trofimov、Foivos Tsimpourlas、Johannes Heidecke、Karan Singhal 与 HealthBench Professional 参考文献存在作者线重叠，说明该论文和 OpenAI health evaluation / AGI benefits 研究线关系很近。
-- 与已存档作者重叠：本次归档前 `authors.json` 未发现这些作者条目；本次新增 Akshay V. Jagadeesh、Rahul K. Arora、Khaled Saab、Karan Singhal 四个作者档案。Ali Malik、Mikhail Trofimov、Foivos Tsimpourlas、Johannes Heidecke 暂按 OpenAI team-level 记录，后续若再次出现再补全 profile。
-- 与已存档论文的主题或方法关系：与 [2503.11926](/papers/2503.11926-monitoring-reasoning-models-obfuscation/) 同属 OpenAI alignment RL / monitorability 线；与 [2606.04075](/papers/2606.04075-llms-hack-rewards-and-society/)、[2510.20270](/papers/2510.20270-impossiblebench-test-case-exploitation/)、[2506.10947](/papers/2506.10947-spurious-rewards-rethinking-rlvr/) 共享 reward hacking / misalignment generalization / proxy risk 背景；与 [2501.09620](/papers/2501.09620-causal-rewards-llm-alignment/) 共享 RLHF reward signal 和 alignment objective 设计问题。
-- 需要后续确认：OpenAI 是否释放 beneficial trait dataset、rubric、reward model 或评测明细；HealthBench Professional 是否后续作为独立归档节点；harmful finetuning 结果是否有后续 compute-matched standard RL 对照。
-
 ## 一句话结论
 
 这篇论文给 OpenAI 的 alignment post-training 提供了一个正向版本的 emergent misalignment 实验：如果窄域有害训练能诱导跨域失配，那么用 5% 真实场景 beneficial-trait data 加 RL reward 强化诚实、纠错、风险意识、公平和人类福祉等特质，也可能诱导跨域对齐收益。论文的证据强在 44/53 个 OOD 评测提升、health-only 训练迁移到非健康安全评测、adversarial prompting 与 harmful finetuning 下的降级更小；边界在于模型、数据、评测和 RL 配方都高度内部化，外部还难复现，而且“beneficial traits”本身仍是规范选择和工程可测性之间的折中。
@@ -327,7 +318,6 @@ OpenAI 这篇论文把问题反过来问：如果有害行为能以 trait 或 pe
 | --- | --- |
 | 公开 reviewer comments | 未发现 OpenReview/ARR/会议公开审稿页，官方来源为 OpenAI Alignment Research Blog 和 PDF。 |
 | 训练数据、reward model、完整 eval suite | OpenAI 未公开这些工件。 |
-| 全作者 X / GitHub 深挖 | 本次优先补通讯作者和具备强主页证据的 health AI 核心作者；其余 OpenAI 作者留作后续 profile pass。 |
 | 新闻/社交媒体转述 | 检索到 LessWrong 自动 linkpost、X/LinkedIn/媒体转述和若干中文传播，但缺少实质技术审稿；仅用于判断传播状态，不写入证据链核心。 |
 
 ### Recommendation

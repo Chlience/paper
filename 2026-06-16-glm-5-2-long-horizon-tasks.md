@@ -25,15 +25,6 @@ Updated-At: 2026-06-24 21:18
 - slime / THUDM: 博文明确说 GLM-5.2 的 agentic RL 和 parallel OPD 使用 slime，和 [2026-06-17](/papers/2026-06-17-slime-rl-scaling-framework/) 形成直接工程关系。
 - IndexShare / IndexCache 相关作者线：博文链接 `2603.12201`。该 arXiv 论文标题为 “IndexCache: Accelerating Sparse Attention via Cross-Layer Index Reuse”，作者包括 Yushi Bai、Qian Dong、Ting Jiang、Xin Lv、Zhengxiao Du、Aohan Zeng、Jie Tang、Juanzi Li。它和 GLM-5 / GLM-5.2 团队存在明显人员重叠。
 
-关系判断：
-
-- 同机构作者群：GLM-5.2 仍属于 Z.ai / GLM-5 Team 的大团队发布；GLM-5 GitHub README 把 GLM-5、GLM-5.1、GLM-5.2 放在同一系列中维护。
-- 跨机构桥接：Z.ai / Zhipu AI 与 Tsinghua 之间的桥接已由 [2602.15763](/papers/2602.15763-glm-5-agentic-engineering/) 的 tech leads 和 advisors 体现；slime 文档又连接 THUDM / Tsinghua、SGLang、Megatron 和 GLM 系列 production RL。
-- 与已存档作者重叠：当前没有为 GLM-5 大团队拆分个人作者页；本笔记沿用团队级关系，避免从大规模 author list 自动生成低质量作者档案。
-- 与已存档论文的主题或方法关系：强连接 [2602.15763](/papers/2602.15763-glm-5-agentic-engineering/)、[2026-06-17](/papers/2026-06-17-slime-rl-scaling-framework/)、[2606.12370](/papers/2606.12370-bebop-mtp-rejection-sampling-rl-training/)、[2511.14617](/papers/2511.14617-seer-online-context-learning-llm-rl/)、[2026-04-24](/papers/2026-04-24-deepseek-v4-million-token-context-intelligence/)、[2605.14220](/papers/2605.14220-training-inference-mismatch-llm-rl/)、[2506.19248](/papers/2506.19248-inference-time-reward-hacking-llms/)、[2510.20270](/papers/2510.20270-impossiblebench-test-case-exploitation/)。
-- 需要后续确认：是否会发布独立 GLM-5.2 技术报告、IndexShare 和 IndexCache 命名边界、anti-hack module 的评测细节、parallel OPD 的 expert 来源和融合目标。
-- 作者 profile pass：GLM-5.2 是团队级 release blog / model card，没有新增逐作者署名表；本轮沿用 [2602.15763](/papers/2602.15763-glm-5-agentic-engineering/) 的 GLM-5 Team 关系，并记录 IndexCache / IndexShare 论文 `2603.12201` 的高置信作者线索。Yushi Bai、Qian Dong、Ting Jiang、Xin Lv、Zhengxiao Du、Aohan Zeng、Jie Tang、Juanzi Li 等后续若在独立论文、机构页、OpenReview 或项目仓库中重复出现，应按 author profile SOP 逐人建档或补强；当前不从团队 release 自动生成低置信作者页。
-
 ## 一句话结论
 
 GLM-5.2 是 GLM-5 系列从 200K 长上下文 agentic engineering 推进到 1M 长上下文 coding agent 的 release：它用 IndexShare 降低 DeepSeek Sparse Attention (DSA) indexer 成本，用 Multi-Token Prediction (MTP) IndexShare + KVShare + rejection sampling + total variation (TV) loss 提升 speculative decoding acceptance，用 slime 承载更复杂的 agentic RL / On-Policy Distillation (OPD)，用 critic-based Proximal Policy Optimization (PPO) 适配 compaction 后的长轨迹训练，并把 anti-hack module 放入 coding RL 和 evaluation，目标是让 1M context 在真实长时工程任务中可用、可训、可服务。
@@ -377,7 +368,6 @@ GLM-5.2 的结论链可以概括为：
 | --- | --- |
 | 博文中的具体 hacking 命令示例 | 双用途细节，归档中保留风险类别和防御机制即可 |
 | 完整图片截图与可视化曲线 | 官方图表未以数据表形式完全公开；本笔记记录文本和表格中可抽取结果 |
-| 逐作者档案 | GLM-5.2 以团队形式发布，当前没有新的逐作者 affiliation / contribution 表 |
 
 ### Recommendation
 

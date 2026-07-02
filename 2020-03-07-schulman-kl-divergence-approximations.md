@@ -19,18 +19,6 @@ Updated-At: 2026-06-21 10:17
 
 - [John Schulman](/authors/john-schulman/): 个人博客作者。当前主页显示其为 Thinking Machines cofounder and chief scientist；此前在 Anthropic Alignment Science；更早是 OpenAI cofounder，并在 OpenAI 领导 ChatGPT 创建和 2022-2024 post-training team。主页还显示其 UC Berkeley PhD advisor 为 [Pieter Abbeel](/authors/pieter-abbeel/)。
 
-关系判断：
-
-- 同机构作者群：单作者技术博客；正文感谢 Jacob Hilton 和 Nisan Stiennon 提供反馈。
-- 跨机构桥接：作者经历连接 UC Berkeley / OpenAI / Anthropic / Thinking Machines；本文在 RL、PPO、RLHF 和 post-training 实践中被广泛引用。
-- 与已存档作者重叠：未发现与当前论文笔记的直接共同作者重叠；作者主页显示 [Pieter Abbeel](/authors/pieter-abbeel/) 为博士导师，Pieter Abbeel 已出现在 [2310.01889 Ring Attention](/papers/2310.01889-ring-attention-blockwise-transformers-near-infinite-context/)。
-- 与已存档论文的主题或方法关系：与 [2026-06-16 verl](/papers/2026-06-16-verl-rl-optimization-algorithms/)、[2503.14476 DAPO](/papers/2503.14476-dapo-long-cot-rl-system/)、[2605.14220 TIM/VeXact](/papers/2605.14220-training-inference-mismatch-llm-rl/)、[2025-09-10 batch-invariant inference](/papers/2025-09-10-defeating-nondeterminism-llm-inference/) 关系很强。它提供 `K1/K2/K3` 这类 KL value estimator 的基础语言，后续 RLHF/RLVR 系统用这些量监控 policy drift、rollout/trainer mismatch 和 KL penalty。
-- 需要后续确认：如果后续归档 TRPO、PPO、InstructGPT 或 RLHF 原始论文，应把 John Schulman 的作者页和这些材料补成更完整的 post-training / policy optimization cluster。
-
-作者页决策：
-
-- tracked: [John Schulman](/authors/john-schulman/)。原因是其为 PPO / TRPO / RLHF / post-training 关键作者，且本地档案已有多篇 RLHF/RLVR 材料依赖 PPO、KL 和 logprob ratio 语言。
-
 ## 一句话结论
 
 这篇博客给出了 RL 实践中常用 KL 估计器 `k1/k2/k3` 的最小数学解释：在只能从 $q$ 采样并能计算 $p(x),q(x)$ 的场景下，$k_1=-\log r$ 是无偏但高方差的 $\mathrm{KL}[q,p]$ 估计器；$k_2=\frac12(\log r)^2$ 是低方差但有偏的二阶近似；$k_3=(r-1)-\log r$ 通过控制变量 $r-1$ 保持无偏、非负和低方差，其中 $r=p(x)/q(x)$。对 RLHF/RLVR 来说，它最适合作为 KL 数值估计和 drift 诊断的基础，而当 KL 项被当作可微 loss 或 reward penalty 使用时，还必须单独处理采样分布、stop-gradient、序列自回归依赖和 rollout/trainer logprob 归属。

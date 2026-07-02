@@ -29,15 +29,6 @@ Updated-At: 2026-06-24 20:58
 - 与 DeepSeek-R1 / DeepSeek-V3 系谱重叠的显著作者线索包括 Wenfeng Liang、Xiao Bi、Xingkai Yu、Junxiao Song、Peiyi Wang、Shirong Ma、Zhibin Gou、Zhihong Shao、Ziyi Gao、Daya Guo、Haowei Zhang、Runxin Xu、Ruoyu Zhang、Yu Wu、Z.F. Wu、Zhuoshu Li 等。
 - 与 mHC 相关作者线索：report 引用 `2512.24880` mHC 论文，DeepSeek-V4 appendix 中出现 Zhenda Xie、Huanqi Cao、Chenggang Zhao、Chengqi Deng、Jialiang Huang、Wangding Zeng、Wenfeng Liang 等与 mHC / DeepSeek 系列工程相关的同名作者。
 
-关系判断：
-
-- 同机构作者群：论文以 DeepSeek-AI 作为统一署名，未给逐作者机构拆分。
-- 跨机构桥接：title page 和 appendix 没有展示跨机构 affiliation；当前按 DeepSeek-AI 内部研究工程组织记录。
-- 与已存档作者重叠：与 [2501.12948](/papers/2501.12948-deepseek-r1-rl-reasoning/) 直接重叠明显，是 DeepSeek-R1 / V3 / V3.2 系谱的后续系统报告；与 [2606.04101](/papers/2606.04101-ultraep-rack-scale-moe-load-balancing/) 存在 Yinmin Zhong 同名线索，但 UltraEP 中 Yinmin Zhong 属 Peking University，需要后续确认是否同一人；与 [2405.19888](/papers/2405.19888-parrot-semantic-variable-llm-serving/) 存在 Chaofan Lin 同名线索，机构不同，需要后续确认。
-- 与已存档论文的主题或方法关系：强连接 [2501.12948](/papers/2501.12948-deepseek-r1-rl-reasoning/)、[DSA-2025-09-29](/papers/2025-09-29-deepseek-v3-2-exp-dsa-long-context-efficiency/)、[2606.04101](/papers/2606.04101-ultraep-rack-scale-moe-load-balancing/)、[2606.04662](/papers/2606.04662-muon-outperforms-adam-curvature/)、[2025-09-10](/papers/2025-09-10-defeating-nondeterminism-llm-inference/)、[2605.14220](/papers/2605.14220-training-inference-mismatch-llm-rl/)、[2405.17381](/papers/2405.17381-various-lengths-constant-speed-lightning-attention/)、[2506.13585](/papers/2506.13585-minimax-m1-cispo-lightning-attention/)、[2606.06453](/papers/2606.06453-vortex-sparse-attention-serving/)、[2409.19256](/papers/2409.19256-hybridflow-rlhf-framework/) 和 [2606.00135](/papers/2606.00135-agentic-tool-calling-rl-training/)。
-- 需要后续确认：是否会有 Nature/会议版本；V4-Pro / V4-Flash 后续正式版是否改变架构、权重精度、tool schema 或 benchmark 设置；mHC / CSA / HCA 各自的独立论文是否补充更完整 ablation。
-- 作者 profile pass：这是 DeepSeek-AI 319 作者团队型技术报告；本轮复用已建档 DeepSeek 系列关键作者与重叠作者，包括 [Wenfeng Liang](/authors/wenfeng-liang/)、[Damai Dai](/authors/damai-dai/)、[Deli Chen](/authors/deli-chen/)、[Runxin Xu](/authors/runxin-xu/)、[Wangding Zeng](/authors/wangding-zeng/)、[Huazuo Gao](/authors/huazuo-gao/)、[Xingkai Yu](/authors/xingkai-yu/)、[Yu Wu](/authors/yu-wu-deepseek/)、[Zhenda Xie](/authors/zhenda-xie/)、[Peiyi Wang](/authors/peiyi-wang/) 等。完整 319 人列表缺逐人机构和贡献映射，不批量建档，避免低置信作者图；后续若作者在独立论文、OpenReview、项目仓库或机构页中重复出现，再按 author profile SOP 逐人补强。
-
 ## 一句话结论
 
 DeepSeek-V4 的核心是把“百万 token 上下文”做成一个端到端系统能力：在扩大 Mixture-of-Experts (MoE) 规模之外，V4-Pro 用 1.6T total / 49B active parameters，V4-Flash 用 284B total / 13B active parameters，二者通过 Compressed Sparse Attention (CSA) / Heavily Compressed Attention (HCA) hybrid attention 压缩 key-value cache (KV cache) 与 attention FLOPs，通过 Manifold-Constrained Hyper-Connections (mHC) 稳定深层残差传播，通过 Muon 提升预训练收敛，再配合 deterministic kernels、heterogeneous KV cache、on-disk prefix reuse、FP4 Quantization-Aware Training (QAT)、On-Policy Distillation (OPD) 多专家合并和 agent sandbox，使 1M context、long-horizon agent、长思考推理和高效部署共同成立。

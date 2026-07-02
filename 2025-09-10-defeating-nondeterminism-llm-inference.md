@@ -20,14 +20,6 @@ Updated-At: 2026-01-30 15:10
 - Horace He: Thinking Machines Lab，文章署名作者。
 - Thinking Machines Lab: 文章与代码的发布组织；代码仓库 `batch_invariant_ops` 属于 `thinking-machines-lab` GitHub organization。
 
-关系判断：
-
-- 同机构作者群：文章没有列出完整合作者名单，只说明 Horace He 与 Thinking Machines Lab 其他成员协作完成。
-- 跨机构桥接：未发现外部机构共同作者；文章引用并讨论 vLLM、SGLang、PyTorch、FlexAttention、FlashAttention、FlashInfer 等开源系统。
-- 与已存档作者重叠：未发现与当前归档论文作者重叠。
-- 与已存档论文的主题或方法关系：与 `2409.19256` 和 `2606.00135` 关系最强。前者讨论 RLHF/VERL 如何把训练和 rollout 编排起来；本文讨论 rollout inference 的数值确定性，以及 sampler 与 trainer 的 logprob 一致性。与 `2606.06453` 同属 LLM serving / kernel / attention 系统效率方向。
-- 需要后续确认：代码仓库和 vLLM/FlexAttention 集成可能持续演化；后续引用时需确认对应 commit、vLLM PR 和实际支持的模型/kernel 范围。
-
 ## 一句话结论
 
 这篇文章指出，LLM 推理在 `temperature=0` 下仍然出现不同输出，主要来源通常是 batch 不变性缺失：服务端负载改变 batch size、prefill/decode 切分、KV cache 布局和 attention split 策略，进而改变浮点 reduction 顺序；作者通过 batch-invariant RMSNorm、matmul 和 attention kernel 展示了可复现推理的实现路径，并把它连接到真正 on-policy RL 中 sampler 与 trainer 的数值一致性问题。

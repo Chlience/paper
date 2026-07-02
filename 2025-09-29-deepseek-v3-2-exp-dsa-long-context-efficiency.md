@@ -22,15 +22,6 @@ Updated-At: 2026-06-24 20:36
 
 - DeepSeek-AI: 机构团队署名；报告未列出个人作者。后续正式 DeepSeek-V3.2 arXiv 条目显示 DeepSeek-AI 及大量成员署名，并由 Wenfeng Liang 提交。
 
-关系判断：
-
-- 同机构作者群：DeepSeek-AI 内部技术报告；没有逐人贡献表，无法把 DSA 具体归因到单个成员。
-- 跨机构桥接：该报告本身没有披露跨机构合作；方法上引用 Native Sparse Attention、MQA 和 DeepSeek-V2/R1/Math 系列。
-- 与已存档作者重叠：无法从这份报告确认个人作者重叠；DeepSeek 系列已建档作者可从 [DeepSeek-V2](/papers/2405.04434-deepseek-v2-mla-moe-efficient-llm/)、[DeepSeek-V3](/papers/2412.19437-deepseek-v3-technical-report/)、[DeepSeek-R1](/papers/2501.12948-deepseek-r1-rl-reasoning/) 和 [DeepSeek-V4](/papers/2026-04-24-deepseek-v4-million-token-context-intelligence/) 追踪。
-- 与已存档论文的主题或方法关系：这是 GLM-5 / GLM-5.2 报告里 “DSA” 的上游来源；也是 DeepSeek-V4 CSA/HCA compressed sparse attention 的直接技术前序节点。
-- 需要后续确认：正式 DeepSeek-V3.2 arXiv 报告是否给出 DSA 具体 contributor；若给出，应回填作者关系和 `authors.json`。
-- Author profile pass: 团队报告无个人作者列表，跳过逐人 X / homepage / GitHub / Scholar pass；官方 DeepSeek GitHub、Hugging Face 和 release page 已用于机构来源确认。
-
 ## 一句话结论
 
 DSA 是 DeepSeek 把 128K MLA 模型推向细粒度稀疏注意力的一次可控架构替换：先用 dense attention 分布训练一个轻量 lightning indexer，再让主模型只对每个 query 的 top-k MLA latent KV entry 做核心注意力；在 2.1B token indexer warm-up 与 943.7B token sparse continued pre-training 后，DeepSeek-V3.2-Exp 在公开 benchmark 上基本贴近 V3.1-Terminus，同时显著降低长上下文 inference cost，但结论依赖超大规模适配预算、私有训练细节和专用 kernel 栈。
@@ -325,7 +316,6 @@ post-training 包含两部分：
 | Material | Reason |
 | --- | --- |
 | 公开 reviewer comments | 未发现 OpenReview/ARR/会议公开审稿页，或无法可靠匹配到当前报告版本。 |
-| 逐人 author profile pass | 报告只署名 DeepSeek-AI，未披露个人作者列表；暂不新增个人作者档案。 |
 | 训练 GPU hours / wall-clock | 报告未披露，无法可靠推算。 |
 | 训练并行方式 | README 只给出 inference / local run surface，不能反推训练并行配置。 |
 | cost figure 精确数值 | PDF 图像没有机器可读数值表，避免从图片强行读数。 |
