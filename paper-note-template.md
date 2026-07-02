@@ -17,10 +17,10 @@ Updated-At: YYYY-MM-DD HH:mm
 
 ## 作者与关系
 
-- Author A: 发表时机构：Institution in this paper；历史机构：previously verified affiliations if already known.
-- Author B: 发表时机构：Institution in this paper；历史机构：previously verified affiliations if already known.
+- Author A: Institution in this paper.
+- Author B: Institution in this paper；历史机构：previously verified affiliations if already known and not already listed in the paper-time institution.
 
-写法要求：本节只保留发表该论文时的机构和已核验历史机构。作者主页、GitHub、Scholar、X 账号、账号搜索过程、profile pass 结果、跳过原因和候选账号判断写入 `authors.json` 或临时中间文件，不写入论文 Markdown。
+写法要求：本节作者条目在冒号后直接写发表该论文时的机构。若有额外已核验历史机构，再写 `历史机构：...`；历史机构中不重复列出已在当前机构中出现的机构。
 
 ## 一句话结论
 
