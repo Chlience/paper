@@ -2954,13 +2954,13 @@
     "slug": "lei-li-hku",
     "name": "Lei Li",
     "aliases": ["Lei Li", "Tobias Lee", "TobiasLee"],
-    "affiliations": ["The University of Hong Kong", "Peking University"],
+    "affiliations": ["The University of Hong Kong", "Peking University", "Xiaomi LLM Core"],
     "homepage": "https://lilei-nlp.github.io/",
     "github": "https://github.com/tobiaslee",
     "x": "https://x.com/_TobiasLee",
     "xConfidence": "high",
-    "topics": ["multimodal LLMs", "in-context learning", "LLM-as-a-judge", "Math-Shepherd"],
-    "notes": "Math-Shepherd coauthor. Homepage and GitHub identify him as an HKU PhD student, former Peking University MSc student, and link the same GitHub/X profiles.",
+    "topics": ["multimodal LLMs", "in-context learning", "LLM-as-a-judge", "Math-Shepherd", "MOPD", "MiMo"],
+    "notes": "Math-Shepherd coauthor and MOPD coauthor. Homepage and GitHub identify him as an HKU PhD student, former Peking University MSc student, and link the same GitHub/X profiles; MOPD title page adds Xiaomi LLM Core / MiMo post-training relation.",
     "sources": [
       {
         "label": "Homepage",
@@ -2981,6 +2981,14 @@
       {
         "label": "X",
         "url": "https://x.com/_TobiasLee"
+      },
+      {
+        "label": "MOPD",
+        "url": "https://arxiv.org/abs/2606.30406"
+      },
+      {
+        "label": "MiMo-V2-Flash repository",
+        "url": "https://github.com/XiaomiMiMo/MiMo-V2-Flash"
       }
     ]
   },
@@ -3173,8 +3181,8 @@
     "homepage": "https://cs.pku.edu.cn/info/1237/2101.htm",
     "x": "",
     "xConfidence": "not-found",
-    "topics": ["natural language processing", "computational linguistics", "Math-Shepherd", "in-context learning"],
-    "notes": "Math-Shepherd coauthor and Peking University professor at the Institute of Computational Linguistics. OpenReview records Damai Dai and Peiyi Wang advisor relations; no high-confidence personal X account found in this pass.",
+    "topics": ["natural language processing", "computational linguistics", "Math-Shepherd", "DeepSeekMoE", "MOPD", "in-context learning"],
+    "notes": "Math-Shepherd coauthor, DeepSeekMoE coauthor and MOPD co-corresponding author. Peking University profile identifies her as a professor at the Institute of Computational Linguistics; OpenReview records Damai Dai and Peiyi Wang advisor relations; no high-confidence personal X account found in this pass.",
     "sources": [
       {
         "label": "Peking University profile",
@@ -3187,6 +3195,18 @@
       {
         "label": "Google Scholar",
         "url": "https://scholar.google.com/citations?hl=zh-CN&user=y2EaftAAAAAJ"
+      },
+      {
+        "label": "Math-Shepherd",
+        "url": "https://arxiv.org/abs/2312.08935"
+      },
+      {
+        "label": "DeepSeekMoE",
+        "url": "https://arxiv.org/abs/2401.06066"
+      },
+      {
+        "label": "MOPD",
+        "url": "https://arxiv.org/abs/2606.30406"
       }
     ]
   },
@@ -5295,6 +5315,142 @@
       {
         "label": "USENIX OSDI 2026 presentation",
         "url": "https://www.usenix.org/conference/osdi26/presentation/gao"
+      }
+    ]
+  },
+  {
+    "slug": "wenhan-ma",
+    "name": "Wenhan Ma",
+    "aliases": ["Wenhan Ma", "Ma Wenhan"],
+    "affiliations": ["Peking University", "Xiaomi LLM Core"],
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["MOPD", "MiMo", "MoE reinforcement learning", "post-training", "router alignment"],
+    "notes": "MOPD first author. Title page marks Peking University and Xiaomi LLM Core, with work done during Xiaomi internship. OpenReview search result identifies Wenhan Ma as a Peking University PhD student; Hailin Zhang homepage lists Wenhan Ma as first author on an ICML 2026 MoE RL router-alignment paper with Hailin Zhang, Liang Zhao, Yudong Wang, Zhifang Sui and Fuli Luo. No high-confidence personal X account found in this pass.",
+    "sources": [
+      {
+        "label": "MOPD",
+        "url": "https://arxiv.org/abs/2606.30406"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Wenhan_Ma1"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=en&user=z81xNAEAAAAJ"
+      },
+      {
+        "label": "Hailin Zhang homepage",
+        "url": "https://hugozhl.github.io/"
+      }
+    ]
+  },
+  {
+    "slug": "liang-zhao-xiaomi",
+    "name": "Liang Zhao",
+    "aliases": ["Liang Zhao", "zhao1iang-mimo"],
+    "affiliations": ["Xiaomi MiMo", "Xiaomi LLM Core", "Peking University"],
+    "homepage": "https://scholar.google.com/citations?hl=en&user=VKBVxMQAAAAJ",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["MOPD", "MiMo", "LLM post-training", "MoE reinforcement learning", "agentic RL"],
+    "notes": "MOPD coauthor from Xiaomi LLM Core. Google Scholar search result lists Xiaomi MiMo, SkyworkAI, Tencent, Alibaba and Peking University with verified pku.edu.cn email; Hugging Face profile zhao1iang-mimo identifies Liang Zhao and links MiMo-related papers. No high-confidence personal X account found in this pass.",
+    "sources": [
+      {
+        "label": "MOPD",
+        "url": "https://arxiv.org/abs/2606.30406"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=en&user=VKBVxMQAAAAJ"
+      },
+      {
+        "label": "Hugging Face",
+        "url": "https://huggingface.co/zhao1iang-mimo"
+      },
+      {
+        "label": "Hailin Zhang homepage",
+        "url": "https://hugozhl.github.io/"
+      }
+    ]
+  },
+  {
+    "slug": "hailin-zhang",
+    "name": "Hailin Zhang",
+    "chineseName": "张海林",
+    "aliases": ["Hailin Zhang", "HugoZHL"],
+    "affiliations": ["Xiaomi MiMo", "Peking University"],
+    "homepage": "https://hugozhl.github.io/",
+    "github": "https://github.com/HugoZHL",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["MiMo", "MOPD", "RL infrastructure", "MLSys", "large-scale LLM systems", "sparse decoding"],
+    "notes": "MOPD coauthor and Xiaomi MiMo RL infrastructure researcher. Homepage identifies him as Hailin Zhang (张海林), currently building MiMo at Xiaomi, specializing in AI infrastructure and efficient, scalable, stable RL infrastructures for MiMo series models; it links GitHub HugoZHL and Google Scholar and states he earned a Peking University PhD in 2025 advised by Bin Cui. No high-confidence personal X account found in this pass.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://hugozhl.github.io/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/HugoZHL"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=ca900BIAAAAJ"
+      },
+      {
+        "label": "MOPD",
+        "url": "https://arxiv.org/abs/2606.30406"
+      },
+      {
+        "label": "MiMo-V2-Flash repository",
+        "url": "https://github.com/XiaomiMiMo/MiMo-V2-Flash"
+      }
+    ]
+  },
+  {
+    "slug": "fuli-luo",
+    "name": "Fuli Luo",
+    "chineseName": "罗福莉",
+    "aliases": ["Fuli Luo", "Luo Fuli", "luofuli"],
+    "affiliations": ["Xiaomi LLM Core", "Xiaomi MiMo", "Peking University", "DeepSeek AI"],
+    "homepage": "https://scholar.google.com/citations?hl=zh-CN&user=1s79Z5cAAAAJ",
+    "github": "",
+    "x": "https://x.com/_LuoFuli",
+    "xConfidence": "high",
+    "topics": ["MOPD", "MiMo", "DeepSeek-R1", "DeepSeekMoE", "LLM post-training", "agentic models"],
+    "notes": "MOPD co-corresponding author and Xiaomi MiMo lead signal. Google Scholar identifies Fuli Luo（罗福莉）; OpenReview and Hugging Face activity connect her to MiMo-V2-Flash, MoE RL router alignment, DeepSeek-R1 and prior DeepSeek work. X search result and posts from @_LuoFuli discuss MiMo releases, matching Xiaomi MiMo author-line evidence. PKU news article describes Luo Fuli as leader of the MiMo LLM. X account confidence is high because the handle, MiMo posts, public profile snippets, paper activity and external reporting align.",
+    "sources": [
+      {
+        "label": "MOPD",
+        "url": "https://arxiv.org/abs/2606.30406"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=zh-CN&user=1s79Z5cAAAAJ"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Fuli_Luo1"
+      },
+      {
+        "label": "Hugging Face",
+        "url": "https://huggingface.co/luofuli/activity/all"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/_LuoFuli"
+      },
+      {
+        "label": "Peking University news",
+        "url": "https://newsen.pku.edu.cn/news_events/news/people/15385.html"
+      },
+      {
+        "label": "DeepSeekMoE",
+        "url": "https://arxiv.org/abs/2401.06066"
       }
     ]
   }

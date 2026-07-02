@@ -1,7 +1,7 @@
 # 国产前沿模型技术报告时间线总览
 
 First-Archived-At: 2026-06-23 18:40
-Updated-At: 2026-06-29 13:03
+Updated-At: 2026-07-02 11:34
 Pinned: true
 
 ## Source
@@ -20,13 +20,14 @@ Pinned: true
 - Local archive: [2026-04-24 DeepSeek-V4](/papers/2026-04-24-deepseek-v4-million-token-context-intelligence/)
 - Local archive: [2026-06-16 GLM-5.2](/papers/2026-06-16-glm-5-2-long-horizon-tasks/)
 - Local archive: [2606.13392 MiniMax Sparse Attention / MiniMax-M3](/papers/2606.13392-minimax-sparse-attention-m3/)
+- Local archive: [2606.30406 MOPD / Xiaomi MiMo](/papers/2606.30406-mopd-multi-teacher-on-policy-distillation/)
 - Related systems and method nodes: [2211.17192 Speculative Decoding](/papers/2211.17192-fast-inference-transformers-speculative-decoding/), [DSA-2025-09-29 DeepSeek Sparse Attention](/papers/2025-09-29-deepseek-v3-2-exp-dsa-long-context-efficiency/), [2606.12370 Qwen Bebop](/papers/2606.12370-bebop-mtp-rejection-sampling-rl-training/), [2602.06036 DFlash](/papers/2602.06036-dflash-block-diffusion-speculative-decoding/), [DSPARK-2026-06-27 DSpark](/papers/2026-06-27-dspark-confidence-scheduled-speculative-decoding/), [2511.14617 Seer](/papers/2511.14617-seer-online-context-learning-llm-rl/), [2026-06-17 slime](/papers/2026-06-17-slime-rl-scaling-framework/), [2026-06-19 Muon 综合](/papers/2026-06-19-muon-optimizer-keller-jordan-synthesis/)
 
 ## 作者与关系
 
-这条时间线主要由五个国产模型组织构成：DeepSeek-AI、Qwen Team / Alibaba、Kimi Team / Moonshot AI、MiniMax、GLM-5 Team / Z.ai / Zhipu AI / Tsinghua University。它们的报告大多采用团队署名，作者列表按字母序或贡献组呈现，因此更适合按组织、技术路线和系统依赖建图，逐人关系只在跨论文重复出现且已核验的作者上保留。
+这条时间线主要由六个国产模型组织构成：DeepSeek-AI、Qwen Team / Alibaba、Kimi Team / Moonshot AI、MiniMax、GLM-5 Team / Z.ai / Zhipu AI / Tsinghua University、Xiaomi MiMo。它们的报告大多采用团队署名，作者列表按字母序或贡献组呈现，因此更适合按组织、技术路线和系统依赖建图，逐人关系只在跨论文重复出现且已核验的作者上保留。
 
-DeepSeek 线从 [DeepSeekMoE](/papers/2401.06066-deepseekmoe-expert-specialization/) 的 fine-grained experts / shared experts 走向 V2 的 MLA + sparse FFN 合流，再走向 V3 的 FP8 / DualPipe / MTP，经过 R1 的 reasoning RL，随后用 DSA 与 V4 的 CSA/HCA hybrid attention、mHC、Muon、deterministic kernels 和 agent sandbox 汇合到 million-token context，并用 DSpark / DeepSpec 把 speculative decoding 推进到 DeepSeek-V4 production serving。Qwen 线从 Qwen2.5 的模型族和 reward / long-context 基座，走到 Qwen3 的 thinking control 与 strong-to-weak distillation，再由 Bebop 把 [speculative decoding](/papers/2211.17192-fast-inference-transformers-speculative-decoding/) 中 $1-\mathrm{TV}(p,q)$ 的接受率语言转成 MTP rollout 的 rejection sampling / TV loss recipe。Kimi 线从 k1.5 的 long-context RL recipe，走到 K2 的 open agentic intelligence，再到 K2.5 的 visual agentic intelligence，并由 Seer 解释 Moonshot 生态里同步 RL rollout 的系统压力。GLM 线从 GLM-5 的 agentic engineering 与 slime 异步 RL，走到 GLM-5.2 的 1M long-horizon coding agent，并在 IndexShare、KVShare、TV loss 和 anti-hack 上持续把 sparse attention、MTP 与 RL 闭环结合起来。MiniMax 线先用 M1 的 Lightning Attention 和 CISPO 处理长输出 RL 成本，再用 MiniMax-M3 / MSA 走向 1M context 的 native sparse softmax attention 与多模态/协作模型。
+DeepSeek 线从 [DeepSeekMoE](/papers/2401.06066-deepseekmoe-expert-specialization/) 的 fine-grained experts / shared experts 走向 V2 的 MLA + sparse FFN 合流，再走向 V3 的 FP8 / DualPipe / MTP，经过 R1 的 reasoning RL，随后用 DSA 与 V4 的 CSA/HCA hybrid attention、mHC、Muon、deterministic kernels 和 agent sandbox 汇合到 million-token context，并用 DSpark / DeepSpec 把 speculative decoding 推进到 DeepSeek-V4 production serving。Qwen 线从 Qwen2.5 的模型族和 reward / long-context 基座，走到 Qwen3 的 thinking control 与 strong-to-weak distillation，再由 Bebop 把 [speculative decoding](/papers/2211.17192-fast-inference-transformers-speculative-decoding/) 中 $1-\mathrm{TV}(p,q)$ 的接受率语言转成 MTP rollout 的 rejection sampling / TV loss recipe。Kimi 线从 k1.5 的 long-context RL recipe，走到 K2 的 open agentic intelligence，再到 K2.5 的 visual agentic intelligence，并由 Seer 解释 Moonshot 生态里同步 RL rollout 的系统压力。GLM 线从 GLM-5 的 agentic engineering 与 slime 异步 RL，走到 GLM-5.2 的 1M long-horizon coding agent，并在 IndexShare、KVShare、TV loss 和 anti-hack 上持续把 sparse attention、MTP 与 RL 闭环结合起来。MiniMax 线先用 M1 的 Lightning Attention 和 CISPO 处理长输出 RL 成本，再用 MiniMax-M3 / MSA 走向 1M context 的 native sparse softmax attention 与多模态/协作模型。Xiaomi MiMo 线在 [MOPD](/papers/2606.30406-mopd-multi-teacher-on-policy-distillation/) 中把多领域 RL teachers 的能力整合写成 student on-policy rollout、teacher prefill、reverse KL / policy-gradient advantage 和 top-k distillation 的 post-training recipe，并在 MiMo-V2-Flash 中给出部署证据。
 
 ## 一句话结论
 
@@ -43,10 +44,13 @@ DeepSeek 线从 [DeepSeekMoE](/papers/2401.06066-deepseekmoe-expert-specializati
 | Moonshot / Kimi | long-context RL 到 agentic / visual agent 的数据和系统闭环 | k1.5 OMD-style RL、partial rollout、long2short、K2 tool synthesis、MuonClip、checkpoint engine、K2.5 visual RL / Agent Swarm、Seer grouped rollout | 长 CoT、多工具 agent、software engineering、visual agentic workload | tool harness 与 simulator 透明度、reward/rubric 可复验性、swarm 与 checkpoint 系统成本 |
 | MiniMax | 长输出和长上下文的 attention / objective 协同优化 | M1 Lightning Attention + CISPO、M3 MSA、Index Branch、block sparse softmax、kernel co-design | long-output RL 成本、1M context sparse softmax、open-weight multimodal M3 | M3 428B 完整训练 recipe、MSA 在完整模型上的 ablation、H800/SM100 kernel 路线差异 |
 | GLM / Z.ai | agentic engineering production stack | GLM-5 744B-A40B、DSA、slime、TITO、double-sided IS、GLM-5.2 IndexShare/KVShare、critic PPO、anti-hack | long-horizon coding agent、1M context serving、agentic RL infra、防 reward hacking | GLM-5.2 完整技术报告、anti-hack precision/recall、IndexShare/KVShare 质量损失、parallel OPD 细节 |
+| Xiaomi MiMo | 多领域 teacher 能力整合 + agentic RL post-training | MiMo-V2-Flash、MOPD、same-origin RL teachers、teacher prefill、reverse KL / PG advantage、top-k distillation、large-scale code agent environments | multi-teacher capability integration、单模型吸收多个 domain RL teacher、MiMo series RL infrastructure | MOPD code / teacher service trace、MiMo-V2-Flash 完整训练账本、异源 teacher 失效边界、teacher RL 总成本 |
 
 DeepSeek 的特色是把“能力增长”持续翻译成系统账本。V2 的 MLA 和 DeepSeekMoE 处理 KV cache 与 active compute，V3 的 FP8 / DualPipe / auxiliary-loss-free routing 处理训练吞吐和 MoE 稳定性，V4 的 CSA/HCA、heterogeneous KV cache、deterministic kernels 和 OPD 把百万上下文、低精度、post-training 和部署一致性放在一张图里。DSpark 继续补上 serving 侧的动态验证预算：DFlash parallel backbone 负责长候选块，低秩 Markov head 处理块内局部依赖，confidence scheduler 按请求置信度和 engine load 裁剪 target verification 长度。它的报告最值得追踪底层机制，因为很多后续国产路线都会复用或回应这些工程语言。
 
 Qwen 的特色是把模型族、蒸馏和开源生态组织成可扩展发布面。Qwen2.5/Qwen3 把 dense/MoE、thinking/non-thinking、tool-use、math/code、long context 和小模型 distillation 放进统一 family；Bebop 又把 speculative decoding 的 $1-\mathrm{TV}(p,q)$ 接受率关系落成 MTP rollout recipe，并通过 SGLang/vLLM 进入推理引擎。它的优势是把研究点快速变成模型族和工具链选项，代价是内部模型版本、训练预算和 API MoE 细节常常需要额外追问。
+
+Xiaomi MiMo 的特色是把多个领域 RL teacher 的能力整合拆成独立工程阶段。MOPD 先让 Math、IF、SWE 等 domain teachers 从同一 SFT checkpoint 分叉并各自做 RL，再让 student 在自己的 on-policy trajectory 上接受 teacher prefill 分布指导。这个设计把 teacher signal 放进 token-level reverse KL / policy-gradient advantage，保留每个 domain 独立调 recipe 的便利，也给 MiMo-V2-Flash 这种单一模型整合多 teacher 能力提供路径。它最需要复验的地方是 teacher prefill service 的真实成本、同源 teacher 条件和 MiMo-V2-Flash 完整训练账本。
 
 Kimi 的特色是把长上下文 RL 直接推向真实 agent 任务。k1.5 关心长 CoT、partial rollout 和 long2short，K2 关心 MCP tool ecosystem、synthetic tool data、self-critique reward 和 checkpoint engine，K2.5 继续扩到视觉、浏览器、OS 和 Agent Swarm。它的路线经常把模型能力、工具环境、reward harness 和运行预算绑在一起看，适合观察“agentic capability”如何从单题推理扩展到长任务执行。
 
@@ -109,6 +113,7 @@ DeepSeek-V4 和 GLM-5.2 又把长上下文推到 million-token 级别。DeepSeek
 | 2026-06 | [2606.12370 Bebop](/papers/2606.12370-bebop-mtp-rejection-sampling-rl-training/) | MTP rejection sampling, TV loss, RL rollout acceleration, entropy-acceptance bound | Qwen3.5-35A3B mixed RFT data，global batch size 256，sequence length 256K；MTP + RS 带来 `1.5-1.8x` per-step RL latency reduction | 依赖 Qwen 内部模型/系统；TV coverage 超出 pre-RL entropy range 时仍需复验 |
 | 2026-06 | [DSpark](/papers/2026-06-27-dspark-confidence-scheduled-speculative-decoding/) | semi-autoregressive drafter, DFlash backbone, Markov head, calibrated confidence head, hardware-aware prefix scheduler, DeepSpec | DeepSeek-V4-Flash 在 80 tok/s/user SLA 下 throughput 高于 MTP-1 51%；DeepSeek-V4-Pro 在 35 tok/s/user SLA 下高 52%；公开 DSpark checkpoints 和 DeepSpec 训练框架 | 线上 telemetry、capacity table、traffic mix、V4 DSpark 训练数据和 kernel 细节未公开；未发现 DSpark 独立 arXiv / OpenReview |
 | 2026-06 | [MiniMax-M3 / MSA](/papers/2606.13392-minimax-sparse-attention-m3/) | GQA block sparse attention, Index Branch, KL alignment, 1M context, native multimodality | 109B MoE 3T token 对照；MSA-CPT 400B；1M context 下 28.4x attention FLOPs reduction、14.2x prefill、7.6x decode | 完整 M3 428B training recipe、MSA full-model ablation 和 kernel 路线仍待补 |
+| 2026-06 | [2606.30406 MOPD](/papers/2606.30406-mopd-multi-teacher-on-policy-distillation/) | multi-teacher on-policy distillation, reverse KL, PG advantage, top-k distillation, same-origin teachers, MiMo-V2-Flash | Qwen3-30B-A3B controlled study 中 MOPD normalized score 0.9373，高于 Mix-RL 0.8818；MiMo-V2-Flash 多项 benchmark 达到或超过 RL teacher | 强外部 teacher 实验显示 distribution mismatch 会退化；teacher prefill overhead、GPU hours 和完整 MiMo training recipe 未公开 |
 
 ### 训练配置披露审计
 
@@ -120,6 +125,7 @@ DeepSeek-V4 和 GLM-5.2 又把长上下文推到 million-token 级别。DeepSeek
 | DeepSeek-R1 | R1-Zero 10,400 steps；max length 32,768 -> 65,536；R1 多阶段 SFT/RL/distillation | vLLM rollout、DualPipe、跨节点 EP、MTP 等系统模块公开；具体硬件/并行度未完整公开 | GPU hours、wall-clock、美元成本未披露 | RL recipe 细，资源账本不足 |
 | Kimi k1.5 | long-CoT warmup、OMD-style RL、partial rollout、long2short | Megatron + vLLM + Mooncake/RDMA；集群规模未披露 | GPU hours、wall-clock、美元成本未披露 | recipe 价值高，成本审计弱 |
 | Qwen3 | 36T tokens；S1 >30T、S2 ~5T、S3 数千亿 long-context tokens | 训练硬件和并行方式未完整公开 | distillation vs RL 报告 1,800 vs 17,920 GPU hours；主训练成本未披露 | distillation 对照强，主训练账本弱 |
+| MOPD / MiMo-V2-Flash | Qwen3-30B-A3B controlled study 使用同 SFT checkpoint、Math/IF/SWE domain RL teachers；MiMo-V2-Flash README 披露 27T pretraining、MOPD 和 large-scale agentic RL | teacher prefill service 异步化方向公开；训练硬件、teacher serving topology、GPU 数、并行方式未完整公开 | MOPD Stage 3 成本、teacher RL 总成本、GPU hours、wall-clock 和美元成本未披露 | multi-teacher integration 机制强，完整成本账本和系统 trace 待补 |
 | Qwen Bebop | Qwen3.5-35A3B mixed RFT data；global batch size 256；sequence length 256K；冻结 backbone 训练 5-step MTP，评估 $\gamma=3$ | SGLang / vLLM MTP implementation 相关；训练硬件和并行方式未完整公开 | 报告 `1.5-1.8x` per-step RL latency reduction；GPU hours、wall-clock、美元成本未披露 | MTP/TV recipe 强，资源账本和外部复验不足 |
 | MiniMax-M1 | 7.5T continual pretraining；1M context extension；40K -> 80K RL | 训练硬件和并行方式未完整公开 | GPU hours、wall-clock、美元成本未披露 | long-output RL recipe 强，资源账本不足 |
 | Kimi K2 | 15.5T pretraining；400B at 4K + 60B at 32K annealing | H800 cluster；PP16；EP16；ZeRO-1；FP8 activations；CPU offload | 完整 GPU 数、wall-clock、GPU hours、美元成本未披露 | 系统配置较清楚，成本账本不足 |
@@ -142,13 +148,13 @@ DeepSeek-V4 和 GLM-5.2 又把长上下文推到 million-token 级别。DeepSeek
 ### Target
 
 - Intended target system: 新增国产模型技术报告时间线总览。
-- Existing related assets: `papers-index.md`，[DeepSeekMoE](/papers/2401.06066-deepseekmoe-expert-specialization/)、DeepSeek、Qwen、Kimi、MiniMax、GLM 系列独立笔记。
+- Existing related assets: `papers-index.md`，[DeepSeekMoE](/papers/2401.06066-deepseekmoe-expert-specialization/)、DeepSeek、Qwen、Kimi、MiniMax、GLM、Xiaomi MiMo / MOPD 系列独立笔记。
 - Proposed form: 根目录 Markdown 综合条目，并在 archive index 中提供入口。
 
 ### Reusable Elements
 
 1. 国产模型技术报告从 base model efficiency 到 reasoning RL，再到 agentic production system 的三阶段脉络。
-2. DeepSeek / Qwen / Kimi / GLM / MiniMax 的组织级路线对照。
+2. DeepSeek / Qwen / Kimi / GLM / MiniMax / Xiaomi MiMo 的组织级路线对照。
 3. 后续阅读模型报告时的方法机制 / 继承关系 / baseline / harness / rollout / reward / serving 审计框架。
 
 ### Risks
@@ -165,7 +171,6 @@ DeepSeek-V4 和 GLM-5.2 又把长上下文推到 million-token 级别。DeepSeek
 | --- | --- |
 | 全量榜单更新 | 需要实时检索并统一 harness，超出这篇时间线目标。 |
 | 未归档国产报告 | 先基于本地已读材料生成；后续补读后可扩展。 |
-| 逐作者 profile pass | 本条为综合文章，不新增个人作者判断。 |
 
 ### Recommendation
 
