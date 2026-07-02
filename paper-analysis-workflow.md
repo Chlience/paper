@@ -1,7 +1,7 @@
 # Paper Analysis Workflow
 
 First-Archived-At: 2026-06-19
-Updated-At: 2026-06-24
+Updated-At: 2026-07-02
 
 ## 目标
 
@@ -192,7 +192,7 @@ LLM RL、post-training、systems、serving、optimizer 和评测类论文都必�
    - `"Paper Title" ICLR OR NeurIPS OR ICML OR ACL OR ARR`
    - `"arxiv_id" OpenReview`
 3. 若标题改动或存在匿名投稿，用作者组合、摘要关键词和 arXiv id 交叉匹配。匹配证据不足时，只写“未能可靠匹配公开 review”，避免弱匹配。
-4. 对 OpenReview forum，优先拉取 API 而非只读网页正文：
+4. 对 OpenReview forum，优先拉取 API，再用网页正文补充核对：
 
 ```text
 https://api2.openreview.net/notes?forum=<forum_id>&details=replyCount,directReplies,replies
@@ -315,10 +315,10 @@ https://api2.openreview.net/notes?forum=<forum_id>&details=replyCount,directRepl
 
 ## Markdown 公式写法
 
-站点在构建期使用 KaTeX 渲染 Markdown 里的 LaTeX 公式。推荐写法：
+站点在构建期使用 KaTeX 渲染 Markdown 里的 LaTeX 公式。论文 Markdown 中的数学公式必须使用 `$...$` 或 `$$...$$` 包裹：
 
-- 行内公式：`$a_t = b_t + c_t$`
-- 块级公式：
+- 行内公式使用 `$...$`，例如 `$a_t = b_t + c_t$`。
+- 独立单行公式使用 `$$...$$`，例如：
 
 ```text
 $$
@@ -326,14 +326,11 @@ L_t = \sum_i g_i g_i^\top
 $$
 ```
 
-兼容写法：
-
-- 行内公式：`\(...\)`
-- 块级公式：`\[...\]`
-- 块级环境：`\begin{equation}...\end{equation}`
-
 写作要求：
 
+- 不使用 `\(...\)`、`\[...\]` 或裸 `\begin{equation}...\end{equation}` 作为 Markdown 源文公式分隔符；若需要 equation / aligned / split 等 LaTeX 环境，外层仍用 `$$...$$` 包裹。
+- 不把数学表达式放进反引号代码样式中。例如写 `$\pi_{\phi_d}$`，不要写 `` `\pi_{\phi_d}` ``。
+- 简短符号和变量关系优先写成行内公式；需要独立展示的推导、loss、定理表达和更新规则写成单行或多行 `$$...$$` 公式块。
 - 普通美元金额和 shell 变量尽量放进反引号代码中，例如 `` `$HOME` ``。
 - 长公式优先使用块级公式，减少表格和移动端横向撑开。
 - 公式只用于保留必要符号、更新规则和定理表达；正文解释仍需用自然语言说明变量含义。

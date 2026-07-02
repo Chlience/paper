@@ -5453,5 +5453,125 @@
         "url": "https://arxiv.org/abs/2401.06066"
       }
     ]
+  },
+  {
+    "slug": "zhentao-tan",
+    "name": "Zhentao Tan",
+    "aliases": ["Zhentao Tan"],
+    "affiliations": ["Alibaba Group", "Alibaba Cloud", "University of Science and Technology of China"],
+    "homepage": "https://scholar.google.com/citations?hl=zh-CN&user=VCX7itEAAAAJ",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["HydraHead", "head-wise hybrid attention", "interpretability-guided head selection", "long-context modeling", "multimodal AI"],
+    "notes": "HydraHead first author. arXiv lists Alibaba Group for the paper. Public profile snippets identify him as an Alibaba Cloud researcher with University of Science and Technology of China postdoc and PhD history; Google Scholar lists Alibaba Cloud and USTC.",
+    "sources": [
+      {
+        "label": "HydraHead",
+        "url": "https://arxiv.org/abs/2606.20097"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Zhentao_Tan1"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=zh-CN&user=VCX7itEAAAAJ"
+      },
+      {
+        "label": "ResearchGate",
+        "url": "https://www.researchgate.net/profile/Zhentao-Tan"
+      }
+    ]
+  },
+  {
+    "slug": "xu-shen",
+    "name": "Xu Shen",
+    "aliases": ["Xu Shen"],
+    "affiliations": ["Alibaba Group", "Tongyi Large Model Business Unit, Alibaba Token Hub", "University of Science and Technology of China"],
+    "homepage": "https://scholar.google.com/citations?hl=en&user=38jwGs8AAAAJ",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["HydraHead", "LLM architecture", "long-context modeling", "machine learning", "computer vision"],
+    "notes": "HydraHead coauthor. arXiv lists Alibaba Group. Google Scholar identifies Tongyi Large Model Business Unit, Alibaba Token Hub with verified alibaba-inc.com email. Public OpenReview snippet identifies Alibaba Group researcher history and USTC PhD student history.",
+    "sources": [
+      {
+        "label": "HydraHead",
+        "url": "https://arxiv.org/abs/2606.20097"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=en&user=38jwGs8AAAAJ"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Xu_Shen1"
+      }
+    ]
+  },
+  {
+    "slug": "yue-wu-alibaba",
+    "name": "Yue Wu",
+    "aliases": ["Yue Wu"],
+    "affiliations": ["Alibaba Group", "Alibaba Cloud", "University of Science and Technology of China"],
+    "homepage": "https://scholar.google.com/citations?hl=zh-CN&user=srajsjoAAAAJ",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["HydraHead", "large language models", "machine learning", "image and video processing", "long-context modeling"],
+    "notes": "HydraHead coauthor. arXiv lists Alibaba Group. Google Scholar identifies Alibaba Cloud with verified mail.ustc.edu.cn email. Public OpenReview snippet identifies Alibaba Group researcher history and USTC postdoc history.",
+    "sources": [
+      {
+        "label": "HydraHead",
+        "url": "https://arxiv.org/abs/2606.20097"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=zh-CN&user=srajsjoAAAAJ"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Yue_Wu18"
+      }
+    ]
+  },
+  {
+    "slug": "jieping-ye",
+    "name": "Jieping Ye",
+    "aliases": ["Jieping Ye"],
+    "affiliations": ["Alibaba Group", "Alibaba Cloud Data to Intelligence Lab", "University of Michigan", "Didi Chuxing AI Labs"],
+    "homepage": "https://www.yelabs.net/",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["HydraHead", "machine learning", "data mining", "artificial intelligence", "long-context modeling", "Alibaba Tongyi Lab"],
+    "notes": "HydraHead coauthor. arXiv lists Alibaba Group. Public sources identify Alibaba Group / Alibaba Cloud Data to Intelligence Lab leadership, University of Michigan professor history, and earlier Didi Chuxing AI Labs publication affiliation.",
+    "sources": [
+      {
+        "label": "HydraHead",
+        "url": "https://arxiv.org/abs/2606.20097"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=en&user=T9AzhwcAAAAJ"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Jieping_Ye4"
+      },
+      {
+        "label": "Alibaba Cloud Global Summit 2025",
+        "url": "https://www.alibabacloud.com/en/alibaba-cloud-global-summit-2025"
+      },
+      {
+        "label": "Mcity Congress 2024",
+        "url": "https://mcity.umich.edu/2024-mcity-congress-explored-ais-growing-role-in-transportation/"
+      },
+      {
+        "label": "KDD 2018 accepted papers",
+        "url": "https://www.kdd.org/kdd2018/accepted-papers"
+      }
+    ]
   }
 ]
