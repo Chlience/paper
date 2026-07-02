@@ -17,16 +17,10 @@ Updated-At: YYYY-MM-DD HH:mm
 
 ## 作者与关系
 
-- Author A: Institution / role if known.
-- Author B: Institution / role if known.
+- Author A: 发表时机构：Institution in this paper；历史机构：previously verified affiliations if already known.
+- Author B: 发表时机构：Institution in this paper；历史机构：previously verified affiliations if already known.
 
-关系判断：
-
-- 同机构作者群：
-- 跨机构桥接：
-- 与已存档作者重叠：若作者已有页面，使用 `[Author Name](/authors/<slug>/)`。
-- 与已存档论文的主题或方法关系：
-- 需要后续确认：
+写法要求：本节只保留发表该论文时的机构和已核验历史机构。作者主页、GitHub、Scholar、X 账号、账号搜索过程、profile pass 结果、跳过原因和候选账号判断写入 `authors.json` 或临时中间文件，不写入论文 Markdown。
 
 ## 一句话结论
 

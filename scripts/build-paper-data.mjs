@@ -262,6 +262,43 @@ const stripPageChrome = (markdown) =>
     .replace(/^Sort-Time:\s*.+\n+/m, '')
     .trim();
 
+const paperMaintenanceLinePattern =
+  /(关系判断|作者\s*profile\s*pass|Author\s+profile\s+pass|作者页决策|Grok broad|Grok CLI|SuperGrok|xConfidence|not-found|账号搜索|X\s*\/\s*GitHub|逐人\s*X|逐作者档案|全量作者\s*profile|全作者\s*X|全体作者\s*X|homepage\s*\/\s*GitHub\s*\/\s*Scholar)/i;
+
+const stripPublicPaperMaintenance = (markdown) => {
+  const lines = markdown.split('\n');
+  const kept = [];
+  let skipAuthorMaintenanceBlock = false;
+
+  for (const line of lines) {
+    const trimmed = line.trim();
+
+    if (skipAuthorMaintenanceBlock) {
+      if (/^##\s+/.test(line)) {
+        skipAuthorMaintenanceBlock = false;
+      } else {
+        continue;
+      }
+    }
+
+    if (/^关系判断[:：]?$/.test(trimmed) || /^作者\s*profile\s*pass[:：]?$/.test(trimmed) || /^作者页决策[:：]?$/.test(trimmed)) {
+      skipAuthorMaintenanceBlock = true;
+      continue;
+    }
+
+    if (/^#{3,6}\s+Author\s+profile\s+pass/i.test(trimmed)) {
+      skipAuthorMaintenanceBlock = true;
+      continue;
+    }
+
+    if (paperMaintenanceLinePattern.test(line)) continue;
+
+    kept.push(line);
+  }
+
+  return kept.join('\n').trim();
+};
+
 const fileToWebPath = (file, paperFiles) => {
   if (paperFiles.has(file)) return `/papers/${file.replace(/\.md$/, '')}/`;
   if (internalFilePaths.has(file)) return internalFilePaths.get(file);
@@ -335,7 +372,7 @@ const build = async () => {
       getSourceField(raw, ['arXiv', 'URL', 'PDF', 'Source']) ||
       getSourceField(raw, 'DOI');
 
-    const pageMarkdown = stripPageChrome(raw);
+    const pageMarkdown = stripPublicPaperMaintenance(stripPageChrome(raw));
     const firstArchivedAt = getFirstArchivedAt(raw);
     const updatedAt = getUpdatedAt(raw);
     const pinned = getPinned(raw);

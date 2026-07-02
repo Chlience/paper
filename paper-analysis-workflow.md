@@ -78,7 +78,7 @@ papers-index.md
 authors.json
 ```
 
-`authors.json` 只记录相对稳定的作者事实：英文姓名、中文姓名、别名、机构、主页、X 账号、账号核验状态、主题标签和来源链接。论文语境下的关系判断仍写入对应论文笔记的 `作者与关系` 章节。
+`authors.json` 只记录相对稳定的作者事实：英文姓名、中文姓名、别名、机构、主页、X 账号、账号核验状态、主题标签和来源链接。论文笔记的 `作者与关系` 章节只写发表时机构和已核验历史机构；跨论文作者、机构和主题关系写入 `papers-index.md` 或 `跨论文关系`。
 
 ## 阅读顺序
 
@@ -90,7 +90,7 @@ authors.json
 6. 再读 method / system / theory / experiment，梳理证据链。
 7. 最后读 limitation、ethics、appendix 和 project README，补齐边界条件。
 8. 搜索公开审稿意见。若论文有 OpenReview、ARR、会议投稿页或可匹配的公开 peer review，按 `审稿意见搜索与吸收` 章节记录 venue status、review 数量、rating / confidence、主要认可点、主要质疑点、作者回应和可信度影响；若未发现公开审稿，写入 `Reference Intake Brief -> Skipped`。
-9. 完成论文初稿后，执行作者 profile pass：抽取核心作者、通讯作者、维护者、跨论文重复作者和项目组织线索；按 `author-x-account-search-sop.md` 获取 homepage、GitHub、Scholar/DBLP/OpenReview、机构页和 X 候选；交叉验证后决定是否更新 `authors.json`、论文笔记和 `papers-index.md`。
+9. 完成论文初稿后，执行作者 profile pass：抽取核心作者、通讯作者、维护者、跨论文重复作者和项目组织线索；按 `author-x-account-search-sop.md` 获取 homepage、GitHub、Scholar/DBLP/OpenReview、机构页和 X 候选；交叉验证后更新 `authors.json` 和必要的 `papers-index.md` 关系。账号搜索过程、跳过原因、候选账号判断和 `xConfidence` 不写入论文 Markdown；需要暂存时使用 `/tmp` 或未跟踪中间文件。
 
 ## 分析维度
 
@@ -257,23 +257,20 @@ https://api2.openreview.net/notes?forum=<forum_id>&details=replyCount,directRepl
 
 记录内容：
 
-- 每位作者及机构。
-- 同机构作者群。
-- 跨机构桥接作者。
-- equal contribution、corresponding author、实验室或项目组织线索。
+- 每位作者发表该论文时的机构。
+- 已有作者档案中经过核验的历史机构。
 - 与当前 `papers-index.md` 中已有作者是否重叠。
 - 与已有论文是否存在同主题、同方法、同系统、同数据集、同机构或引用关系。
 - 若作者已有 `/authors/<slug>/` 页面，在相关论文笔记和索引中优先使用作者页链接。
 - 若作者个人信息经过核验，更新 `authors.json`；账号搜索默认使用 Grok，并参考 `author-x-account-search-sop.md` 记录 evidence 与 confidence。
-- 完成 `作者与关系` 章节后，必须做作者页决策：`tracked`、`recurring`、`skip/team` 或 `needs-follow-up`。
 - 对核心作者、通讯作者、代码仓库维护者、项目 tech lead、跨论文重复作者，打开 `author-x-account-search-sop.md`，默认用 Grok 做 broad search，再用网页、GitHub、主页、X 帖文或机构页面交叉验证。
-- 若证据只支持部分字段，仍记录已验证 homepage、GitHub、Scholar/DBLP/OpenReview、机构页或 `xConfidence: "not-found"`；证据不足的字段留空并在论文笔记中写明待查项。
+- 若证据只支持部分字段，仍记录已验证 homepage、GitHub、Scholar/DBLP/OpenReview、机构页或 `xConfidence: "not-found"` 到 `authors.json`；证据不足的字段留空。论文 Markdown 不记录搜索过程、候选账号、跳过原因或 profile pass 结论。
 
 判断要求：
 
-- 来源明确的事实直接写事实。
-- 由机构、署名顺序或邮箱推断的关系，用“关系判断”表述。
-- 没有证据时写“未发现作者重叠”或“需要后续来源确认”。
+- 来源明确的机构事实直接写事实。
+- 作者列表说明只写发表时机构和已核验历史机构。
+- 作者重叠、跨机构桥接、主题延展和方法复用写入 `papers-index.md` 或 `跨论文关系`，避免把维护过程写进作者列表。
 
 ## 笔记结构
 
@@ -360,7 +357,7 @@ $$
 
 维护原则：
 
-- 作者页存放稳定身份信息和跨论文聚合；论文页保留该论文语境下的作者关系、机构桥接和主题判断。
+- 作者页存放稳定身份信息和跨论文聚合；论文页作者列表只保留发表时机构和已核验历史机构。
 - 账号、主页、机构、中文姓名等事实必须有来源链接。X 账号默认先用 Grok 搜索，再用网页、GitHub、主页、X 帖文或机构页面交叉验证；使用 `high`、`medium`、`lab-account`、`not-found` 等 confidence 标记。
 - 若作者有已核验中文姓名，在 `authors.json` 写入 `chineseName`；站点展示为 `English Name (中文姓名)`。
 - 无法可靠拆分的团队署名、大规模 author list、文档贡献者列表先保留在论文页，不自动拆成作者页。
@@ -370,9 +367,9 @@ $$
 
 1. 从 `Source -> Authors`、`作者与关系`、项目页、代码仓库和 appendix 中抽取候选作者与角色。
 2. 在 `authors.json`、`papers-index.md` 和已有论文笔记中搜索候选作者，确认已有档案、别名、中文姓名和跨论文重复情况。
-3. 对需要补充档案的作者，按 `author-x-account-search-sop.md` 运行 Grok broad search，并保存可复查来源。
+3. 对需要补充档案的作者，按 `author-x-account-search-sop.md` 运行 Grok broad search，并把过程记录保存在临时文件或未跟踪 scratch 中。
 4. 交叉验证后更新 `authors.json`；若找到作者页，在论文笔记和索引中使用 `/authors/<slug>/` 链接。
-5. 对团队署名、超大作者列表或证据稀疏作者，记录跳过原因或 `needs-follow-up`，避免用弱匹配创建档案。
+5. 对团队署名、超大作者列表或证据稀疏作者，可以在临时中间文件中记录跳过原因，论文 Markdown 不写 profile pass 过程。
 6. 运行 `npm run build` 与 `npm run check:site`，确认作者页和论文页链接可生成。
 
 ## 安全与双用途处理
@@ -390,7 +387,7 @@ $$
 
 - 文件是否落盘。
 - `papers-index.md` 是否更新。
-- 是否完成作者 profile pass：候选作者清单、已有档案复用、新档案创建或跳过原因、`authors.json` 更新、`xConfidence` 与来源链接是否明确。
+- 是否完成作者 profile pass，并把稳定来源同步到 `authors.json`；论文 Markdown 不应包含候选账号、跳过原因、`xConfidence` 或搜索过程。
 - 作者页相关信息是否同步到 `authors.json`，论文笔记和 `papers-index.md` 是否使用 `/authors/<slug>/` 链接。
 - 每篇论文是否包含作者关系。
 - 是否保留来源 URL 和版本日期。

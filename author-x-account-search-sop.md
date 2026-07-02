@@ -241,8 +241,9 @@ Also note the project account separately if useful:
 - @slime_framework: Official framework account (bio + follower count). Frequently credits individual contributors.
 
 ### Phase 8: Follow-ups & Archival
-- If verified homepage/GitHub/Scholar/institution or high-confidence X links appear, update `authors.json`, the paper note's "作者与关系", and papers-index.md author clusters.
+- If verified homepage/GitHub/Scholar/institution or high-confidence X links appear, update `authors.json` and the necessary `papers-index.md` author clusters. In the paper note's "作者与关系" section, keep only the author's paper-time affiliation and previously verified historical affiliations.
 - If no high-confidence X exists, still write `xConfidence: "not-found"` and preserve profile evidence in `authors.json`.
+- Do not write search traces, rejected X candidates, `xConfidence`, skip reasons, or author-profile-pass notes into paper Markdown. If the search needs working notes, keep them in `/tmp` or another untracked scratch file.
 - Optionally re-check low-activity candidates later (new posts can appear).
 - For future papers: Repeat from Phase 1; reuse the same query templates.
 

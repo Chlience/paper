@@ -13,6 +13,31 @@ const excludedMarkdownFiles = new Set([
   'author-x-account-search-sop.md',
 ]);
 
+const maintenanceScanExemptFiles = new Set([
+  'paper-analysis-workflow.md',
+  'paper-note-template.md',
+]);
+
+const forbiddenPaperMaintenancePatterns = [
+  /关系判断/,
+  /作者\s*profile\s*pass/i,
+  /Author\s+profile\s+pass/i,
+  /作者页决策/,
+  /Grok broad/i,
+  /Grok CLI/i,
+  /SuperGrok/i,
+  /xConfidence/,
+  /not-found/,
+  /账号搜索/,
+  /X\s*\/\s*GitHub/i,
+  /逐人\s*X/,
+  /逐作者档案/,
+  /全量作者\s*profile/i,
+  /全作者\s*X/,
+  /全体作者\s*X/,
+  /homepage\s*\/\s*GitHub\s*\/\s*Scholar/i,
+];
+
 const fail = (message) => {
   console.error(message);
   process.exitCode = 1;
@@ -40,6 +65,14 @@ for (const file of await readMarkdownFiles()) {
 
   if (!getTopLevelField(markdown, 'Updated-At')) {
     fail(`${file} is missing Updated-At.`);
+  }
+
+  if (!maintenanceScanExemptFiles.has(file)) {
+    for (const pattern of forbiddenPaperMaintenancePatterns) {
+      if (pattern.test(markdown)) {
+        fail(`${file} contains paper-maintenance text matching ${pattern}.`);
+      }
+    }
   }
 }
 

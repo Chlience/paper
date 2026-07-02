@@ -23,6 +23,19 @@ const requiredSectionGroups = [
   { name: 'Reference Intake Brief', headings: ['## Reference Intake Brief'] },
 ];
 
+const forbiddenPublicPaperPatterns = [
+  /关系判断/,
+  /作者\s*profile\s*pass/i,
+  /Author\s+profile\s+pass/i,
+  /作者页决策/,
+  /Grok broad/i,
+  /Grok CLI/i,
+  /SuperGrok/i,
+  /xConfidence/,
+  /not-found/,
+  /账号搜索/,
+];
+
 const fail = (message) => {
   console.error(message);
   process.exitCode = 1;
@@ -72,6 +85,12 @@ for (const paper of data.papers) {
 
   if (paper.html.includes(legacyLocalRoot)) {
     fail(`${paper.file} generated HTML still contains a local absolute path.`);
+  }
+
+  for (const pattern of forbiddenPublicPaperPatterns) {
+    if (pattern.test(paper.html)) {
+      fail(`${paper.file} generated HTML contains public maintenance text matching ${pattern}.`);
+    }
   }
 }
 
