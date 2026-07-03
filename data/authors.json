@@ -6322,5 +6322,225 @@
         "url": "https://scholar.google.com/citations?hl=en&user=jCNJhFcAAAAJ"
       }
     ]
+  },
+  {
+    "slug": "zijun-xie",
+    "name": "Zijun Xie",
+    "aliases": ["Zijun Xie"],
+    "affiliations": ["School of Mathematical Sciences, Peking University", "Baidu Inc."],
+    "homepage": "https://github.com/xiezijun714-lang",
+    "github": "https://github.com/xiezijun714-lang",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["ECHO", "agentic RL", "source-indexed memory", "long-horizon agents", "credit assignment"],
+    "notes": "First author of ECHO. The arXiv title page lists Peking University and Baidu Inc.; the paper and project repository point to the xiezijun714-lang/Echo implementation, whose owner profile identifies Zijun Xie.",
+    "sources": [
+      {
+        "label": "ECHO",
+        "url": "https://arxiv.org/abs/2606.31650"
+      },
+      {
+        "label": "ECHO project",
+        "url": "https://github.com/xiezijun714-lang/Echo"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/xiezijun714-lang"
+      }
+    ]
+  },
+  {
+    "slug": "binbin-zheng",
+    "name": "Binbin Zheng",
+    "aliases": ["Binbin Zheng"],
+    "affiliations": ["Baidu Inc.", "University of Science and Technology of China"],
+    "homepage": "https://openreview.net/profile?id=~Binbin_Zheng1",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["ECHO", "agentic RL", "LLM agents", "long-horizon tool use", "source-indexed memory"],
+    "notes": "Co-first author of ECHO. The arXiv title page lists Baidu Inc. and University of Science and Technology of China; the OpenReview profile uses the same Binbin Zheng identity and USTC email context.",
+    "sources": [
+      {
+        "label": "ECHO",
+        "url": "https://arxiv.org/abs/2606.31650"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Binbin_Zheng1"
+      },
+      {
+        "label": "SCOPE",
+        "url": "https://arxiv.org/abs/2604.10688"
+      }
+    ]
+  },
+  {
+    "slug": "enlei-gong",
+    "name": "Enlei Gong",
+    "aliases": ["Enlei Gong"],
+    "affiliations": ["Baidu Inc."],
+    "homepage": "",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["ECHO", "agentic RL", "LLM agents", "Baidu"],
+    "notes": "Co-first author of ECHO. The arXiv title page lists Baidu Inc.; Baidu open technical reports and PaddleSpeech materials provide consistent coauthor evidence.",
+    "sources": [
+      {
+        "label": "ECHO",
+        "url": "https://arxiv.org/abs/2606.31650"
+      },
+      {
+        "label": "ERNIE 5.0",
+        "url": "https://arxiv.org/abs/2602.04705"
+      },
+      {
+        "label": "PaddleSpeech",
+        "url": "https://aclanthology.org/2022.naacl-demo.9/"
+      }
+    ]
+  },
+  {
+    "slug": "jihua-liu-baidu",
+    "name": "Jihua Liu",
+    "aliases": ["Jihua Liu"],
+    "affiliations": ["Baidu Inc."],
+    "homepage": "",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["ECHO", "agentic RL", "LLM agents", "Baidu"],
+    "notes": "Coauthor of ECHO. The arXiv title page lists Baidu Inc.; Baidu ERNIE 5.0 author lists provide a consistent Baidu coauthor signal.",
+    "sources": [
+      {
+        "label": "ECHO",
+        "url": "https://arxiv.org/abs/2606.31650"
+      },
+      {
+        "label": "ERNIE 5.0",
+        "url": "https://arxiv.org/abs/2602.04705"
+      }
+    ]
+  },
+  {
+    "slug": "yuyang-you",
+    "name": "Yuyang You",
+    "aliases": ["Yuyang You"],
+    "affiliations": ["School of Mathematical Sciences, Peking University"],
+    "homepage": "",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["ECHO", "agentic RL", "LLM agents", "long-horizon tool use"],
+    "notes": "Coauthor of ECHO. The arXiv title page lists School of Mathematical Sciences, Peking University.",
+    "sources": [
+      {
+        "label": "ECHO",
+        "url": "https://arxiv.org/abs/2606.31650"
+      }
+    ]
+  },
+  {
+    "slug": "lingfeng-liu-pku",
+    "name": "Lingfeng Liu",
+    "aliases": ["Lingfeng Liu"],
+    "affiliations": ["School of Mathematical Sciences, Peking University"],
+    "homepage": "",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["ECHO", "agentic RL", "LLM agents", "long-horizon tool use"],
+    "notes": "Coauthor of ECHO. The arXiv title page lists School of Mathematical Sciences, Peking University.",
+    "sources": [
+      {
+        "label": "ECHO",
+        "url": "https://arxiv.org/abs/2606.31650"
+      }
+    ]
+  },
+  {
+    "slug": "jiayao-tang",
+    "name": "Jiayao Tang",
+    "aliases": ["Jiayao Tang"],
+    "affiliations": ["School of Mathematical Sciences, Peking University"],
+    "homepage": "",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["ECHO", "agentic RL", "LLM agents", "long-horizon tool use"],
+    "notes": "Coauthor of ECHO. The arXiv title page lists School of Mathematical Sciences, Peking University.",
+    "sources": [
+      {
+        "label": "ECHO",
+        "url": "https://arxiv.org/abs/2606.31650"
+      }
+    ]
+  },
+  {
+    "slug": "guanqun-zhao",
+    "name": "Guanqun Zhao",
+    "aliases": ["Guanqun Zhao"],
+    "affiliations": ["Baidu Inc."],
+    "homepage": "",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["ECHO", "agentic RL", "LLM agents", "Baidu"],
+    "notes": "Coauthor of ECHO. The arXiv title page lists Baidu Inc.",
+    "sources": [
+      {
+        "label": "ECHO",
+        "url": "https://arxiv.org/abs/2606.31650"
+      }
+    ]
+  },
+  {
+    "slug": "aoqi-hu",
+    "name": "Aoqi Hu",
+    "aliases": ["Aoqi Hu"],
+    "affiliations": ["Baidu Inc."],
+    "homepage": "",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["ECHO", "agentic RL", "LLM agents", "Baidu"],
+    "notes": "Coauthor of ECHO. The arXiv title page lists Baidu Inc.",
+    "sources": [
+      {
+        "label": "ECHO",
+        "url": "https://arxiv.org/abs/2606.31650"
+      }
+    ]
+  },
+  {
+    "slug": "zeyu-chen-baidu",
+    "name": "Zeyu Chen",
+    "aliases": ["Zeyu Chen"],
+    "affiliations": ["Baidu Inc."],
+    "homepage": "https://github.com/ZeyuChen",
+    "github": "https://github.com/ZeyuChen",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["ECHO", "agentic RL", "LLM agents", "Baidu", "PaddlePaddle"],
+    "notes": "Corresponding author of ECHO. The arXiv title page lists Baidu Inc.; Google Scholar links to the same GitHub homepage, and the GitHub profile shows Baidu/PaddlePaddle open-source work.",
+    "sources": [
+      {
+        "label": "ECHO",
+        "url": "https://arxiv.org/abs/2606.31650"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/ZeyuChen"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=LCzu9MEAAAAJ&hl=en"
+      },
+      {
+        "label": "PaddleSpeech",
+        "url": "https://aclanthology.org/2022.naacl-demo.9/"
+      }
+    ]
   }
 ]
