@@ -299,7 +299,7 @@ meta-evolution 处理“谁控制更新”和“更新什么”。论文区分�
 
 ## 跨论文关系
 
-- 与 `papers-index.md` 中已有论文的作者关系：[Ning Ding](/authors/ning-ding/) 和 [Bowen Zhou](/authors/bowen-zhou/) 已在 [2505.22617 Entropy Mechanism](/papers/2505.22617-entropy-mechanism-rl-reasoning-language-models/) 与 [2509.25123 RL skill acquisition](/papers/2509.25123-rl-compositional-skill-acquisition/) 中出现；Kaiyan Zhang 本次新增，并通过 TsinghuaC3I / Frontis.AI 连接 OpenPRM、TTRL、MARTI、SSRL 等 self-evolving / scalable RL 线索。
+- 与 `content/utility/papers-index.md` 中已有论文的作者关系：[Ning Ding](/authors/ning-ding/) 和 [Bowen Zhou](/authors/bowen-zhou/) 已在 [2505.22617 Entropy Mechanism](/papers/2505.22617-entropy-mechanism-rl-reasoning-language-models/) 与 [2509.25123 RL skill acquisition](/papers/2509.25123-rl-compositional-skill-acquisition/) 中出现；Kaiyan Zhang 本次新增，并通过 TsinghuaC3I / Frontis.AI 连接 OpenPRM、TTRL、MARTI、SSRL 等 self-evolving / scalable RL 线索。
 - 与已有论文的主题关系：[2604.09459 credit assignment survey](/papers/2604.09459-credit-assignment-reasoning-agentic-llm-rl/) 处理 reasoning-to-agentic credit assignment，本 survey 处理完整 deployed agent self-improvement stack；两者共同构成 agent RL 的 map 层。
 - 与已有论文的方法或系统关系：[SLIME-2026-06-17](/papers/2026-06-17-slime-rl-scaling-framework/)、[2602.15763 GLM-5](/papers/2602.15763-glm-5-agentic-engineering/) 和 [2511.14617 Seer](/papers/2511.14617-seer-online-context-learning-llm-rl/) 对应 survey 第 6 节的 runtime-to-parameter consolidation 和 rollout infrastructure；[2606.00135](/papers/2606.00135-agentic-tool-calling-rl-training/) 对应 environment / tool-calling learnability；[2605.30290](/papers/2605.30290-self-trained-verification/) 对应 verifier feedback self-improvement；[2025-09-10 inference determinism](/papers/2025-09-10-defeating-nondeterminism-llm-inference/) 与 [2605.14220 TIM/VeXact](/papers/2605.14220-training-inference-mismatch-llm-rl/) 对应 longitudinal evaluation 所需的 rollout consistency。
 - 新增后应更新的索引 cluster：新增 “Self-Improving Agents、Harness 与 Experience Infrastructure” cluster，并把本文设为 self-improving agents 主题入口。
@@ -308,8 +308,8 @@ meta-evolution 处理“谁控制更新”和“更新什么”。论文区分�
 
 ### Target
 
-- Intended target system: 新增论文笔记、更新 `papers-index.md`、更新 `authors.json`。
-- Existing related assets: `papers-index.md`；[SLIME-2026-06-17](/papers/2026-06-17-slime-rl-scaling-framework/)；[2602.15763](/papers/2602.15763-glm-5-agentic-engineering/)；[2511.14617](/papers/2511.14617-seer-online-context-learning-llm-rl/)；[2606.00135](/papers/2606.00135-agentic-tool-calling-rl-training/)；[2605.30290](/papers/2605.30290-self-trained-verification/)；[2604.09459](/papers/2604.09459-credit-assignment-reasoning-agentic-llm-rl/)。
+- Intended target system: 新增论文笔记、更新 `content/utility/papers-index.md`、更新 `data/authors.json`。
+- Existing related assets: `content/utility/papers-index.md`；[SLIME-2026-06-17](/papers/2026-06-17-slime-rl-scaling-framework/)；[2602.15763](/papers/2602.15763-glm-5-agentic-engineering/)；[2511.14617](/papers/2511.14617-seer-online-context-learning-llm-rl/)；[2606.00135](/papers/2606.00135-agentic-tool-calling-rl-training/)；[2605.30290](/papers/2605.30290-self-trained-verification/)；[2604.09459](/papers/2604.09459-credit-assignment-reasoning-agentic-llm-rl/)。
 - Proposed form: 新建独立 Markdown 文档，并在 archive index 中作为 self-improving agents umbrella 节点。
 
 ### Reusable Elements

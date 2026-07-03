@@ -293,8 +293,8 @@ OpenAI 这篇论文把问题反过来问：如果有害行为能以 trait 或 pe
 ### Target
 
 - Intended target system: 新增论文笔记。
-- Existing related assets: `papers-index.md`；[2503.11926](/papers/2503.11926-monitoring-reasoning-models-obfuscation/)、[2606.04075](/papers/2606.04075-llms-hack-rewards-and-society/)、[2510.20270](/papers/2510.20270-impossiblebench-test-case-exploitation/)、[2506.10947](/papers/2506.10947-spurious-rewards-rethinking-rlvr/)、[2501.09620](/papers/2501.09620-causal-rewards-llm-alignment/)。
-- Proposed form: 新建独立 Markdown 文档；更新 `papers-index.md`；补充核心作者 `authors.json`。
+- Existing related assets: `content/utility/papers-index.md`；[2503.11926](/papers/2503.11926-monitoring-reasoning-models-obfuscation/)、[2606.04075](/papers/2606.04075-llms-hack-rewards-and-society/)、[2510.20270](/papers/2510.20270-impossiblebench-test-case-exploitation/)、[2506.10947](/papers/2506.10947-spurious-rewards-rethinking-rlvr/)、[2501.09620](/papers/2501.09620-causal-rewards-llm-alignment/)。
+- Proposed form: 新建独立 Markdown 文档；更新 `content/utility/papers-index.md`；补充核心作者 `data/authors.json`。
 
 ### Reusable Elements
 

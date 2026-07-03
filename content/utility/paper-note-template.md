@@ -160,7 +160,7 @@ Updated-At: YYYY-MM-DD HH:mm
 
 ## 跨论文关系
 
-- 与 `papers-index.md` 中已有论文的作者关系：
+- 与 `content/utility/papers-index.md` 中已有论文的作者关系：
 - 与已有论文的主题关系：
 - 与已有论文的方法或系统关系：
 - 新增后应更新的索引 cluster：
@@ -172,7 +172,7 @@ Updated-At: YYYY-MM-DD HH:mm
 ### Target
 
 - Intended target system: 新增论文笔记 / 具体专题文档。
-- Existing related assets: `papers-index.md`；已存档论文链接使用 `/papers/<slug>/`。
+- Existing related assets: `content/utility/papers-index.md`；已存档论文链接使用 `/papers/<slug>/`。
 - Proposed form: 新建独立 Markdown 文档 / 更新已有文档。
 
 ### Reusable Elements

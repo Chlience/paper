@@ -7,7 +7,7 @@ Updated-At: 2026-07-03
 
 本页说明这个论文档案如何把一次阅读变成可追溯、可更新、可连接的长期记录。它面向两类读者：公开网页上的读者可以看到笔记质量如何被约束；后续维护者可以按同一套流程继续新增论文、作者档案和跨论文关系。
 
-每次用户给出 arXiv、PDF、论文项目页、技术博客或论文标题时，本目录按同一流程产出独立 Markdown 笔记，并维护 `papers-index.md`、`authors.json` 和相关站点链接。
+每次用户给出 arXiv、PDF、论文项目页、技术博客或论文标题时，本目录按同一流程产出独立 Markdown 笔记，并维护 `content/utility/papers-index.md`、`data/authors.json` 和相关站点链接。
 
 ## 公开归档原则
 
@@ -50,13 +50,13 @@ Updated-At: 2026-07-03
 每篇论文对应一个独立 Markdown 文件：
 
 ```text
-<arxiv-id>-<short-title-slug>.md
+content/papers/<arxiv-id>-<short-title-slug>.md
 ```
 
 示例：
 
 ```text
-2606.04075-llms-hack-rewards-and-society.md
+content/papers/2606.04075-llms-hack-rewards-and-society.md
 ```
 
 每篇论文笔记头部保留两个本地档案时间字段：
@@ -69,16 +69,16 @@ Updated-At: 2026-07-03
 每次新增或更新论文后，同步更新：
 
 ```text
-papers-index.md
+content/utility/papers-index.md
 ```
 
 若论文作者已有档案，或新论文让某位作者在当前归档中跨论文重复出现，同步维护：
 
 ```text
-authors.json
+data/authors.json
 ```
 
-`authors.json` 只记录相对稳定的作者事实：英文姓名、中文姓名、别名、机构、主页、X 账号、账号核验状态、主题标签和来源链接。论文笔记的 `作者与关系` 章节只写发表时机构和已核验历史机构；跨论文作者、机构和主题关系写入 `papers-index.md` 或 `跨论文关系`。
+`data/authors.json` 只记录相对稳定的作者事实：英文姓名、中文姓名、别名、机构、主页、X 账号、账号核验状态、主题标签和来源链接。论文笔记的 `作者与关系` 章节只写发表时机构和已核验历史机构；跨论文作者、机构和主题关系写入 `content/utility/papers-index.md` 或 `跨论文关系`。
 
 ## 阅读顺序
 
@@ -90,7 +90,7 @@ authors.json
 6. 再读 method / system / theory / experiment，梳理证据链。
 7. 最后读 limitation、ethics、appendix 和 project README，补齐边界条件。
 8. 搜索公开审稿意见。若论文有 OpenReview、ARR、会议投稿页或可匹配的公开 peer review，按 `审稿意见搜索与吸收` 章节记录 venue status、review 数量、rating / confidence、主要认可点、主要质疑点、作者回应和可信度影响；若未发现公开审稿，写入 `Reference Intake Brief -> Skipped`。
-9. 完成论文初稿后，核验作者公开身份信息；稳定来源写入 `authors.json`，跨论文作者、机构和主题关系写入 `papers-index.md`。核验过程本身不写入论文 Markdown。
+9. 完成论文初稿后，核验作者公开身份信息；稳定来源写入 `data/authors.json`，跨论文作者、机构和主题关系写入 `content/utility/papers-index.md`。核验过程本身不写入论文 Markdown。
 
 ## 分析维度
 
@@ -243,7 +243,7 @@ https://api2.openreview.net/notes?forum=<forum_id>&details=replyCount,directRepl
 
 - 默认写入对应笔记的 `本地讨论补充` 章节。
 - 若讨论修正了 `一句话结论`、`局限`、`主要启发` 或 `跨论文关系`，同步更新对应章节。
-- 若讨论产生新的作者关系、主题延展、方法复用或跨材料关系，同步更新 `papers-index.md`。
+- 若讨论产生新的作者关系、主题延展、方法复用或跨材料关系，同步更新 `content/utility/papers-index.md`。
 
 写法要求：
 
@@ -259,10 +259,10 @@ https://api2.openreview.net/notes?forum=<forum_id>&details=replyCount,directRepl
 
 - 每位作者发表该论文时的机构。
 - 已有作者档案中经过核验的历史机构。
-- 与当前 `papers-index.md` 中已有作者是否重叠。
+- 与当前 `content/utility/papers-index.md` 中已有作者是否重叠。
 - 与已有论文是否存在同主题、同方法、同系统、同数据集、同机构或引用关系。
 - 若作者已有 `/authors/<slug>/` 页面，在相关论文笔记和索引中优先使用作者页链接。
-- 若作者个人信息经过核验，更新 `authors.json`；只记录稳定来源和公开可展示字段。
+- 若作者个人信息经过核验，更新 `data/authors.json`；只记录稳定来源和公开可展示字段。
 - 对核心作者、通讯作者、代码仓库维护者、项目负责人和跨论文重复作者，优先核验主页、GitHub、Scholar/DBLP/OpenReview、机构页和项目页。
 - 若证据只支持部分字段，只写入已核验字段；证据不足的字段留空。论文 Markdown 不记录核验过程。
 
@@ -271,7 +271,7 @@ https://api2.openreview.net/notes?forum=<forum_id>&details=replyCount,directRepl
 - 来源明确的机构事实直接写事实。
 - 作者列表说明只写发表时机构和已核验历史机构；作者条目冒号后直接写发表该论文时的机构，不加发表时机构前缀。
 - 若已核验历史机构包含发表该论文时的机构，历史机构中省略该重复项；没有额外历史机构时，不写 `历史机构：`。
-- 作者重叠、跨机构桥接、主题延展和方法复用写入 `papers-index.md` 或 `跨论文关系`，避免把维护过程写进作者列表。
+- 作者重叠、跨机构桥接、主题延展和方法复用写入 `content/utility/papers-index.md` 或 `跨论文关系`，避免把维护过程写进作者列表。
 
 ## 笔记结构
 
@@ -310,7 +310,7 @@ https://api2.openreview.net/notes?forum=<forum_id>&details=replyCount,directRepl
 
 写作要求：
 
-- 论文笔记、`papers-index.md` 和跨论文关系中的已存档论文链接必须使用 `/papers/<slug>/`，作者链接必须使用 `/authors/<slug>/`，避免写成相对 `.md` 链接。
+- 论文笔记、`content/utility/papers-index.md` 和跨论文关系中的已存档论文链接必须使用 `/papers/<slug>/`，作者链接必须使用 `/authors/<slug>/`，避免写成相对 `.md` 链接。
 - 当文本是在说明本地要编辑的文件名时，使用代码样式，例如 `2504.13837-rlvr-reasoning-boundary-base-model.md`。
 - 新增论文后，若其它笔记或索引提到该论文并需要跳转，也同步补成 `/papers/<slug>/` 链接。
 
@@ -350,23 +350,23 @@ $$
 
 作者页由构建脚本从两类信息生成：
 
-1. `authors.json` 中的人类维护档案，适合记录主页、X、机构、主题和核验来源。
+1. `data/authors.json` 中的人类维护档案，适合记录主页、X、机构、主题和核验来源。
 2. 论文 `Source -> Authors` 中跨论文重复出现的作者，适合自动汇总相关论文。
 
 维护原则：
 
 - 作者页存放稳定身份信息和跨论文聚合；论文页作者列表只保留发表时机构和额外已核验历史机构，条目中不加发表时机构前缀。
 - 账号、主页、机构、中文姓名等事实必须有来源链接。公开社交主页只有在来源链条足够稳定时才展示。
-- 若作者有已核验中文姓名，在 `authors.json` 写入 `chineseName`；站点展示为 `English Name (中文姓名)`。
+- 若作者有已核验中文姓名，在 `data/authors.json` 写入 `chineseName`；站点展示为 `English Name (中文姓名)`。
 - 无法可靠拆分的团队署名、大规模 author list、文档贡献者列表先保留在论文页，不自动拆成作者页。
 - 新增作者档案后完成站点构建和链接检查，确认 `/authors/` 和 `/authors/<slug>/` 可访问。
 
 每次新增或更新论文时按以下顺序执行作者页维护：
 
 1. 从 `Source -> Authors`、`作者与关系`、项目页、代码仓库和 appendix 中抽取作者与可核验角色。
-2. 在 `authors.json`、`papers-index.md` 和已有论文笔记中搜索候选作者，确认已有档案、别名、中文姓名和跨论文重复情况。
+2. 在 `data/authors.json`、`content/utility/papers-index.md` 和已有论文笔记中搜索候选作者，确认已有档案、别名、中文姓名和跨论文重复情况。
 3. 对需要补充档案的作者，核验主页、GitHub、学术主页、机构页、项目页和可公开核验的社交主页。
-4. 交叉验证后更新 `authors.json`；若找到作者页，在论文笔记和索引中使用 `/authors/<slug>/` 链接。
+4. 交叉验证后更新 `data/authors.json`；若找到作者页，在论文笔记和索引中使用 `/authors/<slug>/` 链接。
 5. 对团队署名、超大作者列表或证据稀疏作者，保留团队或机构级记录；论文 Markdown 不写个人核验过程。
 6. 完成站点构建和链接检查，确认作者页和论文页链接可生成。
 
@@ -384,9 +384,9 @@ $$
 发布前检查：
 
 - 新增或更新内容是否已写入对应 Markdown / JSON 文件。
-- `papers-index.md` 是否更新。
-- 是否把稳定作者来源同步到 `authors.json`；论文 Markdown 不应包含作者核验过程。
-- 作者页相关信息是否同步到 `authors.json`，论文笔记和 `papers-index.md` 是否使用 `/authors/<slug>/` 链接。
+- `content/utility/papers-index.md` 是否更新。
+- 是否把稳定作者来源同步到 `data/authors.json`；论文 Markdown 不应包含作者核验过程。
+- 作者页相关信息是否同步到 `data/authors.json`，论文笔记和 `content/utility/papers-index.md` 是否使用 `/authors/<slug>/` 链接。
 - 每篇论文是否包含作者关系。
 - 是否保留来源 URL 和版本日期。
 - 是否完成公开审稿意见搜索；若有公开 review，是否吸收 reviewer consensus、主要质疑、作者回应和可信度影响；若无公开 review，是否在 `Skipped` 记录原因。

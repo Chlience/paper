@@ -182,7 +182,7 @@ DeepSeek-V4 和 GLM-5.2 又把长上下文推到 million-token 级别。DeepSeek
 ### Target
 
 - Intended target system: 新增国产模型技术报告时间线总览。
-- Existing related assets: `papers-index.md`，[DeepSeekMoE](/papers/2401.06066-deepseekmoe-expert-specialization/)、DeepSeek、Qwen、Kimi、MiniMax、GLM、Xiaomi MiMo / MOPD 系列独立笔记。
+- Existing related assets: `content/utility/papers-index.md`，[DeepSeekMoE](/papers/2401.06066-deepseekmoe-expert-specialization/)、DeepSeek、Qwen、Kimi、MiniMax、GLM、Xiaomi MiMo / MOPD 系列独立笔记。
 - Proposed form: 根目录 Markdown 综合条目，并在 archive index 中提供入口。
 
 ### Reusable Elements

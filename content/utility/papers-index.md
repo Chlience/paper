@@ -6,6 +6,7 @@ Updated-At: 2026-07-03
 ## 本地工作流
 
 - 目录规则：`AGENTS.md`
+- 内容目录：论文笔记 `content/papers/`；公开索引和模板 `content/utility/`；作者数据 `data/authors.json`；内部 SOP `internal/`
 - 论文分析 SOP：[paper-analysis-workflow.md](/workflow/)
 - 论文笔记模板：[paper-note-template.md](/template/)
 
