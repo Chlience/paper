@@ -40,6 +40,22 @@ const forbiddenPublicPaperPatterns = [
   /账号搜索/,
 ];
 
+const forbiddenPublicUtilityPatterns = [
+  ...forbiddenPublicPaperPatterns,
+  /Grok/i,
+  /author-x-account-search-sop\.md/i,
+  /候选账号/,
+  /检索命令/,
+  /scratch/i,
+  /\/tmp\b/i,
+  /未跟踪/,
+  /npm run/i,
+  /文件是否落盘/,
+  /提交最终回答/,
+  /本地提交策略/,
+  /最终回复/,
+];
+
 const suspiciousHrefPatterns = [
   /%EF%BC%9B/i,
   /%EF%BC%8C/i,
@@ -139,6 +155,12 @@ for (const paper of data.papers) {
 for (const utility of data.utilities) {
   if (utility.html.includes(legacyLocalRoot)) {
     fail(`${utility.file} generated HTML still contains a local absolute path.`);
+  }
+
+  for (const pattern of forbiddenPublicUtilityPatterns) {
+    if (pattern.test(utility.html)) {
+      fail(`${utility.file} generated HTML contains public maintenance text matching ${pattern}.`);
+    }
   }
 
   checkHtmlLinks(utility.file, utility.html);

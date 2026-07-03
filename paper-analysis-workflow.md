@@ -1,7 +1,7 @@
 # Paper Analysis Workflow
 
 First-Archived-At: 2026-06-19
-Updated-At: 2026-07-02
+Updated-At: 2026-07-03
 
 ## 目标
 
@@ -28,11 +28,11 @@ Updated-At: 2026-07-02
 - 每篇论文的来源、版本、作者、归档时间和站点内链接。
 - 一句话结论、论文脉络、关键实验或定理、主要启发和局限。
 - 公开审稿状态和 reviewer 意见吸收：venue status、review 数量、rating / confidence、主要认可点、主要质疑点、作者 rebuttal 和可信度影响。
-- 作者与关系，包括机构、同机构作者群、跨机构桥接、通讯作者、共同一作、代码或项目组织线索。
+- 作者列表中的发表时机构，以及已核验且不重复的历史机构。
 - 已存档论文之间的主题、方法、系统、机构、作者和引用关系。
-- 作者页中的稳定公开信息：主页、GitHub、Scholar/DBLP/OpenReview、机构页、X 账号及核验状态。
+- 作者页中的稳定公开信息：主页、GitHub、Scholar/DBLP/OpenReview、机构页和可公开核验的社交主页。
 
-更细的检索命令、Grok prompt、账号判定细节和临时 scratch 信息留在内部 SOP 中。网页展示结论、证据来源和 confidence，保留可复查性，同时避免把维护过程噪声暴露给普通读者。
+网页展示结论、证据来源和可信度边界；用于形成这些结论的中间操作记录不进入公开页面。
 
 ## 输入
 
@@ -90,7 +90,7 @@ authors.json
 6. 再读 method / system / theory / experiment，梳理证据链。
 7. 最后读 limitation、ethics、appendix 和 project README，补齐边界条件。
 8. 搜索公开审稿意见。若论文有 OpenReview、ARR、会议投稿页或可匹配的公开 peer review，按 `审稿意见搜索与吸收` 章节记录 venue status、review 数量、rating / confidence、主要认可点、主要质疑点、作者回应和可信度影响；若未发现公开审稿，写入 `Reference Intake Brief -> Skipped`。
-9. 完成论文初稿后，执行作者 profile pass：抽取核心作者、通讯作者、维护者、跨论文重复作者和项目组织线索；按 `author-x-account-search-sop.md` 获取 homepage、GitHub、Scholar/DBLP/OpenReview、机构页和 X 候选；交叉验证后更新 `authors.json` 和必要的 `papers-index.md` 关系。账号搜索过程、跳过原因、候选账号判断和 `xConfidence` 不写入论文 Markdown；需要暂存时使用 `/tmp` 或未跟踪中间文件。
+9. 完成论文初稿后，核验作者公开身份信息；稳定来源写入 `authors.json`，跨论文作者、机构和主题关系写入 `papers-index.md`。核验过程本身不写入论文 Markdown。
 
 ## 分析维度
 
@@ -262,9 +262,9 @@ https://api2.openreview.net/notes?forum=<forum_id>&details=replyCount,directRepl
 - 与当前 `papers-index.md` 中已有作者是否重叠。
 - 与已有论文是否存在同主题、同方法、同系统、同数据集、同机构或引用关系。
 - 若作者已有 `/authors/<slug>/` 页面，在相关论文笔记和索引中优先使用作者页链接。
-- 若作者个人信息经过核验，更新 `authors.json`；账号搜索默认使用 Grok，并参考 `author-x-account-search-sop.md` 记录 evidence 与 confidence。
-- 对核心作者、通讯作者、代码仓库维护者、项目 tech lead、跨论文重复作者，打开 `author-x-account-search-sop.md`，默认用 Grok 做 broad search，再用网页、GitHub、主页、X 帖文或机构页面交叉验证。
-- 若证据只支持部分字段，仍记录已验证 homepage、GitHub、Scholar/DBLP/OpenReview、机构页或 `xConfidence: "not-found"` 到 `authors.json`；证据不足的字段留空。论文 Markdown 不记录搜索过程、候选账号、跳过原因或 profile pass 结论。
+- 若作者个人信息经过核验，更新 `authors.json`；只记录稳定来源和公开可展示字段。
+- 对核心作者、通讯作者、代码仓库维护者、项目负责人和跨论文重复作者，优先核验主页、GitHub、Scholar/DBLP/OpenReview、机构页和项目页。
+- 若证据只支持部分字段，只写入已核验字段；证据不足的字段留空。论文 Markdown 不记录核验过程。
 
 判断要求：
 
@@ -356,19 +356,19 @@ $$
 维护原则：
 
 - 作者页存放稳定身份信息和跨论文聚合；论文页作者列表只保留发表时机构和额外已核验历史机构，条目中不加发表时机构前缀。
-- 账号、主页、机构、中文姓名等事实必须有来源链接。X 账号默认先用 Grok 搜索，再用网页、GitHub、主页、X 帖文或机构页面交叉验证；使用 `high`、`medium`、`lab-account`、`not-found` 等 confidence 标记。
+- 账号、主页、机构、中文姓名等事实必须有来源链接。公开社交主页只有在来源链条足够稳定时才展示。
 - 若作者有已核验中文姓名，在 `authors.json` 写入 `chineseName`；站点展示为 `English Name (中文姓名)`。
 - 无法可靠拆分的团队署名、大规模 author list、文档贡献者列表先保留在论文页，不自动拆成作者页。
-- 新增作者档案后运行 `npm run build` 与 `npm run check:site`，确认 `/authors/` 和 `/authors/<slug>/` 已生成。
+- 新增作者档案后完成站点构建和链接检查，确认 `/authors/` 和 `/authors/<slug>/` 可访问。
 
 每次新增或更新论文时按以下顺序执行作者页维护：
 
-1. 从 `Source -> Authors`、`作者与关系`、项目页、代码仓库和 appendix 中抽取候选作者与角色。
+1. 从 `Source -> Authors`、`作者与关系`、项目页、代码仓库和 appendix 中抽取作者与可核验角色。
 2. 在 `authors.json`、`papers-index.md` 和已有论文笔记中搜索候选作者，确认已有档案、别名、中文姓名和跨论文重复情况。
-3. 对需要补充档案的作者，按 `author-x-account-search-sop.md` 运行 Grok broad search，并把过程记录保存在临时文件或未跟踪 scratch 中。
+3. 对需要补充档案的作者，核验主页、GitHub、学术主页、机构页、项目页和可公开核验的社交主页。
 4. 交叉验证后更新 `authors.json`；若找到作者页，在论文笔记和索引中使用 `/authors/<slug>/` 链接。
-5. 对团队署名、超大作者列表或证据稀疏作者，可以在临时中间文件中记录跳过原因，论文 Markdown 不写 profile pass 过程。
-6. 运行 `npm run build` 与 `npm run check:site`，确认作者页和论文页链接可生成。
+5. 对团队署名、超大作者列表或证据稀疏作者，保留团队或机构级记录；论文 Markdown 不写个人核验过程。
+6. 完成站点构建和链接检查，确认作者页和论文页链接可生成。
 
 ## 安全与双用途处理
 
@@ -381,11 +381,11 @@ $$
 
 ## 质量检查
 
-提交最终回答前检查：
+发布前检查：
 
-- 文件是否落盘。
+- 新增或更新内容是否已写入对应 Markdown / JSON 文件。
 - `papers-index.md` 是否更新。
-- 是否完成作者 profile pass，并把稳定来源同步到 `authors.json`；论文 Markdown 不应包含候选账号、跳过原因、`xConfidence` 或搜索过程。
+- 是否把稳定作者来源同步到 `authors.json`；论文 Markdown 不应包含作者核验过程。
 - 作者页相关信息是否同步到 `authors.json`，论文笔记和 `papers-index.md` 是否使用 `/authors/<slug>/` 链接。
 - 每篇论文是否包含作者关系。
 - 是否保留来源 URL 和版本日期。
@@ -397,20 +397,3 @@ $$
 - 是否存在先否定前项、再强调后项的对照式中文表达。
 - 是否避免长段复制论文原文。
 - 面向站点展示的内部链接是否使用 `/papers/<slug>/`、`/authors/<slug>/`、`/archive/`、`/workflow/` 或 `/template/`。
-
-## 本地提交策略
-
-每次完成一篇论文的初版分析并通过验证后，直接创建本地 commit。远端推送只在用户明确要求 push 时执行。
-
-若后续继续围绕同一篇论文补充讨论、修订表述、增加作者信息或更新跨论文关系，且相关 commit 仍然只存在于本地，优先把修订 amend 进同一个 commit，保持单篇论文的一组变更聚合在一起。
-
-若本地已经存在多个相邻、未推送且属于同一篇论文的 commit，可以在不影响其他主题改动的前提下合并整理。整理前先确认这些 commit 都没有推送到远端，并保留与其他论文、站点功能或配置改动的边界。
-
-## 最终回复
-
-最终回复只报告：
-
-- 新增或更新了哪些文件。
-- 核心变更点。
-- 是否完成验证。
-- 若有无法完成的事项，说明原因。
