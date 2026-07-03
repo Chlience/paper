@@ -202,7 +202,7 @@ Attention：
 
 ### Target
 
-- Intended target system: `paper archive root` 论文与技术文章存档。
+- Intended target system: `content/papers/2025-09-10-defeating-nondeterminism-llm-inference.md` 论文与技术文章存档。
 - Existing related assets: `content/utility/papers-index.md`、`2409.19256-hybridflow-rlhf-framework.md`、`2606.00135-agentic-tool-calling-rl-training.md`、`2606.06453-vortex-sparse-attention-serving.md`。
 - Proposed form: 新建独立 Markdown 文档，并更新总索引。
 

@@ -23,7 +23,7 @@ import {
 import { generatedDir, generatedFile, readPaperEntries, readUtilityEntries } from './content/repository.mjs';
 import { tagsForPaper } from './content/tagging.mjs';
 
-const buildPaperRecords = async (paperEntries, paperFileNames) => {
+const buildPaperRecords = async (paperEntries) => {
   const papers = [];
 
   for (const entry of paperEntries) {
@@ -50,7 +50,7 @@ const buildPaperRecords = async (paperEntries, paperFileNames) => {
       tags: tagsForPaper(slug, raw, fileName),
       summary: excerpt(oneSentence || getSection(raw, '论文脉络')),
       headings: collectHeadings(pageMarkdown),
-      html: renderMarkdown(pageMarkdown, paperFileNames),
+      html: renderMarkdown(pageMarkdown),
     });
   }
 
@@ -190,7 +190,7 @@ const attachPaperAuthorEntries = (papers, authorRecordsByKey) => {
   }
 };
 
-const buildUtilityRecords = async (paperFileNames) => {
+const buildUtilityRecords = async () => {
   const utilities = [];
   for (const meta of readUtilityEntries()) {
     const raw = await fs.readFile(meta.sourcePath, 'utf8');
@@ -201,7 +201,7 @@ const buildUtilityRecords = async (paperFileNames) => {
       updatedAt: getUpdatedAt(raw),
       summary: excerpt(raw, 180),
       headings: collectHeadings(pageMarkdown),
-      html: renderMarkdown(pageMarkdown, paperFileNames),
+      html: renderMarkdown(pageMarkdown),
     });
   }
   return utilities;
@@ -209,14 +209,13 @@ const buildUtilityRecords = async (paperFileNames) => {
 
 const build = async () => {
   const paperEntries = await readPaperEntries();
-  const paperFileNames = new Set(paperEntries.map((entry) => entry.fileName));
   const authorProfiles = await readAuthorProfiles();
 
-  const papers = await buildPaperRecords(paperEntries, paperFileNames);
+  const papers = await buildPaperRecords(paperEntries);
   const { authors, authorRecordsByKey } = buildAuthorRecords(papers, authorProfiles);
   attachPaperAuthorEntries(papers, authorRecordsByKey);
 
-  const utilities = await buildUtilityRecords(paperFileNames);
+  const utilities = await buildUtilityRecords();
   const tags = [...new Set(papers.flatMap((paper) => paper.tags))].sort();
   const data = {
     generatedAt: new Date().toISOString(),

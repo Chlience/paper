@@ -10,7 +10,6 @@ export const paperContentDir = path.join(contentDir, 'papers');
 export const utilityContentDir = path.join(contentDir, 'utility');
 export const dataDir = path.join(repoRoot, 'data');
 export const authorsFile = path.join(dataDir, 'authors.json');
-export const legacyLocalRoot = ['', 'home', 'chlience', 'paper'].join('/');
 
 export const toRepoRelativePath = (targetPath) => path.relative(repoRoot, targetPath).split(path.sep).join('/');
 
@@ -54,12 +53,3 @@ export const utilityPageDefinitions = [
 ];
 
 export const readUtilityEntries = () => utilityPageDefinitions.map((entry) => ({ ...entry }));
-
-export const utilityFiles = new Map(utilityPageDefinitions.map((entry) => [entry.fileName, entry]));
-
-export const internalFilePaths = new Map([
-  ['AGENTS.md', '/workflow/'],
-  ['README.md', '/'],
-  ['internal/author-x-account-search-sop.md', '/workflow/'],
-  ['author-x-account-search-sop.md', '/workflow/'],
-]);

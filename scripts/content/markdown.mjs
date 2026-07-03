@@ -1,9 +1,7 @@
-import path from 'node:path';
 import katex from 'katex';
 import MarkdownIt from 'markdown-it';
 import markdownItAnchor from 'markdown-it-anchor';
 import markdownItTexmath from 'markdown-it-texmath';
-import { internalFilePaths, legacyLocalRoot, utilityFiles } from './repository.mjs';
 
 const slugCounts = new Map();
 
@@ -72,18 +70,10 @@ export const getTopLevelField = (markdown, name) => {
   return markdown.match(new RegExp(`^${escaped}:\\s*(.+)$`, 'm'))?.[1]?.trim() ?? '';
 };
 
-export const getFirstArchivedAt = (markdown) =>
-  getTopLevelField(markdown, 'First-Archived-At') ||
-  getTopLevelField(markdown, 'Archive-Time') ||
-  getTopLevelField(markdown, 'Sort-Time') ||
-  getTopLevelField(markdown, 'Date');
+export const getFirstArchivedAt = (markdown) => getTopLevelField(markdown, 'First-Archived-At');
 
 export const getUpdatedAt = (markdown) =>
-  getTopLevelField(markdown, 'Updated-At') ||
-  getTopLevelField(markdown, 'Sort-Time') ||
-  getTopLevelField(markdown, 'Archive-Time') ||
-  getTopLevelField(markdown, 'Date') ||
-  getFirstArchivedAt(markdown);
+  getTopLevelField(markdown, 'Updated-At') || getFirstArchivedAt(markdown);
 
 export const getPinned = (markdown) => /^(true|yes|1)$/i.test(getTopLevelField(markdown, 'Pinned'));
 
@@ -150,9 +140,6 @@ export const stripPageChrome = (markdown) =>
     .replace(/^First-Archived-At:\s*.+\n+/m, '')
     .replace(/^Updated-At:\s*.+\n+/m, '')
     .replace(/^Pinned:\s*.+\n+/m, '')
-    .replace(/^Date:\s*.+\n+/m, '')
-    .replace(/^Archive-Time:\s*.+\n+/m, '')
-    .replace(/^Sort-Time:\s*.+\n+/m, '')
     .trim();
 
 const paperMaintenanceLinePattern =
@@ -192,41 +179,6 @@ export const stripPublicPaperMaintenance = (markdown) => {
   return kept.join('\n').trim();
 };
 
-const fileToWebPath = (file, paperFileNames) => {
-  const normalizedFile = file.replace(/^[./]+/, '').replace(/\\/g, '/');
-  const fileName = path.basename(normalizedFile);
-  if (paperFileNames.has(fileName)) return `/papers/${fileName.replace(/\.md$/, '')}/`;
-  if (internalFilePaths.has(normalizedFile)) return internalFilePaths.get(normalizedFile);
-  if (internalFilePaths.has(fileName)) return internalFilePaths.get(fileName);
-  return utilityFiles.get(fileName)?.path ?? null;
-};
-
-const normalizeLocalLinks = (markdown, paperFileNames) => {
-  const legacyRootPattern = escapeRegExp(`${legacyLocalRoot}/`);
-  let result = markdown.replace(
-    new RegExp(`\\]\\((?:${legacyRootPattern})?([^\\)\\s:#]+\\.md)(?::\\d+)?(#[^)]+)?\\)`, 'g'),
-    (match, file, hash = '') => {
-      const webPath = fileToWebPath(file, paperFileNames);
-      return webPath ? `](${webPath}${hash})` : match;
-    },
-  );
-
-  const localFiles = [
-    ...[...paperFileNames].flatMap((file) => [file, `content/papers/${file}`]),
-    ...[...utilityFiles.keys()].flatMap((file) => [file, `content/utility/${file}`]),
-    ...internalFilePaths.keys(),
-  ];
-  for (const file of localFiles) {
-    const webPath = fileToWebPath(file, paperFileNames);
-    if (!webPath) continue;
-    result = result.replaceAll(`${legacyLocalRoot}/${file}`, webPath);
-  }
-
-  result = result.replaceAll(legacyLocalRoot, 'paper archive root');
-
-  return result;
-};
-
 export const collectHeadings = (markdown) => {
   const headings = [];
   for (const line of markdown.split('\n')) {
@@ -248,7 +200,7 @@ export const collectHeadings = (markdown) => {
   return headings;
 };
 
-export const renderMarkdown = (markdown, paperFileNames) => {
+export const renderMarkdown = (markdown) => {
   slugCounts.clear();
-  return md.render(normalizeLocalLinks(markdown, paperFileNames));
+  return md.render(markdown);
 };
