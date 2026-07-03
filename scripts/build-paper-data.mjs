@@ -1,452 +1,56 @@
 import fs from 'node:fs/promises';
-import path from 'node:path';
-import process from 'node:process';
-import katex from 'katex';
-import MarkdownIt from 'markdown-it';
-import markdownItAnchor from 'markdown-it-anchor';
-import markdownItTexmath from 'markdown-it-texmath';
+import {
+  formatAuthorDisplayName,
+  normalizeAuthorKey,
+  readAuthorProfiles,
+  slugifyAuthor,
+  splitAuthorNames,
+} from './content/authors.mjs';
+import {
+  collectHeadings,
+  excerpt,
+  getFirstArchivedAt,
+  getFirstHeading,
+  getPinned,
+  getSection,
+  getSourceField,
+  getSourceUrl,
+  getUpdatedAt,
+  renderMarkdown,
+  stripPageChrome,
+  stripPublicPaperMaintenance,
+} from './content/markdown.mjs';
+import { generatedDir, generatedFile, readPaperEntries, readUtilityEntries } from './content/repository.mjs';
+import { tagsForPaper } from './content/tagging.mjs';
 
-const repoRoot = process.cwd();
-const generatedDir = path.join(repoRoot, 'src/generated');
-const generatedFile = path.join(generatedDir, 'paper-data.json');
-const authorsFile = path.join(repoRoot, 'authors.json');
-const legacyLocalRoot = ['', 'home', 'chlience', 'paper'].join('/');
-
-const utilityFiles = new Map([
-  ['papers-index.md', { slug: 'archive', title: 'Paper Archive Index', path: '/archive/' }],
-  ['paper-analysis-workflow.md', { slug: 'workflow', title: 'Paper Analysis Workflow', path: '/workflow/' }],
-  ['paper-note-template.md', { slug: 'template', title: 'Paper Note Template', path: '/template/' }],
-]);
-
-const tagOverrides = new Map([
-  ['2001.08361-scaling-laws-neural-language-models', ['Methodology', 'Theory']],
-  ['2203.15556-training-compute-optimal-large-language-models', ['Methodology', 'Theory']],
-  ['2205.14135-flashattention-io-aware-exact-attention', ['Systems', 'Theory', 'Methodology']],
-  ['2310.01889-ring-attention-blockwise-transformers-near-infinite-context', ['Systems', 'Methodology', 'Theory']],
-  ['2308.16369-sarathi-chunked-prefill-decode-maximal-batching', ['Systems', 'Methodology']],
-  ['2025-09-10-defeating-nondeterminism-llm-inference', ['Systems', 'RL', 'Methodology']],
-  ['2403.03185-correlated-proxies-reward-hacking', ['RL', 'Safety', 'Methodology']],
-  ['2405.19888-parrot-semantic-variable-llm-serving', ['Systems', 'Methodology']],
-  ['2409.19256-hybridflow-rlhf-framework', ['Systems', 'RL']],
-  ['2501.09620-causal-rewards-llm-alignment', ['RL', 'Safety', 'Methodology']],
-  ['2501.12948-deepseek-r1-rl-reasoning', ['RL', 'Safety', 'Methodology']],
-  ['2503.11926-monitoring-reasoning-models-obfuscation', ['RL', 'Safety', 'Methodology']],
-  ['2503.14476-dapo-long-cot-rl-system', ['RL', 'Systems', 'Methodology']],
-  ['2504.13837-rlvr-reasoning-boundary-base-model', ['RL', 'Methodology']],
-  ['2505.24864-prorl-prolonged-rl-reasoning-boundaries', ['RL', 'Systems', 'Methodology']],
-  ['2510.01180-brorl-broadened-rl-exploration', ['RL', 'Systems', 'Methodology']],
-  ['2509.25123-rl-compositional-skill-acquisition', ['RL', 'Methodology']],
-  ['2511.02749-span-queries-cache-attention-locality', ['Systems', 'Methodology']],
-  ['2512.07783-interplay-pretraining-midtraining-rl-reasoning', ['RL', 'Methodology']],
-  ['2506.10947-spurious-rewards-rethinking-rlvr', ['RL', 'Safety', 'Methodology']],
-  ['2506.19248-inference-time-reward-hacking-llms', ['RL', 'Safety', 'Methodology']],
-  ['2604.04648-caution-pessimism-best-of-n-reward-hacking', ['RL', 'Safety', 'Methodology']],
-  ['2510.20270-impossiblebench-test-case-exploitation', ['Safety', 'Methodology', 'Systems']],
-  ['2510.19315-transformers-inherently-succinct', ['Theory']],
-  ['2602.07078-optimal-token-baseline-long-horizon-llm-rl', ['RL', 'Systems', 'Methodology']],
-  ['2605.14220-training-inference-mismatch-llm-rl', ['RL', 'Systems', 'Methodology']],
-  ['2605.30290-self-trained-verification', ['RL', 'Methodology']],
-  ['2605.31514-age-of-empires-anthropomorphism', ['Methodology']],
-  ['2606.00135-agentic-tool-calling-rl-training', ['RL', 'Systems', 'Methodology']],
-  ['2606.04075-llms-hack-rewards-and-society', ['Safety', 'RL']],
-  ['2606.04101-ultraep-rack-scale-moe-load-balancing', ['Systems']],
-  ['2606.04662-muon-outperforms-adam-curvature', ['Optimizer', 'Theory']],
-]);
-
-const internalFilePaths = new Map([
-  ['AGENTS.md', '/workflow/'],
-  ['README.md', '/'],
-]);
-
-const excludedPaperFiles = new Set([
-  'AGENTS.md',
-  'DESIGN.md',
-  'PRODUCT.md',
-  'README.md',
-  'author-x-account-search-sop.md',
-  ...utilityFiles.keys(),
-]);
-
-const slugCounts = new Map();
-const slugify = (value) => {
-  const base = String(value)
-    .trim()
-    .toLowerCase()
-    .replace(/[`*_~[\](){}<>:"'.,，。；;!?！？/\\|]+/g, '')
-    .replace(/\s+/g, '-')
-    .replace(/-+/g, '-')
-    .replace(/^-|-$/g, '');
-
-  const slug = base || 'section';
-  const count = slugCounts.get(slug) ?? 0;
-  slugCounts.set(slug, count + 1);
-  return count === 0 ? slug : `${slug}-${count + 1}`;
-};
-
-const md = new MarkdownIt({
-  html: true,
-  linkify: true,
-  typographer: false,
-})
-  .use(markdownItTexmath, {
-    engine: katex,
-    delimiters: ['brackets', 'dollars', 'beg_end'],
-    katexOptions: {
-      output: 'htmlAndMathml',
-      throwOnError: false,
-    },
-  })
-  .use(markdownItAnchor, {
-    slugify,
-    permalink: markdownItAnchor.permalink.linkInsideHeader({
-      symbol: '#',
-      placement: 'after',
-      class: 'heading-anchor',
-      ariaHidden: true,
-    }),
-  });
-
-const stripMarkdown = (value = '') =>
-  value
-    .replace(/```[\s\S]*?```/g, ' ')
-    .replace(/`([^`]+)`/g, '$1')
-    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
-    .replace(/[*_>#-]/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
-
-const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-
-const asciiFold = (value = '') =>
-  String(value)
-    .normalize('NFKD')
-    .replace(/[\u0300-\u036f]/g, '');
-
-const normalizeAuthorKey = (value = '') =>
-  asciiFold(value)
-    .toLowerCase()
-    .replace(/[’']/g, '')
-    .replace(/[^a-z0-9]+/g, ' ')
-    .trim()
-    .replace(/\s+/g, ' ');
-
-const slugifyAuthor = (value = '') =>
-  asciiFold(value)
-    .toLowerCase()
-    .replace(/[’']/g, '')
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/-+/g, '-')
-    .replace(/^-|-$/g, '') || 'author';
-
-const formatAuthorDisplayName = (name, chineseName = '') => (chineseName ? `${name} (${chineseName})` : name);
-
-const authorTextIsParseable = (value = '') => {
-  const text = value.trim();
-  if (!text || /^unknown$/i.test(text)) return false;
-  return !/(https?:|contributors?|team:|other authors?|appendix|collaboration|;)/i.test(text);
-};
-
-const looksLikePersonName = (value = '') => {
-  const name = value.trim();
-  if (!name || name.length > 64) return false;
-  if (!/^[\p{L}\p{M}][\p{L}\p{M} .'-]+$/u.test(name)) return false;
-  const words = name.split(/\s+/).filter(Boolean);
-  return words.length >= 2 && words.length <= 6;
-};
-
-const splitAuthorNames = (value = '') => {
-  if (!authorTextIsParseable(value)) return [];
-  const separator = value.includes(',') ? /\s*,\s*/ : /\s+and\s+/i;
-  const seen = new Set();
-  const names = [];
-
-  for (const rawPart of value.split(separator)) {
-    const name = rawPart.trim().replace(/\s+/g, ' ');
-    const key = normalizeAuthorKey(name);
-    if (!looksLikePersonName(name) || seen.has(key)) continue;
-    seen.add(key);
-    names.push(name);
-  }
-
-  return names;
-};
-
-const readAuthorProfiles = async () => {
-  try {
-    const raw = await fs.readFile(authorsFile, 'utf8');
-    const profiles = JSON.parse(raw);
-    return Array.isArray(profiles) ? profiles : [];
-  } catch (error) {
-    if (error?.code === 'ENOENT') return [];
-    throw error;
-  }
-};
-
-const excerpt = (value, limit = 220) => {
-  const text = stripMarkdown(value);
-  return text.length > limit ? `${text.slice(0, limit - 1)}...` : text;
-};
-
-const getFirstHeading = (markdown, fallback) => {
-  const match = markdown.match(/^#\s+(.+)$/m);
-  if (!match) return fallback;
-  return match[1].replace(/\s+(论文笔记|技术文章笔记)\s*$/, '').trim();
-};
-
-const getTopLevelField = (markdown, name) => {
-  const escaped = escapeRegExp(name);
-  return markdown.match(new RegExp(`^${escaped}:\\s*(.+)$`, 'm'))?.[1]?.trim() ?? '';
-};
-
-const getFirstArchivedAt = (markdown) =>
-  getTopLevelField(markdown, 'First-Archived-At') ||
-  getTopLevelField(markdown, 'Archive-Time') ||
-  getTopLevelField(markdown, 'Sort-Time') ||
-  getTopLevelField(markdown, 'Date');
-const getUpdatedAt = (markdown) =>
-  getTopLevelField(markdown, 'Updated-At') ||
-  getTopLevelField(markdown, 'Sort-Time') ||
-  getTopLevelField(markdown, 'Archive-Time') ||
-  getTopLevelField(markdown, 'Date') ||
-  getFirstArchivedAt(markdown);
-const getPinned = (markdown) => /^(true|yes|1)$/i.test(getTopLevelField(markdown, 'Pinned'));
-
-const getSection = (markdown, heading) => {
-  const lines = markdown.split('\n');
-  const start = lines.findIndex((line) => line.trim() === `## ${heading}`);
-  if (start === -1) return '';
-
-  const collected = [];
-  for (const line of lines.slice(start + 1)) {
-    if (line.startsWith('## ')) break;
-    collected.push(line);
-  }
-  return collected.join('\n').trim();
-};
-
-const getSourceFieldRaw = (markdown, names) => {
-  const labels = Array.isArray(names) ? names : [names];
-  for (const label of labels) {
-    const escaped = label.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    const value = markdown.match(new RegExp(`^-\\s+${escaped}:\\s*(.+)$`, 'mi'))?.[1]?.trim();
-    if (value) return value;
-  }
-  return '';
-};
-
-const getSourceField = (markdown, names) => stripMarkdown(getSourceFieldRaw(markdown, names));
-
-const getSourceUrl = (markdown) => {
-  const candidates = [
-    ['arXiv', getSourceFieldRaw(markdown, 'arXiv')],
-    ['URL', getSourceFieldRaw(markdown, 'URL')],
-    ['PDF', getSourceFieldRaw(markdown, 'PDF')],
-    ['Source', getSourceFieldRaw(markdown, 'Source')],
-    ['DOI', getSourceFieldRaw(markdown, 'DOI')],
-  ];
-
-  for (const [label, rawValue] of candidates) {
-    if (!rawValue) continue;
-    const markdownUrl = rawValue.match(/\[[^\]]+\]\((https?:\/\/[^)]+)\)/i)?.[1];
-    if (markdownUrl) return markdownUrl;
-
-    const bareUrl = rawValue.match(/https?:\/\/[^\s)；，。]+/i)?.[0];
-    if (bareUrl) return bareUrl;
-
-    const plainValue = stripMarkdown(rawValue);
-    if (label === 'arXiv') {
-      const arxivId = plainValue.match(/\b\d{4}\.\d{4,5}(?:v\d+)?\b/)?.[0];
-      if (arxivId) return `https://arxiv.org/abs/${arxivId}`;
-    }
-
-    if (label === 'DOI') {
-      const doi = plainValue.match(/\b10\.\d{4,9}\/\S+\b/)?.[0]?.replace(/[；，。.]$/, '');
-      if (doi) return `https://doi.org/${doi}`;
-    }
-  }
-
-  return '';
-};
-
-const parseExplicitTags = (value = '') =>
-  [
-    ...new Set(
-      stripMarkdown(value)
-        .split(/[,，;；]/)
-        .map((tag) => tag.trim())
-        .filter(Boolean),
-    ),
-  ].slice(0, 5);
-
-const inferTags = (markdown, filename) => {
-  const explicitTags = parseExplicitTags(getSourceField(markdown, 'Tags'));
-  if (explicitTags.length > 0) return explicitTags;
-
-  const haystack = [
-    filename,
-    getSourceField(markdown, 'Title') || getFirstHeading(markdown, filename.replace(/\.md$/, '')),
-    getSourceField(markdown, 'Subjects'),
-    getSection(markdown, '一句话结论'),
-    getSection(markdown, '主要启发'),
-  ]
-    .join('\n')
-    .toLowerCase();
-  const tags = [];
-  const add = (tag, pattern) => {
-    if (pattern.test(haystack)) tags.push(tag);
-  };
-
-  add('RL', /\b(rl|rlhf|rlvr|grpo|ppo|post-training|rollout|reward)\b/);
-  add('Systems', /\b(serving|inference|kernel|attention|moe|vllm|sglang|verl|distributed|hybridflow|vortex|ultraep)\b/);
-  add('Safety', /\b(safety|jailbreak|reward hacking|societal|risk|governance)\b/);
-  add('Theory', /\b(theory|theorem|transformer|succinct|hessian|curvature|formal|automata)\b/);
-  add('Optimizer', /\b(muon|adam|adamw|optimizer|shampoo|soap|galore|apollo|lion|adafactor)\b/);
-  add('Methodology', /\b(methodology|anthropomorphism|verification|verifier|evaluation|benchmark)\b/);
-
-  return [...new Set(tags)].slice(0, 5);
-};
-
-const stripPageChrome = (markdown) =>
-  markdown
-    .replace(/^#\s+.+\n+/, '')
-    .replace(/^First-Archived-At:\s*.+\n+/m, '')
-    .replace(/^Updated-At:\s*.+\n+/m, '')
-    .replace(/^Pinned:\s*.+\n+/m, '')
-    .replace(/^Date:\s*.+\n+/m, '')
-    .replace(/^Archive-Time:\s*.+\n+/m, '')
-    .replace(/^Sort-Time:\s*.+\n+/m, '')
-    .trim();
-
-const paperMaintenanceLinePattern =
-  /(关系判断|作者\s*profile\s*pass|Author\s+profile\s+pass|作者页决策|Grok broad|Grok CLI|SuperGrok|xConfidence|not-found|账号搜索|X\s*\/\s*GitHub|逐人\s*X|逐作者档案|全量作者\s*profile|全作者\s*X|全体作者\s*X|homepage\s*\/\s*GitHub\s*\/\s*Scholar)/i;
-
-const stripPublicPaperMaintenance = (markdown) => {
-  const lines = markdown.split('\n');
-  const kept = [];
-  let skipAuthorMaintenanceBlock = false;
-
-  for (const line of lines) {
-    const trimmed = line.trim();
-
-    if (skipAuthorMaintenanceBlock) {
-      if (/^##\s+/.test(line)) {
-        skipAuthorMaintenanceBlock = false;
-      } else {
-        continue;
-      }
-    }
-
-    if (/^关系判断[:：]?$/.test(trimmed) || /^作者\s*profile\s*pass[:：]?$/.test(trimmed) || /^作者页决策[:：]?$/.test(trimmed)) {
-      skipAuthorMaintenanceBlock = true;
-      continue;
-    }
-
-    if (/^#{3,6}\s+Author\s+profile\s+pass/i.test(trimmed)) {
-      skipAuthorMaintenanceBlock = true;
-      continue;
-    }
-
-    if (paperMaintenanceLinePattern.test(line)) continue;
-
-    kept.push(line);
-  }
-
-  return kept.join('\n').trim();
-};
-
-const fileToWebPath = (file, paperFiles) => {
-  if (paperFiles.has(file)) return `/papers/${file.replace(/\.md$/, '')}/`;
-  if (internalFilePaths.has(file)) return internalFilePaths.get(file);
-  return utilityFiles.get(file)?.path ?? null;
-};
-
-const normalizeLocalLinks = (markdown, paperFiles) => {
-  const legacyRootPattern = escapeRegExp(`${legacyLocalRoot}/`);
-  let result = markdown.replace(
-    new RegExp(`\\]\\((?:${legacyRootPattern})?([^\\)\\s:#]+\\.md)(?::\\d+)?(#[^)]+)?\\)`, 'g'),
-    (match, file, hash = '') => {
-      const webPath = fileToWebPath(file, paperFiles);
-      return webPath ? `](${webPath}${hash})` : match;
-    },
-  );
-
-  for (const file of [...paperFiles, ...utilityFiles.keys(), ...internalFilePaths.keys()]) {
-    const webPath = fileToWebPath(file, paperFiles);
-    if (!webPath) continue;
-    result = result.replaceAll(`${legacyLocalRoot}/${file}`, webPath);
-  }
-
-  result = result.replaceAll(legacyLocalRoot, 'paper archive root');
-
-  return result;
-};
-
-const collectHeadings = (markdown) => {
-  const headings = [];
-  for (const line of markdown.split('\n')) {
-    const match = line.match(/^(#{2,3})\s+(.+)$/);
-    if (!match) continue;
-    headings.push({
-      depth: match[1].length,
-      text: stripMarkdown(match[2]),
-      id: match[2]
-        .trim()
-        .toLowerCase()
-        .replace(/[`*_~[\](){}<>:"'.,，。；;!?！？/\\|]+/g, '')
-        .replace(/\s+/g, '-')
-        .replace(/-+/g, '-')
-        .replace(/^-|-$/g, '') || 'section',
-    });
-  }
-  return headings;
-};
-
-const renderMarkdown = (markdown, paperFiles) => {
-  slugCounts.clear();
-  return md.render(normalizeLocalLinks(markdown, paperFiles));
-};
-
-const readMarkdownFiles = async () => {
-  const files = await fs.readdir(repoRoot);
-  return files.filter((file) => file.endsWith('.md')).sort();
-};
-
-const build = async () => {
-  const markdownFiles = await readMarkdownFiles();
-  const paperFiles = new Set(markdownFiles.filter((file) => !excludedPaperFiles.has(file)));
-  const authorProfiles = await readAuthorProfiles();
-
+const buildPaperRecords = async (paperEntries, paperFileNames) => {
   const papers = [];
-  for (const file of paperFiles) {
-    const sourcePath = path.join(repoRoot, file);
-    const raw = await fs.readFile(sourcePath, 'utf8');
-    const title = getSourceField(raw, 'Title') || getFirstHeading(raw, file.replace(/\.md$/, ''));
-    const slug = file.replace(/\.md$/, '');
-    const oneSentence = getSection(raw, '一句话结论');
-    const sourceUrl = getSourceUrl(raw);
 
+  for (const entry of paperEntries) {
+    const { file, fileName, slug, sourcePath } = entry;
+    const raw = await fs.readFile(sourcePath, 'utf8');
+    const title = getSourceField(raw, 'Title') || getFirstHeading(raw, slug);
+    const oneSentence = getSection(raw, '一句话结论');
     const pageMarkdown = stripPublicPaperMaintenance(stripPageChrome(raw));
-    const firstArchivedAt = getFirstArchivedAt(raw);
-    const updatedAt = getUpdatedAt(raw);
-    const pinned = getPinned(raw);
     const authors = getSourceField(raw, ['Authors', 'Author']) || 'Unknown';
+
     papers.push({
       slug,
       file,
       path: `/papers/${slug}/`,
       title,
-      firstArchivedAt,
-      updatedAt,
-      pinned,
-      sourceUrl,
+      firstArchivedAt: getFirstArchivedAt(raw),
+      updatedAt: getUpdatedAt(raw),
+      pinned: getPinned(raw),
+      sourceUrl: getSourceUrl(raw),
       authors,
       parsedAuthors: splitAuthorNames(authors),
       subjects: getSourceField(raw, 'Subjects'),
       currentVersion: getSourceField(raw, 'Current version read'),
-      tags: tagOverrides.get(slug) ?? inferTags(raw, file),
+      tags: tagsForPaper(slug, raw, fileName),
       summary: excerpt(oneSentence || getSection(raw, '论文脉络')),
       headings: collectHeadings(pageMarkdown),
-      html: renderMarkdown(pageMarkdown, paperFiles),
+      html: renderMarkdown(pageMarkdown, paperFileNames),
     });
   }
 
@@ -457,6 +61,10 @@ const build = async () => {
     return timeCompare || b.slug.localeCompare(a.slug);
   });
 
+  return papers;
+};
+
+const buildAuthorRecords = (papers, authorProfiles) => {
   const authorMentions = new Map();
   for (const paper of papers) {
     for (const name of paper.parsedAuthors) {
@@ -567,6 +175,10 @@ const build = async () => {
     return statusCompare || b.paperCount - a.paperCount || a.name.localeCompare(b.name);
   });
 
+  return { authors, authorRecordsByKey };
+};
+
+const attachPaperAuthorEntries = (papers, authorRecordsByKey) => {
   for (const paper of papers) {
     paper.authorEntries = paper.parsedAuthors.map((name) => {
       const author = authorRecordsByKey.get(normalizeAuthorKey(name));
@@ -576,23 +188,35 @@ const build = async () => {
     });
     delete paper.parsedAuthors;
   }
+};
 
+const buildUtilityRecords = async (paperFileNames) => {
   const utilities = [];
-  for (const [file, meta] of utilityFiles) {
-    const sourcePath = path.join(repoRoot, file);
-    const raw = await fs.readFile(sourcePath, 'utf8');
+  for (const meta of readUtilityEntries()) {
+    const raw = await fs.readFile(meta.sourcePath, 'utf8');
     const pageMarkdown = stripPageChrome(raw);
     utilities.push({
       ...meta,
-      file,
       firstArchivedAt: getFirstArchivedAt(raw),
       updatedAt: getUpdatedAt(raw),
       summary: excerpt(raw, 180),
       headings: collectHeadings(pageMarkdown),
-      html: renderMarkdown(pageMarkdown, paperFiles),
+      html: renderMarkdown(pageMarkdown, paperFileNames),
     });
   }
+  return utilities;
+};
 
+const build = async () => {
+  const paperEntries = await readPaperEntries();
+  const paperFileNames = new Set(paperEntries.map((entry) => entry.fileName));
+  const authorProfiles = await readAuthorProfiles();
+
+  const papers = await buildPaperRecords(paperEntries, paperFileNames);
+  const { authors, authorRecordsByKey } = buildAuthorRecords(papers, authorProfiles);
+  attachPaperAuthorEntries(papers, authorRecordsByKey);
+
+  const utilities = await buildUtilityRecords(paperFileNames);
   const tags = [...new Set(papers.flatMap((paper) => paper.tags))].sort();
   const data = {
     generatedAt: new Date().toISOString(),

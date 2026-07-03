@@ -1,9 +1,7 @@
 import fs from 'node:fs/promises';
-import path from 'node:path';
 import process from 'node:process';
+import { generatedFile } from './content/repository.mjs';
 
-const repoRoot = process.cwd();
-const generatedFile = path.join(repoRoot, 'src/generated/paper-data.json');
 const pinnedOverviewSlug = '2026-06-23-chinese-frontier-model-reports-timeline';
 
 const data = JSON.parse(await fs.readFile(generatedFile, 'utf8'));

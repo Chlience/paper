@@ -1,10 +1,8 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import process from 'node:process';
+import { authorsFile, generatedFile, repoRoot } from './content/repository.mjs';
 
-const repoRoot = process.cwd();
-const generatedFile = path.join(repoRoot, 'src/generated/paper-data.json');
-const authorsFile = path.join(repoRoot, 'authors.json');
 const distDir = path.join(repoRoot, 'dist');
 const legacyLocalRoot = ['', 'home', 'chlience', 'paper'].join('/');
 const expectedSiteUrl = process.env.PUBLIC_SITE_URL ?? 'https://papers.chlience.com';
@@ -172,7 +170,7 @@ for (const sourceAuthor of sourceAuthors) {
 
   for (const field of ['github', 'huggingFace']) {
     if (sourceAuthor[field] && generatedAuthor[field] !== sourceAuthor[field]) {
-      fail(`Generated author ${sourceAuthor.slug} is missing ${field} from authors.json.`);
+      fail(`Generated author ${sourceAuthor.slug} is missing ${field} from data/authors.json.`);
     }
   }
 }

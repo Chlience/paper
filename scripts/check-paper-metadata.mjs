@@ -1,17 +1,6 @@
 import fs from 'node:fs/promises';
-import path from 'node:path';
 import process from 'node:process';
-
-const repoRoot = process.cwd();
-const generatedFile = path.join(repoRoot, 'src/generated/paper-data.json');
-
-const excludedMarkdownFiles = new Set([
-  'AGENTS.md',
-  'DESIGN.md',
-  'PRODUCT.md',
-  'README.md',
-  'author-x-account-search-sop.md',
-]);
+import { generatedFile, readPaperEntries, readUtilityEntries } from './content/repository.mjs';
 
 const maintenanceScanExemptFiles = new Set([
   'paper-analysis-workflow.md',
@@ -48,11 +37,6 @@ const fail = (message) => {
   process.exitCode = 1;
 };
 
-const readMarkdownFiles = async () => {
-  const files = await fs.readdir(repoRoot);
-  return files.filter((file) => file.endsWith('.md') && !excludedMarkdownFiles.has(file)).sort();
-};
-
 const getTopLevelField = (markdown, name) =>
   markdown.match(new RegExp(`^${name}:\\s*(.+)$`, 'm'))?.[1]?.trim() ?? '';
 
@@ -71,26 +55,28 @@ const getSection = (markdown, heading) => {
 
 const authorBulletPattern = /^- (?:\[[^\]]+\]\([^)]+\)|[^:：`]{1,100})[:：]\s+(.+)$/;
 
-for (const file of await readMarkdownFiles()) {
-  const markdown = await fs.readFile(path.join(repoRoot, file), 'utf8');
+const sourceEntries = [...(await readPaperEntries()), ...readUtilityEntries()];
+
+for (const entry of sourceEntries) {
+  const markdown = await fs.readFile(entry.sourcePath, 'utf8');
   for (const legacyField of ['Date', 'Archive-Time', 'Sort-Time']) {
     if (getTopLevelField(markdown, legacyField)) {
-      fail(`${file} still uses legacy top-level field ${legacyField}.`);
+      fail(`${entry.file} still uses legacy top-level field ${legacyField}.`);
     }
   }
 
   if (!getTopLevelField(markdown, 'First-Archived-At')) {
-    fail(`${file} is missing First-Archived-At.`);
+    fail(`${entry.file} is missing First-Archived-At.`);
   }
 
   if (!getTopLevelField(markdown, 'Updated-At')) {
-    fail(`${file} is missing Updated-At.`);
+    fail(`${entry.file} is missing Updated-At.`);
   }
 
-  if (!maintenanceScanExemptFiles.has(file)) {
+  if (!maintenanceScanExemptFiles.has(entry.fileName)) {
     for (const pattern of forbiddenPaperMaintenancePatterns) {
       if (pattern.test(markdown)) {
-        fail(`${file} contains paper-maintenance text matching ${pattern}.`);
+        fail(`${entry.file} contains paper-maintenance text matching ${pattern}.`);
       }
     }
 
@@ -102,7 +88,7 @@ for (const file of await readMarkdownFiles()) {
 
       for (const pattern of forbiddenAuthorBulletPatterns) {
         if (pattern.test(match[1])) {
-          fail(`${file}:${index + 1} author list bullet contains non-institution detail matching ${pattern}: ${line}`);
+          fail(`${entry.file}:${index + 1} author list bullet contains non-institution detail matching ${pattern}: ${line}`);
         }
       }
     }
