@@ -6055,5 +6055,43 @@
         "url": "https://azanette.com/"
       }
     ]
+  },
+  {
+    "slug": "shen-yan",
+    "name": "Shen Yan",
+    "aliases": ["Shen Yan"],
+    "affiliations": ["ByteDance Seed", "ByteDance", "Google DeepMind", "Michigan State University", "ByteDance AML", "Google Research"],
+    "homepage": "https://shenyann.github.io/",
+    "github": "",
+    "x": "https://x.com/shen_82",
+    "xConfidence": "high",
+    "topics": ["Seed2.0", "Dynamic Linear Attention", "multimodal pretraining", "video-text modeling", "vision-language models"],
+    "notes": "ArXiv submitter for Seed2.0 Model Card and ByteDance Seed coauthor of Dynamic Linear Attention. LinkedIn identifies him as Research Scientist at ByteDance / Bytedance Seed responsible for multimodal pretraining; personal homepage records Research Scientist at Google DeepMind, Michigan State University PhD, and earlier work with ByteDance AML and Google Research. Homepage links the same X/Twitter handle.",
+    "sources": [
+      {
+        "label": "Seed2.0 Model Card",
+        "url": "https://arxiv.org/abs/2607.00248"
+      },
+      {
+        "label": "Dynamic Linear Attention",
+        "url": "https://arxiv.org/abs/2606.10650"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://shenyann.github.io/"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=en&user=-shYRd8AAAAJ"
+      },
+      {
+        "label": "LinkedIn",
+        "url": "https://www.linkedin.com/in/shawnyanyuv"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/shen_82"
+      }
+    ]
   }
 ]
