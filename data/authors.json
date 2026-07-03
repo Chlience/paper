@@ -6290,12 +6290,20 @@
     "github": "https://github.com/keroro824",
     "x": "https://x.com/BeidiChen",
     "xConfidence": "high",
-    "topics": ["Vortex", "sparse attention", "long-context efficiency", "LLM serving", "efficient AI"],
-    "notes": "Senior coauthor of Vortex and PI of Infini AI Lab. Lab and GitHub profiles identify her as a Carnegie Mellon University assistant professor and Amazon Scholar, with prior FAIR / Meta, Stanford and Rice affiliations.",
+    "topics": ["Vortex", "ThunderAgent", "sparse attention", "agentic inference", "long-context efficiency", "LLM serving", "efficient AI"],
+    "notes": "Senior coauthor of Vortex and coauthor of ThunderAgent. PI of Infini AI Lab. Lab and GitHub profiles identify her as a Carnegie Mellon University assistant professor and Amazon Scholar, with prior FAIR / Meta, Stanford and Rice affiliations.",
     "sources": [
       {
         "label": "Vortex",
         "url": "https://arxiv.org/abs/2606.06453"
+      },
+      {
+        "label": "ThunderAgent",
+        "url": "https://arxiv.org/abs/2602.13692"
+      },
+      {
+        "label": "ThunderAgent project",
+        "url": "https://github.com/ThunderAgent-org/ThunderAgent"
       },
       {
         "label": "Vortex project",
@@ -6880,6 +6888,296 @@
       {
         "label": "X",
         "url": "https://x.com/noahdgoodman"
+      }
+    ]
+  },
+  {
+    "slug": "hao-kang",
+    "name": "Hao Kang",
+    "aliases": ["Hao Kang"],
+    "affiliations": ["Georgia Institute of Technology", "MIT"],
+    "homepage": "https://haokang-timmy.github.io/",
+    "github": "https://github.com/HaoKang-Timmy",
+    "x": "https://x.com/GT_HaoKang",
+    "xConfidence": "high",
+    "topics": ["ThunderAgent", "agentic inference", "ML systems", "efficient LLM systems", "LLM agents"],
+    "notes": "Equal-contribution first author of ThunderAgent. Homepage identifies him as a Georgia Tech PhD student advised by Tushar Krishna and a visiting MIT researcher advised by Song Han.",
+    "sources": [
+      {
+        "label": "ThunderAgent",
+        "url": "https://arxiv.org/abs/2602.13692"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://haokang-timmy.github.io/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/HaoKang-Timmy"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=xTG6Nn0AAAAJ&hl=en"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Hao_Kang2"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/GT_HaoKang"
+      }
+    ]
+  },
+  {
+    "slug": "ziyang-li-thunderagent",
+    "name": "Ziyang Li",
+    "aliases": ["Ziyang Li", "Ziyang li"],
+    "affiliations": ["Individual Researcher", "Zhejiang University"],
+    "homepage": "",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["ThunderAgent", "agentic inference", "LLM systems"],
+    "notes": "Equal-contribution first author of ThunderAgent. The paper lists Individual Researcher as the paper-time affiliation; the OpenReview profile snippet identifies a College of Computer Science and Technology undergraduate student at Zhejiang University.",
+    "sources": [
+      {
+        "label": "ThunderAgent",
+        "url": "https://arxiv.org/abs/2602.13692"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Ziyang_li8"
+      },
+      {
+        "label": "DBLP",
+        "url": "https://dblp.org/pid/90/10939"
+      }
+    ]
+  },
+  {
+    "slug": "weili-xu",
+    "name": "Weili Xu",
+    "aliases": ["Weili Xu"],
+    "affiliations": ["University of Illinois Urbana-Champaign", "Zhejiang University", "Together AI"],
+    "homepage": "https://weili-0234.github.io/",
+    "github": "https://github.com/Weili-0234",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["ThunderAgent", "machine learning systems", "LLM systems", "agentic inference", "CUDA"],
+    "notes": "Equal-contribution first author of ThunderAgent. Homepage and GitHub identify him as a UIUC computer engineering undergraduate, a Zhejiang University dual-degree student, and a Together AI research intern.",
+    "sources": [
+      {
+        "label": "ThunderAgent",
+        "url": "https://arxiv.org/abs/2602.13692"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://weili-0234.github.io/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/Weili-0234"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=gDqEGEUAAAAJ&hl=en"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Weili_Xu1"
+      }
+    ]
+  },
+  {
+    "slug": "xinyu-yang-cmu",
+    "name": "Xinyu Yang",
+    "aliases": ["Xinyu Yang", "Malachy Xinyu Yang", "He Xing"],
+    "affiliations": ["Carnegie Mellon University"],
+    "homepage": "https://xinyuyang.me/",
+    "github": "",
+    "x": "https://x.com/Xinyu2ML",
+    "xConfidence": "high",
+    "topics": ["ThunderAgent", "InfiniAI Lab", "machine learning systems", "foundation model systems", "agentic inference"],
+    "notes": "Equal-contribution first author of ThunderAgent. Homepage identifies them as a Carnegie Mellon University PhD candidate; Scholar and homepage connect the work to CMU machine learning systems.",
+    "sources": [
+      {
+        "label": "ThunderAgent",
+        "url": "https://arxiv.org/abs/2602.13692"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://xinyuyang.me/"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=Fvq2R14AAAAJ&hl=en"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/Xinyu2ML"
+      }
+    ]
+  },
+  {
+    "slug": "yinfang-chen",
+    "name": "Yinfang Chen",
+    "aliases": ["Yinfang Chen", "Yinfang CHEN"],
+    "affiliations": ["University of Illinois Urbana-Champaign"],
+    "homepage": "https://yinfangchen.github.io/",
+    "github": "https://github.com/yinfangchen",
+    "x": "https://x.com/yinfang_chen",
+    "xConfidence": "high",
+    "topics": ["ThunderAgent", "agentic AI", "systems and networking", "autonomous clouds", "reliability"],
+    "notes": "Coauthor of ThunderAgent. Homepage identifies Yinfang Chen as a final-year UIUC Computer Science PhD candidate working on systems, networking, agentic AI, reliability, and autonomous clouds.",
+    "sources": [
+      {
+        "label": "ThunderAgent",
+        "url": "https://arxiv.org/abs/2602.13692"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://yinfangchen.github.io/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/yinfangchen"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=RlxlnHsAAAAJ&hl=en"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Yinfang_Chen1"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/yinfang_chen"
+      }
+    ]
+  },
+  {
+    "slug": "junxiong-wang",
+    "name": "Junxiong Wang",
+    "aliases": ["Junxiong Wang"],
+    "affiliations": ["Together AI", "Cornell University"],
+    "homepage": "https://jxiw.github.io/",
+    "github": "",
+    "x": "https://x.com/_junxiong_wang",
+    "xConfidence": "high",
+    "topics": ["ThunderAgent", "Together AI", "efficient RL rollouts", "adaptive speculative decoding", "LLM systems"],
+    "notes": "Coauthor of ThunderAgent. Homepage identifies him as leading several Together AI projects including adaptive speculative decoding, inference-time training, and efficient RL rollouts, with a Cornell CS PhD background.",
+    "sources": [
+      {
+        "label": "ThunderAgent",
+        "url": "https://arxiv.org/abs/2602.13692"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://jxiw.github.io/"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/_junxiong_wang"
+      },
+      {
+        "label": "Hugging Face",
+        "url": "https://huggingface.co/JunxiongWang"
+      }
+    ]
+  },
+  {
+    "slug": "tushar-krishna",
+    "name": "Tushar Krishna",
+    "aliases": ["Tushar Krishna"],
+    "affiliations": ["Georgia Institute of Technology", "MIT", "Harvard University", "Princeton University", "IIT Delhi", "Intel"],
+    "homepage": "https://tusharkrishna.ece.gatech.edu/",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["ThunderAgent", "computer architecture", "interconnection networks", "deep learning accelerators", "ML systems"],
+    "notes": "Coauthor of ThunderAgent and Georgia Tech ECE associate professor. Homepage records Georgia Tech ECE/CS appointments, prior visiting MIT and Harvard appointments, Intel experience, MIT PhD, Princeton MSE, and IIT Delhi BTech.",
+    "sources": [
+      {
+        "label": "ThunderAgent",
+        "url": "https://arxiv.org/abs/2602.13692"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://tusharkrishna.ece.gatech.edu/"
+      },
+      {
+        "label": "Georgia Tech ECE",
+        "url": "https://ece.gatech.edu/directory/tushar-krishna"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=P__ztgcAAAAJ&hl=en"
+      }
+    ]
+  },
+  {
+    "slug": "chenfeng-xu",
+    "name": "Chenfeng Xu",
+    "aliases": ["Chenfeng Xu"],
+    "affiliations": ["Together AI", "The University of Texas at Austin", "University of California, Berkeley"],
+    "homepage": "https://www.chenfengx.com/",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["ThunderAgent", "efficient generative AI", "ML systems", "robotics", "efficient machine learning"],
+    "notes": "Coauthor of ThunderAgent. Homepage identifies him as a Together AI researcher, incoming tenure-track assistant professor at UT Austin CS, and UC Berkeley PhD advised by Masayoshi Tomizuka and Kurt Keutzer.",
+    "sources": [
+      {
+        "label": "ThunderAgent",
+        "url": "https://arxiv.org/abs/2602.13692"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://www.chenfengx.com/"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=RpqvaTUAAAAJ&hl=en"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Chenfeng_Xu1"
+      }
+    ]
+  },
+  {
+    "slug": "simran-arora",
+    "name": "Simran Arora",
+    "aliases": ["Simran Arora", "Simran S. Arora"],
+    "affiliations": ["Together AI", "Stanford University", "Caltech"],
+    "homepage": "https://arorasimran.com/",
+    "github": "",
+    "x": "https://x.com/simran_s_arora",
+    "xConfidence": "high",
+    "topics": ["ThunderAgent", "AI systems", "Frontier Performance", "efficient AI", "Hazy Research"],
+    "notes": "Coauthor of ThunderAgent. Homepage identifies her as lead of the Frontier Performance research team at Together AI, incoming Caltech CMS assistant professor, and Stanford CS PhD from Hazy Research.",
+    "sources": [
+      {
+        "label": "ThunderAgent",
+        "url": "https://arxiv.org/abs/2602.13692"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://arorasimran.com/"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=rGRsWH8AAAAJ&hl=en"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Simran_Arora1"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/simran_s_arora"
       }
     ]
   }
