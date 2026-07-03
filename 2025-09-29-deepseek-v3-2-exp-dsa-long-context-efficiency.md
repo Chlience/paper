@@ -20,7 +20,7 @@ Updated-At: 2026-06-24 20:36
 
 ## 作者与关系
 
-- DeepSeek-AI: 机构团队署名；报告未列出个人作者。后续正式 DeepSeek-V3.2 arXiv 条目显示 DeepSeek-AI 及大量成员署名，并由 Wenfeng Liang 提交。
+- DeepSeek-AI: DeepSeek-AI.
 
 ## 一句话结论
 

@@ -256,6 +256,40 @@ verl 当前最重要的变化，是把“RL 算法”扩展成“算法目标 + 
 
 只有这三类指标同时改善，才能说明优化确实提升了训练效率。若 wall-clock 下降但 mismatch、staleness、length distribution 或 ESS 恶化，需要把收益解释为系统吞吐收益，而不能直接解释为算法改进。
 
+## 证据链强度评估
+
+### 强证据
+
+- verl 文档给出 one-step-off、fully async、TransferQueue、MTP 等模块的具体配置、指标和时间对比，可支撑系统吞吐方向的判断。
+- rollout correction 部分把 `rollout_log_probs`、`old_log_probs` 和当前 `log_prob` 分清，公式上能解释 staleness 下的行为策略修正。
+- 指标清单覆盖 quality、algorithm 和 system 三层，能直接指导后续实验记录。
+
+### 中等强度证据
+
+- 多数性能数字来自官方文档、示例配置或 W&B 链接，可信度高于概念描述，但仍缺少独立复验。
+- MTP 的硬件差异结果说明收益受模型、decode 长度、显存带宽和 kernel overhead 共同影响，不能只按接受率判断。
+
+### 需要谨慎的推论
+
+- fully async、partial rollout 和 correction 的组合空间很大，不同 reward、context length、GPU 拓扑和推理引擎会改变最优配置。
+- 文档随版本快速变化，本笔记适合作为架构理解和实验 checklist，具体参数需要绑定 verl commit 与运行日志。
+
+## 主要启发
+
+- RL 后训练系统要把算法目标、样本新鲜度、logprob 归属和参数同步作为同一条闭环来设计。
+- 判断异步优化是否有效，需要同时看 wall-clock、staleness、importance weight、有效样本量和任务质量。
+- 面向 agentic rollout 时，慢环境、长 decode、teacher query 和 reward 计算都应进入调度器的状态变量。
+
+## OpenReview / 审稿意见吸收
+
+- Venue status: 当前档案未记录公开 peer-review 状态。
+- Public reviews: 当前档案未记录可可靠匹配的 OpenReview / ARR / 会议 reviewer comments。
+- Ratings / confidence: 无公开评分可用于校准。
+- Reviewer consensus: 暂无。
+- Main criticisms: 暂无公开 reviewer 质疑可引用；可信度主要由论文、技术报告、项目证据和本地一致性检查决定。
+- Author response: 暂无公开 rebuttal 记录。
+- 对本文可信度的影响: 按未完成公开审稿吸收处理，结论需要依赖实验设置、baseline 强度、复现证据和跨论文一致性校准。
+
 ## 局限
 
 - verl 文档更新速度快，具体配置名、支持引擎和默认值需要以后续官方页面为准。

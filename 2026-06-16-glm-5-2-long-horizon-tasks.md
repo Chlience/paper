@@ -20,7 +20,7 @@ Updated-At: 2026-06-24 21:18
 
 ## 作者与关系
 
-- Z.ai / GLM-5 Team: GLM-5.2 博文、模型卡和 GitHub README 都以团队/组织形式发布，模型卡引用 [2602.15763](/papers/2602.15763-glm-5-agentic-engineering/) GLM-5 技术报告。
+- Z.ai / GLM-5 Team: Z.ai / GLM-5 Team.
 - GLM-5 Team / Zhipu AI / Tsinghua University: [2602.15763](/papers/2602.15763-glm-5-agentic-engineering/) 的作者结构已经在本地建档。GLM-5.2 延续同一开源仓库和同一 GLM-5 series citation。
 - slime / THUDM: 博文明确说 GLM-5.2 的 agentic RL 和 parallel OPD 使用 slime，和 [2026-06-17](/papers/2026-06-17-slime-rl-scaling-framework/) 形成直接工程关系。
 - IndexShare / IndexCache 相关作者线：博文链接 `2603.12201`。该 arXiv 论文标题为 “IndexCache: Accelerating Sparse Attention via Cross-Layer Index Reuse”，作者包括 Yushi Bai、Qian Dong、Ting Jiang、Xin Lv、Zhengxiao Du、Aohan Zeng、Jie Tang、Juanzi Li。它和 GLM-5 / GLM-5.2 团队存在明显人员重叠。

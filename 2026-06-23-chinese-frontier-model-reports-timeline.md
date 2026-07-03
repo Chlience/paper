@@ -137,6 +137,40 @@ DeepSeek-V4 和 GLM-5.2 又把长上下文推到 million-token 级别。DeepSeek
 | GLM-5.2 | release blog 未公开完整 pretraining；parallel OPD 约两天 | serving / slime / OPD 机制公开；训练硬件和并行方式未完整公开 | pretraining GPU hours、wall-clock、美元成本未披露 | release 级信息，等待完整技术报告 |
 | MiniMax-M3 / MSA | 109B 实验 3T tokens；MSA-CPT 400B；long-context 140B；M3 428B 完整训练未展开 | 109B 效率实验报告 H800；开源 repo 主要面向 SM100 | M3 完整 GPU hours、wall-clock、美元成本未披露 | MSA 机制强，M3 训练账本待补 |
 
+## 证据链强度评估
+
+### 强证据
+
+- 时间线逐条连接到已归档论文或技术报告，材料来源以 primary source 为主。
+- MoE、MLA/稀疏注意力、长上下文、RLVR、MTP、agentic RL 和 serving 优化在多家公司报告中重复出现，支撑“工程迁移”主线。
+- 训练配置披露审计把数据、硬件、并行、成本和未披露项分开，便于比较公开透明度。
+
+### 中等强度证据
+
+- 跨公司归纳依赖公开报告的粒度，报告写法、benchmark、prompt、sampling budget 和 harness 不完全一致。
+- 部分条目来自 release blog 或 preview report，证据强度低于完整 technical report。
+
+### 需要谨慎的推论
+
+- 该时间线覆盖本地已归档材料，不能代表国产模型生态的完整样本。
+- 跨模型性能比较受版本、工具环境、judge、internal verifier 和安全策略影响，适合看趋势，不适合直接排定模型强弱。
+
+## 主要启发
+
+- 国产前沿模型报告的重心已经从单一 benchmark 展示扩展到训练系统、serving 系统、agentic harness 和成本账本。
+- 评估模型报告质量时，需要把能力分数、训练披露、系统可复验性和安全/anti-hack 机制分开记录。
+- 后续新增国模论文时，应同步更新时间线、公司技术特色、跨论文关系和未披露项，避免索引只积累条目名。
+
+## OpenReview / 审稿意见吸收
+
+- Venue status: 当前档案未记录公开 peer-review 状态。
+- Public reviews: 当前档案未记录可可靠匹配的 OpenReview / ARR / 会议 reviewer comments。
+- Ratings / confidence: 无公开评分可用于校准。
+- Reviewer consensus: 暂无。
+- Main criticisms: 暂无公开 reviewer 质疑可引用；可信度主要由论文、技术报告、项目证据和本地一致性检查决定。
+- Author response: 暂无公开 rebuttal 记录。
+- 对本文可信度的影响: 按未完成公开审稿吸收处理，结论需要依赖实验设置、baseline 强度、复现证据和跨论文一致性校准。
+
 ## 局限
 
 这份总览依赖本地已归档笔记和对应 primary source，覆盖范围偏向已经读过并沉淀的国产技术报告。很多报告是团队级 technical report 或 release blog，缺少公开 peer review、完整训练数据、多 seed、置信区间和第三方复现。跨模型比较也受到版本、prompt、sampling budget、tool harness、scaffold、judge、internal verifier 和安全策略影响。

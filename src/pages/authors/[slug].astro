@@ -15,7 +15,15 @@ const { author } = Astro.props;
 const authorDisplayName = author.displayName ?? author.name;
 const canonicalPath = author.path;
 const authorUrl = getAbsoluteUrl(canonicalPath, Astro.site);
-const sameAs = [...new Set([author.homepage, author.x, ...(author.sources ?? []).map((source) => source.url)].filter(Boolean))];
+const profileLinks = [
+  { label: 'Homepage', url: author.homepage },
+  { label: 'GitHub', url: author.github },
+  { label: 'Hugging Face', url: author.huggingFace },
+  { label: 'X', url: author.x },
+].filter((link) => link.url);
+const sameAs = [
+  ...new Set([...profileLinks.map((link) => link.url), ...(author.sources ?? []).map((source) => source.url)].filter(Boolean)),
+];
 ---
 
 <Layout
@@ -38,8 +46,7 @@ const sameAs = [...new Set([author.homepage, author.x, ...(author.sources ?? [])
       <div class="paper-meta">
         <span>{author.paperCount} archived notes</span>
         {author.xConfidence && <span>X: {author.xConfidence}</span>}
-        {author.homepage && <a href={author.homepage}>Homepage</a>}
-        {author.x && <a href={author.x}>X</a>}
+        {profileLinks.map((link) => <a href={link.url}>{link.label}</a>)}
       </div>
     </header>
 

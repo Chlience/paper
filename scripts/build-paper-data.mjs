@@ -224,18 +224,73 @@ const getSection = (markdown, heading) => {
   return collected.join('\n').trim();
 };
 
-const getSourceField = (markdown, names) => {
+const getSourceFieldRaw = (markdown, names) => {
   const labels = Array.isArray(names) ? names : [names];
   for (const label of labels) {
     const escaped = label.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     const value = markdown.match(new RegExp(`^-\\s+${escaped}:\\s*(.+)$`, 'mi'))?.[1]?.trim();
-    if (value) return stripMarkdown(value);
+    if (value) return value;
   }
   return '';
 };
 
+const getSourceField = (markdown, names) => stripMarkdown(getSourceFieldRaw(markdown, names));
+
+const getSourceUrl = (markdown) => {
+  const candidates = [
+    ['arXiv', getSourceFieldRaw(markdown, 'arXiv')],
+    ['URL', getSourceFieldRaw(markdown, 'URL')],
+    ['PDF', getSourceFieldRaw(markdown, 'PDF')],
+    ['Source', getSourceFieldRaw(markdown, 'Source')],
+    ['DOI', getSourceFieldRaw(markdown, 'DOI')],
+  ];
+
+  for (const [label, rawValue] of candidates) {
+    if (!rawValue) continue;
+    const markdownUrl = rawValue.match(/\[[^\]]+\]\((https?:\/\/[^)]+)\)/i)?.[1];
+    if (markdownUrl) return markdownUrl;
+
+    const bareUrl = rawValue.match(/https?:\/\/[^\s)；，。]+/i)?.[0];
+    if (bareUrl) return bareUrl;
+
+    const plainValue = stripMarkdown(rawValue);
+    if (label === 'arXiv') {
+      const arxivId = plainValue.match(/\b\d{4}\.\d{4,5}(?:v\d+)?\b/)?.[0];
+      if (arxivId) return `https://arxiv.org/abs/${arxivId}`;
+    }
+
+    if (label === 'DOI') {
+      const doi = plainValue.match(/\b10\.\d{4,9}\/\S+\b/)?.[0]?.replace(/[；，。.]$/, '');
+      if (doi) return `https://doi.org/${doi}`;
+    }
+  }
+
+  return '';
+};
+
+const parseExplicitTags = (value = '') =>
+  [
+    ...new Set(
+      stripMarkdown(value)
+        .split(/[,，;；]/)
+        .map((tag) => tag.trim())
+        .filter(Boolean),
+    ),
+  ].slice(0, 5);
+
 const inferTags = (markdown, filename) => {
-  const haystack = `${filename}\n${markdown}`.toLowerCase();
+  const explicitTags = parseExplicitTags(getSourceField(markdown, 'Tags'));
+  if (explicitTags.length > 0) return explicitTags;
+
+  const haystack = [
+    filename,
+    getSourceField(markdown, 'Title') || getFirstHeading(markdown, filename.replace(/\.md$/, '')),
+    getSourceField(markdown, 'Subjects'),
+    getSection(markdown, '一句话结论'),
+    getSection(markdown, '主要启发'),
+  ]
+    .join('\n')
+    .toLowerCase();
   const tags = [];
   const add = (tag, pattern) => {
     if (pattern.test(haystack)) tags.push(tag);
@@ -368,9 +423,7 @@ const build = async () => {
     const title = getSourceField(raw, 'Title') || getFirstHeading(raw, file.replace(/\.md$/, ''));
     const slug = file.replace(/\.md$/, '');
     const oneSentence = getSection(raw, '一句话结论');
-    const sourceUrl =
-      getSourceField(raw, ['arXiv', 'URL', 'PDF', 'Source']) ||
-      getSourceField(raw, 'DOI');
+    const sourceUrl = getSourceUrl(raw);
 
     const pageMarkdown = stripPublicPaperMaintenance(stripPageChrome(raw));
     const firstArchivedAt = getFirstArchivedAt(raw);
@@ -456,6 +509,8 @@ const build = async () => {
       aliases: profile?.aliases ?? [],
       affiliations: profile?.affiliations ?? [],
       homepage: profile?.homepage ?? '',
+      github: profile?.github ?? '',
+      huggingFace: profile?.huggingFace ?? '',
       x: profile?.x ?? '',
       xConfidence: profile?.xConfidence ?? '',
       topics: profileTopics.length > 0 ? profileTopics : paperTopics,

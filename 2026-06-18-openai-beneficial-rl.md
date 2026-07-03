@@ -18,25 +18,25 @@ Updated-At: 2026-06-21 22:16
 Related public materials used in the 2026-06-21 update:
 
 - Emergent Misalignment: https://arxiv.org/abs/2502.17424
-- Persona Features Control Emergent Misalignment: https://arxiv.org/abs/2506.19823；OpenReview: https://openreview.net/forum?id=yjrVOxjkDR；code/data: https://github.com/openai/emergent-misalignment-persona-features
+- Persona Features Control Emergent Misalignment: [arXiv](https://arxiv.org/abs/2506.19823)；[OpenReview](https://openreview.net/forum?id=yjrVOxjkDR)；[code/data](https://github.com/openai/emergent-misalignment-persona-features)
 - Helpful Assistant Features Suppress Emergent Misalignment: https://alignment.openai.com/helpful-assistant-features/
 - HealthBench Professional: https://arxiv.org/abs/2604.27470
 - Sidestepping Evaluation Awareness and Anticipating Misalignment with Production Evaluations: https://alignment.openai.com/prod-evals/
 - School of Reward Hacks: https://arxiv.org/abs/2508.17511
-- Natural Emergent Misalignment from Reward Hacking in Production RL: https://arxiv.org/abs/2511.18397；Anthropic blog: https://www.anthropic.com/research/emergent-misalignment-reward-hacking
+- Natural Emergent Misalignment from Reward Hacking in Production RL: [arXiv](https://arxiv.org/abs/2511.18397)；[Anthropic blog](https://www.anthropic.com/research/emergent-misalignment-reward-hacking)
 - Model Organisms for Emergent Misalignment: https://arxiv.org/html/2506.11613v1
-- UK AISI open-source reward-hacking misalignment replication: https://www.alignmentforum.org/posts/2ANCyejqxfqK2obEj/some-natural-emergent-misalignment-from-reward-hacking-in；code: https://github.com/UKGovernmentBEIS/reward-hacking-misalignment
+- UK AISI open-source reward-hacking misalignment replication: [Alignment Forum](https://www.alignmentforum.org/posts/2ANCyejqxfqK2obEj/some-natural-emergent-misalignment-from-reward-hacking-in)；[code](https://github.com/UKGovernmentBEIS/reward-hacking-misalignment)
 
 ## 作者与关系
 
-- [Akshay V. Jagadeesh](/authors/akshay-v-jagadeesh/): OpenAI Research Scientist；个人主页显示其研究目标是构建 deeply and persistently beneficial AI，重点在 health and medicine；论文通讯作者，邮箱 `ajag@openai.com`。
-- [Rahul K. Arora](/authors/rahul-k-arora/): OpenAI researcher，主页说明其工作方向为 health and RL，同时是 University of Calgary faculty；参与 HealthBench、OpenAI health performance 改进和临床使用研究。
-- [Khaled Saab](/authors/khaled-saab/): OpenAI Member of Technical Staff；此前为 Google DeepMind Research Scientist，Stanford PhD；主页说明当前研究关注 accelerating biomedical intelligence。
-- Ali Malik: OpenAI；公开主页显示其背景为 Stanford CS PhD、AI research scientist，长期关注 education 和 human-centered learning。
-- Mikhail Trofimov: OpenAI；该论文和 HealthBench Professional 参考文献作者线重叠，需要后续补 profile。
-- Foivos Tsimpourlas: OpenAI；该论文和 HealthBench Professional 参考文献作者线重叠，需要后续补 profile。
-- Johannes Heidecke: OpenAI；公开会议资料显示其关注 AI safety 与 reinforcement learning，并担任 OpenAI Safety Systems 相关角色；该论文与 HealthBench Professional 参考文献也出现其署名。
-- [Karan Singhal](/authors/karan-singhal/): OpenAI；个人主页显示其领导 Health AI and AGI Benefits teams，研究目标覆盖 health AI、deeply beneficial models 和 tangible AGI benefits；论文通讯作者，邮箱 `karan@openai.com`。
+- [Akshay V. Jagadeesh](/authors/akshay-v-jagadeesh/): OpenAI.
+- [Rahul K. Arora](/authors/rahul-k-arora/): OpenAI.
+- [Khaled Saab](/authors/khaled-saab/): OpenAI.
+- Ali Malik: OpenAI.
+- Mikhail Trofimov: OpenAI.
+- Foivos Tsimpourlas: OpenAI.
+- Johannes Heidecke: OpenAI.
+- [Karan Singhal](/authors/karan-singhal/): OpenAI.
 
 ## 一句话结论
 

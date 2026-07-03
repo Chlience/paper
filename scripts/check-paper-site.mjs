@@ -4,6 +4,7 @@ import process from 'node:process';
 
 const repoRoot = process.cwd();
 const generatedFile = path.join(repoRoot, 'src/generated/paper-data.json');
+const authorsFile = path.join(repoRoot, 'authors.json');
 const distDir = path.join(repoRoot, 'dist');
 const legacyLocalRoot = ['', 'home', 'chlience', 'paper'].join('/');
 const expectedSiteUrl = process.env.PUBLIC_SITE_URL ?? 'https://papers.chlience.com';
@@ -19,6 +20,9 @@ const requiredSectionGroups = [
     name: '关键实验/定理',
     headings: ['## 关键实验/定理', '## 关键实验结果', '## 主要实验结果', '## 关键定理', '## 文献扫描结果', '## 方法论论证'],
   },
+  { name: '证据链强度评估', headings: ['## 证据链强度评估'] },
+  { name: 'OpenReview / 审稿意见吸收', headings: ['## OpenReview / 审稿意见吸收'] },
+  { name: '主要启发', headings: ['## 主要启发'] },
   { name: '局限', headings: ['## 局限', '## 局限与待验证问题'] },
   { name: 'Reference Intake Brief', headings: ['## Reference Intake Brief'] },
 ];
@@ -34,6 +38,14 @@ const forbiddenPublicPaperPatterns = [
   /xConfidence/,
   /not-found/,
   /账号搜索/,
+];
+
+const suspiciousHrefPatterns = [
+  /%EF%BC%9B/i,
+  /%EF%BC%8C/i,
+  /%E3%80%82/i,
+  /[；，。]/,
+  /%E6%9C%AA%E5%8F%91%E7%8E%B0/i,
 ];
 
 const fail = (message) => {
@@ -66,6 +78,7 @@ const scanFiles = async (dir, predicate) => {
 };
 
 const data = JSON.parse(await fs.readFile(generatedFile, 'utf8'));
+const sourceAuthors = JSON.parse(await fs.readFile(authorsFile, 'utf8'));
 
 if (!Array.isArray(data.papers) || data.papers.length === 0) {
   fail('No generated paper pages found.');
@@ -74,6 +87,29 @@ if (!Array.isArray(data.papers) || data.papers.length === 0) {
 if (!Array.isArray(data.authors)) {
   fail('No generated author pages found.');
 }
+
+const paperSlugs = new Set((data.papers ?? []).map((paper) => paper.slug));
+const authorSlugs = new Set((data.authors ?? []).map((author) => author.slug));
+const generatedAuthorsBySlug = new Map((data.authors ?? []).map((author) => [author.slug, author]));
+
+const checkHtmlLinks = (label, html) => {
+  for (const match of html.matchAll(/href="([^"]+)"/g)) {
+    const href = match[1];
+    if (suspiciousHrefPatterns.some((pattern) => pattern.test(href))) {
+      fail(`${label} generated HTML contains suspicious href: ${href}`);
+    }
+
+    const paperMatch = href.match(/^\/papers\/([^/#?]+)\//);
+    if (paperMatch && !paperSlugs.has(paperMatch[1]) && paperMatch[1] !== '%3Cslug%3E') {
+      fail(`${label} links to missing paper page: ${href}`);
+    }
+
+    const authorMatch = href.match(/^\/authors\/([^/#?]+)\//);
+    if (authorMatch && !authorSlugs.has(authorMatch[1]) && authorMatch[1] !== '%3Cslug%3E') {
+      fail(`${label} links to missing author page: ${href}`);
+    }
+  }
+};
 
 for (const paper of data.papers) {
   const source = await fs.readFile(path.join(repoRoot, paper.file), 'utf8');
@@ -87,16 +123,35 @@ for (const paper of data.papers) {
     fail(`${paper.file} generated HTML still contains a local absolute path.`);
   }
 
+  if (paper.sourceUrl && !/^https?:\/\//i.test(paper.sourceUrl)) {
+    fail(`${paper.file} generated sourceUrl must be an absolute URL: ${paper.sourceUrl}`);
+  }
+
   for (const pattern of forbiddenPublicPaperPatterns) {
     if (pattern.test(paper.html)) {
       fail(`${paper.file} generated HTML contains public maintenance text matching ${pattern}.`);
     }
   }
+
+  checkHtmlLinks(paper.file, paper.html);
 }
 
 for (const utility of data.utilities) {
   if (utility.html.includes(legacyLocalRoot)) {
     fail(`${utility.file} generated HTML still contains a local absolute path.`);
+  }
+
+  checkHtmlLinks(utility.file, utility.html);
+}
+
+for (const sourceAuthor of sourceAuthors) {
+  const generatedAuthor = generatedAuthorsBySlug.get(sourceAuthor.slug);
+  if (!generatedAuthor) continue;
+
+  for (const field of ['github', 'huggingFace']) {
+    if (sourceAuthor[field] && generatedAuthor[field] !== sourceAuthor[field]) {
+      fail(`Generated author ${sourceAuthor.slug} is missing ${field} from authors.json.`);
+    }
   }
 }
 

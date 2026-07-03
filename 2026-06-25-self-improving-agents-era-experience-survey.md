@@ -17,11 +17,11 @@ Updated-At: 2026-06-28 14:18
 
 ## 作者与关系
 
-- Che Jiang: Tsinghua University / Horizon Research, Frontis.AI；project lead and core contributor。OpenReview profile `~Che_Jiang1` records Tsinghua PhD student, Bowen Zhou as PhD advisor, Google Scholar and DBLP links.
+- Che Jiang: Tsinghua University / Horizon Research, Frontis.AI.
 - Jincheng Zhong, Yu Fu, Kai Tian, Junlin Yang, Kaikai Zhao, Yuchong Wang, Tianwei Luo: core contributors on title page.
-- [Ning Ding](/authors/ning-ding/): corresponding author；Tsinghua University / Shanghai AI Laboratory / THU-C3I profile in local archive；recurring RLVR and reasoning intelligence author.
-- [Kaiyan Zhang](/authors/kaiyan-zhang/): project lead and corresponding author；OpenReview profile records Frontis.AI principal researcher from 2026 and Tsinghua PhD background；homepage links GitHub `iseesaw`, Google Scholar and X `OkhayIea`.
-- [Bowen Zhou](/authors/bowen-zhou/): corresponding author；Tsinghua University / Shanghai AI Laboratory / TsinghuaC3I profile in local archive；advisor relation appears in Che Jiang and Kaiyan Zhang OpenReview profiles.
+- [Ning Ding](/authors/ning-ding/): Tsinghua University / Shanghai AI Laboratory / THU-C3I.
+- [Kaiyan Zhang](/authors/kaiyan-zhang/): Frontis.AI.
+- [Bowen Zhou](/authors/bowen-zhou/): Tsinghua University / Shanghai AI Laboratory / TsinghuaC3I.
 
 ## 一句话结论
 

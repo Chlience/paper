@@ -6093,5 +6093,234 @@
         "url": "https://x.com/shen_82"
       }
     ]
+  },
+  {
+    "slug": "zhuoming-chen",
+    "name": "Zhuoming Chen",
+    "chineseName": "陈卓明",
+    "aliases": ["Zhuoming Chen", "Chen Zhuoming"],
+    "affiliations": ["Carnegie Mellon University"],
+    "homepage": "https://dreaming-panda.github.io/",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["Vortex", "sparse attention", "LLM serving", "ML systems", "AI-agent algorithm search"],
+    "notes": "First author and submitter of Vortex. Homepage identifies him as a Carnegie Mellon University SCS PhD student advised by Beidi Chen and Zhihao Jia, working on ML systems, generative AI and randomized algorithms.",
+    "sources": [
+      {
+        "label": "Vortex",
+        "url": "https://arxiv.org/abs/2606.06453"
+      },
+      {
+        "label": "Vortex project",
+        "url": "https://infini-ai-lab.github.io/vortex_torch/"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://dreaming-panda.github.io/"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=en&user=4Bb5KRYAAAAJ"
+      }
+    ]
+  },
+  {
+    "slug": "xinrui-zhong",
+    "name": "Xinrui Zhong",
+    "aliases": ["Xinrui Zhong"],
+    "affiliations": ["Rice University"],
+    "homepage": "",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["Vortex", "sparse attention", "LLM serving"],
+    "notes": "Coauthor of Vortex. The Vortex paper and project page list Rice University as the paper-time affiliation.",
+    "sources": [
+      {
+        "label": "Vortex",
+        "url": "https://arxiv.org/abs/2606.06453"
+      },
+      {
+        "label": "Vortex project",
+        "url": "https://infini-ai-lab.github.io/vortex_torch/"
+      }
+    ]
+  },
+  {
+    "slug": "qilong-feng",
+    "name": "Qilong Feng",
+    "aliases": ["Qilong Feng"],
+    "affiliations": ["Carnegie Mellon University"],
+    "homepage": "",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["Vortex", "sparse attention", "LLM serving"],
+    "notes": "Coauthor of Vortex. The Vortex paper and project page list Carnegie Mellon University as the paper-time affiliation.",
+    "sources": [
+      {
+        "label": "Vortex",
+        "url": "https://arxiv.org/abs/2606.06453"
+      },
+      {
+        "label": "Vortex project",
+        "url": "https://infini-ai-lab.github.io/vortex_torch/"
+      }
+    ]
+  },
+  {
+    "slug": "ranajoy-sadhukhan",
+    "name": "Ranajoy Sadhukhan",
+    "aliases": ["Ranajoy Sadhukhan"],
+    "affiliations": ["Carnegie Mellon University"],
+    "homepage": "",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["Vortex", "sparse attention", "LLM serving"],
+    "notes": "Coauthor of Vortex. The Vortex paper and project page list Carnegie Mellon University as the paper-time affiliation.",
+    "sources": [
+      {
+        "label": "Vortex",
+        "url": "https://arxiv.org/abs/2606.06453"
+      },
+      {
+        "label": "Vortex project",
+        "url": "https://infini-ai-lab.github.io/vortex_torch/"
+      }
+    ]
+  },
+  {
+    "slug": "yang-zhou-vortex",
+    "name": "Yang Zhou",
+    "aliases": ["Yang Zhou"],
+    "affiliations": ["Carnegie Mellon University"],
+    "homepage": "",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["Vortex", "sparse attention", "LLM serving"],
+    "notes": "Coauthor of Vortex. The Vortex paper and project page list Carnegie Mellon University as the paper-time affiliation. The slug keeps this profile distinct from other authors with the same name.",
+    "sources": [
+      {
+        "label": "Vortex",
+        "url": "https://arxiv.org/abs/2606.06453"
+      },
+      {
+        "label": "Vortex project",
+        "url": "https://infini-ai-lab.github.io/vortex_torch/"
+      }
+    ]
+  },
+  {
+    "slug": "michael-qizhe-shieh",
+    "name": "Michael Qizhe Shieh",
+    "aliases": ["Michael Qizhe Shieh", "Qizhe Shieh"],
+    "affiliations": ["National University of Singapore", "Carnegie Mellon University", "Google DeepMind / Google Brain", "Shanghai Jiao Tong University"],
+    "homepage": "https://michaelshieh.com/",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["Vortex", "sparse attention", "LLM serving", "natural language processing"],
+    "notes": "Coauthor of Vortex. NUS profile and homepage identify him as an assistant professor at the National University of Singapore, with MS/PhD from Carnegie Mellon University, prior Google DeepMind / Google Brain work, and undergraduate study in the SJTU ACM Class.",
+    "sources": [
+      {
+        "label": "Vortex",
+        "url": "https://arxiv.org/abs/2606.06453"
+      },
+      {
+        "label": "Vortex project",
+        "url": "https://infini-ai-lab.github.io/vortex_torch/"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://michaelshieh.com/"
+      },
+      {
+        "label": "NUS profile",
+        "url": "https://www.comp.nus.edu.sg/cs/people/mshieh/"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=en&user=J_pLyhIAAAAJ"
+      }
+    ]
+  },
+  {
+    "slug": "zhihao-jia",
+    "name": "Zhihao Jia",
+    "aliases": ["Zhihao Jia"],
+    "affiliations": ["Carnegie Mellon University", "Facebook / Meta", "Stanford University"],
+    "homepage": "https://www.cs.cmu.edu/~zhihaoj2/",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["Vortex", "ML systems", "LLM serving", "distributed systems", "programming systems"],
+    "notes": "Coauthor of Vortex. Homepage and CMU CSD profile identify him as an assistant professor in CMU Computer Science working on systems and machine learning; the CMU profile records prior work as a Facebook research scientist and a Stanford PhD.",
+    "sources": [
+      {
+        "label": "Vortex",
+        "url": "https://arxiv.org/abs/2606.06453"
+      },
+      {
+        "label": "Vortex project",
+        "url": "https://infini-ai-lab.github.io/vortex_torch/"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://www.cs.cmu.edu/~zhihaoj2/"
+      },
+      {
+        "label": "CMU CSD profile",
+        "url": "https://www.csd.cs.cmu.edu/people/faculty/zhihao-jia"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=en&user=0IWLFR4AAAAJ"
+      }
+    ]
+  },
+  {
+    "slug": "beidi-chen",
+    "name": "Beidi Chen",
+    "aliases": ["Beidi Chen"],
+    "affiliations": ["Carnegie Mellon University", "Amazon Scholar", "FAIR / Meta", "Stanford University", "Rice University"],
+    "homepage": "https://www.andrew.cmu.edu/user/beidic/",
+    "github": "https://github.com/keroro824",
+    "x": "https://x.com/BeidiChen",
+    "xConfidence": "high",
+    "topics": ["Vortex", "sparse attention", "long-context efficiency", "LLM serving", "efficient AI"],
+    "notes": "Senior coauthor of Vortex and PI of Infini AI Lab. Lab and GitHub profiles identify her as a Carnegie Mellon University assistant professor and Amazon Scholar, with prior FAIR / Meta, Stanford and Rice affiliations.",
+    "sources": [
+      {
+        "label": "Vortex",
+        "url": "https://arxiv.org/abs/2606.06453"
+      },
+      {
+        "label": "Vortex project",
+        "url": "https://infini-ai-lab.github.io/vortex_torch/"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://www.andrew.cmu.edu/user/beidic/"
+      },
+      {
+        "label": "Infini AI Lab",
+        "url": "https://www.infini-ai-lab.cmu.edu/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/keroro824"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/BeidiChen"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=en&user=jCNJhFcAAAAJ"
+      }
+    ]
   }
 ]

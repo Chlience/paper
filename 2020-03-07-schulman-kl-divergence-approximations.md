@@ -17,7 +17,7 @@ Updated-At: 2026-06-21 10:17
 
 ## 作者与关系
 
-- [John Schulman](/authors/john-schulman/): 个人博客作者。当前主页显示其为 Thinking Machines cofounder and chief scientist；此前在 Anthropic Alignment Science；更早是 OpenAI cofounder，并在 OpenAI 领导 ChatGPT 创建和 2022-2024 post-training team。主页还显示其 UC Berkeley PhD advisor 为 [Pieter Abbeel](/authors/pieter-abbeel/)。
+- [John Schulman](/authors/john-schulman/): Thinking Machines.
 
 ## 一句话结论
 
@@ -296,6 +296,16 @@ $$
 - 如果样本来自 rollout policy $\pi_{\text{rollout}}$，而目标 KL 是 $\pi_\theta$ 对 reference 或 old policy 的 KL，必须先处理采样分布和 importance ratio。
 - 对 LLM 自回归序列，按 token 求 `k3` 均值可以作为诊断；若要优化 sequence-level KL，需要考虑 prefix distribution 对后续 token 的影响。
 - `k3` 非负不表示训练一定稳定。它只能更稳定地测量 drift；是否允许 drift，要由 reward、entropy、clip fraction、任务分布和安全边界一起判断。
+
+## OpenReview / 审稿意见吸收
+
+- Venue status: 当前档案未记录公开 peer-review 状态。
+- Public reviews: 当前档案未记录可可靠匹配的 OpenReview / ARR / 会议 reviewer comments。
+- Ratings / confidence: 无公开评分可用于校准。
+- Reviewer consensus: 暂无。
+- Main criticisms: 暂无公开 reviewer 质疑可引用；可信度主要由论文、技术报告、项目证据和本地一致性检查决定。
+- Author response: 暂无公开 rebuttal 记录。
+- 对本文可信度的影响: 按未完成公开审稿吸收处理，结论需要依赖实验设置、baseline 强度、复现证据和跨论文一致性校准。
 
 ## 本地讨论补充
 

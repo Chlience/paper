@@ -20,7 +20,7 @@ Updated-At: 2026-06-19 22:20
 - Muon is Scalable for LLM Training: https://arxiv.org/abs/2502.16982
 - Moonlight implementation/project: https://github.com/MoonshotAI/Moonlight
 - Kimi K2: Open Agentic Intelligence, MuonClip section: https://arxiv.org/html/2507.20534v1
-- Why Muon Outperforms Adam: A Curvature Perspective: https://arxiv.org/abs/2606.04662，本地笔记：[2606.04662](/papers/2606.04662-muon-outperforms-adam-curvature/)
+- Why Muon Outperforms Adam: A Curvature Perspective: [arXiv](https://arxiv.org/abs/2606.04662)，本地笔记：[2606.04662](/papers/2606.04662-muon-outperforms-adam-curvature/)
 - Convergence of Muon with Newton-Schulz: https://arxiv.org/abs/2601.19156
 - Muown: Row-Norm Control for Muon Optimization: https://arxiv.org/abs/2605.10797
 - Gram Newton-Schulz: A Fast, Hardware-Aware Newton-Schulz Algorithm for Muon: https://tridao.me/blog/2026/gram-newton-schulz/
@@ -29,7 +29,7 @@ Updated-At: 2026-06-19 22:20
 
 ## 作者与关系
 
-- Keller Jordan: `kellerjordan.github.io` 个人研究博客作者，GitHub 账号为 `KellerJordan`，维护 `Muon`、`modded-nanogpt`、`cifar10-airbench` 等训练 speedrun / optimizer 实验仓库；About 页面直接链接 `https://x.com/kellerjordan0`。
+- Keller Jordan: Independent Researcher.
 - Muon implementation citation authors: Keller Jordan, Yuchen Jin, Vlado Boza, Jiacheng You, Franz Cesista, Laker Newhouse, Jeremy Bernstein。Keller Jordan 的仓库 README 以该列表给出 Muon 引用格式。
 - Moonlight / Kimi Team: `Muon is Scalable for LLM Training` 由 Kimi Team / Moonshot AI 主导，核心补充是 large-scale Muon 的 weight decay、per-parameter update scale、Distributed Muon 和 Moonlight MoE 预训练结果。
 - Kimi K2 Team: 在 K2 report 中把 Muon 扩展为 MuonClip，加入 QK-Clip 控制 attention logits 爆炸，用于 1T total parameter MoE 的长程预训练。
@@ -256,6 +256,16 @@ Muown 的做法是把 row-magnitude vector 作为显式 optimizer variable 处�
 - Muon 的“约 2x compute efficiency”来自特定 scaling-law 设置，不能直接换算为所有团队的 wall-clock 或成本下降。
 - QK-Clip 解决的是大规模 attention logits 动态问题；它引入了额外训练干预，需要评估对模型质量、attention head 分工和 long-context 泛化的影响。
 - 更新方向正交化可能提高 rare directions 的学习强度，也可能在某些任务中放大噪声方向；实际部署需要记录 layerwise update RMS、spectral norm、QK logits 和 loss spikes。
+
+## OpenReview / 审稿意见吸收
+
+- Venue status: 当前档案未记录公开 peer-review 状态。
+- Public reviews: 当前档案未记录可可靠匹配的 OpenReview / ARR / 会议 reviewer comments。
+- Ratings / confidence: 无公开评分可用于校准。
+- Reviewer consensus: 暂无。
+- Main criticisms: 暂无公开 reviewer 质疑可引用；可信度主要由论文、技术报告、项目证据和本地一致性检查决定。
+- Author response: 暂无公开 rebuttal 记录。
+- 对本文可信度的影响: 按未完成公开审稿吸收处理，结论需要依赖实验设置、baseline 强度、复现证据和跨论文一致性校准。
 
 ## 本地讨论补充
 

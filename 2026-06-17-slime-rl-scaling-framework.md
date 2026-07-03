@@ -27,9 +27,9 @@ Version: slime latest release `v0.3.0`; docs snapshot `main@243773c`; docs last 
 
 ## 作者与关系
 
-- Project / Organization: `THUDM/slime`，官方文档署名 slime Team，仓库由 THUDM GitHub organization 维护。
-- Citation authors: Zilin Zhu、Chengxing Xie、Xin Lv and slime Contributors；README 标注 Xin Lv 为 corresponding author。
-- GitHub release owner / major maintainer signal: `v0.3.0` release 由 `zhuzilin` 发布；contributors API 显示 `zhuzilin`、`fzyzcjy`、`yitianlian`、`lilei199908` 等贡献靠前。
+- Project / Organization: THUDM / slime Team.
+- Citation authors: Zilin Zhu, Chengxing Xie, Xin Lv and slime Contributors.
+- GitHub release owner / major maintainer signal: `v0.3.0` release 由 `zhuzilin` 发布.
 - 与 GLM / Zhipu / Tsinghua 生态关系：官方文档说明 slime 是 GLM-5.2、GLM-5.1、GLM-5、GLM-4.7、GLM-4.6、GLM-4.5 背后的 RL 训练框架。`2602.15763` GLM-5 技术报告中，Xin Lv 是 tech lead，Chengxing Xie 与 Zilin Zhu 出现在 core contributors 中，构成直接人员重叠。
 - 与已存档论文作者重叠：与 [2602.15763](/papers/2602.15763-glm-5-agentic-engineering/) 直接重叠；与 [2409.19256](/papers/2409.19256-hybridflow-rlhf-framework/) / [2026-06-16](/papers/2026-06-16-verl-rl-optimization-algorithms/) 暂未确认直接作者重叠，但主题上同属大规模 RL post-training infrastructure；与 [2605.14220](/papers/2605.14220-training-inference-mismatch-llm-rl/) 通过 train-rollout logprob consistency、TIS 和 backend mismatch 形成系统问题连接。
 - 跨机构桥接：slime 文档连接 THUDM / Tsinghua、Z.ai / GLM 系列、SGLang 社区、Megatron-LM 生态和后训练开源社区；同时有 vime、Miles、Relax、APRIL、TritonForge 等下游系统把 slime 作为 RL substrate 使用。
@@ -155,6 +155,24 @@ slime 文档把正确性、可复现性和 CI 明确列为基础设施问题。`
 | `v0.3.0` updates | agent module、coding-agent RL、fully async、variable batch、host-memory optimization、delta sync | slime 从通用 RL 框架推进到 agent-first RL infrastructure |
 | CI / correctness | train-rollout logprob consistency、GPU placement、multi-sample、delta update validation | 直接回应 RL system silent failure |
 
+## 证据链强度评估
+
+### 强证据
+
+- 文档明确把 Megatron 训练、SGLang rollout、Ray 资源管理、Data Buffer、custom generation / reward 和 agentic hook 放到同一套控制面。
+- 官方材料声称已支撑 GLM-4.5 到 GLM-5.2 系列 RL training，这类生产验证强于只展示 toy example。
+- CI / correctness 条目覆盖 logprob consistency、GPU placement、multi-sample 和 delta update，直接对应 RL system 中常见静默错误。
+
+### 中等强度证据
+
+- Quick Start、示例脚本和配置约束能支持可运行性判断，但没有提供跨框架公平 benchmark。
+- dynamic sampling、partial rollout 和 delta sync 的机制合理，具体收益需要绑定模型、环境、reward 和硬件。
+
+### 需要谨慎的推论
+
+- `latest` 镜像和快速迭代文档会降低长期复现实验的稳定性。
+- slime 的强项来自 Megatron + SGLang 深度集成，迁移到其他 rollout backend 时需要重新评估一致性、吞吐和调试成本。
+
 ## 与本地档案的关系
 
 - 与 [2602.15763](/papers/2602.15763-glm-5-agentic-engineering/)：GLM-5 报告给出 slime 在 production agentic RL 中的具体用法，包括异步 rollout、TITO、direct double-sided IS、stale sample dropping、DP-aware routing 和 PD disaggregation；slime 文档提供对应框架入口、版本快照和 Quick Start surface。
@@ -165,6 +183,16 @@ slime 文档把正确性、可复现性和 CI 明确列为基础设施问题。`
 - 与 [2606.00135](/papers/2606.00135-agentic-tool-calling-rl-training/)：tool-calling RL 论文强调 harness、tool schema、zero-variance prompts 和 policy update cost；slime 提供 `metadata`、custom generate、loss mask、custom reward 和 dynamic sampling 等工程接口。
 - 与 [2506.13585](/papers/2506.13585-minimax-m1-cispo-lightning-attention/)：MiniMax-M1 关注 long-output RL objective 和 Lightning Attention 架构效率；slime 关注 rollout/training 系统层吞吐和 agent trajectory 组织。两者都说明长输出/agent RL 需要同时处理算法、架构和系统。
 - 与 [2606.04101](/papers/2606.04101-ultraep-rack-scale-moe-load-balancing/)：UltraEP 处理 MoE expert load balancing；slime 的大 MoE RL 路线会直接受 EP、DeepEP、SGLang MoE serving 和 Megatron parallelism 影响。
+
+## OpenReview / 审稿意见吸收
+
+- Venue status: 当前档案未记录公开 peer-review 状态。
+- Public reviews: 当前档案未记录可可靠匹配的 OpenReview / ARR / 会议 reviewer comments。
+- Ratings / confidence: 无公开评分可用于校准。
+- Reviewer consensus: 暂无。
+- Main criticisms: 暂无公开 reviewer 质疑可引用；可信度主要由论文、技术报告、项目证据和本地一致性检查决定。
+- Author response: 暂无公开 rebuttal 记录。
+- 对本文可信度的影响: 按未完成公开审稿吸收处理，结论需要依赖实验设置、baseline 强度、复现证据和跨论文一致性校准。
 
 ## 本地讨论补充
 

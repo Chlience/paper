@@ -24,7 +24,7 @@ Updated-At: 2026-06-24 20:58
 
 ## 作者与关系
 
-- DeepSeek-AI: 论文署名组织；report 联系邮箱为 `research@deepseek.com`。
+- DeepSeek-AI: DeepSeek-AI.
 - Appendix Research & Engineering: 报告按 first name 字母序列出大量作者，且用 `*` 标记已离队成员。完整列表过长，本笔记记录为 DeepSeek-AI 组织论文。
 - 与 DeepSeek-R1 / DeepSeek-V3 系谱重叠的显著作者线索包括 Wenfeng Liang、Xiao Bi、Xingkai Yu、Junxiao Song、Peiyi Wang、Shirong Ma、Zhibin Gou、Zhihong Shao、Ziyi Gao、Daya Guo、Haowei Zhang、Runxin Xu、Ruoyu Zhang、Yu Wu、Z.F. Wu、Zhuoshu Li 等。
 - 与 mHC 相关作者线索：report 引用 `2512.24880` mHC 论文，DeepSeek-V4 appendix 中出现 Zhenda Xie、Huanqi Cao、Chenggang Zhao、Chengqi Deng、Jialiang Huang、Wangding Zeng、Wenfeng Liang 等与 mHC / DeepSeek 系列工程相关的同名作者。

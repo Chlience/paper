@@ -38,6 +38,11 @@ const forbiddenPaperMaintenancePatterns = [
   /homepage\s*\/\s*GitHub\s*\/\s*Scholar/i,
 ];
 
+const forbiddenAuthorBulletPatterns = [
+  /\b(equal contribution|corresponding author|corresponding|first author|senior author|project lead|core contributor|maintainer|submitter|arXiv submitter|contact author|advisor|lead|profile|homepage|GitHub|Hugging Face|Google Scholar|DBLP|OpenReview|LinkedIn|email|Research Scientist|Assistant Professor|Principal Researcher|PhD student|Ph\.D\. student|Ph\.D\. candidate|internship|intern|bio|Twitter|cofounder|chief scientist|shared|already tracked|also appears|appears in|author line|researcher at|working on|work done|verified|records|lists|advisor|supervised)\b/i,
+  /个人主页|主页|公开|邮箱|通讯|提交|脚注|贡献声明|研究方向|当前|后续|此前|更早|线索|证据|显示|说明|标注|标为|连接|重叠|博士|副教授|教授|研究员|学生|实习|导师|贡献|维护|组织作者|第一作者|通讯作者|提交者|搜索结果|标题页|加粗作者|本地已有档案|另署|作者组|注释|参与|负责|出现/,
+];
+
 const fail = (message) => {
   console.error(message);
   process.exitCode = 1;
@@ -50,6 +55,21 @@ const readMarkdownFiles = async () => {
 
 const getTopLevelField = (markdown, name) =>
   markdown.match(new RegExp(`^${name}:\\s*(.+)$`, 'm'))?.[1]?.trim() ?? '';
+
+const getSection = (markdown, heading) => {
+  const lines = markdown.split('\n');
+  const start = lines.findIndex((line) => line.trim() === `## ${heading}`);
+  if (start === -1) return '';
+
+  const collected = [];
+  for (const line of lines.slice(start + 1)) {
+    if (line.startsWith('## ')) break;
+    collected.push(line);
+  }
+  return collected.join('\n').trim();
+};
+
+const authorBulletPattern = /^- (?:\[[^\]]+\]\([^)]+\)|[^:：`]{1,100})[:：]\s+(.+)$/;
 
 for (const file of await readMarkdownFiles()) {
   const markdown = await fs.readFile(path.join(repoRoot, file), 'utf8');
@@ -71,6 +91,19 @@ for (const file of await readMarkdownFiles()) {
     for (const pattern of forbiddenPaperMaintenancePatterns) {
       if (pattern.test(markdown)) {
         fail(`${file} contains paper-maintenance text matching ${pattern}.`);
+      }
+    }
+
+    const authorSection = getSection(markdown, '作者与关系');
+    const authorLines = authorSection.split('\n');
+    for (const [index, line] of authorLines.entries()) {
+      const match = line.match(authorBulletPattern);
+      if (!match) continue;
+
+      for (const pattern of forbiddenAuthorBulletPatterns) {
+        if (pattern.test(match[1])) {
+          fail(`${file}:${index + 1} author list bullet contains non-institution detail matching ${pattern}: ${line}`);
+        }
       }
     }
   }

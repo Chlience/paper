@@ -17,14 +17,14 @@ Updated-At: 2026-06-28 14:28
 
 ## 作者与关系
 
-- [Xin Cheng](/authors/xin-cheng-deepseek/): Peking University / DeepSeek-AI；DSpark 等贡作者和 contact author；也是 [2601.07372 Engram](/papers/2601.07372-conditional-memory-engram-scalable-lookup/) 第一作者。
-- [Xingkai Yu](/authors/xingkai-yu/): DeepSeek-AI；DSpark 等贡作者和 contact author；在 [DeepSeekMoE](/papers/2401.06066-deepseekmoe-expert-specialization/)、[DeepSeek-R1](/papers/2501.12948-deepseek-r1-rl-reasoning/)、Engram 和 DeepSeek-V4 中重复出现。
-- [Chenze Shao](/authors/chenze-shao/): DSpark 等贡作者和 contact author；OpenReview profile 记录 ICT CAS PhD、Tencent WeChat AI 研究员经历和 `deepseek.com` confirmed email；GitHub `shaochenze` 标注 DeepSeek 并链接个人主页。
-- [Jiashi Li](/authors/jiashi-li/): DSpark 等贡作者和 contact author；OpenReview profile 记录 DeepSeek researcher 与 Peking University 本科背景，GitHub `beginlner` 显示同名；此前也出现在 [DeepSeekMoE](/papers/2401.06066-deepseekmoe-expert-specialization/)。
-- [Yunfan Xiong](/authors/yunfan-xiong/): DSpark 等贡作者和 contact author；OpenReview profile 记录 Peking University MS / undergraduate 背景，DSpark 标题页给出 `yunfanxiong@deepseek.com`。
+- [Xin Cheng](/authors/xin-cheng-deepseek/): Peking University / DeepSeek-AI.
+- [Xingkai Yu](/authors/xingkai-yu/): DeepSeek-AI.
+- [Chenze Shao](/authors/chenze-shao/): DeepSeek AI.
+- [Jiashi Li](/authors/jiashi-li/): DeepSeek AI.
+- [Yunfan Xiong](/authors/yunfan-xiong/): Peking University.
 - Yi Qian, Jiaqi Zhu, Shirong Ma, Xiaokang Zhang, Jiasheng Ye, Qinyu Chen, Chengqi Deng, Jiping Yu, Zhengyan Zhang, Yixuan Wei, Yixuan Tan, Wenkai Yang, Zhean Xu, Xuanyu Wang, Muyang Chen, Rui Tian, Xiao Bi, Zhewen Hao, Shaoyuan Chen, Huanqi Cao, Wentao Zhang, Anyi Xu: DSpark 标题页标注 DeepSeek-AI。
 - [Damai Dai](/authors/damai-dai/), [Runxin Xu](/authors/runxin-xu/), [Yu Wu](/authors/yu-wu-deepseek/), [Wenfeng Liang](/authors/wenfeng-liang/): DeepSeek 系列、MoE、R1 / alignment 或组织层高频作者。
-- [Huishuai Zhang](/authors/huishuai-zhang/), [Dongyan Zhao](/authors/dongyan-zhao/): Peking University；也出现在 Engram，提供 PKU 学术侧连接。
+- [Huishuai Zhang](/authors/huishuai-zhang/), [Dongyan Zhao](/authors/dongyan-zhao/): Peking University.
 
 ## 一句话结论
 
