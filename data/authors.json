@@ -6542,5 +6542,345 @@
         "url": "https://aclanthology.org/2022.naacl-demo.9/"
       }
     ]
+  },
+  {
+    "slug": "jubayer-ibn-hamid",
+    "name": "Jubayer Ibn Hamid",
+    "aliases": ["Jubayer Ibn Hamid", "Jubayer Hamid"],
+    "affiliations": ["Stanford University", "Google"],
+    "homepage": "https://jubayer-ibn-hamid.github.io/",
+    "github": "https://github.com/Jubayer-Hamid",
+    "x": "https://x.com/jubayer_hamid",
+    "xConfidence": "high",
+    "topics": ["SPIRAL", "set reinforcement learning", "inference compute", "reinforcement learning", "scientific discovery"],
+    "notes": "Equal-contribution first author of SPIRAL. Public homepage lists Stanford CS PhD status, SAIL, Google student researcher role, and advisors Dorsa Sadigh and Chelsea Finn.",
+    "sources": [
+      {
+        "label": "SPIRAL",
+        "url": "https://arxiv.org/abs/2606.23595"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://jubayer-ibn-hamid.github.io/"
+      },
+      {
+        "label": "Stanford Profile",
+        "url": "https://profiles.stanford.edu/jubayer-hamid"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=3G2EbP4AAAAJ&hl=en"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/Jubayer-Hamid"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/jubayer_hamid"
+      }
+    ]
+  },
+  {
+    "slug": "ifdita-hasan-orney",
+    "name": "Ifdita Hasan Orney",
+    "aliases": ["Ifdita Hasan Orney", "Ifdita Hasan"],
+    "affiliations": ["Stanford University"],
+    "homepage": "https://ifdita-hasan.github.io/",
+    "github": "https://github.com/ifdita-hasan",
+    "x": "https://x.com/ifdita_hasan",
+    "xConfidence": "high",
+    "topics": ["SPIRAL", "set reinforcement learning", "reinforcement learning", "human-centered AI", "Stanford AI Lab"],
+    "notes": "Equal-contribution first author of SPIRAL. Public homepage lists Stanford CS master's status and advisors Dorsa Sadigh and Emma Brunskill.",
+    "sources": [
+      {
+        "label": "SPIRAL",
+        "url": "https://arxiv.org/abs/2606.23595"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://ifdita-hasan.github.io/"
+      },
+      {
+        "label": "Stanford Profile",
+        "url": "https://profiles.stanford.edu/ifdita-hasan-orney"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=ueRMDI0AAAAJ&hl=en"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/ifdita-hasan"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Ifdita_Hasan_Orney1"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/ifdita_hasan"
+      }
+    ]
+  },
+  {
+    "slug": "michael-y-li",
+    "name": "Michael Y. Li",
+    "aliases": ["Michael Y. Li", "Michael Li"],
+    "affiliations": ["Stanford University", "Princeton University"],
+    "homepage": "https://michaelyli.github.io/",
+    "github": "https://github.com/michaelyli",
+    "x": "https://x.com/michaelyli_",
+    "xConfidence": "high",
+    "topics": ["SPIRAL", "inference compute", "long-context memory", "statistical machine learning", "Monte Carlo"],
+    "notes": "Coauthor of SPIRAL. Public homepage lists Stanford CS PhD status, advisors Noah Goodman and Emily Fox, and Princeton undergraduate background.",
+    "sources": [
+      {
+        "label": "SPIRAL",
+        "url": "https://arxiv.org/abs/2606.23595"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://michaelyli.github.io/"
+      },
+      {
+        "label": "CoCoLab People",
+        "url": "https://cocolab.stanford.edu/people"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=N1Gjo24AAAAJ&hl=en"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/michaelyli"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Michael_Y._Li1"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/michaelyli_"
+      }
+    ]
+  },
+  {
+    "slug": "omar-shaikh",
+    "name": "Omar Shaikh",
+    "aliases": ["Omar Shaikh"],
+    "affiliations": ["Stanford University", "Georgia Institute of Technology"],
+    "homepage": "https://oshaikh.com/",
+    "github": "https://github.com/oshaikh13",
+    "x": "https://x.com/oshaikh13",
+    "xConfidence": "high",
+    "topics": ["SPIRAL", "human-AI grounding", "HCI", "NLP", "LLM agents"],
+    "notes": "Coauthor of SPIRAL. Public homepage lists Stanford CS PhD status, advisors Michael Bernstein and Diyi Yang, and Georgia Tech undergraduate background.",
+    "sources": [
+      {
+        "label": "SPIRAL",
+        "url": "https://arxiv.org/abs/2606.23595"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://oshaikh.com/"
+      },
+      {
+        "label": "CV",
+        "url": "https://oshaikh.com/cv/"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=vdPcthgAAAAJ&hl=en"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/oshaikh13"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/oshaikh13"
+      }
+    ]
+  },
+  {
+    "slug": "yoonho-lee",
+    "name": "Yoonho Lee",
+    "aliases": ["Yoonho Lee"],
+    "affiliations": ["Stanford University"],
+    "homepage": "https://yoonholee.com/",
+    "github": "https://github.com/yoonholee",
+    "x": "https://x.com/yoonholeee",
+    "xConfidence": "high",
+    "topics": ["SPIRAL", "continual learning", "text optimization", "AI agents", "long-horizon credit assignment"],
+    "notes": "Coauthor of SPIRAL. Public homepage lists Stanford CS PhD status and Chelsea Finn as advisor.",
+    "sources": [
+      {
+        "label": "SPIRAL",
+        "url": "https://arxiv.org/abs/2606.23595"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://yoonholee.com/"
+      },
+      {
+        "label": "Stanford Profile",
+        "url": "https://profiles.stanford.edu/yoonho-lee"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=BAAZ_ysAAAAJ&hl=en"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/yoonholee"
+      },
+      {
+        "label": "ORCID",
+        "url": "https://orcid.org/0000-0002-5146-5444"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/yoonholeee"
+      }
+    ]
+  },
+  {
+    "slug": "dorsa-sadigh",
+    "name": "Dorsa Sadigh",
+    "aliases": ["Dorsa Sadigh"],
+    "affiliations": ["Stanford University", "Google DeepMind", "University of California, Berkeley"],
+    "homepage": "https://dorsa.fyi/",
+    "github": "https://github.com/dsadigh",
+    "x": "https://x.com/DorsaSadigh",
+    "xConfidence": "high",
+    "topics": ["SPIRAL", "set reinforcement learning", "robot learning", "human-robot interaction", "reinforcement learning"],
+    "notes": "Coauthor of SPIRAL and Stanford CS faculty member. Public profiles connect her to Stanford SAIL/HAI, Google DeepMind, and Berkeley training.",
+    "sources": [
+      {
+        "label": "SPIRAL",
+        "url": "https://arxiv.org/abs/2606.23595"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://dorsa.fyi/"
+      },
+      {
+        "label": "Stanford Profile",
+        "url": "https://profiles.stanford.edu/dorsa-sadigh"
+      },
+      {
+        "label": "Stanford HAI",
+        "url": "https://hai.stanford.edu/people/dorsa-sadigh"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=ZaJEZpYAAAAJ&hl=en"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/dsadigh"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Dorsa_Sadigh1"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/DorsaSadigh"
+      }
+    ]
+  },
+  {
+    "slug": "chelsea-finn",
+    "name": "Chelsea Finn",
+    "aliases": ["Chelsea Finn", "Chelsea B. Finn"],
+    "affiliations": ["Stanford University", "Physical Intelligence", "University of California, Berkeley", "MIT", "Google Brain", "Google DeepMind"],
+    "homepage": "https://ai.stanford.edu/~cbfinn/",
+    "github": "https://github.com/cbfinn",
+    "x": "https://x.com/chelseabfinn",
+    "xConfidence": "high",
+    "topics": ["SPIRAL", "robot learning", "meta-learning", "reinforcement learning", "agents"],
+    "notes": "Coauthor of SPIRAL and Stanford CS/EE faculty member. Public homepage lists IRIS lab, Physical Intelligence cofounder role, Berkeley PhD, MIT undergraduate background, and prior Google Brain/DeepMind work.",
+    "sources": [
+      {
+        "label": "SPIRAL",
+        "url": "https://arxiv.org/abs/2606.23595"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://ai.stanford.edu/~cbfinn/"
+      },
+      {
+        "label": "IRIS Lab",
+        "url": "https://irislab.stanford.edu/"
+      },
+      {
+        "label": "Stanford Profile",
+        "url": "https://profiles.stanford.edu/chelsea-finn"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=vfPE6hgAAAAJ"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/cbfinn"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Chelsea_Finn1"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/chelseabfinn"
+      }
+    ]
+  },
+  {
+    "slug": "noah-goodman",
+    "name": "Noah Goodman",
+    "aliases": ["Noah Goodman", "Noah D. Goodman"],
+    "affiliations": ["Stanford University", "MIT", "University of Texas at Austin", "University of Arizona"],
+    "homepage": "https://cocolab.stanford.edu/ndg",
+    "github": "",
+    "x": "https://x.com/noahdgoodman",
+    "xConfidence": "high",
+    "topics": ["SPIRAL", "probabilistic cognition", "reinforcement learning", "language model reasoning", "inference compute"],
+    "notes": "Coauthor of SPIRAL and Stanford professor connected to CoCoLab. Public CV and profiles connect him to Stanford, MIT, University of Texas at Austin, and University of Arizona.",
+    "sources": [
+      {
+        "label": "SPIRAL",
+        "url": "https://arxiv.org/abs/2606.23595"
+      },
+      {
+        "label": "CoCoLab",
+        "url": "https://cocolab.stanford.edu/ndg"
+      },
+      {
+        "label": "CV",
+        "url": "https://cocolab.stanford.edu/ndg-cv.html"
+      },
+      {
+        "label": "Stanford Profile",
+        "url": "https://profiles.stanford.edu/noah-goodman"
+      },
+      {
+        "label": "Stanford HAI",
+        "url": "https://hai.stanford.edu/people/noah-goodman"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=OUpIbcQAAAAJ"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Noah_Goodman1"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/noahdgoodman"
+      }
+    ]
   }
 ]
