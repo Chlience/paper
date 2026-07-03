@@ -5573,5 +5573,487 @@
         "url": "https://www.kdd.org/kdd2018/accepted-papers"
       }
     ]
+  },
+  {
+    "slug": "rishabh-agarwal",
+    "name": "Rishabh Agarwal",
+    "aliases": ["Rishabh Agarwal"],
+    "affiliations": ["Google DeepMind", "Mila", "McGill University", "Google Brain", "IIT Bombay", "Periodic Labs", "Meta"],
+    "homepage": "https://agarwl.github.io/",
+    "github": "https://github.com/agarwl",
+    "x": "https://x.com/agarwl_",
+    "xConfidence": "high",
+    "topics": ["on-policy distillation", "generalized knowledge distillation", "reinforcement learning", "LLM distillation", "reasoning"],
+    "notes": "Equal-contribution and corresponding author of On-Policy Distillation of Language Models. The paper lists Google DeepMind and Mila. Public Mila and homepage sources connect him to Google DeepMind, McGill, Mila, Google Brain, IIT Bombay, and later Periodic Labs.",
+    "sources": [
+      {
+        "label": "On-Policy Distillation",
+        "url": "https://arxiv.org/abs/2306.13649"
+      },
+      {
+        "label": "Mila profile",
+        "url": "https://mila.quebec/en/directory/rishabh-agarwal"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://agarwl.github.io/"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/agarwl_"
+      }
+    ]
+  },
+  {
+    "slug": "nino-vieillard",
+    "name": "Nino Vieillard",
+    "aliases": ["Nino Vieillard"],
+    "affiliations": ["Google DeepMind", "Google", "CentraleSupelec"],
+    "homepage": "https://scholar.google.com/citations?hl=en&user=p25Y-8YAAAAJ",
+    "github": "",
+    "x": "https://x.com/nino_vieillard",
+    "xConfidence": "high",
+    "topics": ["on-policy distillation", "generalized knowledge distillation", "reinforcement learning", "RLHF", "language model alignment"],
+    "notes": "Equal-contribution and corresponding author of On-Policy Distillation of Language Models. The paper lists Google DeepMind. Public Scholar and X profiles align with the Google DeepMind RLHF / alignment publication record.",
+    "sources": [
+      {
+        "label": "On-Policy Distillation",
+        "url": "https://arxiv.org/abs/2306.13649"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=en&user=p25Y-8YAAAAJ"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/nino_vieillard"
+      }
+    ]
+  },
+  {
+    "slug": "yongchao-zhou",
+    "name": "Yongchao Zhou",
+    "aliases": ["Yongchao Zhou"],
+    "affiliations": ["Google DeepMind", "University of Toronto", "Vector Institute", "xAI", "micro1"],
+    "homepage": "https://openreview.net/profile?id=~Yongchao_Zhou1",
+    "github": "",
+    "x": "https://x.com/Yongchao_Zhou_",
+    "xConfidence": "high",
+    "topics": ["on-policy distillation", "language model distillation", "large language models", "reasoning", "post-training"],
+    "notes": "Coauthor of On-Policy Distillation of Language Models. The paper lists Google DeepMind and University of Toronto. Public OpenReview, Scholar, LinkedIn snippets, and X profile connect him to University of Toronto, Vector Institute, Google DeepMind, xAI, and micro1.",
+    "sources": [
+      {
+        "label": "On-Policy Distillation",
+        "url": "https://arxiv.org/abs/2306.13649"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Yongchao_Zhou1"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=en&user=35M6rhsAAAAJ"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/Yongchao_Zhou_"
+      }
+    ]
+  },
+  {
+    "slug": "piotr-stanczyk",
+    "name": "Piotr Stanczyk",
+    "aliases": ["Piotr Stanczyk"],
+    "affiliations": ["Google DeepMind", "Google"],
+    "homepage": "https://scholar.google.com/citations?hl=en&user=fKVK0dYAAAAJ",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["on-policy distillation", "machine learning infrastructure", "language model distillation"],
+    "notes": "Coauthor of On-Policy Distillation of Language Models, with paper footnote credit for infrastructure contribution. The paper lists Google DeepMind. Public Scholar and professional profile snippets align with Google / Google DeepMind.",
+    "sources": [
+      {
+        "label": "On-Policy Distillation",
+        "url": "https://arxiv.org/abs/2306.13649"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=en&user=fKVK0dYAAAAJ"
+      },
+      {
+        "label": "LinkedIn",
+        "url": "https://ch.linkedin.com/in/piotr-stanczyk-a86b9314"
+      }
+    ]
+  },
+  {
+    "slug": "sabela-ramos",
+    "name": "Sabela Ramos",
+    "aliases": ["Sabela Ramos"],
+    "affiliations": ["Google DeepMind", "Google Research", "YouTube", "ETH Zurich", "University of A Coruna"],
+    "homepage": "https://research.google/people/sabelaramos/",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["on-policy distillation", "reinforcement learning infrastructure", "language model distillation", "high-performance computing"],
+    "notes": "Coauthor of On-Policy Distillation of Language Models, with paper footnote credit for infrastructure contribution. The paper lists Google DeepMind. Google Research profile connects her to HPC, ETH Zurich postdoctoral work, Google / YouTube, and RL tools.",
+    "sources": [
+      {
+        "label": "On-Policy Distillation",
+        "url": "https://arxiv.org/abs/2306.13649"
+      },
+      {
+        "label": "Google Research profile",
+        "url": "https://research.google/people/sabelaramos/"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=en&user=97trlAkAAAAJ"
+      }
+    ]
+  },
+  {
+    "slug": "matthieu-geist",
+    "name": "Matthieu Geist",
+    "aliases": ["Matthieu Geist"],
+    "affiliations": ["Google DeepMind", "Google Brain France", "Cohere", "Earth Species Project", "University of Lorraine", "CentraleSupelec", "University Paul Verlaine of Metz", "University of Lille"],
+    "homepage": "https://earthspecies.org/team/matthieu-geist/",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["reinforcement learning", "sequential decision making", "on-policy distillation", "language model alignment", "LLMs"],
+    "notes": "Coauthor of On-Policy Distillation of Language Models. The paper lists Google DeepMind. Public biography and Scholar sources connect him to Google Brain France, Cohere, Earth Species Project, University of Lorraine, CentraleSupelec, University Paul Verlaine of Metz, and University of Lille.",
+    "sources": [
+      {
+        "label": "On-Policy Distillation",
+        "url": "https://arxiv.org/abs/2306.13649"
+      },
+      {
+        "label": "Earth Species Project profile",
+        "url": "https://earthspecies.org/team/matthieu-geist/"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=en&user=ectPLEUAAAAJ"
+      }
+    ]
+  },
+  {
+    "slug": "olivier-bachem",
+    "name": "Olivier Bachem",
+    "aliases": ["Olivier Bachem"],
+    "affiliations": ["Google DeepMind", "Google Brain", "ETH Zurich"],
+    "homepage": "https://olivierbachem.ch/",
+    "github": "",
+    "x": "https://x.com/OlivierBachem",
+    "xConfidence": "high",
+    "topics": ["on-policy distillation", "Gemma", "reinforcement learning", "language model post-training", "coresets"],
+    "notes": "Coauthor of On-Policy Distillation of Language Models. The paper lists Google DeepMind. Public homepage identifies him as a Google DeepMind senior director / research scientist, co-leading Gemma, with earlier Google Brain and ETH Zurich history.",
+    "sources": [
+      {
+        "label": "On-Policy Distillation",
+        "url": "https://arxiv.org/abs/2306.13649"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://olivierbachem.ch/"
+      },
+      {
+        "label": "Google Research profile",
+        "url": "https://research.google/people/olivierbachem/"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/OlivierBachem"
+      }
+    ]
+  },
+  {
+    "slug": "fahim-tajwar",
+    "name": "Fahim Tajwar",
+    "aliases": ["Fahim Tajwar"],
+    "affiliations": ["Carnegie Mellon University", "Stanford University"],
+    "homepage": "https://tajwarfahim.github.io/",
+    "github": "https://github.com/tajwarfahim",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["maximum likelihood reinforcement learning", "RLVR", "post-training", "reasoning", "reinforcement learning"],
+    "notes": "Co-first and corresponding author of Maximum Likelihood Reinforcement Learning. Homepage identifies him as a CMU Machine Learning Department PhD student advised by Ruslan Salakhutdinov and Jeff Schneider, with BS and MS degrees from Stanford University.",
+    "sources": [
+      {
+        "label": "Maximum Likelihood Reinforcement Learning",
+        "url": "https://arxiv.org/abs/2602.02710"
+      },
+      {
+        "label": "Project page",
+        "url": "https://zanette-labs.github.io/MaxRL/"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://tajwarfahim.github.io/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/tajwarfahim"
+      }
+    ]
+  },
+  {
+    "slug": "guanning-zeng",
+    "name": "Guanning Zeng",
+    "aliases": ["Guanning Zeng"],
+    "affiliations": ["Tsinghua University", "Carnegie Mellon University"],
+    "homepage": "https://github.com/guanning03",
+    "github": "https://github.com/guanning03",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["maximum likelihood reinforcement learning", "RLVR", "representation learning", "reinforcement learning", "generative models"],
+    "notes": "Co-first and corresponding author of Maximum Likelihood Reinforcement Learning. arXiv v1 lists Tsinghua University; project page lists CMU; GitHub profile says PhD student at Carnegie Mellon University and previous undergraduate at Tsinghua.",
+    "sources": [
+      {
+        "label": "Maximum Likelihood Reinforcement Learning",
+        "url": "https://arxiv.org/abs/2602.02710"
+      },
+      {
+        "label": "Project page",
+        "url": "https://zanette-labs.github.io/MaxRL/"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=SU6ooAQAAAAJ"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/guanning03"
+      }
+    ]
+  },
+  {
+    "slug": "yueer-zhou",
+    "name": "Yueer Zhou",
+    "aliases": ["Yueer Zhou", "周玥儿"],
+    "affiliations": ["Zhejiang University", "Stanford University", "Carnegie Mellon University", "University of Southern California"],
+    "homepage": "https://zhouyueer7.github.io/",
+    "github": "https://github.com/zhouyueer7",
+    "x": "https://x.com/Yueer_Zhou",
+    "xConfidence": "high",
+    "topics": ["maximum likelihood reinforcement learning", "self-improving foundation models", "continual learning", "low-rank adaptation", "VLA"],
+    "notes": "Coauthor of Maximum Likelihood Reinforcement Learning. Homepage identifies her as a Zhejiang University undergraduate, working closely with Andrea Zanette and Fahim Tajwar at CMU and with USC Viterbi GVL Lab; Andrea Zanette's homepage lists her as former intern to Stanford MSCS.",
+    "sources": [
+      {
+        "label": "Maximum Likelihood Reinforcement Learning",
+        "url": "https://arxiv.org/abs/2602.02710"
+      },
+      {
+        "label": "Project page",
+        "url": "https://zanette-labs.github.io/MaxRL/"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://zhouyueer7.github.io/"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/Yueer_Zhou"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/zhouyueer7"
+      }
+    ]
+  },
+  {
+    "slug": "yuda-song",
+    "name": "Yuda Song",
+    "aliases": ["Yuda Song"],
+    "affiliations": ["Carnegie Mellon University", "FAIR Paris", "Amazon NYC", "Microsoft Research NYC", "University of California San Diego"],
+    "homepage": "https://yudasong.github.io/",
+    "github": "https://github.com/yudasong",
+    "x": "https://x.com/yus167",
+    "xConfidence": "high",
+    "topics": ["maximum likelihood reinforcement learning", "interactive decision-making", "reinforcement learning theory", "foundation models", "post-training"],
+    "notes": "Coauthor of Maximum Likelihood Reinforcement Learning. Homepage identifies him as a CMU MLD PhD candidate advised by Aarti Singh and Drew Bagnell, with prior internships at FAIR Paris, Amazon NYC, and Microsoft Research NYC, and undergraduate study at UC San Diego.",
+    "sources": [
+      {
+        "label": "Maximum Likelihood Reinforcement Learning",
+        "url": "https://arxiv.org/abs/2602.02710"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://yudasong.github.io/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/yudasong"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/yus167"
+      }
+    ]
+  },
+  {
+    "slug": "daman-arora",
+    "name": "Daman Arora",
+    "aliases": ["Daman Arora", "daman arora"],
+    "affiliations": ["Carnegie Mellon University", "Microsoft Research India", "Indian Institute of Technology Delhi"],
+    "homepage": "https://daman1209arora.github.io/",
+    "github": "https://github.com/daman1209arora",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["maximum likelihood reinforcement learning", "reasoning", "continual learning", "software agents", "retrieval"],
+    "notes": "Coauthor of Maximum Likelihood Reinforcement Learning. Homepage identifies him as a CMU MLD PhD student advised by Andrea Zanette, previously a Research Fellow at Microsoft Research India, and previously at IIT Delhi.",
+    "sources": [
+      {
+        "label": "Maximum Likelihood Reinforcement Learning",
+        "url": "https://arxiv.org/abs/2602.02710"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://daman1209arora.github.io/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/daman1209arora"
+      }
+    ]
+  },
+  {
+    "slug": "yiding-jiang",
+    "name": "Yiding Jiang",
+    "aliases": ["Yiding Jiang"],
+    "affiliations": ["Carnegie Mellon University", "Google DeepMind", "Google Research", "Meta AI Research", "Cerebras Systems", "University of California Berkeley"],
+    "homepage": "https://yidingjiang.github.io/",
+    "github": "https://github.com/yidingjiang",
+    "x": "https://x.com/yidingjiang",
+    "xConfidence": "high",
+    "topics": ["maximum likelihood reinforcement learning", "post-training", "Gemini", "generalization", "reinforcement learning"],
+    "notes": "Coauthor of Maximum Likelihood Reinforcement Learning. Homepage identifies him as a Google DeepMind research scientist working on RL and post-training for Gemini, previously a CMU MLD PhD student with Zico Kolter, Google Research AI resident, Meta AI Research and Cerebras Systems intern, and UC Berkeley EECS graduate.",
+    "sources": [
+      {
+        "label": "Maximum Likelihood Reinforcement Learning",
+        "url": "https://arxiv.org/abs/2602.02710"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://yidingjiang.github.io/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/yidingjiang"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/yidingjiang"
+      }
+    ]
+  },
+  {
+    "slug": "jeff-schneider",
+    "name": "Jeff Schneider",
+    "aliases": ["Jeff Schneider"],
+    "affiliations": ["Carnegie Mellon University", "Robotics Institute", "Auton Lab"],
+    "homepage": "https://www.cs.cmu.edu/~schneide/",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["maximum likelihood reinforcement learning", "reinforcement learning", "decision making with large language models", "self-driving cars", "machine learning"],
+    "notes": "Coauthor of Maximum Likelihood Reinforcement Learning. CMU homepage identifies him as a Research Professor in the Robotics Institute, School of Computer Science, Carnegie Mellon University, and lists Fahim Tajwar among current PhD students.",
+    "sources": [
+      {
+        "label": "Maximum Likelihood Reinforcement Learning",
+        "url": "https://arxiv.org/abs/2602.02710"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://www.cs.cmu.edu/~schneide/"
+      }
+    ]
+  },
+  {
+    "slug": "ruslan-salakhutdinov",
+    "name": "Ruslan Salakhutdinov",
+    "aliases": ["Ruslan Salakhutdinov", "Russ Salakhutdinov"],
+    "affiliations": ["Carnegie Mellon University", "Machine Learning Department"],
+    "homepage": "https://www.cs.cmu.edu/~rsalakhu/",
+    "github": "",
+    "x": "https://x.com/rsalakhu",
+    "xConfidence": "high",
+    "topics": ["maximum likelihood reinforcement learning", "deep learning", "probabilistic graphical models", "large-scale optimization", "statistical machine learning"],
+    "notes": "Coauthor of Maximum Likelihood Reinforcement Learning. Homepage identifies him as a CMU Machine Learning Department professor and UPMC professor of Computer Science; Fahim Tajwar's homepage lists him as co-advisor.",
+    "sources": [
+      {
+        "label": "Maximum Likelihood Reinforcement Learning",
+        "url": "https://arxiv.org/abs/2602.02710"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://www.cs.cmu.edu/~rsalakhu/"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/rsalakhu"
+      }
+    ]
+  },
+  {
+    "slug": "haiwen-feng",
+    "name": "Haiwen Feng",
+    "aliases": ["Haiwen Feng", "Haven Feng", "Haiwen (Haven) Feng"],
+    "affiliations": ["UC Berkeley", "Impossible, Inc.", "Max Planck Institute for Intelligent Systems", "Adobe", "University of Tubingen"],
+    "homepage": "https://havenfeng.github.io/",
+    "github": "https://github.com/HavenFeng/",
+    "x": "https://x.com/HavenFeng/",
+    "xConfidence": "high",
+    "topics": ["maximum likelihood reinforcement learning", "multimodal foundation models", "world models", "inverse graphics", "agentic reasoning"],
+    "notes": "Coauthor of Maximum Likelihood Reinforcement Learning. Project page lists UC Berkeley and Impossible, Inc.; homepage identifies him as a UC Berkeley postdoctoral scholar, previously PhD at Max Planck Institute for Intelligent Systems, visiting PhD at BAIR, Adobe intern, and University of Tubingen physics graduate.",
+    "sources": [
+      {
+        "label": "Maximum Likelihood Reinforcement Learning",
+        "url": "https://arxiv.org/abs/2602.02710"
+      },
+      {
+        "label": "Project page",
+        "url": "https://zanette-labs.github.io/MaxRL/"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://havenfeng.github.io/"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/HavenFeng/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/HavenFeng/"
+      }
+    ]
+  },
+  {
+    "slug": "andrea-zanette",
+    "name": "Andrea Zanette",
+    "aliases": ["Andrea Zanette"],
+    "affiliations": ["Carnegie Mellon University", "UC Berkeley", "Stanford University"],
+    "homepage": "https://azanette.com/",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["maximum likelihood reinforcement learning", "foundation models", "reasoning", "alignment", "reinforcement learning theory"],
+    "notes": "Corresponding author of Maximum Likelihood Reinforcement Learning. Homepage identifies him as an Assistant Professor at Carnegie Mellon University, joining ECE in Fall 2024 with a courtesy appointment in MLD; previously postdoctoral scholar at UC Berkeley and PhD at Stanford University.",
+    "sources": [
+      {
+        "label": "Maximum Likelihood Reinforcement Learning",
+        "url": "https://arxiv.org/abs/2602.02710"
+      },
+      {
+        "label": "Project page",
+        "url": "https://zanette-labs.github.io/MaxRL/"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://azanette.com/"
+      }
+    ]
   }
 ]
