@@ -1,7 +1,7 @@
 # Paper Analysis Workflow
 
 First-Archived-At: 2026-06-19
-Updated-At: 2026-07-03
+Updated-At: 2026-07-05
 
 ## 目标
 
@@ -369,6 +369,19 @@ $$
 4. 交叉验证后更新 `data/authors.json`；若找到作者页，在论文笔记和索引中使用 `/authors/<slug>/` 链接。
 5. 对团队署名、超大作者列表或证据稀疏作者，保留团队或机构级记录；论文 Markdown 不写个人核验过程。
 6. 完成站点构建和链接检查，确认作者页和论文页链接可生成。
+
+## 收尾提交策略
+
+每完成一篇论文的分析、索引更新和作者页维护后，默认创建一个独立 commit，但不自动 push。
+
+执行顺序：
+
+1. 先完成质量检查、站点构建和链接检查，确认本篇论文页面、索引页和作者页可以生成。
+2. 用 `git status --short` 检查工作区，识别本篇论文相关改动和既有未提交改动。
+3. 只 stage 本篇论文对应的 Markdown、`content/utility/papers-index.md`、`data/authors.json` 和必要生成物；若工作区已有其他论文或无关改动，不能合入本篇 commit。
+4. commit message 使用本篇论文的 arXiv id 或短标题，保持一篇论文一个 commit，便于回溯和回滚。
+5. commit 后再次检查 `git status --short`，确认剩余未提交内容属于其他任务或历史遗留。
+6. 不执行 `git push`；只有用户明确要求 push / 推送时再推送远端。
 
 ## 安全与双用途处理
 
