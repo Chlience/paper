@@ -7728,5 +7728,351 @@
         "url": "https://github.com/chenwhql"
       }
     ]
+  },
+  {
+    "slug": "yan-wang-flashmemory",
+    "name": "Yan Wang",
+    "aliases": ["Yan Wang", "libertywing"],
+    "affiliations": ["Independent Researchers", "Tencent"],
+    "homepage": "https://huggingface.co/libertywing",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["FlashMemory", "DeepSeek-V4", "Lookahead Sparse Attention", "KV cache", "long-context inference"],
+    "notes": "Equal-contribution author and project lead of FlashMemory-DeepSeek-V4, with paper-time affiliation Independent Researchers. Hugging Face profile libertywing owns the FlashMemory-Deepseek-V4 model release. The paper status note and OpenReview profile evidence connect this author to Tencent.",
+    "sources": [
+      {
+        "label": "FlashMemory-DeepSeek-V4",
+        "url": "https://arxiv.org/abs/2606.09079"
+      },
+      {
+        "label": "Hugging Face",
+        "url": "https://huggingface.co/libertywing"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Yan_Wang17"
+      }
+    ]
+  },
+  {
+    "slug": "qifan-zhang-hkust-gz",
+    "name": "Qifan Zhang",
+    "aliases": ["Qifan Zhang", "Qifan ZHANG", "Bklight999"],
+    "affiliations": ["Tencent", "The Hong Kong University of Science and Technology (Guangzhou)"],
+    "homepage": "",
+    "github": "https://github.com/Bklight999",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["FlashMemory", "DeepSeek-V4", "Lookahead Sparse Attention", "LLM agents", "graph reasoning"],
+    "notes": "Equal-contribution author of FlashMemory-DeepSeek-V4 with paper-time affiliations Tencent and HKUST(GZ). GitHub profile Bklight999 identifies Qifan Zhang at Hong Kong University of Science and Technology, Guangzhou.",
+    "sources": [
+      {
+        "label": "FlashMemory-DeepSeek-V4",
+        "url": "https://arxiv.org/abs/2606.09079"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/Bklight999"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=9gGwIBcAAAAJ"
+      }
+    ]
+  },
+  {
+    "slug": "jiachen-yu-tsinghua",
+    "name": "Jiachen Yu",
+    "aliases": ["Jiachen Yu"],
+    "affiliations": ["Tencent", "Tsinghua University", "Tsinghua Shenzhen International Graduate School"],
+    "homepage": "",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["FlashMemory", "DeepSeek-V4", "Lookahead Sparse Attention", "LLM reinforcement learning"],
+    "notes": "Equal-contribution author of FlashMemory-DeepSeek-V4 with paper-time affiliations Tencent and Tsinghua University. Google Scholar evidence connects Jiachen Yu to Tsinghua SIGS and LLM/RL work.",
+    "sources": [
+      {
+        "label": "FlashMemory-DeepSeek-V4",
+        "url": "https://arxiv.org/abs/2606.09079"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=L7nYpVYAAAAJ"
+      }
+    ]
+  },
+  {
+    "slug": "tian-liang-tencent",
+    "name": "Tian Liang",
+    "aliases": ["Tian Liang", "skytliang"],
+    "affiliations": ["Tencent", "Tsinghua Shenzhen International Graduate School", "Wuhan University"],
+    "homepage": "https://skytliang.github.io/",
+    "github": "https://github.com/skytliang",
+    "x": "https://x.com/skytliang",
+    "xConfidence": "high",
+    "topics": ["FlashMemory", "DeepSeek-V4", "Lookahead Sparse Attention", "LLM agents", "multimodal learning"],
+    "notes": "Equal-contribution author of FlashMemory-DeepSeek-V4 with paper-time affiliation Tencent. Personal homepage identifies Tian Liang as a researcher at Tencent AI Lab and records prior education at Wuhan University and Tsinghua SIGS.",
+    "sources": [
+      {
+        "label": "FlashMemory-DeepSeek-V4",
+        "url": "https://arxiv.org/abs/2606.09079"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://skytliang.github.io/"
+      }
+    ]
+  },
+  {
+    "slug": "dongyang-ma-flashmemory",
+    "name": "Dongyang Ma",
+    "aliases": ["Dongyang Ma"],
+    "affiliations": ["Independent Researchers"],
+    "homepage": "",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["FlashMemory", "DeepSeek-V4", "Lookahead Sparse Attention", "LLM agents"],
+    "notes": "Equal-contribution author of FlashMemory-DeepSeek-V4 with paper-time affiliation Independent Researchers. Stable public profile evidence beyond the paper remains limited.",
+    "sources": [
+      {
+        "label": "FlashMemory-DeepSeek-V4",
+        "url": "https://arxiv.org/abs/2606.09079"
+      },
+      {
+        "label": "DBLP",
+        "url": "https://dblp.org/pid/284/0284"
+      }
+    ]
+  },
+  {
+    "slug": "xiang-hu-tencent",
+    "name": "Xiang Hu",
+    "aliases": ["Xiang Hu"],
+    "affiliations": ["Tencent"],
+    "homepage": "",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["FlashMemory", "DeepSeek-V4", "Lookahead Sparse Attention", "long-context inference"],
+    "notes": "Author of FlashMemory-DeepSeek-V4 with paper-time affiliation Tencent. Google Scholar evidence connects Xiang Hu to Tencent LLM Frontier Lab.",
+    "sources": [
+      {
+        "label": "FlashMemory-DeepSeek-V4",
+        "url": "https://arxiv.org/abs/2606.09079"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=D4hnUZkAAAAJ"
+      }
+    ]
+  },
+  {
+    "slug": "zibo-lin-tencent",
+    "name": "Zibo Lin",
+    "aliases": ["Zibo Lin"],
+    "affiliations": ["Tencent"],
+    "homepage": "",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["FlashMemory", "DeepSeek-V4", "Lookahead Sparse Attention"],
+    "notes": "Author of FlashMemory-DeepSeek-V4 with paper-time affiliation Tencent. Stable public profile evidence beyond publication indices remains limited.",
+    "sources": [
+      {
+        "label": "FlashMemory-DeepSeek-V4",
+        "url": "https://arxiv.org/abs/2606.09079"
+      },
+      {
+        "label": "CatalyzeX",
+        "url": "https://www.catalyzex.com/paper/flashmemory-deepseek-v4-lightning-index"
+      }
+    ]
+  },
+  {
+    "slug": "chunyang-li-tencent",
+    "name": "Chunyang Li",
+    "aliases": ["Chunyang Li"],
+    "affiliations": ["Tencent"],
+    "homepage": "",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["FlashMemory", "DeepSeek-V4", "Lookahead Sparse Attention"],
+    "notes": "Author of FlashMemory-DeepSeek-V4 with paper-time affiliation Tencent. Stable public profile evidence beyond the paper remains limited.",
+    "sources": [
+      {
+        "label": "FlashMemory-DeepSeek-V4",
+        "url": "https://arxiv.org/abs/2606.09079"
+      }
+    ]
+  },
+  {
+    "slug": "zhichao-wang-tencent",
+    "name": "Zhichao Wang",
+    "aliases": ["Zhichao Wang"],
+    "affiliations": ["Tencent"],
+    "homepage": "",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["FlashMemory", "DeepSeek-V4", "Lookahead Sparse Attention"],
+    "notes": "Author of FlashMemory-DeepSeek-V4 with paper-time affiliation Tencent. Stable public profile evidence beyond the paper remains limited.",
+    "sources": [
+      {
+        "label": "FlashMemory-DeepSeek-V4",
+        "url": "https://arxiv.org/abs/2606.09079"
+      }
+    ]
+  },
+  {
+    "slug": "miao-peng",
+    "name": "Miao Peng",
+    "aliases": ["Miao Peng"],
+    "affiliations": ["Tencent", "The Hong Kong University of Science and Technology (Guangzhou)", "Wuhan University", "Northeastern University"],
+    "homepage": "https://gknl.github.io/",
+    "github": "https://github.com/gknl",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["FlashMemory", "DeepSeek-V4", "Lookahead Sparse Attention", "data science"],
+    "notes": "Author of FlashMemory-DeepSeek-V4 with paper-time affiliations Tencent and HKUST(GZ). Personal homepage identifies Miao Peng as a HKUST(GZ) PhD student advised by Jia Li and records earlier Wuhan University and Northeastern University education.",
+    "sources": [
+      {
+        "label": "FlashMemory-DeepSeek-V4",
+        "url": "https://arxiv.org/abs/2606.09079"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://gknl.github.io/"
+      }
+    ]
+  },
+  {
+    "slug": "nuo-chen",
+    "name": "Nuo Chen",
+    "aliases": ["Nuo Chen", "Jerry N. Chen"],
+    "affiliations": ["Tencent", "The Hong Kong University of Science and Technology (Guangzhou)", "Peking University", "Beijing University of Posts and Telecommunications"],
+    "homepage": "https://jerrynchen.github.io/",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["FlashMemory", "DeepSeek-V4", "Lookahead Sparse Attention", "LLM agents", "data science"],
+    "notes": "Author of FlashMemory-DeepSeek-V4 with paper-time affiliation Tencent. Personal homepage identifies Nuo Chen as a HKUST-GZ PhD student advised by Jia Li and Yangqiu Song, with prior Peking University and BUPT education.",
+    "sources": [
+      {
+        "label": "FlashMemory-DeepSeek-V4",
+        "url": "https://arxiv.org/abs/2606.09079"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://jerrynchen.github.io/"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=xomDCvcAAAAJ"
+      }
+    ]
+  },
+  {
+    "slug": "jia-li-hkust-gz",
+    "name": "Jia Li",
+    "aliases": ["Jia Li"],
+    "affiliations": ["The Hong Kong University of Science and Technology (Guangzhou)", "The Chinese University of Hong Kong", "Google AI", "Tencent AI Lab"],
+    "homepage": "https://sites.google.com/view/lijia",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["FlashMemory", "DeepSeek-V4", "Lookahead Sparse Attention", "data science", "machine learning"],
+    "notes": "Author of FlashMemory-DeepSeek-V4 with paper-time affiliation HKUST(GZ). Homepage identifies Jia Li as an associate professor in Data Science and Analytics at HKUST(GZ), director of DSAIL, with PhD from CUHK and prior internships at Google AI and Tencent AI Lab.",
+    "sources": [
+      {
+        "label": "FlashMemory-DeepSeek-V4",
+        "url": "https://arxiv.org/abs/2606.09079"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://sites.google.com/view/lijia"
+      },
+      {
+        "label": "DBLP",
+        "url": "https://dblp.org/pid/23/6950-9"
+      }
+    ]
+  },
+  {
+    "slug": "yujiu-yang",
+    "name": "Yujiu Yang",
+    "aliases": ["Yujiu Yang"],
+    "affiliations": ["Tsinghua University", "Tsinghua Shenzhen International Graduate School", "Chinese Academy of Sciences Institute of Automation", "National Laboratory of Pattern Recognition"],
+    "homepage": "https://www.sigs.tsinghua.edu.cn/yyj_en/main.htm",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["FlashMemory", "DeepSeek-V4", "Lookahead Sparse Attention", "multimedia", "machine learning"],
+    "notes": "Author of FlashMemory-DeepSeek-V4 with paper-time affiliation Tsinghua University. Tsinghua SIGS profile identifies Yujiu Yang as a professor and records PhD training at CASIA/NLPR plus postdoctoral work at Tsinghua.",
+    "sources": [
+      {
+        "label": "FlashMemory-DeepSeek-V4",
+        "url": "https://arxiv.org/abs/2606.09079"
+      },
+      {
+        "label": "Tsinghua profile",
+        "url": "https://www.sigs.tsinghua.edu.cn/yyj_en/main.htm"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=4gH3sxsAAAAJ"
+      }
+    ]
+  },
+  {
+    "slug": "haitao-mi",
+    "name": "Haitao Mi",
+    "aliases": ["Haitao Mi"],
+    "affiliations": ["Tencent", "Tencent AI Lab"],
+    "homepage": "",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["FlashMemory", "DeepSeek-V4", "Lookahead Sparse Attention", "natural language processing"],
+    "notes": "Author of FlashMemory-DeepSeek-V4 with paper-time affiliation Tencent. OpenReview profile evidence connects Haitao Mi to Tencent AI Lab.",
+    "sources": [
+      {
+        "label": "FlashMemory-DeepSeek-V4",
+        "url": "https://arxiv.org/abs/2606.09079"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Haitao_Mi1"
+      }
+    ]
+  },
+  {
+    "slug": "dong-yu",
+    "name": "Dong Yu",
+    "aliases": ["Dong Yu"],
+    "affiliations": ["Tencent", "Tencent AI Lab"],
+    "homepage": "https://dongyu888.github.io/",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["FlashMemory", "DeepSeek-V4", "Lookahead Sparse Attention", "speech recognition", "LLM agents"],
+    "notes": "Author of FlashMemory-DeepSeek-V4 with paper-time affiliation Tencent. Personal homepage identifies Dong Yu as a researcher known for speech recognition, deep learning, large language model and multi-modal agentic systems.",
+    "sources": [
+      {
+        "label": "FlashMemory-DeepSeek-V4",
+        "url": "https://arxiv.org/abs/2606.09079"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://dongyu888.github.io/"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=tMY31_gAAAAJ"
+      }
+    ]
   }
 ]
