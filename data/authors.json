@@ -7488,5 +7488,245 @@
         "url": "https://openreview.net/profile?id=~Jing_Zhang24"
       }
     ]
+  },
+  {
+    "slug": "wenhui-tan",
+    "name": "Wenhui Tan",
+    "aliases": ["Wenhui Tan", "Albert Wenhui Tan", "AlbertTan"],
+    "affiliations": ["Gaoling School of Artificial Intelligence, Renmin University of China", "Northeastern University (China)", "Microsoft Research Asia", "Xiaomi", "Xiaohongshu"],
+    "homepage": "https://alberttan404.github.io/",
+    "github": "https://github.com/AlbertTan404",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["PIPO", "latent compression", "multi-token prediction", "LLM reasoning", "embodied AI", "CoLaR"],
+    "notes": "First author of PIPO. Homepage identifies him as a PhD student at the Gaoling School of Artificial Intelligence, Renmin University of China under Ruihua Song, with research interests in multimodal LLM reasoning and embodied AI; it also lists PIPO, CoLaR, MSRA, Xiaomi and Xiaohongshu internship history.",
+    "sources": [
+      {
+        "label": "PIPO",
+        "url": "https://arxiv.org/abs/2605.27255"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://alberttan404.github.io/"
+      },
+      {
+        "label": "AIMind @RUC team",
+        "url": "https://ruc-aimind.github.io/team/"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=en&user=cELItK0AAAAJ"
+      }
+    ]
+  },
+  {
+    "slug": "minghao-li-pipo",
+    "name": "Minghao Li",
+    "aliases": ["Minghao Li"],
+    "affiliations": ["AI Platform, Xiaohongshu Inc.", "Xiaohongshu Inc."],
+    "homepage": "",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["PIPO", "Relax", "HiSVD", "multi-token prediction", "RL training systems"],
+    "notes": "PIPO coauthor with paper-time affiliation AI Platform, Xiaohongshu Inc. Also appears on Relax and ACL 2026 HiSVD with the Xiaohongshu engineering line. Name is common, so no personal homepage or X account was merged without stronger evidence.",
+    "sources": [
+      {
+        "label": "PIPO",
+        "url": "https://arxiv.org/abs/2605.27255"
+      },
+      {
+        "label": "Relax",
+        "url": "https://arxiv.org/abs/2604.11554"
+      },
+      {
+        "label": "HiSVD",
+        "url": "https://aclanthology.org/2026.acl-long.946/"
+      }
+    ]
+  },
+  {
+    "slug": "xiaoqian-ma-xiaohongshu",
+    "name": "Xiaoqian Ma",
+    "aliases": ["Xiaoqian Ma"],
+    "affiliations": ["AI Platform, Xiaohongshu Inc.", "Xiaohongshu Inc."],
+    "homepage": "",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["PIPO", "HiSVD", "multi-token prediction", "LLM efficiency"],
+    "notes": "PIPO coauthor with paper-time affiliation AI Platform, Xiaohongshu Inc. Also appears on ACL 2026 HiSVD with the same Xiaohongshu author cluster. Name is common, so no personal homepage or X account was merged without stronger evidence.",
+    "sources": [
+      {
+        "label": "PIPO",
+        "url": "https://arxiv.org/abs/2605.27255"
+      },
+      {
+        "label": "HiSVD",
+        "url": "https://aclanthology.org/2026.acl-long.946/"
+      }
+    ]
+  },
+  {
+    "slug": "siqi-fan-uestc",
+    "name": "Siqi Fan",
+    "aliases": ["Siqi Fan", "Siqi Fan 0001"],
+    "affiliations": ["University of Electronic Science and Technology of China", "Xiaohongshu Inc."],
+    "homepage": "",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["PIPO", "HiSVD", "LLM efficiency", "token-efficient reasoning", "lifelong learning evaluation"],
+    "notes": "PIPO coauthor with paper-time affiliation University of Electronic Science and Technology of China. DBLP disambiguates this profile as Siqi Fan 0001 at UESTC; search results also show a UESTC Google Scholar/OpenReview identity. ACL 2026 HiSVD links the same author cluster to Xiaohongshu.",
+    "sources": [
+      {
+        "label": "PIPO",
+        "url": "https://arxiv.org/abs/2605.27255"
+      },
+      {
+        "label": "DBLP",
+        "url": "https://dblp.org/pid/149/1267-1"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=zh-CN&user=pybmbCYAAAAJ"
+      },
+      {
+        "label": "HiSVD",
+        "url": "https://aclanthology.org/2026.acl-long.946/"
+      }
+    ]
+  },
+  {
+    "slug": "xiusheng-huang",
+    "name": "Xiusheng Huang",
+    "aliases": ["Xiusheng Huang"],
+    "affiliations": ["Institute of Automation, Chinese Academy of Sciences", "University of Chinese Academy of Sciences", "Beijing Academy of Artificial Intelligence", "Xiaohongshu Inc."],
+    "homepage": "",
+    "github": "https://github.com/Huangxiusheng",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["PIPO", "HiSVD", "knowledge editing", "LLM efficiency", "natural language processing"],
+    "notes": "PIPO coauthor with paper-time affiliation Institute of Automation, Chinese Academy of Sciences. Earlier knowledge-editing papers list Institute of Automation CAS, University of Chinese Academy of Sciences and Beijing Academy of Artificial Intelligence; Google Scholar search result verifies an ia.ac.cn email. ACL 2026 HiSVD links the same author cluster to Xiaohongshu.",
+    "sources": [
+      {
+        "label": "PIPO",
+        "url": "https://arxiv.org/abs/2605.27255"
+      },
+      {
+        "label": "Reasons and Solutions for the Decline in Model Performance after Editing",
+        "url": "https://arxiv.org/abs/2410.23843"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=zh-CN&user=4mY2E30AAAAJ"
+      },
+      {
+        "label": "GitHub DEM",
+        "url": "https://github.com/Huangxiusheng/DEM"
+      },
+      {
+        "label": "HiSVD",
+        "url": "https://aclanthology.org/2026.acl-long.946/"
+      }
+    ]
+  },
+  {
+    "slug": "liujie-zhang-xiaohongshu",
+    "name": "Liujie Zhang",
+    "aliases": ["Liujie Zhang", "Zhang Liujie", "ZhangLiujie"],
+    "affiliations": ["AI Platform, Xiaohongshu Inc.", "Xiaohongshu Inc."],
+    "homepage": "",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["PIPO", "Relax", "HiSVD", "RL training systems", "LLM efficiency"],
+    "notes": "PIPO coauthor with paper-time affiliation AI Platform, Xiaohongshu Inc. First author of Relax and corresponding author of ACL 2026 HiSVD under the ZhangLiujie spelling. No high-confidence personal homepage or X account found in the search pass.",
+    "sources": [
+      {
+        "label": "PIPO",
+        "url": "https://arxiv.org/abs/2605.27255"
+      },
+      {
+        "label": "Relax",
+        "url": "https://arxiv.org/abs/2604.11554"
+      },
+      {
+        "label": "HiSVD",
+        "url": "https://aclanthology.org/2026.acl-long.946/"
+      },
+      {
+        "label": "Semantic Scholar",
+        "url": "https://www.semanticscholar.org/author/Liujie-Zhang/2107948163"
+      }
+    ]
+  },
+  {
+    "slug": "ruihua-song",
+    "name": "Ruihua Song",
+    "aliases": ["Ruihua Song", "Song Ruihua"],
+    "affiliations": ["Gaoling School of Artificial Intelligence, Renmin University of China", "Renmin University of China", "Microsoft Research", "Tsinghua University", "Shanghai Jiao Tong University"],
+    "homepage": "https://gsai.ruc.edu.cn/english/rsong",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["PIPO", "AIMind", "multimodal natural language understanding", "dialogue systems", "latent compression", "LLM reasoning"],
+    "notes": "Corresponding author of PIPO and leader of AIMind @RUC. AIMind profile identifies her as a tenured associate professor at Gaoling School of Artificial Intelligence, Renmin University of China, with Bachelor's and Master's degrees from Tsinghua University, PhD from Shanghai Jiao Tong University, and earlier Microsoft Asia Research Institute experience. DBLP lists current Renmin University of China affiliation and former Microsoft Research affiliation.",
+    "sources": [
+      {
+        "label": "PIPO",
+        "url": "https://arxiv.org/abs/2605.27255"
+      },
+      {
+        "label": "RUC profile",
+        "url": "https://gsai.ruc.edu.cn/english/rsong"
+      },
+      {
+        "label": "AIMind @RUC team",
+        "url": "https://ruc-aimind.github.io/team/"
+      },
+      {
+        "label": "DBLP",
+        "url": "https://dblp.org/pid/s/RuihuaSong"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=zh-CN&user=v5LctN8AAAAJ"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Ruihua_Song1"
+      }
+    ]
+  },
+  {
+    "slug": "weihang-chen-xiaohongshu",
+    "name": "Weihang Chen",
+    "aliases": ["Weihang Chen", "chenwhql"],
+    "affiliations": ["AI Platform, Xiaohongshu Inc.", "Xiaohongshu Inc.", "PaddlePaddle"],
+    "homepage": "",
+    "github": "https://github.com/chenwhql",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["PIPO", "Relax", "HiSVD", "LLM efficiency", "RL training systems"],
+    "notes": "Corresponding author of PIPO with paper-time affiliation AI Platform, Xiaohongshu Inc. Also appears on Relax and ACL 2026 HiSVD in the Xiaohongshu engineering line. GitHub profile chenwhql uses the public name Weihang Chen and lists @PaddlePaddle plus Beijing, China; no high-confidence X account found.",
+    "sources": [
+      {
+        "label": "PIPO",
+        "url": "https://arxiv.org/abs/2605.27255"
+      },
+      {
+        "label": "Relax",
+        "url": "https://arxiv.org/abs/2604.11554"
+      },
+      {
+        "label": "HiSVD",
+        "url": "https://aclanthology.org/2026.acl-long.946/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/chenwhql"
+      }
+    ]
   }
 ]
