@@ -7180,5 +7180,313 @@
         "url": "https://x.com/simran_s_arora"
       }
     ]
+  },
+  {
+    "slug": "haoyang-li-zr0",
+    "name": "Haoyang Li",
+    "aliases": ["Haoyang Li"],
+    "affiliations": ["Renmin University of China", "Key Laboratory of Data Engineering and Knowledge Engineering, Beijing, China"],
+    "homepage": "",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["ZR-0", "vision-language-action models", "embodied chain-of-thought", "ProcVLM", "text-to-SQL"],
+    "notes": "First author of ZR-0. Public RUCKBReasoning materials and earlier Text-to-SQL projects identify him with Renmin University of China and the lihaoyang.cs@ruc.edu.cn contact line; Jing Zhang's homepage also lists him across ZR-0, ProcVLM, From Pixels to Tokens, and RUC data intelligence work.",
+    "sources": [
+      {
+        "label": "ZR-0",
+        "url": "https://arxiv.org/abs/2606.30552"
+      },
+      {
+        "label": "Jing Zhang homepage",
+        "url": "https://xiaojingzi.github.io/"
+      },
+      {
+        "label": "text2sql-demo contact",
+        "url": "https://github.com/RUCKBReasoning/text2sql-demo/blob/main/README.md"
+      }
+    ]
+  },
+  {
+    "slug": "guanlin-li-ruc",
+    "name": "Guanlin Li",
+    "aliases": ["Guanlin Li"],
+    "affiliations": ["Renmin University of China", "Key Laboratory of Data Engineering and Knowledge Engineering, Beijing, China"],
+    "homepage": "",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["ZR-0", "vision-language-action models", "embodied intelligence", "TableLLM"],
+    "notes": "ZR-0 coauthor from Renmin University of China. Also appears in RUC/Jing Zhang group VLA and TableLLM-related publications; no high-confidence personal homepage or X account found in the search pass.",
+    "sources": [
+      {
+        "label": "ZR-0",
+        "url": "https://arxiv.org/abs/2606.30552"
+      },
+      {
+        "label": "TableLLM",
+        "url": "https://arxiv.org/abs/2403.19318"
+      },
+      {
+        "label": "Action Draft and Verify",
+        "url": "https://arxiv.org/abs/2603.18091"
+      },
+      {
+        "label": "Jing Zhang homepage",
+        "url": "https://xiaojingzi.github.io/"
+      }
+    ]
+  },
+  {
+    "slug": "youhe-feng",
+    "name": "Youhe Feng",
+    "aliases": ["Youhe Feng"],
+    "affiliations": ["Renmin University of China"],
+    "homepage": "",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["ZR-0", "ProcVLM", "embodied chain-of-thought", "robot manipulation", "progress rewards"],
+    "notes": "ZR-0 coauthor from Renmin University of China and first author of ProcVLM, which constructs ProcCorpus-60M and procedure-grounded progress rewards used as a key data source for ZR-0.",
+    "sources": [
+      {
+        "label": "ZR-0",
+        "url": "https://arxiv.org/abs/2606.30552"
+      },
+      {
+        "label": "ProcVLM project",
+        "url": "https://procvlm.github.io/"
+      },
+      {
+        "label": "Jing Zhang homepage",
+        "url": "https://xiaojingzi.github.io/"
+      }
+    ]
+  },
+  {
+    "slug": "chen-zhao-ruc-vla",
+    "name": "Chen Zhao",
+    "aliases": ["Chen Zhao"],
+    "affiliations": ["Renmin University of China"],
+    "homepage": "",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["ZR-0", "vision-language-action models", "Action Draft and Verify", "robot manipulation"],
+    "notes": "ZR-0 coauthor from Renmin University of China and first author of Action Draft and Verify in the same RUC/Jing Zhang VLA line. Name is common, so no external profile was merged without stronger evidence.",
+    "sources": [
+      {
+        "label": "ZR-0",
+        "url": "https://arxiv.org/abs/2606.30552"
+      },
+      {
+        "label": "Action Draft and Verify",
+        "url": "https://arxiv.org/abs/2603.18091"
+      },
+      {
+        "label": "Jing Zhang homepage",
+        "url": "https://xiaojingzi.github.io/"
+      }
+    ]
+  },
+  {
+    "slug": "zhuoran-wang-ruc",
+    "name": "Zhuoran Wang",
+    "aliases": ["Zhuoran Wang"],
+    "affiliations": ["Renmin University of China"],
+    "homepage": "",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["ZR-0", "vision-language-action models", "Action Draft and Verify", "robot manipulation"],
+    "notes": "ZR-0 coauthor from Renmin University of China and coauthor of Action Draft and Verify in the RUC/Jing Zhang VLA line. No high-confidence personal homepage or X account found in the search pass.",
+    "sources": [
+      {
+        "label": "ZR-0",
+        "url": "https://arxiv.org/abs/2606.30552"
+      },
+      {
+        "label": "Action Draft and Verify",
+        "url": "https://arxiv.org/abs/2603.18091"
+      },
+      {
+        "label": "Jing Zhang homepage",
+        "url": "https://xiaojingzi.github.io/"
+      }
+    ]
+  },
+  {
+    "slug": "yang-li-ruc-zr0",
+    "name": "Yang Li",
+    "aliases": ["Yang Li"],
+    "affiliations": ["Renmin University of China", "Key Laboratory of Data Engineering and Knowledge Engineering, Beijing, China"],
+    "homepage": "",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["ZR-0", "vision-language-action models", "TableLLM", "embodied intelligence"],
+    "notes": "ZR-0 coauthor from Renmin University of China. Also appears in TableLLM and Action Draft and Verify in the RUC/Jing Zhang group; slug is scoped because the name is highly ambiguous.",
+    "sources": [
+      {
+        "label": "ZR-0",
+        "url": "https://arxiv.org/abs/2606.30552"
+      },
+      {
+        "label": "TableLLM",
+        "url": "https://arxiv.org/abs/2403.19318"
+      },
+      {
+        "label": "Action Draft and Verify",
+        "url": "https://arxiv.org/abs/2603.18091"
+      },
+      {
+        "label": "Jing Zhang homepage",
+        "url": "https://xiaojingzi.github.io/"
+      }
+    ]
+  },
+  {
+    "slug": "qizhe-wei",
+    "name": "Qizhe Wei",
+    "aliases": ["Qizhe Wei"],
+    "affiliations": ["Renmin University of China"],
+    "homepage": "",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["ZR-0", "vision-language-action models", "embodied chain-of-thought", "robot manipulation"],
+    "notes": "ZR-0 coauthor from Renmin University of China. No high-confidence personal homepage or X account found in the search pass.",
+    "sources": [
+      {
+        "label": "ZR-0",
+        "url": "https://arxiv.org/abs/2606.30552"
+      },
+      {
+        "label": "Jing Zhang homepage",
+        "url": "https://xiaojingzi.github.io/"
+      }
+    ]
+  },
+  {
+    "slug": "shifeng-bao",
+    "name": "Shifeng Bao",
+    "aliases": ["Shifeng Bao"],
+    "affiliations": ["Renmin University of China"],
+    "homepage": "",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["ZR-0", "vision-language-action models", "Action Draft and Verify", "robot manipulation"],
+    "notes": "ZR-0 coauthor from Renmin University of China and coauthor of Action Draft and Verify in the same VLA line. No high-confidence personal homepage or X account found in the search pass.",
+    "sources": [
+      {
+        "label": "ZR-0",
+        "url": "https://arxiv.org/abs/2606.30552"
+      },
+      {
+        "label": "Action Draft and Verify",
+        "url": "https://arxiv.org/abs/2603.18091"
+      },
+      {
+        "label": "Jing Zhang homepage",
+        "url": "https://xiaojingzi.github.io/"
+      }
+    ]
+  },
+  {
+    "slug": "haitao-shen-ruc",
+    "name": "Haitao Shen",
+    "aliases": ["Haitao Shen"],
+    "affiliations": ["Renmin University of China"],
+    "homepage": "",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["ZR-0", "vision-language-action models", "latent action supervision", "robot manipulation"],
+    "notes": "ZR-0 coauthor from Renmin University of China. Jing Zhang's homepage also lists Haitao Shen on From Pixels to Tokens in the RUC embodied intelligence line.",
+    "sources": [
+      {
+        "label": "ZR-0",
+        "url": "https://arxiv.org/abs/2606.30552"
+      },
+      {
+        "label": "Jing Zhang homepage",
+        "url": "https://xiaojingzi.github.io/"
+      }
+    ]
+  },
+  {
+    "slug": "yihan-zhao-ruc",
+    "name": "Yihan Zhao",
+    "aliases": ["Yihan Zhao"],
+    "affiliations": ["Renmin University of China"],
+    "homepage": "",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["ZR-0", "vision-language-action models", "latent action supervision", "robot manipulation"],
+    "notes": "ZR-0 coauthor from Renmin University of China. Jing Zhang's homepage also lists Yihan Zhao on From Pixels to Tokens in the RUC embodied intelligence line.",
+    "sources": [
+      {
+        "label": "ZR-0",
+        "url": "https://arxiv.org/abs/2606.30552"
+      },
+      {
+        "label": "Jing Zhang homepage",
+        "url": "https://xiaojingzi.github.io/"
+      }
+    ]
+  },
+  {
+    "slug": "tong-yang-zhipu",
+    "name": "Tong Yang",
+    "aliases": ["Tong Yang"],
+    "affiliations": ["Zhipu AI"],
+    "homepage": "",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["ZR-0", "vision-language-action models", "Zhipu AI", "embodied intelligence"],
+    "notes": "ZR-0 coauthor with paper-time affiliation Zhipu AI. Name is common and no high-confidence personal profile or X account was merged.",
+    "sources": [
+      {
+        "label": "ZR-0",
+        "url": "https://arxiv.org/abs/2606.30552"
+      },
+      {
+        "label": "Jing Zhang homepage",
+        "url": "https://xiaojingzi.github.io/"
+      }
+    ]
+  },
+  {
+    "slug": "jing-zhang-ruc",
+    "name": "Jing Zhang",
+    "aliases": ["Jing Zhang", "Jing ZHANG"],
+    "affiliations": ["Renmin University of China", "Tsinghua University (PhD)"],
+    "homepage": "https://xiaojingzi.github.io/",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["large language models", "knowledge engineering", "data intelligence", "embodied intelligence", "vision-language-action models"],
+    "notes": "Corresponding author of ZR-0. Homepage identifies her as a professor in the School of Information at Renmin University of China, with a Tsinghua University PhD background and research spanning knowledge engineering, LLM alignment, data intelligence, and embodied intelligence.",
+    "sources": [
+      {
+        "label": "ZR-0",
+        "url": "https://arxiv.org/abs/2606.30552"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://xiaojingzi.github.io/"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=en&user=T7Wa3GQAAAAJ"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Jing_Zhang24"
+      }
+    ]
   }
 ]
