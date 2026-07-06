@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="650" viewBox="0 0 1200 650" role="img" aria-labelledby="title desc">
+  <title id="title">PIPO architecture, SFT training, and OPD training flow</title>
+  <desc id="desc">A redrawn three-panel method figure showing PIPO inference, supervised fine-tuning, and on-policy distillation with a teacher-derived confidence label.</desc>
+  <defs>
+    <style>
+      .bg { fill: #f7f8f5; }
+      .panel { fill: #ffffff; stroke: #cfd6cc; stroke-width: 2; rx: 14; }
+      .title { font: 700 24px system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #22302a; }
+      .panel-title { font: 700 18px system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #22302a; }
+      .label { font: 600 14px system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #26352e; }
+      .small { font: 500 12px system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #53625a; }
+      .box { fill: #ffffff; stroke: #91a097; stroke-width: 1.5; rx: 9; }
+      .compress { fill: #e9f3e5; stroke: #79a36c; stroke-width: 1.5; rx: 9; }
+      .predict { fill: #e7eef6; stroke: #7596b8; stroke-width: 1.5; rx: 9; }
+      .draft { fill: #fff0d8; stroke: #c99b45; stroke-width: 1.5; rx: 9; }
+      .loss { fill: #f0e7f4; stroke: #9b78ad; stroke-width: 1.5; rx: 9; }
+      .teacher { fill: #edf1f3; stroke: #7b8790; stroke-width: 1.5; rx: 9; }
+      .arrow { stroke: #56645d; stroke-width: 2; fill: none; marker-end: url(#arrow); }
+      .dash { stroke: #7b8790; stroke-width: 1.8; stroke-dasharray: 6 6; fill: none; marker-end: url(#arrow); }
+    </style>
+    <marker id="arrow" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 Z" fill="#56645d"/>
+    </marker>
+  </defs>
+
+  <rect class="bg" width="1200" height="650"/>
+  <text x="60" y="50" class="title">PIPO method flow</text>
+  <text x="60" y="76" class="small">The same pair-level interface is used at inference, SFT, and OPD; OPD reuses teacher/student probabilities to train the confidence head.</text>
+
+  <rect class="panel" x="55" y="110" width="340" height="470"/>
+  <text x="85" y="145" class="panel-title">(i) Pair-level inference</text>
+  <rect class="compress" x="95" y="185" width="260" height="46"/>
+  <text x="142" y="213" class="label">compress (x2i, x2i+1) -> zi</text>
+  <path class="arrow" d="M225 231 L225 265"/>
+  <rect class="box" x="115" y="265" width="220" height="48"/>
+  <text x="181" y="294" class="label">backbone</text>
+  <path class="arrow" d="M225 313 L225 350"/>
+  <rect class="predict" x="80" y="350" width="132" height="48"/>
+  <text x="104" y="379" class="label">yb token</text>
+  <rect class="draft" x="238" y="350" width="132" height="48"/>
+  <text x="262" y="379" class="label">yd draft</text>
+  <path class="arrow" d="M304 398 L304 435"/>
+  <rect class="loss" x="218" y="435" width="172" height="48"/>
+  <text x="243" y="464" class="label">confidence c</text>
+  <text x="88" y="520" class="small">if c >= tau: next pair = (yb, yd)</text>
+  <text x="88" y="542" class="small">else: next pair = (yb, PAD)</text>
+
+  <rect class="panel" x="430" y="110" width="340" height="470"/>
+  <text x="460" y="145" class="panel-title">(ii) SFT training</text>
+  <rect class="compress" x="470" y="188" width="260" height="46"/>
+  <text x="513" y="216" class="label">ground-truth token pairs</text>
+  <path class="arrow" d="M600 234 L600 270"/>
+  <rect class="box" x="490" y="270" width="220" height="48"/>
+  <text x="536" y="299" class="label">PIPO forward</text>
+  <path class="arrow" d="M600 318 L600 352"/>
+  <rect class="predict" x="454" y="352" width="132" height="50"/>
+  <text x="487" y="382" class="label">CE(yb)</text>
+  <rect class="draft" x="614" y="352" width="132" height="50"/>
+  <text x="645" y="382" class="label">CE(yd)</text>
+  <path class="arrow" d="M680 402 L680 436"/>
+  <rect class="loss" x="575" y="436" width="190" height="50"/>
+  <text x="595" y="466" class="label">BCE(c, p_d(gold))</text>
+  <text x="462" y="526" class="small">random PAD injection trains rejected-draft cases</text>
+
+  <rect class="panel" x="805" y="110" width="340" height="470"/>
+  <text x="835" y="145" class="panel-title">(iii) OPD training</text>
+  <rect class="compress" x="842" y="185" width="266" height="46"/>
+  <text x="888" y="213" class="label">student rollout with PAD</text>
+  <path class="arrow" d="M975 231 L975 265"/>
+  <rect class="teacher" x="842" y="265" width="266" height="46"/>
+  <text x="889" y="293" class="label">remove PAD -> teacher</text>
+  <path class="arrow" d="M975 311 L975 345"/>
+  <rect class="box" x="830" y="345" width="128" height="52"/>
+  <text x="862" y="375" class="label">p_s</text>
+  <rect class="teacher" x="992" y="345" width="128" height="52"/>
+  <text x="1024" y="375" class="label">p_t</text>
+  <path class="arrow" d="M958 371 L992 371"/>
+  <path class="arrow" d="M975 397 L975 432"/>
+  <rect class="loss" x="840" y="432" width="270" height="58"/>
+  <text x="870" y="457" class="label">confidence label</text>
+  <text x="867" y="478" class="small">yc = min(p_t(x) / p_s(x), 1)</text>
+  <text x="842" y="526" class="small">reverse KL aligns student; same probabilities supervise acceptance</text>
+</svg>

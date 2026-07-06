@@ -60,19 +60,14 @@ Updated-At: YYYY-MM-DD HH:mm
 
 ### 5. 方法 / 系统 / 理论框架
 
+<!-- 若有架构图、训练流程图或标签构造图，直接放在解释该机制的小节下方，并写 source URL 与重要性。示例：
 
-### 6. 结论链条
-
-
-## 关键图摘录
-
-可选章节。只摘录机制、系统路径、标签构造、主结论或失败边界相关图；没有必要图时删除本节。示例格式：
-
-```markdown
 ![Figure 1: short description](/images/papers/<paper-slug>/fig-1-short-name.png)
 
-Figure 1 from `<paper title>`. Source: `<source URL>`. 重要性：
-```
+Redrawn from Figure X of `<paper title>`. Source: `<source URL>`. 重要性：
+-->
+
+### 6. 结论链条
 
 
 ## 关键实验/定理
@@ -84,6 +79,8 @@ Figure 1 from `<paper title>`. Source: `<source URL>`. 重要性：
 - 指标：
 - 结果：
 - 解读：
+
+<!-- 若有主结论图或失败边界图，直接放在对应结果小节的表格或解读附近。 -->
 
 ### 结果 2
 
