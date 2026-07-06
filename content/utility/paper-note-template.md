@@ -64,6 +64,17 @@ Updated-At: YYYY-MM-DD HH:mm
 ### 6. 结论链条
 
 
+## 关键图摘录
+
+可选章节。只摘录机制、系统路径、标签构造、主结论或失败边界相关图；没有必要图时删除本节。示例格式：
+
+```markdown
+![Figure 1: short description](/images/papers/<paper-slug>/fig-1-short-name.png)
+
+Figure 1 from `<paper title>`. Source: `<source URL>`. 重要性：
+```
+
+
 ## 关键实验/定理
 
 ### 结果 1

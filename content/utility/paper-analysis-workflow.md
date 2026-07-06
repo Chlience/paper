@@ -1,7 +1,7 @@
 # Paper Analysis Workflow
 
 First-Archived-At: 2026-06-19
-Updated-At: 2026-07-05
+Updated-At: 2026-07-06
 
 ## 目标
 
@@ -178,6 +178,56 @@ LLM RL、post-training、systems、serving、optimizer 和评测类论文都必�
 - `关键实验/定理` 中每个结果都要有 `设置`、`Baseline`、`指标`、`结果`、`解读`。
 - 若 baseline 选择影响可信度，在 `证据链强度评估 -> 需要谨慎的推论` 和 `局限` 中重复点明。
 - 若 reviewer 批评 baseline 不完整、统计显著性不足或实验设置不公平，在 `OpenReview / 审稿意见吸收` 中明确写入，并说明作者 rebuttal 是否补充实验。
+
+## 关键图摘录
+
+论文中重要图可以进入归档，但必须有选择地摘录。目标是提升机制理解和证据复查效率，避免把论文 PDF 复制成图片集。
+
+### 适合摘录的图
+
+每篇论文默认摘录 $0$ 到 $3$ 张图。只有满足以下至少一条时才摘录：
+
+- 架构、系统路径或数据流图：例如模型结构、训练 / 推理流水线、cache / memory / communication path。
+- 关键训练信号或标签构造图：例如 reward、indexer、verifier、dataset pipeline、credit assignment 的生成流程。
+- 主结论图：例如 accuracy / memory / latency / cost 的核心 tradeoff，或支撑论文最主要 claim 的曲线。
+- 失败边界图：例如 scaling collapse、ablation failure、OOD degradation、false positives、latency tail。
+- 跨论文关系图：能够直接帮助比较已有归档论文的方法、系统层级或证据边界。
+
+不摘录只起装饰作用、信息可由表格完整表达、与主结论关系弱或版权风险高的图片。若一张图只提供少量数值，优先改写成 Markdown 表格和文字解读。
+
+### 存放与命名
+
+原始或重绘图片放在：
+
+```text
+public/images/papers/<paper-slug>/fig-<n>-<short-name>.<ext>
+```
+
+Markdown 中使用站点路径引用：
+
+```markdown
+![Figure 1: short description](/images/papers/<paper-slug>/fig-1-short-name.png)
+```
+
+推荐在论文笔记中加入可选章节：
+
+```markdown
+## 关键图摘录
+
+![Figure 1: short description](/images/papers/<paper-slug>/fig-1-short-name.png)
+
+Figure 1 from <paper title>. Source: <source URL>. 重要性：说明这张图支撑哪条机制、结论或边界。
+```
+
+若图片来自论文原图，图注写 `Figure X from <paper title>` 并附 source URL。若为本地重画，图注写 `Redrawn from Figure X of <paper title>`，并说明重画时保留和省略了哪些信息。
+
+### 版权与复现边界
+
+- 优先使用论文、项目页或官方仓库中许可清楚的图片。
+- 许可不明确时，优先本地重画机制图或把关键数据转成表格；重画图只保留必要结构和变量，不逐像素复制原图。
+- 不批量截取 PDF 图片，不把临时截图、下载过程、裁剪过程或 OCR 过程写入论文 Markdown。
+- 每张图必须有明确来源链接和摘录理由；没有摘录理由时删除图片。
+- 安全或双用途论文中的图若包含可直接滥用流程，改写成高层机制图或文字 summary，避免沉淀操作细节。
 
 ## 审稿意见搜索与吸收
 
@@ -404,6 +454,7 @@ $$
 - 是否保留来源 URL 和版本日期。
 - 是否完成公开审稿意见搜索；若有公开 review，是否吸收 reviewer consensus、主要质疑、作者回应和可信度影响；若无公开 review，是否在 `Skipped` 记录原因。
 - 是否在核心实验中写清楚实验设置、baseline 名称/版本/调参强度、compute 是否匹配、实现是否匹配和评测协议。
+- 若摘录关键图，是否放入 `public/images/papers/<paper-slug>/`，Markdown 是否使用 `/images/papers/<paper-slug>/...` 站点路径，图注是否包含 source URL 和摘录理由，版权边界是否清楚。
 - 是否区分来源事实、作者主张和本地推论。
 - 是否在方法前回答研究问题、已有工作不足，并重建作者可能的思考路径。
 - 是否把阅读后的有效交流提炼进对应笔记。
