@@ -208,19 +208,19 @@ Markdown 中使用站点路径引用，并直接放在相关分析段落附近�
 ```markdown
 ![Figure 1: short description](/images/papers/<paper-slug>/fig-1-short-name.png)
 
-Figure 1 from <paper title>. Source: <source URL>. 重要性：说明这张图支撑哪条机制、结论或边界。
+Figure 1: 原始 caption 的中文翻译或轻度修饰，保留图中变量、方法名和实验条件。Image Source: [source label](<image source URL>).
 ```
 
 不默认新建独立 `关键图摘录` 章节。只有综合综述、图谱型文章、或多张图需要集中比较时，才建立图集式章节。普通论文笔记里，图应随正文论证出现。
 
-图注写 `Figure X from <paper title>` 并附 source URL。若图片文件来自 TeX source、HTML、项目页或官方仓库，图注或邻近文字需要说明该图片文件来源。禁止自行绘图、手工复刻论文图、从 PDF 或浏览器页面截图、裁剪 PDF 页面、OCR 生成图、用 SVG/Canvas/绘图工具重画论文图。
+图注不写 `from <paper title>` 这类重复来源说明，也不把本地“重要性”分析写进 caption。图注主体优先来自论文原始 caption，可以翻译、压缩或轻度修饰，末尾统一追加 `Image Source: ...` 指向具体图片文件来源。若需要说明这张图为什么重要，放在图前后的正文分析中。禁止自行绘图、手工复刻论文图、从 PDF 或浏览器页面截图、裁剪 PDF 页面、OCR 生成图、用 SVG/Canvas/绘图工具重画论文图。
 
 ### 版权与复现边界
 
 - 优先使用论文 TeX source、HTML、项目页或官方仓库中许可清楚的原始图片文件。
 - 许可不明确、图片只能通过截图/PDF 裁剪取得、或原始图片文件无法定位时，放弃缓存图片，改写成 Markdown 表格和文字解读。
 - 不截取 PDF 图片，不从浏览器或 PDF 阅读器截图，不裁剪 PDF 页面，不自行绘图或重画论文图。
-- 每张图必须有明确来源链接和摘录理由；没有摘录理由时删除图片。
+- 每张图必须有明确图片来源链接；没有摘录理由时删除图片，摘录理由写在正文分析中。
 - 安全或双用途论文中的图若包含可直接滥用流程，放弃缓存该图，改写成高层文字 summary，避免沉淀操作细节。
 
 ## 审稿意见搜索与吸收
@@ -448,7 +448,7 @@ $$
 - 是否保留来源 URL 和版本日期。
 - 是否完成公开审稿意见搜索；若有公开 review，是否吸收 reviewer consensus、主要质疑、作者回应和可信度影响；若无公开 review，是否在 `Skipped` 记录原因。
 - 是否在核心实验中写清楚实验设置、baseline 名称/版本/调参强度、compute 是否匹配、实现是否匹配和评测协议。
-- 若摘录关键图，是否只缓存论文 TeX source、HTML、项目页或官方仓库中的原始图片文件，是否放入 `public/images/papers/<paper-slug>/`，Markdown 是否使用 `/images/papers/<paper-slug>/...` 站点路径，图注是否包含 source URL、图片文件来源和摘录理由，版权边界是否清楚。
+- 若摘录关键图，是否只缓存论文 TeX source、HTML、项目页或官方仓库中的原始图片文件，是否放入 `public/images/papers/<paper-slug>/`，Markdown 是否使用 `/images/papers/<paper-slug>/...` 站点路径，图注是否来自原始 caption 的翻译或轻度修饰，末尾是否包含 `Image Source`，版权边界是否清楚。
 - 是否区分来源事实、作者主张和本地推论。
 - 是否在方法前回答研究问题、已有工作不足，并重建作者可能的思考路径。
 - 是否把阅读后的有效交流提炼进对应笔记。

@@ -91,7 +91,6 @@ try {
       const dialog = document.querySelector('[data-paper-figure-dialog]');
       const dialogImage = document.querySelector('[data-paper-figure-dialog-image]');
       const dialogCaption = document.querySelector('[data-paper-figure-dialog-caption]');
-      const close = document.querySelector('[data-paper-figure-dialog-close]');
 
       const triggerRect = trigger.getBoundingClientRect();
       const proseRect = prose.getBoundingClientRect();
@@ -108,11 +107,16 @@ try {
         dialogOpen: dialog.open,
         dialogSrc: dialogImage.getAttribute('src'),
         captionText: dialogCaption.textContent,
-        focusOnClose: document.activeElement === close,
+        focusOnDialog: document.activeElement === dialog,
+        hasVisibleChrome: Boolean(
+          document.querySelector('[data-paper-figure-dialog-source]') ||
+          document.querySelector('[data-paper-figure-dialog-close]') ||
+          document.querySelector('.paper-figure-dialog-head')
+        ),
         locked: document.documentElement.classList.contains('is-figure-dialog-open'),
       };
 
-      close.click();
+      dialog.dispatchEvent(new MouseEvent('click', { bubbles: true }));
       await new Promise((resolve) => requestAnimationFrame(resolve));
       const closedState = {
         dialogOpen: dialog.open,
@@ -144,10 +148,12 @@ try {
   );
   assert.equal(value.openState.dialogOpen, true, 'clicking a figure should open the image dialog');
   assert.ok(value.openState.dialogSrc.includes('fig-1-pipo-overview.png'), 'dialog should show the clicked image');
-  assert.ok(value.openState.captionText.includes('Figure 1 from'), 'dialog should copy the figure caption');
-  assert.equal(value.openState.focusOnClose, true, 'dialog should move focus to the close button');
+  assert.ok(value.openState.captionText.includes('输入侧方法、输出侧方法与 PIPO 的比较'), 'dialog should copy the concise figure caption');
+  assert.ok(value.openState.captionText.includes('Image Source'), 'dialog caption should keep image provenance');
+  assert.equal(value.openState.focusOnDialog, true, 'dialog should receive focus after opening');
+  assert.equal(value.openState.hasVisibleChrome, false, 'dialog should not render a header, source button, or close button');
   assert.equal(value.openState.locked, true, 'opening the dialog should lock page scrolling');
-  assert.equal(value.closedState.dialogOpen, false, 'close button should close the dialog');
+  assert.equal(value.closedState.dialogOpen, false, 'backdrop click should close the dialog');
   assert.equal(value.closedState.imageSrcCleared, true, 'closing should clear the dialog image src');
   assert.equal(value.closedState.focusRestored, true, 'closing should restore focus to the figure trigger');
   assert.equal(value.closedState.unlocked, true, 'closing should unlock page scrolling');

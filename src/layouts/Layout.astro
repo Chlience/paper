@@ -61,14 +61,8 @@ const jsonLdItems = [
     <main>
       <slot />
     </main>
-    <dialog class="paper-figure-dialog" data-paper-figure-dialog aria-label="图片详情">
+    <dialog class="paper-figure-dialog" data-paper-figure-dialog aria-label="图片详情" tabindex="-1">
       <figure class="paper-figure-dialog-panel">
-        <div class="paper-figure-dialog-head">
-          <a class="paper-figure-dialog-source mono" data-paper-figure-dialog-source target="_blank" rel="noreferrer">
-            打开原图
-          </a>
-          <button class="paper-figure-dialog-close" type="button" data-paper-figure-dialog-close>关闭</button>
-        </div>
         <div class="paper-figure-dialog-media">
           <img data-paper-figure-dialog-image alt="" />
         </div>
@@ -80,8 +74,6 @@ const jsonLdItems = [
       const figureDialog = document.querySelector('[data-paper-figure-dialog]');
       const figureDialogImage = figureDialog?.querySelector('[data-paper-figure-dialog-image]');
       const figureDialogCaption = figureDialog?.querySelector('[data-paper-figure-dialog-caption]');
-      const figureDialogSource = figureDialog?.querySelector('[data-paper-figure-dialog-source]');
-      const figureDialogClose = figureDialog?.querySelector('[data-paper-figure-dialog-close]');
       let lastFigureTrigger = null;
 
       const closeFigureDialog = () => {
@@ -93,9 +85,7 @@ const jsonLdItems = [
       if (
         figureDialog instanceof HTMLDialogElement &&
         figureDialogImage instanceof HTMLImageElement &&
-        figureDialogCaption instanceof HTMLElement &&
-        figureDialogSource instanceof HTMLAnchorElement &&
-        figureDialogClose instanceof HTMLButtonElement
+        figureDialogCaption instanceof HTMLElement
       ) {
         document.querySelectorAll('[data-paper-figure-open]').forEach((trigger) => {
           trigger.addEventListener('click', (event) => {
@@ -120,15 +110,12 @@ const jsonLdItems = [
 
             figureDialogImage.src = source;
             figureDialogImage.alt = image.alt || '';
-            figureDialogSource.href = source;
             figureDialogCaption.innerHTML = caption?.innerHTML ?? '';
             document.documentElement.classList.add('is-figure-dialog-open');
             figureDialog.showModal();
-            figureDialogClose.focus();
+            figureDialog.focus();
           });
         });
-
-        figureDialogClose.addEventListener('click', closeFigureDialog);
 
         figureDialog.addEventListener('click', (event) => {
           if (event.target === figureDialog) closeFigureDialog();

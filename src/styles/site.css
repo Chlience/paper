@@ -1088,50 +1088,16 @@ html.is-figure-dialog-open body {
 
 .paper-figure-dialog-panel {
   display: grid;
-  grid-template-rows: auto minmax(0, 1fr) auto;
+  grid-template-rows: minmax(0, 1fr) auto;
   max-height: calc(min(88vh, 920px) - 2px);
   margin: 0;
-}
-
-.paper-figure-dialog-head {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 10px;
-  padding: 12px;
-  border-bottom: 1px solid var(--border);
-}
-
-.paper-figure-dialog-source,
-.paper-figure-dialog-close {
-  min-height: 32px;
-  display: inline-flex;
-  align-items: center;
-  padding: 0 10px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: oklch(99% 0.003 178);
-  color: var(--muted);
-  font: inherit;
-  font-size: 13px;
-  cursor: pointer;
-}
-
-.paper-figure-dialog-source {
-  font-size: 12px;
-}
-
-.paper-figure-dialog-source:hover,
-.paper-figure-dialog-close:hover {
-  border-color: oklch(72% 0.06 145);
-  color: var(--fg);
 }
 
 .paper-figure-dialog-media {
   min-height: 0;
   display: grid;
   place-items: center;
-  padding: 18px;
+  padding: 16px;
   overflow: auto;
   background: oklch(96.5% 0.006 178);
 }
@@ -1261,10 +1227,6 @@ html.is-figure-dialog-open body {
 
   .paper-figure-dialog-panel {
     max-height: calc(min(86vh, 720px) - 2px);
-  }
-
-  .paper-figure-dialog-head {
-    padding: 10px;
   }
 
   .paper-figure-dialog-media {

@@ -64,7 +64,7 @@ Updated-At: YYYY-MM-DD HH:mm
 
 ![Figure 1: short description](/images/papers/<paper-slug>/fig-1-short-name.png)
 
-Figure X from `<paper title>`. Source: `<source URL>`；Image file source: `<tex/html/project/repo path or URL>`. 重要性：
+Figure X: 原始 caption 的中文翻译或轻度修饰，保留图中变量、方法名和实验条件。Image Source: [source label](<image source URL>).
 -->
 
 ### 6. 结论链条
