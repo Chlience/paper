@@ -60,11 +60,11 @@ Updated-At: YYYY-MM-DD HH:mm
 
 ### 5. 方法 / 系统 / 理论框架
 
-<!-- 若有架构图、训练流程图或标签构造图，直接放在解释该机制的小节下方，并写 source URL 与重要性。示例：
+<!-- 若论文 TeX source、HTML、项目页或官方仓库提供架构图、训练流程图或标签构造图的原始图片文件，可缓存到 public/images/papers/<paper-slug>/，并直接放在解释该机制的小节下方。禁止截图、PDF 裁剪和自行绘图。示例：
 
 ![Figure 1: short description](/images/papers/<paper-slug>/fig-1-short-name.png)
 
-Redrawn from Figure X of `<paper title>`. Source: `<source URL>`. 重要性：
+Figure X from `<paper title>`. Source: `<source URL>`；Image file source: `<tex/html/project/repo path or URL>`. 重要性：
 -->
 
 ### 6. 结论链条
@@ -80,7 +80,7 @@ Redrawn from Figure X of `<paper title>`. Source: `<source URL>`. 重要性：
 - 结果：
 - 解读：
 
-<!-- 若有主结论图或失败边界图，直接放在对应结果小节的表格或解读附近。 -->
+<!-- 若有主结论图或失败边界图，且能从论文源文件、HTML、项目页或官方仓库取得原始图片文件，直接放在对应结果小节的表格或解读附近。 -->
 
 ### 结果 2
 

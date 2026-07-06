@@ -181,7 +181,7 @@ LLM RL、post-training、systems、serving、optimizer 和评测类论文都必�
 
 ## 关键图嵌入与摘录
 
-论文中重要图可以进入归档，但必须有选择地摘录。默认把图嵌入到首次需要它的正文位置附近，例如方法图放在对应机制小节，训练信号图放在标签或 loss 说明附近，主结论图放在对应实验结果旁边。目标是提升机制理解和证据复查效率，避免把论文 PDF 复制成图片集。
+论文中重要图可以进入归档，但必须有选择地摘录，并且只能缓存论文已经公开提供的原始图片文件。可接受来源包括 arXiv TeX source 中的 `figures/` 图片、论文 HTML 页面引用的图片、项目页或官方仓库中的论文配图。默认把图嵌入到首次需要它的正文位置附近，例如方法图放在对应机制小节，训练信号图放在标签或 loss 说明附近，主结论图放在对应实验结果旁边。目标是提升机制理解和证据复查效率，避免把论文 PDF 复制成图片集。
 
 ### 适合摘录的图
 
@@ -193,11 +193,11 @@ LLM RL、post-training、systems、serving、optimizer 和评测类论文都必�
 - 失败边界图：例如 scaling collapse、ablation failure、OOD degradation、false positives、latency tail。
 - 跨论文关系图：能够直接帮助比较已有归档论文的方法、系统层级或证据边界。
 
-不摘录只起装饰作用、信息可由表格完整表达、与主结论关系弱或版权风险高的图片。若一张图只提供少量数值，优先改写成 Markdown 表格和文字解读。
+不摘录只起装饰作用、信息可由表格完整表达、与主结论关系弱或版权风险高的图片。若一张图只提供少量数值，优先改写成 Markdown 表格和文字解读。若论文没有提供可直接缓存的原始图片文件，放弃摘录该图，改用文字或表格说明。
 
 ### 存放、命名与正文位置
 
-原始或重绘图片放在：
+原始图片文件放在：
 
 ```text
 public/images/papers/<paper-slug>/fig-<n>-<short-name>.<ext>
@@ -213,23 +213,15 @@ Figure 1 from <paper title>. Source: <source URL>. 重要性：说明这张图�
 
 不默认新建独立 `关键图摘录` 章节。只有综合综述、图谱型文章、或多张图需要集中比较时，才建立图集式章节。普通论文笔记里，图应随正文论证出现。
 
-若一张图需要重画，仍放在正文对应位置：
-
-```markdown
-![Figure 1: short description](/images/papers/<paper-slug>/fig-1-short-name.png)
-
-Redrawn from Figure X of <paper title>. Source: <source URL>. 重要性：说明这张图支撑哪条机制、结论或边界。
-```
-
-若图片来自论文原图，图注写 `Figure X from <paper title>` 并附 source URL。若为本地重画，图注写 `Redrawn from Figure X of <paper title>`，并说明重画时保留和省略了哪些信息。
+图注写 `Figure X from <paper title>` 并附 source URL。若图片文件来自 TeX source、HTML、项目页或官方仓库，图注或邻近文字需要说明该图片文件来源。禁止自行绘图、手工复刻论文图、从 PDF 或浏览器页面截图、裁剪 PDF 页面、OCR 生成图、用 SVG/Canvas/绘图工具重画论文图。
 
 ### 版权与复现边界
 
-- 优先使用论文、项目页或官方仓库中许可清楚的图片。
-- 许可不明确时，优先本地重画机制图或把关键数据转成表格；重画图只保留必要结构和变量，不逐像素复制原图。
-- 不批量截取 PDF 图片，不把临时截图、下载过程、裁剪过程或 OCR 过程写入论文 Markdown。
+- 优先使用论文 TeX source、HTML、项目页或官方仓库中许可清楚的原始图片文件。
+- 许可不明确、图片只能通过截图/PDF 裁剪取得、或原始图片文件无法定位时，放弃缓存图片，改写成 Markdown 表格和文字解读。
+- 不截取 PDF 图片，不从浏览器或 PDF 阅读器截图，不裁剪 PDF 页面，不自行绘图或重画论文图。
 - 每张图必须有明确来源链接和摘录理由；没有摘录理由时删除图片。
-- 安全或双用途论文中的图若包含可直接滥用流程，改写成高层机制图或文字 summary，避免沉淀操作细节。
+- 安全或双用途论文中的图若包含可直接滥用流程，放弃缓存该图，改写成高层文字 summary，避免沉淀操作细节。
 
 ## 审稿意见搜索与吸收
 
@@ -456,7 +448,7 @@ $$
 - 是否保留来源 URL 和版本日期。
 - 是否完成公开审稿意见搜索；若有公开 review，是否吸收 reviewer consensus、主要质疑、作者回应和可信度影响；若无公开 review，是否在 `Skipped` 记录原因。
 - 是否在核心实验中写清楚实验设置、baseline 名称/版本/调参强度、compute 是否匹配、实现是否匹配和评测协议。
-- 若摘录关键图，是否放入 `public/images/papers/<paper-slug>/`，Markdown 是否使用 `/images/papers/<paper-slug>/...` 站点路径，图注是否包含 source URL 和摘录理由，版权边界是否清楚。
+- 若摘录关键图，是否只缓存论文 TeX source、HTML、项目页或官方仓库中的原始图片文件，是否放入 `public/images/papers/<paper-slug>/`，Markdown 是否使用 `/images/papers/<paper-slug>/...` 站点路径，图注是否包含 source URL、图片文件来源和摘录理由，版权边界是否清楚。
 - 是否区分来源事实、作者主张和本地推论。
 - 是否在方法前回答研究问题、已有工作不足，并重建作者可能的思考路径。
 - 是否把阅读后的有效交流提炼进对应笔记。
