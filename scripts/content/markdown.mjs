@@ -2,8 +2,12 @@ import katex from 'katex';
 import MarkdownIt from 'markdown-it';
 import markdownItAnchor from 'markdown-it-anchor';
 import markdownItTexmath from 'markdown-it-texmath';
+import { existsSync, readFileSync } from 'node:fs';
+import path from 'node:path';
 
 const slugCounts = new Map();
+const imageDimensions = new Map();
+const publicDir = path.resolve(process.cwd(), 'public');
 
 const slugify = (value) => {
   const base = String(value)
@@ -18,6 +22,123 @@ const slugify = (value) => {
   const count = slugCounts.get(slug) ?? 0;
   slugCounts.set(slug, count + 1);
   return count === 0 ? slug : `${slug}-${count + 1}`;
+};
+
+const getLocalImageDimensions = (src) => {
+  if (!src || !src.startsWith('/')) return null;
+  const cleanSrc = src.split(/[?#]/)[0];
+  if (!cleanSrc.startsWith('/images/')) return null;
+  if (imageDimensions.has(cleanSrc)) return imageDimensions.get(cleanSrc);
+
+  const filePath = path.resolve(publicDir, cleanSrc.replace(/^\/+/, ''));
+  if (!filePath.startsWith(`${publicDir}${path.sep}`) || !existsSync(filePath)) {
+    imageDimensions.set(cleanSrc, null);
+    return null;
+  }
+
+  const buffer = readFileSync(filePath);
+  const isPng =
+    buffer.length >= 24 &&
+    buffer[0] === 0x89 &&
+    buffer[1] === 0x50 &&
+    buffer[2] === 0x4e &&
+    buffer[3] === 0x47;
+
+  if (!isPng) {
+    imageDimensions.set(cleanSrc, null);
+    return null;
+  }
+
+  const dimensions = {
+    width: buffer.readUInt32BE(16),
+    height: buffer.readUInt32BE(20),
+  };
+  imageDimensions.set(cleanSrc, dimensions);
+  return dimensions;
+};
+
+const getPlainInlineText = (inlineToken) =>
+  (inlineToken?.children ?? [])
+    .map((child) => child.content ?? '')
+    .join('')
+    .trim();
+
+const isFigureCaption = (inlineToken) =>
+  /^(Figure|Fig\.|图)\s*[A-Za-z0-9一二三四五六七八九十.:-]*/i.test(getPlainInlineText(inlineToken));
+
+const isSingleImageParagraph = (inlineToken) => {
+  const children = inlineToken?.children ?? [];
+  return children.length === 1 && children[0].type === 'image';
+};
+
+const addImageLoadingAttrs = (imageToken) => {
+  const src = imageToken.attrGet('src');
+  const alt = (imageToken.content || imageToken.attrGet('alt') || '').trim();
+  const dimensions = getLocalImageDimensions(src);
+
+  imageToken.attrJoin('class', 'paper-figure-image');
+  imageToken.attrSet('loading', 'lazy');
+  imageToken.attrSet('decoding', 'async');
+  if (alt) imageToken.attrSet('alt', alt);
+  if (dimensions) {
+    imageToken.attrSet('width', String(dimensions.width));
+    imageToken.attrSet('height', String(dimensions.height));
+  }
+};
+
+const paperFigurePlugin = (markdown) => {
+  markdown.core.ruler.after('inline', 'paper_figures', (state) => {
+    const output = [];
+
+    for (let i = 0; i < state.tokens.length; i += 1) {
+      const token = state.tokens[i];
+      const inline = state.tokens[i + 1];
+      const close = state.tokens[i + 2];
+      const nextOpen = state.tokens[i + 3];
+      const captionInline = state.tokens[i + 4];
+      const nextClose = state.tokens[i + 5];
+
+      if (
+        token?.type === 'paragraph_open' &&
+        inline?.type === 'inline' &&
+        close?.type === 'paragraph_close' &&
+        isSingleImageParagraph(inline) &&
+        nextOpen?.type === 'paragraph_open' &&
+        captionInline?.type === 'inline' &&
+        nextClose?.type === 'paragraph_close' &&
+        isFigureCaption(captionInline)
+      ) {
+        const image = inline.children[0];
+        const src = image.attrGet('src');
+        const alt = (image.content || image.attrGet('alt') || '').trim();
+        addImageLoadingAttrs(image);
+
+        const figureOpen = new state.Token('figure_open', 'figure', 1);
+        figureOpen.attrSet('class', 'paper-figure');
+        figureOpen.attrSet('data-paper-figure', '');
+
+        const linkOpen = new state.Token('link_open', 'a', 1);
+        linkOpen.attrSet('class', 'paper-figure-open');
+        linkOpen.attrSet('data-paper-figure-open', '');
+        linkOpen.attrSet('href', src);
+        linkOpen.attrSet('aria-label', alt ? `查看大图：${alt}` : '查看大图');
+
+        const linkClose = new state.Token('link_close', 'a', -1);
+        const captionOpen = new state.Token('figcaption_open', 'figcaption', 1);
+        captionOpen.attrSet('class', 'paper-figure-caption');
+        const captionClose = new state.Token('figcaption_close', 'figcaption', -1);
+        const figureClose = new state.Token('figure_close', 'figure', -1);
+
+        output.push(figureOpen, linkOpen, image, linkClose, captionOpen, captionInline, captionClose, figureClose);
+        i += 5;
+        continue;
+      }
+
+      output.push(token);
+    }
+
+    state.tokens = output;
+  });
 };
 
 const md = new MarkdownIt({
@@ -41,7 +162,8 @@ const md = new MarkdownIt({
       class: 'heading-anchor',
       ariaHidden: true,
     }),
-  });
+  })
+  .use(paperFigurePlugin);
 
 export const stripMarkdown = (value = '') =>
   value

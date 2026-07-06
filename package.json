@@ -12,6 +12,7 @@
     "build": "npm run build:content && astro build",
     "test:search": "node scripts/check-paper-search.mjs",
     "test:pins": "node scripts/check-pinned-papers.mjs",
+    "test:figures": "node scripts/check-paper-figure-dialog.mjs",
     "test:dialog-scroll": "node scripts/check-paper-dialog-scroll.mjs",
     "test:dialog-interaction": "node scripts/check-paper-dialog-interaction.mjs",
     "check:metadata": "node scripts/check-paper-metadata.mjs",
