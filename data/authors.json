@@ -5613,12 +5613,16 @@
     "github": "",
     "x": "https://x.com/nino_vieillard",
     "xConfidence": "high",
-    "topics": ["on-policy distillation", "generalized knowledge distillation", "reinforcement learning", "RLHF", "language model alignment"],
-    "notes": "Equal-contribution and corresponding author of On-Policy Distillation of Language Models. The paper lists Google DeepMind. Public Scholar and X profiles align with the Google DeepMind RLHF / alignment publication record.",
+    "topics": ["on-policy distillation", "generalized knowledge distillation", "reinforcement learning", "RLHF", "language model alignment", "Gemma 4"],
+    "notes": "Equal-contribution and corresponding author of On-Policy Distillation of Language Models. The paper lists Google DeepMind. Gemma 4 Technical Report lists him among core contributors. Public Scholar and X profiles align with the Google DeepMind RLHF / alignment publication record.",
     "sources": [
       {
         "label": "On-Policy Distillation",
         "url": "https://arxiv.org/abs/2306.13649"
+      },
+      {
+        "label": "Gemma 4 Technical Report",
+        "url": "https://arxiv.org/abs/2607.02770"
       },
       {
         "label": "Google Scholar",
@@ -5669,12 +5673,16 @@
     "github": "",
     "x": "",
     "xConfidence": "not-found",
-    "topics": ["on-policy distillation", "machine learning infrastructure", "language model distillation"],
-    "notes": "Coauthor of On-Policy Distillation of Language Models, with paper footnote credit for infrastructure contribution. The paper lists Google DeepMind. Public Scholar and professional profile snippets align with Google / Google DeepMind.",
+    "topics": ["on-policy distillation", "machine learning infrastructure", "language model distillation", "Gemma 4"],
+    "notes": "Coauthor of On-Policy Distillation of Language Models, with paper footnote credit for infrastructure contribution. The paper lists Google DeepMind. Gemma 4 Technical Report lists him among core contributors. Public Scholar and professional profile snippets align with Google / Google DeepMind.",
     "sources": [
       {
         "label": "On-Policy Distillation",
         "url": "https://arxiv.org/abs/2306.13649"
+      },
+      {
+        "label": "Gemma 4 Technical Report",
+        "url": "https://arxiv.org/abs/2607.02770"
       },
       {
         "label": "Google Scholar",
@@ -5695,12 +5703,16 @@
     "github": "",
     "x": "",
     "xConfidence": "not-found",
-    "topics": ["on-policy distillation", "reinforcement learning infrastructure", "language model distillation", "high-performance computing"],
-    "notes": "Coauthor of On-Policy Distillation of Language Models, with paper footnote credit for infrastructure contribution. The paper lists Google DeepMind. Google Research profile connects her to HPC, ETH Zurich postdoctoral work, Google / YouTube, and RL tools.",
+    "topics": ["on-policy distillation", "reinforcement learning infrastructure", "language model distillation", "high-performance computing", "Gemma 4"],
+    "notes": "Coauthor of On-Policy Distillation of Language Models, with paper footnote credit for infrastructure contribution. The paper lists Google DeepMind. Gemma 4 Technical Report lists her among core contributors. Google Research profile connects her to HPC, ETH Zurich postdoctoral work, Google / YouTube, and RL tools.",
     "sources": [
       {
         "label": "On-Policy Distillation",
         "url": "https://arxiv.org/abs/2306.13649"
+      },
+      {
+        "label": "Gemma 4 Technical Report",
+        "url": "https://arxiv.org/abs/2607.02770"
       },
       {
         "label": "Google Research profile",
@@ -5747,12 +5759,16 @@
     "github": "",
     "x": "https://x.com/OlivierBachem",
     "xConfidence": "high",
-    "topics": ["on-policy distillation", "Gemma", "reinforcement learning", "language model post-training", "coresets"],
-    "notes": "Coauthor of On-Policy Distillation of Language Models. The paper lists Google DeepMind. Public homepage identifies him as a Google DeepMind senior director / research scientist, co-leading Gemma, with earlier Google Brain and ETH Zurich history.",
+    "topics": ["on-policy distillation", "Gemma", "Gemma 4", "open-weight multimodal models", "reinforcement learning", "language model post-training", "coresets"],
+    "notes": "Coauthor of On-Policy Distillation of Language Models. The paper lists Google DeepMind. Gemma 4 Technical Report lists him among core contributors. Public homepage identifies him as a Google DeepMind senior director / research scientist, co-leading Gemma, with earlier Google Brain and ETH Zurich history.",
     "sources": [
       {
         "label": "On-Policy Distillation",
         "url": "https://arxiv.org/abs/2306.13649"
+      },
+      {
+        "label": "Gemma 4 Technical Report",
+        "url": "https://arxiv.org/abs/2607.02770"
       },
       {
         "label": "Homepage",
