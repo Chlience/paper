@@ -20,11 +20,13 @@ Updated-At: YYYY-MM-DD HH:mm
 - Author A: Institution in this paper.
 - Author B: Institution in this paper；历史机构：previously verified affiliations if already known and not already listed in the paper-time institution.
 
-写法要求：本节作者条目在冒号后直接写发表该论文时的机构。若有额外已核验历史机构，再写 `历史机构：...`；历史机构中不重复列出已在当前机构中出现的机构。
+写法要求：作者条目在冒号后直接写发表该论文时的机构。若有额外已核验历史机构，再写 `历史机构：...`；历史机构中不重复列出已在当前机构中出现的机构。
 
 ## 一句话结论
 
 用一段话说明论文最核心贡献或判断。
+
+<!-- 若读后讨论改变了论文核心贡献、主张边界或本地评价，可在这里添加一段 `本地评价：...`；完整推理链仍写入 `本地讨论补充`。 -->
 
 ## 阅读目标与判断边界
 
@@ -138,7 +140,7 @@ Figure X: 原始 caption 的中文翻译或轻度修饰，保留图中变量、�
 - Reviewer consensus:
 - Main criticisms:
 - Author response:
-- 对本文可信度的影响:
+- 对可信度的影响:
 
 ## 本地讨论补充
 

@@ -1,7 +1,7 @@
 # Paper Analysis Workflow
 
 First-Archived-At: 2026-06-19
-Updated-At: 2026-07-06
+Updated-At: 2026-07-08
 
 ## 目标
 
@@ -260,7 +260,7 @@ https://api2.openreview.net/notes?forum=<forum_id>&details=replyCount,directRepl
 - Reviewer consensus: 主要认可点，例如问题重要性、方法新意、实验覆盖、工程可用性。
 - Main criticisms: 主要质疑点，例如理论假设、baseline 不完整、统计显著性、ablation 不足、泛化边界、写作或 novelty。
 - Author response: 是否公开 rebuttal；作者是否补充实验、承认限制或澄清误解。
-- 对本文可信度的影响: 明确哪些主张应上调可信度，哪些主张应降级为待复验。
+- 对可信度的影响: 明确哪些主张应上调可信度，哪些主张应降级为待复验。
 
 写法要求：
 
@@ -287,6 +287,7 @@ https://api2.openreview.net/notes?forum=<forum_id>&details=replyCount,directRepl
 
 - 默认写入对应笔记的 `本地讨论补充` 章节。
 - 若讨论修正了 `一句话结论`、`局限`、`主要启发` 或 `跨论文关系`，同步更新对应章节。
+- 若讨论改变了对论文核心贡献、主张边界或本地评价的读法，在 `一句话结论` 后补一段 `本地评价：...`，用一到两段前置呈现收敛判断；完整推理链仍保留在 `本地讨论补充`。
 - 若讨论产生新的作者关系、主题延展、方法复用或跨材料关系，同步更新 `content/utility/papers-index.md`。
 
 写法要求：
