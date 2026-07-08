@@ -62,7 +62,7 @@ Updated-At: YYYY-MM-DD HH:mm
 
 ### 5. 方法 / 系统 / 理论框架
 
-<!-- 若论文 TeX source、HTML、项目页或官方仓库提供架构图、训练流程图或标签构造图的原始图片文件，可缓存到 public/images/papers/<paper-slug>/，并直接放在解释该机制的小节下方。禁止截图、PDF 裁剪和自行绘图。示例：
+<!-- 若论文 TeX source、HTML、项目页或官方仓库提供架构图、训练流程图或标签构造图的原始图片文件，可缓存到 public/images/papers/<paper-slug>/，并直接放在解释该机制的小节下方。截图、PDF 裁剪和本地辅助示意图只用于高价值场景，并按 SOP 标注来源形态。示例：
 
 ![Figure 1: short description](/images/papers/<paper-slug>/fig-1-short-name.png)
 
@@ -82,7 +82,7 @@ Figure X: 原始 caption 的中文翻译或轻度修饰，保留图中变量、�
 - 结果：
 - 解读：
 
-<!-- 若有主结论图或失败边界图，且能从论文源文件、HTML、项目页或官方仓库取得原始图片文件，直接放在对应结果小节的表格或解读附近。 -->
+<!-- 若有主结论图或失败边界图，且满足 SOP 的高价值准入标准，直接放在对应结果小节的表格或解读附近。 -->
 
 ### 结果 2
 
@@ -102,6 +102,9 @@ Figure X: 原始 caption 的中文翻译或轻度修饰，保留图中变量、�
 | 数据与任务 |  |
 | RL / 训练配置 |  |
 | 系统配置 |  |
+| 框架基座 / paper base | 训练、推理 / rollout、serving、并行 / kernel、agent loop、reward / evaluator 分别基于什么框架。 |
+| 框架版本与证据来源 | 记录大版本、commit、release 日期、README / requirements / 脚本来源；未披露则写“版本未披露”。 |
+| 框架改动范围 | 直接调用 / 配置适配 / fork 或 vendored code / 核心模块改写 / 新增模块；写清改动落在 trainer、rollout、scheduler、agent loop、reward、data pipeline、kernel 或 harness 的哪一层。 |
 | 技术报告训练配置 |  |
 | 训练硬件与拓扑 |  |
 | 并行方式与框架 |  |

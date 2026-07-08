@@ -137,7 +137,7 @@ data/authors.json
 
 ## 实验设置与 baseline 审计
 
-LLM RL、post-training、systems、serving、optimizer 和评测类论文都必须把实验设置写到足够可复查。baseline 的选择和强度会直接改变结论可信度，不能只记录最终分数。
+LLM RL、post-training、systems、serving、optimizer 和评测类论文都必须把实验设置写到足够可复查。baseline 的选择和强度会直接改变结论可信度，不能只记录最终分数。若论文方法、系统或实验代码基于已有框架，还要做轻量级框架分析，明确它的 paper base：具体基于哪些训练、推理、服务、评测或 agent 框架，大版本或 commit 证据是什么，作者主要改动落在哪些模块。
 
 ### 必须记录的实验设置
 
@@ -147,13 +147,16 @@ LLM RL、post-training、systems、serving、optimizer 和评测类论文都必�
 2. 数据与任务：训练集、过滤规则、prompt 数量、验证 / 测试集、是否去重、是否含合成数据、是否和 benchmark 有污染风险。
 3. RL / 训练配置：PPO / GRPO / DAPO / RLOO / REINFORCE / actor-critic 等目标；rollout group size；batch size；max prompt / response length；采样温度、top-p、top-k；KL penalty / KL loss；entropy bonus；reward shaping；optimizer、learning rate、warmup、训练步数和 token budget。
 4. 系统配置：GPU 数量和型号，parallelism / sharding，rollout engine 与 trainer engine，是否异步，是否使用 vLLM / SGLang / Megatron / FSDP / ZeRO，是否有 fused kernel 或 logprob consistency 设置。
-5. 评测协议：pass@1、avg@k、pass@$k$、majority vote、Best-of-N、temperature、top-p、样本数、判题器、工具环境、是否报告 peak / final / average checkpoint。
-6. 统计报告：seed 数量、误差线、置信区间、显著性检验、曲线平滑方式；若缺失，明确写入局限。
+5. 框架基座 / paper base：若论文使用或改造现有框架，记录训练框架、推理 / rollout 框架、serving 框架、并行 / kernel 框架、agent loop / tool 框架、reward / evaluator 框架；尽量写出大版本、commit、release 日期或 README / requirements 证据。若只披露框架名，写明“版本未披露”。若没有相关实现，写“未涉及”。
+6. 框架改动范围：区分直接调用、配置适配、fork / vendored code、核心模块改写和新增模块；写清作者改了 trainer、rollout、scheduler、agent loop、reward、data pipeline、kernel、benchmark harness 中的哪一部分。不要把框架本身能力写成论文贡献。
+7. 评测协议：pass@1、avg@k、pass@$k$、majority vote、Best-of-N、temperature、top-p、样本数、判题器、工具环境、是否报告 peak / final / average checkpoint。
+8. 统计报告：seed 数量、误差线、置信区间、显著性检验、曲线平滑方式；若缺失，明确写入局限。
 
 技术报告、模型报告和系统报告还必须单独写清训练相关信息：
 
 - 训练硬件：GPU / TPU 数量、型号、节点数、每节点卡数、NVLink / NVSwitch / InfiniBand / Ethernet 等拓扑。
 - 并行方式：PP / TP / EP / DP / SP / FSDP / ZeRO / sequence parallel / expert parallel 的度数、跨节点范围、是否异步、是否使用自研调度或 fused kernels。
+- 框架栈：具体训练框架、推理 / serving engine、分布式训练后端、checkpoint / weight sync 方式、数据处理和评测 harness；优先记录大版本，例如 `verl 0.x`、`SGLang 0.4.x`、`Megatron-Core 0.13.x`、`PyTorch 2.x`、`CUDA 12.x` 这类粒度。版本证据不足时记录来源和缺口。
 - 训练数据：pretraining tokens、数据组成变化、语言覆盖、代码 / 数学 / 多模态比例线索、去重 / 过滤 / packing、FIM 或合成数据比例；SFT / RL 数据量、来源、生成器和人工校验方式。
 - 训练过程：sequence length、context extension 阶段、batch size schedule、optimizer、learning-rate schedule、warmup、gradient clipping、训练步数、token budget、checkpoint / rollback 情况。
 - 训练时间与成本：GPU hours、wall-clock time、每 trillion tokens 成本、pretraining / context extension / post-training 分项成本、公开成本是否排除研究试错和 ablations。
