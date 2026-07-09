@@ -8463,5 +8463,479 @@
         "url": "https://openreview.net/profile?id=~Furu_Wei1"
       }
     ]
+  },
+  {
+    "slug": "ruisheng-cao",
+    "name": "Ruisheng Cao",
+    "aliases": ["Ruisheng Cao", "Rhythm Tsao"],
+    "affiliations": ["Qwen Team", "Alibaba Group", "Shanghai Jiao Tong University", "X-LANCE Lab"],
+    "homepage": "https://rhythmcao.github.io/",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["Qwen3-Coder-Next", "coding agents", "software engineering agents", "text-to-SQL", "multimodal agents"],
+    "notes": "Core contributor of Qwen3-Coder-Next. Homepage identifies him as a staff research scientist at Alibaba Qwen Coder Team and a PhD graduate from X-LANCE Lab, Shanghai Jiao Tong University, with research interests spanning code intelligence, text-to-SQL and multimodal agents.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://rhythmcao.github.io/"
+      },
+      {
+        "label": "Qwen3-Coder-Next arXiv",
+        "url": "https://arxiv.org/abs/2603.00729"
+      },
+      {
+        "label": "Qwen3-Coder GitHub",
+        "url": "https://github.com/QwenLM/Qwen3-Coder"
+      }
+    ]
+  },
+  {
+    "slug": "mouxiang-chen",
+    "name": "Mouxiang Chen",
+    "chineseName": "陈谋祥",
+    "aliases": ["Mouxiang Chen", "Keytoyze"],
+    "affiliations": ["Qwen Team", "Alibaba Group", "Zhejiang University"],
+    "homepage": "https://me.keytoix.vip/",
+    "github": "https://github.com/Keytoyze",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["Qwen3-Coder-Next", "Qwen-Coder", "large language models", "code generation", "time series"],
+    "notes": "Core contributor of Qwen3-Coder-Next. Homepage identifies him as a Zhejiang University PhD student and Alibaba Qwen intern, and lists Qwen-related LLM publications with Binyuan Hui, Zeyu Cui, Jiaxi Yang and Junyang Lin.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://me.keytoix.vip/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/Keytoyze"
+      },
+      {
+        "label": "Qwen3-Coder-Next arXiv",
+        "url": "https://arxiv.org/abs/2603.00729"
+      }
+    ]
+  },
+  {
+    "slug": "jiawei-chen-qwen",
+    "name": "Jiawei Chen",
+    "chineseName": "陈家慰",
+    "aliases": ["Jiawei Chen"],
+    "affiliations": ["Qwen Team", "Alibaba Group", "Institute of Software, Chinese Academy of Sciences"],
+    "homepage": "https://chen700564.github.io/",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["Qwen3-Coder-Next", "code LLMs", "agentic RL", "retrieval-augmented generation"],
+    "notes": "Core contributor of Qwen3-Coder-Next. Homepage identifies him as a Qwen Team researcher at Alibaba Group with doctoral training at the Institute of Software, Chinese Academy of Sciences, and states research interests in Code LLMs and Agentic RL.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://chen700564.github.io/"
+      },
+      {
+        "label": "Qwen3-Coder-Next arXiv",
+        "url": "https://arxiv.org/abs/2603.00729"
+      },
+      {
+        "label": "Qwen3-Coder GitHub",
+        "url": "https://github.com/QwenLM/Qwen3-Coder"
+      }
+    ]
+  },
+  {
+    "slug": "zeyu-cui",
+    "name": "Zeyu Cui",
+    "aliases": ["Zeyu Cui", "cyente"],
+    "affiliations": ["Qwen Team", "Alibaba Group", "Institute of Automation, Chinese Academy of Sciences", "DAMO Institute"],
+    "homepage": "https://cyente.github.io/",
+    "github": "https://github.com/cyente",
+    "x": "https://x.com/czy_yente",
+    "xConfidence": "high",
+    "topics": ["Qwen3-Coder-Next", "Qwen-Coder", "coding agents", "large language models"],
+    "notes": "Core contributor of Qwen3-Coder-Next and recurring Qwen author. GitHub profile identifies Zeyu Cui, links the Qwen and Qwen3-Coder projects, lists research interests in Coding Agent and Large Language Models, and gives the X handle.",
+    "sources": [
+      {
+        "label": "GitHub",
+        "url": "https://github.com/cyente"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=QVxn-CkAAAAJ"
+      },
+      {
+        "label": "Qwen3-Coder-Next arXiv",
+        "url": "https://arxiv.org/abs/2603.00729"
+      }
+    ]
+  },
+  {
+    "slug": "yunlong-feng-qwen",
+    "name": "Yunlong Feng",
+    "aliases": ["Yunlong Feng"],
+    "affiliations": ["Qwen Team", "Alibaba Group"],
+    "homepage": "",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["Qwen3-Coder-Next", "Qwen-Coder", "software engineering agents", "executable environments"],
+    "notes": "Core contributor of Qwen3-Coder-Next from Qwen Team / Alibaba Cloud. Public personal profile evidence was sparse in this pass, so the profile is scoped to Qwen3-Coder-Next and Qwen Team sources.",
+    "sources": [
+      {
+        "label": "Qwen3-Coder-Next arXiv",
+        "url": "https://arxiv.org/abs/2603.00729"
+      },
+      {
+        "label": "Qwen3-Coder GitHub",
+        "url": "https://github.com/QwenLM/Qwen3-Coder"
+      },
+      {
+        "label": "Hugging Face model card",
+        "url": "https://huggingface.co/Qwen/Qwen3-Coder-Next"
+      }
+    ]
+  },
+  {
+    "slug": "yuheng-jing",
+    "name": "Yuheng Jing",
+    "aliases": ["Yuheng Jing"],
+    "affiliations": ["Qwen Team", "Alibaba Group", "Institute of Automation, Chinese Academy of Sciences"],
+    "homepage": "",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["Qwen3-Coder-Next", "Qwen-Coder", "mobile device agents", "coding agents"],
+    "notes": "Core contributor of Qwen3-Coder-Next. OpenReview and Scholar search results connect this name to Qwen3-Coder-Next and agent papers; public profile access was limited, so affiliations are kept conservative.",
+    "sources": [
+      {
+        "label": "Qwen3-Coder-Next arXiv",
+        "url": "https://arxiv.org/abs/2603.00729"
+      },
+      {
+        "label": "OpenReview profile",
+        "url": "https://openreview.net/profile?id=~Yuheng_Jing1"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=CwURd-8AAAAJ"
+      }
+    ]
+  },
+  {
+    "slug": "kaixin-li",
+    "name": "Kaixin Li",
+    "aliases": ["Kaixin Li"],
+    "affiliations": ["Qwen Team", "Alibaba Group", "National University of Singapore"],
+    "homepage": "https://likaixin2000.github.io/",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["Qwen3-Coder-Next", "Qwen-Coder", "multimodal agents", "GUI agents", "code generation"],
+    "notes": "Core contributor of Qwen3-Coder-Next. Homepage identifies Kaixin Li as an NUS PhD student and previous Qwen research intern supervised by Junyang Lin and Binyuan Hui, with contributions to Qwen-VL, Qwen-3.5 and Qwen-Coder.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://likaixin2000.github.io/"
+      },
+      {
+        "label": "Qwen3-Coder-Next arXiv",
+        "url": "https://arxiv.org/abs/2603.00729"
+      },
+      {
+        "label": "Qwen3-Coder GitHub",
+        "url": "https://github.com/QwenLM/Qwen3-Coder"
+      }
+    ]
+  },
+  {
+    "slug": "mingze-li-qwen",
+    "name": "Mingze Li",
+    "aliases": ["Mingze Li"],
+    "affiliations": ["Qwen Team", "Alibaba Group"],
+    "homepage": "",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["Qwen3-Coder-Next", "Qwen3", "Qwen-Coder", "software engineering agents"],
+    "notes": "Core contributor of Qwen3-Coder-Next and recurring Qwen author. Public personal profile evidence was sparse in this pass, so the profile is scoped to Qwen model report sources.",
+    "sources": [
+      {
+        "label": "Qwen3-Coder-Next arXiv",
+        "url": "https://arxiv.org/abs/2603.00729"
+      },
+      {
+        "label": "Qwen3 arXiv",
+        "url": "https://arxiv.org/abs/2505.09388"
+      },
+      {
+        "label": "Qwen3-Coder GitHub",
+        "url": "https://github.com/QwenLM/Qwen3-Coder"
+      }
+    ]
+  },
+  {
+    "slug": "zeyao-ma",
+    "name": "Zeyao Ma",
+    "aliases": ["Zeyao Ma"],
+    "affiliations": ["Qwen Team", "Alibaba Group", "Renmin University of China"],
+    "homepage": "",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["Qwen3-Coder-Next", "coding agents", "code generation", "reasoning", "table processing"],
+    "notes": "Core contributor of Qwen3-Coder-Next. OpenReview and Scholar results identify Zeyao Ma with Qwen Team / Alibaba internship and Renmin University of China education; publications include Scaling Agentic Verifier for Competitive Coding.",
+    "sources": [
+      {
+        "label": "Qwen3-Coder-Next arXiv",
+        "url": "https://arxiv.org/abs/2603.00729"
+      },
+      {
+        "label": "OpenReview profile",
+        "url": "https://openreview.net/profile?id=~Zeyao_Ma1"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=N0DI51ZfPdkC"
+      }
+    ]
+  },
+  {
+    "slug": "kashun-shum",
+    "name": "Kashun Shum",
+    "aliases": ["Kashun Shum", "KaShun Shum"],
+    "affiliations": ["Qwen Team", "Alibaba Group", "HKUST NLP Lab"],
+    "homepage": "https://shumkashun.github.io/",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["Qwen3-Coder-Next", "Qwen-Coder", "coding agents", "large language models"],
+    "notes": "Core contributor and arXiv submitter for Qwen3-Coder-Next. Public homepage was reachable but not text-extractable in this pass; Qwen3-Coder-Next arXiv and Qwen sources provide the stable paper relation.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://shumkashun.github.io/"
+      },
+      {
+        "label": "Qwen3-Coder-Next arXiv",
+        "url": "https://arxiv.org/abs/2603.00729"
+      },
+      {
+        "label": "Qwen3-Coder GitHub",
+        "url": "https://github.com/QwenLM/Qwen3-Coder"
+      }
+    ]
+  },
+  {
+    "slug": "xuwu-wang-qwen",
+    "name": "Xuwu Wang",
+    "aliases": ["Xuwu Wang"],
+    "affiliations": ["Qwen Team", "Alibaba Group"],
+    "homepage": "",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["Qwen3-Coder-Next", "Qwen-Coder", "software engineering agents", "executable environments"],
+    "notes": "Core contributor of Qwen3-Coder-Next from Qwen Team / Alibaba Cloud. Public personal profile evidence was sparse in this pass, so the profile is scoped to Qwen3-Coder-Next and related Qwen Team sources.",
+    "sources": [
+      {
+        "label": "Qwen3-Coder-Next arXiv",
+        "url": "https://arxiv.org/abs/2603.00729"
+      },
+      {
+        "label": "Qwen3-Coder GitHub",
+        "url": "https://github.com/QwenLM/Qwen3-Coder"
+      },
+      {
+        "label": "Hugging Face model card",
+        "url": "https://huggingface.co/Qwen/Qwen3-Coder-Next"
+      }
+    ]
+  },
+  {
+    "slug": "jinxi-wei",
+    "name": "Jinxi Wei",
+    "aliases": ["Jinxi Wei"],
+    "affiliations": ["Qwen Team", "Alibaba Group"],
+    "homepage": "",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["Qwen3-Coder-Next", "Qwen-Coder", "coding agents", "tool calling"],
+    "notes": "Core contributor of Qwen3-Coder-Next from Qwen Team / Alibaba Cloud. Public personal profile evidence was sparse in this pass, so the profile is scoped to Qwen3-Coder-Next and related Qwen Team sources.",
+    "sources": [
+      {
+        "label": "Qwen3-Coder-Next arXiv",
+        "url": "https://arxiv.org/abs/2603.00729"
+      },
+      {
+        "label": "Qwen3-Coder GitHub",
+        "url": "https://github.com/QwenLM/Qwen3-Coder"
+      },
+      {
+        "label": "Hugging Face model card",
+        "url": "https://huggingface.co/Qwen/Qwen3-Coder-Next"
+      }
+    ]
+  },
+  {
+    "slug": "jiaxi-yang-qwen",
+    "name": "Jiaxi Yang",
+    "aliases": ["Jiaxi Yang"],
+    "affiliations": ["Qwen Team", "Alibaba Group", "Shenzhen Institutes of Advanced Technology, Chinese Academy of Sciences"],
+    "homepage": "",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["Qwen3-Coder-Next", "Qwen3", "Qwen-Coder", "large language models", "natural language processing"],
+    "notes": "Core contributor of Qwen3-Coder-Next and recurring Qwen author. OpenReview / Scholar results identify a Jiaxi Yang profile at SIAT, CAS; Qwen3 and Qwen3-Coder-Next sources provide the Qwen author relation.",
+    "sources": [
+      {
+        "label": "Qwen3-Coder-Next arXiv",
+        "url": "https://arxiv.org/abs/2603.00729"
+      },
+      {
+        "label": "Qwen3 arXiv",
+        "url": "https://arxiv.org/abs/2505.09388"
+      },
+      {
+        "label": "OpenReview profile",
+        "url": "https://openreview.net/profile?id=~Jiaxi_Yang1"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=NqUIrccAAAAJ"
+      }
+    ]
+  },
+  {
+    "slug": "jiajun-zhang-qwen",
+    "name": "Jiajun Zhang",
+    "aliases": ["Jiajun Zhang"],
+    "affiliations": ["Qwen Team", "Alibaba Group"],
+    "homepage": "",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["Qwen3-Coder-Next", "Qwen-Coder", "coding agents", "competitive coding"],
+    "notes": "Core contributor of Qwen3-Coder-Next from Qwen Team / Alibaba Cloud. Public personal profile evidence was sparse in this pass, so the profile is scoped to Qwen3-Coder-Next and related Qwen Team sources.",
+    "sources": [
+      {
+        "label": "Qwen3-Coder-Next arXiv",
+        "url": "https://arxiv.org/abs/2603.00729"
+      },
+      {
+        "label": "Qwen3-Coder GitHub",
+        "url": "https://github.com/QwenLM/Qwen3-Coder"
+      },
+      {
+        "label": "Hugging Face model card",
+        "url": "https://huggingface.co/Qwen/Qwen3-Coder-Next"
+      }
+    ]
+  },
+  {
+    "slug": "lei-zhang-qwen",
+    "name": "Lei Zhang",
+    "aliases": ["Lei Zhang"],
+    "affiliations": ["Qwen Team", "Alibaba Group"],
+    "homepage": "",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["Qwen3-Coder-Next", "Qwen-Coder", "software engineering agents", "executable environments"],
+    "notes": "Core contributor of Qwen3-Coder-Next from Qwen Team / Alibaba Cloud. Public personal profile evidence was sparse in this pass, so the profile is scoped to Qwen3-Coder-Next and related Qwen Team sources.",
+    "sources": [
+      {
+        "label": "Qwen3-Coder-Next arXiv",
+        "url": "https://arxiv.org/abs/2603.00729"
+      },
+      {
+        "label": "Qwen3-Coder GitHub",
+        "url": "https://github.com/QwenLM/Qwen3-Coder"
+      },
+      {
+        "label": "Hugging Face model card",
+        "url": "https://huggingface.co/Qwen/Qwen3-Coder-Next"
+      }
+    ]
+  },
+  {
+    "slug": "zongmeng-zhang",
+    "name": "Zongmeng Zhang",
+    "aliases": ["Zongmeng Zhang"],
+    "affiliations": ["Qwen Team", "Alibaba Group", "University of Science and Technology of China", "Shandong University"],
+    "homepage": "https://zmzhang2000.github.io/",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["Qwen3-Coder-Next", "coding agents", "large language models", "reinforcement learning", "multimodal LLMs"],
+    "notes": "Core contributor of Qwen3-Coder-Next. Homepage identifies him as a USTC PhD candidate working on advanced coding agents at Qwen Team and lists Qwen3-Coder-Next plus SWE-Universe among publications.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://zmzhang2000.github.io/"
+      },
+      {
+        "label": "Qwen3-Coder-Next arXiv",
+        "url": "https://arxiv.org/abs/2603.00729"
+      },
+      {
+        "label": "Qwen3-Coder GitHub",
+        "url": "https://github.com/QwenLM/Qwen3-Coder"
+      }
+    ]
+  },
+  {
+    "slug": "wenting-zhao-qwen",
+    "name": "Wenting Zhao",
+    "aliases": ["Wenting Zhao"],
+    "affiliations": ["Qwen Team", "Alibaba Group", "Cornell University"],
+    "homepage": "https://wenting-zhao.github.io/wenting-zhao.github.io/",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["Qwen3-Coder-Next", "Qwen-Coder", "reasoning", "coding agents"],
+    "notes": "Core contributor of Qwen3-Coder-Next. Search results connect Wenting Zhao to Qwen3-Coder-Next and a Cornell reasoning profile; the X candidate was not cross-verified enough for a high-confidence handle.",
+    "sources": [
+      {
+        "label": "Qwen3-Coder-Next arXiv",
+        "url": "https://arxiv.org/abs/2603.00729"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://wenting-zhao.github.io/wenting-zhao.github.io/"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=sycHskQAAAAJ"
+      }
+    ]
+  },
+  {
+    "slug": "fan-zhou-qwen",
+    "name": "Fan Zhou",
+    "aliases": ["Fan Zhou"],
+    "affiliations": ["Qwen Team", "Alibaba Group"],
+    "homepage": "",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["Qwen3-Coder-Next", "Qwen3", "Qwen-Coder", "large language models"],
+    "notes": "Core contributor of Qwen3-Coder-Next and recurring Qwen3 author. Public personal profile evidence was sparse in this pass, so the profile is scoped to Qwen model report sources.",
+    "sources": [
+      {
+        "label": "Qwen3-Coder-Next arXiv",
+        "url": "https://arxiv.org/abs/2603.00729"
+      },
+      {
+        "label": "Qwen3 arXiv",
+        "url": "https://arxiv.org/abs/2505.09388"
+      },
+      {
+        "label": "Qwen3-Coder GitHub",
+        "url": "https://github.com/QwenLM/Qwen3-Coder"
+      }
+    ]
   }
 ]
