@@ -7198,314 +7198,6 @@
     ]
   },
   {
-    "slug": "haoyang-li-zr0",
-    "name": "Haoyang Li",
-    "aliases": ["Haoyang Li"],
-    "affiliations": ["Renmin University of China", "Key Laboratory of Data Engineering and Knowledge Engineering, Beijing, China"],
-    "homepage": "",
-    "github": "",
-    "x": "",
-    "xConfidence": "not-found",
-    "topics": ["ZR-0", "vision-language-action models", "embodied chain-of-thought", "ProcVLM", "text-to-SQL"],
-    "notes": "First author of ZR-0. Public RUCKBReasoning materials and earlier Text-to-SQL projects identify him with Renmin University of China and the lihaoyang.cs@ruc.edu.cn contact line; Jing Zhang's homepage also lists him across ZR-0, ProcVLM, From Pixels to Tokens, and RUC data intelligence work.",
-    "sources": [
-      {
-        "label": "ZR-0",
-        "url": "https://arxiv.org/abs/2606.30552"
-      },
-      {
-        "label": "Jing Zhang homepage",
-        "url": "https://xiaojingzi.github.io/"
-      },
-      {
-        "label": "text2sql-demo contact",
-        "url": "https://github.com/RUCKBReasoning/text2sql-demo/blob/main/README.md"
-      }
-    ]
-  },
-  {
-    "slug": "guanlin-li-ruc",
-    "name": "Guanlin Li",
-    "aliases": ["Guanlin Li"],
-    "affiliations": ["Renmin University of China", "Key Laboratory of Data Engineering and Knowledge Engineering, Beijing, China"],
-    "homepage": "",
-    "github": "",
-    "x": "",
-    "xConfidence": "not-found",
-    "topics": ["ZR-0", "vision-language-action models", "embodied intelligence", "TableLLM"],
-    "notes": "ZR-0 coauthor from Renmin University of China. Also appears in RUC/Jing Zhang group VLA and TableLLM-related publications; no high-confidence personal homepage or X account found in the search pass.",
-    "sources": [
-      {
-        "label": "ZR-0",
-        "url": "https://arxiv.org/abs/2606.30552"
-      },
-      {
-        "label": "TableLLM",
-        "url": "https://arxiv.org/abs/2403.19318"
-      },
-      {
-        "label": "Action Draft and Verify",
-        "url": "https://arxiv.org/abs/2603.18091"
-      },
-      {
-        "label": "Jing Zhang homepage",
-        "url": "https://xiaojingzi.github.io/"
-      }
-    ]
-  },
-  {
-    "slug": "youhe-feng",
-    "name": "Youhe Feng",
-    "aliases": ["Youhe Feng"],
-    "affiliations": ["Renmin University of China"],
-    "homepage": "",
-    "github": "",
-    "x": "",
-    "xConfidence": "not-found",
-    "topics": ["ZR-0", "ProcVLM", "embodied chain-of-thought", "robot manipulation", "progress rewards"],
-    "notes": "ZR-0 coauthor from Renmin University of China and first author of ProcVLM, which constructs ProcCorpus-60M and procedure-grounded progress rewards used as a key data source for ZR-0.",
-    "sources": [
-      {
-        "label": "ZR-0",
-        "url": "https://arxiv.org/abs/2606.30552"
-      },
-      {
-        "label": "ProcVLM project",
-        "url": "https://procvlm.github.io/"
-      },
-      {
-        "label": "Jing Zhang homepage",
-        "url": "https://xiaojingzi.github.io/"
-      }
-    ]
-  },
-  {
-    "slug": "chen-zhao-ruc-vla",
-    "name": "Chen Zhao",
-    "aliases": ["Chen Zhao"],
-    "affiliations": ["Renmin University of China"],
-    "homepage": "",
-    "github": "",
-    "x": "",
-    "xConfidence": "not-found",
-    "topics": ["ZR-0", "vision-language-action models", "Action Draft and Verify", "robot manipulation"],
-    "notes": "ZR-0 coauthor from Renmin University of China and first author of Action Draft and Verify in the same RUC/Jing Zhang VLA line. Name is common, so no external profile was merged without stronger evidence.",
-    "sources": [
-      {
-        "label": "ZR-0",
-        "url": "https://arxiv.org/abs/2606.30552"
-      },
-      {
-        "label": "Action Draft and Verify",
-        "url": "https://arxiv.org/abs/2603.18091"
-      },
-      {
-        "label": "Jing Zhang homepage",
-        "url": "https://xiaojingzi.github.io/"
-      }
-    ]
-  },
-  {
-    "slug": "zhuoran-wang-ruc",
-    "name": "Zhuoran Wang",
-    "aliases": ["Zhuoran Wang"],
-    "affiliations": ["Renmin University of China"],
-    "homepage": "",
-    "github": "",
-    "x": "",
-    "xConfidence": "not-found",
-    "topics": ["ZR-0", "vision-language-action models", "Action Draft and Verify", "robot manipulation"],
-    "notes": "ZR-0 coauthor from Renmin University of China and coauthor of Action Draft and Verify in the RUC/Jing Zhang VLA line. No high-confidence personal homepage or X account found in the search pass.",
-    "sources": [
-      {
-        "label": "ZR-0",
-        "url": "https://arxiv.org/abs/2606.30552"
-      },
-      {
-        "label": "Action Draft and Verify",
-        "url": "https://arxiv.org/abs/2603.18091"
-      },
-      {
-        "label": "Jing Zhang homepage",
-        "url": "https://xiaojingzi.github.io/"
-      }
-    ]
-  },
-  {
-    "slug": "yang-li-ruc-zr0",
-    "name": "Yang Li",
-    "aliases": ["Yang Li"],
-    "affiliations": ["Renmin University of China", "Key Laboratory of Data Engineering and Knowledge Engineering, Beijing, China"],
-    "homepage": "",
-    "github": "",
-    "x": "",
-    "xConfidence": "not-found",
-    "topics": ["ZR-0", "vision-language-action models", "TableLLM", "embodied intelligence"],
-    "notes": "ZR-0 coauthor from Renmin University of China. Also appears in TableLLM and Action Draft and Verify in the RUC/Jing Zhang group; slug is scoped because the name is highly ambiguous.",
-    "sources": [
-      {
-        "label": "ZR-0",
-        "url": "https://arxiv.org/abs/2606.30552"
-      },
-      {
-        "label": "TableLLM",
-        "url": "https://arxiv.org/abs/2403.19318"
-      },
-      {
-        "label": "Action Draft and Verify",
-        "url": "https://arxiv.org/abs/2603.18091"
-      },
-      {
-        "label": "Jing Zhang homepage",
-        "url": "https://xiaojingzi.github.io/"
-      }
-    ]
-  },
-  {
-    "slug": "qizhe-wei",
-    "name": "Qizhe Wei",
-    "aliases": ["Qizhe Wei"],
-    "affiliations": ["Renmin University of China"],
-    "homepage": "",
-    "github": "",
-    "x": "",
-    "xConfidence": "not-found",
-    "topics": ["ZR-0", "vision-language-action models", "embodied chain-of-thought", "robot manipulation"],
-    "notes": "ZR-0 coauthor from Renmin University of China. No high-confidence personal homepage or X account found in the search pass.",
-    "sources": [
-      {
-        "label": "ZR-0",
-        "url": "https://arxiv.org/abs/2606.30552"
-      },
-      {
-        "label": "Jing Zhang homepage",
-        "url": "https://xiaojingzi.github.io/"
-      }
-    ]
-  },
-  {
-    "slug": "shifeng-bao",
-    "name": "Shifeng Bao",
-    "aliases": ["Shifeng Bao"],
-    "affiliations": ["Renmin University of China"],
-    "homepage": "",
-    "github": "",
-    "x": "",
-    "xConfidence": "not-found",
-    "topics": ["ZR-0", "vision-language-action models", "Action Draft and Verify", "robot manipulation"],
-    "notes": "ZR-0 coauthor from Renmin University of China and coauthor of Action Draft and Verify in the same VLA line. No high-confidence personal homepage or X account found in the search pass.",
-    "sources": [
-      {
-        "label": "ZR-0",
-        "url": "https://arxiv.org/abs/2606.30552"
-      },
-      {
-        "label": "Action Draft and Verify",
-        "url": "https://arxiv.org/abs/2603.18091"
-      },
-      {
-        "label": "Jing Zhang homepage",
-        "url": "https://xiaojingzi.github.io/"
-      }
-    ]
-  },
-  {
-    "slug": "haitao-shen-ruc",
-    "name": "Haitao Shen",
-    "aliases": ["Haitao Shen"],
-    "affiliations": ["Renmin University of China"],
-    "homepage": "",
-    "github": "",
-    "x": "",
-    "xConfidence": "not-found",
-    "topics": ["ZR-0", "vision-language-action models", "latent action supervision", "robot manipulation"],
-    "notes": "ZR-0 coauthor from Renmin University of China. Jing Zhang's homepage also lists Haitao Shen on From Pixels to Tokens in the RUC embodied intelligence line.",
-    "sources": [
-      {
-        "label": "ZR-0",
-        "url": "https://arxiv.org/abs/2606.30552"
-      },
-      {
-        "label": "Jing Zhang homepage",
-        "url": "https://xiaojingzi.github.io/"
-      }
-    ]
-  },
-  {
-    "slug": "yihan-zhao-ruc",
-    "name": "Yihan Zhao",
-    "aliases": ["Yihan Zhao"],
-    "affiliations": ["Renmin University of China"],
-    "homepage": "",
-    "github": "",
-    "x": "",
-    "xConfidence": "not-found",
-    "topics": ["ZR-0", "vision-language-action models", "latent action supervision", "robot manipulation"],
-    "notes": "ZR-0 coauthor from Renmin University of China. Jing Zhang's homepage also lists Yihan Zhao on From Pixels to Tokens in the RUC embodied intelligence line.",
-    "sources": [
-      {
-        "label": "ZR-0",
-        "url": "https://arxiv.org/abs/2606.30552"
-      },
-      {
-        "label": "Jing Zhang homepage",
-        "url": "https://xiaojingzi.github.io/"
-      }
-    ]
-  },
-  {
-    "slug": "tong-yang-zhipu",
-    "name": "Tong Yang",
-    "aliases": ["Tong Yang"],
-    "affiliations": ["Zhipu AI"],
-    "homepage": "",
-    "github": "",
-    "x": "",
-    "xConfidence": "not-found",
-    "topics": ["ZR-0", "vision-language-action models", "Zhipu AI", "embodied intelligence"],
-    "notes": "ZR-0 coauthor with paper-time affiliation Zhipu AI. Name is common and no high-confidence personal profile or X account was merged.",
-    "sources": [
-      {
-        "label": "ZR-0",
-        "url": "https://arxiv.org/abs/2606.30552"
-      },
-      {
-        "label": "Jing Zhang homepage",
-        "url": "https://xiaojingzi.github.io/"
-      }
-    ]
-  },
-  {
-    "slug": "jing-zhang-ruc",
-    "name": "Jing Zhang",
-    "aliases": ["Jing Zhang", "Jing ZHANG"],
-    "affiliations": ["Renmin University of China", "Tsinghua University (PhD)"],
-    "homepage": "https://xiaojingzi.github.io/",
-    "github": "",
-    "x": "",
-    "xConfidence": "not-found",
-    "topics": ["large language models", "knowledge engineering", "data intelligence", "embodied intelligence", "vision-language-action models"],
-    "notes": "Corresponding author of ZR-0. Homepage identifies her as a professor in the School of Information at Renmin University of China, with a Tsinghua University PhD background and research spanning knowledge engineering, LLM alignment, data intelligence, and embodied intelligence.",
-    "sources": [
-      {
-        "label": "ZR-0",
-        "url": "https://arxiv.org/abs/2606.30552"
-      },
-      {
-        "label": "Homepage",
-        "url": "https://xiaojingzi.github.io/"
-      },
-      {
-        "label": "Google Scholar",
-        "url": "https://scholar.google.com/citations?hl=en&user=T7Wa3GQAAAAJ"
-      },
-      {
-        "label": "OpenReview",
-        "url": "https://openreview.net/profile?id=~Jing_Zhang24"
-      }
-    ]
-  },
-  {
     "slug": "wenhui-tan",
     "name": "Wenhui Tan",
     "aliases": ["Wenhui Tan", "Albert Wenhui Tan", "AlbertTan"],
@@ -8427,6 +8119,348 @@
       {
         "label": "Google Scholar",
         "url": "https://scholar.google.com/citations?user=tMY31_gAAAAJ"
+      }
+    ]
+  },
+  {
+    "slug": "daixuan-cheng",
+    "name": "Daixuan Cheng",
+    "chineseName": "成岱璇",
+    "aliases": ["Daixuan Cheng"],
+    "affiliations": ["Gaoling School of Artificial Intelligence, Renmin University of China", "Microsoft Research", "Beijing University of Posts and Telecommunications", "Tsinghua University CoAI", "Beijing Institute for General Artificial Intelligence"],
+    "homepage": "https://cdxeve.github.io/",
+    "github": "https://github.com/cdxeve",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["LLM-in-Sandbox", "agentic LLM training", "computer-use agents", "reinforcement learning", "domain adaptation"],
+    "notes": "First author of LLM-in-Sandbox. Homepage identifies him as a PhD student at GSAI, Renmin University of China, an intern/research student in the GenAI Group at Microsoft Research, and a researcher focused on agentic LLM training.",
+    "sources": [
+      {
+        "label": "LLM-in-Sandbox",
+        "url": "https://arxiv.org/abs/2601.16206"
+      },
+      {
+        "label": "Project page",
+        "url": "https://llm-in-sandbox.github.io/"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://cdxeve.github.io/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/cdxeve"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=flRAZJQAAAAJ"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Daixuan_Cheng1"
+      }
+    ]
+  },
+  {
+    "slug": "shaohan-huang",
+    "name": "Shaohan Huang",
+    "aliases": ["Shaohan Huang", "Shaohan HUANG"],
+    "affiliations": ["Microsoft Research", "Microsoft Research Asia", "Beihang University"],
+    "homepage": "https://buaahsh.github.io/",
+    "github": "https://github.com/buaahsh",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["LLM-in-Sandbox", "large language models", "multimodal large language models", "model architecture", "retrieval", "domain adaptation"],
+    "notes": "LLM-in-Sandbox coauthor from Microsoft Research. Public homepage and Microsoft profile identify him as a Senior Researcher / Researcher in the Microsoft Research Asia GenAI group.",
+    "sources": [
+      {
+        "label": "LLM-in-Sandbox",
+        "url": "https://arxiv.org/abs/2601.16206"
+      },
+      {
+        "label": "Project page",
+        "url": "https://llm-in-sandbox.github.io/"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://buaahsh.github.io/"
+      },
+      {
+        "label": "Microsoft Research",
+        "url": "https://www.microsoft.com/en-us/research/people/shaohanh/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/buaahsh"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=w_QWEo8AAAAJ"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Shaohan_Huang1"
+      }
+    ]
+  },
+  {
+    "slug": "yuxian-gu",
+    "name": "Yuxian Gu",
+    "aliases": ["Yuxian Gu"],
+    "affiliations": ["Tsinghua University", "Microsoft Research Asia", "MIT HAN Lab"],
+    "homepage": "https://t1101675.github.io/",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["LLM-in-Sandbox", "efficient LLM training", "large language models", "knowledge distillation", "inference efficiency"],
+    "notes": "LLM-in-Sandbox coauthor from Tsinghua University. Homepage identifies him as a final-year PhD candidate in the Conversational AI Group at Tsinghua University, with work on LLM efficiency across pre-training, adaptation and inference; he has also worked with Microsoft Research Asia and MIT HAN Lab.",
+    "sources": [
+      {
+        "label": "LLM-in-Sandbox",
+        "url": "https://arxiv.org/abs/2601.16206"
+      },
+      {
+        "label": "Project page",
+        "url": "https://llm-in-sandbox.github.io/"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://t1101675.github.io/"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=zF9dr1sAAAAJ"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Yuxian_Gu1"
+      }
+    ]
+  },
+  {
+    "slug": "huatong-song",
+    "name": "Huatong Song",
+    "chineseName": "宋华彤",
+    "aliases": ["Huatong Song", "Song Huatong"],
+    "affiliations": ["Gaoling School of Artificial Intelligence, Renmin University of China", "IQuest Research", "Boss Zhipin Nanbeige", "ByteDance Seed-Edge"],
+    "homepage": "https://ssmallsong.github.io/",
+    "github": "https://github.com/SsmallSong",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["LLM-in-Sandbox", "agentic LLM training", "computer-use agents", "software engineering agents", "reinforcement learning"],
+    "notes": "LLM-in-Sandbox coauthor from RUC GSAI. Homepage identifies him as a master student supervised by Xin Zhao, with research interests around agentic LLM training and related internship experience.",
+    "sources": [
+      {
+        "label": "LLM-in-Sandbox",
+        "url": "https://arxiv.org/abs/2601.16206"
+      },
+      {
+        "label": "Project page",
+        "url": "https://llm-in-sandbox.github.io/"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://ssmallsong.github.io/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/SsmallSong"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=ZbbnafsAAAAJ"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Huatong_Song1"
+      }
+    ]
+  },
+  {
+    "slug": "guoxin-chen",
+    "name": "Guoxin Chen",
+    "aliases": ["Guoxin Chen"],
+    "affiliations": ["Gaoling School of Artificial Intelligence, Renmin University of China", "Institute of Computing Technology, Chinese Academy of Sciences"],
+    "homepage": "https://chen-gx.github.io/",
+    "github": "https://github.com/Chen-GX",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["LLM-in-Sandbox", "coding agents", "web research agents", "large language models", "agentic reasoning"],
+    "notes": "LLM-in-Sandbox coauthor from RUC GSAI. GitHub and OpenReview identify him as a PhD student at Renmin University of China, with prior Institute of Computing Technology, Chinese Academy of Sciences affiliation.",
+    "sources": [
+      {
+        "label": "LLM-in-Sandbox",
+        "url": "https://arxiv.org/abs/2601.16206"
+      },
+      {
+        "label": "Project page",
+        "url": "https://llm-in-sandbox.github.io/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/Chen-GX"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://chen-gx.github.io/"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=I6EjtN0AAAAJ"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Guoxin_Chen1"
+      }
+    ]
+  },
+  {
+    "slug": "li-dong",
+    "name": "Li Dong",
+    "chineseName": "董力",
+    "aliases": ["Li Dong"],
+    "affiliations": ["Microsoft Research", "Microsoft Research Asia", "University of Edinburgh", "Beihang University"],
+    "homepage": "https://dong.li/",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["LLM-in-Sandbox", "large language models", "machine intelligence", "model architecture", "natural language processing"],
+    "notes": "LLM-in-Sandbox coauthor from Microsoft Research. Microsoft profile identifies him as a Principal Researcher in the General Artificial Intelligence group; personal homepage lists publications and mentoring at Microsoft Research.",
+    "sources": [
+      {
+        "label": "LLM-in-Sandbox",
+        "url": "https://arxiv.org/abs/2601.16206"
+      },
+      {
+        "label": "Project page",
+        "url": "https://llm-in-sandbox.github.io/"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://dong.li/"
+      },
+      {
+        "label": "Microsoft Research",
+        "url": "https://www.microsoft.com/en-us/research/people/lidong1/"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=wEfQgPgAAAAJ"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Li_Dong1"
+      }
+    ]
+  },
+  {
+    "slug": "wayne-xin-zhao",
+    "name": "Wayne Xin Zhao",
+    "aliases": ["Wayne Xin Zhao", "Xin Zhao"],
+    "affiliations": ["Gaoling School of Artificial Intelligence, Renmin University of China", "Peking University"],
+    "homepage": "https://ai.ruc.edu.cn/english/FACULTYn/XinZhao/index.htm",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["LLM-in-Sandbox", "large language models", "recommender systems", "natural language processing", "data mining"],
+    "notes": "LLM-in-Sandbox coauthor from RUC GSAI. RUC faculty page and Scholar profile identify him as a professor at Renmin University of China working on recommender systems, data mining and natural language processing, with PhD from Peking University.",
+    "sources": [
+      {
+        "label": "LLM-in-Sandbox",
+        "url": "https://arxiv.org/abs/2601.16206"
+      },
+      {
+        "label": "Project page",
+        "url": "https://llm-in-sandbox.github.io/"
+      },
+      {
+        "label": "RUC faculty page",
+        "url": "https://ai.ruc.edu.cn/english/FACULTYn/XinZhao/index.htm"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=JNhNacoAAAAJ"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Xin_Zhao10"
+      }
+    ]
+  },
+  {
+    "slug": "ji-rong-wen",
+    "name": "Ji-Rong Wen",
+    "aliases": ["Ji-Rong Wen", "Jirong Wen"],
+    "affiliations": ["Gaoling School of Artificial Intelligence, Renmin University of China"],
+    "homepage": "https://ai.ruc.edu.cn/english/FACULTYn/JiRongWen/index.htm",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["LLM-in-Sandbox", "large language models", "web search", "information retrieval", "data mining"],
+    "notes": "LLM-in-Sandbox coauthor from RUC GSAI. RUC faculty page identifies him as executive dean of the Gaoling School of Artificial Intelligence, and public profiles connect him to large language models, web search and information retrieval.",
+    "sources": [
+      {
+        "label": "LLM-in-Sandbox",
+        "url": "https://arxiv.org/abs/2601.16206"
+      },
+      {
+        "label": "Project page",
+        "url": "https://llm-in-sandbox.github.io/"
+      },
+      {
+        "label": "RUC faculty page",
+        "url": "https://ai.ruc.edu.cn/english/FACULTYn/JiRongWen/index.htm"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=tbxCHJgAAAAJ"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Ji-Rong_Wen1"
+      },
+      {
+        "label": "DBLP",
+        "url": "https://dblp.org/pid/w/JRWen"
+      }
+    ]
+  },
+  {
+    "slug": "furu-wei",
+    "name": "Furu Wei",
+    "chineseName": "韦福如",
+    "aliases": ["Furu Wei"],
+    "affiliations": ["Microsoft Research", "Microsoft Research Asia", "Wuhan University", "IBM Research China"],
+    "homepage": "https://thegenerality.com/",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["LLM-in-Sandbox", "general artificial intelligence", "large foundation models", "natural language processing", "multimodal AI"],
+    "notes": "LLM-in-Sandbox coauthor from Microsoft Research. Homepage and Microsoft profile identify him as a Distinguished Scientist and Vice President at Microsoft Research, Chief Scientist of Microsoft Research Asia, and leader of the General Artificial Intelligence group.",
+    "sources": [
+      {
+        "label": "LLM-in-Sandbox",
+        "url": "https://arxiv.org/abs/2601.16206"
+      },
+      {
+        "label": "Project page",
+        "url": "https://llm-in-sandbox.github.io/"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://thegenerality.com/"
+      },
+      {
+        "label": "Microsoft Research",
+        "url": "https://www.microsoft.com/en-us/research/people/fuwei/"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=G-V1VpwAAAAJ"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Furu_Wei1"
       }
     ]
   }
