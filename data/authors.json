@@ -7748,18 +7748,27 @@
   {
     "slug": "yan-wang-flashmemory",
     "name": "Yan Wang",
-    "aliases": ["Yan Wang", "libertywing"],
-    "affiliations": ["Independent Researchers", "Tencent"],
-    "homepage": "https://huggingface.co/libertywing",
+    "chineseName": "王琰",
+    "aliases": ["Yan Wang", "WANG Yan", "libertywing"],
+    "affiliations": ["Independent Researchers", "Tencent", "Tencent HY Team", "Tencent AI Lab", "miHoYo"],
+    "homepage": "https://libertywing.github.io/yanwang.github.io/",
     "github": "",
     "x": "",
     "xConfidence": "not-found",
-    "topics": ["FlashMemory", "DeepSeek-V4", "Lookahead Sparse Attention", "KV cache", "long-context inference"],
-    "notes": "Equal-contribution author and project lead of FlashMemory-DeepSeek-V4, with paper-time affiliation Independent Researchers. Hugging Face profile libertywing owns the FlashMemory-Deepseek-V4 model release. The paper status note and OpenReview profile evidence connect this author to Tencent.",
+    "topics": ["FlashMemory", "DeepSeek-V4", "Lookahead Sparse Attention", "HiLS-Attention", "infinite-memory architectures", "KV cache", "long-context inference"],
+    "notes": "Equal-contribution author and project lead of FlashMemory-DeepSeek-V4, with paper-time affiliation Independent Researchers. Author of HiLS-Attention with paper-time affiliation Tencent HY Team. Personal homepage identifies WANG Yan (王琰) as a principal research scientist at Tencent AI Lab and lead of the Model Architecture Exploration Group working on infinite-memory architectures.",
     "sources": [
       {
         "label": "FlashMemory-DeepSeek-V4",
         "url": "https://arxiv.org/abs/2606.09079"
+      },
+      {
+        "label": "HiLS-Attention",
+        "url": "https://arxiv.org/abs/2607.02980"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://libertywing.github.io/yanwang.github.io/"
       },
       {
         "label": "Hugging Face",
@@ -7822,22 +7831,34 @@
   {
     "slug": "tian-liang-tencent",
     "name": "Tian Liang",
-    "aliases": ["Tian Liang", "skytliang"],
-    "affiliations": ["Tencent", "Tsinghua Shenzhen International Graduate School", "Wuhan University"],
+    "aliases": ["Tian Liang", "skytliang", "Skytliang"],
+    "affiliations": ["Tencent", "Tencent HY Team", "Tencent AI Lab", "Tsinghua Shenzhen International Graduate School", "Wuhan University"],
     "homepage": "https://skytliang.github.io/",
-    "github": "https://github.com/skytliang",
+    "github": "https://github.com/Skytliang",
     "x": "https://x.com/skytliang",
     "xConfidence": "high",
-    "topics": ["FlashMemory", "DeepSeek-V4", "Lookahead Sparse Attention", "LLM agents", "multimodal learning"],
-    "notes": "Equal-contribution author of FlashMemory-DeepSeek-V4 with paper-time affiliation Tencent. Personal homepage identifies Tian Liang as a researcher at Tencent AI Lab and records prior education at Wuhan University and Tsinghua SIGS.",
+    "topics": ["FlashMemory", "DeepSeek-V4", "Lookahead Sparse Attention", "HiLS-Attention", "native sparse attention", "LLM agents", "multimodal learning"],
+    "notes": "Equal-contribution author of FlashMemory-DeepSeek-V4 with paper-time affiliation Tencent. Author of HiLS-Attention with paper-time affiliation Tencent HY Team. Personal homepage identifies Tian Liang as a researcher at Tencent AI Lab and records prior education at Wuhan University and Tsinghua SIGS; high-confidence X was previously verified through homepage/profile consistency.",
     "sources": [
       {
         "label": "FlashMemory-DeepSeek-V4",
         "url": "https://arxiv.org/abs/2606.09079"
       },
       {
+        "label": "HiLS-Attention",
+        "url": "https://arxiv.org/abs/2607.02980"
+      },
+      {
         "label": "Homepage",
         "url": "https://skytliang.github.io/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/Skytliang"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=Z6bZcT4AAAAJ"
       }
     ]
   },
@@ -7866,22 +7887,38 @@
   {
     "slug": "xiang-hu-tencent",
     "name": "Xiang Hu",
-    "aliases": ["Xiang Hu"],
-    "affiliations": ["Tencent"],
-    "homepage": "",
-    "github": "",
+    "aliases": ["Xiang Hu", "imhuim982"],
+    "affiliations": ["Tencent", "Tencent HY Team", "Tencent AI Lab", "Ant Research"],
+    "homepage": "https://imhuim982.github.io/",
+    "github": "https://github.com/imhuim982",
     "x": "",
     "xConfidence": "not-found",
-    "topics": ["FlashMemory", "DeepSeek-V4", "Lookahead Sparse Attention", "long-context inference"],
-    "notes": "Author of FlashMemory-DeepSeek-V4 with paper-time affiliation Tencent. Google Scholar evidence connects Xiang Hu to Tencent LLM Frontier Lab.",
+    "topics": ["FlashMemory", "DeepSeek-V4", "Lookahead Sparse Attention", "HiLS-Attention", "hierarchical sparse attention", "native sparse attention", "long-context inference"],
+    "notes": "Author of FlashMemory-DeepSeek-V4 with paper-time affiliation Tencent. Core contributor and corresponding contact of HiLS-Attention with paper-time affiliation Tencent HY Team. Google Scholar and GitHub evidence connect Xiang Hu to Tencent AI Lab / LLM Frontier Lab; homepage also records earlier Ant Research long-context modeling projects.",
     "sources": [
       {
         "label": "FlashMemory-DeepSeek-V4",
         "url": "https://arxiv.org/abs/2606.09079"
       },
       {
+        "label": "HiLS-Attention",
+        "url": "https://arxiv.org/abs/2607.02980"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://imhuim982.github.io/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/imhuim982"
+      },
+      {
         "label": "Google Scholar",
         "url": "https://scholar.google.com/citations?user=D4hnUZkAAAAJ"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Xiang_Hu2"
       }
     ]
   },
@@ -8046,22 +8083,324 @@
   {
     "slug": "haitao-mi",
     "name": "Haitao Mi",
-    "aliases": ["Haitao Mi"],
-    "affiliations": ["Tencent", "Tencent AI Lab"],
+    "aliases": ["Haitao Mi", "haitaominlp"],
+    "affiliations": ["Tencent", "Tencent HY Team", "Tencent AI Lab", "Tencent America"],
     "homepage": "",
     "github": "",
-    "x": "",
-    "xConfidence": "not-found",
-    "topics": ["FlashMemory", "DeepSeek-V4", "Lookahead Sparse Attention", "natural language processing"],
-    "notes": "Author of FlashMemory-DeepSeek-V4 with paper-time affiliation Tencent. OpenReview profile evidence connects Haitao Mi to Tencent AI Lab.",
+    "x": "https://x.com/haitaominlp",
+    "xConfidence": "high",
+    "topics": ["FlashMemory", "DeepSeek-V4", "Lookahead Sparse Attention", "HiLS-Attention", "natural language processing"],
+    "notes": "Author of FlashMemory-DeepSeek-V4 with paper-time affiliation Tencent. Author of HiLS-Attention with paper-time affiliation Tencent HY Team. OpenReview and Google Scholar evidence connect Haitao Mi to Tencent AI Lab / Tencent; high-confidence X is supported by profile role match and project-specific self-post evidence from the SOP search.",
     "sources": [
       {
         "label": "FlashMemory-DeepSeek-V4",
         "url": "https://arxiv.org/abs/2606.09079"
       },
       {
+        "label": "HiLS-Attention",
+        "url": "https://arxiv.org/abs/2607.02980"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=G3OMbFSm858C"
+      },
+      {
         "label": "OpenReview",
         "url": "https://openreview.net/profile?id=~Haitao_Mi1"
+      },
+      {
+        "label": "LinkedIn",
+        "url": "https://www.linkedin.com/in/haitao-mi-7b601536"
+      }
+    ]
+  },
+  {
+    "slug": "xinyu-wei-shanghaitech",
+    "name": "Xinyu Wei",
+    "aliases": ["Xinyu Wei"],
+    "affiliations": ["ShanghaiTech University"],
+    "homepage": "",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["HiLS-Attention", "native sparse attention", "long-context modeling"],
+    "notes": "Core-contributor-marked author of HiLS-Attention with paper-time affiliation ShanghaiTech University. Kewei Tu homepage lists Xinyu Wei as a current master student; stable public profile evidence beyond the paper and advisor page remains limited.",
+    "sources": [
+      {
+        "label": "HiLS-Attention",
+        "url": "https://arxiv.org/abs/2607.02980"
+      },
+      {
+        "label": "Kewei Tu homepage",
+        "url": "https://faculty.sist.shanghaitech.edu.cn/faculty/tukw/"
+      }
+    ]
+  },
+  {
+    "slug": "hao-gu-hkust",
+    "name": "Hao Gu",
+    "aliases": ["Hao Gu", "Marcus Gu Hao"],
+    "affiliations": ["The Hong Kong University of Science and Technology"],
+    "homepage": "",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["HiLS-Attention", "native sparse attention", "long-context modeling", "large language models"],
+    "notes": "Core-contributor-marked author of HiLS-Attention with paper-time affiliation HKUST. Google Scholar and HKUST faculty/profile publication evidence connect Hao Gu to Sirui Han / HKUST AI-related LLM work; no high-confidence personal X account found.",
+    "sources": [
+      {
+        "label": "HiLS-Attention",
+        "url": "https://arxiv.org/abs/2607.02980"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=ozg7axcAAAAJ"
+      },
+      {
+        "label": "HKUST faculty profile evidence",
+        "url": "https://facultyprofiles.hkust.edu.hk/profiles.php?profile=sirui-han-siruihan"
+      },
+      {
+        "label": "BTC-LLM",
+        "url": "https://arxiv.org/abs/2506.12040"
+      }
+    ]
+  },
+  {
+    "slug": "minshen-zhang",
+    "name": "Minshen Zhang",
+    "aliases": ["Minshen Zhang", "alexzms"],
+    "affiliations": ["University of California, San Diego", "ShanghaiTech University", "Alibaba Ant Group"],
+    "homepage": "https://alexzms.github.io/",
+    "github": "https://github.com/alexzms",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["HiLS-Attention", "native sparse attention", "long-context modeling", "machine learning systems", "FastVideo"],
+    "notes": "Core-contributor-marked author of HiLS-Attention with paper-time affiliation UC San Diego. Homepage identifies Minshen Zhang as a UCSD master student in Hao AI Lab with prior ShanghaiTech training under Kewei Tu and Ant Group work integrating hierarchical sparse attention into SGLang.",
+    "sources": [
+      {
+        "label": "HiLS-Attention",
+        "url": "https://arxiv.org/abs/2607.02980"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://alexzms.github.io/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/alexzms"
+      },
+      {
+        "label": "FlashMHF",
+        "url": "https://arxiv.org/abs/2512.06989"
+      }
+    ]
+  },
+  {
+    "slug": "huayang-li",
+    "name": "Huayang Li",
+    "aliases": ["Huayang Li", "ghrua"],
+    "affiliations": ["Tencent HY Team", "Tencent AI Lab", "Tencent", "Nara Institute of Science and Technology"],
+    "homepage": "https://sites.google.com/view/huayangli",
+    "github": "https://github.com/ghrua",
+    "x": "https://x.com/HuayangLi",
+    "xConfidence": "high",
+    "topics": ["HiLS-Attention", "native sparse attention", "long-context modeling", "retrieval-augmented generation", "machine translation"],
+    "notes": "Author of HiLS-Attention with paper-time affiliation Tencent HY Team. Homepage identifies Huayang Li as a NAIST PhD student and records earlier full-time research work at Tencent AI Lab; high-confidence X is linked from the homepage and matched by profile evidence.",
+    "sources": [
+      {
+        "label": "HiLS-Attention",
+        "url": "https://arxiv.org/abs/2607.02980"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://sites.google.com/view/huayangli"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/ghrua"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=_1jSi34AAAAJ"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Huayang_Li1"
+      }
+    ]
+  },
+  {
+    "slug": "lei-zhu-tencent",
+    "name": "Lei Zhu",
+    "chineseName": "祝磊",
+    "aliases": ["Lei Zhu", "ZHU Lei", "rayleizhu"],
+    "affiliations": ["Tencent HY Team", "Tencent Hunyuan Frontier Lab", "Tencent AI Lab", "Huawei Noah’s Ark Lab", "City University of Hong Kong"],
+    "homepage": "https://www.rayleizhu.com/",
+    "github": "https://github.com/rayleizhu",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["HiLS-Attention", "native sparse attention", "long-context modeling", "sparse attention", "LLM inference acceleration"],
+    "notes": "Author of HiLS-Attention with paper-time affiliation Tencent HY Team. Homepage identifies ZHU Lei (祝磊) as a senior researcher at Tencent Hunyuan Frontier Lab focused on long-term memory, long-context modeling, sparse attention and LLM inference acceleration; no high-confidence personal X account found.",
+    "sources": [
+      {
+        "label": "HiLS-Attention",
+        "url": "https://arxiv.org/abs/2607.02980"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://www.rayleizhu.com/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/rayleizhu"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=8PUzlfYAAAAJ"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Lei_Zhu12"
+      },
+      {
+        "label": "DBLP",
+        "url": "https://dblp.org/pid/99/549-16.html"
+      },
+      {
+        "label": "ORCID",
+        "url": "https://orcid.org/0000-0002-0191-7086"
+      }
+    ]
+  },
+  {
+    "slug": "sirui-han",
+    "name": "Sirui Han",
+    "chineseName": "韓斯睿",
+    "aliases": ["Sirui Han", "HAN Sirui", "siruihan2024"],
+    "affiliations": ["The Hong Kong University of Science and Technology"],
+    "homepage": "http://siruihan.com/",
+    "github": "https://github.com/siruihan2024",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["HiLS-Attention", "large language models", "AI for finance", "machine learning"],
+    "notes": "Author of HiLS-Attention with paper-time affiliation HKUST. HKUST faculty profile and GitHub identify Sirui Han as an assistant professor at HKUST; the faculty page includes Hao Gu co-authored LLM papers, forming the HKUST bridge in this paper. No high-confidence personal X account found.",
+    "sources": [
+      {
+        "label": "HiLS-Attention",
+        "url": "https://arxiv.org/abs/2607.02980"
+      },
+      {
+        "label": "HKUST faculty profile",
+        "url": "https://facultyprofiles.hkust.edu.hk/profiles.php?profile=sirui-han-siruihan"
+      },
+      {
+        "label": "HKUST research portal",
+        "url": "https://researchportal.hkust.edu.hk/en/persons/sirui-han/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/siruihan2024"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=ootCmkEAAAAJ"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Sirui_Han1"
+      }
+    ]
+  },
+  {
+    "slug": "yushi-bai",
+    "name": "Yushi Bai",
+    "chineseName": "白雨石",
+    "aliases": ["Yushi Bai", "Bai Yushi", "bys0318", "realYushiBai"],
+    "affiliations": ["Tencent HY Team", "Tsinghua University", "Z.ai"],
+    "homepage": "https://bys0318.github.io/",
+    "github": "https://github.com/bys0318",
+    "x": "https://x.com/realYushiBai",
+    "xConfidence": "high",
+    "topics": ["HiLS-Attention", "IndexCache", "IndexShare", "GLM-5", "long-context modeling", "sparse attention"],
+    "notes": "Author of HiLS-Attention with paper-time affiliation Tencent HY Team. Homepage identifies Yushi Bai (白雨石) as a Tsinghua PhD student advised by Juanzi Li; local archive already connects this author to IndexCache / GLM-5.2. High-confidence X is linked from the homepage and tied to IndexCache / GLM-5 activity.",
+    "sources": [
+      {
+        "label": "HiLS-Attention",
+        "url": "https://arxiv.org/abs/2607.02980"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://bys0318.github.io/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/bys0318"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=E6cma10AAAAJ"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Yushi_Bai1"
+      },
+      {
+        "label": "IndexCache",
+        "url": "https://arxiv.org/abs/2603.12201"
+      }
+    ]
+  },
+  {
+    "slug": "kewei-tu",
+    "name": "Kewei Tu",
+    "chineseName": "屠可伟",
+    "aliases": ["Kewei Tu", "Tu Kewei"],
+    "affiliations": ["ShanghaiTech University"],
+    "homepage": "https://faculty.sist.shanghaitech.edu.cn/faculty/tukw/",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["HiLS-Attention", "hierarchical sparse attention", "long-context modeling", "natural language processing"],
+    "notes": "Author of HiLS-Attention with paper-time affiliation ShanghaiTech University. Homepage identifies Kewei Tu (屠可伟) as a ShanghaiTech SIST professor and lists Xinyu Wei as a current master student; no high-confidence personal X account found.",
+    "sources": [
+      {
+        "label": "HiLS-Attention",
+        "url": "https://arxiv.org/abs/2607.02980"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://faculty.sist.shanghaitech.edu.cn/faculty/tukw/"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=5gi3Pm0AAAAJ"
+      },
+      {
+        "label": "Semantic Scholar",
+        "url": "https://www.semanticscholar.org/author/Kewei-Tu/40341553"
+      }
+    ]
+  },
+  {
+    "slug": "leo-liang-tencent",
+    "name": "Leo Liang",
+    "aliases": ["Leo Liang"],
+    "affiliations": ["Tencent HY Team"],
+    "homepage": "",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["HiLS-Attention", "native sparse attention", "long-context modeling"],
+    "notes": "Author of HiLS-Attention with paper-time affiliation Tencent HY Team. Stable public profile evidence beyond the paper and official code repository remains limited; no high-confidence personal X account found.",
+    "sources": [
+      {
+        "label": "HiLS-Attention",
+        "url": "https://arxiv.org/abs/2607.02980"
+      },
+      {
+        "label": "HiLS-Attention GitHub",
+        "url": "https://github.com/Tencent-Hunyuan/HiLS-Attention"
       }
     ]
   },
