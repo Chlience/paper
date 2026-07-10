@@ -46,8 +46,17 @@ const exactDatePattern = /^\d{4}-\d{2}-\d{2}$/;
 const absoluteUrlPattern = /https?:\/\/[^\s)>；，。]+/gi;
 const internalPaperPathPattern = /\/papers\/([^/#?\s)]+)\//g;
 const markdownImagePattern = /!\[[^\]]*\]\(\s*(?:<([^>]+)>|([^\s)]+))(?:\s+["'][^"']*["'])?\s*\)/g;
-const evidenceLocatorPattern =
-  /https?:\/\/|§\s*\d|(?:section|sec\.?|figure|fig\.?|table|appendix|page|p\.?|theorem|lemma|chapter|file|path|commit|line)\s*[#A-Za-z0-9一二三四五六七八九十_.:/-]+|(?:第\s*)?[0-9一二三四五六七八九十]+(?:\.[0-9]+)*(?:\s*)?(?:节|章|页)|(?:图|表|附录|定理|引理|页码|代码路径|文件|行号)\s*[#A-Za-z0-9一二三四五六七八九十_.:/-]+/i;
+const textualEvidenceLocatorPatterns = [
+  /§\s*\d+(?:\.\d+)*/,
+  /\b(?:section|sec|figure|fig|table|appendix|page|theorem|lemma|chapter)\.?(?=\s|[:#])\s*[:#]?\s*(?:[A-Z]?\d+(?:[._-]\d+)*|[A-Z]\b|["“`][^"”`]+["”`])/i,
+  /\bp\.\s*\d+(?:-\d+)?/i,
+  /\b(?:file|path)\b\s*[:#]?\s*`?[A-Za-z0-9_@+.-]+(?:\/[A-Za-z0-9_@+.-]+)+`?/i,
+  /\bcommit\b\s*[:#]?\s*[0-9a-f]{7,40}\b/i,
+  /\blines?\b\s*[:#]?\s*\d+(?:-\d+)?/i,
+  /(?:第\s*)?[0-9一二三四五六七八九十]+(?:\.[0-9]+)*\s*(?:节|章|页)/,
+  /(?:图|表|附录|定理|引理|页码|行号)\s*[:：]?\s*(?:[A-Z]?\d+(?:[._-]\d+)*|[A-Z]\b)/i,
+  /(?:代码路径|文件)\s*[:：]?\s*`?[A-Za-z0-9_@+.-]+(?:\/[A-Za-z0-9_@+.-]+)+`?/,
+];
 
 const issue = (code, subject, message) => ({ code, subject, message });
 
@@ -114,6 +123,19 @@ const isHttpUrl = (value) => {
   } catch {
     return false;
   }
+};
+
+const hasEvidenceLocator = (value) => {
+  for (const match of value.matchAll(absoluteUrlPattern)) {
+    if (isHttpUrl(match[0])) return true;
+  }
+  return textualEvidenceLocatorPatterns.some((pattern) => pattern.test(value));
+};
+
+const isSafePaperImagePath = (imageUrl, expectedPrefix) => {
+  if (/[\\%?#]/.test(imageUrl) || !imageUrl.startsWith(expectedPrefix)) return false;
+  if (imageUrl.split('/').some((segment) => segment === '.' || segment === '..')) return false;
+  return path.posix.normalize(imageUrl) === imageUrl;
 };
 
 const workflowVersionFor = (markdown) =>
@@ -249,7 +271,7 @@ export const validatePaperRecord = async ({
 
     for (const block of resultBlocks(sectionForGroup(markdown, evidenceSectionGroup))) {
       const locator = evidenceValue(block.body);
-      if (!locator || !evidenceLocatorPattern.test(locator)) {
+      if (!locator || !hasEvidenceLocator(locator)) {
         errors.push(issue('v2-evidence-location', slug, `Missing evidence location in ${block.title}.`));
       }
     }
@@ -293,6 +315,11 @@ export const validatePaperRecord = async ({
     }
     if (!imageUrl.startsWith(expectedPrefix)) {
       errors.push(issue('image-slug-mismatch', slug, `Image path must start with ${expectedPrefix}.`));
+      continue;
+    }
+    if (!isSafePaperImagePath(imageUrl, expectedPrefix)) {
+      errors.push(issue('image-path', slug, `Local image path must stay inside ${expectedPrefix}.`));
+      continue;
     }
     const repoRelativePath = path.posix.join('public', imageUrl.slice(1));
     if (!(await imageExists(repoRelativePath))) {

@@ -297,6 +297,18 @@ test('v2 evidence locations reject unresolved placeholders', async () => {
   assert.ok(result.errors.some((issue) => issue.code === 'v2-evidence-location'));
 });
 
+test('v2 evidence locations reject words that only begin with a locator abbreviation', async () => {
+  const invalid = v2Paper.replace('证据定位：Section 4, Table 1.', '证据定位：pending');
+  const result = await validate('prefix-only-evidence', invalid);
+  assert.ok(result.errors.some((issue) => issue.code === 'v2-evidence-location'));
+});
+
+test('v2 evidence locations reject incomplete URLs', async () => {
+  const invalid = v2Paper.replace('证据定位：Section 4, Table 1.', '证据定位：https://');
+  const result = await validate('incomplete-url-evidence', invalid);
+  assert.ok(result.errors.some((issue) => issue.code === 'v2-evidence-location'));
+});
+
 test('v2 notes require review classification fields', async () => {
   const invalid = v2Paper.replace('- Page type: not-found\n', '');
   const result = await validate('invalid-v2-review-fields', invalid);
@@ -393,6 +405,20 @@ test('paper images reject relative local paths', async () => {
   );
   const result = await validate('relative-image-path', markdown);
   assert.ok(result.errors.some((issue) => issue.code === 'image-path'));
+});
+
+test('paper images reject path traversal outside the paper directory', async () => {
+  const markdown = v2Paper.replace(
+    '- 结果：有效。',
+    '- 结果：有效。\n\n![Figure](/images/papers/path-traversal/../other/fig.png)\n\nFigure 1: result. Image Source: https://example.com/fig.png',
+  );
+  let checkedFilesystem = false;
+  const result = await validate('path-traversal', markdown, async () => {
+    checkedFilesystem = true;
+    return true;
+  });
+  assert.ok(result.errors.some((issue) => issue.code === 'image-path'));
+  assert.equal(checkedFilesystem, false);
 });
 
 test('each local image requires its own nearby Image Source caption', async () => {
