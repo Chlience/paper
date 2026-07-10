@@ -15,8 +15,10 @@
     "test:figures": "node scripts/check-paper-figure-dialog.mjs",
     "test:dialog-scroll": "node scripts/check-paper-dialog-scroll.mjs",
     "test:dialog-interaction": "node scripts/check-paper-dialog-interaction.mjs",
+    "test:workflow": "node --test scripts/check-paper-workflow.test.mjs",
     "check:metadata": "node scripts/check-paper-metadata.mjs",
-    "check:site": "npm run check:metadata && node scripts/check-paper-site.mjs",
+    "check:workflow": "node scripts/check-paper-workflow.mjs",
+    "check:site": "npm run check:metadata && npm run check:workflow && node scripts/check-paper-site.mjs",
     "check:math": "npm run build:content && node scripts/check-markdown-math.mjs",
     "preview": "astro preview",
     "astro": "astro"

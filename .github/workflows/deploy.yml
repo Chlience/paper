@@ -40,7 +40,7 @@ jobs:
       - name: Build site
         run: npm run build
 
-      - name: Check generated site
+      - name: Check generated site and paper workflow
         run: npm run check:site
 
       - name: Check Markdown math

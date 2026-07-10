@@ -1,6 +1,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import process from 'node:process';
+import { REQUIRED_SECTION_GROUPS } from './content/paper-workflow.mjs';
 import { authorsFile, generatedFile, repoRoot } from './content/repository.mjs';
 
 const distDir = path.join(repoRoot, 'dist');
@@ -8,22 +9,6 @@ const legacyLocalRoot = ['', 'home', 'chlience', 'paper'].join('/');
 const expectedSiteUrl = process.env.PUBLIC_SITE_URL ?? 'https://papers.chlience.com';
 const expectedUmamiScriptSrc = 'https://umami.chlience.com/script.js';
 const expectedUmamiWebsiteId = 'adb2da68-eff5-4878-9124-14cbde61f171';
-
-const requiredSectionGroups = [
-  { name: 'Source', headings: ['## Source'] },
-  { name: '作者与关系', headings: ['## 作者与关系'] },
-  { name: '一句话结论', headings: ['## 一句话结论'] },
-  { name: '论文脉络', headings: ['## 论文脉络'] },
-  {
-    name: '关键实验/定理',
-    headings: ['## 关键实验/定理', '## 关键实验结果', '## 主要实验结果', '## 关键定理', '## 文献扫描结果', '## 方法论论证'],
-  },
-  { name: '证据链强度评估', headings: ['## 证据链强度评估'] },
-  { name: 'OpenReview / 审稿意见吸收', headings: ['## OpenReview / 审稿意见吸收'] },
-  { name: '主要启发', headings: ['## 主要启发'] },
-  { name: '局限', headings: ['## 局限', '## 局限与待验证问题'] },
-  { name: 'Reference Intake Brief', headings: ['## Reference Intake Brief'] },
-];
 
 const forbiddenPublicPaperPatterns = [
   /关系判断/,
@@ -34,7 +19,6 @@ const forbiddenPublicPaperPatterns = [
   /Grok CLI/i,
   /SuperGrok/i,
   /xConfidence/,
-  /not-found/,
   /账号搜索/,
 ];
 
@@ -127,8 +111,8 @@ const checkHtmlLinks = (label, html) => {
 
 for (const paper of data.papers) {
   const source = await fs.readFile(path.join(repoRoot, paper.file), 'utf8');
-  for (const group of requiredSectionGroups) {
-    if (!group.headings.some((heading) => source.includes(heading))) {
+  for (const group of REQUIRED_SECTION_GROUPS) {
+    if (!group.headings.some((heading) => source.includes(`## ${heading}`))) {
       fail(`${paper.file} is missing required section group: ${group.name}`);
     }
   }

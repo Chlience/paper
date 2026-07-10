@@ -29,6 +29,8 @@ http://localhost:4321
 ## Build
 
 ```bash
+npm run test:workflow
+npm run check:workflow
 npm run build
 npm run check:site
 npm run check:math
@@ -64,8 +66,16 @@ Paper-reading workflow:
 content/utility/paper-analysis-workflow.md
 ```
 
-New notes should follow:
+New notes use the v2 source snapshot and evidence contract in:
 
 ```text
 content/utility/paper-note-template.md
 ```
+
+Author identity, profile, and public-account verification follows the internal SOP:
+
+```text
+internal/author-x-account-search-sop.md
+```
+
+`npm run check:workflow` validates paper structure, v2 fields, evidence locations, archive-time conflicts, local figures, author-profile data, and recurring unprofiled authors. Historical notes remain readable under compatibility mode and produce bounded migration advisories.
