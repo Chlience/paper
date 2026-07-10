@@ -8937,5 +8937,113 @@
         "url": "https://github.com/QwenLM/Qwen3-Coder"
       }
     ]
+  },
+  {
+    "slug": "huajun-bai",
+    "name": "Huajun Bai",
+    "aliases": ["Huajun Bai"],
+    "affiliations": ["Tsinghua University", "Tsinghua Storage Research Group", "Cornell University"],
+    "homepage": "https://storage.cs.tsinghua.edu.cn/~bhj/",
+    "github": "https://github.com/baihuajun24",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["SPORK", "Systems for AI", "efficient LLM inference", "agentic inference"],
+    "notes": "Contact author and public code-repository owner for SPORK. The Tsinghua Storage Research Group homepage identifies him as a Tsinghua PhD student advised by Jiwu Shu, working on Systems for AI and efficient LLM inference, with a Cornell University bachelor's degree.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://storage.cs.tsinghua.edu.cn/~bhj/"
+      },
+      {
+        "label": "SPORK arXiv",
+        "url": "https://arxiv.org/abs/2607.03333"
+      },
+      {
+        "label": "SPORK GitHub",
+        "url": "https://github.com/baihuajun24/spork"
+      }
+    ]
+  },
+  {
+    "slug": "huichuan-zheng",
+    "name": "Huichuan Zheng",
+    "aliases": ["Huichuan Zheng"],
+    "affiliations": ["Tsinghua University", "Tsinghua Storage Research Group", "Shandong University"],
+    "homepage": "https://storage.cs.tsinghua.edu.cn/~zhc/",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["SPORK", "storage systems", "LLM training", "agentic inference"],
+    "notes": "SPORK coauthor. His Tsinghua Storage Research Group homepage identifies him as a postdoctoral researcher advised by Jiwu Shu, with Shandong University PhD and bachelor's degrees and research interests in storage systems and LLM training.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://storage.cs.tsinghua.edu.cn/~zhc/"
+      },
+      {
+        "label": "Tsinghua Storage Research Group team",
+        "url": "https://storage.cs.tsinghua.edu.cn/team/"
+      },
+      {
+        "label": "SPORK arXiv",
+        "url": "https://arxiv.org/abs/2607.03333"
+      }
+    ]
+  },
+  {
+    "slug": "youyou-lu",
+    "name": "Youyou Lu",
+    "aliases": ["Youyou Lu"],
+    "affiliations": ["Tsinghua University", "Tsinghua Storage Research Group", "Nanjing University"],
+    "homepage": "https://storage.cs.tsinghua.edu.cn/~lu/",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["SPORK", "computer systems", "computer architecture", "memory systems", "storage systems", "AI systems"],
+    "notes": "SPORK coauthor and Tsinghua Storage Research Group associate professor. Her homepage records research in computer systems and architecture, with emphasis on memory, storage, and artificial intelligence systems, and a Tsinghua PhD plus Nanjing University bachelor's degree.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://storage.cs.tsinghua.edu.cn/~lu/"
+      },
+      {
+        "label": "DBLP",
+        "url": "https://dblp.org/pid/96/8005"
+      },
+      {
+        "label": "SPORK arXiv",
+        "url": "https://arxiv.org/abs/2607.03333"
+      }
+    ]
+  },
+  {
+    "slug": "jiwu-shu",
+    "name": "Jiwu Shu",
+    "aliases": ["Jiwu Shu"],
+    "affiliations": ["Tsinghua University", "Tsinghua Storage Research Group", "Xiamen University", "Nanjing University", "Jiangsu University", "National University of Defense Technology"],
+    "homepage": "https://storage.cs.tsinghua.edu.cn/~jiwu-shu/",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["SPORK", "storage systems", "nonvolatile memory", "distributed systems", "parallel processing", "LLM systems"],
+    "notes": "Corresponding author of SPORK and professor leading the Tsinghua Storage Research Group. His homepage, DBLP, and OpenReview profile connect his long-running storage and parallel/distributed systems research to Tsinghua University and a 2020-2023 Xiamen University appointment.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://storage.cs.tsinghua.edu.cn/~jiwu-shu/"
+      },
+      {
+        "label": "DBLP",
+        "url": "https://dblp.org/pid/60/3690"
+      },
+      {
+        "label": "OpenReview profile",
+        "url": "https://openreview.net/profile?id=~Jiwu_Shu1"
+      },
+      {
+        "label": "SPORK arXiv",
+        "url": "https://arxiv.org/abs/2607.03333"
+      }
+    ]
   }
 ]

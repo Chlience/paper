@@ -16,6 +16,7 @@ Updated-At: 2026-07-10
 | --- | --- | --- |
 | [Gemma 4](/papers/2607.02770-gemma-4-technical-report/) | 2026年7月 | 把 dense / MoE、thinking、长上下文、QAT、MTP drafter 与 encoder-free multimodality 组合进开放模型族。 |
 | [HiLS-Attention](/papers/2607.02980-hils-attention-infinite-context/) | 2026年7月 | 用 hierarchical softmax 分配 chunk mass，再在选中 chunk 内做 token attention，实现可训练的长上下文稀疏注意力。 |
+| [SPORK](/papers/2607.03333-spork-self-speculative-agentic-inference/) | 2026年7月 | 让目标模型从共享 KV prefix 自预测下一次工具调用，提前执行只读工具，并用 target verification 回收失败 probe 的 token 前缀。 |
 | [国产模型报告时间线](/papers/2026-06-23-chinese-frontier-model-reports-timeline/) | 2026年6月 | 按 MoE / 长上下文、reasoning RL、agentic infrastructure 三条主线串联 2024-2026 年国产前沿模型演进。 |
 | [Seed2.0](/papers/2607.00248-seed2-model-card-real-world-complexity/) | 2026年6月 | 用产品任务分布重构模型评测，将能力、成本与真实工作流案例放进同一模型卡。 |
 | [ECHO](/papers/2606.31650-echo-selective-turn-memory-agentic-rl/) | 2026年6月 | 把 selective memory / compact / context reconstruction 做成可训练 slot。 |
