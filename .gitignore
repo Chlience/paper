@@ -4,5 +4,6 @@ dist/
 src/generated/
 AGENTS.md
 docs/superpowers/
+.worktrees/
 npm-debug.log*
 .DS_Store
