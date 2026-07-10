@@ -227,6 +227,30 @@ test('archive index accepts one well-formed row for every paper', () => {
   assert.deepEqual(result.errors, []);
 });
 
+test('archive index requires reverse chronological month order', () => {
+  const result = workflow.validateArchiveIndex(
+    archiveIndex([
+      archiveRow('older', 'Older', '2026年6月'),
+      archiveRow('newer', 'Newer', '2026年7月'),
+    ]),
+    new Set(['older', 'newer']),
+  );
+
+  assert.ok(result.errors.some((issue) => issue.code === 'index-time-order' && issue.subject === 'newer'));
+});
+
+test('archive index allows stable ordering within the same month', () => {
+  const result = workflow.validateArchiveIndex(
+    archiveIndex([
+      archiveRow('echo', 'ECHO', '2026年7月'),
+      archiveRow('spiral', 'SPIRAL', '2026年7月'),
+    ]),
+    new Set(['echo', 'spiral']),
+  );
+
+  assert.deepEqual(result.errors, []);
+});
+
 test('archive index requires every paper inside the current collection table', () => {
   const index = `${archiveIndex([archiveRow('echo', 'ECHO')])}\n## 跨论文关系\n\n[SPIRAL](/papers/spiral/)`;
   const result = workflow.validateArchiveIndex(index, new Set(['echo', 'spiral']));
@@ -831,6 +855,7 @@ test('public workflow documents index and deletion reverse-integrity contracts',
   ]) {
     assert.match(workflowDoc, new RegExp(snippet.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
   }
+  assert.match(workflowDoc, /从新到旧/);
   assert.match(agentInstructions, /核心信号/);
   assert.match(agentInstructions, /孤立作者/);
 });

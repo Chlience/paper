@@ -180,8 +180,8 @@ Run:
 
 ```bash
 rtk npm run test:workflow
-rtk npm run check:site
 rtk npm run build
+rtk npm run check:site
 rtk git diff --check
 ```
 

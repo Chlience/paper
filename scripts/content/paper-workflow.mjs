@@ -187,6 +187,11 @@ const firstMarkdownTable = (markdown) => {
   return rows.length > 0 ? { header: rows[0], rows: rows.slice(1) } : null;
 };
 
+const parseArchiveMonth = (value) => {
+  const match = value.match(/^(\d{4})年([1-9]|1[0-2])月$/);
+  return match ? Number(match[1]) * 12 + Number(match[2]) : null;
+};
+
 export const validateArchiveIndex = (indexMarkdown, knownPaperSlugs) => {
   const errors = [];
   const table = firstMarkdownTable(getSection(indexMarkdown, '当前收录'));
@@ -201,6 +206,7 @@ export const validateArchiveIndex = (indexMarkdown, knownPaperSlugs) => {
   }
 
   const indexedCounts = new Map();
+  let previousValidMonth = null;
   for (const [index, row] of table.rows.entries()) {
     const rowSubject = `row-${index + 1}`;
     if (row.length !== 3) {
@@ -227,8 +233,20 @@ export const validateArchiveIndex = (indexMarkdown, knownPaperSlugs) => {
       errors.push(issue('stale-index-entry', slug, 'Archive index links to a paper that is not archived.'));
     }
 
-    if (!/^\d{4}年(?:[1-9]|1[0-2])月$/.test(monthCell.text)) {
+    const monthKey = parseArchiveMonth(monthCell.text);
+    if (monthKey === null) {
       errors.push(issue('index-time-format', subject, 'Archive index time must use YYYY年M月.'));
+    } else {
+      if (previousValidMonth && monthKey > previousValidMonth.key) {
+        errors.push(
+          issue(
+            'index-time-order',
+            subject,
+            `Archive index time must run newest to oldest; ${monthCell.text} appears after ${previousValidMonth.text}.`,
+          ),
+        );
+      }
+      previousValidMonth = { key: monthKey, text: monthCell.text };
     }
 
     const signal = signalCell.text.trim();
