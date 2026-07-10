@@ -1,5 +1,11 @@
 import path from 'node:path';
-import { normalizeAuthorKey, splitAuthorNames } from './authors.mjs';
+import MarkdownIt from 'markdown-it';
+import {
+  authorProfileIsReferenced,
+  collectAuthorReferences,
+  normalizeAuthorKey,
+  splitAuthorNames,
+} from './authors.mjs';
 import { getFirstArchivedAt, getSection, getSourceField, getSourceFieldRaw, getTopLevelField } from './markdown.mjs';
 
 export const REQUIRED_SECTION_GROUPS = [
@@ -59,6 +65,7 @@ const textualEvidenceLocatorPatterns = [
 ];
 
 const issue = (code, subject, message) => ({ code, subject, message });
+const markdownParser = new MarkdownIt();
 
 const sectionForGroup = (markdown, group) => {
   for (const heading of group.headings) {
@@ -143,6 +150,107 @@ const isSafePaperImagePath = (imageUrl, expectedPrefix) => {
 
 const workflowVersionFor = (markdown) =>
   scalarValue(getSourceFieldRaw(getSection(markdown, 'Source'), 'Workflow version'));
+
+const firstMarkdownTable = (markdown) => {
+  const tokens = markdownParser.parse(markdown, {});
+  const tableStart = tokens.findIndex((token) => token.type === 'table_open');
+  if (tableStart < 0) return null;
+
+  const rows = [];
+  let row = null;
+  let cell = null;
+
+  for (const token of tokens.slice(tableStart)) {
+    if (token.type === 'table_close') break;
+    if (token.type === 'tr_open') row = [];
+    if (token.type === 'th_open' || token.type === 'td_open') {
+      cell = { text: '', links: [] };
+    }
+    if (token.type === 'inline' && cell) {
+      cell.text = token.content.trim();
+      cell.links = (token.children ?? [])
+        .filter((child) => child.type === 'link_open')
+        .map((child) => child.attrGet('href'))
+        .filter(Boolean);
+    }
+    if ((token.type === 'th_close' || token.type === 'td_close') && row && cell) {
+      row.push(cell);
+      cell = null;
+    }
+    if (token.type === 'tr_close' && row) {
+      rows.push(row);
+      row = null;
+    }
+  }
+
+  return rows.length > 0 ? { header: rows[0], rows: rows.slice(1) } : null;
+};
+
+export const validateArchiveIndex = (indexMarkdown, knownPaperSlugs) => {
+  const errors = [];
+  const table = firstMarkdownTable(getSection(indexMarkdown, '当前收录'));
+  if (!table) {
+    errors.push(issue('missing-index-table', '当前收录', 'Archive index must contain the current collection table.'));
+    return { errors };
+  }
+
+  const header = table.header.map((cell) => cell.text);
+  if (header.length !== 3 || header.some((value, index) => value !== ['简称', '时间', '核心信号'][index])) {
+    errors.push(issue('index-table-header', '当前收录', 'Expected columns: 简称, 时间, 核心信号.'));
+  }
+
+  const indexedCounts = new Map();
+  for (const [index, row] of table.rows.entries()) {
+    const rowSubject = `row-${index + 1}`;
+    if (row.length !== 3) {
+      errors.push(issue('index-row-shape', rowSubject, 'Every archive index row must contain exactly three cells.'));
+      continue;
+    }
+
+    const [titleCell, monthCell, signalCell] = row;
+    const paperPath = titleCell.links.length === 1 ? titleCell.links[0] : '';
+    const slug = paperPath.match(/^\/papers\/([^/#?]+)\/$/)?.[1] ?? '';
+    const shortTitle = titleCell.text.match(/^\[([^\]]+)\]\(\/papers\/[^/#?]+\/\)$/)?.[1]?.trim() ?? '';
+    const subject = slug || rowSubject;
+
+    if (!slug) {
+      errors.push(issue('index-paper-link', rowSubject, 'The short title must be a single /papers/<slug>/ link.'));
+      continue;
+    }
+    if (!shortTitle) {
+      errors.push(issue('missing-index-short-title', subject, 'Archive index short title is required.'));
+    }
+
+    indexedCounts.set(slug, (indexedCounts.get(slug) ?? 0) + 1);
+    if (!knownPaperSlugs.has(slug)) {
+      errors.push(issue('stale-index-entry', slug, 'Archive index links to a paper that is not archived.'));
+    }
+
+    if (!/^\d{4}年(?:[1-9]|1[0-2])月$/.test(monthCell.text)) {
+      errors.push(issue('index-time-format', subject, 'Archive index time must use YYYY年M月.'));
+    }
+
+    const signal = signalCell.text.trim();
+    if (!signal) {
+      errors.push(issue('missing-core-signal', subject, 'Archive index core signal is required.'));
+    } else if (signal.length < 8 || !/[。！？.!?]$/.test(signal)) {
+      errors.push(issue('core-signal-format', subject, 'Core signal must be one concise sentence.'));
+    }
+  }
+
+  for (const [slug, count] of indexedCounts) {
+    if (count > 1) {
+      errors.push(issue('duplicate-index-entry', slug, `Archive index contains ${count} rows for this paper.`));
+    }
+  }
+  for (const slug of knownPaperSlugs) {
+    if (!indexedCounts.has(slug)) {
+      errors.push(issue('missing-index-entry', slug, 'Paper is missing from the current collection table.'));
+    }
+  }
+
+  return { errors };
+};
 
 export const validatePaperRecord = async ({
   slug,
@@ -498,6 +606,35 @@ export const findRecurringUnprofiled = (records, profiles) => {
     .map(([, value]) => issue('recurring-unprofiled-author', value.name, `Appears in ${value.paperSlugs.size} papers.`))
     .sort((left, right) => left.subject.localeCompare(right.subject));
 };
+
+export const findOrphanAuthorProfiles = (records, profiles) => {
+  if (!Array.isArray(profiles)) return [];
+  const references = records.map((record) => {
+    const source = getSection(record.markdown, 'Source');
+    return collectAuthorReferences(record.markdown, getSourceField(source, ['Authors', 'Author']));
+  });
+
+  return profiles
+    .filter((profile) => profile && typeof profile === 'object' && !Array.isArray(profile))
+    .filter((profile) => !references.some((paperReferences) => authorProfileIsReferenced(profile, paperReferences)))
+    .map((profile) =>
+      issue(
+        'orphan-author-profile',
+        profile.slug || profile.name || 'unknown-author',
+        'Author profile has no remaining archived paper reference.',
+      ),
+    )
+    .sort((left, right) => left.subject.localeCompare(right.subject));
+};
+
+export const validateArchiveCollections = ({ records, profiles, indexMarkdown, knownPaperSlugs }) => ({
+  errors: [
+    ...validateArchiveIndex(indexMarkdown, knownPaperSlugs).errors,
+    ...validateAuthorProfiles(profiles).errors,
+    ...findOrphanAuthorProfiles(records, profiles),
+  ],
+  advisories: findRecurringUnprofiled(records, Array.isArray(profiles) ? profiles : []),
+});
 
 export const summarizeAdvisories = (advisories, limit = 5) => {
   const grouped = new Map();

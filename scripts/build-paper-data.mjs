@@ -1,5 +1,7 @@
 import fs from 'node:fs/promises';
 import {
+  authorProfileIsReferenced,
+  collectAuthorReferences,
   formatAuthorDisplayName,
   normalizeAuthorKey,
   readAuthorProfiles,
@@ -45,6 +47,7 @@ const buildPaperRecords = async (paperEntries) => {
       sourceUrl: getSourceUrl(raw),
       authors,
       parsedAuthors: splitAuthorNames(authors),
+      authorReferences: collectAuthorReferences(raw, authors),
       subjects: getSourceField(raw, 'Subjects'),
       currentVersion: getSourceField(raw, 'Current version read'),
       tags: tagsForPaper(slug, raw, fileName),
@@ -91,6 +94,11 @@ const buildAuthorRecords = (papers, authorProfiles) => {
     }
     for (const slugValue of mention?.paperSlugs ?? []) {
       paperSlugs.add(slugValue);
+    }
+    if (profile) {
+      for (const paper of papers) {
+        if (authorProfileIsReferenced(profile, paper.authorReferences)) paperSlugs.add(paper.slug);
+      }
     }
 
     const paperList = papers
@@ -187,6 +195,7 @@ const attachPaperAuthorEntries = (papers, authorRecordsByKey) => {
         : { name };
     });
     delete paper.parsedAuthors;
+    delete paper.authorReferences;
   }
 };
 

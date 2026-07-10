@@ -2,10 +2,9 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import process from 'node:process';
 import {
-  findRecurringUnprofiled,
   summarizeAdvisories,
+  validateArchiveCollections,
   validateArchiveTimes,
-  validateAuthorProfiles,
   validatePaperRecord,
 } from './content/paper-workflow.mjs';
 import { authorsFile, repoRoot, readPaperEntries } from './content/repository.mjs';
@@ -53,8 +52,9 @@ for (const record of records) {
 const timeResult = validateArchiveTimes(records);
 errors.push(...timeResult.errors);
 advisories.push(...timeResult.advisories);
-errors.push(...validateAuthorProfiles(profiles).errors);
-advisories.push(...findRecurringUnprofiled(records, Array.isArray(profiles) ? profiles : []));
+const collectionResult = validateArchiveCollections({ records, profiles, indexMarkdown, knownPaperSlugs });
+errors.push(...collectionResult.errors);
+advisories.push(...collectionResult.advisories);
 
 for (const item of errors) {
   console.error(`ERROR [${item.code}] ${item.subject}: ${item.message}`);

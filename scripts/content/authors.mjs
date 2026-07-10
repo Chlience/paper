@@ -1,4 +1,5 @@
 import fs from 'node:fs/promises';
+import { getSection } from './markdown.mjs';
 import { authorsFile } from './repository.mjs';
 
 const asciiFold = (value = '') =>
@@ -53,6 +54,27 @@ export const splitAuthorNames = (value = '') => {
   }
 
   return names;
+};
+
+export const collectAuthorReferences = (markdown = '', authorNames = '') => {
+  const authorSections = [getSection(markdown, 'Source'), getSection(markdown, '作者与关系')].join('\n');
+  const slugs = new Set(
+    [...authorSections.matchAll(/\/authors\/([a-z0-9]+(?:-[a-z0-9]+)*)\//g)].map((match) => match[1]),
+  );
+  const keys = new Set(splitAuthorNames(authorNames).map(normalizeAuthorKey).filter(Boolean));
+  return { slugs, keys };
+};
+
+export const authorProfileIsReferenced = (profile, references) => {
+  if (!profile || typeof profile !== 'object' || Array.isArray(profile)) return false;
+  const slug = typeof profile.slug === 'string' ? profile.slug.trim() : '';
+  if (slug && references.slugs.has(slug)) return true;
+
+  const identities = [profile.name, ...(Array.isArray(profile.aliases) ? profile.aliases : [])]
+    .filter((name) => typeof name === 'string')
+    .map(normalizeAuthorKey)
+    .filter(Boolean);
+  return identities.some((key) => references.keys.has(key));
 };
 
 export const readAuthorProfiles = async () => {

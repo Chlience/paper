@@ -2,11 +2,28 @@ import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
 import fs from 'node:fs/promises';
 import test from 'node:test';
+import * as authors from './content/authors.mjs';
 import * as markdown from './content/markdown.mjs';
 import * as workflow from './content/paper-workflow.mjs';
 
 const { validatePaperRecord } = workflow;
 const { stripPublicPaperMaintenance } = markdown;
+
+const archiveIndex = (rows) => `# Paper Archive Index
+
+## 当前收录
+
+| 简称 | 时间 | 核心信号 |
+| --- | --- | --- |
+${rows.join('\n')}
+
+## 作者关系图谱
+
+保留关系记录。
+`;
+
+const archiveRow = (slug, shortTitle, month = '2026年7月', signal = '提炼论文最核心的机制贡献。') =>
+  `| [${shortTitle}](/papers/${slug}/) | ${month} | ${signal} |`;
 
 const coreBody = `
 ## 作者与关系
@@ -100,12 +117,153 @@ test('exports the archive time validator', () => {
   assert.equal(typeof workflow.validateArchiveTimes, 'function');
 });
 
+test('exports the archive index validator', () => {
+  assert.equal(typeof workflow.validateArchiveIndex, 'function');
+});
+
 test('exports the author profile validator', () => {
   assert.equal(typeof workflow.validateAuthorProfiles, 'function');
 });
 
 test('exports the recurring author audit', () => {
   assert.equal(typeof workflow.findRecurringUnprofiled, 'function');
+});
+
+test('exports the orphan author profile audit', () => {
+  assert.equal(typeof workflow.findOrphanAuthorProfiles, 'function');
+});
+
+test('exports the archive collection audit', () => {
+  assert.equal(typeof workflow.validateArchiveCollections, 'function');
+});
+
+test('author references combine profile links with source author names', () => {
+  const references = authors.collectAuthorReferences(
+    [
+      '## 作者与关系',
+      '',
+      '- [Ada Example](/authors/ada-example/): Example University.',
+      '',
+      '## 跨论文关系',
+      '',
+      '- Related work by [External Author](/authors/external-author/).',
+    ].join('\n'),
+    'Bob Example, Carol Example',
+  );
+
+  assert.deepEqual([...references.slugs], ['ada-example']);
+  assert.deepEqual([...references.keys], ['bob example', 'carol example']);
+  assert.equal(authors.authorProfileIsReferenced({ slug: 'ada-example', name: 'Ada Example' }, references), true);
+  assert.equal(
+    authors.authorProfileIsReferenced(
+      { slug: 'robert-example', name: 'Robert Example', aliases: ['Bob Example'] },
+      references,
+    ),
+    true,
+  );
+});
+
+test('orphan author audit ignores linked and aliased profiles and reports true orphans', () => {
+  const records = [
+    {
+      slug: 'linked-paper',
+      markdown: [
+        '## Source',
+        '',
+        '- Authors: Bob Example',
+        '',
+        '## 作者与关系',
+        '',
+        '- [Ada Example](/authors/ada-example/): Example University.',
+      ].join('\n'),
+    },
+  ];
+  const profiles = [
+    { slug: 'ada-example', name: 'Ada Example' },
+    { slug: 'robert-example', name: 'Robert Example', aliases: ['Bob Example'] },
+    { slug: 'orphan-author', name: 'Orphan Author' },
+  ];
+
+  const issues = workflow.findOrphanAuthorProfiles(records, profiles);
+
+  assert.deepEqual(issues.map((issue) => issue.subject), ['orphan-author']);
+  assert.equal(issues[0].code, 'orphan-author-profile');
+});
+
+test('archive collection audit combines index and author reverse-integrity errors', () => {
+  const records = [
+    {
+      slug: 'echo',
+      markdown: '## Source\n\n- Authors: Ada Example\n\n## 作者与关系\n\n- Ada Example: Example University.',
+    },
+  ];
+  const result = workflow.validateArchiveCollections({
+    records,
+    profiles: [
+      { slug: 'ada-example', name: 'Ada Example' },
+      { slug: 'orphan-author', name: 'Orphan Author' },
+    ],
+    indexMarkdown: archiveIndex([archiveRow('echo', 'ECHO')]),
+    knownPaperSlugs: new Set(['echo', 'missing-paper']),
+  });
+
+  assert.ok(result.errors.some((issue) => issue.code === 'missing-index-entry'));
+  assert.ok(result.errors.some((issue) => issue.code === 'orphan-author-profile'));
+});
+
+test('archive index accepts one well-formed row for every paper', () => {
+  const result = workflow.validateArchiveIndex(
+    archiveIndex([
+      archiveRow('echo', 'ECHO'),
+      archiveRow('spiral', 'SPIRAL', '2026年6月', '把搜索轨迹和聚合轨迹放进同一个 RL 目标。'),
+    ]),
+    new Set(['echo', 'spiral']),
+  );
+
+  assert.deepEqual(result.errors, []);
+});
+
+test('archive index requires every paper inside the current collection table', () => {
+  const index = `${archiveIndex([archiveRow('echo', 'ECHO')])}\n## 跨论文关系\n\n[SPIRAL](/papers/spiral/)`;
+  const result = workflow.validateArchiveIndex(index, new Set(['echo', 'spiral']));
+
+  assert.ok(result.errors.some((issue) => issue.code === 'missing-index-entry' && issue.subject === 'spiral'));
+});
+
+test('archive index rejects stale and duplicate paper rows', () => {
+  const result = workflow.validateArchiveIndex(
+    archiveIndex([
+      archiveRow('echo', 'ECHO'),
+      archiveRow('echo', 'ECHO duplicate'),
+      archiveRow('deleted-paper', 'Deleted'),
+    ]),
+    new Set(['echo']),
+  );
+
+  assert.ok(result.errors.some((issue) => issue.code === 'duplicate-index-entry' && issue.subject === 'echo'));
+  assert.ok(result.errors.some((issue) => issue.code === 'stale-index-entry' && issue.subject === 'deleted-paper'));
+});
+
+test('archive index enforces the concise three-column contract', () => {
+  const invalidHeader = archiveIndex([archiveRow('echo', 'ECHO')]).replace('核心信号', 'Theme');
+  const invalidRows = archiveIndex([
+    archiveRow('echo', 'ECHO', '2026-07', ''),
+    archiveRow('spiral', 'SPIRAL', '2026年6月', 'search, set RL, aggregation'),
+  ]);
+
+  const headerResult = workflow.validateArchiveIndex(invalidHeader, new Set(['echo']));
+  const rowResult = workflow.validateArchiveIndex(invalidRows, new Set(['echo', 'spiral']));
+
+  assert.ok(headerResult.errors.some((issue) => issue.code === 'index-table-header'));
+  assert.ok(rowResult.errors.some((issue) => issue.code === 'index-time-format' && issue.subject === 'echo'));
+  assert.ok(rowResult.errors.some((issue) => issue.code === 'missing-core-signal' && issue.subject === 'echo'));
+  assert.ok(rowResult.errors.some((issue) => issue.code === 'core-signal-format' && issue.subject === 'spiral'));
+});
+
+test('archive index requires a current collection table', () => {
+  const result = workflow.validateArchiveIndex('# Empty index', new Set(['echo']));
+
+  assert.ok(result.errors.some((issue) => issue.code === 'missing-index-table'));
 });
 
 test('exports the advisory summarizer', () => {
@@ -567,6 +725,21 @@ test('recurring unprofiled authors are reported once', () => {
   assert.deepEqual(issues.map((issue) => issue.subject), ['Bob Example']);
 });
 
+test('content build associates linked author profiles with their papers', async () => {
+  const result = spawnSync(process.execPath, ['scripts/build-paper-data.mjs'], {
+    cwd: process.cwd(),
+    encoding: 'utf8',
+  });
+  assert.equal(result.status, 0, result.stderr || result.stdout);
+
+  const data = JSON.parse(await fs.readFile('src/generated/paper-data.json', 'utf8'));
+  for (const slug of ['nino-vieillard', 'gennady-pekhimenko', 'dongyang-ma-flashmemory']) {
+    const author = data.authors.find((candidate) => candidate.slug === slug);
+    assert.ok(author, `Missing generated author ${slug}`);
+    assert.ok(author.paperCount > 0, `Expected ${slug} to have at least one linked paper`);
+  }
+});
+
 test('advisory summaries group by code and bound examples', () => {
   const advisories = [
     ...Array.from({ length: 7 }, (_, index) => ({ code: 'legacy-a', subject: `paper-${index}`, message: 'A' })),
@@ -636,7 +809,24 @@ test('the public template exposes every v2 contract field', async () => {
     'Match confidence',
     'Observed at',
     'Decision: merge',
+    '索引核心信号',
   ]) {
     assert.match(template, new RegExp(fieldName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
   }
+});
+
+test('public workflow documents index and deletion reverse-integrity contracts', async () => {
+  const workflowDoc = await fs.readFile('content/utility/paper-analysis-workflow.md', 'utf8');
+  const agentInstructions = await fs.readFile('AGENTS.md', 'utf8');
+
+  for (const snippet of [
+    '| 简称 | 时间 | 核心信号 |',
+    '索引核心信号',
+    '论文删除与反向清理',
+    '`orphan-author-profile`',
+  ]) {
+    assert.match(workflowDoc, new RegExp(snippet.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
+  }
+  assert.match(agentInstructions, /核心信号/);
+  assert.match(agentInstructions, /孤立作者/);
 });
