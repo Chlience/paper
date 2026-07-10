@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
+import fs from 'node:fs/promises';
 import test from 'node:test';
 import * as workflow from './content/paper-workflow.mjs';
 
@@ -362,4 +363,23 @@ test('workflow CLI validates the current archive without errors', () => {
   });
   assert.equal(result.status, 0, result.stderr || result.stdout);
   assert.match(result.stdout, /Paper workflow check passed for 91 papers and 298 author profiles\./);
+});
+
+test('the public template exposes every v2 contract field', async () => {
+  const template = await fs.readFile('content/utility/paper-note-template.md', 'utf8');
+  for (const fieldName of [
+    'Workflow version',
+    'Material type',
+    'Canonical source',
+    'Responsible organization',
+    'Published / updated',
+    'Accessed',
+    '证据定位',
+    'Page type',
+    'Match confidence',
+    'Observed at',
+    'Decision: merge',
+  ]) {
+    assert.match(template, new RegExp(fieldName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
+  }
 });

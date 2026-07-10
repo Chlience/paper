@@ -5,15 +5,24 @@ Updated-At: YYYY-MM-DD HH:mm
 
 ## Source
 
+- Workflow version: v2
+- Material type: research-paper / technical-report / model-card / survey / blog / framework-docs / composite
+- Canonical source:
 - Title:
+- Authors:
+- Responsible organization:
 - arXiv:
 - PDF:
 - Code/Project:
 - OpenReview / Review page:
-- Authors:
 - Submitted:
+- Published / updated:
 - Current version read:
+- Version / revision read:
+- Accessed: YYYY-MM-DD
 - Subjects:
+
+<!-- `Authors` 与 `Responsible organization` 至少填写一项。按材料类型保留适用字段；网页、框架文档和组合材料也要记录规范来源、发布日期或最近更新时间、读取版本与访问日期。 -->
 
 ## 作者与关系
 
@@ -40,6 +49,13 @@ Updated-At: YYYY-MM-DD HH:mm
 
 - 
 - 
+
+证据写法：
+
+- 论文事实：正文、附录、表格、图、代码或项目页直接给出的内容。
+- 作者主张：摘要、引言、结论、项目说明或作者回应中的解释与归因。
+- 本地分析：基于来源进行的机制重建、比较、推断和可信度判断。
+- 关键判断附 `证据定位`，写明章节、图、表、附录、页码、代码路径或网页 URL。
 
 数学公式写法：
 
@@ -80,6 +96,9 @@ Figure X: 原始 caption 的中文翻译或轻度修饰，保留图中变量、�
 - Baseline：
 - 指标：
 - 结果：
+- 证据定位：
+- 对照是否可比：
+- 支持的最窄结论：
 - 解读：
 
 <!-- 若有主结论图或失败边界图，且满足 SOP 的高价值准入标准，直接放在对应结果小节的表格或解读附近。 -->
@@ -90,14 +109,27 @@ Figure X: 原始 caption 的中文翻译或轻度修饰，保留图中变量、�
 - Baseline：
 - 指标：
 - 结果：
+- 证据定位：
+- 对照是否可比：
+- 支持的最窄结论：
 - 解读：
 
 ### 实验设置与 baseline 审计
 
 数字密集项优先用表格记录，正文保留判断和边界。
 
+<!-- 通用行适用于所有含实验或评测的材料。训练、系统与模型报告行按材料类型启用；无关行应删除，避免用空表格代替分析。 -->
+
 | 维度 | 记录 |
 | --- | --- |
+| 评测协议 |  |
+| 统计报告 |  |
+| Baseline 是否 tuned |  |
+| Baseline 是否 compute-matched |  |
+| Baseline 是否 implementation-matched |  |
+| Baseline 是否覆盖强替代方案 |  |
+| Baseline 是否存在弱化风险 |  |
+| 结论边界 |  |
 | 模型与初始化 |  |
 | 数据与任务 |  |
 | RL / 训练配置 |  |
@@ -112,14 +144,6 @@ Figure X: 原始 caption 的中文翻译或轻度修饰，保留图中变量、�
 | 训练过程与超参 |  |
 | 训练时间 / GPU hours / 成本 |  |
 | 未披露项 |  |
-| 评测协议 |  |
-| 统计报告 |  |
-| Baseline 是否 tuned |  |
-| Baseline 是否 compute-matched |  |
-| Baseline 是否 implementation-matched |  |
-| Baseline 是否覆盖强替代方案 |  |
-| Baseline 是否存在弱化风险 |  |
-| 结论边界 |  |
 
 ## 证据链强度评估
 
@@ -137,6 +161,9 @@ Figure X: 原始 caption 的中文翻译或轻度修饰，保留图中变量、�
 
 ## OpenReview / 审稿意见吸收
 
+- Page type: official-review / metadata-only / proceedings / commentary / not-found / not-applicable
+- Match confidence: high / medium / low
+- Observed at: YYYY-MM-DD
 - Venue status:
 - Public reviews:
 - Ratings / confidence:
@@ -211,6 +238,8 @@ Figure X: 原始 caption 的中文翻译或轻度修饰，保留图中变量、�
 
 ### Recommendation
 
-Decision: merge / revise then merge / skip / ask user
+Decision: merge
+
+Allowed values: `merge` / `revise-then-merge` / `skip` / `ask-user`
 
 Why:
