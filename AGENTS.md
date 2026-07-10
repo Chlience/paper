@@ -20,6 +20,7 @@
 - 作者关系分析必须覆盖：作者机构、同机构关系、跨机构桥接、与已存档论文作者是否重叠、主题或引用关系。
 - 完成每篇论文的 `作者与关系` 后，必须执行作者 profile pass：按 `internal/author-x-account-search-sop.md` 检索和交叉验证 homepage、GitHub、Scholar/DBLP/OpenReview、机构页和 X 候选，并据此更新 `data/authors.json`。搜索过程、候选账号、跳过原因和 `xConfidence` 不写入论文 Markdown；需要暂存时使用 `/tmp` 或未跟踪中间文件。
 - 若新增论文和已有论文存在作者重叠、同一实验室连续产出、共同机构、主题延展、引用或方法复用，必须写入 `content/utility/papers-index.md` 的跨论文关系。
+- `content/utility/papers-index.md` 不维护按单篇展开的作者或机构分组。单篇作者关系写入对应论文，稳定作者事实写入 `data/authors.json`，索引只保留影响跨论文理解的关系。
 - 删除论文时必须同步删除 `当前收录` 行和失效的跨论文关系，并审计 `data/authors.json`。作者 profile 在剩余论文中没有作者链接、姓名或别名关联时，必须在同一提交中删除；孤立作者会触发工作流硬错误。
 - 论文笔记和 `content/utility/papers-index.md` 中指向已存档论文的 Markdown 链接必须使用站点路径 `/papers/<slug>/`；工作流、模板、索引页面链接分别使用 `/workflow/`、`/template/`、`/archive/`；本地文件名用代码样式保留。
 - 对安全或双用途论文，保留机制、风险、评测和防御启发，避免沉淀可直接滥用的操作细节。

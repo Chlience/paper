@@ -334,7 +334,7 @@ DSpark 因此采用异步近似：用两步前的 confidence 预测确定 dynami
 - 与 `content/utility/papers-index.md` 中已有论文的作者关系：DSpark 与 [Engram](/papers/2601.07372-conditional-memory-engram-scalable-lookup/)、[DeepSeekMoE](/papers/2401.06066-deepseekmoe-expert-specialization/)、[DeepSeek-R1](/papers/2501.12948-deepseek-r1-rl-reasoning/) 和 [DeepSeek-V4](/papers/2026-04-24-deepseek-v4-million-token-context-intelligence/) 有大量 DeepSeek 作者网络重叠；本轮新增 Chenze Shao、Jiashi Li、Yunfan Xiong 作者档案，并为 Xin Cheng、Xingkai Yu 补 DSpark 来源。
 - 与已有论文的主题关系：继承 [2211.17192](/papers/2211.17192-fast-inference-transformers-speculative-decoding/) 的 rejection sampling / TV acceptance 机制，直接使用 [2602.06036 DFlash](/papers/2602.06036-dflash-block-diffusion-speculative-decoding/) 作为 parallel backbone，补充 [2606.12370 Bebop](/papers/2606.12370-bebop-mtp-rejection-sampling-rl-training/) 的 MTP / TV loss 路线和 [2511.14617 Seer](/papers/2511.14617-seer-online-context-learning-llm-rl/) 的 rollout serving 路线。
 - 与已有论文的方法或系统关系：[DeepSeek-V4](/papers/2026-04-24-deepseek-v4-million-token-context-intelligence/) 是 DSpark 的 target serving 环境，涉及 CSA/HCA、mHC、ZOS、deterministic kernels 和 variable-length sparse attention kernels；[TIM/VeXact](/papers/2605.14220-training-inference-mismatch-llm-rl/) 与 [inference determinism](/papers/2025-09-10-defeating-nondeterminism-llm-inference/) 提供后续复验语言。
-- 新增后应更新的索引 cluster：Cluster AG speculative decoding / rollout acceleration；Cluster AC DeepSeek-V4 production serving；Cluster AC2 Engram / DeepSeek author network；DeepSeek 系列总关系。
+- 跨论文关系定位：连接 speculative decoding / rollout acceleration、DeepSeek-V4 production serving、Engram / DeepSeek author network 与 DeepSeek 系列。
 
 ## Reference Intake Brief
 
@@ -342,7 +342,7 @@ DSpark 因此采用异步近似：用两步前的 confidence 预测确定 dynami
 
 - Intended target system: 新增论文笔记；更新 `content/utility/papers-index.md`；更新 `data/authors.json`。
 - Existing related assets: `content/utility/papers-index.md`；[2211.17192](/papers/2211.17192-fast-inference-transformers-speculative-decoding/)、[2602.06036](/papers/2602.06036-dflash-block-diffusion-speculative-decoding/)、[2606.12370](/papers/2606.12370-bebop-mtp-rejection-sampling-rl-training/)、[2511.14617](/papers/2511.14617-seer-online-context-learning-llm-rl/)、[2026-04-24](/papers/2026-04-24-deepseek-v4-million-token-context-intelligence/)、[2601.07372](/papers/2601.07372-conditional-memory-engram-scalable-lookup/)。
-- Proposed form: 新建独立 Markdown 文档，更新 speculative decoding cluster 和 DeepSeek 系列关系。
+- Proposed form: 新建独立 Markdown 文档，更新当前收录、speculative decoding 和 DeepSeek 系列跨论文关系。
 
 ### Reusable Elements
 

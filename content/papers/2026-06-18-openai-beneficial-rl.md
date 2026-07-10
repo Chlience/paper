@@ -286,7 +286,7 @@ OpenAI 这篇论文把问题反过来问：如果有害行为能以 trait 或 pe
 - 与 [2506.10947](/papers/2506.10947-spurious-rewards-rethinking-rlvr/)：Spurious Rewards 提醒 RLVR 会放大 base-model prior 和 reward proxy；这篇则要求 reward proxy 对应清晰的 beneficial behavior，且通过 generic helpfulness control 检查 proxy 是否真的在驱动 OOD alignment。
 - 与 [2501.09620](/papers/2501.09620-causal-rewards-llm-alignment/)：Causal Rewards 关注 reward model 对 spurious feature 的因果去偏；这篇关注 trait-level reward 是否能跨域泛化。两者在 reward signal 设计上互补：一个偏 causal debiasing，一个偏 trait-level behavioral shaping。
 - 与未归档但重要的外部节点：Betley et al. `2502.17424`、Persona Features `2506.19823`、School of Reward Hacks `2508.17511`、Natural Emergent Misalignment from Reward Hacking `2511.18397`、HealthBench Professional `2604.27470`、OpenAI production eval blog 共同构成这篇的外部上下文。后续若这些材料被正式归档，需要把这里的外部引用升级成站内 `/papers/<slug>/` 链接。
-- 新增后应更新的索引 cluster：新增 `Cluster AS: OpenAI Beneficial Trait RL 与 Alignment Persistence`；在跨论文关系中连接 OpenAI CoT monitorability、reward hacking、emergent misalignment、health AI evaluation 和 RLHF reward design。
+- 跨论文关系定位：记录 OpenAI Beneficial Trait RL 与 Alignment Persistence，并连接 OpenAI CoT monitorability、reward hacking、emergent misalignment、health AI evaluation 和 RLHF reward design。
 
 ## Reference Intake Brief
 

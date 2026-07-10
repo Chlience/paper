@@ -196,7 +196,7 @@ Attention：
 - 与 `2606.04075` 的作者关系：未发现作者重叠。主题关系中等。SocioHack 关注 RL 优化闭环中的 reward hacking；本文关注数值和 serving 调度带来的轨迹差异，二者都提醒优化闭环中的环境细节会改变行为。
 - 与 `2510.19315` 的作者关系：未发现作者重叠。关系较弱；一个是 serving 数值系统，一个是 Transformer 理论复杂性。
 - 与 `2605.31514` 的作者关系：未发现作者重叠。方法论关系中等；两者都提醒研究者把观察到的模型行为和接口/系统条件分开解释。
-- 新增后应更新的索引 cluster：新增 “LLM Inference Determinism 与 Batch-Invariant Kernels” cluster，作为 RLHF/RLVR 系统和 LLM serving 系统之间的数值一致性节点。
+- 跨论文关系定位：将 “LLM Inference Determinism 与 Batch-Invariant Kernels” 作为 RLHF/RLVR 系统和 LLM serving 系统之间的数值一致性节点。
 
 ## Reference Intake Brief
 

@@ -17,9 +17,9 @@ const archiveIndex = (rows) => `# Paper Archive Index
 | --- | --- | --- |
 ${rows.join('\n')}
 
-## 作者关系图谱
+## 跨论文关系
 
-保留关系记录。
+保留高信号关系记录。
 `;
 
 const archiveRow = (slug, shortTitle, month = '2026年7月', signal = '提炼论文最核心的机制贡献。') =>
@@ -829,4 +829,43 @@ test('public workflow documents index and deletion reverse-integrity contracts',
   }
   assert.match(agentInstructions, /核心信号/);
   assert.match(agentInstructions, /孤立作者/);
+});
+
+test('archive omits the manually maintained author relationship graph', async () => {
+  const [index, workflowDoc, template, archivePage, agentInstructions] = await Promise.all([
+    fs.readFile('content/utility/papers-index.md', 'utf8'),
+    fs.readFile('content/utility/paper-analysis-workflow.md', 'utf8'),
+    fs.readFile('content/utility/paper-note-template.md', 'utf8'),
+    fs.readFile('src/pages/archive/index.astro', 'utf8'),
+    fs.readFile('AGENTS.md', 'utf8'),
+  ]);
+
+  assert.doesNotMatch(index, /^## 作者关系图谱$/m);
+  assert.doesNotMatch(index, /^### Cluster\s+/m);
+  const crossPaperRelations = markdown.getSection(index, '跨论文关系');
+  assert.match(crossPaperRelations, /Haibin Lin/);
+  assert.match(crossPaperRelations, /\/authors\/tri-dao\//);
+  assert.doesNotMatch(workflowDoc, /作者关系图谱|索引 cluster/i);
+  assert.doesNotMatch(template, /索引行[^\n]*cluster/i);
+  assert.doesNotMatch(archivePage, /作者关系图谱/);
+  assert.match(agentInstructions, /跨论文关系/);
+
+  const paperFiles = (await fs.readdir('content/papers')).filter((fileName) => fileName.endsWith('.md'));
+  const staleMaintenancePatterns = [
+    /作者关系图谱/i,
+    /新增后应更新的索引 cluster/i,
+    /新增索引 cluster/i,
+    /索引状态：[^\n]*cluster/i,
+    /索引中的作者关系/i,
+    /Proposed form:[^\n]*(?:索引[^\n]*cluster|cluster[^\n]*跨论文关系)/i,
+    /(?:新增|更新|扩展|归入)[^\n]*Cluster [A-Z][A-Z0-9]*/i,
+  ];
+  const staleFiles = [];
+
+  for (const fileName of paperFiles) {
+    const source = await fs.readFile(`content/papers/${fileName}`, 'utf8');
+    if (staleMaintenancePatterns.some((pattern) => pattern.test(source))) staleFiles.push(fileName);
+  }
+
+  assert.deepEqual(staleFiles, []);
 });
