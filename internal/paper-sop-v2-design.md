@@ -1,7 +1,7 @@
 # Paper SOP v2 Design
 
 Created-At: 2026-07-10
-Status: Approved for implementation
+Status: Implemented; cross-paper ownership amended 2026-07-10
 
 ## 1. 目标
 
@@ -97,7 +97,7 @@ SOP 中的每个强制项必须满足至少一个条件：
 4. Mechanism pass：解释朴素路径、优化路径、成立条件和实现边界。
 5. Evidence pass：核对实验、定理、baseline、统计和证据定位。
 6. External pass：核对公开审稿、代码、框架版本和外部状态。
-7. Relationship pass：更新作者 profile、机构关系、跨论文关系和索引。
+7. Relationship pass：更新作者 profile、机构关系、论文笔记中的跨论文关系和索引行。
 8. Discussion/update pass：回写讨论结论、版本变化和勘误。
 9. Release gate：执行内容检查、构建、站点检查和本地提交。
 
@@ -295,7 +295,7 @@ git diff --check
 以下优化具有价值，但属于后续独立任务：
 
 - 将 `当前收录` 表格改为生成数据。
-- 把跨论文关系从长文本索引迁移为结构化边。
+- 将论文本地关系章节进一步升级为机器可读的结构化边；从全局长文本索引迁移到论文本地章节已完成。
 - 为历史 91 篇笔记补齐 v2 Source 和证据定位字段。
 - 为作者搜索建立持久化的内部审计记录。
 - 将 advisory 分阶段提升为 CI error。

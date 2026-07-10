@@ -177,6 +177,12 @@ DeepSeek-V4 和 GLM-5.2 又把长上下文推到 million-token 级别。DeepSeek
 
 时间线采用首次公开或提交时间，部分条目的当前阅读版本晚于首次提交，例如 Kimi K2 当前读 v2，DeepSeek-R1 当前读 v2 / Nature 相关版本，GLM-5.2 是 release blog。后续如果某家发布独立论文版本、代码复现、权重更新或 benchmark 修订，需要回到对应条目更新版本边界。
 
+## 跨论文关系
+
+- 本文是国产模型报告的综合导航节点；DeepSeek 主线由 [DeepSeekMoE](/papers/2401.06066-deepseekmoe-expert-specialization/)、[DeepSeek-V2](/papers/2405.04434-deepseek-v2-mla-moe-efficient-llm/)、[DeepSeek-V3](/papers/2412.19437-deepseek-v3-technical-report/)、[DeepSeek-R1](/papers/2501.12948-deepseek-r1-rl-reasoning/) 和 [DeepSeek-V4](/papers/2026-04-24-deepseek-v4-million-token-context-intelligence/) 连接 MoE / MLA、reasoning RL 与 million-token system。
+- [Qwen2.5](/papers/2412.15115-qwen2-5-technical-report/) / [Qwen3](/papers/2505.09388-qwen3-technical-report/)、[Kimi k1.5](/papers/2501.12599-kimi-k1-5-scaling-rl-llms/) / [Kimi K2](/papers/2507.20534-kimi-k2-open-agentic-intelligence/) / [Kimi K2.5](/papers/2602.02276-kimi-k2-5-visual-agentic-intelligence/)、[GLM-5](/papers/2602.15763-glm-5-agentic-engineering/) / [GLM-5.2](/papers/2026-06-16-glm-5-2-long-horizon-tasks/) 和 [MiniMax-M1](/papers/2506.13585-minimax-m1-cispo-lightning-attention/) / [MiniMax-M3](/papers/2606.13392-minimax-sparse-attention-m3/) 构成跨公司对照，比较重点集中在 reasoning、agentic workload、长上下文和公开训练账本。
+- [MOPD](/papers/2606.30406-mopd-multi-teacher-on-policy-distillation/)、[Bebop](/papers/2606.12370-bebop-mtp-rejection-sampling-rl-training/) 和 [DSpark](/papers/2026-06-27-dspark-confidence-scheduled-speculative-decoding/) 将时间线中的 teacher-signal integration、MTP 与 speculative decoding 分别落实为独立方法节点，适合用于核对模型报告中的简写主张。
+
 ## Reference Intake Brief
 
 ### Target

@@ -21,6 +21,7 @@ export const REQUIRED_SECTION_GROUPS = [
   { name: 'OpenReview / 审稿意见吸收', headings: ['OpenReview / 审稿意见吸收'] },
   { name: '主要启发', headings: ['主要启发'] },
   { name: '局限', headings: ['局限', '局限与待验证问题'] },
+  { name: '跨论文关系', headings: ['跨论文关系'] },
   { name: 'Reference Intake Brief', headings: ['Reference Intake Brief'] },
 ];
 

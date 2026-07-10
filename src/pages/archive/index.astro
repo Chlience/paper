@@ -10,7 +10,7 @@ const archive = data.utilities.find((page) => page.slug === 'archive');
     <header class="page-header slim">
       <p class="eyebrow mono">Index</p>
       <h1>{archive?.title}</h1>
-      <p class="deck">论文简称、首次公开时间、核心信号和跨论文关系。</p>
+      <p class="deck">论文简称、首次公开时间和核心信号。</p>
     </header>
     <div class="prose wide" set:html={archive?.html ?? ''} />
   </article>

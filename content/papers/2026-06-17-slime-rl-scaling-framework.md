@@ -173,7 +173,7 @@ slime 文档把正确性、可复现性和 CI 明确列为基础设施问题。`
 - `latest` 镜像和快速迭代文档会降低长期复现实验的稳定性。
 - slime 的强项来自 Megatron + SGLang 深度集成，迁移到其他 rollout backend 时需要重新评估一致性、吞吐和调试成本。
 
-## 与本地档案的关系
+## 跨论文关系
 
 - 与 [2602.15763](/papers/2602.15763-glm-5-agentic-engineering/)：GLM-5 报告给出 slime 在 production agentic RL 中的具体用法，包括异步 rollout、TITO、direct double-sided IS、stale sample dropping、DP-aware routing 和 PD disaggregation；slime 文档提供对应框架入口、版本快照和 Quick Start surface。
 - 与 [2409.19256](/papers/2409.19256-hybridflow-rlhf-framework/) / [2026-06-16](/papers/2026-06-16-verl-rl-optimization-algorithms/)：HybridFlow / VERL 更像通用 RLHF/RLVR dataflow framework；slime 选择 Megatron + SGLang native 路线，并把 custom generation 与 SGLang serving 能力放到中心。

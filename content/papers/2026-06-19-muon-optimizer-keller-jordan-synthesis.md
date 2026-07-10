@@ -337,7 +337,7 @@ Shampoo / SOAP 更像 structured preconditioning 路线：它们维护和使用�
 
 ### Target
 
-- Intended target system: 新增 Muon optimizer 综合技术博客笔记；更新 `content/utility/papers-index.md` 的当前收录和 optimizer geometry 跨论文关系；为 Keller Jordan 建立作者档案。
+- Intended target system: 新增 Muon optimizer 综合技术博客笔记；更新索引行和 optimizer geometry 关系章节；为 Keller Jordan 建立作者档案。
 - Existing related assets: [2606.04662](/papers/2606.04662-muon-outperforms-adam-curvature/)、[2026-04-24 DeepSeek-V4](/papers/2026-04-24-deepseek-v4-million-token-context-intelligence/)、[2602.15763 GLM-5](/papers/2602.15763-glm-5-agentic-engineering/)、[2307.08691 FlashAttention-2](/papers/2307.08691-flashattention-2-parallelism-work-partitioning/)。
 - Proposed form: 技术博客 + 多资料综合条目。
 

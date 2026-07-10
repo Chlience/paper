@@ -416,7 +416,7 @@ $$
 
 ### Target
 
-- Intended target system: 新增 John Schulman KL approximation 技术博客笔记；更新 `content/utility/papers-index.md` 的 post-training / KL estimator 图谱；新增 John Schulman 作者档案。
+- Intended target system: 新增 John Schulman KL approximation 技术博客笔记；更新索引行和 post-training / KL estimator 关系章节；新增 John Schulman 作者档案。
 - Existing related assets: [2026-06-16 verl](/papers/2026-06-16-verl-rl-optimization-algorithms/)、[2503.14476 DAPO](/papers/2503.14476-dapo-long-cot-rl-system/)、[2605.14220 TIM/VeXact](/papers/2605.14220-training-inference-mismatch-llm-rl/)、[2025-09-10 batch-invariant inference](/papers/2025-09-10-defeating-nondeterminism-llm-inference/)。
 - Proposed form: 新建独立 Markdown 文档并更新索引、作者档案和相关笔记反向链接。
 

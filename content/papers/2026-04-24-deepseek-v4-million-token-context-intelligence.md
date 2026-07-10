@@ -540,7 +540,7 @@ Instruct / Max mode：
 - 与 [2405.17381](/papers/2405.17381-various-lengths-constant-speed-lightning-attention/) 和 [2506.13585](/papers/2506.13585-minimax-m1-cispo-lightning-attention/)：三者都服务 long context / long output。Lightning Attention 用 recurrent/linear attention 降低长序列成本；MiniMax-M1 把 Lightning Attention 放进 long-output RL；DeepSeek-V4 用 CSA/HCA compressed attention 与 KV cache systems 支撑 1M context。
 - 与 [2606.06453](/papers/2606.06453-vortex-sparse-attention-serving/)、[2511.02749](/papers/2511.02749-span-queries-cache-attention-locality/) 和 [2405.19888](/papers/2405.19888-parrot-semantic-variable-llm-serving/)：V4 从模型内部压缩 KV 和 attention；这些 serving 论文从 sparse attention DSL、span query/cache locality、application DAG 显式化角度降低真实 workload 成本。
 - 与 [2409.19256](/papers/2409.19256-hybridflow-rlhf-framework/) 和 [2606.00135](/papers/2606.00135-agentic-tool-calling-rl-training/)：V4 post-training 展示了 ultra-long-context RL/OPD、rollout WAL、sandbox infra 和 tool-call schema 的生产级实现，补充了 RLHF/RLVR systems 与 tool-use RL 的工程侧细节。
-- 索引状态：`content/utility/papers-index.md` 的跨论文关系已将 DeepSeek-V4 连接到 DeepSeek-R1、Muon、TIM、inference determinism、Lightning Attention、MiniMax-M1、UltraEP、Vortex、HybridFlow 和 tool-use RL。
+- 关系状态：本笔记的 `跨论文关系` 已将 DeepSeek-V4 连接到 DeepSeek-R1、Muon、TIM、inference determinism、Lightning Attention、MiniMax-M1、UltraEP、Vortex、HybridFlow 和 tool-use RL。
 
 ## Reference Intake Brief
 

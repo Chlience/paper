@@ -343,9 +343,9 @@ GLM-5.2 的结论链可以概括为：
 
 ### Target
 
-- Intended target system: 维护 GLM-5.2 技术博客笔记，并同步 `content/utility/papers-index.md` 中 GLM / slime / long-horizon agentic RL 关系。
+- Intended target system: 维护 GLM-5.2 技术博客笔记，同步索引行和 GLM / slime / long-horizon agentic RL 关系章节。
 - Existing related assets: [2602.15763](/papers/2602.15763-glm-5-agentic-engineering/)；[2026-06-17](/papers/2026-06-17-slime-rl-scaling-framework/)；[2606.12370](/papers/2606.12370-bebop-mtp-rejection-sampling-rl-training/)；[2026-04-24](/papers/2026-04-24-deepseek-v4-million-token-context-intelligence/)。
-- Proposed form: 维护 `2026-06-16-glm-5-2-long-horizon-tasks.md`；同步 `content/utility/papers-index.md`。
+- Proposed form: 维护 `2026-06-16-glm-5-2-long-horizon-tasks.md`；同步索引行和对应论文的关系章节。
 
 ### Reusable Elements
 

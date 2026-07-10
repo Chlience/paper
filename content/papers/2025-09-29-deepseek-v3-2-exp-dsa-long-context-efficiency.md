@@ -284,7 +284,7 @@ post-training 包含两部分：
 
 ## 跨论文关系
 
-- 与 `content/utility/papers-index.md` 中已有论文的作者关系：该报告只署名 DeepSeek-AI，无法确认个人作者重叠；机构层面连接 DeepSeek-V2/V3/R1/V4。
+- 与已有论文的作者关系：该报告只署名 DeepSeek-AI，无法确认个人作者重叠；机构层面连接 DeepSeek-V2/V3/R1/V4。
 - 与已有论文的主题关系：[DeepSeek-V2](/papers/2405.04434-deepseek-v2-mla-moe-efficient-llm/) 提供 MLA 基础，[DeepSeek-V3](/papers/2412.19437-deepseek-v3-technical-report/) 提供大规模 MoE / FP8 / DualPipe 系统背景，[DeepSeek-R1](/papers/2501.12948-deepseek-r1-rl-reasoning/) 提供 GRPO 与 reasoning RL 语境，[DeepSeek-V4](/papers/2026-04-24-deepseek-v4-million-token-context-intelligence/) 在 million-token context 中继续发展 compressed sparse / heavily compressed attention。
 - 与已有论文的方法或系统关系：[GLM-5](/papers/2602.15763-glm-5-agentic-engineering/) 明确采用 DSA，并报告 20B token sparse attention adaptation；[GLM-5.2](/papers/2026-06-16-glm-5-2-long-horizon-tasks/) 用 IndexShare / IndexCache 处理 DSA indexer 成本与 serving 复用；[MiniMax Sparse Attention](/papers/2606.13392-minimax-sparse-attention-m3/) 是另一条 trainable sparse softmax attention 路线；[Vortex](/papers/2606.06453-vortex-sparse-attention-serving/) 处理 sparse attention serving 程序化执行；[TIM](/papers/2605.14220-training-inference-mismatch-llm-rl/) 与 [batch-invariant inference](/papers/2025-09-10-defeating-nondeterminism-llm-inference/) 提供实现一致性审计语言。
 - 跨论文关系定位：DeepSeek sparse attention / DSA 节点；DeepSeek efficient sparse architecture 系谱；GLM-5 / GLM-5.2 DSA 采用关系；MiniMax-M3 / DSA sparse attention 对照；Vortex / TIM long-context serving 与 consistency 关系。
@@ -293,9 +293,9 @@ post-training 包含两部分：
 
 ### Target
 
-- Intended target system: 新增论文笔记；更新 `content/utility/papers-index.md` 的 DeepSeek / DSA / sparse attention 关系。
+- Intended target system: 新增论文笔记；更新索引行和 DeepSeek / DSA / sparse attention 关系章节。
 - Existing related assets: `content/utility/papers-index.md`；[DeepSeek-V2](/papers/2405.04434-deepseek-v2-mla-moe-efficient-llm/)、[DeepSeek-V3](/papers/2412.19437-deepseek-v3-technical-report/)、[DeepSeek-R1](/papers/2501.12948-deepseek-r1-rl-reasoning/)、[DeepSeek-V4](/papers/2026-04-24-deepseek-v4-million-token-context-intelligence/)、[GLM-5](/papers/2602.15763-glm-5-agentic-engineering/)、[GLM-5.2](/papers/2026-06-16-glm-5-2-long-horizon-tasks/)、[MiniMax-M3](/papers/2606.13392-minimax-sparse-attention-m3/)、[Vortex](/papers/2606.06453-vortex-sparse-attention-serving/)。
-- Proposed form: 新建独立 Markdown 文档；同步更新索引行和跨论文关系。
+- Proposed form: 新建独立 Markdown 文档；同步更新索引行和对应论文的关系章节。
 
 ### Reusable Elements
 
@@ -309,7 +309,7 @@ post-training 包含两部分：
 - Unsourced or unverifiable claims: 训练硬件、并行方式、数据组成、训练时间均标注未披露；cost figure 只做方向性解读。
 - Tone/brand mismatch: 避免把 release 文案直接当作 peer-reviewed claim；显式区分官方报告、内部 benchmark 和本地推论。
 - Safety/compliance issues: 无直接双用途安全操作细节；内容聚焦模型效率、训练和评测。
-- Overlap with existing assets: 与 GLM-5 / DeepSeek-V4 / MiniMax-M3 的 DSA 相关内容存在主题重叠，本条作为上游原始报告节点，索引用跨论文关系消除重复。
+- Overlap with existing assets: 与 GLM-5 / DeepSeek-V4 / MiniMax-M3 的 DSA 相关内容存在主题重叠，本条作为上游原始报告节点，由对应论文的关系章节说明差异。
 
 ### Skipped
 
@@ -324,4 +324,4 @@ post-training 包含两部分：
 
 Decision: merge
 
-Why: DSA 是 GLM-5、GLM-5.2 和 DeepSeek-V4 sparse attention 讨论的关键上游节点；报告给出机制、训练 token 数、top-k、loss 和 cost 方向，足以进入本地论文索引。需要在索引中保留“训练与系统细节未披露”的边界，避免把 release 证据读成完整论文证据。
+Why: DSA 是 GLM-5、GLM-5.2 和 DeepSeek-V4 sparse attention 讨论的关键上游节点；报告给出机制、训练 token 数、top-k、loss 和 cost 方向，足以进入 `当前收录`。本笔记继续保留“训练与系统细节未披露”的边界，避免把 release 证据读成完整论文证据。

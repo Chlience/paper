@@ -17,9 +17,9 @@ const archiveIndex = (rows) => `# Paper Archive Index
 | --- | --- | --- |
 ${rows.join('\n')}
 
-## 跨论文关系
+## 后续新增论文沉淀规范
 
-保留高信号关系记录。
+关系保留在对应论文笔记中。
 `;
 
 const archiveRow = (slug, shortTitle, month = '2026年7月', signal = '提炼论文最核心的机制贡献。') =>
@@ -64,6 +64,10 @@ const coreBody = `
 ## 局限
 
 1. 局限。
+
+## 跨论文关系
+
+- 暂无高置信跨论文关系。
 
 ## Reference Intake Brief
 
@@ -831,24 +835,35 @@ test('public workflow documents index and deletion reverse-integrity contracts',
   assert.match(agentInstructions, /孤立作者/);
 });
 
-test('archive omits the manually maintained author relationship graph', async () => {
-  const [index, workflowDoc, template, archivePage, agentInstructions] = await Promise.all([
-    fs.readFile('content/utility/papers-index.md', 'utf8'),
-    fs.readFile('content/utility/paper-analysis-workflow.md', 'utf8'),
-    fs.readFile('content/utility/paper-note-template.md', 'utf8'),
-    fs.readFile('src/pages/archive/index.astro', 'utf8'),
-    fs.readFile('AGENTS.md', 'utf8'),
-  ]);
+test('archive omits global author grouping while paper notes retain author relationships', async () => {
+  const [index, workflowDoc, template, archivePage, agentInstructions, authorSop, dapo, flashAttention2] =
+    await Promise.all([
+      fs.readFile('content/utility/papers-index.md', 'utf8'),
+      fs.readFile('content/utility/paper-analysis-workflow.md', 'utf8'),
+      fs.readFile('content/utility/paper-note-template.md', 'utf8'),
+      fs.readFile('src/pages/archive/index.astro', 'utf8'),
+      fs.readFile('AGENTS.md', 'utf8'),
+      fs.readFile('internal/author-x-account-search-sop.md', 'utf8'),
+      fs.readFile('content/papers/2503.14476-dapo-long-cot-rl-system.md', 'utf8'),
+      fs.readFile('content/papers/2307.08691-flashattention-2-parallelism-work-partitioning.md', 'utf8'),
+    ]);
 
   assert.doesNotMatch(index, /^## 作者关系图谱$/m);
   assert.doesNotMatch(index, /^### Cluster\s+/m);
-  const crossPaperRelations = markdown.getSection(index, '跨论文关系');
-  assert.match(crossPaperRelations, /Haibin Lin/);
-  assert.match(crossPaperRelations, /\/authors\/tri-dao\//);
+  assert.match(markdown.getSection(dapo, '跨论文关系'), /Haibin Lin/);
+  assert.match(flashAttention2, /\/authors\/tri-dao\//);
   assert.doesNotMatch(workflowDoc, /作者关系图谱|索引 cluster/i);
+  assert.doesNotMatch(
+    workflowDoc,
+    /(?:关系|主题延展|方法复用)[^\n]{0,80}(?:同步更新|写入)\s*`?content\/utility\/papers-index/i,
+  );
   assert.doesNotMatch(template, /索引行[^\n]*cluster/i);
   assert.doesNotMatch(archivePage, /作者关系图谱/);
   assert.match(agentInstructions, /跨论文关系/);
+  assert.match(authorSop, /papers-index\.md`：只维护 `当前收录`/);
+  assert.match(authorSop, /论文笔记 `跨论文关系`/);
+  assert.doesNotMatch(authorSop, /papers-index\.md`：写已核验/);
+  assert.doesNotMatch(authorSop, /papers-index\.md` 中已核验的跨论文关系/);
 
   const paperFiles = (await fs.readdir('content/papers')).filter((fileName) => fileName.endsWith('.md'));
   const staleMaintenancePatterns = [
@@ -859,13 +874,50 @@ test('archive omits the manually maintained author relationship graph', async ()
     /索引中的作者关系/i,
     /Proposed form:[^\n]*(?:索引[^\n]*cluster|cluster[^\n]*跨论文关系)/i,
     /(?:新增|更新|扩展|归入)[^\n]*Cluster [A-Z][A-Z0-9]*/i,
+    /索引状态：[^\n]*跨论文关系/i,
+    /(?:更新|同步|补充)[^\n]{0,60}(?:papers-index|索引)[^\n]{0,60}跨论文关系/i,
+    /(?:papers-index|索引)[^\n]{0,60}的当前收录[^\n]{0,60}跨论文关系/i,
+    /关系写入索引/i,
+    /索引中(?:补充|作为)[^\n]*关系/i,
+    /当前索引[^\n]*引用关系/i,
+    /应在索引中[^\n]*(?:连接|关系|图谱)/i,
+    /Existing local paper notes and `content\/utility\/papers-index\.md` \| Cross-paper relationship mapping/i,
+    /papers-index\.md` 中已有论文的作者关系/i,
+    /(?:在 `content\/utility\/papers-index\.md` 新增|索引中已经存在的)[^\n]*节点/i,
   ];
   const staleFiles = [];
 
   for (const fileName of paperFiles) {
     const source = await fs.readFile(`content/papers/${fileName}`, 'utf8');
-    if (staleMaintenancePatterns.some((pattern) => pattern.test(source))) staleFiles.push(fileName);
+    const ambiguousOwnership = source.split('\n').some((line) => {
+      const maintenanceField = /(?:Intended target system|Proposed form|Why):/i.test(line);
+      const mentionsIndex = /(?:papers-index|索引|\bindex\b)/i.test(line);
+      const mentionsRelations = /(?:关系|图谱|节点)/i.test(line);
+      if (!maintenanceField || !mentionsIndex || !mentionsRelations) return false;
+
+      const ownsOnlyCollection = /(?:索引行|当前收录)/.test(line);
+      const localizesRelations = /(?:关系章节|对应论文|本笔记|笔记中维护关系)/.test(line);
+      return !ownsOnlyCollection || !localizesRelations;
+    });
+    if (ambiguousOwnership || staleMaintenancePatterns.some((pattern) => pattern.test(source))) {
+      staleFiles.push(fileName);
+    }
   }
 
   assert.deepEqual(staleFiles, []);
+});
+
+test('cross-paper relations live in paper notes instead of the archive index', async () => {
+  const index = await fs.readFile('content/utility/papers-index.md', 'utf8');
+  assert.doesNotMatch(index, /^## 跨论文关系$/m);
+  assert.ok(workflow.REQUIRED_SECTION_GROUPS.some((group) => group.name === '跨论文关系'));
+
+  const paperFiles = (await fs.readdir('content/papers')).filter((fileName) => fileName.endsWith('.md'));
+  const missingRelations = [];
+  for (const fileName of paperFiles) {
+    const source = await fs.readFile(`content/papers/${fileName}`, 'utf8');
+    if (!markdown.getSection(source, '跨论文关系').trim()) missingRelations.push(fileName);
+  }
+
+  assert.deepEqual(missingRelations, []);
 });

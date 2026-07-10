@@ -234,7 +234,7 @@ MTP 在 verl 文档里既可用于训练，也可用于 rollout speculative deco
 
 第四，看 mismatch 指标。需要记录 `rollout_log_probs`、当前训练 logprob、KL、K3、chi2 token/sequence、IS effective sample size、RS masked fraction。若这些指标异常，吞吐提升可能只是把错误样本更快送进 update。
 
-## 与已存档材料的关系
+## 跨论文关系
 
 - [2020-03-07 Schulman KL approximation](/papers/2020-03-07-schulman-kl-divergence-approximations/) 提供 `K3` 指标的数学来源：$k_3=(r-1)-\log r$ 是无偏、非负、低方差 KL value estimator。verl 中记录 KL/K3/chi2 时，应继续区分 drift 诊断值、KL reward penalty 和可微 KL loss。
 - [2409.19256](/papers/2409.19256-hybridflow-rlhf-framework/) 提供 verl 的原始系统抽象：RLHF 被看作多模型 dataflow，single-controller 编排模型间流程，multi-controller 处理模型内分布式执行。当前 one-step-off、fully async、TransferQueue 是这条系统线在 post-training workloads 上继续扩展。
