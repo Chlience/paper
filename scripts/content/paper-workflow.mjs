@@ -1,6 +1,6 @@
 import path from 'node:path';
 import { normalizeAuthorKey, splitAuthorNames } from './authors.mjs';
-import { getFirstArchivedAt, getSection, getSourceField, getUpdatedAt } from './markdown.mjs';
+import { getFirstArchivedAt, getSection, getSourceField, getSourceFieldRaw, getTopLevelField } from './markdown.mjs';
 
 export const REQUIRED_SECTION_GROUPS = [
   { name: 'Source', headings: ['Source'] },
@@ -42,9 +42,12 @@ export const REFERENCE_DECISIONS = new Set(['merge', 'revise-then-merge', 'skip'
 const evidenceSectionGroup = REQUIRED_SECTION_GROUPS.find((group) => group.name === '关键实验/定理');
 
 const exactMinutePattern = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$/;
-const absoluteUrlPattern = /https?:\/\/[^\s)>；，。]+/i;
-const internalPaperLinkPattern = /\]\(\/papers\/([^/#?]+)\/\)/g;
-const localImagePattern = /!\[[^\]]*\]\((\/images\/papers\/[^)\s]+)\)/g;
+const exactDatePattern = /^\d{4}-\d{2}-\d{2}$/;
+const absoluteUrlPattern = /https?:\/\/[^\s)>；，。]+/gi;
+const internalPaperPathPattern = /\/papers\/([^/#?\s)]+)\//g;
+const markdownImagePattern = /!\[[^\]]*\]\(\s*(?:<([^>]+)>|([^\s)]+))(?:\s+["'][^"']*["'])?\s*\)/g;
+const evidenceLocatorPattern =
+  /https?:\/\/|§\s*\d|(?:section|sec\.?|figure|fig\.?|table|appendix|page|p\.?|theorem|lemma|chapter|file|path|commit|line)\s*[#A-Za-z0-9一二三四五六七八九十_.:/-]+|(?:第\s*)?[0-9一二三四五六七八九十]+(?:\.[0-9]+)*(?:\s*)?(?:节|章|页)|(?:图|表|附录|定理|引理|页码|代码路径|文件|行号)\s*[#A-Za-z0-9一二三四五六七八九十_.:/-]+/i;
 
 const issue = (code, subject, message) => ({ code, subject, message });
 
@@ -56,42 +59,89 @@ const sectionForGroup = (markdown, group) => {
   return '';
 };
 
-const hasTraceableSource = (source, knownPaperSlugs) => {
-  if (absoluteUrlPattern.test(source)) return true;
-  for (const match of source.matchAll(internalPaperLinkPattern)) {
+const hasTraceableSource = (source, knownPaperSlugs, allowArchive = false) => {
+  for (const match of source.matchAll(absoluteUrlPattern)) {
+    if (isHttpUrl(match[0])) return true;
+  }
+  for (const match of source.matchAll(internalPaperPathPattern)) {
     if (knownPaperSlugs.has(match[1])) return true;
   }
-  return false;
+  return allowArchive && /(?:^|[\s(])\/archive\/(?:$|[\s)])/m.test(source);
 };
 
 const resultBlocks = (section) => {
   const matches = [...section.matchAll(/^###\s+(.+)$/gm)];
   if (matches.length === 0) return section.trim() ? [{ title: 'section', body: section }] : [];
-  return matches
+  const blocks = matches
     .map((match, index) => ({
       title: match[1].trim(),
       body: section.slice(match.index, matches[index + 1]?.index ?? section.length),
     }))
-    .filter(({ title }) => /结果|定理|实验|案例|扫描/.test(title) && !/设置|审计/.test(title));
+    .filter(({ title }) => !/^(?:实验设置|baseline\s*审计|术语|符号约定)/i.test(title));
+  return blocks.length > 0 ? blocks : [{ title: 'section', body: section }];
 };
 
 const lineValue = (section, name) =>
   section.match(new RegExp(`^- ${name}:\\s*(.+)$`, 'mi'))?.[1]?.trim() ?? '';
+
+const evidenceValue = (block) => block.match(/^- 证据定位[:：]\s*(.+)$/mi)?.[1]?.trim() ?? '';
+
+const scalarValue = (value = '') => value.trim().replace(/^`([^`]+)`$/, '$1').trim();
+
+const canonicalValue = (value = '') => {
+  const raw = scalarValue(value);
+  return raw.match(/^\[[^\]]+\]\(([^)\s]+)\)$/)?.[1] ?? raw.match(/^<([^>\s]+)>$/)?.[1] ?? raw;
+};
+
+const isValidDate = (value) => {
+  if (!exactDatePattern.test(value)) return false;
+  const [year, month, day] = value.split('-').map(Number);
+  if (year < 1000 || month < 1 || month > 12 || day < 1) return false;
+  return day <= new Date(Date.UTC(year, month, 0)).getUTCDate();
+};
+
+const isValidMinute = (value) => {
+  if (!exactMinutePattern.test(value)) return false;
+  const [date, time] = value.split(' ');
+  const [hour, minute] = time.split(':').map(Number);
+  return isValidDate(date) && hour >= 0 && hour <= 23 && minute >= 0 && minute <= 59;
+};
+
+const isHttpUrl = (value) => {
+  try {
+    const url = new URL(value);
+    return (url.protocol === 'http:' || url.protocol === 'https:') && Boolean(url.hostname);
+  } catch {
+    return false;
+  }
+};
+
+const workflowVersionFor = (markdown) =>
+  scalarValue(getSourceFieldRaw(getSection(markdown, 'Source'), 'Workflow version'));
 
 export const validatePaperRecord = async ({
   slug,
   markdown,
   indexMarkdown,
   knownPaperSlugs,
+  legacyPaperSlugs = new Set(),
   imageExists,
 }) => {
   const errors = [];
   const advisories = [];
-  const workflowVersion = getSourceField(markdown, 'Workflow version');
-  const isV2 = workflowVersion.toLowerCase() === 'v2';
   const source = getSection(markdown, 'Source');
+  const workflowVersion = scalarValue(getSourceFieldRaw(source, 'Workflow version'));
+  const isV2 = workflowVersion.toLowerCase() === 'v2';
+  const materialType = scalarValue(getSourceFieldRaw(source, 'Material type'));
+  const canonicalSource = canonicalValue(getSourceFieldRaw(source, 'Canonical source'));
   const firstArchivedAt = getFirstArchivedAt(markdown);
-  const updatedAt = getUpdatedAt(markdown);
+  const updatedAt = getTopLevelField(markdown, 'Updated-At');
+
+  if (!workflowVersion && !legacyPaperSlugs.has(slug)) {
+    errors.push(issue('missing-workflow-version', slug, 'New notes must declare Workflow version: v2.'));
+  } else if (workflowVersion && !isV2) {
+    errors.push(issue('unsupported-workflow-version', slug, `Unsupported Workflow version: ${workflowVersion}.`));
+  }
 
   if (!firstArchivedAt || !updatedAt) {
     errors.push(issue('missing-archive-time', slug, 'First-Archived-At and Updated-At are required.'));
@@ -102,7 +152,7 @@ export const validatePaperRecord = async ({
       errors.push(issue('missing-core-section', slug, `Missing or empty section: ${group.name}.`));
     }
   }
-  if (!hasTraceableSource(source, knownPaperSlugs)) {
+  if (!hasTraceableSource(source, knownPaperSlugs, isV2 && materialType === 'composite')) {
     errors.push(issue('missing-source-link', slug, 'Source must contain an external URL or a valid archived paper link.'));
   }
   if (!indexMarkdown.includes(`/papers/${slug}/`)) {
@@ -120,7 +170,7 @@ export const validatePaperRecord = async ({
         'Add Workflow version, Material type, Canonical source, and Accessed.',
       ),
     );
-    if (!exactMinutePattern.test(firstArchivedAt) || !exactMinutePattern.test(updatedAt)) {
+    if (!isValidMinute(firstArchivedAt) || !isValidMinute(updatedAt)) {
       advisories.push(issue('legacy-time-format', slug, 'Normalize timestamps to YYYY-MM-DD HH:mm.'));
     }
     const review = getSection(markdown, 'OpenReview / 审稿意见吸收');
@@ -144,8 +194,8 @@ export const validatePaperRecord = async ({
       );
     }
   } else if (
-    !exactMinutePattern.test(firstArchivedAt) ||
-    !exactMinutePattern.test(updatedAt)
+    !isValidMinute(firstArchivedAt) ||
+    !isValidMinute(updatedAt)
   ) {
     errors.push(issue('v2-time-format', slug, 'v2 timestamps must use YYYY-MM-DD HH:mm.'));
   } else if (updatedAt < firstArchivedAt) {
@@ -153,42 +203,53 @@ export const validatePaperRecord = async ({
   }
 
   if (isV2) {
+    const sourceField = (names) => scalarValue(getSourceFieldRaw(source, names));
+    const accessed = sourceField('Accessed');
     const requiredFields = [
-      ['Material type', getSourceField(markdown, 'Material type')],
-      ['Canonical source', getSourceField(markdown, 'Canonical source')],
-      ['Title', getSourceField(markdown, 'Title')],
+      ['Material type', materialType],
+      ['Canonical source', canonicalSource],
+      ['Title', sourceField('Title')],
       [
         'Authors or Responsible organization',
-        getSourceField(markdown, ['Authors', 'Responsible organization']),
+        sourceField(['Authors', 'Responsible organization']),
       ],
       [
         'Published / submitted date',
-        getSourceField(markdown, ['Published / updated', 'Submitted', 'Published']),
+        sourceField(['Published / updated', 'Submitted', 'Published']),
       ],
       [
         'Version / revision read',
-        getSourceField(markdown, ['Version / revision read', 'Current version read']),
+        sourceField(['Version / revision read', 'Current version read']),
       ],
-      ['Accessed', getSourceField(markdown, 'Accessed')],
+      ['Accessed', accessed],
     ];
 
     for (const [name, value] of requiredFields) {
       if (!value) errors.push(issue('v2-source-field', slug, `Missing v2 Source field: ${name}.`));
     }
-    if (!MATERIAL_TYPES.has(getSourceField(markdown, 'Material type'))) {
+    if (!MATERIAL_TYPES.has(materialType)) {
       errors.push(issue('v2-material-type', slug, 'Material type is outside the supported v2 set.'));
     }
-    const canonicalSource = getSourceField(markdown, 'Canonical source');
     const canonicalPaper = canonicalSource.match(/^\/papers\/([^/#?]+)\/$/)?.[1];
-    const validInternalCanonical = canonicalSource === '/archive/' || knownPaperSlugs.has(canonicalPaper);
-    if (canonicalSource && !/^https?:\/\//i.test(canonicalSource) && !validInternalCanonical) {
+    const validInternalCanonical =
+      materialType === 'composite' &&
+      (canonicalSource === '/archive/' || (knownPaperSlugs.has(canonicalPaper) && canonicalPaper !== slug));
+    if (canonicalSource && !isHttpUrl(canonicalSource) && !validInternalCanonical) {
       errors.push(
-        issue('v2-canonical-source', slug, 'Canonical source must be an absolute URL or a valid archive path.'),
+        issue(
+          'v2-canonical-source',
+          slug,
+          'Canonical source must be an absolute URL, or a non-self archive path for composite material.',
+        ),
       );
+    }
+    if (accessed && !isValidDate(accessed)) {
+      errors.push(issue('v2-accessed-date', slug, 'Accessed must use a valid YYYY-MM-DD date.'));
     }
 
     for (const block of resultBlocks(sectionForGroup(markdown, evidenceSectionGroup))) {
-      if (!/- 证据定位[:：]\s*\S/m.test(block.body)) {
+      const locator = evidenceValue(block.body);
+      if (!locator || !evidenceLocatorPattern.test(locator)) {
         errors.push(issue('v2-evidence-location', slug, `Missing evidence location in ${block.title}.`));
       }
     }
@@ -208,6 +269,10 @@ export const validatePaperRecord = async ({
     ) {
       errors.push(issue('v2-review-confidence', slug, 'Match confidence must be high, medium, or low.'));
     }
+    const observedAt = lineValue(review, 'Observed at');
+    if (observedAt && !isValidDate(observedAt)) {
+      errors.push(issue('v2-review-date', slug, 'Observed at must use a valid YYYY-MM-DD date.'));
+    }
 
     const intake = getSection(markdown, 'Reference Intake Brief');
     const decision = intake.match(/^Decision:\s*(\S+)$/mi)?.[1] ?? '';
@@ -216,9 +281,16 @@ export const validatePaperRecord = async ({
     }
   }
 
-  for (const match of markdown.matchAll(localImagePattern)) {
-    const imageUrl = match[1];
+  const visibleMarkdown = markdown.replace(/<!--[\s\S]*?-->/g, (comment) => comment.replace(/[^\n]/g, ' '));
+  for (const match of visibleMarkdown.matchAll(markdownImagePattern)) {
+    const imageUrl = (match[1] ?? match[2]).trim();
+    if (/^https?:\/\//i.test(imageUrl)) continue;
+
     const expectedPrefix = `/images/papers/${slug}/`;
+    if (!imageUrl.startsWith('/images/papers/')) {
+      errors.push(issue('image-path', slug, `Local image path must start with ${expectedPrefix}.`));
+      continue;
+    }
     if (!imageUrl.startsWith(expectedPrefix)) {
       errors.push(issue('image-slug-mismatch', slug, `Image path must start with ${expectedPrefix}.`));
     }
@@ -226,7 +298,10 @@ export const validatePaperRecord = async ({
     if (!(await imageExists(repoRelativePath))) {
       errors.push(issue('missing-image-file', slug, `Missing image file: ${repoRelativePath}.`));
     }
-    const captionWindow = markdown.slice(match.index, match.index + 1000);
+    const captionStart = match.index + match[0].length;
+    const nextImage = visibleMarkdown.indexOf('![', captionStart);
+    const captionEnd = Math.min(captionStart + 1000, nextImage === -1 ? visibleMarkdown.length : nextImage);
+    const captionWindow = visibleMarkdown.slice(captionStart, captionEnd);
     if (!/Image Source:/i.test(captionWindow)) {
       errors.push(issue('missing-image-source', slug, `Image caption lacks Image Source: ${imageUrl}.`));
     }
@@ -250,7 +325,7 @@ export const validateArchiveTimes = (records) => {
   for (const [value, group] of times) {
     if (!value || group.length < 2) continue;
     for (const record of group) {
-      const isV2 = getSourceField(record.markdown, 'Workflow version').toLowerCase() === 'v2';
+      const isV2 = workflowVersionFor(record.markdown).toLowerCase() === 'v2';
       const target = isV2 ? errors : advisories;
       target.push(
         issue(
@@ -275,43 +350,75 @@ export const validateAuthorProfiles = (profiles) => {
   const identityOwners = new Map();
   const directUrlFields = ['homepage', 'github', 'huggingFace', 'x'];
 
-  for (const profile of profiles) {
-    if (slugOwners.has(profile.slug)) {
-      errors.push(
-        issue('author-slug-conflict', profile.slug, `Slug is already used by ${slugOwners.get(profile.slug)}.`),
-      );
-    } else {
-      slugOwners.set(profile.slug, profile.name);
+  for (const [index, profile] of profiles.entries()) {
+    if (!profile || typeof profile !== 'object' || Array.isArray(profile)) {
+      errors.push(issue('author-profile-shape', `profile[${index}]`, 'Each author profile must be an object.'));
+      continue;
     }
 
-    for (const name of [profile.name, ...(profile.aliases ?? [])]) {
-      const key = normalizeAuthorKey(name);
+    const slug = typeof profile.slug === 'string' ? profile.slug.trim() : '';
+    const name = typeof profile.name === 'string' ? profile.name.trim() : '';
+    const subject = slug || `profile[${index}]`;
+    if (!slug || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) {
+      errors.push(issue('author-slug', subject, 'Author slug must be a non-empty ASCII slug.'));
+    }
+    if (!name) {
+      errors.push(issue('author-name', subject, 'Author name must be a non-empty string.'));
+    }
+
+    if (slug && slugOwners.has(slug)) {
+      errors.push(
+        issue('author-slug-conflict', slug, `Slug is already used by ${slugOwners.get(slug)}.`),
+      );
+    } else if (slug) {
+      slugOwners.set(slug, name);
+    }
+
+    let aliases = [];
+    if (profile.aliases !== undefined && !Array.isArray(profile.aliases)) {
+      errors.push(issue('author-aliases-shape', subject, 'aliases must be an array when present.'));
+    } else {
+      aliases = profile.aliases ?? [];
+    }
+
+    for (const identity of [name, ...aliases]) {
+      if (typeof identity !== 'string') {
+        errors.push(issue('author-alias', subject, 'Every alias must be a string.'));
+        continue;
+      }
+      const key = normalizeAuthorKey(identity);
       if (!key) continue;
       const owner = identityOwners.get(key);
-      if (owner && owner !== profile.slug) {
+      if (owner && owner !== slug) {
         errors.push(
           issue(
             'author-identity-conflict',
-            name,
-            `Normalized identity is shared by ${owner} and ${profile.slug}.`,
+            identity,
+            `Normalized identity is shared by ${owner} and ${slug}.`,
           ),
         );
-      } else {
-        identityOwners.set(key, profile.slug);
+      } else if (slug) {
+        identityOwners.set(key, slug);
       }
     }
 
-    for (const name of directUrlFields) {
-      const value = profile[name];
-      if (value && !/^https?:\/\//i.test(value)) {
-        errors.push(issue('author-profile-url', profile.slug, `${name} must be an absolute URL.`));
+    for (const fieldName of directUrlFields) {
+      const value = profile[fieldName];
+      if (value && (typeof value !== 'string' || !isHttpUrl(value))) {
+        errors.push(issue('author-profile-url', subject, `${fieldName} must be a valid absolute HTTP URL.`));
       }
     }
 
-    for (const source of profile.sources ?? []) {
+    let sources = [];
+    if (profile.sources !== undefined && !Array.isArray(profile.sources)) {
+      errors.push(issue('author-sources-shape', subject, 'sources must be an array when present.'));
+    } else {
+      sources = profile.sources ?? [];
+    }
+    for (const source of sources) {
       const value = typeof source === 'string' ? source : source?.url;
-      if (!value || !/^https?:\/\//i.test(value)) {
-        errors.push(issue('author-source-url', profile.slug, 'Every source must contain an absolute URL.'));
+      if (typeof value !== 'string' || !isHttpUrl(value)) {
+        errors.push(issue('author-source-url', subject, 'Every source must contain a valid absolute HTTP URL.'));
       }
     }
   }
@@ -321,12 +428,20 @@ export const validateAuthorProfiles = (profiles) => {
 
 export const findRecurringUnprofiled = (records, profiles) => {
   const profileKeys = new Set(
-    profiles.flatMap((profile) => [profile.name, ...(profile.aliases ?? [])].map(normalizeAuthorKey)),
+    profiles
+      .filter((profile) => profile && typeof profile === 'object' && !Array.isArray(profile))
+      .flatMap((profile) => [
+        profile.name,
+        ...(Array.isArray(profile.aliases) ? profile.aliases : []),
+      ])
+      .filter((name) => typeof name === 'string')
+      .map(normalizeAuthorKey),
   );
   const mentions = new Map();
 
   for (const record of records) {
-    for (const name of splitAuthorNames(getSourceField(record.markdown, ['Authors', 'Author']))) {
+    const source = getSection(record.markdown, 'Source');
+    for (const name of splitAuthorNames(getSourceField(source, ['Authors', 'Author']))) {
       const key = normalizeAuthorKey(name);
       const value = mentions.get(key) ?? { name, paperSlugs: new Set() };
       value.paperSlugs.add(record.slug);

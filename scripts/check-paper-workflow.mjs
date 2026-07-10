@@ -1,7 +1,6 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import process from 'node:process';
-import { readAuthorProfiles } from './content/authors.mjs';
 import {
   findRecurringUnprofiled,
   summarizeAdvisories,
@@ -9,12 +8,18 @@ import {
   validateAuthorProfiles,
   validatePaperRecord,
 } from './content/paper-workflow.mjs';
-import { repoRoot, readPaperEntries } from './content/repository.mjs';
+import { authorsFile, repoRoot, readPaperEntries } from './content/repository.mjs';
 
 const indexPath = path.join(repoRoot, 'content', 'utility', 'papers-index.md');
+const legacyManifestPath = path.join(repoRoot, 'internal', 'paper-workflow-legacy-slugs.json');
 const entries = await readPaperEntries();
 const indexMarkdown = await fs.readFile(indexPath, 'utf8');
-const profiles = await readAuthorProfiles();
+const profiles = JSON.parse(await fs.readFile(authorsFile, 'utf8'));
+const legacyManifest = JSON.parse(await fs.readFile(legacyManifestPath, 'utf8'));
+if (!Array.isArray(legacyManifest.slugs)) {
+  throw new TypeError('internal/paper-workflow-legacy-slugs.json must contain a slugs array.');
+}
+const legacyPaperSlugs = new Set(legacyManifest.slugs);
 const knownPaperSlugs = new Set(entries.map((entry) => entry.slug));
 const records = await Promise.all(
   entries.map(async (entry) => ({ ...entry, markdown: await fs.readFile(entry.sourcePath, 'utf8') })),
@@ -38,6 +43,7 @@ for (const record of records) {
     markdown: record.markdown,
     indexMarkdown,
     knownPaperSlugs,
+    legacyPaperSlugs,
     imageExists: exists,
   });
   errors.push(...result.errors);
@@ -48,7 +54,7 @@ const timeResult = validateArchiveTimes(records);
 errors.push(...timeResult.errors);
 advisories.push(...timeResult.advisories);
 errors.push(...validateAuthorProfiles(profiles).errors);
-advisories.push(...findRecurringUnprofiled(records, profiles));
+advisories.push(...findRecurringUnprofiled(records, Array.isArray(profiles) ? profiles : []));
 
 for (const item of errors) {
   console.error(`ERROR [${item.code}] ${item.subject}: ${item.message}`);
@@ -63,5 +69,7 @@ if (errors.length > 0) {
   console.error(`Paper workflow check failed with ${errors.length} error(s).`);
   process.exitCode = 1;
 } else {
-  console.log(`Paper workflow check passed for ${records.length} papers and ${profiles.length} author profiles.`);
+  console.log(
+    `Paper workflow check passed for ${records.length} papers and ${Array.isArray(profiles) ? profiles.length : 0} author profiles.`,
+  );
 }

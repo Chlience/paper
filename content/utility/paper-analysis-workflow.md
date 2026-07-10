@@ -87,10 +87,10 @@ Updated-At: 2026-07-10
 
 v2 来源快照至少记录：
 
-- `Canonical source`：承载当前材料身份与版本信息的规范 URL；组合材料也可以指向已经归档的 `/papers/<slug>/` 页面。
+- `Canonical source`：承载当前材料身份与版本信息的规范 URL。`composite` 可以指向其他已归档材料的 `/papers/<slug>/` 页面或 `/archive/`；自身页面不能作为自己的来源。
 - `Title`，以及 `Authors` 或 `Responsible organization` 至少一项。
 - `Published / updated`：来源显示的发布日期或最近一次有意义更新时间。
-- `Current version read` 与 `Version / revision read`：写明实际读取版本；来源没有版本号时记录日期、commit 或页面状态。
+- `Current version read` 与 `Version / revision read` 二者至少填写一项，写明实际读取版本；来源没有版本号时记录日期、commit 或页面状态。
 - `Accessed`：本次核验来源的日期，格式为 `YYYY-MM-DD`。
 
 arXiv 论文优先以 abstract 页面作为规范来源，并补充 PDF、HTML、源码、代码与项目页。网页、模型卡和框架文档优先使用官方页面或官方仓库，记录页面更新时间、release、tag 或 commit。第三方报道只承担线索和外部评论角色，不能替代责任主体发布的规范来源。

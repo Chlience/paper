@@ -37,6 +37,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Test paper workflow validator
+        run: npm run test:workflow
+
       - name: Build site
         run: npm run build
 

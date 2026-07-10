@@ -1117,7 +1117,7 @@ rtk git status --short
 
 Expected:
 
-- Workflow tests: 9 tests pass after the template-contract test is added.
+- Workflow tests: the complete validator suite passes; the CLI smoke assertion uses dynamic archive counts so normal archive growth does not invalidate the test.
 - Workflow check: pass for 91 papers and 298 author profiles; advisory output is bounded to 5 examples per code.
 - Metadata: `Paper metadata check passed.`
 - Math: check passes after content generation.

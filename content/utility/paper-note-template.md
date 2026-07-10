@@ -22,7 +22,7 @@ Updated-At: YYYY-MM-DD HH:mm
 - Accessed: YYYY-MM-DD
 - Subjects:
 
-<!-- `Authors` 与 `Responsible organization` 至少填写一项。按材料类型保留适用字段；网页、框架文档和组合材料也要记录规范来源、发布日期或最近更新时间、读取版本与访问日期。 -->
+<!-- `Authors` 与 `Responsible organization` 至少填写一项，`Current version read` 与 `Version / revision read` 至少填写一项。普通材料的 Canonical source 使用官方绝对 URL；composite 可以使用其他已归档材料的 /papers/<slug>/ 或 /archive/，不能引用自身页面。按材料类型删除不适用字段。 -->
 
 ## 作者与关系
 
