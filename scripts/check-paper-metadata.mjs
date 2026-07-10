@@ -1,5 +1,6 @@
 import fs from 'node:fs/promises';
 import process from 'node:process';
+import { isPublicPaperMaintenanceExemption } from './content/markdown.mjs';
 import { generatedFile, readPaperEntries, readUtilityEntries } from './content/repository.mjs';
 
 const maintenanceScanExemptFiles = new Set([
@@ -95,8 +96,12 @@ for (const entry of sourceEntries) {
   }
 
   if (!maintenanceScanExemptFiles.has(entry.fileName)) {
+    const maintenanceScanMarkdown = markdown
+      .split('\n')
+      .filter((line) => !isPublicPaperMaintenanceExemption(line))
+      .join('\n');
     for (const pattern of forbiddenPaperMaintenancePatterns) {
-      if (pattern.test(markdown)) {
+      if (pattern.test(maintenanceScanMarkdown)) {
         fail(`${entry.file} contains paper-maintenance text matching ${pattern}.`);
       }
     }

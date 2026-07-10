@@ -95,6 +95,9 @@ const lineValue = (section, name) =>
 
 const evidenceValue = (block) => block.match(/^- 证据定位[:：]\s*(.+)$/mi)?.[1]?.trim() ?? '';
 
+const resultFieldValue = (block, name) =>
+  block.match(new RegExp(`^- ${name}[:：][ \\t]*(.+)$`, 'mi'))?.[1]?.trim() ?? '';
+
 const scalarValue = (value = '') => value.trim().replace(/^`([^`]+)`$/, '$1').trim();
 
 const canonicalValue = (value = '') => {
@@ -273,6 +276,20 @@ export const validatePaperRecord = async ({
       const locator = evidenceValue(block.body);
       if (!locator || !hasEvidenceLocator(locator)) {
         errors.push(issue('v2-evidence-location', slug, `Missing evidence location in ${block.title}.`));
+      }
+      if (!resultFieldValue(block.body, '对照是否可比')) {
+        errors.push(
+          issue('v2-result-comparability', slug, `Missing comparability assessment in ${block.title}.`),
+        );
+      }
+      if (!resultFieldValue(block.body, '支持的最窄结论')) {
+        errors.push(
+          issue(
+            'v2-result-narrow-conclusion',
+            slug,
+            `Missing narrowest supported conclusion in ${block.title}.`,
+          ),
+        );
       }
     }
 

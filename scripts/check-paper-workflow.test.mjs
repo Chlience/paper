@@ -2,9 +2,11 @@ import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
 import fs from 'node:fs/promises';
 import test from 'node:test';
+import * as markdown from './content/markdown.mjs';
 import * as workflow from './content/paper-workflow.mjs';
 
 const { validatePaperRecord } = workflow;
+const { stripPublicPaperMaintenance } = markdown;
 
 const coreBody = `
 ## 作者与关系
@@ -24,6 +26,8 @@ const coreBody = `
 ### 结果 1
 
 - 证据定位：Section 4, Table 1.
+- 对照是否可比：在相同设置下可比。
+- 支持的最窄结论：仅支持当前评测设置中的结果。
 - 结果：有效。
 
 ## 证据链强度评估
@@ -281,6 +285,18 @@ test('v2 result blocks require evidence locations', async () => {
   const invalid = v2Paper.replace('- 证据定位：Section 4, Table 1.\n', '');
   const result = await validate('invalid-v2-evidence', invalid);
   assert.ok(result.errors.some((issue) => issue.code === 'v2-evidence-location'));
+});
+
+test('v2 result blocks require a comparability assessment', async () => {
+  const invalid = v2Paper.replace('- 对照是否可比：在相同设置下可比。', '- 对照是否可比：');
+  const result = await validate('missing-v2-comparability', invalid);
+  assert.ok(result.errors.some((issue) => issue.code === 'v2-result-comparability'));
+});
+
+test('v2 result blocks require a narrowest supported conclusion', async () => {
+  const invalid = v2Paper.replace('- 支持的最窄结论：仅支持当前评测设置中的结果。', '- 支持的最窄结论：');
+  const result = await validate('missing-v2-narrow-conclusion', invalid);
+  assert.ok(result.errors.some((issue) => issue.code === 'v2-result-narrow-conclusion'));
 });
 
 test('v2 evidence checks cover result headings written in English', async () => {
@@ -573,6 +589,37 @@ test('workflow CLI validates the current archive without errors', () => {
   });
   assert.equal(result.status, 0, result.stderr || result.stdout);
   assert.match(result.stdout, /Paper workflow check passed for \d+ papers and \d+ author profiles\./);
+});
+
+test('public paper sanitizer retains the v2 not-found review classification', () => {
+  const cleaned = stripPublicPaperMaintenance(`## OpenReview / 审稿意见吸收
+
+- Page type: not-found
+- xConfidence: not-found
+`);
+
+  assert.match(cleaned, /Page type: not-found/);
+  assert.doesNotMatch(cleaned, /xConfidence/);
+});
+
+test('the maintenance exemption accepts only the canonical single-line review field', () => {
+  assert.equal(typeof markdown.isPublicPaperMaintenanceExemption, 'function');
+  assert.equal(markdown.isPublicPaperMaintenanceExemption?.('- Page type: not-found'), true);
+  assert.equal(markdown.isPublicPaperMaintenanceExemption?.('-\n Page type: not-found'), false);
+  assert.equal(markdown.isPublicPaperMaintenanceExemption?.('- Page type:\nnot-found'), false);
+  assert.equal(markdown.isPublicPaperMaintenanceExemption?.('- xConfidence: not-found'), false);
+});
+
+test('metadata CLI accepts the v2 not-found review classification', async () => {
+  const canary = await fs.readFile('content/papers/2603.00729-qwen3-coder-next-agentic-coding.md', 'utf8');
+  assert.match(canary, /^- Page type: not-found$/m);
+
+  const result = spawnSync(process.execPath, ['scripts/check-paper-metadata.mjs'], {
+    cwd: process.cwd(),
+    encoding: 'utf8',
+  });
+  assert.equal(result.status, 0, result.stderr || result.stdout);
+  assert.match(result.stdout, /Paper metadata check passed\./);
 });
 
 test('the public template exposes every v2 contract field', async () => {
