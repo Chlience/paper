@@ -63,7 +63,7 @@ Updated-At: 2026-07-13
 | [Engram](/papers/2601.07372-conditional-memory-engram-scalable-lookup/) | 2026年1月 | 用 hashed N-gram lookup 和 context-aware gating 增加可离线扩展的 conditional memory。 |
 | [Trust Region Masking](/papers/2512.23075-trust-region-masking-long-horizon-llm-rl/) | 2025年12月 | 用序列级 max-token divergence 约束 rollout-policy mismatch，控制长轨迹 surrogate error。 |
 | [Interplay](/papers/2512.07783-interplay-pretraining-midtraining-rl-reasoning/) | 2025年12月 | 用合成环境拆分 pre / mid / RL training，识别 primitive seed、edge of competence 与 bridge data 条件。 |
-| [RollArt](/papers/2512.22560-rollart-disaggregated-agentic-rl-training/) | 2025年12月 | 按硬件特性拆分 trainer、rollout、environment 和 reward，并用 bounded-staleness async 实现多任务 agentic RL。 |
+| [RollArt](/papers/2512.22560-rollart-disaggregated-agentic-rl-training/) | 2025年12月 | 用声明式 task-domain 硬件亲和映射、轨迹级环境状态机和 $\alpha$-bounded 异步换权，协调 H800/H20/CPU/serverless 上的多任务 agentic RL。 |
 | [Seer](/papers/2511.14617-seer-online-context-learning-llm-rl/) | 2025年11月 | 利用同 prompt rollout 的上下文相关性做 divided rollout、speculative scheduling 和 suffix-tree reuse。 |
 | [Span Query](/papers/2511.02749-span-queries-cache-attention-locality/) | 2025年11月 | 让客户端声明可重排 message spans，以表达式树重写提升 KV cache 与 attention locality。 |
 | [BroRL](/papers/2510.01180-brorl-broadened-rl-exploration/) | 2025年10月 | 把 RLVR scaling 轴扩展到 rollout width，并用 correct-mass decomposition 解释宽采样收益。 |

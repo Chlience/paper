@@ -5319,6 +5319,296 @@
     ]
   },
   {
+    "slug": "tianyuan-wu",
+    "name": "Tianyuan Wu",
+    "aliases": ["Tianyuan Wu"],
+    "affiliations": ["HKUST"],
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["distributed training", "RL post-training systems", "agent sandbox runtime", "AI infrastructure"],
+    "notes": "RollArt equal-contribution author and HKUST researcher in Wei Wang's systems group. HKUST pages connect his work on reliable distributed training, RollPacker, RollArt, Weave and CRAB.",
+    "sources": [
+      {
+        "label": "HKUST qualifying examination",
+        "url": "https://cse.hkust.edu.hk/pg/defenses/F24/twubt-02-12-2024.html"
+      },
+      {
+        "label": "HKUST systems group",
+        "url": "https://cse.hkust.edu.hk/~weiwa/people.html"
+      },
+      {
+        "label": "RollArt proceedings",
+        "url": "https://www.usenix.org/conference/osdi26/presentation/gao"
+      }
+    ]
+  },
+  {
+    "slug": "dakai-an",
+    "name": "Dakai An",
+    "aliases": ["Dakai An"],
+    "affiliations": ["HKUST"],
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["RL post-training systems", "AI infrastructure", "distributed systems"],
+    "notes": "HKUST author on RollArt and RollPacker. The HKUST research portal also links Dakai An to systems work on heterogeneous AI serving.",
+    "sources": [
+      {
+        "label": "RollArt proceedings",
+        "url": "https://www.usenix.org/conference/osdi26/presentation/gao"
+      },
+      {
+        "label": "RollPacker HKUST record",
+        "url": "https://researchportal.hkust.edu.hk/en/publications/rollpacker-taming-long-tail-rollouts-for-rl-post-training-with-ta/"
+      },
+      {
+        "label": "KATZ HKUST record",
+        "url": "https://researchportal.hkust.edu.hk/en/publications/katz-efficient-workflow-serving-for-diffusion-models-with-many-ad/"
+      }
+    ]
+  },
+  {
+    "slug": "lunxi-cao",
+    "name": "Lunxi Cao",
+    "aliases": ["Lunxi Cao"],
+    "affiliations": ["HKUST"],
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["RL post-training systems", "distributed systems", "agent sandbox runtime"],
+    "notes": "HKUST PhD student supervised by Wei Wang and author on RollArt, RollPacker, Weave and CRAB. His HKUST qualifying examination surveys RL post-training systems.",
+    "sources": [
+      {
+        "label": "HKUST systems group",
+        "url": "https://cse.hkust.edu.hk/~weiwa/people.html"
+      },
+      {
+        "label": "HKUST qualifying examination",
+        "url": "https://cse.hkust.edu.hk/pg/defenses/S26/lcaoar-15-04-2026.html"
+      },
+      {
+        "label": "RollArt proceedings",
+        "url": "https://www.usenix.org/conference/osdi26/presentation/gao"
+      }
+    ]
+  },
+  {
+    "slug": "dilxat-muhtar",
+    "name": "Dilxat Muhtar",
+    "aliases": ["Dilxat Muhtar"],
+    "affiliations": ["Alibaba Group"],
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["agentic RL systems", "RL post-training", "ROLL"],
+    "notes": "Alibaba Group author on RollArt and later ROLL agentic-learning work. The profile is limited to the identity supported by the official RollArt and ROLL project records to avoid same-name conflation.",
+    "sources": [
+      {
+        "label": "RollArt proceedings",
+        "url": "https://www.usenix.org/conference/osdi26/presentation/gao"
+      },
+      {
+        "label": "RollArt arXiv",
+        "url": "https://arxiv.org/abs/2512.22560"
+      },
+      {
+        "label": "ROLL repository",
+        "url": "https://github.com/alibaba/ROLL"
+      }
+    ]
+  },
+  {
+    "slug": "zichen-liu-alibaba",
+    "name": "Zichen Liu",
+    "aliases": ["Zichen Liu"],
+    "affiliations": ["Alibaba Group"],
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["ROLL", "asynchronous RL", "agentic RL systems", "RL post-training"],
+    "notes": "Alibaba Group author on ROLL, ROLL Flash and RollArt. Public project and paper records provide the stable linkage; no high-confidence personal homepage was identified in this pass.",
+    "sources": [
+      {
+        "label": "ROLL arXiv",
+        "url": "https://arxiv.org/abs/2506.06122"
+      },
+      {
+        "label": "ROLL Flash arXiv",
+        "url": "https://arxiv.org/abs/2510.11345"
+      },
+      {
+        "label": "RollArt proceedings",
+        "url": "https://www.usenix.org/conference/osdi26/presentation/gao"
+      }
+    ]
+  },
+  {
+    "slug": "haizhou-zhao-alibaba",
+    "name": "Haizhou Zhao",
+    "aliases": ["Haizhou Zhao"],
+    "affiliations": ["Alibaba Group"],
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["ROLL", "asynchronous RL", "agentic RL systems", "RL post-training"],
+    "notes": "Alibaba Group author on ROLL, ROLL Flash and RollArt. Stable identity evidence comes from the repeated official project author lists.",
+    "sources": [
+      {
+        "label": "ROLL arXiv",
+        "url": "https://arxiv.org/abs/2506.06122"
+      },
+      {
+        "label": "ROLL Flash arXiv",
+        "url": "https://arxiv.org/abs/2510.11345"
+      },
+      {
+        "label": "RollArt proceedings",
+        "url": "https://www.usenix.org/conference/osdi26/presentation/gao"
+      }
+    ]
+  },
+  {
+    "slug": "ju-huang-alibaba",
+    "name": "Ju Huang",
+    "aliases": ["Ju Huang"],
+    "affiliations": ["Alibaba Group"],
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["ROLL", "asynchronous RL", "rollout scheduling", "RL post-training"],
+    "notes": "Alibaba Group author on ROLL, ROLL Flash, RollPacker and RollArt. Repeated official author lists support the project linkage.",
+    "sources": [
+      {
+        "label": "ROLL arXiv",
+        "url": "https://arxiv.org/abs/2506.06122"
+      },
+      {
+        "label": "ROLL Flash arXiv",
+        "url": "https://arxiv.org/abs/2510.11345"
+      },
+      {
+        "label": "RollArt proceedings",
+        "url": "https://www.usenix.org/conference/osdi26/presentation/gao"
+      }
+    ]
+  },
+  {
+    "slug": "siran-yang-alibaba",
+    "name": "Siran Yang",
+    "aliases": ["Siran Yang"],
+    "affiliations": ["Alibaba Group"],
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["AI infrastructure", "distributed training", "RL post-training", "ROLL"],
+    "notes": "Alibaba Group systems author on ROLL, ROLL Flash, RollPacker, RollArt and large-scale training reliability work with HKUST.",
+    "sources": [
+      {
+        "label": "ROLL arXiv",
+        "url": "https://arxiv.org/abs/2506.06122"
+      },
+      {
+        "label": "RollPacker arXiv",
+        "url": "https://arxiv.org/abs/2509.21009"
+      },
+      {
+        "label": "RollArt proceedings",
+        "url": "https://www.usenix.org/conference/osdi26/presentation/gao"
+      }
+    ]
+  },
+  {
+    "slug": "yongbin-li-tongyi",
+    "name": "Yongbin Li",
+    "chineseName": "李永彬",
+    "aliases": ["Yongbin Li", "Li Yongbin", "李永彬"],
+    "affiliations": ["Tongyi Lab", "Alibaba Group"],
+    "homepage": "https://yongbin-li.github.io/",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["code LLMs", "coding agents", "Qoder", "LLM post-training", "agentic RL"],
+    "notes": "Principal Research Scientist at Tongyi Lab. His homepage identifies responsibility for Qwen-Coder-Qoder model training and AI coding products; RollArt connects this model/product line to the training infrastructure project.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://yongbin-li.github.io/"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=xF5VrokAAAAJ&hl=en"
+      },
+      {
+        "label": "RollArt proceedings",
+        "url": "https://www.usenix.org/conference/osdi26/presentation/gao"
+      }
+    ]
+  },
+  {
+    "slug": "wenbo-su-alibaba",
+    "name": "Wenbo Su",
+    "aliases": ["Wenbo Su"],
+    "affiliations": ["Alibaba Group"],
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["RL post-training", "large language models", "distributed training", "recommendation systems"],
+    "notes": "Alibaba Group author on ROLL, ROLL Flash, RollPacker and RollArt, with earlier work on switching synchronous and asynchronous recommendation-model training.",
+    "sources": [
+      {
+        "label": "ROLL arXiv",
+        "url": "https://arxiv.org/abs/2506.06122"
+      },
+      {
+        "label": "GBA OpenReview",
+        "url": "https://openreview.net/forum?id=vphSm8QmLFm"
+      },
+      {
+        "label": "RollArt proceedings",
+        "url": "https://www.usenix.org/conference/osdi26/presentation/gao"
+      }
+    ]
+  },
+  {
+    "slug": "jiamang-wang-alibaba",
+    "name": "Jiamang Wang",
+    "aliases": ["Jiamang Wang"],
+    "affiliations": ["Alibaba Group"],
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["machine learning infrastructure", "distributed systems", "ROLL", "RL post-training"],
+    "notes": "Alibaba Group researcher in machine learning infrastructure and distributed systems. OpenReview and official ROLL records connect his long-running infrastructure work to RollPacker and RollArt.",
+    "sources": [
+      {
+        "label": "OpenReview profile",
+        "url": "https://openreview.net/profile?id=~Jiamang_Wang1"
+      },
+      {
+        "label": "ROLL arXiv",
+        "url": "https://arxiv.org/abs/2506.06122"
+      },
+      {
+        "label": "RollArt proceedings",
+        "url": "https://www.usenix.org/conference/osdi26/presentation/gao"
+      }
+    ]
+  },
+  {
+    "slug": "lin-qu-alibaba",
+    "name": "Lin Qu",
+    "aliases": ["Lin Qu"],
+    "affiliations": ["Alibaba Group"],
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["distributed training", "machine learning infrastructure", "recommendation systems", "ROLL"],
+    "notes": "Alibaba Group systems author across recommendation-model training, ROLL, RollPacker and RollArt. DBLP and official project records provide the stable publication linkage.",
+    "sources": [
+      {
+        "label": "DBLP",
+        "url": "https://dblp.org/pid/67/2906"
+      },
+      {
+        "label": "ROLL arXiv",
+        "url": "https://arxiv.org/abs/2506.06122"
+      },
+      {
+        "label": "RollArt proceedings",
+        "url": "https://www.usenix.org/conference/osdi26/presentation/gao"
+      }
+    ]
+  },
+  {
     "slug": "wenhan-ma",
     "name": "Wenhan Ma",
     "aliases": ["Wenhan Ma", "Ma Wenhan"],
