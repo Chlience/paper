@@ -1,4 +1,5 @@
 {
+  "2026-07-13-agentic-rl-learned-environment-evolution": ["learned-environment", "agent-rl", "tool-use", "rollout-optimization"],
   "2026-06-23-chinese-frontier-model-reports-timeline": ["moe-systems", "long-context", "reasoning-rl", "rl-infrastructure"],
   "2026-07-13-rl-credit-assignment-may-july-landscape": ["credit-assignment", "agent-rl", "agent-memory", "rl-algorithm"],
   "2026-07-13-grape-micro-task-agentic-workflow-serving": ["agent-workflow", "inference-scheduling", "kv-cache", "serving-runtime"],
