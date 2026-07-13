@@ -9059,8 +9059,8 @@
     "github": "https://github.com/think2try",
     "x": "",
     "xConfidence": "not-found",
-    "topics": ["agentic reinforcement learning", "LLM post-training", "reasoning", "agents", "GLM"],
-    "notes": "SAO co-first author and Tsinghua computer science PhD student advised by Yuxiao Dong and Jie Tang. His homepage records work on language-model post-training, agents, reinforcement learning, and the GLM-4.5 / GLM-5 series; SAO was completed while he interned at Z.AI.",
+    "topics": ["agentic reinforcement learning", "LLM post-training", "reasoning", "agents", "context compaction", "GLM"],
+    "notes": "SAO and CompactionRL co-first author and Tsinghua computer science PhD student advised by Yuxiao Dong and Jie Tang. His homepage records work on language-model post-training, agents, reinforcement learning, and the GLM-4.5 / GLM-5 series; both papers connect this work to his Z.AI internship.",
     "sources": [
       {
         "label": "Homepage",
@@ -9077,6 +9077,10 @@
       {
         "label": "SAO arXiv",
         "url": "https://arxiv.org/abs/2607.07508"
+      },
+      {
+        "label": "CompactionRL arXiv",
+        "url": "https://arxiv.org/abs/2607.05378"
       }
     ]
   },
@@ -9089,8 +9093,8 @@
     "github": "",
     "x": "",
     "xConfidence": "not-found",
-    "topics": ["agentic reinforcement learning", "LLM post-training", "coding agents", "reasoning"],
-    "notes": "SAO co-first author and Tsinghua computer science PhD student from 2025. Yuxiao Dong's student list and the MLE-RL OpenReview record connect his work to reasoning, coding agents, and reinforcement learning; SAO was completed while he interned at Z.AI.",
+    "topics": ["agentic reinforcement learning", "LLM post-training", "coding agents", "reasoning", "context compaction"],
+    "notes": "SAO and CompactionRL co-first author and Tsinghua computer science PhD student from 2025. Yuxiao Dong's student list and the MLE-RL OpenReview record connect his work to reasoning, coding agents, and reinforcement learning; both papers connect this work to his Z.AI internship.",
     "sources": [
       {
         "label": "Yuxiao Dong student list",
@@ -9103,6 +9107,41 @@
       {
         "label": "SAO arXiv",
         "url": "https://arxiv.org/abs/2607.07508"
+      },
+      {
+        "label": "CompactionRL arXiv",
+        "url": "https://arxiv.org/abs/2607.05378"
+      }
+    ]
+  },
+  {
+    "slug": "yi-jing",
+    "name": "Yi Jing",
+    "aliases": ["Yi Jing"],
+    "affiliations": ["Tsinghua University", "Xinya College", "Department of Computer Science and Technology", "Knowledge Engineering Group (KEG)", "PKUICL", "Z.AI"],
+    "homepage": "https://leoj-xy.github.io/",
+    "github": "https://github.com/LeoJ-xy",
+    "huggingFace": "https://huggingface.co/LeoJ-xy",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["mechanistic interpretability", "LLM post-training", "agentic reinforcement learning", "context compaction", "AI for research"],
+    "notes": "CompactionRL coauthor and Tsinghua undergraduate in Xinya College and computer science. Her homepage records current THUKEG and PKUICL internships and research in interpretability, post-training, and AI for research; CompactionRL was completed while she interned at Z.AI.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://leoj-xy.github.io/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/LeoJ-xy"
+      },
+      {
+        "label": "Hugging Face",
+        "url": "https://huggingface.co/LeoJ-xy"
+      },
+      {
+        "label": "CompactionRL arXiv",
+        "url": "https://arxiv.org/abs/2607.05378"
       }
     ]
   },
@@ -9116,8 +9155,8 @@
     "github": "",
     "x": "",
     "xConfidence": "not-found",
-    "topics": ["large language models", "agentic reinforcement learning", "machine learning", "knowledge graphs", "data mining"],
-    "notes": "SAO coauthor and Tsinghua computer science professor in the Knowledge Engineering Group. His official homepage identifies his work in artificial intelligence, machine learning, data mining, knowledge graphs, and the GLM project ecosystem.",
+    "topics": ["large language models", "agentic reinforcement learning", "context compaction", "machine learning", "knowledge graphs", "data mining"],
+    "notes": "SAO and CompactionRL coauthor and Tsinghua computer science professor in the Knowledge Engineering Group. His official homepage identifies his work in artificial intelligence, machine learning, data mining, knowledge graphs, and the GLM project ecosystem.",
     "sources": [
       {
         "label": "Homepage",
@@ -9130,6 +9169,10 @@
       {
         "label": "SAO arXiv",
         "url": "https://arxiv.org/abs/2607.07508"
+      },
+      {
+        "label": "CompactionRL arXiv",
+        "url": "https://arxiv.org/abs/2607.05378"
       }
     ]
   },
@@ -9142,8 +9185,8 @@
     "github": "",
     "x": "https://x.com/ericdongyx",
     "xConfidence": "high",
-    "topics": ["large language models", "agentic reinforcement learning", "agents", "graph representation learning", "data mining"],
-    "notes": "SAO coauthor and Tsinghua computer science associate professor. His official homepage lists Zhenyu Hou and Yujiang Li as PhD students, records prior research roles at Meta AI and Microsoft Research Redmond, and directly links the @ericdongyx X account; the Tsinghua KEG X profile independently names the same handle.",
+    "topics": ["large language models", "agentic reinforcement learning", "context compaction", "agents", "graph representation learning", "data mining"],
+    "notes": "SAO and CompactionRL coauthor and Tsinghua computer science associate professor. His official homepage lists Zhenyu Hou and Yujiang Li as PhD students, records prior research roles at Meta AI and Microsoft Research Redmond, and directly links the @ericdongyx X account; the Tsinghua KEG X profile independently names the same handle.",
     "sources": [
       {
         "label": "Homepage",
@@ -9160,6 +9203,10 @@
       {
         "label": "SAO arXiv",
         "url": "https://arxiv.org/abs/2607.07508"
+      },
+      {
+        "label": "CompactionRL arXiv",
+        "url": "https://arxiv.org/abs/2607.05378"
       }
     ]
   },

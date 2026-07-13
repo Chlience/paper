@@ -1,7 +1,7 @@
 # slime v0.3.0 / main 文档快照：RL Scaling 后训练框架分析
 
 First-Archived-At: 2026-06-17 13:26
-Updated-At: 2026-06-17 13:26
+Updated-At: 2026-07-13 13:51
 Version: slime latest release `v0.3.0`; docs snapshot `main@243773c`; docs last updated 2026-06-17
 
 ## Source
@@ -176,6 +176,7 @@ slime 文档把正确性、可复现性和 CI 明确列为基础设施问题。`
 ## 跨论文关系
 
 - 与 [2602.15763](/papers/2602.15763-glm-5-agentic-engineering/)：GLM-5 报告给出 slime 在 production agentic RL 中的具体用法，包括异步 rollout、TITO、direct double-sided IS、stale sample dropping、DP-aware routing 和 PD disaggregation；slime 文档提供对应框架入口、版本快照和 Quick Start surface。
+- 与 [CompactionRL](/papers/2607.05378-compactionrl-context-compaction-agent-rl/)：CompactionRL 明确使用 slime 训练 GLM-4.7-Flash 与 GLM-4.5-Air-SFT，并在同一 async RL 数据流中容纳 execution / summary segments、独立 critic、token-level loss 和 group size 1。论文没有公开 queue、weight sync、policy lag 或 distributed topology，因此当前关系可确认框架采用与算法接口，无法复原具体 runtime 配置。
 - 与 [2409.19256](/papers/2409.19256-hybridflow-rlhf-framework/) / [2026-06-16](/papers/2026-06-16-verl-rl-optimization-algorithms/)：HybridFlow / VERL 更像通用 RLHF/RLVR dataflow framework；slime 选择 Megatron + SGLang native 路线，并把 custom generation 与 SGLang serving 能力放到中心。
 - 与 [2605.14220](/papers/2605.14220-training-inference-mismatch-llm-rl/) / [2025-09-10](/papers/2025-09-10-defeating-nondeterminism-llm-inference/)：slime 的 TIS、train-rollout logprob consistency 和 debug replay 都服务同一个问题，即 rollout behavior policy 与 trainer optimization policy 的实现级一致性。
 - 与 [2511.14617](/papers/2511.14617-seer-online-context-learning-llm-rl/)：Seer 在 synchronous RL 里压低 rollout long-tail；slime 在 agentic workflow 中强调 fully async、partial rollout、external rollout engine 和 staleness control。两者分别代表同步优化和异步吞吐路线。

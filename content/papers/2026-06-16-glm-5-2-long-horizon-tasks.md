@@ -1,7 +1,7 @@
 # GLM-5.2: Built for Long-Horizon Tasks 技术文章笔记
 
 First-Archived-At: 2026-06-18 13:45
-Updated-At: 2026-07-11 11:11
+Updated-At: 2026-07-13 13:51
 
 ## Source
 
@@ -339,6 +339,7 @@ GLM-5.2 的结论链可以概括为：
 - 与 [2506.19248](/papers/2506.19248-inference-time-reward-hacking-llms/)、[2510.20270](/papers/2510.20270-impossiblebench-test-case-exploitation/)、[2503.11926](/papers/2503.11926-monitoring-reasoning-models-obfuscation/)：GLM-5.2 把 coding agent reward hacking 明确纳入 release-level 防御，提供了 online guard 的 production 视角。
 - 与 [2506.13585](/papers/2506.13585-minimax-m1-cispo-lightning-attention/)：两者都围绕 long-context / long-output agentic tasks 做系统优化。MiniMax-M1 使用 Lightning Attention 和 CISPO；GLM-5.2 使用 DSA + IndexShare、MTP/KVShare、PPO + compaction 和 slime。
 - 与 [2607.07508 SAO](/papers/2607.07508-sao-single-rollout-asynchronous-agentic-rl/)：SAO 摘要声明该方法已用于 750B-A40B GLM-5.2 的 agentic RL pipeline，并补充 release blog 未展开的 single-rollout、rollout-logprob 双侧 token mask、faster critic update、frozen-attention value model 与 skip-observation GAE。SAO 的公开消融使用 Qwen3-30B-A3B，尚未披露这些配置映射到 GLM-5.2 的 scale-up 细节。
+- 与 [CompactionRL](/papers/2607.05378-compactionrl-context-compaction-agent-rl/)：CompactionRL 同样声明进入 GLM-5.2 RL pipeline，并补充 release blog 中 compact trajectory 的训练语义：shared actor 生成 summary、最近两轮参与 context reconstruction、独立 critic、全 batch token normalization 和跨 segment GAE。公开消融只覆盖 GLM-4.7-Flash 与 GLM-4.5-Air-SFT，750B-A40B 上的 compaction threshold、critic topology、训练成本和实际增益仍未披露。
 
 ## Reference Intake Brief
 
