@@ -59,7 +59,7 @@ Updated-At: 2026-07-13
 | [OTB](/papers/2602.07078-optimal-token-baseline-long-horizon-llm-rl/) | 2026年2月 | 推导 token-level variance-minimizing baseline，并用 logit-gradient proxy 近似长轨迹 policy-gradient 权重。 |
 | [MaxRL](/papers/2602.02710-maximum-likelihood-reinforcement-learning/) | 2026年2月 | 把 binary-outcome RLVR 写成成功 rollout likelihood 最大化，优化 pass@k 覆盖。 |
 | [GLM-5](/papers/2602.15763-glm-5-agentic-engineering/) | 2026年2月 | 把 DSA / MTP / Muon 模型栈、软件工程 mid-training、agentic RL 与异步 rollout 组合为 agentic engineering pipeline。 |
-| [ThunderAgent](/papers/2602.13692-thunderagent-program-aware-agentic-inference/) | 2026年2月 | 把 agent workflow 抽象为 LLM Program，统一调度 KV cache、tool lifecycle 和跨节点 placement。 |
+| [ThunderAgent](/papers/2602.13692-thunderagent-program-aware-agentic-inference/) | 2026年2月 | 把跨多轮 LLM 调用与工具等待建模为带 Reasoning / Acting 状态的 LLM Program，据此执行 KV pause / restore，并在 KV 释放后跨节点选择恢复位置。 |
 | [LLM-in-Sandbox](/papers/2601.16206-computer-environments-agentic-intelligence/) | 2026年1月 | 把通用计算机抽象为最小 Docker sandbox，验证文件、代码和外部资源能提升非代码任务与可训练 agent 能力。 |
 | [Engram](/papers/2601.07372-conditional-memory-engram-scalable-lookup/) | 2026年1月 | 用 hashed N-gram lookup 和 context-aware gating 增加可离线扩展的 conditional memory。 |
 | [Trust Region Masking](/papers/2512.23075-trust-region-masking-long-horizon-llm-rl/) | 2025年12月 | 用序列级 max-token divergence 约束 rollout-policy mismatch，控制长轨迹 surrogate error。 |
