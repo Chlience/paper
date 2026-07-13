@@ -939,6 +939,29 @@ test('public workflow documents index and deletion reverse-integrity contracts',
   assert.match(agentInstructions, /孤立作者/);
 });
 
+test('deploy workflow validates source and builds the static site once', async () => {
+  const source = await fs.readFile('.github/workflows/deploy.yml', 'utf8');
+  const requiredCommands = [
+    'npm run test:workflow',
+    'npm run check:workflow',
+    'npm run check:metadata',
+    'npm run test:search',
+    'npm run test:pins',
+    'node scripts/check-markdown-math.mjs',
+    'node scripts/check-paper-site.mjs',
+  ];
+
+  for (const command of requiredCommands) {
+    assert.match(source, new RegExp(command.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
+  }
+  assert.equal(source.match(/npm run build\b/g)?.length, 1);
+  assert.doesNotMatch(source, /npm run check:(?:math|site)/);
+  assert.match(source, /runs-on: ubuntu-24\.04/);
+  assert.match(source, /timeout-minutes: 10/);
+  assert.ok(source.indexOf('Validate source') < source.indexOf('Build and verify static site'));
+  assert.ok(source.indexOf('Build and verify static site') < source.indexOf('Pack static artifact'));
+});
+
 test('archive omits global author grouping while paper notes retain author relationships', async () => {
   const [index, workflowDoc, template, archivePage, agentInstructions, authorSop, dapo, flashAttention2] =
     await Promise.all([

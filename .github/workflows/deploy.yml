@@ -16,7 +16,8 @@ concurrency:
 jobs:
   build-and-deploy:
     name: Build and deploy static site
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
     env:
       PUBLIC_SITE_URL: https://papers.chlience.com
       ARTIFACT_NAME: papers-site-${{ github.sha }}.tar.gz
@@ -37,17 +38,23 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Test paper workflow validator
-        run: npm run test:workflow
+      - name: Validate source
+        run: |
+          set -euo pipefail
 
-      - name: Build site
-        run: npm run build
+          npm run test:workflow
+          npm run check:workflow
+          npm run check:metadata
+          npm run test:search
+          npm run test:pins
 
-      - name: Check generated site and paper workflow
-        run: npm run check:site
+      - name: Build and verify static site
+        run: |
+          set -euo pipefail
 
-      - name: Check Markdown math
-        run: npm run check:math
+          npm run build
+          node scripts/check-markdown-math.mjs
+          node scripts/check-paper-site.mjs
 
       - name: Pack static artifact
         run: tar -C dist -czf "$ARTIFACT_NAME" .

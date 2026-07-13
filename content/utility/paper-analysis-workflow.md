@@ -202,7 +202,7 @@ npm run test:search
 npm run test:pins
 ```
 
-本地归档不运行 `npm run build` 或 `npm run check:site`。`check:site` 读取生成后的 `dist/`，应在 GitHub Actions 完成 production build 后执行。
+本地归档不运行 `npm run build` 或 `npm run check:site`。GitHub Actions 只执行一次 production build，随后直接运行公式与生成站点检查器，避免检查阶段再次生成内容数据。
 
 <!-- public-utility-omit:end -->
 

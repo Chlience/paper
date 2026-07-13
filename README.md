@@ -43,11 +43,17 @@ These source-level checks do not produce the production `dist/` artifact. `check
 
 ## CI Build and Deployment
 
-GitHub Actions runs the production build and generated-site check:
+GitHub Actions validates source files, runs one production build, and checks the generated output:
 
 ```bash
+npm run test:workflow
+npm run check:workflow
+npm run check:metadata
+npm run test:search
+npm run test:pins
 npm run build
-npm run check:site
+node scripts/check-markdown-math.mjs
+node scripts/check-paper-site.mjs
 ```
 
 The workflow packages `dist/` as a static tarball and uploads it to the server. Both `dist/` and `src/generated/` are ignored by Git and are not committed.
