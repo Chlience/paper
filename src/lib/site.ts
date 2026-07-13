@@ -8,6 +8,7 @@ export const fallbackSiteUrl = 'https://papers.chlience.com';
 export const paths = {
   home: '/',
   papers: '/papers/',
+  topics: '/topics/',
   authors: '/authors/',
   archive: '/archive/',
   workflow: '/workflow/',

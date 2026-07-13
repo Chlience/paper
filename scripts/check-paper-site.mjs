@@ -179,6 +179,8 @@ const sitemapXmlPath = path.join(distDir, 'sitemap.xml');
 const sitemapShardPath = path.join(distDir, 'sitemap-0.xml');
 const robotsTxtPath = path.join(distDir, 'robots.txt');
 const authorsIndexPath = path.join(distDir, 'authors', 'index.html');
+const papersIndexPath = path.join(distDir, 'papers', 'index.html');
+const topicsIndexPath = path.join(distDir, 'topics', 'index.html');
 
 if (!(await exists(sitemapXmlPath))) {
   fail('dist/sitemap.xml is missing.');
@@ -196,6 +198,24 @@ if (data.authors.length > 0 && !(await exists(authorsIndexPath))) {
   fail('dist/authors/index.html is missing.');
 }
 
+if (!(await exists(topicsIndexPath))) {
+  fail('dist/topics/index.html is missing.');
+} else {
+  const topicsHtml = await fs.readFile(topicsIndexPath, 'utf8');
+  for (const route of data.tagRoutes ?? []) {
+    if (!topicsHtml.includes(`id="tag-${route.id}"`)) {
+      fail(`dist/topics/index.html is missing topic anchor: tag-${route.id}.`);
+    }
+  }
+}
+
+if (await exists(papersIndexPath)) {
+  const papersHtml = await fs.readFile(papersIndexPath, 'utf8');
+  if (papersHtml.includes('id="tag-')) {
+    fail('dist/papers/index.html still contains topic route sections.');
+  }
+}
+
 for (const author of data.authors) {
   const authorPage = path.join(distDir, author.path.replace(/^\//, ''), 'index.html');
   if (!(await exists(authorPage))) {
@@ -205,9 +225,11 @@ for (const author of data.authors) {
 
 if ((await exists(sitemapXmlPath)) && (await exists(robotsTxtPath))) {
   const sitemapXml = await fs.readFile(sitemapXmlPath, 'utf8');
+  const sitemapShard = await fs.readFile(sitemapShardPath, 'utf8');
   const robotsTxt = await fs.readFile(robotsTxtPath, 'utf8');
   const sitemapUrl = new URL('/sitemap.xml', expectedSiteUrl).href;
   const sitemapShardUrl = new URL('/sitemap-0.xml', expectedSiteUrl).href;
+  const topicsUrl = new URL('/topics/', expectedSiteUrl).href;
 
   if (!robotsTxt.includes(`Sitemap: ${sitemapUrl}`)) {
     fail(`robots.txt must point to ${sitemapUrl}.`);
@@ -215,6 +237,10 @@ if ((await exists(sitemapXmlPath)) && (await exists(robotsTxtPath))) {
 
   if (!sitemapXml.includes(sitemapShardUrl)) {
     fail(`sitemap.xml must include ${sitemapShardUrl}.`);
+  }
+
+  if (!sitemapShard.includes(topicsUrl)) {
+    fail(`sitemap-0.xml must include ${topicsUrl}.`);
   }
 }
 

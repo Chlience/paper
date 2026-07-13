@@ -605,6 +605,8 @@ facet 只负责组织导航，当前包括 Training、Inference、Architecture�
 
 `check:workflow` 会拒绝漏标、未知标签、重复标签、超过四个标签和指向已删除论文的失效分配。站点锚点由稳定 ID 生成，展示名称调整不会改变已有主题链接。
 
+站点集中在 `/topics/` 展示 facet、主题定义、论文数量和关联论文；论文标签与首页主题入口统一链接到 `/topics/#tag-<id>`。`/papers/` 只承担按首次归档时间浏览论文的职责。
+
 这套结构参考三类公开实践：[W3C SKOS](https://www.w3.org/TR/skos-primer/) 用稳定 concept、preferred label、alternative label 和层级关系管理受控词表；[OpenAlex Topics](https://help.openalex.org/hc/en-us/articles/24736129405719-Topics) 用分层 topic 组织检索，并区分 primary topic 与其它高分 topic；[ACM Computing Classification System](https://www.acm.org/publications/class-2012) 强调一致分类对索引、检索和相关文献发现的作用。本归档据此保留稳定标签 ID、单一主标签、多个辅助标签和 facet 导航。
 
 ## 作者页维护
@@ -703,5 +705,5 @@ facet 只负责组织导航，当前包括 Training、Inference、Architecture�
 - `Reference Intake Brief` 是否使用标准决策值并解释原因。
 - 是否存在先否定前项、再强调后项的对照式中文表达。
 - 是否避免长段复制论文原文。
-- 面向站点展示的内部链接是否使用 `/papers/<slug>/`、`/authors/<slug>/`、`/archive/`、`/workflow/` 或 `/template/`。
+- 面向站点展示的内部链接是否使用 `/papers/<slug>/`、`/topics/#tag-<id>`、`/authors/<slug>/`、`/archive/`、`/workflow/` 或 `/template/`。
 - 本地内容工作流、元数据、公式、搜索和置顶条目检查是否全部通过；production build 与生成站点检查是否明确交给 GitHub Actions。

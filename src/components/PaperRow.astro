@@ -37,7 +37,7 @@ const { paper, showProvenance = true } = Astro.props;
       {paper.pinned && <span class="paper-row-pin">Pinned</span>}
       {showProvenance && <span>{paper.slug}</span>}
       {paper.tags?.slice(0, 3).map((tag, index) => (
-        <a class="topic-link" href={`/papers/#tag-${paper.tagIds?.[index]}`}>{tag}</a>
+        <a class="topic-link" href={`/topics/#tag-${paper.tagIds?.[index]}`}>{tag}</a>
       ))}
     </div>
   </div>

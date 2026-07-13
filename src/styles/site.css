@@ -615,14 +615,19 @@ h3 {
 }
 
 .route-group-heading h3,
+.theme-heading h3,
 .theme-heading h4 {
   margin: 0;
 }
 
-.route-group-heading span,
+.route-group-heading .route-group-all,
 .theme-heading span {
   color: var(--muted);
   font-size: 12px;
+}
+
+.route-group-heading .route-group-all:hover {
+  color: var(--accent);
 }
 
 .route-group > p,
@@ -658,12 +663,53 @@ h3 {
   font-size: 12px;
 }
 
+.topics-header {
+  padding-bottom: var(--space-md);
+}
+
+.topic-facet-index {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--space-md);
+  padding: 12px 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.topic-facet-index a {
+  min-width: 170px;
+  display: grid;
+  flex: 1 1 170px;
+  gap: 3px;
+  padding: 8px 0;
+  color: var(--muted);
+}
+
+.topic-facet-index a:hover,
+.theme-links a:hover {
+  color: var(--fg);
+}
+
+.topic-facet-index a > span:first-child {
+  color: var(--fg);
+  font-weight: 680;
+}
+
+.topic-facet-index .mono {
+  font-size: 11px;
+}
+
+.topics-section {
+  padding-top: var(--space-lg);
+}
+
 .theme-stack {
   display: grid;
   gap: var(--space-xl);
 }
 
 .route-facet {
+  scroll-margin-top: 84px;
   display: grid;
   grid-template-columns: minmax(180px, 0.28fr) minmax(0, 1fr);
   gap: var(--space-lg);
@@ -677,6 +723,7 @@ h3 {
   top: 84px;
 }
 
+.route-facet-header h2,
 .route-facet-header h3 {
   margin: 8px 0;
 }

@@ -2,23 +2,13 @@
 import PaperRow from '../../components/PaperRow.astro';
 import Layout from '../../layouts/Layout.astro';
 import data from '../../generated/paper-data.json';
-
-const routeGroups = data.tagFacets.map((facet) => ({
-  ...facet,
-  routes: data.tagRoutes
-    .filter((route) => route.facetId === facet.id)
-    .map((route) => ({
-      ...route,
-      papers: data.papers.filter((paper) => paper.tagIds.includes(route.id)),
-    })),
-}));
 ---
 
 <Layout active="papers" title="Papers | Chlience Paper Archive" canonicalPath="/papers/">
   <section class="page-header container">
     <p class="eyebrow mono">All notes</p>
     <h1>论文笔记</h1>
-    <p class="deck">当前收录 {data.papers.length} 篇论文或技术文章。列表保留摘要和作者线索，主题入口用于横向比较。</p>
+    <p class="deck">当前收录 {data.papers.length} 篇论文或技术文章，按首次归档时间排列并保留摘要与作者线索。</p>
   </section>
 
   <section class="section compact">
@@ -27,51 +17,4 @@ const routeGroups = data.tagFacets.map((facet) => ({
     </div>
   </section>
 
-  <section class="section">
-    <div class="container section-header">
-      <div>
-        <h2>Topic Routes</h2>
-        <p>同一篇文章可以进入多个问题域，但每个入口只保留和该主题直接相关的论文。</p>
-      </div>
-    </div>
-
-    <div class="container theme-stack">
-      {routeGroups.map((group) => (
-        <section class="route-facet">
-          <header class="route-facet-header">
-            <p class="eyebrow mono">{group.routeCount} routes · {group.paperCount} notes</p>
-            <h3>{group.label}</h3>
-            <p>{group.description}</p>
-          </header>
-          <div class="route-sections">
-            {group.routes.map((route) => (
-              <section class="theme-section" id={`tag-${route.id}`}>
-                <div class="theme-heading">
-                  <h4>{route.label}</h4>
-                  <span class="mono">{route.count}</span>
-                </div>
-                <p class="route-description">{route.description}</p>
-                <div class="theme-links">
-                  {route.papers.map((paper) => <a href={paper.path}>{paper.title}</a>)}
-                </div>
-              </section>
-            ))}
-          </div>
-        </section>
-      ))}
-    </div>
-  </section>
-
 </Layout>
-
-<script>
-  const scrollToCurrentRoute = () => {
-    const routeId = decodeURIComponent(window.location.hash.slice(1));
-    if (!routeId.startsWith('tag-')) return;
-    requestAnimationFrame(() => document.getElementById(routeId)?.scrollIntoView({ block: 'start' }));
-  };
-
-  window.addEventListener('load', scrollToCurrentRoute);
-  window.addEventListener('hashchange', scrollToCurrentRoute);
-  scrollToCurrentRoute();
-</script>

@@ -22,6 +22,6 @@
 - 若新增论文和已有论文存在作者重叠、同一实验室连续产出、共同机构、主题延展、引用或方法复用，必须写入对应论文的 `跨论文关系`。
 - `content/utility/papers-index.md` 只维护 `当前收录` 表及其简称、首次公开月份和核心信号。单篇作者关系与跨论文关系写入对应论文，稳定作者事实写入 `data/authors.json`。
 - 删除论文时必须同步删除 `当前收录` 行，并在剩余论文的 `跨论文关系` 中删除或修订失效描述，同时审计 `data/authors.json`。作者 profile 在剩余论文中没有作者链接、姓名或别名关联时，必须在同一提交中删除；孤立作者会触发工作流硬错误。
-- 论文笔记和 `content/utility/papers-index.md` 中指向已存档论文的 Markdown 链接必须使用站点路径 `/papers/<slug>/`；工作流、模板、索引页面链接分别使用 `/workflow/`、`/template/`、`/archive/`；本地文件名用代码样式保留。
+- 论文笔记和 `content/utility/papers-index.md` 中指向已存档论文的 Markdown 链接必须使用站点路径 `/papers/<slug>/`；主题路由使用 `/topics/#tag-<id>`；工作流、模板、索引页面链接分别使用 `/workflow/`、`/template/`、`/archive/`；本地文件名用代码样式保留。
 - 对安全或双用途论文，保留机制、风险、评测和防御启发，避免沉淀可直接滥用的操作细节。
 - 以后所有完整改动在完成验证后必须创建本地 commit；`push` 只在用户明确要求时执行。

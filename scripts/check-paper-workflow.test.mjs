@@ -962,6 +962,28 @@ test('deploy workflow validates source and builds the static site once', async (
   assert.ok(source.indexOf('Build and verify static site') < source.indexOf('Pack static artifact'));
 });
 
+test('topic routes live on the dedicated topics page', async () => {
+  const [home, papers, topics, paperRow, paperPage, siteHeader, siteLib] = await Promise.all([
+    fs.readFile('src/pages/index.astro', 'utf8'),
+    fs.readFile('src/pages/papers/index.astro', 'utf8'),
+    fs.readFile('src/pages/topics/index.astro', 'utf8'),
+    fs.readFile('src/components/PaperRow.astro', 'utf8'),
+    fs.readFile('src/pages/papers/[slug].astro', 'utf8'),
+    fs.readFile('src/components/SiteHeader.astro', 'utf8'),
+    fs.readFile('src/lib/site.ts', 'utf8'),
+  ]);
+
+  for (const source of [home, paperRow, paperPage]) {
+    assert.match(source, /\/topics\/#tag-/);
+    assert.doesNotMatch(source, /\/papers\/#tag-/);
+  }
+  assert.doesNotMatch(papers, /routeGroups|Topic Routes|id=\{`tag-/);
+  assert.match(topics, /canonicalPath="\/topics\/"/);
+  assert.ok(topics.includes('id={`tag-${route.id}`}'));
+  assert.match(siteHeader, /id: 'topics', label: '主题'/);
+  assert.match(siteLib, /topics: '\/topics\/'/);
+});
+
 test('archive omits global author grouping while paper notes retain author relationships', async () => {
   const [index, workflowDoc, template, archivePage, agentInstructions, authorSop, dapo, flashAttention2] =
     await Promise.all([

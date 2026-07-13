@@ -6,7 +6,10 @@ import data from '../generated/paper-data.json';
 const recentPapers = data.papers.slice(0, 8);
 const routeGroups = data.tagFacets.map((facet) => ({
   ...facet,
-  routes: data.tagRoutes.filter((route) => route.facetId === facet.id),
+  routes: data.tagRoutes
+    .filter((route) => route.facetId === facet.id)
+    .sort((a, b) => b.count - a.count || a.label.localeCompare(b.label))
+    .slice(0, 3),
 }));
 ---
 
@@ -62,19 +65,19 @@ const routeGroups = data.tagFacets.map((facet) => ({
         <h2>Research Routes</h2>
         <p>主题入口用于快速进入同一问题域，数量来自当前归档。</p>
       </div>
-      <a class="section-link" href="/authors/">Authors</a>
+      <a class="section-link" href="/topics/">View all topics</a>
     </div>
     <div class="container route-index">
       {routeGroups.map((group) => (
         <section class="route-group">
           <div class="route-group-heading">
             <h3>{group.label}</h3>
-            <span class="mono">{group.routeCount} routes</span>
+            <a class="route-group-all mono" href={`/topics/#facet-${group.id}`}>{group.routeCount} routes</a>
           </div>
           <p>{group.description}</p>
           <div class="route-link-list">
             {group.routes.map((route) => (
-              <a class="route-link" href={`/papers/#tag-${route.id}`}>
+              <a class="route-link" href={`/topics/#tag-${route.id}`}>
                 <span>{route.label}</span>
                 <span class="mono">{route.count}</span>
               </a>
