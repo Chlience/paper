@@ -1,7 +1,7 @@
 # Paper Archive Index
 
 First-Archived-At: 2026-06-21
-Updated-At: 2026-07-13
+Updated-At: 2026-07-14
 
 ## 本地工作流
 
@@ -26,7 +26,7 @@ Updated-At: 2026-07-13
 | [国产模型报告时间线](/papers/2026-06-23-chinese-frontier-model-reports-timeline/) | 2026年6月 | 按 MoE / 长上下文、reasoning RL、agentic infrastructure 三条主线串联 2024-2026 年国产前沿模型演进。 |
 | [Seed2.0](/papers/2607.00248-seed2-model-card-real-world-complexity/) | 2026年6月 | 用产品任务分布重构模型评测，将能力、成本与真实工作流案例放进同一模型卡。 |
 | [ECHO](/papers/2606.31650-echo-selective-turn-memory-agentic-rl/) | 2026年6月 | 把 selective memory / compact / context reconstruction 做成可训练 slot。 |
-| [SPIRAL](/papers/2606.23595-spiral-learning-search-aggregate/) | 2026年6月 | 把 search traces、set construction、aggregation trace 放进同一个 RL 目标。 |
+| [SPIRAL](/papers/2606.23595-spiral-learning-search-aggregate/) | 2026年6月 | 从 8 条搜索轨迹随机构造 4 个四元集合，以聚合成功率的参与集合均值更新搜索轨迹，并用同集合内中心化 reward 训练共享策略的聚合轨迹。 |
 | [Self-Improving Agents](/papers/2026-06-25-self-improving-agents-era-experience-survey/) | 2026年6月 | 把 agent 自改进抽象为 trace-to-capability 流水线，覆盖 skills、memory、environment、model 与 meta-layer。 |
 | [DSpark](/papers/2026-06-27-dspark-confidence-scheduled-speculative-decoding/) | 2026年6月 | 用 Markov head、置信度校准和硬件感知前缀调度，把并行 drafter 推进生产 serving。 |
 | [MOPD](/papers/2606.30406-mopd-multi-teacher-on-policy-distillation/) | 2026年6月 | 让 student 在自身轨迹上接受多个领域 teacher 的 token-level reverse-KL 信号，整合 RL teacher 能力。 |
