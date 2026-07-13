@@ -1,7 +1,7 @@
 # Defeating Nondeterminism in LLM Inference 技术文章笔记
 
 First-Archived-At: 2026-01-30 15:10
-Updated-At: 2026-01-30 15:10
+Updated-At: 2026-07-13 10:26
 
 ## Source
 
@@ -189,6 +189,7 @@ Attention：
 
 ## 跨论文关系
 
+- 与 [Grape](/papers/2026-07-13-grape-micro-task-agentic-workflow-serving/)：Grape 的跨 task 增量 prefill 在理想 causal 计算上与整段 prefill 等价，同时会改变 chunk 与 batch composition。本文提示有限精度 reduction order 可能改变 logits，随后由 autoregressive sampling 放大为轨迹差异；Grape 用于评测或 RL rollout 时应补充 batch-invariant output consistency 检查。
 - 与 `2409.19256` 的作者关系：未发现作者重叠。主题关系强。`2409.19256` 解决 RLHF/VERL 的多模型 dataflow、rollout 与 training backend 编排；本文补充 rollout inference 的 batch-invariant determinism 和 sampler/trainer 数值一致性。
 - 与 `2606.00135` 的作者关系：未发现作者重叠。主题关系强。`2606.00135` 讨论 tool-calling RL 中 harness、rollout 和 policy update 成本；本文解释 rollout backend 的 batch/slicing 数值差异可能改变轨迹与 logprob，从而影响 on-policy 训练和评测可复现性。
 - 与 `2606.06453` 的作者关系：未发现作者重叠。系统关系强。两者都关注 LLM serving 和 attention/kernel 层细节；Vortex 优化 sparse attention serving，本文优化 deterministic inference 所需的 batch-invariant attention。

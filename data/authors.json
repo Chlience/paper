@@ -9430,5 +9430,61 @@
         "url": "https://x.com/Azaliamirh"
       }
     ]
+  },
+  {
+    "slug": "siqi-wang",
+    "name": "Siqi Wang",
+    "aliases": ["Siqi Wang", "Wang, Siqi"],
+    "affiliations": ["Beihang University"],
+    "homepage": "https://conf.researchr.org/profile/siqiwang4",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["Grape", "agentic LLM serving", "distributed GNN training", "speculative decoding", "high-performance computing"],
+    "notes": "Beihang University systems researcher publicly associated with Grape by Hailong Yang's July 2026 SC acceptance announcement. The same official research-group page connects Siqi Wang to ElasGNN, ZeroSpec, Plasticine, and AtRec; ORCID and conference profiles support the Beihang identity. The supplied Grape manuscript is anonymous, so author order and the complete author list remain unverified.",
+    "sources": [
+      {
+        "label": "Hailong Yang homepage and Grape acceptance announcement",
+        "url": "https://thomas-yang.github.io/"
+      },
+      {
+        "label": "ORCID",
+        "url": "https://orcid.org/0009-0008-0761-3287"
+      },
+      {
+        "label": "Conference profile",
+        "url": "https://conf.researchr.org/profile/siqiwang4"
+      },
+      {
+        "label": "ElasGNN DBLP record",
+        "url": "https://dblp.org/rec/conf/ppopp/Wang0WC0WL0Q26"
+      }
+    ]
+  },
+  {
+    "slug": "hailong-yang",
+    "name": "Hailong Yang",
+    "aliases": ["Hailong Yang", "Hai-Long Yang", "Hailong Yang 0002"],
+    "affiliations": ["Beihang University", "University of Michigan"],
+    "homepage": "https://thomas-yang.github.io/",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["Grape", "high-performance computing", "deep learning systems", "compilation", "parallel and distributed computing"],
+    "notes": "Beihang University professor whose official homepage lists Grape as an SC 2026 publication and records research in high-performance computing, deep learning systems and compilation, and parallel and distributed computing. The homepage also records a prior postdoctoral appointment at the University of Michigan. The supplied Grape manuscript is anonymous, so the profile records a high-confidence public association without claiming a complete author list.",
+    "sources": [
+      {
+        "label": "Homepage and Grape publication listing",
+        "url": "https://thomas-yang.github.io/"
+      },
+      {
+        "label": "DBLP",
+        "url": "https://dblp.org/pid/94/8072-2"
+      },
+      {
+        "label": "CGO conference profile",
+        "url": "https://2026.cgo.org/profile/hailongyang"
+      }
+    ]
   }
 ]
