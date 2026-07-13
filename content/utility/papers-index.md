@@ -31,7 +31,7 @@ Updated-At: 2026-07-13
 | [DSpark](/papers/2026-06-27-dspark-confidence-scheduled-speculative-decoding/) | 2026年6月 | 用 Markov head、置信度校准和硬件感知前缀调度，把并行 drafter 推进生产 serving。 |
 | [MOPD](/papers/2606.30406-mopd-multi-teacher-on-policy-distillation/) | 2026年6月 | 让 student 在自身轨迹上接受多个领域 teacher 的 token-level reverse-KL 信号，整合 RL teacher 能力。 |
 | [GLM-5.2](/papers/2026-06-16-glm-5-2-long-horizon-tasks/) | 2026年6月 | 把 1M context、IndexShare / IndexCache 与 MTP speculative decoding 接入长程 coding agent。 |
-| [slime](/papers/2026-06-17-slime-rl-scaling-framework/) | 2026年6月 | 把 Megatron training、SGLang rollout、Ray、custom reward 与异步权重同步接入同一 RL 后训练闭环。 |
+| [slime](/papers/2026-06-17-slime-rl-scaling-framework/) | 2026年6月 | 把 agent execution 物化为 token-aligned Sample，并用共享 group / rollout ID、loss mask 与行为 logprob 保持 fan-out、compaction 和异步 rollout 后的训练归属。 |
 | [DLA](/papers/2606.10650-dynamic-linear-attention/) | 2026年6月 | 用 representation drift 动态决定 state 边界，在固定 cache 内自适应合并 linear-attention states。 |
 | [HydraHead](/papers/2606.20097-hydrahead-head-wise-hybrid-attention/) | 2026年6月 | 用 causal patching 找到 retrieval-critical heads，只为这些 heads 保留 full attention。 |
 | [Bebop](/papers/2606.12370-bebop-mtp-rejection-sampling-rl-training/) | 2026年6月 | 以 TV loss 训练 MTP heads，并用 probabilistic rejection sampling 提高 RL rollout 接受率。 |
