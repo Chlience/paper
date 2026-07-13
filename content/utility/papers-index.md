@@ -40,7 +40,7 @@ Updated-At: 2026-07-13
 | [FlashMemory](/papers/2606.09079-flashmemory-deepseek-v4-lookahead-sparse-attention/) | 2026年6月 | 预测未来 token 的 KV chunk 需求，将冷 KV 移到 CPU 并按需预取，压缩物理 KV footprint。 |
 | [MiniMax Sparse Attention](/papers/2606.13392-minimax-sparse-attention-m3/) | 2026年6月 | 用 group-aware index branch 选择 KV blocks，再对选中块执行精确 softmax attention。 |
 | [Beneficial-Trait RL](/papers/2026-06-18-openai-beneficial-rl/) | 2026年6月 | 用少量 beneficial-trait RL data 强化诚实、纠错与风险意识，并测量跨域 alignment persistence。 |
-| [Vortex](/papers/2606.06453-vortex-sparse-attention-serving/) | 2026年6月 | 用 vFlow / vTensor 把 sparse attention 算法接入可编程、page-centric production serving。 |
+| [Vortex](/papers/2606.06453-vortex-sparse-attention-serving/) | 2026年6月 | 用 vFlow / vTensor 把动态 sparse-attention selector 与 paged KV execution 编译到同一 SGLang decode 路径。 |
 | [SocioHack](/papers/2606.04075-llms-hack-rewards-and-society/) | 2026年6月 | 把制度规则编码为 reward sandbox，验证 RL model 会发现形式合规但偏离制度意图的策略。 |
 | [UltraEP](/papers/2606.04101-ultraep-rack-scale-moe-load-balancing/) | 2026年6月 | 基于 post-gating exact load 逐 microbatch / layer 规划 expert replica 与 token reroute，统一 MoE 训练和 prefill 负载均衡。 |
 | [Muon Curvature](/papers/2606.04662-muon-outperforms-adam-curvature/) | 2026年6月 | 将 Muon 相对 Adam 的训练优势归因于更低的 directional curvature penalty，step-size 的解释力较弱。 |
