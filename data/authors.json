@@ -6824,12 +6824,16 @@
     "github": "https://github.com/cbfinn",
     "x": "https://x.com/chelseabfinn",
     "xConfidence": "high",
-    "topics": ["SPIRAL", "robot learning", "meta-learning", "reinforcement learning", "agents"],
-    "notes": "Coauthor of SPIRAL and Stanford CS/EE faculty member. Public homepage lists IRIS lab, Physical Intelligence cofounder role, Berkeley PhD, MIT undergraduate background, and prior Google Brain/DeepMind work.",
+    "topics": ["SPIRAL", "LLM-as-a-Verifier", "robot learning", "meta-learning", "reinforcement learning", "agents", "verification"],
+    "notes": "Coauthor of SPIRAL and LLM-as-a-Verifier and Stanford CS/EE faculty member. Public homepage lists IRIS lab, Physical Intelligence cofounder role, Berkeley PhD, MIT undergraduate background, and prior Google Brain/DeepMind work.",
     "sources": [
       {
         "label": "SPIRAL",
         "url": "https://arxiv.org/abs/2606.23595"
+      },
+      {
+        "label": "LLM-as-a-Verifier",
+        "url": "https://arxiv.org/abs/2607.05391"
       },
       {
         "label": "Homepage",
@@ -9156,6 +9160,274 @@
       {
         "label": "SAO arXiv",
         "url": "https://arxiv.org/abs/2607.07508"
+      }
+    ]
+  },
+  {
+    "slug": "jacky-kwok",
+    "name": "Jacky Kwok",
+    "aliases": ["Jacky Kwok", "Kwok, Jacky"],
+    "affiliations": ["Stanford University", "University of California, Berkeley", "Sky Computing Lab", "Berkeley AI Research", "iCyPhy Center"],
+    "homepage": "https://jackyk02.github.io/",
+    "github": "https://github.com/jackyk02",
+    "x": "https://x.com/jackyk02",
+    "xConfidence": "high",
+    "topics": ["LLM-as-a-Verifier", "verification", "test-time scaling", "robot learning", "reinforcement learning systems"],
+    "notes": "LLM-as-a-Verifier first author and Stanford CS PhD student. His homepage directly links the @jackyk02 X account and records research on scalable verifiers for agents and robots, with advising and collaboration links to Azalia Mirhoseini, Ion Stoica, Marco Pavone, and Chelsea Finn; he previously completed Berkeley CS bachelor's and master's degrees.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://jackyk02.github.io/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/jackyk02"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=8mao_AUAAAAJ"
+      },
+      {
+        "label": "LLM-as-a-Verifier",
+        "url": "https://arxiv.org/abs/2607.05391"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/jackyk02"
+      }
+    ]
+  },
+  {
+    "slug": "shulu-li",
+    "name": "Shulu Li",
+    "aliases": ["Shulu Li", "Li, Shulu"],
+    "affiliations": ["University of California, Berkeley", "Fudan University", "Sky Computing Lab"],
+    "homepage": "",
+    "github": "",
+    "x": "https://x.com/shululi256",
+    "xConfidence": "medium",
+    "topics": ["LLM-as-a-Verifier", "verification", "robotics systems", "test-time scaling", "deterministic middleware"],
+    "notes": "LLM-as-a-Verifier coauthor and UC Berkeley EECS PhD student. OpenReview records Ion Stoica and Edward A. Lee as advisor relations, Fudan undergraduate training, and repeated collaboration with Jacky Kwok through RoboMonkey; the @shululi256 account is linked from coauthor announcements, so X confidence remains medium pending a personal homepage link.",
+    "sources": [
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Shulu_Li1"
+      },
+      {
+        "label": "Sky Computing Lab publications",
+        "url": "https://sky.cs.berkeley.edu/publications/"
+      },
+      {
+        "label": "LLM-as-a-Verifier project",
+        "url": "https://llm-as-a-verifier.com/"
+      },
+      {
+        "label": "LLM-as-a-Verifier",
+        "url": "https://arxiv.org/abs/2607.05391"
+      }
+    ]
+  },
+  {
+    "slug": "pranav-atreya",
+    "name": "Pranav Atreya",
+    "aliases": ["Pranav Atreya", "Atreya, Pranav"],
+    "affiliations": ["University of California, Berkeley", "Berkeley Robot Learning Lab", "University of Texas at Austin"],
+    "homepage": "https://pranavatreya.github.io/",
+    "github": "https://github.com/pranavatreya",
+    "x": "https://x.com/pranav_atreya",
+    "xConfidence": "high",
+    "topics": ["LLM-as-a-Verifier", "robot learning", "generalist policies", "robot evaluation", "self-improvement"],
+    "notes": "LLM-as-a-Verifier coauthor and UC Berkeley CS PhD student advised by Sergey Levine. His homepage directly links GitHub, Scholar, and the @pranav_atreya X account and describes work on general-purpose robot intelligence and real-world robot evaluation; he previously completed his undergraduate degree at UT Austin.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://pranavatreya.github.io/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/pranavatreya"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=bQowYEYAAAAJ"
+      },
+      {
+        "label": "LLM-as-a-Verifier",
+        "url": "https://arxiv.org/abs/2607.05391"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/pranav_atreya"
+      }
+    ]
+  },
+  {
+    "slug": "yuejiang-liu",
+    "name": "Yuejiang Liu",
+    "aliases": ["Yuejiang Liu", "Liu, Yuejiang"],
+    "affiliations": ["Stanford University", "National University of Singapore", "EPFL"],
+    "homepage": "https://yuejiangliu.github.io/",
+    "github": "https://github.com/YuejiangLIU",
+    "x": "https://x.com/liu_yuejiang",
+    "xConfidence": "high",
+    "topics": ["LLM-as-a-Verifier", "robot learning", "world models", "verification", "self-improving agents"],
+    "notes": "LLM-as-a-Verifier coauthor and Stanford CS postdoctoral fellow advised by Chelsea Finn and mentored by Yilun Du. His homepage directly links GitHub, Scholar, and @liu_yuejiang, records an EPFL PhD, and announces an incoming NUS assistant-professor appointment focused on physical intelligence and proactive self-improvement.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://yuejiangliu.github.io/"
+      },
+      {
+        "label": "Stanford profile",
+        "url": "https://profiles.stanford.edu/yuejiang-liu"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/YuejiangLIU"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=Xi-B5WIAAAAJ"
+      },
+      {
+        "label": "LLM-as-a-Verifier",
+        "url": "https://arxiv.org/abs/2607.05391"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/liu_yuejiang"
+      }
+    ]
+  },
+  {
+    "slug": "yixing-jiang",
+    "name": "Yixing Jiang",
+    "aliases": ["Yixing Jiang", "Jiang, Yixing"],
+    "affiliations": ["Stanford University", "Stanford Machine Learning Group", "HealthRex Lab"],
+    "homepage": "",
+    "github": "",
+    "x": "https://x.com/jyx_su",
+    "xConfidence": "medium",
+    "topics": ["LLM-as-a-Verifier", "medical agents", "agent evaluation", "electronic health records", "multimodal in-context learning"],
+    "notes": "LLM-as-a-Verifier coauthor, Stanford PhD student, and MedAgentBench first author. Stanford HAI and project pages connect him to clinical agent evaluation, Stanford Machine Learning Group, and HealthRex; the @jyx_su account repeatedly links his Stanford projects and LinkedIn identity, with medium confidence because no personal homepage was found.",
+    "sources": [
+      {
+        "label": "MedAgentBench project",
+        "url": "https://stanfordmlgroup.github.io/projects/medagentbench/"
+      },
+      {
+        "label": "Stanford HAI profile story",
+        "url": "https://hai.stanford.edu/news/stanford-develops-real-world-benchmarks-for-healthcare-ai-agents"
+      },
+      {
+        "label": "MedAgentBench",
+        "url": "https://arxiv.org/abs/2501.14654"
+      },
+      {
+        "label": "LLM-as-a-Verifier project",
+        "url": "https://llm-as-a-verifier.com/"
+      },
+      {
+        "label": "LLM-as-a-Verifier",
+        "url": "https://arxiv.org/abs/2607.05391"
+      }
+    ]
+  },
+  {
+    "slug": "marco-pavone",
+    "name": "Marco Pavone",
+    "aliases": ["Marco Pavone", "Pavone, Marco"],
+    "affiliations": ["Stanford University", "NVIDIA Research", "Massachusetts Institute of Technology"],
+    "homepage": "https://stanford.edu/~pavone/",
+    "github": "",
+    "x": "https://x.com/drmapavone",
+    "xConfidence": "medium",
+    "topics": ["LLM-as-a-Verifier", "autonomous systems", "robotics", "autonomous driving", "verification"],
+    "notes": "LLM-as-a-Verifier coauthor, Stanford Aeronautics and Astronautics associate professor, and NVIDIA Autonomous Vehicle Research director. Official Stanford and NVIDIA pages connect his work to autonomous systems, robot autonomy, driving, and safety-critical verification; the @drmapavone account is identified in coauthor announcements, with medium confidence pending a direct homepage link.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://stanford.edu/~pavone/"
+      },
+      {
+        "label": "Stanford profile",
+        "url": "https://profiles.stanford.edu/marco-pavone"
+      },
+      {
+        "label": "NVIDIA Research profile",
+        "url": "https://research.nvidia.com/labs/avg/author/marco-pavone/"
+      },
+      {
+        "label": "LLM-as-a-Verifier",
+        "url": "https://arxiv.org/abs/2607.05391"
+      }
+    ]
+  },
+  {
+    "slug": "ion-stoica",
+    "name": "Ion Stoica",
+    "aliases": ["Ion Stoica", "Stoica, Ion"],
+    "affiliations": ["University of California, Berkeley", "Sky Computing Lab", "Anyscale", "Databricks", "Conviva Networks", "Carnegie Mellon University"],
+    "homepage": "https://people.eecs.berkeley.edu/~istoica/",
+    "github": "",
+    "x": "https://x.com/istoica05",
+    "xConfidence": "high",
+    "topics": ["LLM-as-a-Verifier", "AI systems", "distributed systems", "cloud computing", "LLM inference"],
+    "notes": "LLM-as-a-Verifier coauthor, UC Berkeley professor, and Sky Computing Lab director. His official homepage records AI systems, cloud, and distributed-systems work including vLLM, Ray, SkyPilot, Spark, and Chatbot Arena, plus cofounder roles at Anyscale, Databricks, and Conviva; coauthor announcements identify the @istoica05 X account.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://people.eecs.berkeley.edu/~istoica/"
+      },
+      {
+        "label": "UC Berkeley faculty profile",
+        "url": "https://www2.eecs.berkeley.edu/Faculty/Homepages/stoica.html"
+      },
+      {
+        "label": "DBLP",
+        "url": "https://dblp.org/pid/s/IonStoica"
+      },
+      {
+        "label": "LLM-as-a-Verifier",
+        "url": "https://arxiv.org/abs/2607.05391"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/istoica05"
+      }
+    ]
+  },
+  {
+    "slug": "azalia-mirhoseini",
+    "name": "Azalia Mirhoseini",
+    "aliases": ["Azalia Mirhoseini", "Mirhoseini, Azalia"],
+    "affiliations": ["Stanford University", "Ricursive Intelligence", "Scaling Intelligence Lab", "Anthropic", "Google Brain", "Google DeepMind", "Rice University"],
+    "homepage": "https://www.azaliamirhoseini.com/",
+    "github": "",
+    "x": "https://x.com/Azaliamirh",
+    "xConfidence": "high",
+    "topics": ["LLM-as-a-Verifier", "self-improving AI", "test-time scaling", "AI systems", "AI for chip design"],
+    "notes": "LLM-as-a-Verifier coauthor, Stanford CS assistant professor, Scaling Intelligence Lab director, and Ricursive Intelligence cofounder. Her homepage directly highlights LLM-as-a-Verifier, self-improving AI, test-time scaling, and prior work at Google Brain, Anthropic, and Google DeepMind; her public author announcement identifies @Azaliamirh.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://www.azaliamirhoseini.com/"
+      },
+      {
+        "label": "Stanford profile",
+        "url": "https://profiles.stanford.edu/azalia-mirhoseini"
+      },
+      {
+        "label": "Scaling Intelligence Lab",
+        "url": "https://scalingintelligence.stanford.edu/"
+      },
+      {
+        "label": "LLM-as-a-Verifier",
+        "url": "https://arxiv.org/abs/2607.05391"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/Azaliamirh"
       }
     ]
   }
