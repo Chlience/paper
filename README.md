@@ -26,25 +26,29 @@ Open:
 http://localhost:4321
 ```
 
-## Build
+## Local Validation
 
 ```bash
 npm run test:workflow
 npm run check:workflow
+npm run check:metadata
+npm run check:math
+npm run test:search
+npm run test:pins
+```
+
+These source-level checks do not produce the production `dist/` artifact. `check:math` refreshes the ignored `src/generated/` content data before validating Markdown formulas.
+
+## CI Build and Deployment
+
+GitHub Actions runs the production build and generated-site check:
+
+```bash
 npm run build
 npm run check:site
-npm run check:math
 ```
 
-The static output is written to:
-
-```text
-dist/
-```
-
-## Deployment
-
-GitHub Actions builds the site and uploads a static tarball to the server.
+The workflow packages `dist/` as a static tarball and uploads it to the server. Both `dist/` and `src/generated/` are ignored by Git and are not committed.
 
 Required GitHub secret:
 

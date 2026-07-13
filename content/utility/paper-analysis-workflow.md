@@ -1,7 +1,7 @@
 # Paper Analysis Workflow
 
 First-Archived-At: 2026-06-19
-Updated-At: 2026-07-10
+Updated-At: 2026-07-13
 
 ## 目标
 
@@ -20,7 +20,7 @@ Updated-At: 2026-07-10
 5. **机制与证据分析**：解释方法成立条件，并给关键判断添加证据定位。
 6. **外部核验**：核验公开审稿状态、作者身份和跨论文关系。
 7. **成文与归档**：按模板生成或更新论文笔记、索引和作者档案。
-8. **一致性检查**：执行内容工作流、元数据、构建、链接和公式检查。
+8. **一致性检查**：执行本地内容工作流、元数据、公式、搜索和置顶条目检查；生产站点构建与生成页面检查由 GitHub Actions 执行。
 9. **提交与回写**：核对改动范围，创建本地提交；后续交流继续回写原笔记。
 
 ## Definition of Done
@@ -33,7 +33,7 @@ Updated-At: 2026-07-10
 - 审稿页类型、匹配置信度、观察日期和 venue 状态已记录；缺少公开审稿时给出明确分类。
 - 每位可解析作者完成基础身份核验；高价值或有歧义作者完成深入核验，并同步稳定事实。
 - `content/utility/papers-index.md` 已更新；`当前收录` 包含唯一的简称、首次公开月份和索引核心信号，作者、机构、主题、引用或方法关系已写入对应论文的 `跨论文关系`。
-- 内容工作流、元数据、站点构建、链接与公式检查通过。
+- 本地内容工作流、元数据、公式、搜索和置顶条目检查通过；GitHub Actions 负责 production build 与生成站点检查。
 - `Reference Intake Brief` 使用标准决策值，并说明吸收、修订、跳过或请求确认的原因。
 - 本次完整改动已创建本地 commit；仅在用户明确要求后推送。
 
@@ -184,9 +184,22 @@ data/authors.json
 ### 8. 一致性检查
 
 - 输入：本次 Markdown、JSON、图片和索引改动。
-- 动作：运行内容工作流、元数据、构建、站点链接和公式检查；检查图片来源、作者别名冲突、重复归档时间与内部链接。
-- 输出：全部检查结果与需要修复的问题列表。
-- 停止条件：错误全部清零；历史兼容提示已审阅且没有由本次改动新增的异常。
+- 动作：运行本地内容工作流、元数据、公式、搜索和置顶条目检查；检查图片来源、作者别名冲突、重复归档时间与内部链接。生产 Astro build、`dist/` 页面检查、产物打包和部署由 GitHub Actions 执行。
+- 输出：本地源文件检查结果与需要修复的问题列表。
+- 停止条件：本地错误全部清零；历史兼容提示已审阅且没有由本次改动新增的异常。push 后的 CI build 作为部署门禁。
+
+本地检查命令固定为：
+
+```bash
+npm run test:workflow
+npm run check:workflow
+npm run check:metadata
+npm run check:math
+npm run test:search
+npm run test:pins
+```
+
+本地归档不运行 `npm run build` 或 `npm run check:site`。`check:site` 读取生成后的 `dist/`，应在 GitHub Actions 完成 production build 后执行。
 
 ### 9. 提交与回写
 
@@ -581,7 +594,7 @@ $$
 - 账号、主页、机构、中文姓名等事实必须有来源链接。公开社交主页只有在来源链条足够稳定时才展示。
 - 若作者有已核验中文姓名，在 `data/authors.json` 写入 `chineseName`；站点展示为 `English Name (中文姓名)`。
 - 无法可靠拆分的团队署名、大规模 author list、文档贡献者列表先保留在论文页，不自动拆成作者页。
-- 新增作者档案后完成站点构建和链接检查，确认 `/authors/` 和 `/authors/<slug>/` 可访问。
+- 新增作者档案后通过本地工作流检查 profile 关联、slug、别名和来源；push 后由 GitHub Actions 生成并检查 `/authors/` 与 `/authors/<slug>/` 页面。
 - `data/authors.json` 中每个 profile 至少关联一篇剩余论文。直接作者链接、`Source -> Authors` 姓名和 alias 都可建立关联；完全没有关联的 profile 会触发 `orphan-author-profile` 硬错误。
 
 每次新增或更新论文时按以下顺序执行作者页维护：
@@ -591,7 +604,7 @@ $$
 3. 对需要补充档案的作者，核验主页、GitHub、学术主页、机构页、项目页和可公开核验的社交主页。
 4. 交叉验证后更新 `data/authors.json`；若找到作者页，在论文笔记中使用 `/authors/<slug>/` 链接。
 5. 对团队署名、超大作者列表或证据稀疏作者，保留团队或机构级记录；论文 Markdown 不写个人核验过程。
-6. 完成站点构建和链接检查，确认作者页和论文页链接可生成。
+6. 完成本地作者关联与内部链接检查；作者页和论文页的 production 生成结果由 GitHub Actions 检查。
 
 ## 论文删除与反向清理
 
@@ -603,7 +616,7 @@ $$
 2. 搜索该 slug，在剩余论文各自的 `跨论文关系` 中删除或修订已经失效的关系描述。
 3. 清理只服务该论文的 tag override、legacy manifest 条目和静态图片；目录或图片删除仍遵循高危操作确认要求。
 4. 重新计算剩余论文中的作者关联。某个 `data/authors.json` profile 若没有 `/authors/<slug>/` 链接，也没有通过 `Source -> Authors` 姓名或 alias 关联任何论文，在同一提交中删除该 profile。
-5. 运行内容构建和完整检查。`missing-index-entry`、`stale-index-entry`、`duplicate-index-entry` 与 `orphan-author-profile` 都属于必须修复的硬错误。
+5. 运行本地内容与反向完整性检查。`missing-index-entry`、`stale-index-entry`、`duplicate-index-entry` 与 `orphan-author-profile` 都属于必须修复的硬错误。
 
 构建脚本只负责聚合关联，不会静默删除人工维护的作者资料。删除动作保持显式、可审查，并与论文删除处于同一提交。
 
@@ -616,7 +629,7 @@ $$
 3. 新版本改变关键结论时，更新对应证据定位、最窄结论、局限和跨论文关系；保留必要的版本差异说明。
 4. 来源修正了数字、作者或状态时，把更正后的事实写入正文，并在 `本地讨论补充` 或相关小节说明原判断为何调整。
 5. 只有实质内容变化才更新 `Updated-At`。链接格式、错别字等纯维护调整可以保留原时间，避免制造虚假的内容更新时间。
-6. 更新后重新执行完整检查，并确认索引、作者档案和关联笔记是否需要同步修订。
+6. 更新后重新执行本地完整检查，并确认索引、作者档案和关联笔记是否需要同步修订。
 
 ## 收尾提交策略
 
@@ -624,9 +637,9 @@ $$
 
 执行顺序：
 
-1. 先完成质量检查、站点构建和链接检查，确认本篇论文页面、索引页和作者页可以生成。
+1. 先完成本地内容、元数据、公式、搜索和置顶条目检查；production 页面生成与站点检查交给 GitHub Actions。
 2. 用 `git status --short` 检查工作区，识别本篇论文相关改动和既有未提交改动。
-3. 只 stage 本篇论文对应的 Markdown、`content/utility/papers-index.md`、`data/authors.json` 和必要生成物；若工作区已有其他论文或无关改动，不能合入本篇 commit。
+3. 只 stage 本篇论文对应的 Markdown、`content/utility/papers-index.md`、`data/authors.json` 和必要静态资源；`dist/` 与 `src/generated/` 不进入 commit。若工作区已有其他论文或无关改动，不能合入本篇 commit。
 4. commit message 使用本篇论文的 arXiv id 或短标题，保持一篇论文一个 commit，便于回溯和回滚。
 5. commit 后再次检查 `git status --short`，确认剩余未提交内容属于其他任务或历史遗留。
 6. 不执行 `git push`；只有用户明确要求 push / 推送时再推送远端。
@@ -664,4 +677,4 @@ $$
 - 是否存在先否定前项、再强调后项的对照式中文表达。
 - 是否避免长段复制论文原文。
 - 面向站点展示的内部链接是否使用 `/papers/<slug>/`、`/authors/<slug>/`、`/archive/`、`/workflow/` 或 `/template/`。
-- 内容工作流、元数据、站点构建、链接和公式检查是否全部通过。
+- 本地内容工作流、元数据、公式、搜索和置顶条目检查是否全部通过；production build 与生成站点检查是否明确交给 GitHub Actions。
