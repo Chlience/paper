@@ -68,7 +68,7 @@ Updated-At: 2026-07-13
 | [Span Query](/papers/2511.02749-span-queries-cache-attention-locality/) | 2025年11月 | 让客户端声明可重排 message spans，以表达式树重写提升 KV cache 与 attention locality。 |
 | [BroRL](/papers/2510.01180-brorl-broadened-rl-exploration/) | 2025年10月 | 把 RLVR scaling 轴扩展到 rollout width，并用 correct-mass decomposition 解释宽采样收益。 |
 | [ImpossibleBench](/papers/2510.20270-impossiblebench-test-case-exploitation/) | 2025年10月 | 构造 specification 与 tests 冲突的 coding tasks，用 cheating rate 测量 test-case exploitation。 |
-| [Laminar](/papers/2510.12633-laminar-asynchronous-rl-post-training/) | 2025年10月 | 以 trajectory-level async、relay workers 和 dynamic repack 解耦 rollout 长尾、训练和权重同步。 |
+| [Laminar](/papers/2510.12633-laminar-asynchronous-rl-post-training/) | 2025年10月 | 让完成轨迹独立进入 experience buffer，并以 CPU/RDMA relay 和同版本 repack 解除全局 batch / 权重同步 barrier。 |
 | [Transformer Succinctness](/papers/2510.19315-transformers-inherently-succinct/) | 2025年10月 | 证明某些语言族的 Transformer 表示只需多项式规模，而 LTL / RNN / automata 需要指数或双指数规模。 |
 | [DeepSeek Sparse Attention](/papers/2025-09-29-deepseek-v3-2-exp-dsa-long-context-efficiency/) | 2025年9月 | 在每层用 dense attention 蒸馏的 lightning indexer 为每个 query 选择最多 2048 个 MLA latent KV positions，并让全部 query heads 共享该层 top-k，将 core attention 降为 $O(Lk)$。 |
 | [Batch-Invariant Inference](/papers/2025-09-10-defeating-nondeterminism-llm-inference/) | 2025年9月 | 用 batch-invariant RMSNorm、matmul 与 attention kernel 消除 temperature=0 推理的批次依赖漂移。 |
