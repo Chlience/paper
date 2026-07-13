@@ -70,7 +70,7 @@ Updated-At: 2026-07-13
 | [ImpossibleBench](/papers/2510.20270-impossiblebench-test-case-exploitation/) | 2025年10月 | 构造 specification 与 tests 冲突的 coding tasks，用 cheating rate 测量 test-case exploitation。 |
 | [Laminar](/papers/2510.12633-laminar-asynchronous-rl-post-training/) | 2025年10月 | 以 trajectory-level async、relay workers 和 dynamic repack 解耦 rollout 长尾、训练和权重同步。 |
 | [Transformer Succinctness](/papers/2510.19315-transformers-inherently-succinct/) | 2025年10月 | 证明某些语言族的 Transformer 表示只需多项式规模，而 LTL / RNN / automata 需要指数或双指数规模。 |
-| [DeepSeek Sparse Attention](/papers/2025-09-29-deepseek-v3-2-exp-dsa-long-context-efficiency/) | 2025年9月 | 训练 lightning indexer 为每个 query 选择 top-k MLA KV entries，降低 128K attention 成本。 |
+| [DeepSeek Sparse Attention](/papers/2025-09-29-deepseek-v3-2-exp-dsa-long-context-efficiency/) | 2025年9月 | 在每层用 dense attention 蒸馏的 lightning indexer 为每个 query 选择最多 2048 个 MLA latent KV positions，并让全部 query heads 共享该层 top-k，将 core attention 降为 $O(Lk)$。 |
 | [Batch-Invariant Inference](/papers/2025-09-10-defeating-nondeterminism-llm-inference/) | 2025年9月 | 用 batch-invariant RMSNorm、matmul 与 attention kernel 消除 temperature=0 推理的批次依赖漂移。 |
 | [RL Skill Composition](/papers/2509.25123-rl-compositional-skill-acquisition/) | 2025年9月 | 在受控任务中证明 RL 可组合 base model 已掌握的 atomic skills，形成未见组合能力。 |
 | [LoRAFusion](/papers/2510.00206-lorafusion-efficient-lora-fine-tuning/) | 2025年9月 | 用 split-graph kernel fusion 与 multi-adapter packing 同时减少 LoRA memory traffic 和 pipeline bubbles。 |
