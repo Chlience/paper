@@ -1,307 +1,481 @@
-# verl 当前 RL 优化算法与异步训练流水线技术笔记
+# verl v0.8.0 与 V1 异步训练数据面技术笔记
 
 First-Archived-At: 2026-06-16 18:19
-Updated-At: 2026-06-16 18:19
+Updated-At: 2026-07-13 21:34
 
 ## Source
 
-- Title: verl 当前 RL 优化算法与异步训练流水线技术笔记
-- URL: https://verl.org.cn/en/latest/algo/ppo.html
-- URL: https://verl.org.cn/en/latest/algo/grpo.html
-- URL: https://verl.org.cn/en/latest/algo/dapo.html
-- URL: https://verl.org.cn/en/latest/algo/rollout_corr.html
-- URL: https://verl.org.cn/en/latest/algo/rollout_corr_math.html
-- URL: https://verl.org.cn/en/latest/advance/one_step_off.html
-- URL: https://verl.org.cn/en/latest/advance/fully_async.html
-- URL: https://verl.org.cn/en/latest/advance/async-on-policy-distill.html
-- URL: https://verl.org.cn/en/latest/data/transfer_queue.html
-- URL: https://verl.org.cn/en/latest/advance/mtp.html
-- Authors: verl documentation contributors; one-step-off and fully async pages list `https://github.com/meituan-search`; async on-policy distill lists Brilliant Hanabi and furunding; rollout correction page lists Yingru Li; DAPO implementation and run page lists Yuxuan Tong and Guangming Sheng.
-- Current version read: verl docs latest pages, accessed 2026-06-16.
-- Subjects: LLM RL systems, PPO/GRPO/DAPO, rollout correction, asynchronous RL training, on-policy distillation, TransferQueue, MTP.
+- Workflow version: v2
+- Material type: composite
+- Canonical source: https://github.com/verl-project/verl/releases/tag/v0.8.0
+- Title: verl v0.8.0 与 V1 异步训练数据面
+- Responsible organization: verl-project contributors；ByteDance Seed 发起并持续参与维护
+- Code/Project: https://github.com/verl-project/verl
+- Documentation: https://verl.readthedocs.io/en/latest/
+- Architecture paper: https://arxiv.org/abs/2409.19256
+- Stable release: https://github.com/verl-project/verl/releases/tag/v0.8.0
+- Current main snapshot: https://github.com/verl-project/verl/tree/30119a253087bff86c12d329d2d8dd43c589705f
+- OpenReview / Review page: 本材料由 release、文档和源码组成，公开审稿页不适用；HybridFlow 论文的审稿状态见其独立笔记。
+- Published / updated: v0.8.0 发布于 2026-06-01；main 快照与文档复核于 2026-07-13
+- Current version read: stable v0.8.0，tag commit `7aed6b230776f963fa09509c10d9c3a767d1102c`；main `0.9.0.dev`
+- Version / revision read: main commit `30119a253087bff86c12d329d2d8dd43c589705f`；`extend_guide.rst` 更新于 2026-06-23；TransferQueue 文档更新于 2026-06-08；fully async 文档更新于 2026-05-25
+- Accessed: 2026-07-13
+- Subjects: LLM reinforcement learning infrastructure；asynchronous rollout；TransferQueue；ReplayBuffer；rollout correction；agent workflow；on-policy distillation
 
 ## 作者与关系
 
-- verl 文档整体属于 verl / ByteDance Seed Foundation MLSys Team 维护的工程材料集合；不同页面由社区 contributor 分别维护。
-- one-step-off 与 fully async 文档均列出 `https://github.com/meituan-search`，说明这两条异步训练路线在实现和实验上有连续工程线索。
-- async on-policy distill 文档列出 Brilliant Hanabi 与 furunding，路线重点从 reward-based RL 转向 teacher top-k token distribution 的 KL 蒸馏目标。
-- rollout correction 文档列出 Yingru Li，并直接连接 “When Speed Kills Stability: Demystifying RL Collapse from the Training-Inference Mismatch” 这条 train/inference mismatch 研究线。
-- DAPO 文档列出 Yuxuan Tong 与 Guangming Sheng 作为开源实现和实验运行贡献者；Guangming Sheng 同时是 [2409.19256](/papers/2409.19256-hybridflow-rlhf-framework/) 的作者之一，连接 HybridFlow/VERL 原始系统论文与当前 recipe 化工程实践。
-- 与已存档材料的关系：该技术笔记把 [2409.19256](/papers/2409.19256-hybridflow-rlhf-framework/) 的 RLHF dataflow 框架、[2503.14476](/papers/2503.14476-dapo-long-cot-rl-system/) 的 DAPO recipe、[2605.14220](/papers/2605.14220-training-inference-mismatch-llm-rl/) 的 train-inference mismatch、[2511.14617](/papers/2511.14617-seer-online-context-learning-llm-rl/) 的 synchronous rollout 优化，以及 [2602.15763](/papers/2602.15763-glm-5-agentic-engineering/) 的 asynchronous agentic RL 系统串成一条工程演化线。
+- verl 由社区 contributor 共同维护，单个 release、文档页和实现模块的责任人不同；本笔记以项目版本为分析单位，不把模块贡献者合并成一份论文作者表。
+- [Xibin Wu](/authors/xibin-wu/): ByteDance、ByteDance Seed。
+- [Guangming Sheng](/authors/guangming-sheng/): The University of Hong Kong、ByteDance Seed。
+- [Haibin Lin](/authors/haibin-lin/): ByteDance Seed。
+- [Yuxuan Tong](/authors/yuxuan-tong/): Tsinghua University、ByteDance Seed。
+- [Yingru Li](/authors/yingru-li/): xAI、The Chinese University of Hong Kong、ByteDance。
+
+关系说明：Xibin Wu 发布 v0.8.0，并持续参与 HybridFlow、verl 与 Laminar；Guangming Sheng 是 HybridFlow 第一作者，并参与 DAPO 基础设施与 Laminar；Haibin Lin 跨 HybridFlow、DAPO、MegaScale 与 Laminar；Yuxuan Tong 连接 DAPO、OTB、TRM 与 verl 工程线；Yingru Li 维护 rollout correction 页面，其研究连接 train-inference mismatch、OTB、TRM 与三策略修正接口。
+- one-step-off 与 legacy fully async 文档标注 `meituan-search` 团队，形成同一条资源解耦、partial rollout 和 checkpoint engine 工程线；OPD 页面由 Jacob Helwig 维护，v0.8.0 将该模块扩展到多训练后端、多个教师和 fully async trainer。
+- 跨机构桥接主要由 ByteDance Seed 发起的 HybridFlow/verl 主线与 Meituan Search、Ascend TransferQueue、外部推理后端及社区算法贡献者共同完成。
 
 ## 一句话结论
 
-verl 当前 RL 优化已经形成两层结构：PPO/GRPO/DAPO/OPO/GPG/DPPO/OTB 等算法模块负责控制梯度信号、优势估计和 trust region，one-step-off、fully async、async on-policy distill、TransferQueue、MTP 等系统模块负责把 rollout、teacher query、logprob、actor update 和参数同步重叠起来；两层之间的共同边界变量是 `rollout_log_probs`、`old_log_probs`、当前 `log_prob`、staleness 和 rollout correction。
+verl 当前 main 正把 `sync`、`colocate_async` 与 `separate_async` 收敛到同一套 V1 trainer 数据面：AgentLoop 异步写入轨迹字段，TransferQueue 保存状态与 tensor，ReplayBuffer 按样本年龄取样或淘汰，checkpoint engine 同步权重，rollout/old/current logprob 与版本跨度指标共同约束异步 RL 的训练语义。
+
+本地评价：这条统一数据面是当前最值得跟踪的核心信号。v0.8.0 只稳定交付了 TransferQueue sync trainer，fully async 与 TransferQueue 的统一仍列为后续工作；main `0.9.0.dev` 已出现完整 V1 路径，同时保留阈值命名与实现口径不一致、失败 group 处理未闭合、`separate_async` 强制 bypass correction 等开发期边界。
+
+## 阅读目标与判断边界
+
+本笔记关注：
+
+1. v0.8.0 稳定版已经交付哪些能力，2026-07-13 的 main 又新增了哪些开发中接口。
+2. AgentLoop、TransferQueue、ReplayBuffer、trainer 与 checkpoint engine 如何组成一条异步数据流。
+3. partial rollout 让一条轨迹跨越多个参数版本后，三种 logprob 和 freshness 指标分别承担什么作用。
+4. 官方性能数字支持哪些局部结论，以及 agent 工具环境、OPD、MTP 与核心 trainer 的边界。
+
+判断边界：
+
+- 本材料是 release、滚动文档与源码快照的组合；框架能力随 commit 变化，配置名不能脱离版本引用。
+- legacy `verl.experimental.fully_async_policy` 的实验对应独立 experimental 实现；main V1 trainer 需要单独完成端到端验证，两者共享设计动机，控制面和配置接口已有变化。
+- 性能结果主要来自官方文档和项目 W&B，缺少多 seed、误差条、独立复验与统一硬件基线。
+- 本笔记概括 PPO/GRPO/DAPO 等算法模块在系统中的位置；各算法的效果判断以其独立论文笔记为准。
+
+证据写法：
+
+- 项目事实：release note、文档、配置和源码直接给出的功能、默认值、实验数字与 TODO。
+- 维护者主张：项目对吞吐收益、可扩展性与稳定性的解释。
+- 本地分析：对版本边界、数据流语义、代码与注释差异、实验归因和外部有效性的判断。
+- 源码判断固定到 `30119a253087bff86c12d329d2d8dd43c589705f`，避免把后续 main 变化回填为当前事实。
 
 ## 论文脉络
 
-这篇技术笔记整理的材料是一组 verl 官方文档和 recipe。它们共同描述了 verl 从同步 PPO/GRPO 训练循环，逐步扩展到 long-CoT reasoning RL、异步 rollout、on-policy distillation、rollout correction 和样本级数据流系统的过程。
+### 1. 研究问题、背景和价值
 
-脉络可以分成三层：
+LLM RL 的一次更新同时调用 rollout engine、工具或环境、reward/verifier、reference/critic 和训练引擎。长 CoT 与 agentic workload 进一步加入长尾生成、异步工具等待、多轮状态和外部服务。同步 batch 需要等组内最慢轨迹完成，训练 GPU 与推理 GPU 因阶段边界产生空闲；扩大 rollout 并行度只能缓解平均吞吐，长尾仍会形成 barrier。
 
-1. 算法层：PPO 提供 clipped trust region；GRPO 用 group sampling 取代 critic；DAPO 为 long-CoT reasoning RL 增加 Clip-Higher、dynamic sampling、token-level loss 和 overlong reward shaping；OPO、GPG、OTB、DPPO 分别处理 baseline、简化 policy gradient、方差诊断和 divergence trust region。
-2. 分布层：rollout correction 把 `π_rollout`、`π_old`、`π_θ` 拆开，用 TIS、RS、bypass/decoupled mode 处理 rollout behavior policy 与 training anchor 之间的偏移。
-3. 系统层：one-step-off 做批次级 rollout/train 重叠；fully async 做样本级流式训练、staleness control 和 partial rollout；async on-policy distill 把 teacher top-k 查询纳入异步流水线；TransferQueue 与 MTP 分别处理样本数据面和 rollout 推理侧加速。
+异步化会引入另一组变量：样本由哪个参数版本生成、生成期间是否发生权重切换、trainer 消费时已经落后多少版本、行为策略概率由谁保存、组内轨迹是否完整。此时系统调度和策略梯度估计共享同一批状态，二者需要进入同一条可审计数据流。
 
-这条线的核心矛盾是：越接近严格 on-policy，训练语义越清晰，系统气泡越明显；越充分异步化，硬件利用率越高，logprob 归属、样本新鲜度和分布校正越重要。
+verl 的价值因此分成两层：算法层提供 advantage、policy loss、KL 与 rollout correction；执行层负责编排模型、轨迹、数据传输、资源与参数版本。当前 V1 演进的重点位于执行层，它试图让同步和异步模式共用 trainer 主循环与轨迹数据面。
+
+### 2. 已有解决方案与不足
+
+- HybridFlow 的 single-controller / multi-controller 抽象能够表达 PPO、GRPO 等多模型 dataflow，但大量 `DataProto` 经过中心 `RayPPOTrainer`，控制器同时承担编排与数据搬运。
+- colocate sync 让训练与 rollout 复用 GPU，部署简单；阶段切换、长尾等待和 KV 清理形成显著气泡。
+- one-step-off 把下一批 generation 与当前 batch update 重叠，样本通常落后一个权重版本；批次级 barrier 和长尾仍然存在。
+- legacy fully async 把 rollouter、MessageQueue、trainer、ParameterSynchronizer 分开，并加入 `staleness_threshold` 与 `partial_rollout`；它位于 `experimental` 路径，数据面和新 trainer 尚未统一。
+- TransferQueue 先解决中心控制器的数据搬运问题。v0.8.0 将它接入 sync trainer，release 当时明确把 fully async integration 留到下一版本。
+- rollout correction 文档给出行为、proximal 与 current 三策略框架；系统仍需把对应 logprob、参数版本和 trajectory mask 随样本可靠传递。
+
+这些路径分别解决局部瓶颈。V1 的目标是让 AgentLoop 生产轨迹、TransferQueue 传递字段、ReplayBuffer 决定样本、trainer 执行目标、checkpoint engine 更新推理服务，共用一份状态语义。
+
+### 3. 作者可能的思考路径
+
+以下为基于版本演进的本地重建：
+
+1. 先用 HybridFlow 把 RLHF 表达成可组合 dataflow，并支持 FSDP、Megatron 与不同 rollout engine。
+2. 从 long-CoT 训练日志中识别 generation 长尾与阶段等待，先实现 one-step-off，再用独立 rollouter 和流式样本推进 fully async。
+3. 观察中心 trainer 传递全部 tensor 的扩展性问题，引入 TransferQueue，把状态元数据和实际数据存储分开。
+4. 把 AgentLoop 收敛为“非阻塞接收 prompt、完成后写轨迹”的契约，把采样策略收敛为可替换 ReplayBuffer。
+5. 让 `sync`、`colocate_async`、`separate_async` 只通过 hooks、资源布局和 checkpoint 行为改变执行方式，复用 reward、logprob、advantage 与 update 主循环。
+6. 为 partial rollout 增加参数版本区间，为 replay 增加 freshness 阈值，为 rollout mismatch 增加三策略修正和诊断指标。
+
+### 4. 核心假设或切入点
+
+V1 数据面依赖四个假设：
+
+1. **轨迹字段可物化**：prompt、response、mask、rollout logprob、reward 和版本标签可以在生产者与消费者之间独立存取。
+2. **执行模式可局部化**：同步和异步的主要差异可以封装在采样时机、资源切换与权重同步 hooks 中，trainer 的 RL 计算顺序保持一致。
+3. **陈旧性可观测**：prompt 派发 step、轨迹使用的最早/最晚权重版本和 trainer 当前 step 足以构造可操作的 freshness 指标。
+4. **分布偏移可控制**：保存逐 token 行为 logprob，并配合淘汰、importance sampling、rejection sampling 或 bypass PPO，可以把异步偏移限制在可训练范围。
+
+第四个假设具有 workload 依赖性。长轨迹上的 ratio 连乘会提高方差，截断会引入偏差；工具环境还会改变状态转移和轨迹长度。因此 freshness threshold 与 correction 需要通过训练质量、ESS、ratio 和长度分布共同校准。
+
+### 5. 方法 / 系统 / 理论框架
+
+#### 5.1 两个版本快照必须分开
+
+| 能力 | v0.8.0 stable，2026-06-01 | main `0.9.0.dev`，2026-07-13 | 判断 |
+| --- | --- | --- | --- |
+| 入口与 trainer | release 推荐新的 TransferQueue sync trainer，并弃用当时的 `main_ppo.py` | `main_ppo.py` 已变成 V1/V0 开关，默认 `trainer.use_v1: true`；`main_ppo_v0.py` 计划在 v0.9.0 移除 | 入口在连续重构，命令必须绑定版本 |
+| TransferQueue | 正式接入 sync trainer；fully async integration 标为下一 release 计划 | V1 三种 trainer mode 均初始化 TransferQueue 与 ReplayBuffer | 统一数据面属于 main 开发态能力 |
+| fully async | 独立 experimental trainer 已可运行，并有 DAPO、GRPO、tool-use 实验 | `separate_async` 进入 V1 registry，共用 trainer base | legacy 实验支持方向，尚未直接验证 V1 实现 |
+| OPD | FSDP、Megatron、VeOmni；文本/多模态；单/多教师；sync/fully async；reverse KL 与 forward top-k KL | 继续作为 trainer pipeline 的可选 dense teacher signal | 早期 async OPD recipe 已无法代表完整支持面 |
+| agent 接入 | uni-agent、function tool、按样本路由工具环境 | AgentLoopManager 可整体替换；black-box gateway 通过 uni-agent 接入 | trainer 定义轨迹契约，环境实现由外部模块承担 |
+
+证据定位：v0.8.0 [release highlights](https://github.com/verl-project/verl/releases/tag/v0.8.0)；main [`main_ppo.py`](https://github.com/verl-project/verl/blob/30119a253087bff86c12d329d2d8dd43c589705f/verl/trainer/main_ppo.py) 与 [`ppo_trainer.yaml`](https://github.com/verl-project/verl/blob/30119a253087bff86c12d329d2d8dd43c589705f/verl/trainer/config/ppo_trainer.yaml)。
+
+#### 5.2 V1 的统一数据流
+
+V1 的主路径可以直观写成：
+
+```text
+Dataset / prompts
+    -> AgentLoopManager.generate_sequences(...)
+    -> AgentLoop workers + LLM/tool/reward services
+    -> TransferQueue: trajectory fields + status/version tags
+    -> ReplayBuffer.sample(...)
+    -> reward -> old/ref logprob -> values -> advantage
+    -> critic update -> actor update
+    -> CheckpointEngine.update_weights(global_step)
+    -> rollout replicas
+```
+
+`AgentLoopManager` 的替换契约只有两个核心条件：`generate_sequences` 对实际 rollout 保持非阻塞，轨迹完成后把 `prompt_ids`、`response_ids`、`response_mask` 等字段写入 TransferQueue。默认 `AgentLoopManagerTQ` 将一个 prompt 的 `rollout.n` 条 session 分配给 workers；同一 agent loop 还可以输出多条 trajectory，以 `{uid}_{session_id}_{index}` 作为 key。
+
+TransferQueue 把轻量 tag 与 TensorDict value 分开。tag 记录 `status`、序列长度和参数版本，value 保存 token、mask、logprob、reward 及数据集字段。ReplayBuffer 先读取 tag 决定哪些 prompt group 可消费，再按 key 获取训练所需字段。trainer 完成 update 后清理已消费 key，并通过 checkpoint engine 向 rollout replicas 同步新权重。
+
+这条路径缩小了中心 controller 的职责：controller 触发工作和观察元数据，tensor 由可插拔 storage backend 承载。默认 SimpleStorage 位于 CPU memory；Yuanrong 与 MooncakeStore 在文档中标为 beta，RayRDT 标为 alpha，生产选择仍需结合传输、容错和部署成熟度。
+
+证据定位：main [`agent_loop_tq.py`](https://github.com/verl-project/verl/blob/30119a253087bff86c12d329d2d8dd43c589705f/verl/trainer/ppo/v1/agent_loop_tq.py)、[`replay_buffer.py`](https://github.com/verl-project/verl/blob/30119a253087bff86c12d329d2d8dd43c589705f/verl/trainer/ppo/v1/replay_buffer.py)、[`trainer_base.py`](https://github.com/verl-project/verl/blob/30119a253087bff86c12d329d2d8dd43c589705f/verl/trainer/ppo/v1/trainer_base.py)；[extension guide](https://verl.readthedocs.io/en/latest/extend_guide.html)；[TransferQueue docs](https://verl.readthedocs.io/en/latest/data/transfer_queue.html)。
+
+#### 5.3 三种 trainer mode 改变资源与时间关系
+
+| V1 mode | 资源关系 | rollout 行为 | 权重与数据行为 | 当前边界 |
+| --- | --- | --- | --- | --- |
+| `sync` | trainer 与 rollout colocate | partial rollout 关闭 | 每步后同步权重；采样后 rollout replicas sleep 并丢弃 weights/KV | 语义最清楚，阶段气泡保留 |
+| `colocate_async` | trainer 与 rollout colocate | FullyAsync client；默认预热一批；允许中断后续生成 | 采样结束时 abort/sleep，step 结束后同步并 resume | 共享 GPU 需要在 rollout/train 阶段切换，重叠空间受资源复用限制 |
+| `separate_async` | standalone rollout 与 trainer 分离 | partial rollout；rollout 在 trainer update 时继续生产 | 默认每 4 个 local update 同步；要求非 naive checkpoint backend | 当前强制 `bypass_mode=True`；独立 reward-model pool；动态把闲置 trainer 切回 rollout 的策略仍是 TODO |
+
+三种 mode 继承同一 `PPOTrainer`，通过 `on_train_begin`、`on_sample_begin/end`、`on_step_end` 等 hooks 改变 server 状态和权重同步。这个结构使算法模块能够复用，也让模式差异更容易通过 timing、queue 和 staleness 指标比较。
+
+`separate_async` 还有两个明确约束：`train_batch_size = parameter_sync_step * ppo_mini_batch_size`；checkpoint engine backend 需要使用 NCCL、NIXL、Mooncake 等实现。源码注释写有“trainer 空闲时可切换到 rollout”，当前 `should_switch_to_rollout()` 固定返回 `False`，因此这项动态复用仍处于设计位。
+
+证据定位：main [`trainer_sync.py`](https://github.com/verl-project/verl/blob/30119a253087bff86c12d329d2d8dd43c589705f/verl/trainer/ppo/v1/trainer_sync.py)、[`trainer_colocate_async.py`](https://github.com/verl-project/verl/blob/30119a253087bff86c12d329d2d8dd43c589705f/verl/trainer/ppo/v1/trainer_colocate_async.py)、[`trainer_separate_async.py`](https://github.com/verl-project/verl/blob/30119a253087bff86c12d329d2d8dd43c589705f/verl/trainer/ppo/v1/trainer_separate_async.py)。
+
+#### 5.4 三种 logprob 对应两段分布漂移
+
+rollout correction 将策略分成：
+
+$$
+\pi_{\text{rollout}},\qquad \pi_{\text{old}},\qquad \pi_\theta.
+$$
+
+- $\pi_{\text{rollout}}$ 是实际生成 token 的行为策略。
+- $\pi_{\text{old}}$ 是当前 PPO batch 的 proximal anchor，在同一批 mini-batch updates 中保持固定。
+- $\pi_\theta$ 是正在更新的 actor。
+
+Decoupled mode 分别处理两段漂移：
+
+$$
+\rho_t=\frac{\pi_{\text{old}}(a_t\mid s_t)}{\pi_{\text{rollout}}(a_t\mid s_t)},
+\qquad
+r_t(\theta)=\frac{\pi_\theta(a_t\mid s_t)}{\pi_{\text{old}}(a_t\mid s_t)}.
+$$
+
+$\rho_t$ 用于行为策略到 proximal policy 的 importance correction，$r_t$ 用于 PPO clipping。Bypass mode 令 $\pi_{\text{old}}=\pi_{\text{rollout}}$，直接把 rollout logprob 作为 old logprob，省去 trainer 的一次重算；它保留当前策略相对行为策略的 PPO ratio，同时失去独立 proximal anchor。
+
+importance sampling 的粒度决定偏差与方差。完整 sequence ratio 在截断前具有标准 IS 语义，长 horizon 上乘积方差很高；截断后引入偏差。token-level truncated IS 控制方差，文档推导的 bias bound 随 horizon 增长，可写成 $O(T^2\Delta_{\max})$ 量级。系统吞吐因此需要与 IS weight、ESS、rejection fraction、KL/K3 和任务质量一起观察。
+
+main V1 的 `separate_async` 在构造时直接把 `algorithm.rollout_correction.bypass_mode` 设为 `True`，并留下 Decoupled PPO TODO。这一实现状态说明当前 V1 独立异步路径已经传递行为 logprob，完整三策略 correction 仍待接通。
+
+证据定位：[rollout correction](https://verl.readthedocs.io/en/latest/algo/rollout_corr.html) 与 [mathematical derivation](https://verl.readthedocs.io/en/latest/algo/rollout_corr_math.html)；main `trainer_base.py::_compute_old_log_prob` 和 `trainer_separate_async.py::__init__`。
+
+#### 5.5 partial rollout 让一条轨迹成为版本混合物
+
+`FullyAsyncLLMServerClient` 在权重切换时可以中断 generation，保留已生成 token，再用新权重继续请求。它为每条轨迹记录：
+
+- `global_steps`：prompt 从 dataloader 派发时的版本标签。
+- `min_global_steps`：该轨迹开始生成时使用的最早权重版本。
+- `max_global_steps`：该轨迹结束生成时使用的最新权重版本。
+
+由此得到：
+
+$$
+\text{span}=g_{\max}-g_{\min}+1,
+$$
+
+$$
+\text{fresh-lag}=(g_{\text{train}}-1)-g_{\max},\qquad
+\text{worst-lag}=(g_{\text{train}}-1)-g_{\min}.
+$$
+
+`span=1` 表示整条轨迹由同一权重版本生成；`span>1` 表示 token 分段来自不同 checkpoint。更精确的行为策略记号应写为 $\mu_{v(t)}$，每个 token 的 rollout logprob 为：
+
+$$
+\log \mu_{v(t)}(a_t\mid s_t).
+$$
+
+只要每个 token 保存其真实生成概率，token-level correction 仍有明确输入；把整条轨迹简写成单一 $\pi_{\text{rollout}}$ 时需要记住这层版本混合。sequence-level ratio、trajectory reward 和多轮工具状态会进一步放大 horizon 与版本切换的影响。
+
+证据定位：main [`llm_server.py`](https://github.com/verl-project/verl/blob/30119a253087bff86c12d329d2d8dd43c589705f/verl/workers/rollout/llm_server.py) 中 `FullyAsyncLLMServerClient.generate`；`agent_loop_tq.py` 的版本 tags；`trainer_base.py` 的 off-policy metrics。
+
+#### 5.6 `max_off_policy_threshold` 的注释与当前实现口径不同
+
+配置把 `max_off_policy_threshold` 描述为“一条 trajectory 最多跨越多少个模型版本”，默认值为 8。当前 ReplayBuffer 的 `wait` 与 `drop` 条件实际使用：
+
+$$
+\text{age}=g_{\text{train}}-g_{\text{prompt}}+1.
+$$
+
+这里的 $g_{\text{prompt}}$ 来自 prompt 派发时保存的 `global_steps`。因此该阈值在当前 commit 中约束的是从 prompt 派发到 trainer 消费的样本年龄；真实 trajectory span 由 `max_global_steps - min_global_steps + 1` 单独记录和上报，尚未进入这段淘汰判断。
+
+这一区别会影响长工具任务：队列等待、环境执行和生成中断都会增加 age；一条始终使用单一旧 checkpoint 的轨迹可能 age 很高而 span 为 1，一条很快完成但跨过一次权重同步的轨迹可能 age 较低而 span 为 2。生产配置应同时观察 age、span、fresh-lag 与 worst-lag，并明确 threshold 想控制哪一种风险。
+
+ReplayBuffer 还有两个开发期 TODO：`failure` 状态的 prompt group 当前进入可采样集合，源码仍在询问是否过滤失败 session；drop path 也未决定当一个 session 超阈值时是否删除整个 GRPO group。两处都会影响组内样本数、advantage 统计和有效 batch，需要在大规模 GRPO 前复验。
+
+证据定位：main `ppo_trainer.yaml` 的 sampler 配置；`replay_buffer.py::_has_enough_samples`、`_drop_max_off_policy_samples` 与 `sample`。
+
+#### 5.7 工具环境、OPD 与 MTP 位于数据面两侧
+
+工具调用由 AgentLoop 承担。官方 extension guide 支持无状态 function tool 和继承 `BaseTool` 的有状态工具，也允许整体替换 AgentLoopManager。legacy fully async 的 multi-turn 实验通过 `sandbox_fusion_tool_config.yaml` 连接 Sandbox Fusion。这个配置说明 sandbox 是可插拔工具后端；trainer 只接收 token、mask、reward 和轨迹元数据，不负责定义容器生命周期、网络权限或动态网页状态。
+
+对 Claude Code、Codex、Trae 等 black-box agent，uni-agent gateway 提供兼容 message API、token-in-token-out、prefix-based trajectory tracking 和 session management。它把外部 agent runtime 转换为 V1 可消费的轨迹契约，环境隔离、认证和副作用控制仍由 gateway 与工具服务负责。
+
+OPD 位于 reward signal 一侧。学生在自身 state distribution 上 rollout，教师返回 token-level knowledge；v0.8.0 已支持 reverse KL、forward top-k KL、多教师路由、文本/多模态和 sync/fully async。它复用 rollout、teacher server、TransferQueue 与 trainer pipeline，优化目标从稀疏 reward 扩展到 dense teacher signal。
+
+MTP 位于 rollout engine 一侧。它可以提供 speculative tokens，也会引入 draft、verify 和调度开销。官方 H20 示例中 acceptance rate 提高约 14%，mimo-7B + SGLang 的 rollout throughput 反而下降约 50%，说明 acceptance rate 只能作为中间指标，最终判断需要 tokens/s、step time 和端到端训练时间。
+
+#### 5.8 算法模块通过同一执行底座组合
+
+| 层 | 代表模块 | 核心状态 | 与 V1 数据面的关系 |
+| --- | --- | --- | --- |
+| advantage / objective | PPO、GRPO、DAPO、OPO、GPG、OTB、DPPO | reward、values、advantage、mask、loss aggregation | ReplayBuffer 产出的完整 group 和 mask 决定统计语义 |
+| rollout correction | bypass、decoupled、TIS、rejection sampling | rollout/old/current logprob、IS weight、ESS | 依赖轨迹携带真实行为概率和版本信息 |
+| dense teacher signal | OPD、multi-teacher OPD | teacher logprob、routing key、KL loss | teacher service 与 rollout 并行，字段写入同一数据流 |
+| inference acceleration | MTP、不同 rollout engine、checkpoint backend | acceptance、KV、weight version、sync time | 改变样本生产速度和 train-inference mismatch |
+
+这一分层有助于实验归因。算法 loss、采样 freshness、推理后端和资源布局可以独立变化；报告时需要逐项固定或记录，端到端收益才有可解释基线。
+
+### 6. 结论链条
+
+1. agentic RL 的瓶颈来自多阶段 dataflow、长尾轨迹和外部环境，单纯优化 policy loss 无法消除执行气泡。
+2. v0.8.0 已用 TransferQueue 将 sync trainer 的控制流与 tensor 数据流分开，legacy fully async 已验证独立 rollouter、partial rollout 与 checkpoint sync 的吞吐潜力。
+3. main V1 进一步让三种 trainer mode 共用 AgentLoop、TransferQueue、ReplayBuffer 和 trainer base，统一数据面成为当前核心架构变化。
+4. partial rollout 允许一条轨迹跨参数版本，rollout logprob、版本 span 与 staleness 指标成为训练语义的一部分。
+5. 当前源码仍有版本口径、失败 group、group-level drop 和 decoupled correction 等未闭合项，开发分支能力应按 commit 试验后再进入生产结论。
+6. 工具 backend、OPD 与 MTP 均可接入同一执行底座；它们分别改变环境交互、训练信号和样本生产速度，需要单独核算正确性与吞吐。
 
 ## 关键实验/定理
 
-- one-step-off 文档报告，DAPO 32B 训练中 rollout 阶段约占总时间 70%；在 Qwen2.5-Math-7B + DAPO 示例中，FSDP2 路径总时间从 `19h18m` 降到 `15h34m`，Megatron 路径从 `18h21m` 降到 `13h06m`。
-- fully async 文档报告，Qwen2.5-Math-7B + DAPO 在 32/64/128 卡设置下获得约 2 倍级别收益；128 卡 fully async + staleness + partial rollout 的 400 步总时间从 `1 天 16 小时 48 分` 降到 `17 小时 22 分`。Qwen3-30B-A3B + GRPO 设置报告约 `1.72x` 端到端收益。
-- rollout correction 的关键公式是三策略分解：`π_rollout` 负责数据收集，`π_old` 负责 PPO anchor，`π_θ` 是当前更新策略。TIS 使用 $\rho_t=\pi_{\text{old}}(a_t\mid s_t)/\pi_{\text{rollout}}(a_t\mid s_t)$ 修正行为策略偏移，PPO/GRPO 使用 $r_t(\theta)=\pi_\theta(a_t\mid s_t)/\pi_{\text{old}}(a_t\mid s_t)$ 控制策略更新漂移。
-- async on-policy distill 的关键目标是 teacher top-k 支持上的 token-level sparse KL，系统证据来自 one-step-off / two-step-off scheduler 对 rollout、teacher retrieval、actor update 和 weight sync 的重叠。
-- TransferQueue 文档报告其与 verl 集成已在 DAPO 64 节点 1024 卡规模测试，用于优化主机内存利用和数据传输。
-- MTP 文档报告 rollout 接受率可提升约 14%，但在 H20 设置下整体吞吐可能无提升甚至下降，说明 speculative decoding 收益受硬件、模型大小和实现开销共同限制。
-
-## 主线：on-policy 正确性与吞吐之间的张力
-
-LLM RL 的基础循环很直观：当前 actor 生成 response，reward 或 verifier 打分，reference 或 critic 提供额外信号，trainer 根据 logprob 和 advantage 更新 actor。同步实现最容易推理，因为每一批训练样本都来自最新策略，`rollout`、`old policy` 和当前更新的策略之间关系清晰。
-
-这个同步循环在长输出 reasoning RL 里很快遇到系统瓶颈。rollout 会占据大量 wall-clock 时间，输出长度有长尾，某些 prompt 会生成很久，GPU 在等待最慢 response 时产生空闲。DAPO 32B 的 one-step-off 文档把这个问题说得很直接：rollout 阶段约占总时间的 70%，继续增加资源也无法直接缩短长尾生成持续时间。fully async 文档进一步把问题抽象成 rollout 与 train 的资源隔离、流式消费和参数新鲜度控制。
-
-因此，verl 当前优化路线可以按一个问题理解：怎样在不破坏训练目标可解释性的前提下，让 rollout、logprob、reward/teacher、actor update 和参数同步同时工作。
-
-这个问题有两个层面。算法层决定每个 token 或每条 response 的梯度如何计算，系统层决定样本以什么参数版本生成、何时进入训练、是否允许陈旧、怎样修正分布偏移。
-
-## 算法层：从 PPO 到 DAPO、OPO、GPG、DPPO
-
-PPO 是 verl 的基础接口形态。它保留 actor-critic、GAE、clipped surrogate objective 和 KL 控制。核心比率是：
-
-$$
-r_t(\theta)=\frac{\pi_\theta(a_t\mid s_t)}{\pi_{\text{old}}(a_t\mid s_t)}
-$$
-
-典型 clipped loss 用 `clip_ratio` 限制策略更新幅度。verl 文档里还支持 KL reward penalty、actor KL loss、双裁剪 PPO 等扩展。PPO 的优点是稳定、成熟、易诊断；代价是 critic 训练和 value estimation 会增加模型、显存和系统复杂度。
-
-GRPO 去掉 critic，依赖同一 prompt 的多条采样 response 做组内相对优势估计。它需要 `rollout.n > 1`，把一个 prompt 扩成多个候选，然后用组内 reward 统计量构造 advantage。GRPO 在 reasoning RL 中很常见，因为 verifier reward 往往是序列级结果，组内比较能替代 critic 的一部分功能。它也把系统压力转移到了 rollout：同一 prompt 要生成多条 response，长尾和 group-level scheduling 会更加明显，这正是 Seer、fully async、DAPO dynamic sampling 关心的地方。
-
-DAPO 是当前 verl recipe 里最重要的 reasoning RL 组合之一。它在 GRPO 类训练循环上增加四个关键动作：
-
-1. `clip_ratio_low` 和 `clip_ratio_high` 解耦，上界通常设得更高，例如 `0.28`，允许正向改进样本获得更大更新空间。
-2. dynamic sampling with group filtering 会过滤掉组内全对或全错的 prompt，只保留能提供学习信号的组。
-3. `loss_agg_mode="token-mean"` 把策略梯度损失按 token 聚合，避免长 response 在序列级聚合里被弱化。
-4. overlong reward shaping 对接近最大长度的 response 加线性惩罚，减少模型靠无限延长 CoT 占用上下文。
-
-DAPO 的 clipping 代码形态是：
-
-$$
-\ell_1=-A_t r_t,\quad
-\ell_2=-A_t\,\mathrm{clip}(r_t,1-\epsilon_{\text{low}},1+\epsilon_{\text{high}})
-$$
-
-$$
-\ell=\max(\ell_1,\ell_2)
-$$
-
-这个设计和我们之前讨论的 DAPO / GRPO 争议直接相关：dynamic sampling 会改变训练数据分布，token-level loss 会改变长 response 的梯度权重，overlong shaping 会改变模型对长度的偏好。它们提升效果时，需要同时追踪 pass@k、response length、有效组比例、clip fraction 和 reward distribution。
-
-OPO 的切入点是 baseline。它同样使用 group sampling，但把组内长度加权 reward 作为理论最优 reward baseline，并强调 exact on-policy 训练。配置上要求 `ppo_mini_batch_size` 等于 `train_batch_size`，并关闭 entropy 与 KL regularization。OPO 的价值在于减少策略变化和熵崩溃，适合对 on-policy 约束更敏感的实验。
-
-GPG 更激进。它保留组策略梯度，省去 critic、reference model 和 KL penalty，直接优化 RL objective。文档中把它定位为简单且高效的 reasoning baseline。工程上它降低了 reference/critic 计算成本，但稳定性更多依赖优势函数和数据分布本身。
-
-OTB 处理的是 token-level baseline 和梯度方差诊断。它通过 logit-gradient proxy 近似梯度平方范数，在低额外成本下输出 `signal_strength`、`total_power`、`pure_noise` 等指标。对长 CoT RL 来说，这类指标比只看 reward 更接近“更新是否有效”。
-
-DPPO 试图把 trust region 从 PPO 的概率比率启发式推进到策略散度近似，例如 Binary-KL 或 Binary-TV。文档的实验说明它希望在控制 train-inference mismatch 的同时提高稳定性。它和 rollout correction、TIM/VeXact 的关系很紧：都把“训练看到的策略分布”和“生成样本的行为策略分布”当成核心问题。
-
-可以用一张表概括算法层：
-
-| 模块 | 主要优化对象 | 关键变量 | 典型收益 | 主要代价 |
-| --- | --- | --- | --- | --- |
-| PPO | 稳定策略更新 | $r_t(\theta)$、GAE、KL、clip | 稳定、成熟、可诊断 | critic 与 reference 成本高 |
-| GRPO | critic-free group advantage | `rollout.n`、group reward mean/std | 适合 verifier reward | rollout 成本和长尾更明显 |
-| DAPO | long-CoT reasoning RL recipe | clip higher、dynamic sampling、token-mean、overlong shaping | AIME 类任务效果强 | 数据分布和长度偏好被 recipe 改写 |
-| OPO | exact on-policy baseline | 长度加权 reward baseline | 降低策略波动和熵崩溃 | 对 batch 与 on-policy 约束更严格 |
-| GPG | 极简 policy gradient | 修正 advantage、无 critic/reference | 系统成本低 | 稳定性更依赖 reward 和采样质量 |
-| OTB | token-level 方差控制 | gradient variance proxy、token baseline | 看见梯度噪声结构 | 需要额外 logit/proxy 统计 |
-| DPPO | divergence-based trust region | Binary-KL / Binary-TV mask | 控制 mismatch 与更新范围 | 实现和调参更复杂 |
-
-## logprob 层：三个策略必须分清
-
-异步 RL 最容易出错的地方是把几种 logprob 混在一起。verl 的 rollout correction 文档把它拆成三种策略：
-
-$$
-\pi_{\text{rollout}},\quad \pi_{\text{old}},\quad \pi_\theta
-$$
-
-其中 `π_rollout` 是真正生成样本的行为策略，`π_old` 是 PPO/GRPO 更新开始时的 anchor，`π_θ` 是 actor update 过程中正在变化的当前策略。
-
-两类分布漂移对应两种比率：
-
-$$
-\rho_t=\frac{\pi_{\text{old}}(a_t\mid s_t)}{\pi_{\text{rollout}}(a_t\mid s_t)}
-$$
-
-$$
-r_t(\theta)=\frac{\pi_\theta(a_t\mid s_t)}{\pi_{\text{old}}(a_t\mid s_t)}
-$$
-
-`ρ_t` 修正 rollout policy 到 old policy 的差距，`r_t` 是 PPO/GRPO 当前更新本身的比率。同步训练且 rollout engine 与 trainer engine 完全一致时，`π_rollout` 和 `π_old` 可以近似相等。异步训练、不同后端、不同精度、FP8 rollout、vLLM/SGLang 与 Megatron/FSDP 之间的数值差异都会让这个近似变弱。
-
-verl 的 rollout correction 提供三种常见路径：
-
-1. decoupled mode：保留三策略。rollout 端产出 `rollout_log_probs`，trainer 更新前重新计算 `old_log_probs`，再用 `old_log_probs - rollout_log_probs` 生成 truncated importance sampling 权重。
-2. bypass mode：把 `old_log_probs` 设为 `rollout_log_probs`，直接把实际行为策略当作 PPO anchor。fully async 默认更偏向这个路径，因为 old logprob 与 token 必须对应生成时的参数版本。
-3. bypass + policy gradient：在部分设置下使用 `π_θ / π_rollout` 的 IS 或 RS correction，配合无 PPO clip 的 policy gradient loss。
-
-这也是理解 fully async 的关键。训练端仍然会在 actor update 中计算当前 `log_prob`，因为梯度来自当前参数；问题在于 anchor 应该来自 trainer 重新打分，还是直接使用 rollout 端伴随样本保存的 `rollout_log_probs`。一旦样本来自旧参数，或 rollout backend 与 train backend 数值路径不同，保存 rollout logprob 就成为算法正确性的基础设施。
-
-## 系统层一：one-step-off 把 rollout 和 train 先重叠起来
-
-one-step-off 是最小侵入的异步化。它把 actor/trainer 与 rollouter 资源分开，在训练当前批次时异步生成下一批样本。流程大致是：
-
-1. driver 从 dataloader 取下一批 prompt。
-2. 同步 actor 权重到 rollout workers。
-3. rollout workers 异步生成下一批 response。
-4. trainer 等上一批 generation future 完成后，计算 reward、ref logprob、advantage，并更新 actor。
-
-这样每一步训练使用前一步生成的样本，参数保持单步离策略。文档强调它使用 NCCL 参数同步，常见延迟低于数百毫秒；在 Qwen2.5-Math-7B + DAPO 示例里，FSDP2 路径从 `19h18m` 降到 `15h34m`，Megatron 路径从 `18h21m` 降到 `13h06m`。
-
-one-step-off 的工程判断很清晰：如果 rollout 长尾已经让 trainer 大量等待，先把 generation 和 update 重叠；如果等待项 `wait_prev_gen` 仍然很高，再考虑调整 rollout 资源、停止条件和 response length 分布。
-
-它的边界也很清楚：只能重叠一轮，仍然要等上一批 generation 完成，长尾样本仍可能拖住下一步训练。
-
-## 系统层二：fully async 把样本变成流
-
-fully async 把 one-step-off 的批次级重叠推进到流式样本级。系统由四个角色组成：
-
-- Rollouter：逐样本生成 response，并把样本写入队列。
-- MessageQueue：缓存 rollout 产生的样本。
-- Trainer：从队列取到 `require_batches * ppo_mini_batch_size` 个样本后执行训练。
-- ParameterSynchronizer：按 `trigger_parameter_sync_step` 控制 trainer 与 rollouter 的参数同步。
-
-核心控制量有三个：
-
-1. `trigger_parameter_sync_step`：同步前 trainer 做多少次本地更新。越大越省同步开销，样本 freshness 越低。
-2. `staleness_threshold`：允许使用陈旧样本的最大比例。`0` 接近同步流式训练，`>0` 允许 rollouter 在 trainer 更新后继续提供旧样本。
-3. `partial_rollout`：参数同步时中断正在生成的样本，保存状态，更新参数后恢复，减少等待活跃长样本完成的时间。
-
-fully async 文档给出四种模式：
-
-| 模式 | 关键参数 | 语义 | 适合场景 |
-| --- | --- | --- | --- |
-| 在线策略管道 | `trigger_parameter_sync_step=1`, `staleness_threshold=0` | 最接近同步 on-policy | 小规模、稳定性优先 |
-| 流式离线策略管道 | `trigger_parameter_sync_step>1`, `staleness_threshold=0` | 一次产生更多样本，trainer 分批消费 | 对陈旧敏感但想减少气泡 |
-| 带陈旧样本的异步流管道 | `staleness_threshold>0`, `partial_rollout=False` | 同步后可立即消费旧样本 | 追求吞吐且可接受轻度 off-policy |
-| 带 partial rollout 的异步流管道 | `staleness_threshold>0`, `partial_rollout=True` | 中断并恢复长 rollout | 长尾明显的 long-CoT / tool-use |
-
-实验上，Qwen2.5-Math-7B + DAPO 在 32/64/128 卡上大约达到 2 倍级别收益；128 卡设置下，结合 streaming、staleness 和 partial rollout 后，400 步总时间从 `1 天 16 小时 48 分` 降到 `17 小时 22 分`。30B GRPO 设置也报告约 `1.72x` 端到端收益。文档也提醒，`staleness_threshold` 过大可能影响模型效果，建议小于 1。
-
-fully async 的算法代价集中在 logprob 与分布控制。文档明确要求 `actor_rollout_ref.actor.use_rollout_log_probs=True`，因为 old logprob 必须和生成 token 的参数版本绑定。默认 `algorithm.rollout_correction.bypass_mode=True` 使用 rollout logprob；当启用 decoupled correction 时，训练引擎还需要重新计算 logprob，对应 AReaL Decoupled PPO 类路线。
-
-## 系统层三：async on-policy distill 用 dense teacher signal 替代稀疏 reward
-
-async on-policy distill 面向另一个瓶颈：reward-based RL 的信号稀疏、高方差、reward engineering 成本高。它让学生 actor 用当前策略采样，然后向更强教师学习每个 token 位置的 top-k 分布。优化目标是 teacher top-k 支持上的 token-level sparse KL：
-
-$$
-\mathrm{KL}(P_{\text{teacher}}\|Q_{\text{student}})
-$$
-
-这个目标比序列级 reward 更密集，也更容易直接定位每个 token 的更新方向。系统上它有三个阶段：学生 rollout、教师 top-k logprob 查询、actor KL update。严格同步时这三个阶段互相等待，于是文档提供 one-step-off 和 two-step-off 调度器：
-
-- one-step-off：actor update 时做 rollout，teacher retrieval 时做权重同步。
-- two-step-off：teacher retrieval 时同时做 rollout 和 actor update，并交错权重同步。
-
-two-step-off 适合教师查询耗时明显高于权重同步的场景。监控指标也对应这条流水线：`wait_prev_gen`、`wait_prev_teacher`、`sync_rollout_weights`、`get_teacher_knowledge`、`actor/kl_loss`、`perf/mfu/actor`。
-
-它和 RL 的关系可以这样理解：on-policy distillation 仍然关心学生当前 state distribution，因此它保留了 on-policy 的一部分优势；训练信号来自教师分布，减少了 verifier/reward 稀疏性。代价是需要可扩展教师服务，教师吞吐会变成新的系统瓶颈。
-
-## 数据面：TransferQueue 让异步样本流不再全压在 controller 上
-
-fully async 和 distill 都需要让样本在多个计算任务之间流动。传统 `DataProto` 全部经过 `RayPPOTrainer`，单 controller 会成为数据搬运瓶颈。TransferQueue 的设计把元数据和实际 tensor 数据分开：
-
-- control plane 记录每个样本的生产状态和消费状态。
-- data plane 使用分布式 storage backend 保存 TensorDict。
-- consumer 先拿 `BatchMeta`，再从存储后端取实际数据。
-
-这个设计支持样本级调度、不同任务独立消费同一数据字段、可插拔存储后端以及自定义 sampler。文档提到 TransferQueue x verl 已在 DAPO 64 节点 1024 卡规模测试，用于优化主机内存利用和数据传输。对 fully async 来说，它是从“单控制器驱动批次”走向“样本级数据网关”的关键。
-
-## 推理侧加速：MTP 需要看硬件和模型形态
-
-MTP 在 verl 文档里既可用于训练，也可用于 rollout speculative decoding。配置上可以只加载 MTP 参数、训练 MTP 参数，或在 rollout 中通过 vLLM/SGLang 开启推测解码。
-
-这里的工程结论很实际：启用 MTP 可以提高接受率，但在 H20 上整体 rollout 吞吐未必提升，甚至可能下降。文档给出的建议是当前推理阶段优先谨慎开启 MTP，尤其要看模型大小、GPU Tensor Core 性能和推测解码实现开销。
-
-这点和 Seer 的 grouped speculative decoding 形成对照。MTP 是模型结构层的 draft 能力，Seer 用同 prompt group 的 token pattern 生成 grouped draft；二者都服务 rollout 加速，但收益受 batch、硬件、接受率和调度结构共同限制。
-
-## 选择路线时看四个问题
-
-第一，看训练是否必须严格 on-policy。若目标是复现实验或诊断算法，优先选择同步 GRPO/DAPO/OPO，并保守使用 rollout correction。若目标是长时间大规模训练，允许轻度 off-policy，fully async 的 `staleness_threshold` 和 `partial_rollout` 更有价值。
-
-第二，看瓶颈在 rollout、teacher、logprob 还是 update。`wait_prev_gen` 高说明 rollout 侧或长尾是主因；`wait_prev_teacher` 高说明教师服务是瓶颈；`sync_rollout_weights` 高说明参数同步或网络需要优化；actor MFU 低且 rollouter idle 低说明数据流或 trainer 资源可能失衡。
-
-第三，看 reward 信号是否足够密集。数学 verifier reward 适合 GRPO/DAPO；如果存在更强教师且需要低方差 token-level guidance，async on-policy distill 更直接。
-
-第四，看 mismatch 指标。需要记录 `rollout_log_probs`、当前训练 logprob、KL、K3、chi2 token/sequence、IS effective sample size、RS masked fraction。若这些指标异常，吞吐提升可能只是把错误样本更快送进 update。
-
-## 跨论文关系
-
-- [2020-03-07 Schulman KL approximation](/papers/2020-03-07-schulman-kl-divergence-approximations/) 提供 `K3` 指标的数学来源：$k_3=(r-1)-\log r$ 是无偏、非负、低方差 KL value estimator。verl 中记录 KL/K3/chi2 时，应继续区分 drift 诊断值、KL reward penalty 和可微 KL loss。
-- [2409.19256](/papers/2409.19256-hybridflow-rlhf-framework/) 提供 verl 的原始系统抽象：RLHF 被看作多模型 dataflow，single-controller 编排模型间流程，multi-controller 处理模型内分布式执行。当前 one-step-off、fully async、TransferQueue 是这条系统线在 post-training workloads 上继续扩展。
-- [2503.14476](/papers/2503.14476-dapo-long-cot-rl-system/) 是 DAPO recipe 的论文背景。verl 当前 DAPO 文档把 Clip-Higher、dynamic sampling、token-level loss、overlong reward shaping 落到了配置和代码层。
-- [2605.14220](/papers/2605.14220-training-inference-mismatch-llm-rl/) 与 rollout correction 强相关。verl 当前文档把 TIM 风险工程化为三策略框架、TIS、RS、bypass/decoupled mode 和 mismatch 指标。
-- [2511.14617](/papers/2511.14617-seer-online-context-learning-llm-rl/) 提供另一条路线：在保持 synchronous/on-policy 语义下，用 group-aware scheduling、global KVCache 和 grouped SD 降低 rollout long-tail。它和 fully async 的取舍正好互补。
-- [2602.15763](/papers/2602.15763-glm-5-agentic-engineering/) 中的 slime / asynchronous RL / TITO / double-sided IS 与 verl fully async 的方向接近，都在用系统异步性换取 agentic RL 吞吐，同时需要 freshness 和 importance ratio 控制。
-- [2506.13585](/papers/2506.13585-minimax-m1-cispo-lightning-attention/) 的 CISPO 与这里的 off-policy correction 在形式上都使用 importance ratio，但用途不同：CISPO 的 clipped importance value 更偏 loss contribution range 控制，verl rollout correction 直接面对 `π_rollout` 到 `π_old` 的行为策略偏移。
-
-## 实践判断
-
-verl 当前最重要的变化，是把“RL 算法”扩展成“算法目标 + 数据新鲜度 + logprob 归属 + 参数同步 + 样本流调度”的一体化问题。只讨论 PPO/GRPO loss 已经不足以解释训练效果；同一个 DAPO loss，在同步 colocate、one-step-off、fully async、partial rollout、bypass correction、decoupled correction 下，样本分布和梯度估计都会发生变化。
-
-一个稳健的训练实验应该同时记录三类指标：
-
-- 质量指标：reward、pass@k、majority@k、AIME/Math benchmark、response length distribution。
-- 算法指标：KL、entropy、clip fraction、advantage distribution、IS weight、ESS、RS masked fraction。
-- 系统指标：gen time、old logprob time、update actor time、wait_prev_gen、wait_prev_teacher、sync_rollout_weights、trainer/rollouter idle ratio、partial rollout ratio。
-
-只有这三类指标同时改善，才能说明优化确实提升了训练效率。若 wall-clock 下降但 mismatch、staleness、length distribution 或 ESS 恶化，需要把收益解释为系统吞吐收益，而不能直接解释为算法改进。
+### 结果 1：TransferQueue 在 stable sync trainer 中报告 49.1% 端到端收益
+
+- 设置：多模态 post-training，128×H100；TransferQueue 接入 single-controller sync trainer。
+- Baseline：原 `RayPPOTrainer` 负责集中传递 `DataProto` 的路径。
+- 指标：端到端性能；文档报告 49.1% gain，v0.8.0 release 另表述为最高 2×。
+- 证据定位：[TransferQueue docs，Updates 与 verl showcase](https://verl.readthedocs.io/en/latest/data/transfer_queue.html)；[v0.8.0 release，Sync Trainer](https://github.com/verl-project/verl/releases/tag/v0.8.0)。
+- 对照是否可比：设置细节和原始日志主要位于项目博客，公开页面没有完整训练配置与重复试验；两种收益表述不应合并成同一个精确数字。
+- 支持的最窄结论：在一项 128×H100 多模态 workload 中，移除中心 controller 的 tensor 搬运瓶颈可显著提高端到端吞吐。
+
+### 结果 2：legacy fully async 在 128×H20、7B long-CoT 上报告 2.35×
+
+- 设置：Qwen2.5-Math-7B，DAPO，vLLM+FSDP2，28K max response，`rollout.n=16`，400 steps；async 使用 64 trainer + 64 rollout GPUs，`staleness_threshold=0.5`、`partial_rollout=True`。
+- Baseline：128 GPU colocate sync，同样总 GPU 数和 `512×400` rollout 预算。
+- 指标：总时间与 AIME 2024 `acc/mean@1`。
+- 结果：`1d16h48m -> 17h22m`，2.35×；sync max/last 为 `0.3573/0.2958`，async 为 `0.3521/0.3094`。
+- 证据定位：[fully async docs，Asynchronous Training on 7B Model](https://verl.readthedocs.io/en/latest/advance/fully_async.html)。
+- 对照是否可比：总 GPU 与 rollout 数对齐；资源角色、old-logprob 路径和 sample ordering 改变。单条训练曲线缺少误差条。
+- 支持的最窄结论：在该 long-CoT first-party run 中，资源分离、streaming、staleness 与 partial rollout 的组合显著缩短 wall-clock，最终点估计未显示明显质量下降。
+
+### 结果 3：streaming 单独开启会改变训练轨迹
+
+- 设置：同一 128-card 7B 实验，对照 colocate sync、stream off-policy pipeline，以及加入 stale samples 与 partial rollout 的组合。
+- Baseline：colocate sync。
+- 指标：400-step 时间与 AIME `acc/mean@1`。
+- 结果：stream-only 路径用时 `1d1h53m`，max/last accuracy 为 `0.2844/0.2604`；完整 partial 组合用时 `17h22m`，max/last 为 `0.3521/0.3094`。
+- 证据定位：[fully async docs，128-card mode experiment](https://verl.readthedocs.io/en/latest/advance/fully_async.html)。
+- 对照是否可比：属于同一文档和 workload；中间表的 stale-only 行未给数字，组件贡献无法完整分解。
+- 支持的最窄结论：样本顺序、staleness 与 partial rollout 的组合会改变 response length 和训练动态，streaming 本身没有形成稳定的单调收益。
+
+### 结果 4：30B MoE 的 legacy fully async 收益为 1.72×
+
+- 设置：Qwen3-30B-A3B-Base，GRPO，vLLM+Megatron，8K max response，128×H20，400 steps；async 采用 96 rollout + 32 trainer GPUs。
+- Baseline：128 GPU colocate sync。
+- 指标：总时间与 AIME 2024 `acc/mean@1`。
+- 结果：`2d11h39m -> 1d10h41m`，1.72×；sync max/last 为 `0.3500/0.3208`，async 为 `0.3813/0.3448`。
+- 证据定位：[fully async docs，30B Model Mode Experiment](https://verl.readthedocs.io/en/latest/advance/fully_async.html)。
+- 对照是否可比：总 GPU 数一致，资源分配高度偏向 rollout；文档承认并行度整除约束限制了配置搜索。
+- 支持的最窄结论：独立 rollout/train 在该 30B MoE workload 上仍有端到端收益，2.35× 的 7B 数字不能直接外推。
+
+### 结果 5：multi-turn tool-use 实验报告 1.60×，sandbox 通过外部工具配置接入
+
+- 设置：Qwen2.5-7B-Instruct 经 ReTool-SFT 后做 DAPO；32×H20；最多 16 user/assistant turns；工具路径为 `recipe/retool/sandbox_fusion_tool_config.yaml`。
+- Baseline：32 GPU colocate sync；async 为 16 trainer + 16 rollout GPUs，`staleness_threshold=1`、`partial_rollout=True`。
+- 指标：200-step 总时间与 AIME 2025 `acc/mean@30`。
+- 结果：`22h28m -> 14h04m`，1.60×；最后 accuracy 为 `0.2056` 与 `0.2044`。
+- 证据定位：[fully async docs，Multi-Turn Tool Calling](https://verl.readthedocs.io/en/latest/advance/fully_async.html)。
+- 对照是否可比：总 GPU 数与 step 数对齐；单次曲线，工具执行耗时分布和 sandbox 服务容量未披露。
+- 支持的最窄结论：该 Sandbox Fusion 数学工具 workload 中，partial tool rollout 可恢复并缩短训练时间；结果不覆盖动态网页、真实 API 副作用或复杂权限隔离。
+
+### 结果 6：checkpoint engine 降低大模型权重同步时间
+
+- 设置：H20 + Megatron；分别测试 7B、30B-A3B、235B-A22B 的一次 trainer-to-rollout 参数同步。
+- Baseline：默认非 checkpoint-engine 路径。
+- 指标：单次 sync time。
+- 结果：7B `0.12s -> 0.02s`；30B `15.76s -> 4.38s`；235B `58.57s -> 23.70s`。
+- 证据定位：[fully async docs，checkpoint-engine ablation](https://verl.readthedocs.io/en/latest/advance/fully_async.html)。
+- 对照是否可比：同页同硬件的组件级 microbenchmark；未披露重复次数和网络拓扑。
+- 支持的最窄结论：参数同步会随模型规模成为异步 pipeline 的显著 barrier，专用 checkpoint engine 在这些配置中降低了该组件时间。
+
+### 结果 7：MTP acceptance 提高时，rollout throughput 仍可能下降
+
+- 设置：mimo-7B，H20，SGLang，独立 rollout deployment。
+- Baseline：关闭 MTP speculative decoding。
+- 指标：acceptance rate 与 rollout throughput。
+- 结果：acceptance rate 提高约 14%，throughput 下降约 50%。
+- 证据定位：[MTP docs，Performance](https://verl.readthedocs.io/en/latest/advance/mtp.html)。
+- 对照是否可比：同一示例中的开关对照；硬件、kernel 和 batch 细节不足，适用范围较窄。
+- 支持的最窄结论：MTP 的中间接受率无法替代端到端吞吐测量。
+
+### 实验设置与 baseline 审计
+
+| 审计项 | 当前状态 | 对结论的影响 |
+| --- | --- | --- |
+| 版本一致性 | TQ 数字来自 v0.8 stable；fully async 数字来自 legacy experimental；V1 来自 main 源码 | V1 架构与 legacy 性能不能合并成同一已验证系统 |
+| 计算预算 | 主要 fully async 表对齐总 GPU 数、step 和 rollout 数 | 支持 wall-clock 比较；资源角色与执行语义发生变化 |
+| 质量比较 | 给出 max/last point estimates | 可排除明显崩溃，无法证明统计等价 |
+| 重复试验 | 未见 seeds、置信区间或误差条 | 小幅质量差异保持低置信度 |
+| baseline 强度 | colocate sync 是合理框架基线；未系统比较 Laminar、AReaL、slime、RollArt | 支持框架内收益，难以判断跨系统最优性 |
+| component attribution | mode ablation 有缺行；资源分离、streaming、staleness、partial rollout 常一起变化 | 端到端 recipe 结论强于单组件因果结论 |
+| tool environment | Sandbox Fusion 配置明确，服务容量和执行时长分布缺失 | 支持特定代码/数学工具 workload，外推到开放环境需复验 |
 
 ## 证据链强度评估
 
 ### 强证据
 
-- verl 文档给出 one-step-off、fully async、TransferQueue、MTP 等模块的具体配置、指标和时间对比，可支撑系统吞吐方向的判断。
-- rollout correction 部分把 `rollout_log_probs`、`old_log_probs` 和当前 `log_prob` 分清，公式上能解释 staleness 下的行为策略修正。
-- 指标清单覆盖 quality、algorithm 和 system 三层，能直接指导后续实验记录。
+- stable release 明确区分 v0.8.0 的 TransferQueue sync trainer 与后续 fully async integration，版本边界可直接核验。
+- main V1 的三种 mode、统一 TransferQueue 初始化、AgentLoopManager 契约、ReplayBuffer 和 checkpoint hooks 均有源码实现。
+- rollout/old/current 三策略与 bypass/decoupled 计算路径在文档和 `trainer_base.py` 中相互对应。
+- partial rollout 的 `min_global_steps`、`max_global_steps` 记录与 span/staleness 指标具有完整源码链路。
 
 ### 中等强度证据
 
-- 多数性能数字来自官方文档、示例配置或 W&B 链接，可信度高于概念描述，但仍缺少独立复验。
-- MTP 的硬件差异结果说明收益受模型、decode 长度、显存带宽和 kernel overhead 共同影响，不能只按接受率判断。
+- fully async、tool-use、checkpoint engine 和 TransferQueue 均给出具体硬件、模型或时间数字，足以支持项目内部工程判断。
+- 这些结果来自维护团队与官方 W&B，缺少独立复验和统计不确定性，跨系统排名仍需统一 benchmark。
+- v0.8.0 的 OPD 支持面有 release 与实现 PR 支撑，具体组合的稳定性仍取决于 backend 和配置。
 
 ### 需要谨慎的推论
 
-- fully async、partial rollout 和 correction 的组合空间很大，不同 reward、context length、GPU 拓扑和推理引擎会改变最优配置。
-- 文档随版本快速变化，本笔记适合作为架构理解和实验 checklist，具体参数需要绑定 verl commit 与运行日志。
-
-## 主要启发
-
-- RL 后训练系统要把算法目标、样本新鲜度、logprob 归属和参数同步作为同一条闭环来设计。
-- 判断异步优化是否有效，需要同时看 wall-clock、staleness、importance weight、有效样本量和任务质量。
-- 面向 agentic rollout 时，慢环境、长 decode、teacher query 和 reward 计算都应进入调度器的状态变量。
+- main V1 已具备统一代码路径，尚无证据证明它复现 legacy fully async 的全部吞吐与质量数字。
+- `max_off_policy_threshold` 的配置描述与当前判断变量不同，生产上只设置该阈值不足以同时控制 age 和 within-trajectory span。
+- point estimate 接近只能说明该 run 未出现显著退化，无法证明异步 correction 在不同 reward、长度和工具环境下保持等价。
+- MTP、参数同步和数据传输的收益依赖模型形态、GPU、网络、batch、序列长度与 kernel，局部 microbenchmark 不能线性相加为端到端收益。
 
 ## OpenReview / 审稿意见吸收
 
-- Venue status: 当前档案未记录公开 peer-review 状态。
-- Public reviews: 当前档案未记录可可靠匹配的 OpenReview / ARR / 会议 reviewer comments。
-- Ratings / confidence: 无公开评分可用于校准。
-- Reviewer consensus: 暂无。
-- Main criticisms: 暂无公开 reviewer 质疑可引用；可信度主要由论文、技术报告、项目证据和本地一致性检查决定。
-- Author response: 暂无公开 rebuttal 记录。
-- 对本文可信度的影响: 按未完成公开审稿吸收处理，结论需要依赖实验设置、baseline 强度、复现证据和跨论文一致性校准。
+- Page type: not-applicable
+- Match confidence: high
+- Match rationale: 分析对象明确为官方 release、文档和源码组合。
+- Observed at: 2026-07-13
+- Venue status: framework release / rolling documentation / development snapshot。
+- Public reviews: 不适用；HybridFlow 架构论文、DAPO 算法论文和 OPD 论文分别在独立档案中吸收其审稿或发表状态。
+- Ratings / confidence: 不适用。
+- Reviewer consensus: 无统一 peer-review 对象。
+- Main criticisms: 可信度主要受版本快速变化、first-party benchmarks、缺少误差条以及 stable/dev/experimental 三类证据混合影响。
+- Author response: 不适用。
+- 对本文可信度的影响: 架构和代码状态可高置信描述；性能外推与算法等价性维持中低置信度。
+
+## 本地讨论补充
+
+### 1. VERL 的核心信号应聚焦统一数据面
+
+旧版核心信号把 PPO/GRPO/DAPO、rollout correction、fully async、distillation 和 MTP 全部并列，覆盖面过大。当前更聚焦的观察是：V1 让同步、共置异步和分离异步共用 AgentLoop、TransferQueue、ReplayBuffer 与 trainer base，并把参数版本和行为 logprob 作为轨迹字段管理。
+
+算法目标仍然重要，它们通过这一执行底座组合。索引只保留数据面贡献，正文再解释 OPD、MTP 和各类 objective 的接入位置。
+
+### 2. TransferQueue 提供数据交换，ReplayBuffer 定义训练样本
+
+TransferQueue 负责状态可见性、字段存储和传输；ReplayBuffer 决定何时形成 batch、先取哪些 prompt、如何处理陈旧样本。两者组合才构成训练数据面。对于 GRPO，采样单位还涉及 prompt group 与多个 session，单条 trajectory 的删除可能改变组大小，因此 group-level policy 需要显式定义。
+
+### 3. 当前等待年龄与轨迹版本跨度是两个变量
+
+样本年龄回答“这个 prompt 从派发到现在经历了多少 trainer steps”；轨迹跨度回答“它生成期间实际用了多少个模型版本”。前者反映队列、环境和生成总延迟，后者反映单条轨迹内部的行为策略切换。二者都与 off-policy 风险相关，机制不同，适合分别设置告警和策略。
+
+### 4. partial rollout 的 correction 应绑定到 token 版本
+
+一条跨版本轨迹的行为策略随 token 改变。逐 token 保存 rollout logprob 能保留实际 behavior likelihood；只保存一个 trajectory-level checkpoint id 会丢失这层信息。长 horizon 下，sequence ratio 的乘积方差很大，工程上通常还需要截断、rejection、span 上限或直接丢弃过旧样本。
+
+### 5. Sandbox 是工具后端，AgentLoop 是交互契约
+
+VERL 提供 function tool、stateful tool、custom AgentLoop 与 uni-agent gateway。Docker、Sandbox Fusion、远程 API、浏览器或其他动态环境都可以位于该契约后方。训练框架关注 token、observation、mask、reward、异常状态和可复现标识；环境服务负责生命周期、权限、网络、资源限制和动态内容快照。
+
+### 6. 论文写作中应分开 throughput 与 algorithm claim
+
+推荐表述为：“在固定模型、总 GPU 数、rollout 预算和任务下，独立 rollout/train、streaming、staleness 与 partial rollout 的组合将 400-step wall-clock 从 A 降到 B；任务指标为对应 point estimate。”随后单列 correction、span、ESS 和 length distribution。
+
+“异步训练保持 on-policy 等价”需要更强证据，包括真实 behavior logprob、版本分布、校正公式、有效样本量、重复 runs 和质量置信区间。当前官方实验更适合支撑系统吞吐结论。
+
+### 7. 选择 mode 时先定位等待来源
+
+- 复现算法或调试 reward 时，`sync` 提供最清晰的版本和 batch 边界。
+- generation 长尾明显、GPU 资源仍需共置时，`colocate_async` 可利用预取与 resumable partial rollout，需观察阶段切换开销。
+- rollout 和 trainer 可独立部署、长工具等待占主导时，`separate_async` 提供充分重叠；需要同时审计 checkpoint sync、queue depth、age/span、bypass ratio 与 standalone reward service。
+- teacher query 成为主瓶颈时，OPD 的 teacher pool 和异步 retrieval 进入资源平衡问题。
+
+## 主要启发
+
+- 异步 RL 系统应把 trajectory 数据、参数版本、行为概率和消费状态作为同一份可追踪记录。
+- freshness 至少包含派发年龄、轨迹版本跨度、最新版本 lag 和最坏版本 lag；单一 staleness 标量容易混淆不同风险。
+- trainer mode 的抽象边界适合落在 hooks、ReplayBuffer、AgentLoop 与 checkpoint engine，算法 objective 可以在其上复用。
+- 工具环境通过稳定轨迹契约接入训练，sandbox 实现与 RL trainer 可以独立演进。
+- 训练效率报告需要同时包含 wall-clock、GPU 配置、样本预算、quality、ratio/ESS、长度分布和版本指标。
 
 ## 局限
 
-- verl 文档更新速度快，具体配置名、支持引擎和默认值需要以后续官方页面为准。
-- 多数实验结果来自文档给出的配置和 W&B 链接，本笔记没有独立复现实验。
-- fully async、partial rollout 和 rollout correction 的组合空间很大，不同模型、硬件、reward、序列长度下可能表现不同。
-- async on-policy distill 的结论依赖教师质量、teacher server 吞吐和 top-k 分布覆盖；它不能直接替代所有 verifier reward 或 preference reward 场景。
+- main `0.9.0.dev` 处于快速变化阶段，本笔记中的类名、默认值和 TODO 固定到 2026-07-13 commit。
+- stable v0.8.0、legacy experimental fully async 与 main V1 的证据来自三个版本层，端到端能力不能直接拼接。
+- 官方 fully async 实验缺少多 seed 与误差条，质量“基本保持”只由单次 point estimate 支撑。
+- ReplayBuffer 对失败 session、超阈值 group 和自定义 sampler 的行为仍需在真实 GRPO/agent workload 中验证。
+- `separate_async` 当前强制 bypass mode，完整 decoupled correction 的性能与稳定性尚无 V1 证据。
+- TransferQueue 的非默认存储 backend 仍有 beta/alpha 状态，容错、恢复和大规模生产稳定性需要独立测试。
+- 工具实验集中在 Sandbox Fusion 数学任务，缺少动态网页、长时 API、权限失败和有副作用工具的系统评测。
+
+## 跨论文关系
+
+- [HybridFlow](/papers/2409.19256-hybridflow-rlhf-framework/) 提供 verl 的原始多模型 dataflow 与 single-controller/multi-controller 抽象；V1 继续把中心数据搬运拆到 TransferQueue，并把执行模式收敛到 trainer hooks。
+- [DAPO](/papers/2503.14476-dapo-long-cot-rl-system/) 提供 long-CoT GRPO recipe，也是 one-step-off、fully async 与 TransferQueue 大规模测试的主要 workload；系统提速与 DAPO 算法贡献需要分开归因。
+- [TIM](/papers/2605.14220-training-inference-mismatch-llm-rl/) 解释 rollout backend、精度和参数延迟产生的行为策略偏移；verl 将其工程化为 rollout logprob、三策略 correction、K3/chi-square/ESS 等诊断。
+- [Laminar](/papers/2510.12633-laminar-asynchronous-rl-post-training/) 同样围绕异步 rollout、参数同步和样本 freshness 设计系统；它提供跨框架比较时的重要 baseline。
+- [Seer](/papers/2511.14617-seer-online-context-learning-llm-rl/) 保持同步训练语义，通过 group-aware scheduling、KV reuse 与 speculative decoding 缩短 rollout；它与 verl fully async 代表两种不同的长尾处理位置。
+- [RollArt](/papers/2512.22560-rollart-disaggregated-agentic-rl-training/) 将 agentic RL 的 rollout 与训练资源分离，和 V1 `separate_async` 共享 disaggregation 方向。
+- [On-Policy Distillation](/papers/2306.13649-on-policy-distillation-language-models/) 提供学生自生成状态上的教师信号；verl v0.8.0 把这类目标扩展成多后端、多教师、同步和异步执行模块。
+- [MOPD](/papers/2606.30406-mopd-multi-teacher-on-policy-distillation/) 进一步研究多教师路由与聚合，可映射到 verl 的 `teacher_key` 和独立 teacher pools。
+- [Agentic Tool-calling RL](/papers/2606.00135-agentic-tool-calling-rl-training/) 说明长 tool context 下 update 与无效 rollout 的成本；其 VERL 训练优化位于算法采样层，V1 数据面则负责承载轨迹和异步执行。
+- [GLM-5](/papers/2602.15763-glm-5-agentic-engineering/) 中的 slime、TITO 与异步 agent RL 展示另一套生产实践，可用于比较外部 agent runtime、token ownership 和 correction 设计。
 
 ## Reference Intake Brief
 
-- 核心问题：同步 on-policy LLM RL 在 long-CoT / tool-use 场景下会被 rollout 长尾和多阶段等待拖慢。
-- 算法主线：PPO 提供稳定 trust region，GRPO 降低 critic 成本，DAPO 提供 long-CoT recipe，OPO/GPG/OTB/DPPO 分别处理 baseline、简化 policy gradient、方差诊断和 divergence trust region。
-- 系统主线：one-step-off 做批次级重叠，fully async 做样本级流式异步，async on-policy distill 把教师查询纳入重叠流水线，TransferQueue 承接样本级数据管理。
-- 关键变量：`rollout_log_probs`、`old_log_probs`、当前 `log_prob`、`staleness_threshold`、`trigger_parameter_sync_step`、`partial_rollout`、`rollout_is_weights`、`modified_response_mask`。
-- 可复用判断：吞吐提升必须和 mismatch 指标、长度分布、ESS、clip fraction、最终任务指标一起看。
-- 后续跟踪：verl fully async 与 Seer synchronous rollout 优化、TIM/VeXact zero-mismatch 路线、GLM-5/slime async RL、MiniMax-M1/CISPO importance ratio 控制之间的工程取舍。
+### Target
+
+- 用于后续撰写或设计 agentic RL infrastructure、fully async rollout、sample freshness、rollout correction 与工具环境接入。
+
+### Reusable Elements
+
+- V1 的 `AgentLoopManager -> TransferQueue -> ReplayBuffer -> trainer -> checkpoint engine` 数据流。
+- stable / development / experimental 三层版本审计方法。
+- rollout/old/current 三策略与 age/span/fresh-lag/worst-lag 四类版本指标。
+- 端到端效率实验的最窄结论、baseline 审计和论文写作表述。
+
+### Risks
+
+- main API 会继续变化；引用实现时必须保留 commit。
+- first-party point estimates 支撑系统内部结果，跨框架泛化与算法等价性仍需复验。
+- 配置注释、源码判断变量和 metric 名称可能处于迁移期，需同时读 config、sampler 和 logging path。
+
+### Skipped
+
+- 跳过 PPO、GRPO、DAPO、OPO、GPG、OTB 与 DPPO 的逐算法教程；它们会遮蔽本材料的数据面核心贡献，并已有独立论文或主题笔记。
+- 跳过统一 reviewer 意见吸收；该 composite 没有单一公开审稿对象。
+- 跳过未公开的生产集群细节和无法复核的稳定性归因。
+
+### Recommendation
+
+Decision: revise-then-merge
+
+Why: 吸收统一 V1 数据面、三策略与版本指标；修订 stable/dev/experimental 混用、`max_off_policy_threshold` 语义和性能归因；保留 legacy fully async 数字作为方向性系统证据。

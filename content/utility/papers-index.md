@@ -35,7 +35,7 @@ Updated-At: 2026-07-13
 | [DLA](/papers/2606.10650-dynamic-linear-attention/) | 2026年6月 | 用 representation drift 动态决定 state 边界，在固定 cache 内自适应合并 linear-attention states。 |
 | [HydraHead](/papers/2606.20097-hydrahead-head-wise-hybrid-attention/) | 2026年6月 | 用 causal patching 找到 retrieval-critical heads，只为这些 heads 保留 full attention。 |
 | [Bebop](/papers/2606.12370-bebop-mtp-rejection-sampling-rl-training/) | 2026年6月 | 以 TV loss 训练 MTP heads，并用 probabilistic rejection sampling 提高 RL rollout 接受率。 |
-| [verl](/papers/2026-06-16-verl-rl-optimization-algorithms/) | 2026年6月 | 把 RL objectives 与 rollout correction、fully async、distillation、MTP 等执行模块组织为可组合训练管线。 |
+| [verl](/papers/2026-06-16-verl-rl-optimization-algorithms/) | 2026年6月 | 把 sync、colocate async 与 separate async 收敛到 TransferQueue + ReplayBuffer 数据面，并用行为 logprob 与版本指标约束样本新鲜度。 |
 | [VIMPO](/papers/2606.20008-vimpo-value-implicit-policy-optimization-llms/) | 2026年6月 | 从 policy / reference log-ratio 构造隐式 value recurrence，省去独立 critic 并形成 token-level PPO advantage。 |
 | [FlashMemory](/papers/2606.09079-flashmemory-deepseek-v4-lookahead-sparse-attention/) | 2026年6月 | 预测未来 token 的 KV chunk 需求，将冷 KV 移到 CPU 并按需预取，压缩物理 KV footprint。 |
 | [MiniMax Sparse Attention](/papers/2606.13392-minimax-sparse-attention-m3/) | 2026年6月 | 用 group-aware index branch 选择 KV blocks，再对选中块执行精确 softmax attention。 |
