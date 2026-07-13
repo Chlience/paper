@@ -8,6 +8,7 @@ import {
   validatePaperRecord,
 } from './content/paper-workflow.mjs';
 import { authorsFile, repoRoot, readPaperEntries } from './content/repository.mjs';
+import { validateTagConfiguration } from './content/tagging.mjs';
 
 const indexPath = path.join(repoRoot, 'content', 'utility', 'papers-index.md');
 const legacyManifestPath = path.join(repoRoot, 'internal', 'paper-workflow-legacy-slugs.json');
@@ -35,6 +36,8 @@ const exists = async (repoRelativePath) => {
 
 const errors = [];
 const advisories = [];
+
+errors.push(...validateTagConfiguration(knownPaperSlugs));
 
 for (const record of records) {
   const result = await validatePaperRecord({

@@ -7,7 +7,7 @@ Updated-At: 2026-07-13
 
 本页说明这个论文档案如何把一次阅读变成可追溯、可更新、可连接的长期记录。它面向两类读者：公开网页上的读者可以看到笔记质量如何被约束；后续维护者可以按同一套流程继续新增论文、作者档案和跨论文关系。
 
-每次用户给出 arXiv、PDF、论文项目页、技术博客或论文标题时，本目录按同一流程产出独立 Markdown 笔记，并维护 `content/utility/papers-index.md`、`data/authors.json` 和相关站点链接。
+每次用户给出 arXiv、PDF、论文项目页、技术博客或论文标题时，本目录按同一流程产出独立 Markdown 笔记，并维护 `content/utility/papers-index.md`、`data/authors.json`、`data/paper-tags.json` 和相关站点链接。
 
 ## 快速执行卡
 
@@ -33,6 +33,7 @@ Updated-At: 2026-07-13
 - 审稿页类型、匹配置信度、观察日期和 venue 状态已记录；缺少公开审稿时给出明确分类。
 - 每位可解析作者完成基础身份核验；高价值或有歧义作者完成深入核验，并同步稳定事实。
 - `content/utility/papers-index.md` 已更新；`当前收录` 包含唯一的简称、首次公开月份和索引核心信号，作者、机构、主题、引用或方法关系已写入对应论文的 `跨论文关系`。
+- `data/paper-tags.json` 已为论文分配 1 个主标签和最多 3 个辅助标签；标签来自 `data/tag-taxonomy.json`，并与论文核心贡献直接对应。
 - 本地内容工作流、元数据、公式、搜索和置顶条目检查通过；GitHub Actions 负责 production build 与生成站点检查。
 - `Reference Intake Brief` 使用标准决策值，并说明吸收、修订、跳过或请求确认的原因。
 - 本次完整改动已创建本地 commit；仅在用户明确要求后推送。
@@ -585,6 +586,27 @@ $$
 
 `check:workflow` 会对论文文件集合与 `当前收录` 执行双向比较，并拒绝缺失、重复、失效链接和不符合三列契约的表格行。
 
+## 论文标签与主题路由
+
+主题路由采用受控词表，数据分成两层：
+
+1. `data/tag-taxonomy.json` 定义稳定 ID、首选展示名称、搜索别名、说明和所属 facet。
+2. `data/paper-tags.json` 显式记录每篇论文的标签 ID；数组第一项是主标签，其余是辅助标签。
+
+facet 只负责组织导航，当前包括 Training、Inference、Architecture、Agents、Evaluation、Safety 和 Theory。论文只分配更细的叶子标签，例如 `Rollout Optimization`、`RL Algorithm`、`Agent Workflow`、`KV Cache` 和 `Reward Hacking`。`RL`、`Systems`、`Methodology` 等归档级大类不作为叶子标签。
+
+分配规则：
+
+1. 每篇论文分配 1–4 个标签，第一项必须描述最核心的机制贡献或主要研究对象。
+2. 辅助标签只覆盖理解核心贡献所需的训练信号、系统环节、模型结构或评测问题。
+3. 同一篇论文允许跨 facet；标签数量不能用于替代贡献优先级，主标签仍由数组首项显式表达。
+4. 新概念优先复用现有首选名称或搜索别名。现有词表无法准确表达且已有清晰方法边界时，再增加稳定 ID 和定义。
+5. 标签改名时保留 ID，通过首选名称和 aliases 维护展示与检索兼容性。标签拆分或合并需要审计全部受影响论文。
+
+`check:workflow` 会拒绝漏标、未知标签、重复标签、超过四个标签和指向已删除论文的失效分配。站点锚点由稳定 ID 生成，展示名称调整不会改变已有主题链接。
+
+这套结构参考三类公开实践：[W3C SKOS](https://www.w3.org/TR/skos-primer/) 用稳定 concept、preferred label、alternative label 和层级关系管理受控词表；[OpenAlex Topics](https://help.openalex.org/hc/en-us/articles/24736129405719-Topics) 用分层 topic 组织检索，并区分 primary topic 与其它高分 topic；[ACM Computing Classification System](https://www.acm.org/publications/class-2012) 强调一致分类对索引、检索和相关文献发现的作用。本归档据此保留稳定标签 ID、单一主标签、多个辅助标签和 facet 导航。
+
 ## 作者页维护
 
 作者页由构建脚本从两类信息生成：
@@ -618,7 +640,7 @@ $$
 
 1. 删除 `content/papers/<slug>.md`，并移除 `当前收录` 中对应的唯一表格行。
 2. 搜索该 slug，在剩余论文各自的 `跨论文关系` 中删除或修订已经失效的关系描述。
-3. 清理只服务该论文的 tag override、legacy manifest 条目和静态图片；目录或图片删除仍遵循高危操作确认要求。
+3. 删除 `data/paper-tags.json` 中对应分配，并清理 legacy manifest 条目和只服务该论文的静态图片；目录或图片删除仍遵循高危操作确认要求。仅在某个 taxonomy 标签不再表达任何存档概念时删除该标签，并审计所有分配和站点链接。
 4. 重新计算剩余论文中的作者关联。某个 `data/authors.json` profile 若没有 `/authors/<slug>/` 链接，也没有通过 `Source -> Authors` 姓名或 alias 关联任何论文，在同一提交中删除该 profile。
 5. 运行本地内容与反向完整性检查。`missing-index-entry`、`stale-index-entry`、`duplicate-index-entry` 与 `orphan-author-profile` 都属于必须修复的硬错误。
 
@@ -663,6 +685,7 @@ $$
 
 - 新增或更新内容是否已写入对应 Markdown / JSON 文件。
 - `content/utility/papers-index.md` 的 `当前收录` 是否与论文文件集合双向一致，按首次公开月份从新到旧排列，且每行包含简称、首次公开月份和索引核心信号。
+- `data/paper-tags.json` 是否覆盖每篇论文、没有失效 slug，并为每篇论文保留 1 个主标签和最多 3 个辅助标签；主标签是否绑定核心贡献。
 - v2 笔记是否声明工作流版本和材料类型，并记录规范来源、责任主体、发布日期或更新时间、读取版本和访问日期。
 - 是否把稳定作者来源同步到 `data/authors.json`；论文 Markdown 不应包含作者核验过程。
 - 作者页相关信息是否同步到 `data/authors.json`，论文笔记是否使用 `/authors/<slug>/` 链接。

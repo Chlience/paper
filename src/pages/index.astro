@@ -4,9 +4,9 @@ import Layout from '../layouts/Layout.astro';
 import data from '../generated/paper-data.json';
 
 const recentPapers = data.papers.slice(0, 8);
-const tagCounts = data.tags.map((tag) => ({
-  tag,
-  count: data.papers.filter((paper) => paper.tags.includes(tag)).length,
+const routeGroups = data.tagFacets.map((facet) => ({
+  ...facet,
+  routes: data.tagRoutes.filter((route) => route.facetId === facet.id),
 }));
 ---
 
@@ -16,7 +16,7 @@ const tagCounts = data.tags.map((tag) => ({
       <p class="eyebrow mono">papers.chlience.com</p>
       <h1>Chlience Paper Archive</h1>
       <p class="deck">
-        面向 LLM、RL、systems、safety、theory 和 optimizer 的论文阅读档案。每篇笔记保留来源、作者关系、证据边界、局限，以及它和其它论文的连接。
+        面向训练、推理、架构、Agent、评测、安全与理论的论文阅读档案。每篇笔记保留来源、作者关系、证据边界、局限，以及它和其它论文的连接。
       </p>
     </div>
     <div class="archive-panel" aria-label="Archive reading contract">
@@ -28,7 +28,7 @@ const tagCounts = data.tags.map((tag) => ({
           <dd>独立 Markdown 档案</dd>
         </div>
         <div>
-          <dt>{data.tags.length} routes</dt>
+          <dt>{data.tagRoutes.length} routes</dt>
           <dd>主题入口</dd>
         </div>
         <div>
@@ -64,12 +64,23 @@ const tagCounts = data.tags.map((tag) => ({
       </div>
       <a class="section-link" href="/authors/">Authors</a>
     </div>
-    <div class="container tag-grid">
-      {tagCounts.map(({ tag, count }) => (
-        <a class="tag-card" href={`/papers/#tag-${tag.toLowerCase()}`}>
-          <span class="mono">{count} notes</span>
-          <strong>{tag}</strong>
-        </a>
+    <div class="container route-index">
+      {routeGroups.map((group) => (
+        <section class="route-group">
+          <div class="route-group-heading">
+            <h3>{group.label}</h3>
+            <span class="mono">{group.routeCount} routes</span>
+          </div>
+          <p>{group.description}</p>
+          <div class="route-link-list">
+            {group.routes.map((route) => (
+              <a class="route-link" href={`/papers/#tag-${route.id}`}>
+                <span>{route.label}</span>
+                <span class="mono">{route.count}</span>
+              </a>
+            ))}
+          </div>
+        </section>
       ))}
     </div>
   </section>

@@ -14,6 +14,7 @@ const getTerms = (query = '') => normalize(query).split(/\s+/).filter(Boolean);
 export const buildPaperSearchItems = (papers = []) =>
   papers.map((paper) => {
     const tags = Array.isArray(paper.tags) ? paper.tags : [];
+    const tagAliases = Array.isArray(paper.tagAliases) ? paper.tagAliases : [];
     const searchText = normalize(
       [
         paper.title,
@@ -23,6 +24,7 @@ export const buildPaperSearchItems = (papers = []) =>
         paper.subjects,
         paper.currentVersion,
         ...tags,
+        ...tagAliases,
       ]
         .filter(Boolean)
         .join(' '),

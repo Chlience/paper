@@ -4,6 +4,7 @@ import fs from 'node:fs/promises';
 import test from 'node:test';
 import * as authors from './content/authors.mjs';
 import * as markdown from './content/markdown.mjs';
+import * as tagging from './content/tagging.mjs';
 import * as workflow from './content/paper-workflow.mjs';
 
 const { validatePaperRecord } = workflow;
@@ -139,6 +140,59 @@ test('exports the orphan author profile audit', () => {
 
 test('exports the archive collection audit', () => {
   assert.equal(typeof workflow.validateArchiveCollections, 'function');
+});
+
+test('controlled tags cover every archived paper and every defined route', async () => {
+  const paperSlugs = (await fs.readdir('content/papers'))
+    .filter((fileName) => fileName.endsWith('.md'))
+    .map((fileName) => fileName.replace(/\.md$/, ''));
+
+  assert.deepEqual(tagging.validateTagConfiguration(paperSlugs), []);
+  assert.deepEqual(
+    new Set(Object.values(tagging.paperTagAssignments).flat()),
+    new Set(tagging.tagDefinitions.map((tag) => tag.id)),
+  );
+});
+
+test('controlled tag validation rejects incomplete or stale assignments', () => {
+  const assignments = structuredClone(tagging.paperTagAssignments);
+  const [missingSlug, unknownSlug, duplicateSlug, overflowSlug] = Object.keys(assignments);
+  delete assignments[missingSlug];
+  assignments[unknownSlug] = ['unknown-route'];
+  assignments[duplicateSlug] = ['agent-workflow', 'agent-workflow'];
+  assignments[overflowSlug] = tagging.tagDefinitions.slice(0, 5).map((tag) => tag.id);
+  assignments['deleted-paper'] = ['benchmark'];
+
+  const errors = tagging.validateTagConfiguration(
+    [missingSlug, unknownSlug, duplicateSlug, overflowSlug],
+    { assignments },
+  );
+  const codes = new Set(errors.map((error) => error.code));
+
+  for (const code of [
+    'missing-paper-tags',
+    'unknown-paper-tag',
+    'duplicate-paper-tag',
+    'too-many-paper-tags',
+    'stale-paper-tags',
+  ]) {
+    assert.ok(codes.has(code), `Expected ${code}.`);
+  }
+});
+
+test('leaf tag labels exclude deprecated archive-wide categories', () => {
+  const labels = new Set(tagging.tagDefinitions.map((tag) => tag.label));
+  for (const broadLabel of ['RL', 'Systems', 'Methodology', 'Safety', 'Theory']) {
+    assert.equal(labels.has(broadLabel), false);
+  }
+});
+
+test('controlled tag validation rejects ambiguous search terms', () => {
+  const taxonomy = structuredClone(tagging.tagTaxonomy);
+  taxonomy.facets[0].tags[1].aliases.push(taxonomy.facets[0].tags[0].label);
+  const errors = tagging.validateTagConfiguration(Object.keys(tagging.paperTagAssignments), { taxonomy });
+
+  assert.ok(errors.some((error) => error.code === 'ambiguous-tag-term'));
 });
 
 test('author references combine profile links with source author names', () => {
@@ -761,6 +815,13 @@ test('content build associates linked author profiles with their papers', async 
   assert.equal(result.status, 0, result.stderr || result.stdout);
 
   const data = JSON.parse(await fs.readFile('src/generated/paper-data.json', 'utf8'));
+  assert.equal(data.tagFacets.length, tagging.tagFacets.length);
+  assert.equal(data.tagRoutes.length, tagging.tagDefinitions.length);
+  for (const paper of data.papers) {
+    assert.equal(paper.primaryTagId, paper.tagIds[0]);
+    assert.equal(paper.primaryTag, paper.tags[0]);
+    assert.ok(paper.tagIds.length >= 1 && paper.tagIds.length <= 4);
+  }
   for (const slug of ['nino-vieillard', 'gennady-pekhimenko', 'dongyang-ma-flashmemory']) {
     const author = data.authors.find((candidate) => candidate.slug === slug);
     assert.ok(author, `Missing generated author ${slug}`);
@@ -868,6 +929,8 @@ test('public workflow documents index and deletion reverse-integrity contracts',
     '索引核心信号',
     '论文删除与反向清理',
     '`orphan-author-profile`',
+    '`data/paper-tags.json`',
+    '`data/tag-taxonomy.json`',
   ]) {
     assert.match(workflowDoc, new RegExp(snippet.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
   }

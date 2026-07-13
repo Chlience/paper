@@ -1,0 +1,299 @@
+{
+  "version": 1,
+  "facets": [
+    {
+      "id": "training", "label": "Training",
+      "description": "模型训练、后训练、优化信号与训练基础设施。",
+      "tags": [
+        {
+          "id": "distributed-training",
+          "label": "Distributed Training",
+          "aliases": ["parallel training", "training systems"],
+          "description": "训练并行、通信、调度与多设备扩展。"
+        },
+        {
+          "id": "training-memory",
+          "label": "Training Memory",
+          "aliases": ["optimizer state sharding", "activation memory"],
+          "description": "训练状态、梯度、参数或 activation 的显存管理。"
+        },
+        {
+          "id": "parameter-efficient-finetuning",
+          "label": "Parameter-Efficient Finetuning",
+          "aliases": ["PEFT", "LoRA training"],
+          "description": "LoRA 等参数高效微调方法与系统。"
+        },
+        {
+          "id": "optimizer",
+          "label": "Optimizer",
+          "aliases": ["optimization algorithm", "Muon", "AdamW"],
+          "description": "参数更新规则、曲率、缩放与优化器工程。"
+        },
+        {
+          "id": "rl-algorithm",
+          "label": "RL Algorithm",
+          "aliases": ["policy optimization", "GRPO", "PPO"],
+          "description": "直接修改 policy objective、advantage 或 trust region 的 RL 方法。"
+        },
+        {
+          "id": "reasoning-rl",
+          "label": "Reasoning RL",
+          "aliases": ["RLVR", "reasoning post-training"],
+          "description": "面向数学、代码与长推理能力的强化学习。"
+        },
+        {
+          "id": "agent-rl",
+          "label": "Agent RL",
+          "aliases": ["agentic RL", "tool-use RL"],
+          "description": "面向多轮环境交互、工具调用与 agent 行为的强化学习。"
+        },
+        {
+          "id": "credit-assignment",
+          "label": "Credit Assignment",
+          "aliases": ["advantage assignment", "token credit"],
+          "description": "把 trajectory reward 分配到 step、token、trace 或 agent。"
+        },
+        {
+          "id": "reward-modeling",
+          "label": "Reward Modeling",
+          "aliases": ["reward design", "reward model"],
+          "description": "训练或构造 reward、proxy、preference 与可验证信号。"
+        },
+        {
+          "id": "training-stability",
+          "label": "Training Stability",
+          "aliases": ["entropy control", "trust region", "training collapse"],
+          "description": "控制 entropy、分布偏移、数值误差与异步陈旧性。"
+        },
+        {
+          "id": "on-policy-distillation",
+          "label": "On-Policy Distillation",
+          "aliases": ["OPD", "policy distillation"],
+          "description": "在 student 自生成轨迹上使用 teacher 分布或反馈。"
+        },
+        {
+          "id": "rl-infrastructure",
+          "label": "RL Infrastructure",
+          "aliases": ["RLHF systems", "RL training framework"],
+          "description": "组织 actor、rollout、reward、trainer 与权重同步的训练系统。"
+        },
+        {
+          "id": "rollout-optimization",
+          "label": "Rollout Optimization",
+          "aliases": ["rollout scaling", "sampling optimization"],
+          "description": "降低 rollout 等待、生成成本、长尾与采样浪费。"
+        }
+      ]
+    },
+    {
+      "id": "inference", "label": "Inference",
+      "description": "在线推理、请求调度、缓存与 test-time compute。",
+      "tags": [
+        {
+          "id": "inference-scheduling",
+          "label": "Inference Scheduling",
+          "aliases": ["batch scheduling", "prefill decode scheduling"],
+          "description": "请求、prefill、decode 或微任务的执行次序与 batch 构造。"
+        },
+        {
+          "id": "serving-runtime",
+          "label": "Serving Runtime",
+          "aliases": ["LLM serving", "inference engine"],
+          "description": "面向在线负载的完整推理 runtime 与执行接口。"
+        },
+        {
+          "id": "kv-cache",
+          "label": "KV Cache",
+          "aliases": ["prefix cache", "cache reuse"],
+          "description": "KV 的存储、复用、迁移、抢占与容量管理。"
+        },
+        {
+          "id": "speculative-decoding",
+          "label": "Speculative Decoding",
+          "aliases": ["draft verify", "speculative inference"],
+          "description": "通过 draft、验证与接受策略减少 target decode 次数。"
+        },
+        {
+          "id": "test-time-scaling",
+          "label": "Test-Time Scaling",
+          "aliases": ["inference-time scaling", "Best-of-N"],
+          "description": "用多轨迹、搜索、验证或聚合扩大推理计算。"
+        },
+        {
+          "id": "deterministic-inference",
+          "label": "Deterministic Inference",
+          "aliases": ["batch invariance", "reproducible inference"],
+          "description": "控制 kernel、batch 与浮点路径引入的输出差异。"
+        }
+      ]
+    },
+    {
+      "id": "architecture", "label": "Architecture",
+      "description": "模型结构、attention、MoE 与长上下文机制。",
+      "tags": [
+        {
+          "id": "long-context",
+          "label": "Long Context",
+          "aliases": ["long sequence", "million-token context"],
+          "description": "扩大训练或推理上下文并控制时间、显存与质量。"
+        },
+        {
+          "id": "sparse-attention",
+          "label": "Sparse Attention",
+          "aliases": ["token selection", "block sparse attention"],
+          "description": "只访问被选择的 token、block 或 chunk。"
+        },
+        {
+          "id": "linear-attention",
+          "label": "Linear Attention",
+          "aliases": ["state-space attention", "recurrent attention"],
+          "description": "用有限状态或核化计算替代完整二次 attention。"
+        },
+        {
+          "id": "attention-kernel",
+          "label": "Attention Kernel",
+          "aliases": ["FlashAttention", "attention IO"],
+          "description": "attention kernel 的 IO、tiling、并行与硬件映射。"
+        },
+        {
+          "id": "moe-architecture",
+          "label": "MoE Architecture",
+          "aliases": ["Mixture of Experts", "expert specialization"],
+          "description": "专家划分、路由、共享专家与稀疏激活结构。"
+        },
+        {
+          "id": "moe-systems",
+          "label": "MoE Systems",
+          "aliases": ["expert parallelism", "MoE communication"],
+          "description": "MoE 训练或推理中的通信、负载均衡与部署。"
+        },
+        {
+          "id": "multi-token-prediction",
+          "label": "Multi-Token Prediction",
+          "aliases": ["MTP", "multi-token generation"],
+          "description": "一次 backbone step 预测多个 token 或 draft。"
+        },
+        {
+          "id": "memory-architecture",
+          "label": "Memory Architecture",
+          "aliases": ["conditional memory", "state compression"],
+          "description": "模型内部的检索记忆、压缩状态或动态记忆结构。"
+        },
+        {
+          "id": "multimodal-model",
+          "label": "Multimodal Model",
+          "aliases": ["vision-language model", "multimodal reasoning"],
+          "description": "联合文本、图像或视频输入的模型与训练。"
+        }
+      ]
+    },
+    {
+      "id": "agents", "label": "Agents",
+      "description": "Agent 程序、工具、记忆、协作与软件工程。",
+      "tags": [
+        {
+          "id": "agent-workflow",
+          "label": "Agent Workflow",
+          "aliases": ["agent runtime", "LLM program"],
+          "description": "表达和执行多阶段 agent 数据流与生命周期。"
+        },
+        {
+          "id": "tool-use",
+          "label": "Tool Use",
+          "aliases": ["tool calling", "computer use", "sandbox"],
+          "description": "模型调用 API、搜索、代码环境或计算机工具。"
+        },
+        {
+          "id": "agent-memory",
+          "label": "Agent Memory",
+          "aliases": ["context management", "trajectory memory"],
+          "description": "Agent 对历史 turn、经验与上下文的选择和重建。"
+        },
+        {
+          "id": "multi-agent-orchestration",
+          "label": "Multi-Agent Orchestration",
+          "aliases": ["agent swarm", "parallel agents"],
+          "description": "多个 agent 或 subagent 的并行、聚合与编排。"
+        },
+        {
+          "id": "coding-agent",
+          "label": "Coding Agent",
+          "aliases": ["software engineering agent", "SWE agent"],
+          "description": "面向 repository、测试和软件工程任务的 agent。"
+        }
+      ]
+    },
+    {
+      "id": "evaluation", "label": "Evaluation",
+      "description": "验证器、过程监督、基准与能力边界分析。",
+      "tags": [
+        {
+          "id": "verifier",
+          "label": "Verifier",
+          "aliases": ["LLM judge", "verification model"],
+          "description": "对答案、轨迹、行为或候选进行评分与选择。"
+        },
+        {
+          "id": "process-supervision",
+          "label": "Process Supervision",
+          "aliases": ["PRM", "step-level supervision"],
+          "description": "对中间 reasoning step 提供标签、reward 或验证。"
+        },
+        {
+          "id": "benchmark",
+          "label": "Benchmark",
+          "aliases": ["evaluation suite", "test set"],
+          "description": "构造或审计用于比较模型和 agent 的评测集合。"
+        },
+        {
+          "id": "reasoning-analysis",
+          "label": "Reasoning Analysis",
+          "aliases": ["capability boundary", "mechanistic evaluation"],
+          "description": "区分采样、组合、泛化与真实 reasoning 能力变化。"
+        }
+      ]
+    },
+    {
+      "id": "safety", "label": "Safety",
+      "description": "奖励攻击、对齐、监控与高风险行为。",
+      "tags": [
+        {
+          "id": "reward-hacking",
+          "label": "Reward Hacking",
+          "aliases": ["specification gaming", "proxy gaming"],
+          "description": "优化 proxy、测试或规则时偏离真实目标。"
+        },
+        {
+          "id": "ai-safety",
+          "label": "AI Safety",
+          "aliases": ["alignment", "misbehavior monitoring"],
+          "description": "模型或 agent 的对齐、风险、欺骗与治理。"
+        }
+      ]
+    },
+    {
+      "id": "theory", "label": "Theory",
+      "description": "学习目标、复杂性与缩放规律的形式化结果。",
+      "tags": [
+        {
+          "id": "rl-theory",
+          "label": "RL Theory",
+          "aliases": ["policy gradient theory", "RL bound"],
+          "description": "RL objective、估计量、方差与性能界。"
+        },
+        {
+          "id": "formal-expressivity",
+          "label": "Formal Expressivity",
+          "aliases": ["Transformer theory", "automata complexity"],
+          "description": "模型相对逻辑、自动机或其他计算模型的表达复杂度。"
+        },
+        {
+          "id": "scaling-laws",
+          "label": "Scaling Laws",
+          "aliases": ["compute-optimal scaling", "neural scaling law"],
+          "description": "参数、数据、计算和 loss 之间的经验或理论缩放关系。"
+        }
+      ]
+    }
+  ]
+}

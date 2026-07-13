@@ -8,6 +8,8 @@ The content source is split by role:
 content/papers/      paper notes, one Markdown file per paper
 content/utility/     public workflow, template, and archive index pages
 data/authors.json    maintained author profiles
+data/tag-taxonomy.json controlled tag vocabulary and facets
+data/paper-tags.json paper-to-tag assignments, primary tag first
 internal/            private maintenance SOPs
 ```
 
@@ -82,4 +84,4 @@ Author identity, profile, and public-account verification follows the internal S
 internal/author-x-account-search-sop.md
 ```
 
-`npm run check:workflow` validates paper structure, v2 fields, evidence locations, archive-time conflicts, local figures, author-profile data, and recurring unprofiled authors. Historical notes remain readable under compatibility mode and produce bounded migration advisories.
+`npm run check:workflow` validates paper structure, v2 fields, evidence locations, archive-time conflicts, local figures, controlled tag assignments, author-profile data, and recurring unprofiled authors. Historical notes remain readable under compatibility mode and produce bounded migration advisories.

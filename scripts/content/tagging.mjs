@@ -1,76 +1,137 @@
-import { getFirstHeading, getSection, getSourceField, stripMarkdown } from './markdown.mjs';
+import fs from 'node:fs';
+import path from 'node:path';
+import { repoRoot } from './repository.mjs';
 
-const tagOverrides = new Map([
-  ['2001.08361-scaling-laws-neural-language-models', ['Methodology', 'Theory']],
-  ['2203.15556-training-compute-optimal-large-language-models', ['Methodology', 'Theory']],
-  ['2205.14135-flashattention-io-aware-exact-attention', ['Systems', 'Theory', 'Methodology']],
-  ['2310.01889-ring-attention-blockwise-transformers-near-infinite-context', ['Systems', 'Methodology', 'Theory']],
-  ['2308.16369-sarathi-chunked-prefill-decode-maximal-batching', ['Systems', 'Methodology']],
-  ['2025-09-10-defeating-nondeterminism-llm-inference', ['Systems', 'RL', 'Methodology']],
-  ['2403.03185-correlated-proxies-reward-hacking', ['RL', 'Safety', 'Methodology']],
-  ['2405.19888-parrot-semantic-variable-llm-serving', ['Systems', 'Methodology']],
-  ['2409.19256-hybridflow-rlhf-framework', ['Systems', 'RL']],
-  ['2501.09620-causal-rewards-llm-alignment', ['RL', 'Safety', 'Methodology']],
-  ['2501.12948-deepseek-r1-rl-reasoning', ['RL', 'Safety', 'Methodology']],
-  ['2503.11926-monitoring-reasoning-models-obfuscation', ['RL', 'Safety', 'Methodology']],
-  ['2503.14476-dapo-long-cot-rl-system', ['RL', 'Systems', 'Methodology']],
-  ['2504.13837-rlvr-reasoning-boundary-base-model', ['RL', 'Methodology']],
-  ['2505.24864-prorl-prolonged-rl-reasoning-boundaries', ['RL', 'Systems', 'Methodology']],
-  ['2510.01180-brorl-broadened-rl-exploration', ['RL', 'Systems', 'Methodology']],
-  ['2509.25123-rl-compositional-skill-acquisition', ['RL', 'Methodology']],
-  ['2511.02749-span-queries-cache-attention-locality', ['Systems', 'Methodology']],
-  ['2512.07783-interplay-pretraining-midtraining-rl-reasoning', ['RL', 'Methodology']],
-  ['2506.10947-spurious-rewards-rethinking-rlvr', ['RL', 'Safety', 'Methodology']],
-  ['2506.19248-inference-time-reward-hacking-llms', ['RL', 'Safety', 'Methodology']],
-  ['2604.04648-caution-pessimism-best-of-n-reward-hacking', ['RL', 'Safety', 'Methodology']],
-  ['2510.20270-impossiblebench-test-case-exploitation', ['Safety', 'Methodology', 'Systems']],
-  ['2510.19315-transformers-inherently-succinct', ['Theory']],
-  ['2602.07078-optimal-token-baseline-long-horizon-llm-rl', ['RL', 'Systems', 'Methodology']],
-  ['2605.14220-training-inference-mismatch-llm-rl', ['RL', 'Systems', 'Methodology']],
-  ['2605.30290-self-trained-verification', ['RL', 'Methodology']],
-  ['2605.31514-age-of-empires-anthropomorphism', ['Methodology']],
-  ['2606.00135-agentic-tool-calling-rl-training', ['RL', 'Systems', 'Methodology']],
-  ['2606.04075-llms-hack-rewards-and-society', ['Safety', 'RL']],
-  ['2606.04101-ultraep-rack-scale-moe-load-balancing', ['Systems']],
-  ['2606.04662-muon-outperforms-adam-curvature', ['Optimizer', 'Theory']],
-]);
+const readJson = (fileName) => JSON.parse(fs.readFileSync(path.join(repoRoot, 'data', fileName), 'utf8'));
 
-const parseExplicitTags = (value = '') =>
-  [
-    ...new Set(
-      stripMarkdown(value)
-        .split(/[,，;；]/)
-        .map((tag) => tag.trim())
-        .filter(Boolean),
-    ),
-  ].slice(0, 5);
+export const tagTaxonomy = readJson('tag-taxonomy.json');
+export const paperTagAssignments = readJson('paper-tags.json');
 
-const inferTags = (markdown, filename) => {
-  const explicitTags = parseExplicitTags(getSourceField(markdown, 'Tags'));
-  if (explicitTags.length > 0) return explicitTags;
+export const tagFacets = tagTaxonomy.facets.map(({ id, label, description }) => ({ id, label, description }));
 
-  const haystack = [
-    filename,
-    getSourceField(markdown, 'Title') || getFirstHeading(markdown, filename.replace(/\.md$/, '')),
-    getSourceField(markdown, 'Subjects'),
-    getSection(markdown, '一句话结论'),
-    getSection(markdown, '主要启发'),
-  ]
-    .join('\n')
-    .toLowerCase();
-  const tags = [];
-  const add = (tag, pattern) => {
-    if (pattern.test(haystack)) tags.push(tag);
-  };
+export const tagDefinitions = tagTaxonomy.facets.flatMap((facet) =>
+  facet.tags.map((tag) => ({
+    ...tag,
+    facetId: facet.id,
+    facetLabel: facet.label,
+  })),
+);
 
-  add('RL', /\b(rl|rlhf|rlvr|grpo|ppo|post-training|rollout|reward)\b/);
-  add('Systems', /\b(serving|inference|kernel|attention|moe|vllm|sglang|verl|distributed|hybridflow|vortex|ultraep)\b/);
-  add('Safety', /\b(safety|jailbreak|reward hacking|societal|risk|governance)\b/);
-  add('Theory', /\b(theory|theorem|transformer|succinct|hessian|curvature|formal|automata)\b/);
-  add('Optimizer', /\b(muon|adam|adamw|optimizer|shampoo|soap|galore|apollo|lion|adafactor)\b/);
-  add('Methodology', /\b(methodology|anthropomorphism|verification|verifier|evaluation|benchmark)\b/);
+const tagDefinitionsById = new Map(tagDefinitions.map((tag) => [tag.id, tag]));
 
-  return [...new Set(tags)].slice(0, 5);
+const issue = (code, subject, message) => ({ code, subject, message });
+const normalizedLabel = (value = '') => String(value).trim().toLocaleLowerCase();
+
+export const validateTagConfiguration = (
+  paperSlugs,
+  { taxonomy = tagTaxonomy, assignments = paperTagAssignments } = {},
+) => {
+  const errors = [];
+  const knownPaperSlugs = new Set(paperSlugs);
+  const facetIds = new Set();
+  const tagIds = new Set();
+  const tagLabels = new Set();
+  const tagTerms = new Map();
+
+  if (!Number.isInteger(taxonomy?.version) || !Array.isArray(taxonomy?.facets)) {
+    return [issue('tag-taxonomy-shape', 'tag-taxonomy.json', 'Expected an integer version and a facets array.')];
+  }
+
+  for (const facet of taxonomy.facets) {
+    if (!facet?.id || !facet?.label || !Array.isArray(facet?.tags)) {
+      errors.push(issue('tag-facet-shape', facet?.id ?? 'unknown-facet', 'Each facet needs id, label, and tags.'));
+      continue;
+    }
+    if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(facet.id)) {
+      errors.push(issue('invalid-tag-facet-id', facet.id, 'Facet IDs must be stable lowercase kebab-case values.'));
+    }
+    if (facetIds.has(facet.id)) {
+      errors.push(issue('duplicate-tag-facet', facet.id, 'Facet IDs must be unique.'));
+    }
+    facetIds.add(facet.id);
+
+    for (const tag of facet.tags) {
+      if (!tag?.id || !tag?.label || !tag?.description || !Array.isArray(tag?.aliases)) {
+        errors.push(issue('tag-definition-shape', tag?.id ?? 'unknown-tag', 'Each tag needs id, label, aliases, and description.'));
+        continue;
+      }
+      if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(tag.id)) {
+        errors.push(issue('invalid-tag-id', tag.id, 'Tag IDs must be stable lowercase kebab-case values.'));
+      }
+      if (tagIds.has(tag.id)) {
+        errors.push(issue('duplicate-tag-id', tag.id, 'Tag IDs must be unique.'));
+      }
+      tagIds.add(tag.id);
+
+      const labelKey = normalizedLabel(tag.label);
+      if (tagLabels.has(labelKey)) {
+        errors.push(issue('duplicate-tag-label', tag.label, 'Preferred tag labels must be unique.'));
+      }
+      tagLabels.add(labelKey);
+
+      const localTerms = new Set();
+      for (const term of [tag.label, ...tag.aliases]) {
+        const termKey = normalizedLabel(term);
+        if (!termKey) {
+          errors.push(issue('empty-tag-term', tag.id, 'Preferred labels and aliases must be non-empty strings.'));
+          continue;
+        }
+        if (localTerms.has(termKey)) {
+          errors.push(issue('duplicate-tag-term', tag.id, `Repeated preferred label or alias: ${term}.`));
+          continue;
+        }
+        localTerms.add(termKey);
+        const existingTagId = tagTerms.get(termKey);
+        if (existingTagId && existingTagId !== tag.id) {
+          errors.push(issue('ambiguous-tag-term', tag.id, `Term ${term} is already used by ${existingTagId}.`));
+        } else {
+          tagTerms.set(termKey, tag.id);
+        }
+      }
+    }
+  }
+
+  if (!assignments || typeof assignments !== 'object' || Array.isArray(assignments)) {
+    return [...errors, issue('paper-tags-shape', 'paper-tags.json', 'Expected a slug-to-tag-ID object.')];
+  }
+
+  for (const slug of knownPaperSlugs) {
+    const ids = assignments[slug];
+    if (!Array.isArray(ids) || ids.length === 0) {
+      errors.push(issue('missing-paper-tags', slug, 'Every paper needs one primary tag and up to three secondary tags.'));
+      continue;
+    }
+    if (ids.length > 4) {
+      errors.push(issue('too-many-paper-tags', slug, 'A paper may have at most four tags.'));
+    }
+    if (new Set(ids).size !== ids.length) {
+      errors.push(issue('duplicate-paper-tag', slug, 'A paper cannot repeat the same tag.'));
+    }
+    for (const id of ids) {
+      if (!tagIds.has(id)) {
+        errors.push(issue('unknown-paper-tag', slug, `Unknown tag ID: ${id}.`));
+      }
+    }
+  }
+
+  for (const slug of Object.keys(assignments)) {
+    if (!knownPaperSlugs.has(slug)) {
+      errors.push(issue('stale-paper-tags', slug, 'Tag assignment points to a paper that is not in the archive.'));
+    }
+  }
+
+  return errors;
 };
 
-export const tagsForPaper = (slug, markdown, fileName) => tagOverrides.get(slug) ?? inferTags(markdown, fileName);
+export const tagsForPaper = (slug) => {
+  const ids = paperTagAssignments[slug];
+  if (!Array.isArray(ids) || ids.length === 0) {
+    throw new Error(`Missing controlled tag assignment for ${slug}.`);
+  }
+
+  return ids.map((id) => {
+    const tag = tagDefinitionsById.get(id);
+    if (!tag) throw new Error(`Unknown controlled tag ${id} assigned to ${slug}.`);
+    return tag;
+  });
+};

@@ -24,18 +24,23 @@ import {
   stripPublicUtilityMaintenance,
 } from './content/markdown.mjs';
 import { generatedDir, generatedFile, readPaperEntries, readUtilityEntries } from './content/repository.mjs';
-import { tagsForPaper } from './content/tagging.mjs';
+import {
+  tagDefinitions as controlledTagDefinitions,
+  tagFacets as controlledTagFacets,
+  tagsForPaper,
+} from './content/tagging.mjs';
 
 const buildPaperRecords = async (paperEntries) => {
   const papers = [];
 
   for (const entry of paperEntries) {
-    const { file, fileName, slug, sourcePath } = entry;
+    const { file, slug, sourcePath } = entry;
     const raw = await fs.readFile(sourcePath, 'utf8');
     const title = getSourceField(raw, 'Title') || getFirstHeading(raw, slug);
     const oneSentence = getSection(raw, '一句话结论');
     const pageMarkdown = stripPublicPaperMaintenance(stripPageChrome(raw));
     const authors = getSourceField(raw, ['Authors', 'Author']) || 'Unknown';
+    const assignedTags = tagsForPaper(slug);
 
     papers.push({
       slug,
@@ -51,7 +56,11 @@ const buildPaperRecords = async (paperEntries) => {
       authorReferences: collectAuthorReferences(raw, authors),
       subjects: getSourceField(raw, 'Subjects'),
       currentVersion: getSourceField(raw, 'Current version read'),
-      tags: tagsForPaper(slug, raw, fileName),
+      tags: assignedTags.map((tag) => tag.label),
+      tagIds: assignedTags.map((tag) => tag.id),
+      tagAliases: [...new Set(assignedTags.flatMap((tag) => tag.aliases))],
+      primaryTag: assignedTags[0].label,
+      primaryTagId: assignedTags[0].id,
       summary: excerpt(oneSentence || getSection(raw, '论文脉络')),
       headings: collectHeadings(pageMarkdown),
       html: renderMarkdown(pageMarkdown),
@@ -226,7 +235,20 @@ const build = async () => {
   attachPaperAuthorEntries(papers, authorRecordsByKey);
 
   const utilities = await buildUtilityRecords();
-  const tags = [...new Set(papers.flatMap((paper) => paper.tags))].sort();
+  const tagRoutes = controlledTagDefinitions
+    .map((tag) => ({
+      ...tag,
+      count: papers.filter((paper) => paper.tagIds.includes(tag.id)).length,
+    }))
+    .filter((tag) => tag.count > 0);
+  const tagFacets = controlledTagFacets.map((facet) => {
+    const routeIds = new Set(tagRoutes.filter((tag) => tag.facetId === facet.id).map((tag) => tag.id));
+    return {
+      ...facet,
+      routeCount: routeIds.size,
+      paperCount: papers.filter((paper) => paper.tagIds.some((tagId) => routeIds.has(tagId))).length,
+    };
+  });
   const data = {
     generatedAt: new Date().toISOString(),
     site: {
@@ -237,7 +259,8 @@ const build = async () => {
     papers,
     authors,
     utilities,
-    tags,
+    tagRoutes,
+    tagFacets,
   };
 
   await fs.mkdir(generatedDir, { recursive: true });

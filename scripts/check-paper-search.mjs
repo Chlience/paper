@@ -9,7 +9,8 @@ const papers = [
     authors: 'Tri Dao',
     summary: 'Better work partitioning for exact attention kernels.',
     slug: '2307.08691-flashattention-2-parallelism-work-partitioning',
-    tags: ['RL', 'Systems', 'Safety'],
+    tags: ['Attention Kernel'],
+    tagAliases: ['FlashAttention', 'attention IO'],
   },
   {
     title: 'ZeRO: Memory Optimizations Toward Training Trillion Parameter Models',
@@ -18,7 +19,8 @@ const papers = [
     authors: 'Samyam Rajbhandari, Jeff Rasley',
     summary: 'Partition optimizer states, gradients, and parameters.',
     slug: '1910.02054-zero-memory-optimizations-trillion-parameter-models',
-    tags: ['RL', 'Systems', 'Optimizer'],
+    tags: ['Training Memory', 'Distributed Training'],
+    tagAliases: ['optimizer state sharding'],
   },
   {
     title: 'Large Language Models Hack Rewards, and Society',
@@ -27,7 +29,8 @@ const papers = [
     authors: 'Peter Henderson',
     summary: 'RL training can exploit reward specification gaps.',
     slug: '2606.04075-llms-hack-rewards-and-society',
-    tags: ['Safety', 'RL'],
+    tags: ['Reward Hacking', 'AI Safety'],
+    tagAliases: ['specification gaming'],
   },
 ];
 
@@ -44,7 +47,8 @@ assert.equal(searchPaperItems(items, 'flash').at(0)?.title, papers[0].title);
 assert.equal(searchPaperItems(items, 'tri dao').at(0)?.path, papers[0].path);
 assert.equal(searchPaperItems(items, 'optimizer partition').at(0)?.title, papers[1].title);
 assert.equal(searchPaperItems(items, 'reward safety').at(0)?.title, papers[2].title);
+assert.equal(searchPaperItems(items, 'specification gaming').at(0)?.title, papers[2].title);
 assert.equal(searchPaperItems(items, 'missing term').length, 0);
-assert.equal(searchPaperItems(items, 'rl', 2).length, 2);
+assert.equal(searchPaperItems(items, 'training', 2).length, 2);
 
 console.log('Paper search check passed.');

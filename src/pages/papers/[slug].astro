@@ -49,7 +49,7 @@ const h2Headings = paper.headings.filter((heading) => heading.depth === 2);
         {paper.updatedAt && paper.updatedAt !== paper.firstArchivedAt && <span>Updated {paper.updatedAt}</span>}
         {paper.currentVersion && <span>{paper.currentVersion}</span>}
         {paper.sourceUrl && <a href={paper.sourceUrl}>Source</a>}
-        {paper.tags.map((tag) => <a href={`/papers/#tag-${tag.toLowerCase()}`}>{tag}</a>)}
+        {paper.tags.map((tag, index) => <a href={`/papers/#tag-${paper.tagIds[index]}`}>{tag}</a>)}
       </div>
     </header>
 
