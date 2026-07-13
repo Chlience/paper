@@ -340,7 +340,7 @@ LLM RL、post-training、systems、serving、optimizer 和评测类论文都必�
 
 ### 适合摘录的图
 
-每篇论文默认摘录 $0$ 到 $3$ 张图。只有满足以下至少一条时才摘录：
+只有满足以下至少一条信息价值条件时才摘录图片：
 
 - 架构、系统路径或数据流图：例如模型结构、训练 / 推理流水线、cache / memory / communication path。
 - 关键训练信号或标签构造图：例如 reward、indexer、verifier、dataset pipeline、credit assignment 的生成流程。
