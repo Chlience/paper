@@ -9293,5 +9293,212 @@
         "url": "https://2026.cgo.org/profile/hailongyang"
       }
     ]
+  },
+  {
+    "slug": "tong-liu",
+    "name": "Tong Liu",
+    "aliases": ["Tong Liu", "Liu, Tong"],
+    "affiliations": ["LMU Munich", "Munich Center for Machine Learning", "Amazon"],
+    "homepage": "https://tongliu-github.github.io/",
+    "github": "https://github.com/TongLiu-github",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["tool-calling RL", "agent evaluation", "reinforcement learning", "efficient post-training"],
+    "notes": "Tool-Calling RL first and corresponding author, LMU Munich and MCML doctoral researcher. The paper marks the work as completed while at Amazon; his homepage and GitHub independently confirm the LMU identity and research focus.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://tongliu-github.github.io/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/TongLiu-github"
+      },
+      {
+        "label": "MCML publication page",
+        "url": "https://mcml.ai/publications/lqc%2B26/"
+      },
+      {
+        "label": "Tool-Calling RL",
+        "url": "https://arxiv.org/abs/2606.00135"
+      }
+    ]
+  },
+  {
+    "slug": "cheng-qian",
+    "name": "Cheng Qian",
+    "aliases": ["Cheng Qian", "Qian, Cheng"],
+    "affiliations": ["University of Illinois Urbana-Champaign", "Tsinghua University", "Carnegie Mellon University"],
+    "homepage": "https://qiancheng0.github.io/",
+    "github": "https://github.com/qiancheng0",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["tool-calling RL", "language agents", "knowledge-intensive NLP", "reinforcement learning"],
+    "notes": "Tool-Calling RL coauthor and UIUC doctoral researcher. His homepage records prior study at Tsinghua University and research collaboration at Carnegie Mellon University; his verified GitHub hosts ToolRL-related work.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://qiancheng0.github.io/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/qiancheng0"
+      },
+      {
+        "label": "Tool-Calling RL",
+        "url": "https://arxiv.org/abs/2606.00135"
+      }
+    ]
+  },
+  {
+    "slug": "matej-cief",
+    "name": "Matej Cief",
+    "aliases": ["Matej Cief", "Matej Čief", "Cief, Matej"],
+    "affiliations": ["Amazon", "Brno University of Technology", "Kempelen Institute of Intelligent Technologies"],
+    "homepage": "https://www.amazon.science/author/matej-cief",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["tool-calling RL", "natural language processing", "machine learning", "language agents"],
+    "notes": "Tool-Calling RL coauthor and Amazon researcher. Amazon Science, OpenReview, and the KInIT profile connect the same identity to prior work at Brno University of Technology and Kempelen Institute of Intelligent Technologies.",
+    "sources": [
+      {
+        "label": "Amazon Science",
+        "url": "https://www.amazon.science/author/matej-cief"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Matej_Cief1"
+      },
+      {
+        "label": "KInIT profile",
+        "url": "https://kinit.sk/clen/matej-cief/"
+      },
+      {
+        "label": "Tool-Calling RL",
+        "url": "https://arxiv.org/abs/2606.00135"
+      }
+    ]
+  },
+  {
+    "slug": "yuan-he",
+    "name": "Yuan He",
+    "chineseName": "何源",
+    "aliases": ["Yuan He", "何源", "He, Yuan", "Lawhy"],
+    "affiliations": ["Amazon", "University of Oxford", "CAMEL-AI"],
+    "homepage": "https://yuanhe.wiki/",
+    "github": "https://github.com/Lawhy",
+    "x": "https://x.com/lawhy_X",
+    "xConfidence": "high",
+    "topics": ["tool-calling RL", "agent post-training", "agent environments", "reinforcement learning infrastructure"],
+    "notes": "Tool-Calling RL coauthor and Amazon applied scientist. His homepage links the same GitHub and X identities and records prior work at the University of Oxford plus a visiting role with CAMEL-AI.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://yuanhe.wiki/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/Lawhy"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/lawhy_X"
+      },
+      {
+        "label": "Tool-Calling RL",
+        "url": "https://arxiv.org/abs/2606.00135"
+      }
+    ]
+  },
+  {
+    "slug": "daniele-dan",
+    "name": "Daniele Dan",
+    "aliases": ["Daniele Dan", "Dan, Daniele"],
+    "affiliations": ["Amazon", "University of Padua", "Imperial College London"],
+    "homepage": "https://danieled3.github.io/Data_Science_Portfolio/",
+    "github": "https://github.com/danieled3",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["tool-calling RL", "applied machine learning", "natural language processing", "language agents"],
+    "notes": "Tool-Calling RL coauthor and Amazon researcher in London. His portfolio and GitHub connect the same identity to prior study at the University of Padua and Imperial College London.",
+    "sources": [
+      {
+        "label": "Portfolio",
+        "url": "https://danieled3.github.io/Data_Science_Portfolio/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/danieled3"
+      },
+      {
+        "label": "Tool-Calling RL",
+        "url": "https://arxiv.org/abs/2606.00135"
+      }
+    ]
+  },
+  {
+    "slug": "nikolaos-aletras",
+    "name": "Nikolaos Aletras",
+    "aliases": ["Nikolaos Aletras", "Nikos Aletras", "Aletras, Nikolaos"],
+    "affiliations": ["University of Sheffield", "Amazon", "University College London"],
+    "homepage": "https://nikosaletras.com/",
+    "github": "",
+    "x": "https://x.com/nikaletras",
+    "xConfidence": "high",
+    "topics": ["tool-calling RL", "natural language processing", "computational social science", "language model evaluation"],
+    "notes": "Tool-Calling RL coauthor, University of Sheffield professor, and head of its NLP group. The paper marks the work as completed while at Amazon; his homepage directly links the @nikaletras X account and records prior UCL work.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://nikosaletras.com/"
+      },
+      {
+        "label": "University of Sheffield profile",
+        "url": "https://www.sheffield.ac.uk/cs/people/academic/nikos-aletras"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/nikaletras"
+      },
+      {
+        "label": "Tool-Calling RL",
+        "url": "https://arxiv.org/abs/2606.00135"
+      }
+    ]
+  },
+  {
+    "slug": "gabriella-kazai",
+    "name": "Gabriella Kazai",
+    "aliases": ["Gabriella Kazai", "Kazai, Gabriella"],
+    "affiliations": ["Amazon", "Microsoft", "Queen Mary University of London"],
+    "homepage": "https://www.gabriella-kazai.com/",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["tool-calling RL", "information retrieval", "human computation", "language agents"],
+    "notes": "Tool-Calling RL corresponding author and Amazon principal researcher. Amazon Science, OpenReview, DBLP, and her homepage connect the same identity to prior research at Microsoft and Queen Mary University of London.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://www.gabriella-kazai.com/"
+      },
+      {
+        "label": "Amazon Science",
+        "url": "https://www.amazon.science/author/gabriella-kazai"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Gabriella_Kazai2"
+      },
+      {
+        "label": "DBLP",
+        "url": "https://dblp.org/pid/k/GabriellaKazai.html"
+      },
+      {
+        "label": "Tool-Calling RL",
+        "url": "https://arxiv.org/abs/2606.00135"
+      }
+    ]
   }
 ]

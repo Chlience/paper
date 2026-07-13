@@ -46,7 +46,7 @@ Updated-At: 2026-07-13
 | [Muon Curvature](/papers/2606.04662-muon-outperforms-adam-curvature/) | 2026年6月 | 将 Muon 相对 Adam 的训练优势归因于更低的 directional curvature penalty，step-size 的解释力较弱。 |
 | [SRPO](/papers/2605.25507-credit-assignment-resets-language-model-reasoning/) | 2026年5月 | 从失败轨迹重置并重采样错误点后的 continuation，只更新后缀 token 以集中 credit assignment。 |
 | [TIM / VeXact](/papers/2605.14220-training-inference-mismatch-llm-rl/) | 2026年5月 | 构造 trainer / rollout bitwise-aligned 基线，证明微小 logprob mismatch 可触发 RL collapse。 |
-| [Tool-Calling RL](/papers/2606.00135-agentic-tool-calling-rl-training/) | 2026年5月 | 识别 tool-calling evaluation harness 的敏感性，并用 pre-rollout filtering 与 variance-aware downsampling 减少无效 RL compute。 |
+| [Tool-Calling RL](/papers/2606.00135-agentic-tool-calling-rl-training/) | 2026年5月 | 量化 tool-calling 评测协议漂移，并用近期 all-correct 预测与 max-variance update 子采样压缩 GRPO wall-clock。 |
 | [Anthropomorphism](/papers/2605.31514-age-of-empires-anthropomorphism/) | 2026年5月 | 用 Age of Empires II 作为 substrate control，说明类人行为测试不足以支持类人内在属性归因。 |
 | [STV](/papers/2605.30290-self-trained-verification/) | 2026年5月 | 把 reference solution 作为 verifier privileged signal，经 OPD + verdict RL 蒸馏到无 reference verifier，并用于训练与测试时自改进。 |
 | [Credit Assignment Survey](/papers/2604.09459-credit-assignment-reasoning-agentic-llm-rl/) | 2026年4月 | 统一 reasoning 与 agentic RL 的 token / step / turn / trajectory credit-assignment 问题。 |

@@ -65,7 +65,7 @@
   "2606.04075-llms-hack-rewards-and-society": ["reward-hacking", "ai-safety", "agent-rl"],
   "2605.31514-age-of-empires-anthropomorphism": ["reasoning-analysis", "benchmark"],
   "2605.30290-self-trained-verification": ["verifier", "on-policy-distillation", "test-time-scaling", "reasoning-rl"],
-  "2606.00135-agentic-tool-calling-rl-training": ["agent-rl", "tool-use", "rollout-optimization", "benchmark"],
+  "2606.00135-agentic-tool-calling-rl-training": ["rollout-optimization", "agent-rl", "tool-use", "benchmark"],
   "2605.14220-training-inference-mismatch-llm-rl": ["training-stability", "deterministic-inference", "rl-infrastructure", "rollout-optimization"],
   "2510.19315-transformers-inherently-succinct": ["formal-expressivity"],
   "2026-04-24-deepseek-v4-million-token-context-intelligence": ["long-context", "sparse-attention", "moe-architecture", "optimizer"],
