@@ -188,6 +188,8 @@ data/authors.json
 - 输出：本地源文件检查结果与需要修复的问题列表。
 - 停止条件：本地错误全部清零；历史兼容提示已审阅且没有由本次改动新增的异常。push 后的 CI build 作为部署门禁。
 
+<!-- public-utility-omit:start -->
+
 本地检查命令固定为：
 
 ```bash
@@ -200,6 +202,8 @@ npm run test:pins
 ```
 
 本地归档不运行 `npm run build` 或 `npm run check:site`。`check:site` 读取生成后的 `dist/`，应在 GitHub Actions 完成 production build 后执行。
+
+<!-- public-utility-omit:end -->
 
 ### 9. 提交与回写
 

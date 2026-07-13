@@ -803,6 +803,22 @@ test('public paper sanitizer retains the v2 not-found review classification', ()
   assert.doesNotMatch(cleaned, /xConfidence/);
 });
 
+test('public utility sanitizer removes repository-only maintenance blocks', () => {
+  const source = `公开说明。
+
+<!-- public-utility-omit:start -->
+npm run check:site
+<!-- public-utility-omit:end -->
+
+继续公开说明。`;
+
+  const sanitized = markdown.stripPublicUtilityMaintenance(source);
+  assert.doesNotMatch(sanitized, /npm run/i);
+  assert.doesNotMatch(sanitized, /public-utility-omit/);
+  assert.match(sanitized, /公开说明。/);
+  assert.match(sanitized, /继续公开说明。/);
+});
+
 test('the maintenance exemption accepts only the canonical single-line review field', () => {
   assert.equal(typeof markdown.isPublicPaperMaintenanceExemption, 'function');
   assert.equal(markdown.isPublicPaperMaintenanceExemption?.('- Page type: not-found'), true);

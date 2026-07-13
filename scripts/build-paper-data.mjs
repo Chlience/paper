@@ -21,6 +21,7 @@ import {
   renderMarkdown,
   stripPageChrome,
   stripPublicPaperMaintenance,
+  stripPublicUtilityMaintenance,
 } from './content/markdown.mjs';
 import { generatedDir, generatedFile, readPaperEntries, readUtilityEntries } from './content/repository.mjs';
 import { tagsForPaper } from './content/tagging.mjs';
@@ -203,7 +204,7 @@ const buildUtilityRecords = async () => {
   const utilities = [];
   for (const meta of readUtilityEntries()) {
     const raw = await fs.readFile(meta.sourcePath, 'utf8');
-    const pageMarkdown = stripPageChrome(raw);
+    const pageMarkdown = stripPublicUtilityMaintenance(stripPageChrome(raw));
     utilities.push({
       ...meta,
       firstArchivedAt: getFirstArchivedAt(raw),

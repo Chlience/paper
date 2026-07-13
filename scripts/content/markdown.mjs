@@ -264,6 +264,15 @@ export const stripPageChrome = (markdown) =>
     .replace(/^Pinned:\s*.+\n+/m, '')
     .trim();
 
+const publicUtilityOmitBlockPattern =
+  /<!--\s*public-utility-omit:start\s*-->[\s\S]*?<!--\s*public-utility-omit:end\s*-->/gi;
+
+export const stripPublicUtilityMaintenance = (markdown = '') =>
+  String(markdown)
+    .replace(publicUtilityOmitBlockPattern, '')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+
 const publicPaperMaintenanceExemptionPattern = /^-[ \t]+Page type:[ \t]*not-found[ \t]*$/i;
 
 export const isPublicPaperMaintenanceExemption = (line) => publicPaperMaintenanceExemptionPattern.test(line);
