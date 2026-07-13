@@ -4,7 +4,7 @@ import process from 'node:process';
 
 const siteUrl =
   process.env.PAPER_SITE_URL ??
-  'http://127.0.0.1:4321/papers/2605.27255-pipo-latent-multi-token-prediction/';
+  'http://127.0.0.1:4321/papers/2607.02770-gemma-4-technical-report/';
 
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -143,12 +143,12 @@ try {
   assert.ok(value.triggerWidth <= value.proseWidth + 1, 'figure image should not overflow the prose column');
   assert.deepEqual(
     value.imageAttrs,
-    { width: '793', height: '231', loading: 'lazy', decoding: 'async' },
+    { width: '995', height: '815', loading: 'lazy', decoding: 'async' },
     'figure image should include stable dimensions and lazy loading hints',
   );
   assert.equal(value.openState.dialogOpen, true, 'clicking a figure should open the image dialog');
-  assert.ok(value.openState.dialogSrc.includes('fig-1-pipo-overview.png'), 'dialog should show the clicked image');
-  assert.ok(value.openState.captionText.includes('输入侧方法、输出侧方法与 PIPO 的比较'), 'dialog should copy the concise figure caption');
+  assert.ok(value.openState.dialogSrc.includes('fig-1-mtp-drafter.png'), 'dialog should show the clicked image');
+  assert.ok(value.openState.captionText.includes('自回归 MTP drafter'), 'dialog should copy the concise figure caption');
   assert.ok(value.openState.captionText.includes('Image Source'), 'dialog caption should keep image provenance');
   assert.equal(value.openState.focusOnDialog, true, 'dialog should receive focus after opening');
   assert.equal(value.openState.hasVisibleChrome, false, 'dialog should not render a header, source button, or close button');

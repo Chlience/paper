@@ -44,7 +44,6 @@ Updated-At: 2026-07-13
 | [SocioHack](/papers/2606.04075-llms-hack-rewards-and-society/) | 2026年6月 | 把制度规则编码为 reward sandbox，验证 RL model 会发现形式合规但偏离制度意图的策略。 |
 | [UltraEP](/papers/2606.04101-ultraep-rack-scale-moe-load-balancing/) | 2026年6月 | 基于 post-gating exact load 逐 microbatch / layer 规划 expert replica 与 token reroute，统一 MoE 训练和 prefill 负载均衡。 |
 | [Muon Curvature](/papers/2606.04662-muon-outperforms-adam-curvature/) | 2026年6月 | 将 Muon 相对 Adam 的训练优势归因于更低的 directional curvature penalty，step-size 的解释力较弱。 |
-| [PIPO](/papers/2605.27255-pipo-latent-multi-token-prediction/) | 2026年5月 | 用 pair-in latent compression + pair-out MTP，在同一接口同时压缩输入并并行预测输出。 |
 | [SRPO](/papers/2605.25507-credit-assignment-resets-language-model-reasoning/) | 2026年5月 | 从失败轨迹重置并重采样错误点后的 continuation，只更新后缀 token 以集中 credit assignment。 |
 | [TIM / VeXact](/papers/2605.14220-training-inference-mismatch-llm-rl/) | 2026年5月 | 构造 trainer / rollout bitwise-aligned 基线，证明微小 logprob mismatch 可触发 RL collapse。 |
 | [Tool-Calling RL](/papers/2606.00135-agentic-tool-calling-rl-training/) | 2026年5月 | 识别 tool-calling evaluation harness 的敏感性，并用 pre-rollout filtering 与 variance-aware downsampling 减少无效 RL compute。 |
