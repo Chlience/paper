@@ -1,7 +1,7 @@
 # DeepSeek-V3.2-Exp: Boosting Long-Context Efficiency with DeepSeek Sparse Attention 论文笔记
 
 First-Archived-At: 2026-06-24 20:36
-Updated-At: 2026-07-13 19:51
+Updated-At: 2026-07-14 09:42
 
 ## Source
 
@@ -186,9 +186,29 @@ T_{\mathrm{index}}
 +T_{\mathrm{other\ model}}.
 $$
 
+Indexer 的打分原语确实仍是 query-key 点积，并且每个 query 都要扫描全部 $S$ 个历史位置。节省来自两种点积后续承载的工作量不同：indexer 只需生成每个位置的一个排序分数，推理时直接做 top-k；core attention 还要让 128 个 attention heads 计算主 QK score、执行 softmax、读取 value / latent KV 并完成加权聚合。令 $c_{\mathrm{index}}$ 表示 indexer 扫描一个历史位置的成本，$c_{\mathrm{core}}$ 表示 dense core attention 处理一个位置的成本，则当 $S>k$ 时，单个 decode query 的 attention 路径可近似写成：
+
+$$
+T_{\mathrm{dense}}(S)\approx S c_{\mathrm{core}},
+\qquad
+T_{\mathrm{DSA}}(S)\approx S c_{\mathrm{index}}+T_{\mathrm{topk+gather}}+k c_{\mathrm{core}}.
+$$
+
+因此，收益条件更准确地写成：
+
+$$
+S(c_{\mathrm{core}}-c_{\mathrm{index}})
+>
+k c_{\mathrm{core}}+T_{\mathrm{topk+gather}}.
+$$
+
+官方配置可以提供一个 MHA-style 的直观量级：dense core 的每个历史位置约包含 $128\times(128+64)=24576$ 个 QK 乘加项，以及 $128\times128=16384$ 个 value 聚合乘加项；indexer 约包含 $64\times128=8192$ 个打分乘加项，再把 64 个 index heads 聚合为一个位置分数。这个估算忽略了 MLA/MQA 重写、FP8、访存、softmax、top-k 与 kernel 融合，只用于说明 $c_{\mathrm{index}}<c_{\mathrm{core}}$ 的来源，不能替代 latency 测量。最后一个 query 位于 128K context 时，$k/S=2048/131072=1/64$，昂贵的 core attention 只处理约 1.56% 的历史位置；indexer 仍处理全部位置。
+
+官方 `model.py` 是语义参考实现，其中可见先形成 dense core scores、再应用 `index_mask` 的写法。生产收益需要 DeepGEMM indexer kernel 与 FlashMLA sparse attention kernel 在物理执行上只对 selected KV 完成 core attention；若执行引擎仍先算完整 core scores 再 mask，主要计算节省不会兑现。
+
 所以 $O(L^2)\rightarrow O(Lk)$ 是 core attention 的优化目标，不能直接当成整个模型的复杂度。真实收益取决于 FP8 indexer、top-k、KV layout、sparse FlashMLA kernel、batching 和通信；上下文越长，省下的 dense core attention 越容易覆盖 selector 的固定与二次扫描成本。这也解释了后续 GLM-5.2 的 IndexShare / IndexCache 为什么继续压低 indexer 开销。
 
-证据定位：2025-09-29 PDF Section 3 `Inference Costs`；官方 README 的 TileLang、DeepGEMM 和 FlashMLA kernel 入口。
+证据定位：2025-09-29 PDF Section 3 `Inference Costs`；官方配置 `inference/config_671B_v3.2.json`；官方代码 `inference/model.py -> Indexer.forward / MLA.forward`；官方 README 的 TileLang、DeepGEMM 和 FlashMLA kernel 入口，快照 `87e509a`。
 
 ### 6. 训练框架
 
@@ -403,6 +423,7 @@ Figure 2: DeepSeek-V3.1-Terminus 与 DeepSeek-V3.2-Exp 在 H800 clusters 上的 
 ### 2. 修正后的理解
 
 - $O(L^2)\rightarrow O(Lk)$ 只描述 core attention。端到端路径仍包含 $O(L^2)$ indexer、top-k、gather、sparse attention 和其它模型计算，成本图用于验证这些项相加后的实际结果。
+- Indexer 与传统 attention 都使用 query-key 点积；indexer 将全历史扫描压缩为低成本排序，昂贵的多头 QK、softmax、KV 读取和 value 聚合只覆盖 top-k。128K context、$k=2048$ 时，最后一个 query 的 core attention 可见比例为 $1/64$，indexer 的全量扫描仍是后续需要继续优化的成本项。
 - Dense warm-up 先建立 selector 的全历史排序能力，sparse training 再让主模型适配。943.7B token 是报告采用的充分预算实例，公开材料没有给出最低适配预算。
 - 原始 DSA 管理“该层 attention 能看到哪些 token”；FlashMemory 后续管理“哪些 chunk 的各层 KV 需要驻留 GPU”。逻辑选择与物理驻留是相邻的两个系统层级。
 - GLM-5.2 的 IndexShare / IndexCache 可以看作 DSA 采用方对 indexer 成本与一致性问题的后续工程回应。
