@@ -14,7 +14,6 @@ Updated-At: 2026-07-14
 
 | 简称 | 时间 | 核心信号 |
 | --- | --- | --- |
-| [Gemma 4](/papers/2607.02770-gemma-4-technical-report/) | 2026年7月 | 把 dense / MoE、thinking、长上下文、QAT、MTP drafter 与 encoder-free multimodality 组合进开放模型族。 |
 | [HiLS-Attention](/papers/2607.02980-hils-attention-infinite-context/) | 2026年7月 | 用 hierarchical softmax 分配 chunk mass，再在选中 chunk 内做 token attention，实现可训练的长上下文稀疏注意力。 |
 | [SPORK](/papers/2607.03333-spork-self-speculative-agentic-inference/) | 2026年7月 | 让目标模型从共享 KV prefix 自预测下一次工具调用，提前执行只读工具，并用 target verification 回收失败 probe 的 token 前缀。 |
 | [CompactionRL](/papers/2607.05378-compactionrl-context-compaction-agent-rl/) | 2026年7月 | 把同一策略生成的 context summary 纳入 PPO，用全 batch token 归一化和跨 segment GAE 在固定峰值上下文内训练长程 coding agent。 |

@@ -11,7 +11,6 @@
   "2601.16206-computer-environments-agentic-intelligence": ["tool-use", "agent-rl", "agent-workflow", "benchmark"],
   "2607.02980-hils-attention-infinite-context": ["sparse-attention", "long-context"],
   "2603.12201-indexcache-cross-layer-index-reuse": ["sparse-attention", "long-context", "serving-runtime"],
-  "2607.02770-gemma-4-technical-report": ["moe-architecture", "multimodal-model", "long-context", "multi-token-prediction"],
   "2606.09079-flashmemory-deepseek-v4-lookahead-sparse-attention": ["kv-cache", "sparse-attention", "long-context", "memory-architecture"],
   "2602.13692-thunderagent-program-aware-agentic-inference": ["agent-workflow", "inference-scheduling", "kv-cache", "tool-use"],
   "2606.23595-spiral-learning-search-aggregate": ["test-time-scaling", "credit-assignment", "rl-algorithm", "agent-workflow"],
