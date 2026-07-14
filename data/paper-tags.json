@@ -1,4 +1,6 @@
 {
+  "2026-07-14-agent-workflow-serving-grape-spork-leyline": ["agent-workflow", "inference-scheduling", "kv-cache", "tool-use"],
+  "2606.01065-leyline-kv-cache-directives-agentic-inference": ["kv-cache", "agent-workflow", "serving-runtime", "agent-memory"],
   "2026-07-13-agentic-rl-learned-environment-evolution": ["learned-environment", "agent-rl", "tool-use", "rollout-optimization"],
   "2026-06-23-chinese-frontier-model-reports-timeline": ["moe-systems", "long-context", "reasoning-rl", "rl-infrastructure"],
   "2026-07-13-rl-credit-assignment-may-july-landscape": ["credit-assignment", "agent-rl", "agent-memory", "rl-algorithm"],

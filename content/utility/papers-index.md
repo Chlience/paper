@@ -14,6 +14,7 @@ Updated-At: 2026-07-14
 
 | 简称 | 时间 | 核心信号 |
 | --- | --- | --- |
+| [Agent Workflow Serving Stack](/papers/2026-07-14-agent-workflow-serving-grape-spork-leyline/) | 2026年7月 | 将预声明 DAG 的跨 task 增量 prefill、ReAct turn 的工具调用推测执行和可编辑上下文的 KV directive 统一为 task、action、edit 三层 Agent 推理优化。 |
 | [HiLS-Attention](/papers/2607.02980-hils-attention-infinite-context/) | 2026年7月 | 用 hierarchical softmax 分配 chunk mass，再在选中 chunk 内做 token attention，实现可训练的长上下文稀疏注意力。 |
 | [SPORK](/papers/2607.03333-spork-self-speculative-agentic-inference/) | 2026年7月 | 让目标模型从共享 KV prefix 自预测下一次工具调用，提前执行只读工具，并用 target verification 回收失败 probe 的 token 前缀。 |
 | [CompactionRL](/papers/2607.05378-compactionrl-context-compaction-agent-rl/) | 2026年7月 | 把同一策略生成的 context summary 纳入 PPO，用全 batch token 归一化和跨 segment GAE 在固定峰值上下文内训练长程 coding agent。 |
@@ -43,6 +44,7 @@ Updated-At: 2026-07-14
 | [SocioHack](/papers/2606.04075-llms-hack-rewards-and-society/) | 2026年6月 | 把制度规则编码为 reward sandbox，验证 RL model 会发现形式合规但偏离制度意图的策略。 |
 | [UltraEP](/papers/2606.04101-ultraep-rack-scale-moe-load-balancing/) | 2026年6月 | 基于 post-gating exact load 逐 microbatch / layer 规划 expert replica 与 token reroute，统一 MoE 训练和 prefill 负载均衡。 |
 | [Muon Curvature](/papers/2606.04662-muon-outperforms-adam-curvature/) | 2026年6月 | 将 Muon 相对 Adam 的训练优势归因于更低的 directional curvature penalty，step-size 的解释力较弱。 |
+| [Leyline](/papers/2606.01065-leyline-kv-cache-directives-agentic-inference/) | 2026年5月 | 让 agent policy 通过 span directive 声明上下文编辑与语义模式，并在 MLA 上用 RoPE 位置校正保留编辑后仍可复用的 KV 工作。 |
 | [SRPO](/papers/2605.25507-credit-assignment-resets-language-model-reasoning/) | 2026年5月 | 从失败轨迹重置并重采样错误点后的 continuation，只更新后缀 token 以集中 credit assignment。 |
 | [TIM / VeXact](/papers/2605.14220-training-inference-mismatch-llm-rl/) | 2026年5月 | 构造 trainer / rollout bitwise-aligned 基线，证明微小 logprob mismatch 可触发 RL collapse。 |
 | [Tool-Calling RL](/papers/2606.00135-agentic-tool-calling-rl-training/) | 2026年5月 | 量化 tool-calling 评测协议漂移，并用近期 all-correct 预测与 max-variance update 子采样压缩 GRPO wall-clock。 |

@@ -1,7 +1,7 @@
 # Efficient Serving for Agentic LLM Workflows via Micro-Task-Level Parallelism 论文笔记
 
 First-Archived-At: 2026-07-13 10:26
-Updated-At: 2026-07-14 10:57
+Updated-At: 2026-07-14 11:13
 
 ## Source
 
@@ -46,7 +46,7 @@ Grape 把相依 LLM task 的静态 prompt、流式上游输出和 decode 拆成�
 
 判断边界：
 
-- 论文 PDF 匿名且没有公开 artifact；作者、机构、venue 和实现状态分别按本地 PDF与公开作者主页记录。
+- 论文 PDF 匿名且没有公开 artifact；作者、机构、venue 和实现状态分别按本地 PDF 与公开作者主页记录。
 - SC 2026 接收状态由作者主页直接支持，尚未由会议 proceedings 页面复核。
 - 论文把工具视为轻量步骤，实证范围集中于 LLM-only workflow；涉及浏览器、sandbox、搜索、长时 API 和异步工具的 agent serving 需要另行评估。
 - 论文使用“数学等价”描述分块 prefill。这里将理想因果计算等价与有限精度、batch 形态和采样轨迹一致性分开讨论。
@@ -327,6 +327,9 @@ Grape 对常规 decode 路径的 $d$ 改动有限，主要通过静态 prompt �
 - 与 [Span Query](/papers/2511.02749-span-queries-cache-attention-locality/)：两篇论文都把 prompt 内部结构暴露给 runtime。Span Query 聚焦 span algebra、cache locality 和 attention locality，Grape 聚焦变量边界、跨 task streaming 和 SLO-aware scheduling。
 - 与 [ThunderAgent](/papers/2602.13692-thunderagent-program-aware-agentic-inference/)：ThunderAgent 管理 program lifecycle、tool wait、KV pause / restore 和多节点 placement；Grape 优化 LLM-only workflow 内部的 prefill / decode overlap。包含 sandbox 和异步工具的完整 runtime 可以由 program-level scheduler 管外部阶段，由 Grape 式 engine 管就绪 LLM 阶段。
 - 与 [TML inference determinism](/papers/2025-09-10-defeating-nondeterminism-llm-inference/)：Grape 改变 chunk 和 batch composition，理想 causal prefill 语义保持等价，有限精度 reduction 与 sampling 输出仍可能改变；评测、cache reuse 和 RL rollout 场景应记录 batch-invariant determinism。
+- 与 [SPORK](/papers/2607.03333-spork-self-speculative-agentic-inference/)：Grape 在预声明数据流 DAG 上拆分并调度 LLM 微任务，SPORK 在运行中的 ReAct 回路里推测下一次工具 Action。组合后的 runtime 需要把 `fork`、`commit`、`reject`、`cancel` 作为动态图事件，同时管理共享前缀引用计数、工具副作用和 GPU / tool admission。
+- 与 [Leyline](/papers/2606.01065-leyline-kv-cache-directives-agentic-inference/)：Grape 的 partial edge 按上游追加 token 推进下游 prefill，Leyline 允许 policy 改写 canonical history。一次 edit 会同步改变 sequence length、partial-edge progress、重算成本和依赖就绪状态；`AMORTIZE` 保留被移除 span 对后续 token 的历史影响，`FORGET` 通过 prefix-trimmed re-prefill 重建语义。
+- 综合关系见 [Agent Workflow Serving Stack](/papers/2026-07-14-agent-workflow-serving-grape-spork-leyline/)：该技术分享把 Grape、SPORK、Leyline 分别放入 task、action、edit 三类边界，并给出统一调度状态、资源冲突与实验矩阵。
 
 ## Reference Intake Brief
 
