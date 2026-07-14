@@ -40,7 +40,7 @@
   "2505.09388-qwen3-technical-report": ["reasoning-rl", "moe-architecture", "on-policy-distillation", "long-context"],
   "2412.15115-qwen2-5-technical-report": ["reasoning-rl", "long-context", "coding-agent", "reward-modeling"],
   "2412.19437-deepseek-v3-technical-report": ["moe-architecture", "distributed-training", "multi-token-prediction", "training-stability"],
-  "2405.04434-deepseek-v2-mla-moe-efficient-llm": ["moe-architecture", "kv-cache", "reasoning-rl"],
+  "2405.04434-deepseek-v2-mla-moe-efficient-llm": ["kv-cache", "moe-architecture", "moe-systems"],
   "2604.09459-credit-assignment-reasoning-agentic-llm-rl": ["credit-assignment", "reasoning-rl", "agent-rl", "rl-theory"],
   "2502.10581-do-we-need-to-verify-step-by-step-process-supervision-theory": ["process-supervision", "rl-theory", "credit-assignment"],
   "2312.08935-math-shepherd-automatic-process-supervision": ["process-supervision", "verifier", "reward-modeling", "reasoning-rl"],
