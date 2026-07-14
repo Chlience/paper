@@ -1,7 +1,7 @@
 # GLM-5.2: Built for Long-Horizon Tasks 技术文章笔记
 
 First-Archived-At: 2026-06-18 13:45
-Updated-At: 2026-07-13 13:51
+Updated-At: 2026-07-14 10:08
 
 ## Source
 
@@ -295,6 +295,7 @@ GLM-5.2 的结论链可以概括为：
 
 - GLM-5.2 的关键是围绕 1M context 改造 indexer、MTP、serving、RL data shape 和 anti-hack。
 - IndexShare / IndexCache 和 DSA 的关系是：DSA 降低主 attention 成本，IndexShare 进一步降低 sparse indexer 成本。
+- 若把当前解码步 $t$、第 $\ell$ 层的 DSA 选择集合写成 $\mathcal S_{t,\ell}$，IndexShare 利用相邻层选择的高重叠，让后续三层复用 anchor layer 算出的 top-$k$ indices，可理解为沿网络深度轴的 index reuse。FlashMemory 则沿解码时间轴预测未来窗口需要驻留的历史 KV chunk。前者主要减少 indexer FLOPs，后者主要管理 HBM residency 与 CPU--GPU 预取。
 - MTP/KVShare 的核心是降低 draft path 和 target path 的不一致，让 speculative decoding 的 acceptance length 上升；它补的是 GLM-5 parameter-sharing MTP 无法自然解决的 KV/activation path 问题。
 - 长轨迹 compaction 改变了 RL 样本结构，使 critic-based PPO 比固定 group structure 更自然。
 
