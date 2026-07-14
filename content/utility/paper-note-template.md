@@ -78,6 +78,8 @@ Updated-At: YYYY-MM-DD HH:mm
 
 ### 5. 方法 / 系统 / 理论框架
 
+<!-- 核心内容深度检查：先确定一项首要贡献及必要的辅助贡献；让一句话结论、索引核心信号和本节最深入的小节指向同一重点；回到定义首要贡献的原始章节、公式、算法、图、附录或代码，选择适合该材料的方式回答 what / how / why / evidence / boundary。实验口径、背景和辅助工程细节应服务于这条主线。 -->
+
 <!-- 若论文 TeX source、HTML、项目页或官方仓库提供架构图、训练流程图或标签构造图的原始图片文件，可缓存到 public/images/papers/<paper-slug>/，并直接放在解释该机制的小节下方。截图、PDF 裁剪和本地辅助示意图只用于高价值场景，并按 SOP 标注来源形态。示例：
 
 ![Figure 1: short description](/images/papers/<paper-slug>/fig-1-short-name.png)
