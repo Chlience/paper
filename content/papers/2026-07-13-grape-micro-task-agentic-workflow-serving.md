@@ -1,7 +1,7 @@
 # Efficient Serving for Agentic LLM Workflows via Micro-Task-Level Parallelism 论文笔记
 
 First-Archived-At: 2026-07-13 10:26
-Updated-At: 2026-07-14 10:45
+Updated-At: 2026-07-14 10:57
 
 ## Source
 
@@ -270,6 +270,16 @@ Figure 13: 两种模型、三类 workflow 下的 P95 token 延迟；Grape 的主
 - Grape 的核心贡献可以压缩为“跨 task incremental prefill + workflow-aware scheduling”，TaskFlow 和 memory manager 分别承担可编程入口与资源压力控制。
 - 评估时以 `vLLM-opt` 为主 baseline。相对 Parrot 的大幅收益混入 engine implementation gap，适合说明完整系统效果，较难单独归因于微任务设计。
 - 平均延迟、吞吐和 P95 的收益结构显示它主要平滑 task-switch prefill burst，整体算力效率提升处于约 15% 量级。
+
+P95 改善显著大于平均延迟，可以用稀疏 burst 分布理解。设常规 decode token 的间隔为 $d$，task boundary 或受同 batch 长 prefill 阻塞的 token 间隔为 $b$，后者占比为 $p$ 且 $b\gg d$，则平均值约为：
+
+$$
+\mathbb E[T]=(1-p)d+pb.
+$$
+
+Grape 对常规 decode 路径的 $d$ 改动有限，主要通过静态 prompt 提前 prefill、上游 token 流式追加、单轮 batch SLO 约束和关键路径调度，把 $b$ 压到更小的 $b'$。平均值中的改善会被较小的 $p$ 加权；当 boundary stalls 及其 head-of-line blocking 影响覆盖尾部 5% 以上样本时，P95 会直接从 burst 区间下降，因此分位数收益可以明显大于均值。长 prefill 还会拖慢同 batch 的 decode requests，使有效尾部样本比例高于 task boundary 自身的出现比例。
+
+论文这里的 P95 是 token-level agentic inter-token latency：它把中间 task 输出与最终输出放进同一 token 时间序列，跨 task 的输出空档会计入分位数。论文没有报告 final-answer latency 或 workflow makespan 的 P95，因此 3.80 倍结果最直接支持“task-switch token gap 被显著压缩”，对用户端任务完成尾延迟的收益仍需单独测量。
 
 ### 2. 修正后的理解
 
