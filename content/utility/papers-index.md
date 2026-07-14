@@ -95,7 +95,7 @@ Updated-At: 2026-07-14
 | [Qwen2.5](/papers/2412.15115-qwen2-5-technical-report/) | 2024年12月 | 把 18T 预训练、SFT / DPO / GRPO 与长上下文扩展组织为通用、代码和数学模型族。 |
 | [Muon](/papers/2026-06-19-muon-optimizer-keller-jordan-synthesis/) | 2024年12月 | 用 low-precision Newton-Schulz 把 momentum matrix 近似正交化，并给出 LLM scaling 所需的更新尺度和参数分组。 |
 | [HybridFlow](/papers/2409.19256-hybridflow-rlhf-framework/) | 2024年9月 | 用跨模型 single-controller 与模型内 multi-controller 统一编排 RLHF dataflow 和并行执行。 |
-| [DeepSeek-V2](/papers/2405.04434-deepseek-v2-mla-moe-efficient-llm/) | 2024年5月 | 用联合 KV latent、decoupled RoPE 和 projection absorption 压缩 decode cache，并以 device-limited DeepSeekMoE 同时控制 active compute 与通信扇出。 |
+| [DeepSeek-V2](/papers/2405.04434-deepseek-v2-mla-moe-efficient-llm/) | 2024年5月 | 把 per-head K/V cache 改成由 hidden state 下投影得到的共享 KV latent，并用 projection absorption 与 decoupled RoPE 避免恢复历史 K/V。 |
 | [Lightning Attention](/papers/2405.17381-various-lengths-constant-speed-lightning-attention/) | 2024年5月 | 把 causal linear attention 拆成块内矩阵乘和块间 recurrent state，提供 IO-aware GPU kernel。 |
 | [Parrot](/papers/2405.19888-parrot-semantic-variable-llm-serving/) | 2024年5月 | 用 Semantic Variable 暴露 LLM application DAG、shared prompt 和性能目标，驱动应用级 serving 调度。 |
 | [Correlated Proxies / ORPO](/papers/2403.03185-correlated-proxies-reward-hacking/) | 2024年3月 | 以 occupancy shift 定义 correlated proxy failure，并用 ORPO 约束策略访问分布。 |
