@@ -1,7 +1,7 @@
 # Efficient Serving for Agentic LLM Workflows via Micro-Task-Level Parallelism 论文笔记
 
 First-Archived-At: 2026-07-13 10:26
-Updated-At: 2026-07-14 11:13
+Updated-At: 2026-07-14 13:02
 
 ## Source
 
@@ -280,6 +280,19 @@ $$
 Grape 对常规 decode 路径的 $d$ 改动有限，主要通过静态 prompt 提前 prefill、上游 token 流式追加、单轮 batch SLO 约束和关键路径调度，把 $b$ 压到更小的 $b'$。平均值中的改善会被较小的 $p$ 加权；当 boundary stalls 及其 head-of-line blocking 影响覆盖尾部 5% 以上样本时，P95 会直接从 burst 区间下降，因此分位数收益可以明显大于均值。长 prefill 还会拖慢同 batch 的 decode requests，使有效尾部样本比例高于 task boundary 自身的出现比例。
 
 论文这里的 P95 是 token-level agentic inter-token latency：它把中间 task 输出与最终输出放进同一 token 时间序列，跨 task 的输出空档会计入分位数。论文没有报告 final-answer latency 或 workflow makespan 的 P95，因此 3.80 倍结果最直接支持“task-switch token gap 被显著压缩”，对用户端任务完成尾延迟的收益仍需单独测量。
+
+进一步按机制归因，可以得到以下层次：
+
+| 收益来源 | 直接作用 | 论文证据 | 本地判断 |
+| --- | --- | --- | --- |
+| 跨 task incremental prefill | 将下游静态 prompt 和逐步到达的上游输出提前转成 KV，与上游 bandwidth-bound decode 重叠；下游 decode 启动前需要补做的 prefill 更少 | 相对 `vLLM-opt`，完整 Grape 的平均延迟 / 吞吐为 1.15 / 1.16 倍，MFU 最高提高 1.15 / 1.16 倍；execution timeline 显示 task-boundary bubble 被填充 | 主要并行机会与平均吞吐收益来源；总 prefill token workload 大体保留，收益来自时间重排、资源互补和等待隐藏 |
+| SLO-aware / critical-path scheduler | 控制每轮 mixed prefill-decode batch 的预计执行时间，优先推进直接产出 token 或即将解除关键依赖的微任务 | P95 相对 `vLLM-opt` 提高 3.80 倍，SLO attainment 从 83.46% 提高到 98.10% | 主要尾延迟转化机制；它决定 overlap 工作何时执行，避免提前 prefill 反向阻塞 decode |
+| graph-aware KV preemption | 在提前执行增加 KV 占用后，优先回收远离 active critical node 的微任务 KV，减少关键路径停顿和近期重算 | memory optimization 独立平均提高吞吐 1.06 倍 | 次要附加收益与容量保护机制，贡献明显小于完整系统的 tail-latency 改善 |
+| vLLM engine 与既有 Parrot 优化 | 提供 optimized operators、CUDA Graph 和更好的 memory management | Grape 相对 Parrot 的平均 / P95 收益达到 2.30 / 8.49 倍，显著高于相对 `vLLM-opt` 的 1.15 / 3.80 倍 | 这部分反映完整实现栈差异，不能计入微任务并行本身的纯增量收益 |
+
+论文没有提供“保留微任务图、分别关闭 incremental prefill / 新 scheduler”的完整正交消融，因此 1.15-1.16 倍平均收益无法继续精确拆分。KV memory optimization 的 1.06 倍也不能直接从总 speedup 中相减，因为它与 arrival rate、cache pressure 和调度选择存在交互。
+
+收益较大的工作负载通常具有多级 LLM 依赖、较长上游 decode、较多已知下游静态 prompt，以及能够容纳 mixed prefill-decode 的 GPU 余量。工具执行占据主要 wall time、下游 prompt 几乎全部依赖最后才得到的外部结果、动态图频繁改变，或 GPU 已被高效独立请求持续饱和时，可隐藏的 prefill 窗口会缩小，Grape 的端到端收益也会收缩。
 
 ### 2. 修正后的理解
 
