@@ -1,7 +1,7 @@
 # Efficient Serving for Agentic LLM Workflows via Micro-Task-Level Parallelism 论文笔记
 
 First-Archived-At: 2026-07-13 10:26
-Updated-At: 2026-07-13 10:26
+Updated-At: 2026-07-14 10:45
 
 ## Source
 
@@ -266,6 +266,7 @@ Figure 13: 两种模型、三类 workflow 下的 P95 token 延迟；Grape 的主
 
 ### 1. 讨论收敛点
 
+- 论文中的 “agentic workflow” 采用预声明的 LLM task dataflow graph：`add_variable` 与 `add_task` 建立 `InputVar` / `IntermediateVar` / `OutputVar` 依赖，再 lowering 成带 strong / partial edge 的微任务 DAG。三类实证都是固定 pipeline：product planner → framework designer → project planner → code generator → test validator 的 MetaGPT 风格 code workflow、顺序 refine 摘要，以及 query rewriter → searcher → answer generator → safety checker。`dynamic node` 的 dynamic 指 token 内容在运行时才出现，控制拓扑仍预先声明；partial edge 表示上游 token chunk 流式进入下游 prefill，条件分支语义未披露。ReAct 的 reasoning → action → observation 循环、运行时停止条件、条件分支、retry 和动态 fan-out 未进入 TaskFlow 语义或实验；若上层 runtime 将一段 ReAct 执行展开为已知 task graph，Grape 的增量 prefill 机制可能用于其中的就绪 LLM 阶段，动态编排仍由上层负责。
 - Grape 的核心贡献可以压缩为“跨 task incremental prefill + workflow-aware scheduling”，TaskFlow 和 memory manager 分别承担可编程入口与资源压力控制。
 - 评估时以 `vLLM-opt` 为主 baseline。相对 Parrot 的大幅收益混入 engine implementation gap，适合说明完整系统效果，较难单独归因于微任务设计。
 - 平均延迟、吞吐和 P95 的收益结构显示它主要平滑 task-switch prefill burst，整体算力效率提升处于约 15% 量级。
