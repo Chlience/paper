@@ -14,6 +14,7 @@ Updated-At: 2026-07-14
 
 | 简称 | 时间 | 核心信号 |
 | --- | --- | --- |
+| [Prefill CP](/papers/2026-07-14-prefill-context-parallelism-inference-scaling/) | 2026年7月 | 将单条长请求的 query rows 沿 context 维分片，并以全局 KV 可见性、因果负载均衡和通信重叠并行化 dense attention 或 DSA indexer，同时明确 KV 所有权与弹性调度决定生产扩展边界。 |
 | [Agent Workflow Serving Stack](/papers/2026-07-14-agent-workflow-serving-grape-spork-leyline/) | 2026年7月 | 将预声明 DAG 的跨 task 增量 prefill、ReAct turn 的工具调用推测执行和可编辑上下文的 KV directive 统一为 task、action、edit 三层 Agent 推理优化。 |
 | [HiLS-Attention](/papers/2607.02980-hils-attention-infinite-context/) | 2026年7月 | 用 hierarchical softmax 分配 chunk mass，再在选中 chunk 内做 token attention，实现可训练的长上下文稀疏注意力。 |
 | [SPORK](/papers/2607.03333-spork-self-speculative-agentic-inference/) | 2026年7月 | 让目标模型从共享 KV prefix 自预测下一次工具调用，提前执行只读工具，并用 target verification 回收失败 probe 的 token 前缀。 |

@@ -1,4 +1,5 @@
 {
+  "2026-07-14-prefill-context-parallelism-inference-scaling": ["inference-parallelism", "long-context", "attention-kernel", "kv-cache"],
   "2026-07-14-agent-workflow-serving-grape-spork-leyline": ["agent-workflow", "inference-scheduling", "kv-cache", "tool-use"],
   "2606.01065-leyline-kv-cache-directives-agentic-inference": ["kv-cache", "agent-workflow", "serving-runtime", "agent-memory"],
   "2026-07-13-agentic-rl-learned-environment-evolution": ["learned-environment", "agent-rl", "tool-use", "rollout-optimization"],

@@ -1,7 +1,7 @@
 # GLM-5.2: Built for Long-Horizon Tasks 技术文章笔记
 
 First-Archived-At: 2026-06-18 13:45
-Updated-At: 2026-07-14 10:19
+Updated-At: 2026-07-14 20:25
 
 ## Source
 
@@ -341,6 +341,7 @@ GLM-5.2 的结论链可以概括为：
 
 - 与 [2602.15763](/papers/2602.15763-glm-5-agentic-engineering/)：GLM-5.2 是 GLM-5 系列后续 release，沿用 744B-A40B、DSA、MTP、slime 和 agentic engineering 方向，并把 context 从 200K 推到 1M。
 - 与 [IndexCache](/papers/2603.12201-indexcache-cross-layer-index-reuse/)：IndexCache 给出 Full / Shared 执行结构、training-free loss search 与 training-aware multi-layer distillation；GLM-5.2 将跨层 top-$k$ reuse 固化为 `index_topk_freq=4` 的 FSSS IndexShare，并扩展到 MTP iteration。公开资料没有确认 GLM-5.2 的 exact index loss。
+- 与 [Prefill CP](/papers/2026-07-14-prefill-context-parallelism-inference-scaling/)：SGLang #29421 为 GLM-5.2 的 DSA Prefill CP 增加 cache layer split，在 CP=4、8192 tokens 下把 per-rank KV/indexer cache 从 0.77 GB 降到 0.20 GB，并让 PD decode 从全部 owner ranks 拉取对应 layer ranges。该综合进一步区分 TTFT compute parallelism 与 KV ownership 带来的容量扩展。
 - 与 [2026-06-17](/papers/2026-06-17-slime-rl-scaling-framework/)：GLM-5.2 博文是 slime 支撑 GLM-5.2 的直接应用证据，覆盖 compact trajectory、sub-agent workflow、parallel OPD、KV-cache FP8 和 training-serving 配置复用。
 - 与 [2606.12370](/papers/2606.12370-bebop-mtp-rejection-sampling-rl-training/)：GLM-5.2 的 MTP 明确受 Bebop 启发，引入 rejection sampling 和 end-to-end TV loss，提高 speculative decoding acceptance。
 - 与 [2605.14220](/papers/2605.14220-training-inference-mismatch-llm-rl/) 和 [2025-09-10](/papers/2025-09-10-defeating-nondeterminism-llm-inference/)：MTP 的训练-推理路径一致性、DSA indexer reuse、rollout logprob consistency 都属于 train/inference consistency 的系统问题。

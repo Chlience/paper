@@ -108,6 +108,12 @@
           "description": "面向在线负载的完整推理 runtime 与执行接口。"
         },
         {
+          "id": "inference-parallelism",
+          "label": "Inference Parallelism",
+          "aliases": ["context parallelism", "sequence parallel inference", "prefill CP"],
+          "description": "推理阶段的 tensor、context、sequence、pipeline 或多维并行执行。"
+        },
+        {
           "id": "kv-cache",
           "label": "KV Cache",
           "aliases": ["prefix cache", "cache reuse"],
