@@ -8072,8 +8072,8 @@
     "github": "https://github.com/bys0318",
     "x": "https://x.com/realYushiBai",
     "xConfidence": "high",
-    "topics": ["HiLS-Attention", "IndexCache", "IndexShare", "GLM-5", "long-context modeling", "sparse attention"],
-    "notes": "Author of HiLS-Attention with paper-time affiliation Tencent HY Team. Homepage identifies Yushi Bai (白雨石) as a Tsinghua PhD student advised by Juanzi Li; local archive already connects this author to IndexCache / GLM-5.2. High-confidence X is linked from the homepage and tied to IndexCache / GLM-5 activity.",
+    "topics": ["HiLS-Attention", "IndexCache", "IndexShare", "GLM-5", "long-context modeling", "sparse attention", "cross-layer index reuse"],
+    "notes": "IndexCache first author and HiLS-Attention author. Homepage identifies Yushi Bai (白雨石) as a Tsinghua PhD student advised by Juanzi Li and records GLM-5 architecture contributions; the paper marks IndexCache as work completed during a Z.ai internship. High-confidence X is linked from the homepage.",
     "sources": [
       {
         "label": "HiLS-Attention",
@@ -9209,8 +9209,8 @@
     "github": "",
     "x": "",
     "xConfidence": "not-found",
-    "topics": ["large language models", "agentic reinforcement learning", "context compaction", "machine learning", "knowledge graphs", "data mining"],
-    "notes": "SAO and CompactionRL coauthor and Tsinghua computer science professor in the Knowledge Engineering Group. His official homepage identifies his work in artificial intelligence, machine learning, data mining, knowledge graphs, and the GLM project ecosystem.",
+    "topics": ["large language models", "agentic reinforcement learning", "context compaction", "IndexCache", "sparse attention", "machine learning", "knowledge graphs", "data mining"],
+    "notes": "IndexCache, SAO, and CompactionRL coauthor and Tsinghua computer science professor in the Knowledge Engineering Group. His official homepage identifies his work in artificial intelligence, machine learning, data mining, knowledge graphs, and the GLM project ecosystem.",
     "sources": [
       {
         "label": "Homepage",
@@ -9227,6 +9227,10 @@
       {
         "label": "CompactionRL arXiv",
         "url": "https://arxiv.org/abs/2607.05378"
+      },
+      {
+        "label": "IndexCache arXiv",
+        "url": "https://arxiv.org/abs/2603.12201"
       }
     ]
   },
@@ -9857,8 +9861,8 @@
     "github": "https://github.com/davidlvxin",
     "x": "",
     "xConfidence": "not-found",
-    "topics": ["reasoning reinforcement learning", "reinforcement learning infrastructure", "agentic reinforcement learning", "long-context modeling", "slime"],
-    "notes": "slime corresponding author and Zhipu AI O Team lead. His homepage connects the same identity to slime, GLM reinforcement learning, long-context research, and prior Tsinghua University study.",
+    "topics": ["reasoning reinforcement learning", "reinforcement learning infrastructure", "agentic reinforcement learning", "long-context modeling", "sparse attention", "IndexCache", "slime"],
+    "notes": "IndexCache coauthor, slime corresponding author, and Zhipu AI O Team lead. His homepage connects the same identity to GLM reinforcement learning, long-context research, reinforcement learning infrastructure, and prior Tsinghua University study.",
     "sources": [
       {
         "label": "Homepage",
@@ -9875,6 +9879,160 @@
       {
         "label": "slime repository",
         "url": "https://github.com/THUDM/slime"
+      },
+      {
+        "label": "IndexCache arXiv",
+        "url": "https://arxiv.org/abs/2603.12201"
+      }
+    ]
+  },
+  {
+    "slug": "qian-dong",
+    "name": "Qian Dong",
+    "aliases": ["Qian Dong", "Dong Qian", "verymakesense", "Deriq-Qian-Dong"],
+    "affiliations": ["Tsinghua University", "THUIR", "Z.ai"],
+    "homepage": "https://dongqian.bj.cn/",
+    "github": "",
+    "googleScholar": "https://scholar.google.com/citations?user=m88SZGgAAAAJ",
+    "huggingFace": "https://huggingface.co/qian",
+    "x": "https://x.com/verymakesense",
+    "xConfidence": "high",
+    "topics": ["IndexCache", "GLM-5", "sparse attention", "long-context modeling", "large language models"],
+    "notes": "IndexCache coauthor and Tsinghua THUIR PhD student. His homepage records core architecture contributions to GLM-5 and directly links the @verymakesense X account; the IndexCache paper marks the work as completed during a Z.ai internship.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://dongqian.bj.cn/"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=m88SZGgAAAAJ"
+      },
+      {
+        "label": "Hugging Face",
+        "url": "https://huggingface.co/qian"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/verymakesense"
+      },
+      {
+        "label": "IndexCache arXiv",
+        "url": "https://arxiv.org/abs/2603.12201"
+      },
+      {
+        "label": "GLM-5 arXiv",
+        "url": "https://arxiv.org/abs/2602.15763"
+      }
+    ]
+  },
+  {
+    "slug": "ting-jiang-zai",
+    "name": "Ting Jiang",
+    "aliases": ["Ting Jiang", "Jiang Ting"],
+    "affiliations": ["Z.ai"],
+    "homepage": "",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["IndexCache", "GLM-5", "sparse attention", "long-context modeling"],
+    "notes": "IndexCache coauthor with paper-time affiliation Z.ai and GLM-5 report author. The name is common, so this profile is scoped to the Z.ai / GLM identity; no reliable personal homepage or X account was found.",
+    "sources": [
+      {
+        "label": "IndexCache arXiv",
+        "url": "https://arxiv.org/abs/2603.12201"
+      },
+      {
+        "label": "GLM-5 arXiv",
+        "url": "https://arxiv.org/abs/2602.15763"
+      }
+    ]
+  },
+  {
+    "slug": "zhengxiao-du",
+    "name": "Zhengxiao Du",
+    "aliases": ["Zhengxiao Du", "Du Zhengxiao", "duzx16"],
+    "affiliations": ["Z.ai", "Tsinghua University"],
+    "homepage": "https://zxdu.xyz/",
+    "github": "https://github.com/duzx16",
+    "googleScholar": "https://scholar.google.co.uk/citations?user=A8x07E0AAAAJ",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["IndexCache", "GLM-5", "large language models", "sparse attention", "long-context modeling"],
+    "notes": "IndexCache coauthor and Z.ai technical lead. His homepage records a 2025 Tsinghua PhD and co-leadership of the GLM base-model group, connecting sparse-attention systems work to the GLM-5 architecture line.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://zxdu.xyz/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/duzx16"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.co.uk/citations?user=A8x07E0AAAAJ"
+      },
+      {
+        "label": "IndexCache arXiv",
+        "url": "https://arxiv.org/abs/2603.12201"
+      },
+      {
+        "label": "GLM-5 arXiv",
+        "url": "https://arxiv.org/abs/2602.15763"
+      }
+    ]
+  },
+  {
+    "slug": "aohan-zeng",
+    "name": "Aohan Zeng",
+    "aliases": ["Aohan Zeng", "Zeng Aohan"],
+    "affiliations": ["Z.ai", "Tsinghua University"],
+    "homepage": "",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["IndexCache", "GLM-5", "GLM", "large language models", "sparse attention"],
+    "notes": "IndexCache coauthor and lead author of the GLM-5 technical report, with public paper affiliations spanning Z.ai and Tsinghua University. No reliable personal homepage or X account was found in this profile pass.",
+    "sources": [
+      {
+        "label": "IndexCache arXiv",
+        "url": "https://arxiv.org/abs/2603.12201"
+      },
+      {
+        "label": "GLM-5 arXiv",
+        "url": "https://arxiv.org/abs/2602.15763"
+      },
+      {
+        "label": "GLM-130B arXiv",
+        "url": "https://arxiv.org/abs/2210.02414"
+      }
+    ]
+  },
+  {
+    "slug": "juanzi-li",
+    "name": "Juanzi Li",
+    "chineseName": "李涓子",
+    "aliases": ["Juanzi Li", "Li Juanzi", "李涓子"],
+    "affiliations": ["Tsinghua University", "Knowledge Engineering Group (KEG)"],
+    "homepage": "https://keg.cs.tsinghua.edu.cn/persons/ljz/",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["IndexCache", "large language models", "knowledge graphs", "natural language processing", "data mining"],
+    "notes": "IndexCache coauthor and Tsinghua University professor in the Knowledge Engineering Group. Her official profiles connect knowledge engineering, knowledge graphs, natural language processing, and large language models; she advises Yushi Bai.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://keg.cs.tsinghua.edu.cn/persons/ljz/"
+      },
+      {
+        "label": "Tsinghua faculty profile",
+        "url": "https://www.cs.tsinghua.edu.cn/info/1111/3487.htm"
+      },
+      {
+        "label": "IndexCache arXiv",
+        "url": "https://arxiv.org/abs/2603.12201"
       }
     ]
   }

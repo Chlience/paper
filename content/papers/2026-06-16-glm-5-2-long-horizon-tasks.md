@@ -1,7 +1,7 @@
 # GLM-5.2: Built for Long-Horizon Tasks 技术文章笔记
 
 First-Archived-At: 2026-06-18 13:45
-Updated-At: 2026-07-14 10:08
+Updated-At: 2026-07-14 10:19
 
 ## Source
 
@@ -15,6 +15,7 @@ Updated-At: 2026-07-14 10:08
 - Published: 2026-06-16
 - Current version read: blog bundle last modified 2026-06-17; official docs and Hugging Face model card accessed 2026-06-24
 - Related paper: [2602.15763](/papers/2602.15763-glm-5-agentic-engineering/)
+- Related method: [IndexCache](/papers/2603.12201-indexcache-cross-layer-index-reuse/)
 - Subjects: long-horizon coding agents, 1M context, sparse attention, speculative decoding, agentic RL, anti-hack training
 - Review / OpenReview: 未发现 GLM-5.2 release blog 对应的官方公开审稿 forum；OpenReview 检索主要返回其它论文/材料引用 GLM-5.2 或相关 GLM-5 系列。
 
@@ -23,7 +24,7 @@ Updated-At: 2026-07-14 10:08
 - Z.ai / GLM-5 Team: Z.ai / GLM-5 Team.
 - GLM-5 Team / Zhipu AI / Tsinghua University: [2602.15763](/papers/2602.15763-glm-5-agentic-engineering/) 的作者结构已经在本地建档。GLM-5.2 延续同一开源仓库和同一 GLM-5 series citation。
 - slime / THUDM: 博文明确说 GLM-5.2 的 agentic RL 和 parallel OPD 使用 slime，和 [2026-06-17](/papers/2026-06-17-slime-rl-scaling-framework/) 形成直接工程关系。
-- IndexShare / IndexCache 相关作者线：博文链接 `2603.12201`。该 arXiv 论文标题为 “IndexCache: Accelerating Sparse Attention via Cross-Layer Index Reuse”，作者包括 Yushi Bai、Qian Dong、Ting Jiang、Xin Lv、Zhengxiao Du、Aohan Zeng、Jie Tang、Juanzi Li。它和 GLM-5 / GLM-5.2 团队存在明显人员重叠。
+- IndexShare / IndexCache 相关作者线：博文链接 [IndexCache](/papers/2603.12201-indexcache-cross-layer-index-reuse/)。该论文作者包括 Yushi Bai、Qian Dong、Ting Jiang、Xin Lv、Zhengxiao Du、Aohan Zeng、Jie Tang、Juanzi Li，与 GLM-5 / GLM-5.2 团队存在明显人员重叠。
 
 ## 一句话结论
 
@@ -112,17 +113,21 @@ GLM-5.2 的产品接口包括 Z.ai chat、GLM Coding Plan、ZCode、Claude Code 
 
 #### 5.2 IndexShare / IndexCache for DSA
 
-DSA 的基本结构是：
+DSA 的基本结构可以拆成 selector 与 sparse core attention：
 
 $$
 \text{core attention cost} = O(Lk), \quad \text{indexer cost} \approx O(L^2).
 $$
 
-当 context 扩展到 1M，主 attention 已经被 sparse attention 控制，但 indexer 每层独立计算 top-k 仍然很贵。GLM-5.2 使用 IndexShare：每 4 个 transformer layers 共享一个 lightweight indexer。第 1 层计算 top-k indices，后 3 层直接复用。
+该式描述 prefill 量级。对单个 decode token，indexer 扫描长度为 $L$ 的历史，成本随 $L$ 线性增加。当 context 扩展到 1M，core attention 已被 top-$k$ 控制，每个 sparse layer 独立运行 indexer 的累计成本随之变得显著。
 
-博文声称这在 1M context 下将 per-token FLOPs 降低 2.9x。IndexShare 从 128K sequence length mid-training 开始引入，并在 long-context benchmarks 上以更低计算量超过 GLM-5.1。
+GLM-5.2 使用固定 FSSS IndexShare pattern：anchor layer 运行 indexer 并产生 top-$k$ token positions，后续三层跳过本层 indexer，沿网络深度复用同一 selection result。Shared 层仍从各自的 KV cache 读取这些 positions 对应的 K/V，并执行各自的 sparse core attention。因此 IndexShare 直接减少 selector FLOPs，基本不减少 KV-cache footprint，也不共享各层的 KV vectors。
 
-这里和 arXiv `2603.12201` 的关系需要记录清楚：论文标题是 IndexCache，核心思想是 cross-layer index reuse；GLM-5.2 博文使用 IndexShare 这个名称描述 production adaptation。两者共享“保留少量 Full layers 运行 indexer，其余 Shared layers 复用 top-k”的机制。
+官方 `config.json` 给出 `index_topk=2048`、`index_topk_freq=4`、`index_skip_topk_offset=3`、`index_topk_pattern=null` 和 `index_share_for_mtp_iteration=true`；offset 之后的 `indexer_types` 呈周期性的 `full, shared, shared, shared`。博文声称这一配置在 1M context 下将 per-token FLOPs 降低 2.9 倍，并从 128K sequence length 的 mid-training 阶段开始引入。
+
+这里需要把论文证据分成三层。IndexCache 在 30B 模型上验证 training-free search 与 training-aware multi-layer distillation；在 744B GLM-5 上只验证 training-free search。GLM-5.2 后续采用固定四层共享，并把机制命名为 IndexShare。固定 FSSS 与 IndexCache 的 training-aware 路线在结构上相容，因为论文中未经训练的 uniform 1/4 pattern 会明显降低 long-context 质量；GLM-5.2 官方材料没有披露 exact index loss，也没有确认完整采用 IndexCache 的 multi-layer KL distillation。
+
+因此可以把 IndexCache 视为方法族，把 IndexShare 视为 GLM-5.2 的 production configuration 与发布名称。两者共享 Full / Shared layers 和跨层 top-$k$ index reuse，训练 recipe 的对应范围保持未披露。
 
 #### 5.3 MTP with IndexShare and KVShare
 
@@ -150,6 +155,8 @@ GLM-5.2 的 MTP 目标有两个：
 | + End-to-end TV Loss | 5.47 (+20%) |
 
 直观理解：MTP 的多步 draft 越像 target model 真正会走的推理路径，acceptance 越高；IndexShare/KVShare 减少了 MTP 推理时由 draft 自身 hidden states 引入的偏移，Bebop/TV loss 则从采样分布距离上进一步控制 mismatch。
+
+MTP IndexShare 属于 GLM-5.2 的后续扩展。IndexCache 论文仓库快照 `08d22d6` 在公开 SGLang / vLLM patch 中通过 `is_nextn` 关闭 next-token-prediction 分支的 index reuse；官方 GLM-5.2 config 则明确设置 `index_share_for_mtp_iteration=true`。两份代码材料对应不同发布阶段，不能把论文 patch 当作最终 GLM-5.2 MTP 实现。
 
 #### 5.4 Efficient serving at 1M context
 
@@ -273,7 +280,7 @@ GLM-5.2 的结论链可以概括为：
 ### 中等强度证据
 
 - FrontierSWE、PostTrainBench、SWE-Marathon 的结果支持 long-horizon coding 定位，但这些 benchmark 的 harness、budget 和 judge 复杂，第三方复验仍然关键。
-- IndexShare 的 2.9x per-token FLOPs claim 和 1M serving scaling 结果来自官方图表和描述，缺少完整可复现实验脚本。
+- IndexShare 的 2.9x per-token FLOPs claim 和 1M serving scaling 结果来自官方图表和描述，缺少完整可复现实验脚本；固定 FSSS pattern 可由官方配置直接确认。
 - anti-hack module 的必要性和机制说得清楚，但没有公开 precision/recall、误拦截率、对训练收益的 ablation。
 
 ### 需要谨慎的推论
@@ -295,7 +302,8 @@ GLM-5.2 的结论链可以概括为：
 
 - GLM-5.2 的关键是围绕 1M context 改造 indexer、MTP、serving、RL data shape 和 anti-hack。
 - IndexShare / IndexCache 和 DSA 的关系是：DSA 降低主 attention 成本，IndexShare 进一步降低 sparse indexer 成本。
-- 若把当前解码步 $t$、第 $\ell$ 层的 DSA 选择集合写成 $\mathcal S_{t,\ell}$，IndexShare 利用相邻层选择的高重叠，让后续三层复用 anchor layer 算出的 top-$k$ indices，可理解为沿网络深度轴的 index reuse。FlashMemory 则沿解码时间轴预测未来窗口需要驻留的历史 KV chunk。前者主要减少 indexer FLOPs，后者主要管理 HBM residency 与 CPU--GPU 预取。
+- 若把当前解码步 $t$、第 $\ell$ 层的 DSA 选择集合写成 $\mathcal S_{t,\ell}$，IndexShare 让后续三层复用 anchor layer 算出的 top-$k$ positions，并在各层读取自己的 KV。它沿网络深度轴减少 indexer forward。FlashMemory 沿解码时间轴预测未来窗口需要驻留的历史 KV chunks，主要管理 HBM residency 与 CPU--GPU 预取。
+- IndexCache 的 30B uniform 1/4 training-free 结果会显著掉点，searched 1/4 与 training-aware 1/4 可以接近 DSA baseline。GLM-5.2 固定 FSSS 说明模型在训练阶段已经适应该 pattern；具体是否使用 multi-layer KL 仍未披露。
 - MTP/KVShare 的核心是降低 draft path 和 target path 的不一致，让 speculative decoding 的 acceptance length 上升；它补的是 GLM-5 parameter-sharing MTP 无法自然解决的 KV/activation path 问题。
 - 长轨迹 compaction 改变了 RL 样本结构，使 critic-based PPO 比固定 group structure 更自然。
 
@@ -324,7 +332,7 @@ GLM-5.2 的结论链可以概括为：
 ## 局限
 
 1. 博文没有公开完整训练数据、RL reward、critic training、compaction implementation 和 anti-hack classifier 细节。
-2. IndexShare 的 production 配置只描述每 4 层共享 indexer，缺少更细的 layer selection、quality tradeoff 和 memory accounting。
+2. IndexShare 的 production 配置确认每四层复用一次 selection result，缺少 exact indexer training loss、质量消融和端到端 memory / latency accounting。
 3. MTP ablation 使用 GLM-5.1 backbone / data，不完全等同 GLM-5.2 最终模型。
 4. long-horizon coding benchmarks 仍依赖大量 harness 细节和外部 judge；跨模型比较需要统一运行环境。
 5. anti-hack 防御可能引入新的 distribution shift：dummy observation、被拦截后的恢复策略、误拦截都可能影响策略学习。
@@ -332,6 +340,7 @@ GLM-5.2 的结论链可以概括为：
 ## 跨论文关系
 
 - 与 [2602.15763](/papers/2602.15763-glm-5-agentic-engineering/)：GLM-5.2 是 GLM-5 系列后续 release，沿用 744B-A40B、DSA、MTP、slime 和 agentic engineering 方向，并把 context 从 200K 推到 1M。
+- 与 [IndexCache](/papers/2603.12201-indexcache-cross-layer-index-reuse/)：IndexCache 给出 Full / Shared 执行结构、training-free loss search 与 training-aware multi-layer distillation；GLM-5.2 将跨层 top-$k$ reuse 固化为 `index_topk_freq=4` 的 FSSS IndexShare，并扩展到 MTP iteration。公开资料没有确认 GLM-5.2 的 exact index loss。
 - 与 [2026-06-17](/papers/2026-06-17-slime-rl-scaling-framework/)：GLM-5.2 博文是 slime 支撑 GLM-5.2 的直接应用证据，覆盖 compact trajectory、sub-agent workflow、parallel OPD、KV-cache FP8 和 training-serving 配置复用。
 - 与 [2606.12370](/papers/2606.12370-bebop-mtp-rejection-sampling-rl-training/)：GLM-5.2 的 MTP 明确受 Bebop 启发，引入 rejection sampling 和 end-to-end TV loss，提高 speculative decoding acceptance。
 - 与 [2605.14220](/papers/2605.14220-training-inference-mismatch-llm-rl/) 和 [2025-09-10](/papers/2025-09-10-defeating-nondeterminism-llm-inference/)：MTP 的训练-推理路径一致性、DSA indexer reuse、rollout logprob consistency 都属于 train/inference consistency 的系统问题。
@@ -347,7 +356,7 @@ GLM-5.2 的结论链可以概括为：
 ### Target
 
 - Intended target system: 维护 GLM-5.2 技术博客笔记，同步索引行和 GLM / slime / long-horizon agentic RL 关系章节。
-- Existing related assets: [2602.15763](/papers/2602.15763-glm-5-agentic-engineering/)；[2026-06-17](/papers/2026-06-17-slime-rl-scaling-framework/)；[2606.12370](/papers/2606.12370-bebop-mtp-rejection-sampling-rl-training/)；[2026-04-24](/papers/2026-04-24-deepseek-v4-million-token-context-intelligence/)。
+- Existing related assets: [2602.15763](/papers/2602.15763-glm-5-agentic-engineering/)；[IndexCache](/papers/2603.12201-indexcache-cross-layer-index-reuse/)；[2026-06-17](/papers/2026-06-17-slime-rl-scaling-framework/)；[2606.12370](/papers/2606.12370-bebop-mtp-rejection-sampling-rl-training/)；[2026-04-24](/papers/2026-04-24-deepseek-v4-million-token-context-intelligence/)。
 - Proposed form: 维护 `2026-06-16-glm-5-2-long-horizon-tasks.md`；同步索引行和对应论文的关系章节。
 
 ### Reusable Elements

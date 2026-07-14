@@ -52,6 +52,7 @@ Updated-At: 2026-07-14
 | [Credit Assignment Survey](/papers/2604.09459-credit-assignment-reasoning-agentic-llm-rl/) | 2026年4月 | 统一 reasoning 与 agentic RL 的 token / step / turn / trajectory credit-assignment 问题。 |
 | [DeepSeek-V4](/papers/2026-04-24-deepseek-v4-million-token-context-intelligence/) | 2026年4月 | 以 CSA / HCA、MoE、MTP / OPD 和系统协同实现百万 token 训练、推理与 agent 能力。 |
 | [Caution](/papers/2604.04648-caution-pessimism-best-of-n-reward-hacking/) | 2026年4月 | 用 reward-feature prediction error 估计 OOD uncertainty，在 Best-of-N selection 时执行 pessimistic correction。 |
+| [IndexCache](/papers/2603.12201-indexcache-cross-layer-index-reuse/) | 2026年3月 | 用 loss-guided layer search 或 multi-layer distillation 划分 Full / Shared 层，跨层复用 top-k positions 并跳过最多 75% 的 DSA indexer 计算。 |
 | [DFlash](/papers/2602.06036-dflash-block-diffusion-speculative-decoding/) | 2026年2月 | 把 block diffusion 用作 speculative drafter，并用 target hidden features 条件化整块候选生成。 |
 | [Qwen3-Coder-Next](/papers/2603.00729-qwen3-coder-next-agentic-coding/) | 2026年2月 | 用 executable environments、repo mid-training、tool-calling RL 与 expert distillation 提升低 active-compute coding agent。 |
 | [Kimi K2.5 / PARL](/papers/2602.02276-kimi-k2-5-visual-agentic-intelligence/) | 2026年2月 | trainable orchestrator + frozen subagents，用 parallel / finish / performance reward 训练并行编排。 |

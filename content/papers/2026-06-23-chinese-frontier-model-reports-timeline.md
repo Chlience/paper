@@ -1,7 +1,7 @@
 # 国产前沿模型技术报告时间线总览
 
 First-Archived-At: 2026-06-23 18:40
-Updated-At: 2026-07-14 09:50
+Updated-At: 2026-07-14 10:19
 Pinned: true
 
 ## Source
@@ -84,7 +84,7 @@ Kimi K2 进一步把重点从推理题移到 agentic workload。它是 1.04T tot
 
 进入 2026 年，Kimi K2.5 和 GLM-5 把 agentic 能力继续向两个方向拉开。K2.5 建在 K2 之上，加入 MoonViT-3D、256K context、zero-vision SFT、visual RL、Token Efficient RL、DEP 和 Agent Swarm。它关心的任务范围从单轮文本和代码扩展到视觉理解、长视频、浏览搜索、OS 操作、并行 sub-agent orchestration。GLM-5 则把“agentic engineering”明确定义为从 vibe coding 到 autonomous engineering 的迁移：744B total / 40B active MoE、MLA、Muon Split、parameter-sharing MTP、DSA、200K context、slime 异步 RL、TITO、direct double-sided IS、DP-aware routing 和 PD disaggregation 共同服务长轨迹工具任务。
 
-DeepSeek-V4 和 GLM-5.2 又把长上下文推到 million-token 级别。DeepSeek 先用 V3.2-Exp / DSA 将 MLA path 改成 lightning indexer + top-k sparse selection，并用 2.1B token dense indexer warm-up 与 943.7B token sparse continued pre-training 建立长上下文稀疏化路线；V4 再把 DSA 推到 compressed KV entries 上，形成 CSA/HCA hybrid attention。V4-Pro 用 1.6T total / 49B active，V4-Flash 用 284B total / 13B active；公开 inference config 显示 CSA `compress_ratio=4` 与 HCA `compress_ratio=128` 在层级上交错，所有 compressed attention 层叠加 128-token sliding-window local branch。它还把 expert waves 写进 MegaMoE：把 experts 切成 wave 后，当前 wave 做 expert compute，下一 wave 做 token transfer，上一 wave 发送 combine 结果，报告给出相对 non-fused EP `1.50-1.73x` 加速，latency-sensitive / RL rollout 场景最高 `1.96x`。DSpark 则把 V4 serving 的下一层瓶颈指向 speculative verification：在 DeepSeek-V4-Flash / Pro live traffic 中，confidence-scheduled prefix verification 让低负载请求使用更长验证预算，高负载请求收缩低置信后缀，从而把 accepted length 结论推进到 throughput-interactivity frontier。GLM-5.2 则把 1M context 明确落在 long-horizon coding agent 上，用 IndexShare / IndexCache 降低 DSA indexer 成本，用 MTP IndexShare + KVShare + rejection sampling + TV loss 提高 speculative decoding acceptance，用 slime 和 critic-based PPO 处理 compaction 后的超长轨迹训练，并把 anti-hack module 纳入 coding RL。
+DeepSeek-V4 和 GLM-5.2 又把长上下文推到 million-token 级别。DeepSeek 先用 V3.2-Exp / DSA 将 MLA path 改成 lightning indexer + top-k sparse selection，并用 2.1B token dense indexer warm-up 与 943.7B token sparse continued pre-training 建立长上下文稀疏化路线；V4 再把 DSA 推到 compressed KV entries 上，形成 CSA/HCA hybrid attention。V4-Pro 用 1.6T total / 49B active，V4-Flash 用 284B total / 13B active；公开 inference config 显示 CSA `compress_ratio=4` 与 HCA `compress_ratio=128` 在层级上交错，所有 compressed attention 层叠加 128-token sliding-window local branch。它还把 expert waves 写进 MegaMoE：把 experts 切成 wave 后，当前 wave 做 expert compute，下一 wave 做 token transfer，上一 wave 发送 combine 结果，报告给出相对 non-fused EP `1.50-1.73x` 加速，latency-sensitive / RL rollout 场景最高 `1.96x`。DSpark 则把 V4 serving 的下一层瓶颈指向 speculative verification：在 DeepSeek-V4-Flash / Pro live traffic 中，confidence-scheduled prefix verification 让低负载请求使用更长验证预算，高负载请求收缩低置信后缀，从而把 accepted length 结论推进到 throughput-interactivity frontier。GLM-5.2 则把 1M context 明确落在 long-horizon coding agent 上，用 IndexShare / [IndexCache](/papers/2603.12201-indexcache-cross-layer-index-reuse/) 降低 DSA indexer 成本，用 MTP IndexShare + KVShare + rejection sampling + TV loss 提高 speculative decoding acceptance，用 slime 和 critic-based PPO 处理 compaction 后的超长轨迹训练，并把 anti-hack module 纳入 coding RL。
 
 沿着时间线看，这些报告之间的差异很大，但压力方向高度一致。第一阶段处理“模型是否能被训练和服务”：MoE、MLA、KV cache、低精度、通信重叠。第二阶段处理“能力是否能被 RL 激发”：verifiable reward、long-CoT、GRPO、OMD、distillation、CISPO。第三阶段处理“能力是否能进入真实工作流”：工具环境、agentic data、rollout tail、checkpoint 切换、train-rollout consistency、长上下文 sparse attention、anti-hack。
 
