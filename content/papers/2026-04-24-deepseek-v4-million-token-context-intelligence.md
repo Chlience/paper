@@ -1,7 +1,7 @@
 # DeepSeek-V4: Towards Highly Efficient Million-Token Context Intelligence 论文笔记
 
 First-Archived-At: 2026-04-25 14:30
-Updated-At: 2026-06-24 20:58
+Updated-At: 2026-07-14 09:50
 
 ## Source
 
@@ -533,7 +533,7 @@ Instruct / Max mode：
 ## 跨论文关系
 
 - 与 [2501.12948](/papers/2501.12948-deepseek-r1-rl-reasoning/)：DeepSeek-R1 是 reasoning RL / GRPO / verifiable reward 的上游节点；DeepSeek-V4 把这条路线推向 1M context、agentic tool-use、specialist RL 和 OPD 统一模型。
-- 与 [DSA-2025-09-29](/papers/2025-09-29-deepseek-v3-2-exp-dsa-long-context-efficiency/)：V4 的 CSA 是 DeepSeek Sparse Attention 在 compressed KV entries 上的后续形态。CSA 层使用 `compress_ratio=4`、lightning indexer 和 top-k sparse selection；HCA 层使用 `compress_ratio=128` 和 dense compressed attention，二者跨层交错构成 V4 的 hybrid attention stack。
+- 与 [DeepSeek-V3.2 / DSA](/papers/2512.02556-deepseek-v3-2-open-large-language-models/)：V4 的 CSA 是 DeepSeek Sparse Attention 在 compressed KV entries 上的后续形态。CSA 层使用 `compress_ratio=4`、lightning indexer 和 top-k sparse selection；HCA 层使用 `compress_ratio=128` 和 dense compressed attention，二者跨层交错构成 V4 的 hybrid attention stack。
 - 与 [2606.04662](/papers/2606.04662-muon-outperforms-adam-curvature/)：V4 是 Muon 大规模 LLM 训练的系统应用案例；Muon 论文解释其曲率优势，V4 报告展示其在 trillion-scale MoE 中的工程化使用。
 - 与 [2025-09-10](/papers/2025-09-10-defeating-nondeterminism-llm-inference/) 和 [2605.14220](/papers/2605.14220-training-inference-mismatch-llm-rl/)：V4 明确把 batch-invariant / deterministic kernels 和 train-inference bitwise alignment 做成内核库目标，和这两篇关于 nondeterminism / TIM 的问题定义直接相接。
 - 与 [2606.04101](/papers/2606.04101-ultraep-rack-scale-moe-load-balancing/)：UltraEP 讨论 MoE training / serving prefill 的 expert load balancing，V4 报告展示 DeepSeek 自身在 fine-grained EP、MegaMoE expert waves、communication-computation overlap、MoE determinism 上的工程方案。

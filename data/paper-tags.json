@@ -29,7 +29,7 @@
   "2510.00206-lorafusion-efficient-lora-fine-tuning": ["parameter-efficient-finetuning", "distributed-training", "training-memory"],
   "2505.11432-megascale-moe-communication-efficient-training": ["moe-systems", "distributed-training", "training-memory"],
   "2211.17192-fast-inference-transformers-speculative-decoding": ["speculative-decoding"],
-  "2025-09-29-deepseek-v3-2-exp-dsa-long-context-efficiency": ["sparse-attention", "long-context"],
+  "2512.02556-deepseek-v3-2-open-large-language-models": ["sparse-attention", "training-stability", "agent-rl", "agent-memory"],
   "2606.13392-minimax-sparse-attention-m3": ["sparse-attention", "long-context", "moe-architecture"],
   "2401.06066-deepseekmoe-expert-specialization": ["moe-architecture"],
   "2601.07372-conditional-memory-engram-scalable-lookup": ["memory-architecture", "moe-architecture"],

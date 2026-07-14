@@ -1,7 +1,7 @@
 # 国产前沿模型技术报告时间线总览
 
 First-Archived-At: 2026-06-23 18:40
-Updated-At: 2026-07-02 11:34
+Updated-At: 2026-07-14 09:50
 Pinned: true
 
 ## Source
@@ -21,7 +21,7 @@ Pinned: true
 - Local archive: [2026-06-16 GLM-5.2](/papers/2026-06-16-glm-5-2-long-horizon-tasks/)
 - Local archive: [2606.13392 MiniMax Sparse Attention / MiniMax-M3](/papers/2606.13392-minimax-sparse-attention-m3/)
 - Local archive: [2606.30406 MOPD / Xiaomi MiMo](/papers/2606.30406-mopd-multi-teacher-on-policy-distillation/)
-- Related systems and method nodes: [2211.17192 Speculative Decoding](/papers/2211.17192-fast-inference-transformers-speculative-decoding/), [DSA-2025-09-29 DeepSeek Sparse Attention](/papers/2025-09-29-deepseek-v3-2-exp-dsa-long-context-efficiency/), [2606.12370 Qwen Bebop](/papers/2606.12370-bebop-mtp-rejection-sampling-rl-training/), [2602.06036 DFlash](/papers/2602.06036-dflash-block-diffusion-speculative-decoding/), [DSPARK-2026-06-27 DSpark](/papers/2026-06-27-dspark-confidence-scheduled-speculative-decoding/), [2511.14617 Seer](/papers/2511.14617-seer-online-context-learning-llm-rl/), [2026-06-17 slime](/papers/2026-06-17-slime-rl-scaling-framework/), [2026-06-19 Muon 综合](/papers/2026-06-19-muon-optimizer-keller-jordan-synthesis/)
+- Related systems and method nodes: [2211.17192 Speculative Decoding](/papers/2211.17192-fast-inference-transformers-speculative-decoding/), [2512.02556 DeepSeek-V3.2 / DSA](/papers/2512.02556-deepseek-v3-2-open-large-language-models/), [2606.12370 Qwen Bebop](/papers/2606.12370-bebop-mtp-rejection-sampling-rl-training/), [2602.06036 DFlash](/papers/2602.06036-dflash-block-diffusion-speculative-decoding/), [DSPARK-2026-06-27 DSpark](/papers/2026-06-27-dspark-confidence-scheduled-speculative-decoding/), [2511.14617 Seer](/papers/2511.14617-seer-online-context-learning-llm-rl/), [2026-06-17 slime](/papers/2026-06-17-slime-rl-scaling-framework/), [2026-06-19 Muon 综合](/papers/2026-06-19-muon-optimizer-keller-jordan-synthesis/)
 
 ## 作者与关系
 
@@ -105,7 +105,7 @@ DeepSeek-V4 和 GLM-5.2 又把长上下文推到 million-token 级别。DeepSeek
 | 2025-05 | Qwen3 | thinking/non-thinking, thinking budget, four-stage post-training, strong-to-weak logits distillation, Qwen3 MoE | Qwen3-8B distillation vs RL: 1800 GPU hours vs 17920 GPU hours，且 AIME 更高 | Qwen3 v1 和后续 2507 系列需要区分 |
 | 2025-06 | MiniMax-M1 | Lightning Attention, long-output RL, CISPO, 1M context | CISPO 解释 clipping 下 reflection token 梯度丢失；M1-80K 长输出 recipe | CISPO 需要更多公开模型和 reward 设置复验 |
 | 2025-07 | Kimi K2 | 1.04T MoE, MuonClip/QK-Clip, MCP/synthetic tools, Verifiable Rewards Gym, self-critique rubric, checkpoint engine | SWE-bench Verified agentic single 65.8 / multi 71.6；MuonClip 避免 logits 爆炸 | agentic harness、tool data 和 rubric reward 可复验性有限 |
-| 2025-09 | [DSA-2025-09-29](/papers/2025-09-29-deepseek-v3-2-exp-dsa-long-context-efficiency/) | DeepSeek Sparse Attention, lightning indexer, fine-grained top-k token selection, sparse continued pretraining | 2.1B token dense indexer warm-up + 943.7B token sparse continued pre-training；H800 long-context inference cost 降低 | release/experiment report，indexer 质量、top-k 召回和任务损失仍需更多公开 stress test |
+| 2025-09 | [V3.2-Exp / DSA precursor](/papers/2512.02556-deepseek-v3-2-open-large-language-models/) | DeepSeek Sparse Attention, lightning indexer, fine-grained top-k token selection, sparse continued pretraining | 2.1B token dense indexer warm-up + 943.7B token sparse continued pre-training；H800 long-context inference cost 降低 | 2025-12 正式归档为 arXiv `2512.02556`；indexer 质量、top-k 召回和任务损失仍需更多公开 stress test |
 | 2026-02 | Kimi K2.5 | MoonViT-3D, visual RL, Agent Swarm, 256K context | 将 K2 backbone 扩展到视觉、长视频、OS/browser/search 和并行 agent | swarm / visual agent 依赖复杂工具环境 |
 | 2026-02 | GLM-5 | 744B-A40B, DSA, Muon Split, MTP, slime async RL | agentic engineering pipeline 与 200K context / async rollout / TITO 结合 | 内部 benchmark、reward 和 harness 占比较高 |
 | 2026-04 | DeepSeek-V4 | 1M context, CSA/HCA interleaving, mHC, Muon, deterministic kernels, OPD, MegaMoE expert waves | V4-Pro 1.6T / 49B active；V4-Flash 284B / 13B active；expert waves 对 non-fused EP `1.50-1.73x`，latency-sensitive 最高 `1.96x` | 预览报告，CSA/HCA/mHC/Muon/expert waves 的独立 ablation 尚不完整 |
