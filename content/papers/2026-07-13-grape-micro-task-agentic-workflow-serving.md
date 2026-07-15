@@ -1,7 +1,7 @@
 # Efficient Serving for Agentic LLM Workflows via Micro-Task-Level Parallelism 论文笔记
 
 First-Archived-At: 2026-07-13 10:26
-Updated-At: 2026-07-14 13:02
+Updated-At: 2026-07-15 14:07
 
 ## Source
 
@@ -18,7 +18,7 @@ Updated-At: 2026-07-14 13:02
 - Published / updated: 2026-07，Hailong Yang 主页公布 Grape 被 SC 2026 接收
 - Current version read: 12 页匿名 PDF，未标注版本号，PDF metadata 的 creation date 为 2026-04-09
 - Version / revision read: supplied anonymous manuscript，读取于 2026-07-13
-- Accessed: 2026-07-13
+- Accessed: 2026-07-15
 - Subjects: agentic LLM serving；micro-task scheduling；incremental prefill；SLO-aware scheduling；KV Cache management
 
 `Canonical source` 是当前可公开核验标题、Grape 简称和 SC 2026 接收状态的作者主页。论文全文来自用户提供的匿名 PDF；公开 proceedings 尚未出现，因此完整作者名单、最终 camera-ready 版本和 artifact 状态仍待后续核验。
@@ -34,7 +34,7 @@ Updated-At: 2026-07-14 13:02
 
 Grape 把相依 LLM task 的静态 prompt、流式上游输出和 decode 拆成可调度的微任务，利用跨 task 增量 prefill 重叠原本串行的 prefill / decode，再用服务级目标约束的 batch 构造和关键路径感知 KV Cache 抢占控制尾延迟。
 
-本地评价：最有价值的新增机制是跨 task 增量 prefill。它把 Parrot 式应用数据流继续下降到一次 LLM 调用内部的 prefill / decode 边界，并把 Sarathi 式 chunked prefill 扩展到依赖调用之间。相对实现匹配的 `vLLM-opt`，平均延迟和吞吐收益分别为 1.15 倍和 1.16 倍，P95 延迟收益达到 3.80 倍；这组对照比相对 Parrot 的大幅数字更能反映 Grape 自身机制的增量价值。
+本地评价：最有价值的新增机制是跨 task 增量 prefill。它把 Parrot 式应用数据流继续下降到一次 LLM 调用内部的 prefill / decode 边界，并把 Sarathi 式 chunked prefill 扩展到依赖调用之间。相对实现匹配的 `vLLM-opt`，完整 Grape 的平均延迟和吞吐收益分别为 1.15 倍和 1.16 倍，P95 延迟收益达到 3.80 倍；论文只单独消融了 memory optimization，因此这组数字支持完整系统，无法继续拆分 incremental prefill、scheduler 与 memory manager 的独立贡献。
 
 ## 阅读目标与判断边界
 
@@ -187,12 +187,12 @@ Figure 13: 两种模型、三类 workflow 下的 P95 token 延迟；Grape 的主
 ### 结果 2：吞吐、SLO 与资源利用率形成一致但规模不同的证据
 
 - 设置：同上；SLO 对 search 设置为 TTFT < 1.0 s 且 TBT < 40 ms，对 summary / code 设置为 TTFT < 1.5 s 且 TBT < 60 ms。TTFT 是 Time to First Token，TBT 是 Time Between Tokens。
-- Baseline：吞吐和 SLO 主要与 Parrot、vLLM、`vLLM-opt` 对比；memory ablation 比较 Grape 与关闭 memory optimization 的版本。
+- Baseline：吞吐与 Parrot、vLLM、`vLLM-opt` 对比；SLO attainment 只比较 Grape 与 `vLLM-opt`；memory ablation 比较 Grape 与关闭 memory optimization 的版本。
 - 指标：tokens/s、Model FLOPs Utilization (MFU)、SLO attainment rate、memory-pressure throughput 和 runtime overhead。
 - 结果：吞吐相对 Parrot / vLLM / `vLLM-opt` 分别提高 2.86 / 1.33 / 1.16 倍；MFU 相对 `vLLM-opt` 在 Llama3 / Qwen3 上最高提高 1.15 / 1.16 倍；memory optimization 平均提高吞吐 1.06 倍；Grape 与 `vLLM-opt` 的平均 SLO attainment 为 98.10% 与 83.46%；图维护和优先级开销低于总推理时间的 0.7%，一次性 profiling 约 5 分钟。
 - 证据定位：Section IV-B-E/H，Figure 14-17、19，PDF pp.8-10。
 - 对照是否可比：`vLLM-opt` 仍是最可信对照。MFU、memory ablation 和 scheduler overhead 的报告较直接，但未给出 profiling model 的预测误差。
-- 支持的最窄结论：论文配置下，跨 task overlap 在提升 tail latency 的同时保持约 16% 吞吐增益，并让给定 token-level SLO 的经验达成率接近 98%。
+- 支持的最窄结论：论文配置下，完整 Grape 在降低 agentic inter-token latency tail 的同时保持约 16% 吞吐增益，并让给定 TTFT / TBT SLO 的经验达成率接近 98%；现有消融无法把这些收益单独归因给 incremental prefill。
 - 解读：SLO 数据支持策略有效性，仍属于经验达成率；每轮 forward 约束没有构成严格端到端保证。
 
 ### 结果 3：匿名生产部署提供方向性外部证据
@@ -253,7 +253,7 @@ Figure 13: 两种模型、三类 workflow 下的 P95 token 延迟；Grape 的主
 
 - Page type: not-found
 - Match confidence: high
-- Observed at: 2026-07-13
+- Observed at: 2026-07-15
 - Venue status: Hailong Yang 官方主页列为 SC 2026 accepted；会议 proceedings 页面尚未公开核验
 - Public reviews: 未发现公开 reviewer comments、meta review 或 rebuttal
 - Ratings / confidence: 未公开
@@ -281,13 +281,13 @@ Grape 对常规 decode 路径的 $d$ 改动有限，主要通过静态 prompt �
 
 论文这里的 P95 是 token-level agentic inter-token latency：它把中间 task 输出与最终输出放进同一 token 时间序列，跨 task 的输出空档会计入分位数。论文没有报告 final-answer latency 或 workflow makespan 的 P95，因此 3.80 倍结果最直接支持“task-switch token gap 被显著压缩”，对用户端任务完成尾延迟的收益仍需单独测量。
 
-进一步按机制归因，可以得到以下层次：
+进一步按机制梳理，可以得到以下层次。除 memory optimization 外，现有结果把 lowering、incremental prefill 与 scheduler 作为完整栈评测，因此完整系统数字在前两行只构成共同证据：
 
 | 收益来源 | 直接作用 | 论文证据 | 本地判断 |
 | --- | --- | --- | --- |
-| 跨 task incremental prefill | 将下游静态 prompt 和逐步到达的上游输出提前转成 KV，与上游 bandwidth-bound decode 重叠；下游 decode 启动前需要补做的 prefill 更少 | 相对 `vLLM-opt`，完整 Grape 的平均延迟 / 吞吐为 1.15 / 1.16 倍，MFU 最高提高 1.15 / 1.16 倍；execution timeline 显示 task-boundary bubble 被填充 | 主要并行机会与平均吞吐收益来源；总 prefill token workload 大体保留，收益来自时间重排、资源互补和等待隐藏 |
-| SLO-aware / critical-path scheduler | 控制每轮 mixed prefill-decode batch 的预计执行时间，优先推进直接产出 token 或即将解除关键依赖的微任务 | P95 相对 `vLLM-opt` 提高 3.80 倍，SLO attainment 从 83.46% 提高到 98.10% | 主要尾延迟转化机制；它决定 overlap 工作何时执行，避免提前 prefill 反向阻塞 decode |
-| graph-aware KV preemption | 在提前执行增加 KV 占用后，优先回收远离 active critical node 的微任务 KV，减少关键路径停顿和近期重算 | memory optimization 独立平均提高吞吐 1.06 倍 | 次要附加收益与容量保护机制，贡献明显小于完整系统的 tail-latency 改善 |
+| 跨 task incremental prefill | 将下游静态 prompt 和逐步到达的上游输出提前转成 KV，与上游 bandwidth-bound decode 重叠；下游 decode 启动前需要补做的 prefill 更少 | 完整 Grape 相对 `vLLM-opt` 的平均延迟 / 吞吐为 1.15 / 1.16 倍，MFU 最高提高 1.15 / 1.16 倍；execution timeline 显示 task-boundary bubble 被填充 | 机制上提供主要并行机会；总 prefill token workload 大体保留，收益方向与时间重排、资源互补和等待隐藏一致，独立贡献尚无消融 |
+| SLO-aware / critical-path scheduler | 控制每轮 mixed prefill-decode batch 的预计执行时间，优先推进直接产出 token 或即将解除关键依赖的微任务 | 完整 Grape 的 P95 相对 `vLLM-opt` 提高 3.80 倍，SLO attainment 从 83.46% 提高到 98.10% | 机制上用于把 overlap 转成较低 tail 并约束对 foreground decode 的干扰；当前结果支持完整调度栈，尚未隔离该 scheduler 的独立贡献 |
+| graph-aware KV preemption | 在提前执行增加 KV 占用后，优先回收远离 active critical node 的微任务 KV，减少关键路径停顿和近期重算 | memory optimization 独立平均提高吞吐 1.06 倍 | 独立证据只覆盖平均吞吐；它对 P95 的独立贡献没有报告，适合作为容量保护机制解读 |
 | vLLM engine 与既有 Parrot 优化 | 提供 optimized operators、CUDA Graph 和更好的 memory management | Grape 相对 Parrot 的平均 / P95 收益达到 2.30 / 8.49 倍，显著高于相对 `vLLM-opt` 的 1.15 / 3.80 倍 | 这部分反映完整实现栈差异，不能计入微任务并行本身的纯增量收益 |
 
 论文没有提供“保留微任务图、分别关闭 incremental prefill / 新 scheduler”的完整正交消融，因此 1.15-1.16 倍平均收益无法继续精确拆分。KV memory optimization 的 1.06 倍也不能直接从总 speedup 中相减，因为它与 arrival rate、cache pressure 和调度选择存在交互。
@@ -381,4 +381,4 @@ Grape 对常规 decode 路径的 $d$ 改动有限，主要通过静态 prompt �
 
 Decision: merge
 
-Why: Grape 给出了从 workflow variable 到 engine 微任务的完整 lowering，并通过实现匹配 baseline 证明跨 task incremental prefill 对 P95 latency 的显著价值。作者、artifact、严格 SLO 保证和工具型 workload 仍有明确证据缺口，适合以带边界的系统论文笔记归档并等待 proceedings / code 更新。
+Why: Grape 给出了从 workflow variable 到 engine 微任务的完整 lowering，完整系统相对实现匹配 baseline 的主要收益集中在 P95 agentic inter-token latency，方向上与减少 task-boundary prefill burst 一致。作者、artifact、正交消融、严格 SLO 保证和工具型 workload 仍有明确证据缺口，适合以带边界的系统论文笔记归档并等待 proceedings / code 更新。

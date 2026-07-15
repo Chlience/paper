@@ -1,7 +1,7 @@
 # Agent Workflow 推理系统：从跨任务流水、工具推测到可编辑 KV Cache
 
 First-Archived-At: 2026-07-14 10:57
-Updated-At: 2026-07-14 11:13
+Updated-At: 2026-07-15 14:09
 
 ## Source
 
@@ -16,7 +16,7 @@ Updated-At: 2026-07-14 11:13
 - Leyline source: https://arxiv.org/abs/2606.01065
 - Published / updated: 2026-07-14
 - Current version read: Grape supplied anonymous manuscript；SPORK arXiv v1 与官方代码 commit `31d5ab6f0740d5b5aa26e6a745dc97bcff5139a3`；Leyline arXiv v1 HTML / PDF / TeX
-- Accessed: 2026-07-14
+- Accessed: 2026-07-15
 - Subjects: agent workflow；LLM serving；micro-task scheduling；tool speculation；KV Cache mutation；ReAct
 
 ## 作者与关系
@@ -29,7 +29,7 @@ Updated-At: 2026-07-14 11:13
 
 ## 一句话结论
 
-Agent Workflow 的主要 serving 浪费分布在 task、action 和 edit 三个边界：Grape 用微任务图把已知依赖的下游 prefill 提前到上游 decode 期间，SPORK 从共享 prefix KV fork 同模型 probe 预测下一次只读工具调用，Leyline 让 policy 用 span directive 编辑已提交历史并选择位置摊销或真正遗忘；三者共同指向一个带动态分支、上下文版本和资源预算的 Agent execution IR，但当前论文尚未给出联合实现或可相加的端到端收益。
+Agent Workflow 的主要 serving 浪费分布在 task、action 和 edit 三个边界：Grape 用微任务图把已知依赖的下游 prefill 提前到上游 decode 期间，SPORK 从共享 prefix KV fork 同模型 probe 预测下一次只读工具调用，Leyline 让 policy 用 span directive 编辑已提交历史并选择位置摊销或当前模型上下文重建；三者共同指向一个带动态分支、上下文版本和资源预算的 Agent execution IR，但当前论文尚未给出联合实现或可相加的端到端收益。
 
 ## 阅读目标与判断边界
 
@@ -135,13 +135,13 @@ TaskFlow 用 `add_variable` 定义 `InputVar`、`IntermediateVar`、`OutputVar`�
 
 #### 2.2 细粒度并行引入新的调度问题
 
-micro-task 增多后，所有可提前执行的 prefill 都进入 batch 会扩大 KV residency，并影响 foreground decode 的 token SLO。Grape 通过三项机制收敛调度空间：
+micro-task 增多后，所有可提前执行的 prefill 都进入 batch 会扩大 KV residency，并影响 foreground decode 的 TTFT / TBT 目标。Grape 通过三项机制收敛调度空间：
 
-1. 用拓扑距离把接近输出关键节点的微任务赋予更高优先级。
-2. 离线拟合单轮执行成本 $T=F(N_{\mathrm{seq}},N_{\mathrm{batch}})$，让候选 batch 满足当前最紧 token SLO。
+1. 直接产出 token 的微任务先按 topological ordering 获得 basic priority；其他微任务寻找 minimum-hop 最近的 downstream prioritized node，并继承其 priority。
+2. 离线拟合单轮执行成本 $T=F(N_{\mathrm{seq}},N_{\mathrm{batch}})$，让候选 batch 满足当前最紧 active SLO target；两阶段 selection 再用 queue head 的 priority differential 填充剩余容量。
 3. 以微任务为单位抢占 KV，优先回收离 active critical node 更远的状态。
 
-相对实现匹配的 `vLLM-opt`，论文报告平均 token latency 加速 1.15×、P95 token latency 加速 3.80×、吞吐提高 1.16×，SLO attainment 为 98.10% 对 83.46%。最大增量集中在 P95，符合减少 task-switch prefill 尖峰的机制。证据定位：Grape Section IV-B-H、Figures 12-19、PDF pp.8-10。
+相对实现匹配的 `vLLM-opt`，完整 Grape 报告平均 agentic inter-token latency 加速 1.15×、P95 加速 3.80×、吞吐提高 1.16×，SLO attainment 为 98.10% 对 83.46%。最大增量集中在 P95，方向上与减少 task-switch prefill 尖峰一致；论文只单独消融 memory optimization，无法把整组收益继续拆分给 incremental prefill、scheduler 与 memory manager。这里的 P95 是连续 intermediate / final output tokens 之间的间隔，论文没有报告 final-answer latency 或 workflow makespan 的 P95。证据定位：Grape Section IV-B-H、Figures 12-19、PDF pp.8-10。
 
 这条路径仍留下一个问题：真实 ReAct agent 的下一条 tool edge 直到模型生成过程中才出现。已知 DAG 可以被流水化，未知 action 需要另一种信号。
 
@@ -174,14 +174,16 @@ Fallback                                                     [ execute actual to
 | 设计 | 动作 | 改变的成本 | 论文信号 |
 | --- | --- | --- | --- |
 | D1 Prefix-cache fork | 首 token 后复用 main prefix KV 发 probe | 降低 probe prefill overhead | 15K context 下约 1.6 s→0.35 s；main TPOT +0.22% |
-| D2 Confidence gate | 用 tool-name span 的 minimum token probability 决定 dispatch / retry | 提高 strict acceptance，减少 wasted tools | GAIA、$\theta=0.90$：88% precision、100% recall；turn acceptance 约 0.22→0.37 |
-| D3 Partial-token accept | rejected probe 作为 draft，由 target model 验证匹配前缀 | 回收 miss branch 的 tool-call decode | BrowseComp 首次 mismatch 中位 27 tokens，约节省 0.6 s/rejected turn |
+| D2 Confidence gate | 论文用 tool-name span 的 minimum token probability 决定 dispatch / retry | 提高 accepted overlap，减少 wasted tools | GAIA、$\theta=0.90$：name-match classification 为 88% precision、100% recall；full-call turn acceptance 约 0.22→0.37 |
+| D3 Partial-token accept | rejected probe 作为 draft，由 target model 验证匹配前缀 | 回收 miss branch 的 tool-call decode | GAIA rejected events 中位 18 tokens；BrowseComp pairs 中位 27 tokens，0.6 s/rejected turn 是后者的离线估计 |
 
-probe 的预执行结果只有在 serialized tool name 和 arguments 与 main 完全一致时才会复用。miss 时，controller 丢弃 speculative result，让 main 完成最终 call；D3 复用 target model 验证通过的 greedy token prefix，随后串行执行实际工具并正常提交 Observation。证据定位：[SPORK 笔记](/papers/2607.03333-spork-self-speculative-agentic-inference/) Sections 5.3-5.6；论文 Sections 4.1-4.3、Figure 6。
+论文要求完整 tool call 精确匹配后才复用预执行结果；公开 strict runner 使用 tool name 与规范化参数字典等值比较。miss 时，controller 丢弃 speculative result，让 main 完成最终 call；D3 复用 target model 验证通过的 greedy token prefix，随后串行执行实际工具并正常提交 Observation。
+
+D2 还存在 paper / code mismatch。论文把置信度定义在 tool-name span，并称跳过首 token 是为了略过 opening quote；公开 Qwen 强制前缀已经包含该 quote。默认 Qwen runner 对前 16 个生成 tokens 丢弃首 token 后取 minimum probability，窗口可能进入 arguments。88% / 100% 来自同一批 probes 的 name-match classification，阈值没有 held-out calibration；复现前需要确认原实验的 span extraction。证据定位：[SPORK 笔记](/papers/2607.03333-spork-self-speculative-agentic-inference/) Sections 5.3-5.6；论文 Sections 4.1-4.3、Figure 6；官方代码 `spork_core/qwen.py`、`spork_core/tool_calls.py`、`spork_core/turn_runner.py`。
 
 #### 3.2 推测何时值得执行
 
-令 $\alpha$ 为按 tool-call turn 统计的 strict acceptance，$t_{\mathrm{overlap}}$ 为实际隐藏的工具时间，$T_{\mathrm{oh}}$ 为 probe 与错误执行开销。未启用 D3 时，break-even 条件为
+令 $\alpha$ 为按 tool-call turn 统计的 strict acceptance，$t_{\mathrm{overlap}}$ 为实际隐藏的工具时间，$T_{\mathrm{oh}}$ 为 rejected turn 的额外 probe 与错误工具执行开销。未启用 D3 时，break-even 条件为
 
 $$
 \alpha t_{\mathrm{overlap}}
@@ -197,7 +199,7 @@ t_{\mathrm{overlap}}
 \min(T_{\mathrm{tool}},T_{\mathrm{main,remain}}).
 $$
 
-多秒 thinking、较慢工具、稳定 schema、高 exact acceptance 和闲余 serving capacity 会扩大收益。no-think、快速本地工具、heavy batching 和格式分歧会让 probe 进入关键路径；论文的 no-think tau2 speedup 降至 0.79×。
+多秒 thinking、较慢工具、稳定 schema、高 exact acceptance 和闲余 serving capacity 会扩大收益。no-think、快速本地工具、heavy batching 和格式分歧会让 probe 进入关键路径；论文在 Section 6.6 报告 no-think tau2 speedup 降至 0.79×，但没有披露该点的独立样本数和完整配置。
 
 Qwen3-32B / GAIA 主结果中，P95 从 131.9 s 降至 108.1 s，下降 18%（N=165）。这个数字属于 slow-tool、thinking-mode 和论文给定 engine configuration。跨模型主图混合 D1/D2/D3 组合与 serving mode，适合用作迁移线索。证据定位：SPORK Figure 10、Sections 6.2-6.6。
 
@@ -235,15 +237,15 @@ $$
 
 保留 $K_{\mathrm{nope}}$ 与 $V$ 意味着原 span 已经传播到 downstream hidden state 的影响仍存在。`AMORTIZE` 提供 positional replay-equivalence，适合允许这种持久影响的计算摊销。它无法承担敏感信息删除或错误 observation 纠正。
 
-#### 4.2 `FORGET`：支付重算成本获得语义删除
+#### 4.2 `FORGET`：支付重算成本重建当前模型上下文
 
-`FORGET` 从保留 prefix 后重新 prefill replacement 和 suffix。redaction、retention deletion、错误 tool output 修正需要这条路径。两种 mode 把性能与语义选择放到 agent policy，serving 层按声明执行。
+`FORGET` 从保留 prefix 后重新 prefill replacement 和 suffix。redaction、retention deletion、错误 tool output 修正需要这条模型上下文路径。两种 mode 把性能与语义选择放到 agent policy，serving 层按声明执行。它没有清除全局 radix trie 中的旧副本、日志、artifact 或外部工具副作用，也没有提供物理 zeroization；完整合规删除仍需 storage 与 audit 层配合。
 
 #### 4.3 两条实验腿必须分开读
 
 - Mechanism leg：17K 合成 message-edit workload 中，SGLang radix hit 49.6%→Leyline 60.8%，并发 $C=8$ 的 p50 5533→5292 ms，下降 241 ms；$C=16$ 延迟反而增加 45 ms，收益受 workload 和并发影响。
-- Policy leg：debug-gym 中 `keep_all` 10/32（31.2%），`truncate_older_than(n=2,max_chars=200)` 15/33（45.5%），增加 14.3 pp。两臂都走 standard re-prefill，结果只支持截断 policy。
-- Real trace：一条低 radix-hit 的 50-step trace 中，full configuration 的 wall time 下降 5.3%，first-token 48/50 相同；cache hit 只从 27.6% 变为 27.8%，约 95% timing win 来自 fp32 rotation mitigation，Role B cache reuse 在该轨迹上 timing-neutral。另一条 radix hit 91.6% 的 trace 中 splice 慢 0.6%。
+- Policy leg：debug-gym 中，论文 headline 为 `keep_all` 10/32（31.25%）到 `truncate_older_than(n=2,max_chars=200)` 15/33（45.45%），精确差约 14.2 pp，论文按显示的一位小数写 14.3 pp。Table 2 的 treatment 行只合计 14/32，结果规模无法完全核对。两臂都走 standard re-prefill，这项小样本信号只涉及截断 policy。
+- Real trace：一条低 radix-hit 的 50-step trace 中，full configuration 的 wall time 下降 5.3%，cache hit 只从 27.6% 变为 27.8%。论文将约 95% timing win 归于 fp32 rotation mitigation，但没有报告 `fp32 off` arm；公开数字只支持 Role B L2 在该单轨迹上 timing-neutral，无法继续拆分基础 splice 与 fp32 rotation。论文另报 first-token agreement 为 48/50，Section 4 / Appendix Q 的 reference 是 full-prefill，Section 5 / Appendix T 写成 radix arm。另一条 radix hit 91.6% 的 trace 中 splice 慢 0.6%。
 
 证据定位：[Leyline 笔记](/papers/2606.01065-leyline-kv-cache-directives-agentic-inference/)；论文 Sections 3-5、Equation 1、Table 2、Appendix B Table 3、Appendix T/Q。
 
@@ -344,7 +346,7 @@ $$
 
 1. **把 Grape 当作 ReAct scheduler**：论文 TaskFlow 是预声明 task dataflow；动态 loop、retry 和 tool blocking 需要上层 runtime。
 2. **把 SPORK 当作常规 token speculative decoding**：主收益来自提前执行外部工具，D3 才属于 target-verified token recovery。
-3. **把 Leyline `AMORTIZE` 当作语义删除**：后缀状态仍保留原 span 的历史影响；`FORGET` 承担真正遗忘。
+3. **把 Leyline `AMORTIZE` 当作 edited-prompt re-prefill**：后缀状态仍保留原 span 的历史影响；`FORGET` 通过 re-prefill 重建当前 active context，storage、日志和外部副作用还需单独清理。
 4. **把三篇 headline speedup 相乘**：指标、baseline、硬件、workload 和资源竞争都不一致，联合收益需要同一 trace 的 factorial ablation。
 
 ### 8. 一条可执行的落地路线
@@ -366,7 +368,7 @@ $$
 1. 在固定多阶段 pipeline 上启用 Grape 式 incremental prefill，先验证 logits / token / outcome 与 baseline 的差异。
 2. 只为高延迟、read-only、结果可丢弃的工具开启 SPORK D1/D2；建立 strict serialization 和 observation freshness window。
 3. 将 D3 作为独立 engine feature 验证并发隔离，避免共享全局 proposer state。
-4. 对纯展示压缩或可容忍持久影响的 span 尝试 Leyline `AMORTIZE`；纠错、合规和隐私一律走 `FORGET`。
+4. 对纯展示压缩或可容忍持久影响的 span 尝试 Leyline `AMORTIZE`；纠错、合规和隐私相关的 context edit 走 `FORGET`，并由 storage / audit 层完成旧副本、日志和 artifact 清理。
 5. 引入 context version、branch-local KV 和 dynamic graph events，再做联合 admission control。
 
 #### 阶段 C：使用 factorial ablation 验证组合
@@ -393,7 +395,7 @@ $$
 | 0-5 min | 一条 Agent critical path 与三个串行边界 | token engine 速度无法直接代表 workflow 速度 |
 | 5-15 min | Grape：task boundary | 预声明依赖可以下降到 token chunk 与 micro-task |
 | 15-25 min | SPORK：action boundary | next-tool intent 可早于完整 arguments 稳定，收益由 acceptance×overlap 决定 |
-| 25-33 min | Leyline：edit boundary | KV mutation 需要显式 mode，位置摊销与真正遗忘使用不同路径 |
+| 25-33 min | Leyline：edit boundary | KV mutation 需要显式 mode，位置摊销与 active-context 重建使用不同路径 |
 | 33-40 min | 统一 runtime 与实验设计 | 三个 control plane 需要 context version、branch isolation 和共同资源预算 |
 
 结束时保留一张判断表：
@@ -410,13 +412,13 @@ $$
 
 | 工作 | 最关键实现匹配结果 | 证据定位 | 最窄结论 |
 | --- | --- | --- | --- |
-| Grape | 相对 `vLLM-opt`：平均 token latency 加速 1.15×、P95 加速 3.80×、throughput 提高 1.16× | Section IV-B/C，Figures 12-14，PDF pp.8-9 | 固定 LLM task DAG 上的跨 task incremental prefill 主要缓解 task-boundary tail burst |
+| Grape | 完整系统相对 `vLLM-opt`：平均 agentic inter-token latency 加速 1.15×、P95 加速 3.80×、throughput 提高 1.16× | Section IV-B/C，Figures 12-14，PDF pp.8-9 | 固定 LLM task DAG 上，完整 lowering / scheduling / memory 栈主要缓解 task-boundary token-gap tail；正交机制归因仍缺失 |
 | SPORK | Qwen3-32B / GAIA：P95 131.9→108.1 s，-18%，N=165 | Figure 10，Sections 6.2-6.6 | thinking-mode、慢工具和给定 acceptance 下，action-level speculation 能隐藏部分 tool wait |
 | Leyline | radix hit 49.6%→60.8%；$C=8$ p50 5533→5292 ms | Appendix B，Table 3，PDF pp.15-18 | MLA 合成 message-edit workload 上，splice 可恢复 suffix KV work，并在部分并发区间降低延迟 |
 
 - 证据定位：Grape Section IV-B/C、Figures 12-14、PDF pp.8-9；SPORK Figure 10、Sections 6.2-6.6；Leyline Appendix B、Table 3、PDF pp.15-18。
 - 对照是否可比：每篇内部对照都匹配主要实现路径；三篇的模型、workflow、指标和 latency 口径不同，跨论文数字只能分别解释。
-- 支持的最窄结论：三组 headline 数字分别支持跨 task incremental prefill、action-level speculation 和 history splice 在各自 operating region 内减少局部等待，无法据此推出三种机制组合后的加速比。
+- 支持的最窄结论：三组 headline 数字分别支持完整 Grape、action-level speculation 和 history splice 在各自 operating region 内减少局部等待，无法据此拆分 Grape 内部组件，也无法推出三种系统机制组合后的加速比。
 
 Grape 报 ms/token 与 throughput，SPORK 报 per-query P95 wall time，Leyline mechanism 报 replay cache hit 与 p50。分享中保留原指标，使每个数字继续对应原始优化目标。
 
@@ -425,11 +427,11 @@ Grape 报 ms/token 与 throughput，SPORK 报 per-query P95 wall time，Leyline 
 | 层级 | Grape | SPORK | Leyline |
 | --- | --- | --- | --- |
 | Token / math | causal incremental prefill 在理想算术下等价；有限精度轨迹未完整验证 | D3 只接收 target-verified prefix | $\delta$-rotation 校正位置；bf16 pool 存在 1%-3% per-K-entry floor |
-| Action | 固定 task dependency | name+serialized args exact match 后才采用工具结果 | directive 精确指向 rendered token span |
+| Action | 固定 task dependency | 论文要求完整调用精确匹配；公开 strict runner 比较 name 与规范化参数字典 | directive 精确指向 rendered token span |
 | State | append-only IntermediateVar 流 | reject branch 不进入 canonical history | `AMORTIZE` 保留原影响；`FORGET` re-prefill |
-| Side effect | 工具基本未进入实证 | read-only manifest；write / non-idempotent 串行 | 只能编辑模型 context / KV，无法撤销外部写操作 |
+| Side effect | 工具基本未进入实证 | 论文要求 read-only allowlist；公开仓库由集成方负责 enforcement | 只能编辑模型 context / KV，无法撤销外部写操作 |
 
-- 证据定位：Grape Sections III-A/III-C 与 Section V；SPORK Sections 4.1-4.4、6.6；Leyline Sections 3-4、Appendices G/H/Q。
+- 证据定位：Grape Sections III-A/III-C 与 Section V；SPORK Sections 4.1-4.3、6.6；Leyline Sections 3-4、Appendices G/H/Q。
 - 对照是否可比：三篇分别验证 causal task 流、target-verified action prefix 和位置校正后的 KV replay，正确性对象位于不同层级，不能互相替代或合并成单一等价性证明。
 - 支持的最窄结论：联合 runtime 需要同时维护数值、action、state 与 external side effect 四层契约，每篇论文覆盖其中一部分。
 
@@ -439,7 +441,7 @@ Grape 报 ms/token 与 throughput，SPORK 报 per-query P95 wall time，Leyline 
 - SPORK probe 与 main 共享 prefix，同时新增 decode slot、branch KV 和工具流量。
 - Leyline splice 保存 prefill compute，Role B trie pin 不降低 peak allocator watermark。
 - 三篇论文都显示收益具有 operating envelope：Grape 的 P95 增益大于均值；SPORK no-think 出现 0.79×；Leyline 在高 radix-hit trace 中慢 0.6%。
-- 证据定位：Grape Figures 12-18；SPORK Figure 14 与 no-think appendix；Leyline Section 5、Appendices T/U。
+- 证据定位：Grape Figures 12-18；SPORK Figure 14 与 Section 6.6 的 no-think observation；Leyline Section 5、Appendices T/U。
 - 对照是否可比：三项退化信号来自不同模型、workflow 和负载区间，适合提炼共同 admission 变量，无法作为 compute-matched 的联合性能对照。
 - 支持的最窄结论：统一 scheduler 需要按 expected gain、SLO risk、KV pressure 和 side-effect class 做 admission，静态优先级无法覆盖全部组合状态。
 
@@ -449,8 +451,8 @@ Grape 报 ms/token 与 throughput，SPORK 报 per-query P95 wall time，Leyline 
 | --- | --- | --- | --- |
 | Workflow | 固定 code / summary / search DAG | ReAct-style loop，GAIA / HotpotQA / tau2 / BrowseComp | message-edit replay 与 debug-gym |
 | 模型 | Llama3-8B、Qwen3-14B | Qwen3-32B、Qwen3.5-35B-A3B、Qwen3-4B | 4 个 MLA 模型为主，附小型 GQA probes |
-| 硬件 | 1-2×A100 40GB | H20，部分 TP=4 | H100/H200，部分 TP=4 |
-| 强 baseline | 同 vLLM 基座的 `vLLM-opt` | 同 serving mode 的 serial / n-gram baseline | 同 SGLang 的 standard radix |
+| 硬件 | 1-2×A100 40GB | H20；Figure 10 headline 为 TP=1，BrowseComp appendix 含 TP=4 | H100/H200，部分 TP=4 |
+| 强 baseline | 同 vLLM 基座的 `vLLM-opt` | 同 serving mode 的 serial / n-gram baseline | mechanism leg 为同 SGLang standard radix；policy leg 为 keep-all 且两臂 standard re-prefill |
 | 主指标 | ms/token、P95、throughput、SLO attainment | per-query P95 wall time、accuracy、acceptance | cache hit、p50/p99、solve rate、agreement |
 | 统计缺口 | 样本数、arrival process、误差条未披露 | CI 和系统化多 seed latency 不足 | policy 样本少、单 threshold、无联合 ablation |
 | 组合外推风险 | 动态 ReAct 未测 | probe 资源与 workflow prefill 竞争未测 | Grape/SPORK context version interaction 未测 |
@@ -474,13 +476,15 @@ Grape 报 ms/token 与 throughput，SPORK 报 per-query P95 wall time，Leyline 
 - 三篇研究对象处于相邻层级，当前没有共同代码栈、统一 benchmark 或联合结果。
 - Grape 的 “agentic workflow” 范围较窄，主要代表静态 LLM pipeline。
 - SPORK 的只读工具仍可能随时间返回不同 observation；strict arguments match 不自动提供 observational equivalence。
-- Leyline 的 policy gain 与 kernel gain 来自分离实验，`AMORTIZE` 还具有持久上下文影响。
+- SPORK D2 的论文 name-span 定义与公开 Qwen runner 的固定 token window 不一致；阈值结果需要按原实验代码复验。
+- Leyline 的 policy gain 与 kernel gain 来自分离实验，policy 表格无法完全核对，`AMORTIZE` 还具有持久上下文影响。
+- Leyline 的长轨迹 first-token agreement 在四个 MLA 模型间从 4%-100% 不等；位置代数成立无法替代逐模型 fidelity canary。
 
 ## OpenReview / 审稿意见吸收
 
 - Page type: not-applicable
 - Match confidence: high
-- Observed at: 2026-07-14
+- Observed at: 2026-07-15
 - Venue status: Grape 由作者主页记录为 SC 2026 accepted；SPORK 与 Leyline 当前为 arXiv v1。
 - Public reviews: 三篇均未发现可可靠匹配的公开 reviewer comments；Grape 的公开 proceedings / artifact 尚待出现。
 - Ratings / confidence: 无公开评分可统一校准。
@@ -496,12 +500,14 @@ Grape 报 ms/token 与 throughput，SPORK 报 per-query P95 wall time，Leyline 
 - 三篇论文可以沿“task / action / edit boundary”组织，无需把它们压缩成同一种 KV Cache 优化。
 - Grape 与 SPORK 都在创造 overlap，Leyline 主要减少 mutation 后的 repair work；统一成本模型需要同时计算 overlap gain、repair saving 和资源机会成本。
 - Canonical context version 是组合系统的中心状态。Task inputs、SPORK branch、tool result 和 Leyline directive 都必须绑定版本。
+- 三篇工作都优化 inference runtime，没有新增 credit assignment / rewards。Agentic RL 中只有 canonical committed trajectory 进入 rewards；probe、rejected tool result 和 stale cache mode 需要单独 lineage。
 
 ### 2. 修正后的理解
 
 - Grape 的空间并行来自已知 task dataflow 中的跨 task overlap；SPORK 的时间推测来自当前 turn 对 future action 的 early intent；Leyline 处理 history 已经变化后的 state preservation。
-- ReAct runtime 可以把已就绪 LLM 阶段提交给 Grape engine，同时保留动态 loop；SPORK 直接插入每个 ReAct turn；Leyline在 turn boundary 管 canonical state。
+- ReAct runtime 可以把已就绪 LLM 阶段提交给 Grape engine，同时保留动态 loop；SPORK 直接插入每个 ReAct turn；Leyline 在 turn boundary 管 canonical state。
 - Agent serving 的长期接口会从单一 prompt 扩展为 compute graph、speculation branch 和 state directive 三组协议。
+- SPORK accepted result 仍对应 main 最终 Action；D3 token 需要 target-path logprob。Leyline `AMORTIZE` 会让 rendered transcript 与模型实际 conditioning state 分离，RL rollout 与可重放评测必须记录 mode、原始 span provenance 和 context version。
 
 ### 3. 后续复验指标
 
@@ -510,6 +516,8 @@ Grape 报 ms/token 与 throughput，SPORK 报 per-query P95 wall time，Leyline 
 - main/probe/downstream prefill 的 batch share、KV bytes、prefix refcount、preemption/recompute 和 peak watermark。
 - context edit 后的 logits KL、token common prefix、task success、hidden stale-information probe 与合规删除检查。
 - dynamic loop、retry、fan-out、nested agents 和多模型 workflow 的 IR expressivity。
+- SPORK D2 在 tool-name span 与公开 fixed-window extraction 下的 calibration 差异，以及 loose / strict gate 的结果分离。
+- Agentic RL 中 committed trajectory/s、target-path rollout logprob、reward lineage 与 trainer recomputation 的 $\Delta\log p$。
 
 ## 主要启发
 
@@ -523,7 +531,7 @@ Grape 报 ms/token 与 throughput，SPORK 报 per-query P95 wall time，Leyline 
 1. 三篇论文没有联合代码栈和统一 benchmark，本综合的 runtime 架构属于设计推演。
 2. Grape 使用静态 LLM-only DAG，无法直接证明动态 ReAct、sandbox 或 browser workload 的收益。
 3. SPORK 依赖 open-weight serving features、thinking window、read-only tools 和 spare capacity；closed API 或 no-think 模型适配困难。
-4. Leyline 高效路径集中于 MLA，`AMORTIZE` 的持久影响限制了语义适用范围，公开 artifact 当前不可定位。
+4. Leyline 高效路径集中于 MLA，四个 MLA 模型的长轨迹 fidelity 差异很大，GQA live probe 也暴露了 edited-prompt contract 偏移；`AMORTIZE` 的持久影响限制了语义适用范围，公开 artifact 当前不可定位。
 5. 三篇 headline 指标和 baseline 各异，缺少统一成本、能耗、multi-tenant fairness 与 tail confidence interval。
 6. 组合系统中的 branch isolation、tool transaction、context version、dynamic invalidation 和 cross-tenant authorization 仍需实现。
 
