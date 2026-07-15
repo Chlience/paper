@@ -36,6 +36,16 @@ export const normalizeAuthors = (authors = []) => {
 
 const compareStableStrings = (left, right) => (left < right ? -1 : left > right ? 1 : 0);
 
+const canonicalizeForComparison = (value) => {
+  if (Array.isArray(value)) return value.map(canonicalizeForComparison);
+  if (!value || typeof value !== 'object') return value;
+  return Object.fromEntries(
+    Object.keys(value)
+      .sort(compareStableStrings)
+      .map((key) => [key, canonicalizeForComparison(value[key])]),
+  );
+};
+
 const normalizeStringSet = (values = []) =>
   [...new Set(values.map((value) => normalizeSpace(decodeHtml(value))).filter(Boolean))].sort(compareStableStrings);
 
@@ -51,15 +61,53 @@ export const normalizeTrack = (value = '') => {
   return 'other';
 };
 
-export const normalizePresentation = (value = '') => {
+export const normalizePresentationType = (value = '') => {
   const key = normalizeSpace(value).toLocaleLowerCase();
   if (!key) return 'unknown';
+  if (/spotlight|highlight|featured/.test(key)) return 'featured';
   if (/oral|technical session|paper session/.test(key)) return 'oral';
-  if (/spotlight/.test(key)) return 'spotlight';
-  if (/highlight/.test(key)) return 'highlight';
   if (/poster/.test(key)) return 'poster';
-  if (/virtual/.test(key)) return 'virtual';
+  if (/virtual|online|remote|digital|proceedings[- ]only/.test(key)) return 'unknown';
   return 'other';
+};
+
+export const normalizePresentationMode = (value = '') => {
+  const key = normalizeSpace(value).toLocaleLowerCase();
+  if (!key) return 'unknown';
+  if (/hybrid/.test(key)) return 'hybrid';
+  if (/in[- ]?person|on[- ]?site/.test(key)) return 'in-person';
+  if (/proceedings[- ]?only/.test(key)) return 'proceedings-only';
+  if (/virtual|online|remote|digital/.test(key)) return 'virtual';
+  return 'other';
+};
+
+export const migratePresentationFields = (paper = {}) => {
+  const legacyRaw = normalizeSpace(paper.presentationRaw);
+  const legacyNormalized = normalizeSpace(paper.presentationNormalized).toLocaleLowerCase();
+  const hasTypeRaw = Object.hasOwn(paper, 'presentationTypeRaw');
+  const hasModeRaw = Object.hasOwn(paper, 'presentationModeRaw');
+  const presentationTypeRaw = normalizeSpace(
+    hasTypeRaw
+      ? paper.presentationTypeRaw
+      : legacyNormalized === 'virtual' || /virtual/i.test(legacyRaw)
+        ? ''
+        : legacyRaw,
+  );
+  const presentationModeRaw = normalizeSpace(
+    hasModeRaw
+      ? paper.presentationModeRaw
+      : legacyNormalized === 'virtual' || /virtual/i.test(legacyRaw)
+        ? legacyRaw || 'Virtual'
+        : '',
+  );
+  const { presentationRaw: _legacyRaw, presentationNormalized: _legacyNormalized, ...rest } = paper;
+  return {
+    ...rest,
+    presentationTypeRaw,
+    presentationTypeNormalized: normalizePresentationType(presentationTypeRaw),
+    presentationModeRaw,
+    presentationModeNormalized: normalizePresentationMode(presentationModeRaw),
+  };
 };
 
 export const normalizeStatus = (value = '') => {
@@ -72,7 +120,7 @@ export const normalizeStatus = (value = '') => {
 export const normalizePaper = (raw, context, taxonomy) => {
   const title = normalizeSpace(decodeHtml(raw.title));
   const trackRaw = normalizeSpace(raw.trackRaw || context.defaultTrack || 'Main');
-  const presentationRaw = normalizeSpace(raw.presentationRaw);
+  const presentation = migratePresentationFields(raw);
   const officialId = normalizeSpace(raw.officialId);
   const normalized = {
     id: stablePaperId({ venueId: context.venue.id, year: context.year, officialId, title }),
@@ -88,8 +136,10 @@ export const normalizePaper = (raw, context, taxonomy) => {
     sourceTopics: normalizeStringSet(raw.sourceTopics ?? []),
     trackRaw,
     trackNormalized: normalizeTrack(trackRaw),
-    presentationRaw,
-    presentationNormalized: normalizePresentation(presentationRaw),
+    presentationTypeRaw: presentation.presentationTypeRaw,
+    presentationTypeNormalized: presentation.presentationTypeNormalized,
+    presentationModeRaw: presentation.presentationModeRaw,
+    presentationModeNormalized: presentation.presentationModeNormalized,
     recognition: normalizeStringSet(raw.recognition ?? []),
     ...(raw.publicationStatus ? { publicationStatus: normalizeSpace(raw.publicationStatus) } : {}),
     ...(raw.authorStatus ? { authorStatus: normalizeSpace(raw.authorStatus).toLocaleLowerCase() } : {}),
@@ -105,16 +155,24 @@ export const normalizePaper = (raw, context, taxonomy) => {
 };
 
 export const mergePapers = (existing = [], incoming = [], observedAt) => {
-  const incomingById = new Map(incoming.map((paper) => [paper.id, paper]));
+  const incomingById = new Map(
+    incoming.map((paper) => {
+      const migrated = migratePresentationFields(paper);
+      return [migrated.id, migrated];
+    }),
+  );
   const merged = [];
 
-  for (const paper of existing) {
+  for (const existingPaper of existing) {
+    const paper = migratePresentationFields(existingPaper);
     const next = incomingById.get(paper.id);
     if (next) {
       const previousComparable = { ...paper };
       delete previousComparable.firstSeenAt;
       delete previousComparable.lastSeenAt;
-      const changed = contentHash(previousComparable) !== contentHash(next);
+      const changed =
+        contentHash(canonicalizeForComparison(previousComparable)) !==
+        contentHash(canonicalizeForComparison(next));
       merged.push({
         ...paper,
         ...next,

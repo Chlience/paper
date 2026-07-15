@@ -4,21 +4,20 @@ export const CONFERENCE_FILTER_DEFAULTS = Object.freeze({
   query: '',
   venue: '',
   area: '',
-  presentation: '',
+  presentationType: '',
+  presentationMode: '',
   domain: '',
   contribution: '',
   sort: 'presentation',
   page: 1,
 });
 
-const PRESENTATION_ORDER = new Map([
+const PRESENTATION_TYPE_ORDER = new Map([
   ['oral', 0],
-  ['spotlight', 1],
-  ['highlight', 2],
-  ['poster', 3],
-  ['virtual', 4],
-  ['other', 5],
-  ['unknown', 6],
+  ['featured', 1],
+  ['poster', 2],
+  ['other', 3],
+  ['unknown', 4],
 ]);
 
 const CONFERENCE_TEXT_COLLATOR = new Intl.Collator(['zh-CN', 'en'], {
@@ -60,7 +59,8 @@ export const getConferencePaperSearchText = (paper) =>
       paper?.venueAcronym,
       paper?.venueName,
       paper?.trackRaw,
-      paper?.presentationRaw,
+      paper?.presentationTypeRaw,
+      paper?.presentationModeRaw,
       ...(paper?.domains ?? []).map((domain) => domain?.label ?? domain?.id),
       paper?.contributionType?.label,
     ]
@@ -83,16 +83,28 @@ const normalizeSort = (value) => {
     : CONFERENCE_FILTER_DEFAULTS.sort;
 };
 
-export const normalizeConferenceFilterState = (state = {}) => ({
-  query: asString(state.query ?? state.q),
-  venue: asString(state.venue),
-  area: asString(state.area),
-  presentation: asString(state.presentation),
-  domain: asString(state.domain),
-  contribution: asString(state.contribution),
-  sort: normalizeSort(state.sort),
-  page: normalizePage(state.page),
-});
+const normalizePresentationTypeFilter = (value) => {
+  const normalized = asString(value).toLocaleLowerCase();
+  if (['spotlight', 'highlight'].includes(normalized)) return 'featured';
+  if (normalized === 'virtual') return '';
+  return normalized;
+};
+
+export const normalizeConferenceFilterState = (state = {}) => {
+  const legacyPresentation = asString(state.presentationType ?? state.presentation).toLocaleLowerCase();
+  const explicitMode = asString(state.presentationMode ?? state.mode).toLocaleLowerCase();
+  return {
+    query: asString(state.query ?? state.q),
+    venue: asString(state.venue),
+    area: asString(state.area),
+    presentationType: normalizePresentationTypeFilter(legacyPresentation),
+    presentationMode: explicitMode || (legacyPresentation === 'virtual' ? 'virtual' : ''),
+    domain: asString(state.domain),
+    contribution: asString(state.contribution),
+    sort: normalizeSort(state.sort),
+    page: normalizePage(state.page),
+  };
+};
 
 export const readConferenceFilterState = (input = '') => {
   const params =
@@ -104,7 +116,8 @@ export const readConferenceFilterState = (input = '') => {
     query: params.get('q'),
     venue: params.get('venue'),
     area: params.get('area'),
-    presentation: params.get('presentation'),
+    presentationType: params.get('presentation'),
+    presentationMode: params.get('mode'),
     domain: params.get('domain'),
     contribution: params.get('contribution'),
     sort: params.get('sort'),
@@ -119,7 +132,8 @@ export const createConferenceFilterParams = (state = {}) => {
   if (normalized.query) params.set('q', normalized.query);
   if (normalized.venue) params.set('venue', normalized.venue);
   if (normalized.area) params.set('area', normalized.area);
-  if (normalized.presentation) params.set('presentation', normalized.presentation);
+  if (normalized.presentationType) params.set('presentation', normalized.presentationType);
+  if (normalized.presentationMode) params.set('mode', normalized.presentationMode);
   if (normalized.domain) params.set('domain', normalized.domain);
   if (normalized.contribution) params.set('contribution', normalized.contribution);
   if (normalized.sort !== CONFERENCE_FILTER_DEFAULTS.sort) params.set('sort', normalized.sort);
@@ -136,9 +150,10 @@ const confidenceRank = (value) => {
   return -(CONFIDENCE_SCORE.get(normalized) ?? CONFIDENCE_SCORE.get('unknown'));
 };
 
-const presentationRank = (paper) =>
-  PRESENTATION_ORDER.get(asString(paper?.presentationNormalized).toLocaleLowerCase()) ??
-  PRESENTATION_ORDER.get('unknown');
+const presentationTypeRank = (paper) =>
+  PRESENTATION_TYPE_ORDER.get(
+    asString(paper?.presentationTypeNormalized).toLocaleLowerCase(),
+  ) ?? PRESENTATION_TYPE_ORDER.get('unknown');
 
 const compareText = (left, right) =>
   CONFERENCE_TEXT_COLLATOR.compare(asString(left), asString(right));
@@ -150,7 +165,7 @@ export const sortConferencePapers = (papers = [], sort = CONFERENCE_FILTER_DEFAU
     if (normalizedSort === 'venue') {
       return (
         compareText(left?.venueAcronym ?? left?.venueName, right?.venueAcronym ?? right?.venueName) ||
-        presentationRank(left) - presentationRank(right) ||
+        presentationTypeRank(left) - presentationTypeRank(right) ||
         compareText(left?.title, right?.title)
       );
     }
@@ -162,13 +177,13 @@ export const sortConferencePapers = (papers = [], sort = CONFERENCE_FILTER_DEFAU
     if (normalizedSort === 'confidence') {
       return (
         confidenceRank(left?.classificationConfidence) - confidenceRank(right?.classificationConfidence) ||
-        presentationRank(left) - presentationRank(right) ||
+        presentationTypeRank(left) - presentationTypeRank(right) ||
         compareText(left?.title, right?.title)
       );
     }
 
     return (
-      presentationRank(left) - presentationRank(right) ||
+      presentationTypeRank(left) - presentationTypeRank(right) ||
       compareText(left?.venueAcronym ?? left?.venueName, right?.venueAcronym ?? right?.venueName) ||
       compareText(left?.title, right?.title)
     );
@@ -183,8 +198,14 @@ export const filterConferencePapers = (papers = [], state = {}, searchIndex) => 
     if (normalized.venue && paper?.venueId !== normalized.venue) return false;
     if (normalized.area && paper?.ccfAreaId !== normalized.area) return false;
     if (
-      normalized.presentation &&
-      paper?.presentationNormalized !== normalized.presentation
+      normalized.presentationType &&
+      paper?.presentationTypeNormalized !== normalized.presentationType
+    ) {
+      return false;
+    }
+    if (
+      normalized.presentationMode &&
+      paper?.presentationModeNormalized !== normalized.presentationMode
     ) {
       return false;
     }

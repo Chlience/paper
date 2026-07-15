@@ -1,6 +1,6 @@
 # 2026 CCF-A 会议论文目录维护指南
 
-`/conferences/` 提供 2026 年 CCF-A 会议论文的快速检索入口。目录层保存会议、论文、展示等级、领域、核心贡献类型和来源状态；经过深度阅读的论文仍按现有论文存档工作流写入 `content/papers/`。目录论文可以通过 `notePath` 关联已有笔记。
+`/conferences/` 提供 2026 年 CCF-A 会议论文的快速检索入口。目录层保存会议、论文、展示类型、呈现方式、领域、核心贡献类型和来源状态；经过深度阅读的论文仍按现有论文存档工作流写入 `content/papers/`。目录论文可以通过 `notePath` 关联已有笔记。
 
 ## 收录边界
 
@@ -8,7 +8,9 @@
 - 首批自动采集覆盖 ACL、CVPR、ICML、ASPLOS、USENIX Security。其余会议先保留在 registry 中，通过覆盖状态说明 2026 年数据是否可用。
 - 论文范围限定为主会 Main Full/Regular paper。Findings、short paper、demo、workshop、industry companion track 等条目不进入目录。
 - 数据源优先使用会议官网、官方 proceedings、ACL Anthology、CVF Open Access、OpenReview 或主办方公开的结构化数据。聚合站点可以用于排查数量差异，不能作为落库来源。
-- `presentationNormalized` 只记录官方来源能够支持的等级，包括 `oral`、`spotlight`、`highlight`、`poster`、`virtual`、`other` 和 `unknown`。`virtual` 表示官方日程只安排线上展示，不表达论文质量等级；官方页面未公布展示形式时保留 `unknown`。
+- `presentationTypeNormalized` 将官方展示标签归并为 `oral`、`featured`、`poster`、`other` 和 `unknown`。Spotlight 与 Highlight 的原始称呼保存在 `presentationTypeRaw`，统一归入 `featured`。
+- `presentationModeNormalized` 独立记录 `in-person`、`virtual`、`hybrid`、`proceedings-only`、`other` 和 `unknown`。该字段描述呈现或参会方式，不参与展示层级排序。
+- 页面层级筛选只列出 Oral、Spotlight/Highlight、Poster 三项；`other` 和 `unknown` 继续保存在数据层，用于来源审计和后续映射更新。
 - `recognition` 独立保存 Best Paper、Honorable Mention 等荣誉，避免与 oral/poster 展示等级混合。
 - 自动分类用于检索和初筛。领域、贡献类型和核心贡献摘要仍需在高价值论文进入深度笔记时人工复核。
 
@@ -31,7 +33,7 @@
 
 ```json
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "year": 2026,
   "venueId": "icml",
   "coverageStatus": "published",
@@ -50,8 +52,8 @@
 | 组 | 字段 | 含义 |
 | --- | --- | --- |
 | 标识 | `id`, `officialId`, `venueId`, `year` | `id` 由会议、年份与官方 ID 生成；官方 ID 缺失时使用规范化标题生成稳定哈希 |
-| 原始事实 | `title`, `authors`, `trackRaw`, `presentationRaw`, `recognition`, `publicationStatus`, `paperUrl`, `pdfUrl` | 适配器从官方来源提取的论文事实 |
-| 规范化 | `trackNormalized`, `presentationNormalized`, `status` | 统一枚举，供校验和页面筛选 |
+| 原始事实 | `title`, `authors`, `trackRaw`, `presentationTypeRaw`, `presentationModeRaw`, `recognition`, `publicationStatus`, `paperUrl`, `pdfUrl` | 适配器从官方来源提取的论文事实 |
+| 规范化 | `trackNormalized`, `presentationTypeNormalized`, `presentationModeNormalized`, `status` | 两个展示轴及其他统一枚举，供校验和页面筛选 |
 | 可用性 | `authorStatus`, `abstractStatus` | 上游暂缓公开作者或摘要时保存 `embargoed`，对应字段保持为空，避免把占位文本当作论文事实 |
 | 分类与溯源 | `domains`, `primaryDomainId`, `contributionType`, `coreContribution`, `classificationConfidence`, `classifierVersion`, `sourceUrl`, `firstSeenAt`, `lastSeenAt` | 规则分类结果、来源和增量观察时间 |
 
@@ -63,7 +65,7 @@
 
 首批来源使用四类适配方式：
 
-- ACL：以 ACL Anthology 的 `2026.acl-long` 官方卷为录用主清单，并与官方公开日程表合并摘要和 presentation。日程中的 Virtual Presentations 保存为 `virtual`；标题包含 TeX、上标或少量官方拼写差异时，适配器仅对未匹配条目执行高阈值、唯一候选的 token 相似度回退。`2026.acl-short` 的 short papers 不进入目录。
+- ACL：以 ACL Anthology 的 `2026.acl-long` 官方卷为录用主清单，并与官方公开日程表合并摘要及两个展示轴。`Underline/Whova Session Name` 提供 Oral/Poster 类型，`Presentation mode` 提供 In-Person/Virtual 方式；Virtual session 没有对应 Oral/Poster 信息时，展示类型保留 `unknown`。标题包含 TeX、上标或少量官方拼写差异时，适配器仅对未匹配条目执行高阈值、唯一候选的 token 相似度回退。`2026.acl-short` 的 short papers 不进入目录。
 - CVPR：以官方 presentation 日程表为录用主清单，用 CVF Open Access 和 CVPR 官方 Miniconf JSON 补充出版状态、论文链接与摘要。oral、highlight、poster 来自日程表，Award Candidate 写入独立 `recognition`；Findings Poster 不进入主论文集。
 - ICML：读取 ICML 官方 Miniconf JSON，合并同一标题的 poster/oral 事件，仅保留 `ICML.cc/2026/Conference` Main Conference。独立 Position Paper Track、TMLR、Annals of Statistics 等受邀轨道均排除。
 - ASPLOS：读取官方 program 页面中的 research-paper session，提取标题、作者和日程支持的展示信息。当前页面没有逐篇稳定 ID 和摘要，ID 暂由规范化标题生成；标题更正可能需要在更新 PR 中人工迁移旧记录。
@@ -79,7 +81,8 @@
   abstract,
   sourceTopics,
   trackRaw,
-  presentationRaw,
+  presentationTypeRaw,
+  presentationModeRaw,
   recognition,
   publicationStatus,
   authorStatus,
@@ -99,7 +102,7 @@
 
 1. 从 registry 选择已配置的 2026 适配器，并抓取官方来源。
 2. 解析原始条目，合并同一论文的多个日程事件，过滤范围外 track。
-3. 规范化标题、作者、track、presentation 和状态，生成稳定论文 ID。
+3. 规范化标题、作者、track、展示类型、呈现方式和状态，生成稳定论文 ID。
 4. 使用 `taxonomy.json` 对标题、摘要和官方 topic 运行确定性规则分类，并提取一条核心贡献句。分类器使用完整词或短语匹配，并为 ACL、CVPR、ICML、ASPLOS、USENIX Security 加入对应会议主领域先验；充分的跨领域证据仍可覆盖该先验。
 5. 按论文 ID 与已有数据合并。首次发现写入 `firstSeenAt`；论文事实发生变化或从 `source-missing` 恢复时更新 `lastSeenAt`。数据集级 `lastSuccessfulSyncAt` 记录最近一次产生数据变更的成功同步时间；无内容变化的定时检查只保留在 Actions 日志中，从而避免空更新 PR。
 6. 官方源暂时缺少既有论文时，将条目标记为 `source-missing` 并保留记录，便于人工判断页面分批发布、临时故障或撤稿。官方明确撤稿时使用 `withdrawn`。
@@ -160,7 +163,7 @@ npm run build
 
 - 接受论文总数的变化是否与官方公告或分批发布时间一致。
 - `source-missing`、`withdrawn` 和新增论文是否有合理来源。
-- oral、spotlight、highlight、poster 的变化是否来自官方日程更新。
+- Oral、Spotlight/Highlight、Poster 类型以及 In-person、Virtual 方式的变化是否来自官方日程更新。
 - Main Full/Regular 边界是否保持，尤其关注同页混排的 Findings、short、demo 和 workshop。
 - 自动分类低置信度条目与核心贡献句是否仍适合检索。
 - 来源 URL、论文 URL、同步时间和 adapter 标识是否完整。
@@ -171,9 +174,9 @@ npm run build
 
 1. 在 `registry.json` 对应 venue 的 `edition2026` 中补齐官网、accepted-list URL、覆盖状态和稳定 adapter 标识。
 2. 优先寻找官方 JSON、XML、BibTeX 或 proceedings API。HTML 页面适配器需要使用明确的结构选择器，并为页面改版准备失败保护。
-3. 将官方字段映射到统一原始论文对象，明确 Main Full/Regular 的判断规则和 presentation 信息来源。
-4. 增加解析与规范化测试，至少覆盖重复事件合并、范围外 track 过滤、缺失展示等级、稳定 ID 和异常低数量。
+3. 将官方字段映射到统一原始论文对象，明确 Main Full/Regular 的判断规则，以及展示类型和呈现方式各自的信息来源。
+4. 增加解析与规范化测试，至少覆盖重复事件合并、范围外 track 过滤、缺失展示类型或呈现方式、稳定 ID 和异常低数量。
 5. 运行同步、校验和完整构建，检查年度 JSON diff 与页面筛选结果。
 6. 在本文的适配器列表中补充来源、边界判断和已知缺口。
 
-会议官网先公布标题、随后补齐摘要或展示等级的情况很常见。适配器可以逐步丰富同一稳定 ID 的字段，增量合并会保留首次发现时间并更新最新观察时间。
+会议官网先公布标题、随后补齐摘要或展示信息的情况很常见。适配器可以逐步丰富同一稳定 ID 的字段，增量合并会保留首次发现时间并更新最新观察时间。

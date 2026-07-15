@@ -196,10 +196,9 @@ const openReviewId = (value = '') => {
   }
 };
 
-const aclPresentation = (sessionName = '') => {
+const aclPresentationType = (sessionName = '') => {
   if (/^orals? session\b/i.test(sessionName)) return 'Oral';
   if (/^poster session\b/i.test(sessionName)) return 'Poster';
-  if (/^virtual presentations?\b/i.test(sessionName)) return 'Virtual';
   return '';
 };
 
@@ -295,11 +294,12 @@ export const adaptAcl = async ({ getText = fetchText } = {}) => {
     sourceUrl: sourceUrls.acl.accepted,
     sourceUrls: [sourceUrls.acl.roster, sourceUrls.acl.schedule, sourceUrls.acl.accepted],
     coverageStatus: 'published',
-    coverageNote: `${roster.length} ACL Anthology long papers; short papers are excluded and presentation labels follow the official schedule.`,
+    coverageNote: `${roster.length} ACL Anthology long papers; short papers are excluded, presentation type follows the official session, and presentation mode follows the official schedule field.`,
     minPaperCount: 2_200,
     minAbstractCount: 2_200,
-    minPresentationCount: 1_200,
-    maxUnknownPresentationCount: 25,
+    minPresentationTypeCount: 1_200,
+    minPresentationModeCount: 2_200,
+    maxUnknownPresentationModeCount: 25,
     papers: roster.map((paper) => {
       const schedule = scheduleByPaper.get(paper);
       const sessionName = schedule?.['Underline/Whova Session Name'] ?? '';
@@ -308,7 +308,8 @@ export const adaptAcl = async ({ getText = fetchText } = {}) => {
         abstract: schedule?.Abstract ?? '',
         sourceTopics: uniqueStrings([schedule?.Session, sessionName]),
         trackRaw: 'Main Conference Long Paper',
-        presentationRaw: aclPresentation(sessionName),
+        presentationTypeRaw: aclPresentationType(sessionName),
+        presentationModeRaw: schedule?.['Presentation mode'] ?? '',
         sourceUrl: sourceUrls.acl.accepted,
         paperUrl: paper.paperUrl,
       };
@@ -343,7 +344,7 @@ export const adaptCvpr = async ({ getText = fetchText, getJson = fetchJson } = {
       published = undefined;
     }
     const virtualPath = group.find((event) => event.virtualsite_url)?.virtualsite_url ?? '';
-    const presentationRaw = row['Oral Paper'] ? 'Oral' : row['Highlight Paper'] ? 'Highlight' : 'Poster';
+    const presentationTypeRaw = row['Oral Paper'] ? 'Oral' : row['Highlight Paper'] ? 'Highlight' : 'Poster';
     const publishedAuthors = (published?.authors ?? []).filter(
       (author) => !cvprScheduleMetadata(author),
     );
@@ -354,7 +355,7 @@ export const adaptCvpr = async ({ getText = fetchText, getJson = fetchJson } = {
       abstract: miniconfAbstract(group, abstracts),
       sourceTopics: uniqueStrings(group.flatMap((event) => [event.topic, ...(event.keywords ?? [])])),
       trackRaw: 'Main Conference Paper',
-      presentationRaw,
+      presentationTypeRaw,
       recognition: row['Award Candidate'] ? ['Award Candidate'] : [],
       publicationStatus: published ? 'published' : 'scheduled',
       sourceUrl: published ? sourceUrls.cvpr.accepted : sourceUrls.cvpr.schedule,
@@ -371,7 +372,7 @@ export const adaptCvpr = async ({ getText = fetchText, getJson = fetchJson } = {
     minPaperCount: 4_050,
     minAbstractCount: 4_000,
     minPublishedCount: 4_000,
-    minPresentationCount: 4_000,
+    minPresentationTypeCount: 4_000,
     papers,
   };
 };
@@ -399,7 +400,7 @@ export const adaptIcml = async ({ getJson = fetchJson } = {}) => {
       abstract: miniconfAbstract(group, abstracts),
       sourceTopics: uniqueStrings(group.flatMap((event) => [event.topic, ...(event.keywords ?? [])])),
       trackRaw: `Main Conference · ${base.decision || 'Accept'}`,
-      presentationRaw: miniconfPresentation(group),
+      presentationTypeRaw: miniconfPresentation(group),
       sourceUrl: sourceUrls.icml.accepted,
       paperUrl,
       pdfUrl: reviewId ? `https://openreview.net/pdf?id=${encodeURIComponent(reviewId)}` : '',
@@ -414,7 +415,7 @@ export const adaptIcml = async ({ getJson = fetchJson } = {}) => {
     coverageNote: `${papers.length} Main Conference papers; Position Paper Track and invited journal tracks are excluded.`,
     minPaperCount: 6_200,
     minAbstractCount: 6_200,
-    minPresentationCount: 6_200,
+    minPresentationTypeCount: 6_200,
     papers,
   };
 };
@@ -429,7 +430,7 @@ export const adaptAsplos = async ({ getText = fetchText } = {}) => {
     coverageStatus: 'published',
     coverageNote: `Official program DOM lists ${papers.length} research papers; the page prose currently states 167.`,
     minPaperCount: 150,
-    minPresentationCount: 150,
+    minPresentationTypeCount: 150,
     papers,
   };
 };
@@ -446,7 +447,7 @@ export const adaptUsenixSecurity = async ({ getText = fetchText } = {}) => {
     coverageNote: `${papers.length} Cycle 1 and Cycle 2 research papers; ${abstractCount} official abstracts are currently available.`,
     minPaperCount: 340,
     minAbstractCount: 150,
-    minPresentationCount: 340,
+    minPresentationTypeCount: 340,
     papers,
   };
 };

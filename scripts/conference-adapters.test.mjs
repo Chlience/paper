@@ -73,7 +73,7 @@ test('ASPLOS program parsing keeps paper authors while dropping affiliations', (
   const [paper] = parseAsplosProgram(html, 'https://example.com/program/');
   assert.equal(paper.title, 'A Fast System');
   assert.deepEqual(paper.authors, ['Ada Lovelace', 'Alan Turing']);
-  assert.equal(paper.presentationRaw, 'Oral');
+  assert.equal(paper.presentationTypeRaw, 'Oral');
 });
 
 test('USENIX parsing filters schedule talks without research-paper authors', () => {
@@ -124,17 +124,20 @@ test('ACL adapter joins Main roster with official presentation schedule', async 
   const result = await adaptAcl({
     getText: async (url) =>
       url.includes('spreadsheets')
-        ? 'Paper number,Title,Abstract,Session,Underline/Whova Session Name\n42-MAIN,A Paper,We propose a method.,S1,Orals Session A: NLP\n'
+        ? 'Paper number,Title,Abstract,Presentation mode,Session,Underline/Whova Session Name\n42-MAIN,A Paper,We propose a method.,Virtual,S1,Orals Session A: NLP\n'
         : `<modsCollection><mods ID="a-paper"><titleInfo><title>A Paper</title></titleInfo>
           <name type="personal"><namePart type="given">Ada</namePart><namePart type="family">Lovelace</namePart><role><roleTerm>author</roleTerm></role></name>
           <location><url>https://aclanthology.org/2026.acl-long.42/</url></location></mods></modsCollection>`,
   });
-  assert.equal(result.papers[0].presentationRaw, 'Oral');
+  assert.equal(result.papers[0].presentationTypeRaw, 'Oral');
+  assert.equal(result.papers[0].presentationModeRaw, 'Virtual');
   assert.equal(result.papers[0].abstract, 'We propose a method.');
-  assert.equal(result.maxUnknownPresentationCount, 25);
+  assert.equal(result.minPresentationTypeCount, 1_200);
+  assert.equal(result.minPresentationModeCount, 2_200);
+  assert.equal(result.maxUnknownPresentationModeCount, 25);
 });
 
-test('ACL adapter safely fuzzy-matches spelling and TeX title variants and preserves virtual presentations', async () => {
+test('ACL adapter safely fuzzy-matches spelling and TeX title variants and preserves presentation modes', async () => {
   const roster = `<modsCollection>
     <mods ID="paper-1"><titleInfo><title>A Robust Method for Cross-Lingual Language Model Training</title></titleInfo>
       <name type="personal"><namePart type="given">Ada</namePart><namePart type="family">Lovelace</namePart><role><roleTerm>author</roleTerm></role></name>
@@ -143,17 +146,19 @@ test('ACL adapter safely fuzzy-matches spelling and TeX title variants and prese
       <name type="personal"><namePart type="given">Alan</namePart><namePart type="family">Turing</namePart><role><roleTerm>author</roleTerm></role></name>
       <location><url>https://aclanthology.org/2026.acl-long.2/</url></location></mods>
   </modsCollection>`;
-  const schedule = `Paper number,Title,Abstract,Session,Underline/Whova Session Name
-1-MAIN,A Robust Method for Cross Lingual Language Models Training,First abstract.,S1,Virtual Presentations
-2-MAIN,L2M A LaTeX Aware Parsers for Robust Multilingual NLP,Second abstract.,S2,Poster Session A
+  const schedule = `Paper number,Title,Abstract,Presentation mode,Session,Underline/Whova Session Name
+1-MAIN,A Robust Method for Cross Lingual Language Models Training,First abstract.,Virtual,S1,Virtual Presentations
+2-MAIN,L2M A LaTeX Aware Parsers for Robust Multilingual NLP,Second abstract.,In-Person,S2,Poster Session A
 `;
   const result = await adaptAcl({
     getText: async (url) => (url.includes('spreadsheets') ? schedule : roster),
   });
   assert.equal(result.papers[0].abstract, 'First abstract.');
-  assert.equal(result.papers[0].presentationRaw, 'Virtual');
+  assert.equal(result.papers[0].presentationTypeRaw, '');
+  assert.equal(result.papers[0].presentationModeRaw, 'Virtual');
   assert.equal(result.papers[1].abstract, 'Second abstract.');
-  assert.equal(result.papers[1].presentationRaw, 'Poster');
+  assert.equal(result.papers[1].presentationTypeRaw, 'Poster');
+  assert.equal(result.papers[1].presentationModeRaw, 'In-Person');
 });
 
 test('CVPR schedule author fallback removes affiliation metadata while preserving people named Blank', () => {
@@ -185,7 +190,7 @@ test('CVPR adapter enriches the official proceedings roster with presentation me
     getText: async (url) => (url.includes('spreadsheets') ? schedule : openAccess),
     getJson: async (url) => (url.includes('abstracts') ? { 7: 'We introduce a benchmark.' } : events),
   });
-  assert.equal(result.papers[0].presentationRaw, 'Highlight');
+  assert.equal(result.papers[0].presentationTypeRaw, 'Highlight');
   assert.equal(result.papers[0].abstract, 'We introduce a benchmark.');
   assert.equal(result.papers[0].publicationStatus, 'published');
   assert.deepEqual(result.papers[0].authors, ['Ada Lovelace']);
@@ -244,7 +249,8 @@ test('ICML adapter merges oral events and excludes independent position papers',
   assert.equal(result.papers.length, 2);
   const reviewed = result.papers.find((paper) => paper.officialId === 'paper42');
   const virtual = result.papers.find((paper) => paper.officialId === '84');
-  assert.equal(reviewed.presentationRaw, 'Oral');
+  assert.equal(reviewed.presentationTypeRaw, 'Oral');
+  assert.equal(virtual.presentationModeRaw, undefined);
   assert.equal(virtual.paperUrl, 'https://icml.cc/virtual/2026/poster/84');
   assert.equal(virtual.pdfUrl, '');
   assert.equal(virtual.title, 'A & B');

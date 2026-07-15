@@ -102,8 +102,8 @@ export const validateConferenceDatasets = (datasets, registry, taxonomy) => {
   const paperIds = new Set();
 
   for (const dataset of datasets) {
-    if (dataset?.schemaVersion !== 1 || dataset?.year !== 2026 || !Array.isArray(dataset?.papers)) {
-      errors.push(issue('dataset-shape', dataset?.venueId ?? 'unknown', 'Dataset needs schemaVersion 1, year 2026, and papers.'));
+    if (dataset?.schemaVersion !== 2 || dataset?.year !== 2026 || !Array.isArray(dataset?.papers)) {
+      errors.push(issue('dataset-shape', dataset?.venueId ?? 'unknown', 'Dataset needs schemaVersion 2, year 2026, and papers.'));
       continue;
     }
     const venue = venues.get(dataset.venueId);
@@ -154,8 +154,36 @@ export const validateConferenceDatasets = (datasets, registry, taxonomy) => {
       if (!['main', 'findings', 'industry', 'demo', 'workshop', 'short', 'other', 'unknown'].includes(paper.trackNormalized)) {
         errors.push(issue('paper-track', subject, `Invalid normalized track: ${paper.trackNormalized}.`));
       }
-      if (!['oral', 'spotlight', 'highlight', 'poster', 'virtual', 'other', 'unknown'].includes(paper.presentationNormalized)) {
-        errors.push(issue('paper-presentation', subject, `Invalid presentation: ${paper.presentationNormalized}.`));
+      if (!['oral', 'featured', 'poster', 'other', 'unknown'].includes(paper.presentationTypeNormalized)) {
+        errors.push(
+          issue(
+            'paper-presentation-type',
+            subject,
+            `Invalid presentation type: ${paper.presentationTypeNormalized}.`,
+          ),
+        );
+      }
+      if (
+        !['in-person', 'virtual', 'hybrid', 'proceedings-only', 'other', 'unknown'].includes(
+          paper.presentationModeNormalized,
+        )
+      ) {
+        errors.push(
+          issue(
+            'paper-presentation-mode',
+            subject,
+            `Invalid presentation mode: ${paper.presentationModeNormalized}.`,
+          ),
+        );
+      }
+      if (Object.hasOwn(paper, 'presentationRaw') || Object.hasOwn(paper, 'presentationNormalized')) {
+        errors.push(
+          issue(
+            'paper-presentation-legacy',
+            subject,
+            'Legacy presentation fields must be migrated to presentationType and presentationMode fields.',
+          ),
+        );
       }
       if (paper.publicationStatus && !['accepted', 'scheduled', 'published'].includes(paper.publicationStatus)) {
         errors.push(issue('paper-publication', subject, `Invalid publication status: ${paper.publicationStatus}.`));

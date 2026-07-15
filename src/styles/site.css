@@ -1534,7 +1534,7 @@ html.is-figure-dialog-open body {
 
 .conference-filter-grid {
   display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
   gap: var(--space-sm);
   margin-top: 16px;
 }
@@ -1645,23 +1645,29 @@ html.is-figure-dialog-open body {
   font-size: 11px;
 }
 
-.conference-paper-venue span.is-oral {
+.conference-paper-venue span.conference-paper-presentation-type.is-oral {
   color: oklch(31% 0.1 155);
   background: oklch(93% 0.045 155);
 }
 
-.conference-paper-venue span.is-spotlight {
+.conference-paper-venue span.conference-paper-presentation-type.is-featured {
   color: oklch(32% 0.1 230);
   background: oklch(93% 0.035 230);
 }
 
-.conference-paper-venue span.is-highlight {
-  color: oklch(34% 0.09 65);
-  background: oklch(94% 0.04 75);
+.conference-paper-venue span.conference-paper-presentation-mode {
+  border: 1px solid oklch(80% 0.025 235);
+  background: var(--surface);
 }
 
-.conference-paper-venue span.is-virtual {
+.conference-paper-venue span.conference-paper-presentation-mode.is-in-person {
+  color: oklch(32% 0.07 230);
+  border-color: oklch(80% 0.045 230);
+}
+
+.conference-paper-venue span.conference-paper-presentation-mode.is-virtual {
   color: oklch(34% 0.08 285);
+  border-color: oklch(82% 0.04 285);
   background: oklch(94% 0.025 285);
 }
 

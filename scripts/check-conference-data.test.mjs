@@ -11,7 +11,8 @@ import {
   mergePapers,
   normalizeAuthors,
   normalizePaper,
-  normalizePresentation,
+  normalizePresentationMode,
+  normalizePresentationType,
   normalizeTrack,
   sortPapersById,
   stablePaperId,
@@ -20,6 +21,7 @@ import {
   validateConferenceDatasets,
   validateConferenceRegistry,
 } from './conferences/validate.mjs';
+import { getPresentationModeBadge } from '../src/lib/conference-presentation.mjs';
 
 const venue = {
   id: 'testconf',
@@ -38,7 +40,7 @@ test('stablePaperId prefers official IDs and falls back to normalized titles', (
   assert.equal(titleA, titleB);
 });
 
-test('track and presentation normalization preserve separate axes', () => {
+test('track, presentation type, and presentation mode normalization preserve separate axes', () => {
   assert.equal(normalizeTrack('Main Research Track'), 'main');
   assert.equal(normalizeTrack('Findings of ACL'), 'findings');
   assert.equal(normalizeTrack('Findings Full Paper'), 'findings');
@@ -46,9 +48,30 @@ test('track and presentation normalization preserve separate axes', () => {
   assert.equal(normalizeTrack('Short Research Paper'), 'short');
   assert.equal(normalizeTrack('Workshop Full Paper'), 'workshop');
   assert.equal(normalizeTrack('Demo Research Paper'), 'demo');
-  assert.equal(normalizePresentation('Spotlight Poster'), 'spotlight');
-  assert.equal(normalizePresentation('Oral presentation'), 'oral');
-  assert.equal(normalizePresentation('Virtual Presentations'), 'virtual');
+  assert.equal(normalizePresentationType('Spotlight Poster'), 'featured');
+  assert.equal(normalizePresentationType('Highlight Poster'), 'featured');
+  assert.equal(normalizePresentationType('Featured presentation'), 'featured');
+  assert.equal(normalizePresentationType('Oral presentation'), 'oral');
+  assert.equal(normalizePresentationType('Virtual Presentations'), 'unknown');
+  assert.equal(normalizePresentationMode('In-Person (TBC)'), 'in-person');
+  assert.equal(normalizePresentationMode('Virtual'), 'virtual');
+});
+
+test('presentation mode badges normalize official capitalization without rewriting raw data', () => {
+  assert.equal(
+    getPresentationModeBadge({
+      presentationModeRaw: 'virtual',
+      presentationModeNormalized: 'virtual',
+    }),
+    'Virtual',
+  );
+  assert.equal(
+    getPresentationModeBadge({
+      presentationModeRaw: 'In-Person (TBC)',
+      presentationModeNormalized: 'in-person',
+    }),
+    'In-person',
+  );
 });
 
 test('author normalization decodes nested entities before deduplication and preserves unknown entities', () => {
@@ -190,7 +213,8 @@ test('normalization produces an auditable main-track record', () => {
       authors: ['Ada Lovelace', ' Alan Turing '],
       abstract: 'We present a distributed system that reduces training communication.',
       trackRaw: 'Full Research Paper',
-      presentationRaw: 'Poster',
+      presentationTypeRaw: 'Poster',
+      presentationModeRaw: 'Virtual',
       sourceTopics: ['z-topic', 'a-topic', 'z-topic'],
       recognition: ['Z Award', 'A Award', 'Z Award'],
     },
@@ -198,7 +222,8 @@ test('normalization produces an auditable main-track record', () => {
     taxonomy,
   );
   assert.equal(paper.trackNormalized, 'main');
-  assert.equal(paper.presentationNormalized, 'poster');
+  assert.equal(paper.presentationTypeNormalized, 'poster');
+  assert.equal(paper.presentationModeNormalized, 'virtual');
   assert.deepEqual(paper.authors, ['Ada Lovelace', 'Alan Turing']);
   assert.deepEqual(paper.sourceTopics, ['a-topic', 'z-topic']);
   assert.deepEqual(paper.recognition, ['A Award', 'Z Award']);
@@ -253,6 +278,33 @@ test('merge leaves observation timestamps stable for unchanged papers', () => {
   assert.equal(merged.lastSeenAt, paper.lastSeenAt);
 });
 
+test('merge migrates legacy virtual presentation fields without changing observation time', () => {
+  const legacy = {
+    id: 'legacy-virtual',
+    title: 'Legacy virtual paper',
+    presentationRaw: 'Virtual',
+    presentationNormalized: 'virtual',
+    status: 'active',
+    firstSeenAt: '2026-01-01T00:00:00.000Z',
+    lastSeenAt: '2026-01-02T00:00:00.000Z',
+  };
+  const incoming = {
+    id: 'legacy-virtual',
+    title: 'Legacy virtual paper',
+    presentationTypeRaw: '',
+    presentationTypeNormalized: 'unknown',
+    presentationModeRaw: 'Virtual',
+    presentationModeNormalized: 'virtual',
+    status: 'active',
+  };
+  const [merged] = mergePapers([legacy], [incoming], '2026-02-01T00:00:00.000Z');
+  assert.equal(merged.presentationTypeNormalized, 'unknown');
+  assert.equal(merged.presentationModeNormalized, 'virtual');
+  assert.equal(Object.hasOwn(merged, 'presentationRaw'), false);
+  assert.equal(Object.hasOwn(merged, 'presentationNormalized'), false);
+  assert.equal(merged.lastSeenAt, legacy.lastSeenAt);
+});
+
 test('core contribution extraction prefers explicit contribution sentences', () => {
   const result = extractCoreContribution(
     'Prior work is expensive. We propose a cache-aware scheduler that reduces tail latency. Experiments cover three clusters.',
@@ -267,7 +319,7 @@ test('core contribution excerpts stay within 24 words per source', () => {
   assert.ok(result.replace(/\.\.\.$/, '').split(/\s+/).length <= 24);
 });
 
-test('dataset validation accepts virtual papers and rejects unsafe provenance fields', () => {
+test('dataset validation accepts independent presentation type and mode fields', () => {
   const basePaper = {
     id: 'testconf-2026-a',
     officialId: 'official-a',
@@ -276,7 +328,8 @@ test('dataset validation accepts virtual papers and rejects unsafe provenance fi
     title: 'A Safe Paper',
     authors: ['Ada Lovelace'],
     trackNormalized: 'main',
-    presentationNormalized: 'virtual',
+    presentationTypeNormalized: 'oral',
+    presentationModeNormalized: 'virtual',
     publicationStatus: 'accepted',
     status: 'active',
     domains: [{ id: taxonomy.domains[0].id }],
@@ -292,7 +345,7 @@ test('dataset validation accepts virtual papers and rejects unsafe provenance fi
   };
   const registry = { venues: [venue] };
   const dataset = {
-    schemaVersion: 1,
+    schemaVersion: 2,
     year: 2026,
     venueId: 'testconf',
     coverageStatus: 'published',
@@ -336,6 +389,14 @@ test('dataset validation accepts virtual papers and rejects unsafe provenance fi
         classificationConfidence: 1.4,
         firstSeenAt: 'not-a-timestamp',
       },
+      {
+        ...basePaper,
+        id: 'testconf-2026-f',
+        officialId: 'official-f',
+        presentationTypeNormalized: 'virtual',
+        presentationModeNormalized: 'oral',
+        presentationRaw: 'Virtual',
+      },
     ],
   };
   const codes = new Set(validateConferenceDatasets([unsafe], registry, taxonomy).map((error) => error.code));
@@ -352,6 +413,9 @@ test('dataset validation accepts virtual papers and rejects unsafe provenance fi
   assert.ok(codes.has('paper-primary-domain'));
   assert.ok(codes.has('paper-classification-confidence'));
   assert.ok(codes.has('paper-observation-time'));
+  assert.ok(codes.has('paper-presentation-type'));
+  assert.ok(codes.has('paper-presentation-mode'));
+  assert.ok(codes.has('paper-presentation-legacy'));
 });
 
 test('registry and dataset validation enforce edition and adapter coverage contracts', () => {
@@ -381,7 +445,7 @@ test('registry and dataset validation enforce edition and adapter coverage contr
     ),
   );
   const mismatchedDataset = {
-    schemaVersion: 1,
+    schemaVersion: 2,
     year: 2026,
     venueId: 'testconf',
     coverageStatus: 'published',

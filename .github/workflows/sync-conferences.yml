@@ -83,4 +83,4 @@ jobs:
 
             Workflow run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
-            Please review source additions, removals, presentation changes, and automatic classifications before merging.
+            Please review source additions, removals, presentation type or mode changes, and automatic classifications before merging.

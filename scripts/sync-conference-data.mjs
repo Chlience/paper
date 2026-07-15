@@ -70,19 +70,38 @@ const assertAdapterResult = (venue, result, papers) => {
       `${venue.id}: only ${publishedCount} papers have official publication links; safety floor is ${result.minPublishedCount}.`,
     );
   }
-  const presentationCount = papers.filter((paper) => paper.presentationNormalized !== 'unknown').length;
-  if (result.minPresentationCount && presentationCount < result.minPresentationCount) {
+  const presentationTypeCount = papers.filter(
+    (paper) => paper.presentationTypeNormalized !== 'unknown',
+  ).length;
+  if (result.minPresentationTypeCount && presentationTypeCount < result.minPresentationTypeCount) {
     throw new Error(
-      `${venue.id}: only ${presentationCount} papers have official presentation labels; safety floor is ${result.minPresentationCount}.`,
+      `${venue.id}: only ${presentationTypeCount} papers have official presentation types; safety floor is ${result.minPresentationTypeCount}.`,
     );
   }
-  const unknownPresentationCount = papers.length - presentationCount;
+  const unknownPresentationTypeCount = papers.length - presentationTypeCount;
   if (
-    Number.isInteger(result.maxUnknownPresentationCount) &&
-    unknownPresentationCount > result.maxUnknownPresentationCount
+    Number.isInteger(result.maxUnknownPresentationTypeCount) &&
+    unknownPresentationTypeCount > result.maxUnknownPresentationTypeCount
   ) {
     throw new Error(
-      `${venue.id}: ${unknownPresentationCount} papers lack official presentation labels; maximum is ${result.maxUnknownPresentationCount}.`,
+      `${venue.id}: ${unknownPresentationTypeCount} papers lack official presentation types; maximum is ${result.maxUnknownPresentationTypeCount}.`,
+    );
+  }
+  const presentationModeCount = papers.filter(
+    (paper) => paper.presentationModeNormalized !== 'unknown',
+  ).length;
+  if (result.minPresentationModeCount && presentationModeCount < result.minPresentationModeCount) {
+    throw new Error(
+      `${venue.id}: only ${presentationModeCount} papers have official presentation modes; safety floor is ${result.minPresentationModeCount}.`,
+    );
+  }
+  const unknownPresentationModeCount = papers.length - presentationModeCount;
+  if (
+    Number.isInteger(result.maxUnknownPresentationModeCount) &&
+    unknownPresentationModeCount > result.maxUnknownPresentationModeCount
+  ) {
+    throw new Error(
+      `${venue.id}: ${unknownPresentationModeCount} papers lack official presentation modes; maximum is ${result.maxUnknownPresentationModeCount}.`,
     );
   }
   const ids = new Set();
@@ -127,7 +146,7 @@ const syncVenue = async ({ venue, taxonomy, observedAt, dryRun }) => {
   const existingPapers = Array.isArray(existing?.papers) ? existing.papers : [];
   const papers = mergePapers(existingPapers, incoming, observedAt);
   const dataset = {
-    schemaVersion: 1,
+    schemaVersion: 2,
     year: 2026,
     venueId: venue.id,
     coverageStatus: result.coverageStatus,

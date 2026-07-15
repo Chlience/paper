@@ -20,7 +20,9 @@ interface CoverageRow {
 
 const papers = Array.isArray(data.papers) ? data.papers : [];
 const initialPapers = sortConferencePapers(papers).slice(0, CONFERENCE_PAGE_SIZE);
-const conferenceDataVersion = encodeURIComponent(String(data.generatedAt ?? '2026'));
+const conferenceDataVersion = encodeURIComponent(
+  `${data.schemaVersion ?? 1}-${data.generatedAt ?? '2026'}`,
+);
 const conferenceDataUrl = `/data/conference-papers-2026.json?v=${conferenceDataVersion}`;
 const countByVenue = new Map<string, number>();
 const coreContributionCountByVenue = new Map<string, number>();
@@ -204,15 +206,15 @@ const ccfSnapshot = snapshotDate ? `${snapshotLabel} · ${snapshotDate}` : snaps
 
 <Layout
   title={`${data.year || 2026} CCF-A Conference Papers | Chlience Paper Archive`}
-  description="查询 2026 年 CCF-A 会议主会录用论文，按会议、展示形式、领域与核心贡献筛选。"
+  description="查询 2026 年 CCF-A 会议主会录用论文，按会议、展示类型、呈现方式、领域与核心贡献筛选。"
   canonicalPath="/conferences/"
 >
   <section class="page-header container conference-page-header">
     <p class="eyebrow mono">{data.year || 2026} · CCF-A Conference Catalog</p>
     <h1>会议论文索引</h1>
     <p class="deck">
-      汇总 Main Full/Regular track 的官方录用记录，按会议、展示形式、研究领域和贡献类型快速定位论文。
-      展示标签沿用各会议原始口径，只用于组织和查询。
+      汇总 Main Full/Regular track 的官方录用记录，按会议、展示类型、呈现方式、研究领域和贡献类型快速定位论文。
+      Oral、Spotlight/Highlight、Poster 归入三档展示类型；现场与线上方式独立记录，原始标签随论文保留。
     </p>
 
     <dl class="conference-scope-line" aria-label="目录范围">

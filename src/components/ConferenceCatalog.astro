@@ -4,6 +4,14 @@ import {
   paginateConferencePapers,
   sortConferencePapers,
 } from '../lib/conference-filter.mjs';
+import {
+  getPresentationModeBadge,
+  getPresentationTypeBadge,
+  PRESENTATION_MODE_LABELS,
+  PRESENTATION_MODE_ORDER,
+  PRESENTATION_TYPE_LABELS,
+  PRESENTATION_TYPE_ORDER,
+} from '../lib/conference-presentation.mjs';
 
 interface FacetOption {
   id: string;
@@ -23,8 +31,10 @@ interface ConferencePaper {
   abstractStatus?: string;
   trackRaw?: string;
   trackNormalized?: string;
-  presentationRaw?: string;
-  presentationNormalized?: string;
+  presentationTypeRaw?: string;
+  presentationTypeNormalized?: string;
+  presentationModeRaw?: string;
+  presentationModeNormalized?: string;
   recognition?: (string | { label?: string; name?: string })[];
   domains?: { id: string; label: string }[];
   primaryDomainId?: string;
@@ -64,15 +74,6 @@ const AREA_LABELS: Record<string, string> = {
   'artificial-intelligence': '人工智能',
   hci: '人机交互与普适计算',
   interdisciplinary: '交叉与综合',
-};
-
-const PRESENTATION_LABELS: Record<string, string> = {
-  oral: 'Oral',
-  spotlight: 'Spotlight',
-  highlight: 'Highlight',
-  poster: 'Poster',
-  virtual: 'Virtual',
-  unknown: '待确认',
 };
 
 const humanizeId = (value: string) =>
@@ -166,19 +167,34 @@ const findFacetOptions = (aliases: string[]) => {
   return [];
 };
 
-const mergeOptions = (derived: FacetOption[], provided: FacetOption[]) => {
+const mergeOptions = (
+  derived: FacetOption[],
+  provided: FacetOption[],
+  {
+    labels = {},
+    order = [],
+  }: { labels?: Record<string, string>; order?: readonly string[] } = {},
+) => {
   const entries = new Map(derived.map((option) => [option.id, option]));
   provided.forEach((option) => {
     const current = entries.get(option.id);
     entries.set(option.id, {
       id: option.id,
-      label: option.label || current?.label || humanizeId(option.id),
+      label: labels[option.id] || option.label || current?.label || humanizeId(option.id),
       count: option.count || current?.count || 0,
     });
   });
-  return [...entries.values()].sort((left, right) =>
-    left.label.localeCompare(right.label, ['zh-CN', 'en'], { numeric: true }),
-  );
+  const rank = new Map(order.map((id, index) => [id, index]));
+  return [...entries.values()]
+    .filter((option) => option.count > 0)
+    .sort((left, right) => {
+      const leftRank = rank.get(left.id) ?? Number.MAX_SAFE_INTEGER;
+      const rightRank = rank.get(right.id) ?? Number.MAX_SAFE_INTEGER;
+      return (
+        leftRank - rightRank ||
+        left.label.localeCompare(right.label, ['zh-CN', 'en'], { numeric: true })
+      );
+    });
 };
 
 const venueOptions = mergeOptions(
@@ -202,13 +218,23 @@ const areaOptions = mergeOptions(
   findFacetOptions(['ccfAreas', 'ccfArea', 'areas', 'area']),
 );
 
-const presentationOptions = mergeOptions(
+const presentationTypeOptions = mergeOptions(
   makeDerivedOptions(
-    papers.map((paper) => ({ id: paper.presentationNormalized })),
-    (id) => PRESENTATION_LABELS[id] ?? humanizeId(id),
+    papers.map((paper) => ({ id: paper.presentationTypeNormalized })),
+    (id) => PRESENTATION_TYPE_LABELS[id] ?? humanizeId(id),
   ),
-  findFacetOptions(['presentations', 'presentation']),
-);
+  findFacetOptions(['presentationTypes', 'presentations', 'presentation']),
+  { labels: PRESENTATION_TYPE_LABELS, order: PRESENTATION_TYPE_ORDER },
+).filter((option) => ['oral', 'featured', 'poster'].includes(option.id));
+
+const presentationModeOptions = mergeOptions(
+  makeDerivedOptions(
+    papers.map((paper) => ({ id: paper.presentationModeNormalized })),
+    (id) => PRESENTATION_MODE_LABELS[id] ?? humanizeId(id),
+  ),
+  findFacetOptions(['presentationModes', 'presentationMode', 'modes', 'mode']),
+  { labels: PRESENTATION_MODE_LABELS, order: PRESENTATION_MODE_ORDER },
+).filter((option) => !['other', 'unknown'].includes(option.id));
 
 const domainOptions = mergeOptions(
   makeDerivedOptions(papers.flatMap((paper) => paper.domains ?? [])),
@@ -302,14 +328,24 @@ const serializedPapers = JSON.stringify(papers)
       </label>
 
       <label>
-        <span>展示形式</span>
+        <span>展示类型</span>
         <select
           name="presentation"
-          data-conference-filter="presentation"
+          data-conference-filter="presentationType"
           disabled={Boolean(dataUrl)}
         >
-          <option value="">全部形式</option>
-          {presentationOptions.map((option) => (
+          <option value="">全部类型</option>
+          {presentationTypeOptions.map((option) => (
+            <option value={option.id}>{option.label} ({option.count})</option>
+          ))}
+        </select>
+      </label>
+
+      <label>
+        <span>呈现方式</span>
+        <select name="mode" data-conference-filter="presentationMode" disabled={Boolean(dataUrl)}>
+          <option value="">全部方式</option>
+          {presentationModeOptions.map((option) => (
             <option value={option.id}>{option.label} ({option.count})</option>
           ))}
         </select>
@@ -342,7 +378,7 @@ const serializedPapers = JSON.stringify(papers)
       <label>
         <span>排序</span>
         <select name="sort" data-conference-filter="sort" disabled={Boolean(dataUrl)}>
-          <option value="presentation">展示形式</option>
+          <option value="presentation">展示层级</option>
           <option value="venue">会议</option>
           <option value="title">标题</option>
           <option value="confidence">分类置信度</option>
@@ -375,7 +411,7 @@ const serializedPapers = JSON.stringify(papers)
         ? '当前没有可查询的论文记录'
         : `显示 ${initialPage.start}–${initialPage.end}，共 ${initialTotal.toLocaleString('zh-CN')} 篇`}
     </p>
-    <p>默认按 Oral、Spotlight、Highlight、Poster、Virtual 排列</p>
+    <p>默认按 Oral、Spotlight / Highlight、Poster 排列；呈现方式单独标注</p>
   </div>
 
   <ol class="conference-paper-list" data-conference-results>
@@ -383,7 +419,22 @@ const serializedPapers = JSON.stringify(papers)
       <li class="conference-paper-row">
         <div class="conference-paper-venue">
           <strong>{paper.venueAcronym || paper.venueName}</strong>
-          <span>{paper.presentationRaw || PRESENTATION_LABELS[paper.presentationNormalized ?? 'unknown']}</span>
+          {getPresentationTypeBadge(paper) && (
+            <span
+              class={`conference-paper-presentation-type is-${paper.presentationTypeNormalized ?? 'unknown'}`}
+              title={`展示类型：${getPresentationTypeBadge(paper)}`}
+            >
+              {getPresentationTypeBadge(paper)}
+            </span>
+          )}
+          {getPresentationModeBadge(paper) && (
+            <span
+              class={`conference-paper-presentation-mode is-${paper.presentationModeNormalized ?? 'unknown'}`}
+              title={`呈现方式：${getPresentationModeBadge(paper)}`}
+            >
+              {getPresentationModeBadge(paper)}
+            </span>
+          )}
           {paper.trackRaw && <small>{paper.trackRaw}</small>}
         </div>
         <article class="conference-paper-main">
@@ -449,15 +500,10 @@ const serializedPapers = JSON.stringify(papers)
     paginateConferencePapers,
     readConferenceFilterState,
   } from '../lib/conference-filter.mjs';
-
-  const PRESENTATION_LABELS = {
-    oral: 'Oral',
-    spotlight: 'Spotlight',
-    highlight: 'Highlight',
-    poster: 'Poster',
-    virtual: 'Virtual',
-    unknown: '待确认',
-  };
+  import {
+    getPresentationModeBadge,
+    getPresentationTypeBadge,
+  } from '../lib/conference-presentation.mjs';
 
   const STATUS_LABELS = {
     active: 'Accepted',
@@ -515,15 +561,26 @@ const serializedPapers = JSON.stringify(papers)
     venue.append(
       createElement('strong', '', paper.venueAcronym || paper.venueName || 'Unknown venue'),
     );
-    venue.append(
-      createElement(
+    const presentationType = getPresentationTypeBadge(paper);
+    if (presentationType) {
+      const badge = createElement(
         'span',
-        `is-${paper.presentationNormalized || 'unknown'}`,
-        paper.presentationRaw ||
-          PRESENTATION_LABELS[paper.presentationNormalized] ||
-          PRESENTATION_LABELS.unknown,
-      ),
-    );
+        `conference-paper-presentation-type is-${paper.presentationTypeNormalized || 'unknown'}`,
+        presentationType,
+      );
+      badge.title = `展示类型：${presentationType}`;
+      venue.append(badge);
+    }
+    const presentationMode = getPresentationModeBadge(paper);
+    if (presentationMode) {
+      const badge = createElement(
+        'span',
+        `conference-paper-presentation-mode is-${paper.presentationModeNormalized || 'unknown'}`,
+        presentationMode,
+      );
+      badge.title = `呈现方式：${presentationMode}`;
+      venue.append(badge);
+    }
     if (paper.trackRaw) venue.append(createElement('small', '', paper.trackRaw));
     row.append(venue);
 
@@ -727,7 +784,8 @@ const serializedPapers = JSON.stringify(papers)
         !state.query &&
         !state.venue &&
         !state.area &&
-        !state.presentation &&
+        !state.presentationType &&
+        !state.presentationMode &&
         !state.domain &&
         !state.contribution &&
         state.sort === CONFERENCE_FILTER_DEFAULTS.sort;

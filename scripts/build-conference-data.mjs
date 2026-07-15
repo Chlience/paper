@@ -72,13 +72,33 @@ const build = async () => {
       label: area.label,
       count: countPapers((paper) => paper.ccfAreaId === area.id),
     })),
-    presentations: ['oral', 'spotlight', 'highlight', 'poster', 'virtual', 'other', 'unknown'].map(
-      (id) => ({
+    presentationTypes: [
+      ['oral', 'Oral'],
+      ['featured', 'Spotlight / Highlight'],
+      ['poster', 'Poster'],
+      ['other', 'Other'],
+      ['unknown', 'Unspecified'],
+    ]
+      .map(([id, label]) => ({
         id,
-        label: id === 'unknown' ? 'Unspecified' : id[0].toUpperCase() + id.slice(1),
-        count: countPapers((paper) => paper.presentationNormalized === id),
-      }),
-    ),
+        label,
+        count: countPapers((paper) => paper.presentationTypeNormalized === id),
+      }))
+      .filter((option) => option.count > 0),
+    presentationModes: [
+      ['in-person', 'In-person'],
+      ['virtual', 'Virtual'],
+      ['hybrid', 'Hybrid'],
+      ['proceedings-only', 'Proceedings-only'],
+      ['other', 'Other'],
+      ['unknown', 'Unspecified'],
+    ]
+      .map(([id, label]) => ({
+        id,
+        label,
+        count: countPapers((paper) => paper.presentationModeNormalized === id),
+      }))
+      .filter((option) => option.count > 0),
     domains: taxonomy.domains.map(({ id, label }) => ({
       id,
       label,
@@ -96,7 +116,7 @@ const build = async () => {
     .filter(Boolean)
     .sort();
   const data = {
-    schemaVersion: 1,
+    schemaVersion: 2,
     generatedAt: generatedAtCandidates.at(-1) ?? new Date().toISOString(),
     year: 2026,
     ccfSnapshot: registry.ccfSnapshot,

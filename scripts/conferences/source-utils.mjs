@@ -160,7 +160,7 @@ export const parseAsplosProgram = (html = '', sourceUrl) => {
       title,
       authors,
       trackRaw: 'Full Research Paper',
-      presentationRaw: 'Oral',
+      presentationTypeRaw: 'Oral',
       sourceUrl,
       paperUrl: sourceUrl,
     });
@@ -191,7 +191,7 @@ export const parseUsenixProgram = (html = '', sourceUrl) => {
       abstract,
       ...(abstractStatus ? { abstractStatus } : {}),
       trackRaw: 'Full Research Paper',
-      presentationRaw: 'Technical Session',
+      presentationTypeRaw: 'Technical Session',
       sourceUrl,
       paperUrl: absoluteUrl(titleMatch?.[1], sourceUrl),
     });
