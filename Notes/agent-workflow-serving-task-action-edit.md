@@ -424,8 +424,7 @@ Grape 的 downstream prefill 与 SPORK probe 都希望利用 decode 阶段的闲
 1. Grape, *Efficient Serving for Agentic LLM Workflows via Micro-Task-Level Parallelism*：[本地论文笔记](/papers/2026-07-13-grape-micro-task-agentic-workflow-serving/)，[公开标题与 SC 2026 状态](https://thomas-yang.github.io/)。
 2. SPORK, *Self-Speculative Forking to Accelerate Agentic LLM Inference*：[arXiv](https://arxiv.org/abs/2607.03333)，[GitHub](https://github.com/baihuajun24/spork)，[本地论文笔记](/papers/2607.03333-spork-self-speculative-agentic-inference/)。
 3. Leyline, *KV Cache Directives for Agentic Inference*：[arXiv](https://arxiv.org/abs/2606.01065)，[本地论文笔记](/papers/2606.01065-leyline-kv-cache-directives-agentic-inference/)。
-4. 综合证据与统一 runtime 推演：[Agent Workflow Serving Stack](/papers/2026-07-14-agent-workflow-serving-grape-spork-leyline/)。
-5. Parrot：[本地论文笔记](/papers/2405.19888-parrot-semantic-variable-llm-serving/)。
-6. SARATHI：[本地论文笔记](/papers/2308.16369-sarathi-chunked-prefill-decode-maximal-batching/)。
-7. ThunderAgent：[本地论文笔记](/papers/2602.13692-thunderagent-program-aware-agentic-inference/)。
-8. Speculative Decoding：[本地论文笔记](/papers/2211.17192-fast-inference-transformers-speculative-decoding/)。
+4. Parrot：[本地论文笔记](/papers/2405.19888-parrot-semantic-variable-llm-serving/)。
+5. SARATHI：[本地论文笔记](/papers/2308.16369-sarathi-chunked-prefill-decode-maximal-batching/)。
+6. ThunderAgent：[本地论文笔记](/papers/2602.13692-thunderagent-program-aware-agentic-inference/)。
+7. Speculative Decoding：[本地论文笔记](/papers/2211.17192-fast-inference-transformers-speculative-decoding/)。

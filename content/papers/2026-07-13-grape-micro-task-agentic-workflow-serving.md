@@ -1,7 +1,7 @@
 # Efficient Serving for Agentic LLM Workflows via Micro-Task-Level Parallelism 论文笔记
 
 First-Archived-At: 2026-07-13 10:26
-Updated-At: 2026-07-15 14:07
+Updated-At: 2026-07-15 14:21
 
 ## Source
 
@@ -342,7 +342,6 @@ Grape 对常规 decode 路径的 $d$ 改动有限，主要通过静态 prompt �
 - 与 [TML inference determinism](/papers/2025-09-10-defeating-nondeterminism-llm-inference/)：Grape 改变 chunk 和 batch composition，理想 causal prefill 语义保持等价，有限精度 reduction 与 sampling 输出仍可能改变；评测、cache reuse 和 RL rollout 场景应记录 batch-invariant determinism。
 - 与 [SPORK](/papers/2607.03333-spork-self-speculative-agentic-inference/)：Grape 在预声明数据流 DAG 上拆分并调度 LLM 微任务，SPORK 在运行中的 ReAct 回路里推测下一次工具 Action。组合后的 runtime 需要把 `fork`、`commit`、`reject`、`cancel` 作为动态图事件，同时管理共享前缀引用计数、工具副作用和 GPU / tool admission。
 - 与 [Leyline](/papers/2606.01065-leyline-kv-cache-directives-agentic-inference/)：Grape 的 partial edge 按上游追加 token 推进下游 prefill，Leyline 允许 policy 改写 canonical history。一次 edit 会同步改变 sequence length、partial-edge progress、重算成本和依赖就绪状态；`AMORTIZE` 保留被移除 span 对后续 token 的历史影响，`FORGET` 通过 prefix-trimmed re-prefill 重建语义。
-- 综合关系见 [Agent Workflow Serving Stack](/papers/2026-07-14-agent-workflow-serving-grape-spork-leyline/)：该技术分享把 Grape、SPORK、Leyline 分别放入 task、action、edit 三类边界，并给出统一调度状态、资源冲突与实验矩阵。
 
 ## Reference Intake Brief
 
