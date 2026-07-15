@@ -1,0 +1,308 @@
+---
+import ConferenceCatalog from '../../components/ConferenceCatalog.astro';
+import Layout from '../../layouts/Layout.astro';
+import data from '../../generated/conference-data.json';
+import { CONFERENCE_PAGE_SIZE, sortConferencePapers } from '../../lib/conference-filter.mjs';
+
+interface CoverageRow {
+  venueId: string;
+  acronym: string;
+  name: string;
+  status: string;
+  statusLabel: string;
+  statusTone: string;
+  paperCount: number;
+  coreContributionCount: number;
+  checkedAt: string;
+  sourceUrl: string;
+  note: string;
+}
+
+const papers = Array.isArray(data.papers) ? data.papers : [];
+const initialPapers = sortConferencePapers(papers).slice(0, CONFERENCE_PAGE_SIZE);
+const conferenceDataVersion = encodeURIComponent(String(data.generatedAt ?? '2026'));
+const conferenceDataUrl = `/data/conference-papers-2026.json?v=${conferenceDataVersion}`;
+const countByVenue = new Map<string, number>();
+const coreContributionCountByVenue = new Map<string, number>();
+papers.forEach((paper) => {
+  if (!paper.venueId) return;
+  countByVenue.set(paper.venueId, (countByVenue.get(paper.venueId) ?? 0) + 1);
+  if (String(paper.coreContribution ?? '').trim()) {
+    coreContributionCountByVenue.set(
+      paper.venueId,
+      (coreContributionCountByVenue.get(paper.venueId) ?? 0) + 1,
+    );
+  }
+});
+
+const coverageValue = data.coverage as unknown;
+const getCoverageItems = (value: unknown): Record<string, unknown>[] => {
+  if (Array.isArray(value)) return value.filter((item) => item && typeof item === 'object');
+  if (!value || typeof value !== 'object') return [];
+
+  const record = value as Record<string, unknown>;
+  for (const key of ['venues', 'items', 'entries', 'results']) {
+    if (Array.isArray(record[key])) {
+      return (record[key] as unknown[]).filter(
+        (item): item is Record<string, unknown> => Boolean(item && typeof item === 'object'),
+      );
+    }
+  }
+
+  const ignoredKeys = new Set(['summary', 'totals', 'generatedAt', 'year', 'ccfSnapshot']);
+  const entries = Object.entries(record)
+    .filter(([key, item]) => !ignoredKeys.has(key) && item && typeof item === 'object')
+    .map(([key, item]) => ({ venueId: key, ...(item as Record<string, unknown>) }));
+  return entries;
+};
+
+const coverageStatus = (rawStatus: unknown) => {
+  const status = String(rawStatus ?? 'unknown').trim().toLocaleLowerCase();
+  if (/adapter-pending/.test(status)) {
+    return { status, label: '待接入', tone: 'pending' };
+  }
+  if (/complete|synced|published|available|ready/.test(status)) {
+    return { status, label: '已同步', tone: 'complete' };
+  }
+  if (/partial|incomplete/.test(status)) {
+    return { status, label: '部分同步', tone: 'partial' };
+  }
+  if (/pending|await|not-yet|scheduled|upcoming/.test(status)) {
+    return { status, label: '待公布', tone: 'pending' };
+  }
+  if (/not-held|no-edition|out-of-scope|skipped|excluded/.test(status)) {
+    return { status, label: '无 2026 主会数据', tone: 'inactive' };
+  }
+  if (/error|blocked|failed|unavailable/.test(status)) {
+    return { status, label: '需检查', tone: 'error' };
+  }
+  return { status, label: status === 'unknown' ? '待确认' : String(rawStatus), tone: 'unknown' };
+};
+
+const rawCoverageRows = getCoverageItems(coverageValue);
+const coverageRows: CoverageRow[] = rawCoverageRows.map((item) => {
+  const venue =
+    item.venue && typeof item.venue === 'object'
+      ? (item.venue as Record<string, unknown>)
+      : ({} as Record<string, unknown>);
+  const venueId = String(item.venueId ?? item.id ?? venue.id ?? '').trim();
+  const status = coverageStatus(item.status ?? item.coverageStatus ?? item.state);
+  const count = Number(
+    item.paperCount ?? item.acceptedPaperCount ?? item.count ?? countByVenue.get(venueId) ?? 0,
+  );
+  const coreContributionCount = Number(
+    item.coreContributionCount ??
+      item.classifiedPaperCount ??
+      coreContributionCountByVenue.get(venueId) ??
+      0,
+  );
+
+  return {
+    venueId,
+    acronym: String(
+      item.venueAcronym ?? item.acronym ?? venue.acronym ?? item.label ?? venueId ?? 'Unknown',
+    ),
+    name: String(item.venueName ?? item.name ?? venue.name ?? ''),
+    status: status.status,
+    statusLabel: status.label,
+    statusTone: status.tone,
+    paperCount: Number.isFinite(count) ? count : 0,
+    coreContributionCount: Number.isFinite(coreContributionCount) ? coreContributionCount : 0,
+    checkedAt: String(
+      item.lastSuccessfulSyncAt ?? item.lastCheckedAt ?? item.checkedAt ?? item.updatedAt ?? '',
+    ),
+    sourceUrl: String(
+      item.sourceUrl ?? item.acceptedPapersUrl ?? item.officialUrl ?? item.url ?? '',
+    ),
+    note: String(item.note ?? item.message ?? item.reason ?? ''),
+  };
+});
+
+if (coverageRows.length === 0) {
+  const venueRecords = new Map<string, (typeof papers)[number]>();
+  papers.forEach((paper) => {
+    if (paper.venueId && !venueRecords.has(paper.venueId)) venueRecords.set(paper.venueId, paper);
+  });
+  venueRecords.forEach((paper, venueId) => {
+    coverageRows.push({
+      venueId,
+      acronym: paper.venueAcronym || venueId,
+      name: paper.venueName || '',
+      status: 'synced',
+      statusLabel: '已收录',
+      statusTone: 'complete',
+      paperCount: countByVenue.get(venueId) ?? 0,
+      coreContributionCount: coreContributionCountByVenue.get(venueId) ?? 0,
+      checkedAt: '',
+      sourceUrl: paper.sourceUrl || '',
+      note: '',
+    });
+  });
+}
+
+coverageRows.sort((left, right) =>
+  left.acronym.localeCompare(right.acronym, ['zh-CN', 'en'], { numeric: true }),
+);
+
+const completeCoverage = coverageRows.filter((row) => row.statusTone === 'complete').length;
+const pendingCoverage = coverageRows.filter((row) =>
+  ['pending', 'partial', 'unknown'].includes(row.statusTone),
+).length;
+const issueCoverage = coverageRows.filter((row) => row.statusTone === 'error').length;
+const inactiveCoverage = coverageRows.filter((row) => row.statusTone === 'inactive').length;
+
+const formatTimestamp = (value: unknown) => {
+  const date = new Date(String(value ?? ''));
+  if (Number.isNaN(date.getTime())) return String(value || '待首次同步');
+  return new Intl.DateTimeFormat('zh-CN', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+    timeZone: 'Asia/Taipei',
+  }).format(date);
+};
+
+const formatShortDate = (value: string) => {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return value || '未记录';
+  return new Intl.DateTimeFormat('zh-CN', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    timeZone: 'Asia/Taipei',
+  }).format(date);
+};
+
+const safeExternalUrl = (value: string) => {
+  try {
+    const url = new URL(value);
+    return ['http:', 'https:'].includes(url.protocol) ? url.href : '';
+  } catch {
+    return '';
+  }
+};
+
+const snapshotValue = data.ccfSnapshot as unknown;
+const snapshotRecord =
+  snapshotValue && typeof snapshotValue === 'object'
+    ? (snapshotValue as Record<string, unknown>)
+    : null;
+const snapshotLabel =
+  typeof snapshotValue === 'string' || typeof snapshotValue === 'number'
+    ? String(snapshotValue)
+    : String(
+        snapshotRecord?.label ??
+          snapshotRecord?.version ??
+          (snapshotRecord?.edition ? `CCF 第 ${snapshotRecord.edition} 版` : 'CCF 第七版目录'),
+      );
+const snapshotDate = snapshotRecord?.correctedAt ?? snapshotRecord?.publishedAt;
+const ccfSnapshot = snapshotDate ? `${snapshotLabel} · ${snapshotDate}` : snapshotLabel;
+---
+
+<Layout
+  title={`${data.year || 2026} CCF-A Conference Papers | Chlience Paper Archive`}
+  description="查询 2026 年 CCF-A 会议主会录用论文，按会议、展示形式、领域与核心贡献筛选。"
+  canonicalPath="/conferences/"
+>
+  <section class="page-header container conference-page-header">
+    <p class="eyebrow mono">{data.year || 2026} · CCF-A Conference Catalog</p>
+    <h1>会议论文索引</h1>
+    <p class="deck">
+      汇总 Main Full/Regular track 的官方录用记录，按会议、展示形式、研究领域和贡献类型快速定位论文。
+      展示标签沿用各会议原始口径，只用于组织和查询。
+    </p>
+
+    <dl class="conference-scope-line" aria-label="目录范围">
+      <div>
+        <dt>目录快照</dt>
+        <dd>{ccfSnapshot}</dd>
+      </div>
+      <div>
+        <dt>当前记录</dt>
+        <dd>{papers.length.toLocaleString('zh-CN')} 篇 · {coverageRows.length} 个会议</dd>
+      </div>
+      <div>
+        <dt>最近生成</dt>
+        <dd>{formatTimestamp(data.generatedAt)}</dd>
+      </div>
+    </dl>
+  </section>
+
+  <section class="container conference-coverage-section" aria-labelledby="conference-coverage-title">
+    <details class="conference-coverage">
+      <summary>
+        <span id="conference-coverage-title">会议覆盖状态</span>
+        <span class="mono">
+          {completeCoverage} 已同步 · {pendingCoverage} 待更新{inactiveCoverage > 0 ? ` · ${inactiveCoverage} 无届次` : ''}{issueCoverage > 0 ? ` · ${issueCoverage} 需检查` : ''}
+        </span>
+      </summary>
+      <div class="conference-coverage-body">
+        <p>
+          “待接入”表示采集适配器仍待实现；“待公布”和“需检查”记录上游状态。“核心贡献”显示已有摘要支持自动提炼的论文数。数量为零时仍保留会议记录，方便识别数据覆盖边界。
+        </p>
+        <div class="conference-coverage-table-wrap">
+          <table class="conference-coverage-table">
+            <thead>
+              <tr>
+                <th scope="col">会议</th>
+                <th scope="col">状态</th>
+                <th scope="col">论文</th>
+                <th scope="col">核心贡献</th>
+                <th scope="col">数据更新</th>
+                <th scope="col">来源</th>
+              </tr>
+            </thead>
+            <tbody>
+              {coverageRows.map((row) => (
+                <tr>
+                  <th scope="row">
+                    <span>{row.acronym}</span>
+                    {row.name && row.name !== row.acronym && <small>{row.name}</small>}
+                  </th>
+                  <td>
+                    <span class:list={['conference-coverage-status', `is-${row.statusTone}`]}>
+                      {row.statusLabel}
+                    </span>
+                    {row.note && <small>{row.note}</small>}
+                  </td>
+                  <td class="mono">{row.paperCount.toLocaleString('zh-CN')}</td>
+                  <td class="mono">
+                    {row.coreContributionCount.toLocaleString('zh-CN')} / {
+                      row.paperCount.toLocaleString('zh-CN')
+                    }
+                  </td>
+                  <td>{formatShortDate(row.checkedAt)}</td>
+                  <td>
+                    {safeExternalUrl(row.sourceUrl) ? (
+                      <a href={safeExternalUrl(row.sourceUrl)}>官方页面</a>
+                    ) : (
+                      <span>待补充</span>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <section class="section conference-catalog-section" aria-labelledby="conference-query-title">
+    <div class="container">
+      <div class="conference-section-intro">
+        <h2 id="conference-query-title">查询论文</h2>
+        <p>关键词匹配标题、作者和核心贡献；筛选条件会写入 URL，可直接保存或分享。</p>
+      </div>
+      <ConferenceCatalog
+        papers={initialPapers}
+        facets={data.facets}
+        dataUrl={conferenceDataUrl}
+        totalPapers={papers.length}
+      />
+    </div>
+  </section>
+</Layout>

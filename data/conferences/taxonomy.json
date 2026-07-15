@@ -1,0 +1,202 @@
+{
+  "schemaVersion": 1,
+  "domains": [
+    {
+      "id": "computer-architecture",
+      "label": "Computer Architecture",
+      "aliases": ["processor", "microarchitecture", "accelerator", "hardware", "chip", "memory hierarchy", "cache coherence"]
+    },
+    {
+      "id": "parallel-distributed-computing",
+      "label": "Parallel & Distributed Computing",
+      "aliases": ["parallel", "distributed", "cluster", "gpu computing", "scheduling", "consensus", "fault tolerance"]
+    },
+    {
+      "id": "storage-systems",
+      "label": "Storage Systems",
+      "aliases": ["storage", "file system", "filesystem", "ssd", "nvme", "persistent memory", "key-value store"]
+    },
+    {
+      "id": "computer-networks",
+      "label": "Computer Networks",
+      "aliases": ["computer network", "networking", "network traffic", "network protocol", "packet routing", "congestion control", "transport protocol", "datacenter network", "internet measurement", "network topology"]
+    },
+    {
+      "id": "wireless-mobile",
+      "label": "Wireless & Mobile",
+      "aliases": ["wireless", "mobile", "cellular", "wifi", "radio", "spectrum", "edge computing"]
+    },
+    {
+      "id": "cybersecurity",
+      "label": "Cybersecurity",
+      "aliases": ["security", "privacy", "attack", "defense", "malware", "vulnerability", "authentication", "access control"]
+    },
+    {
+      "id": "cryptography",
+      "label": "Cryptography",
+      "aliases": ["cryptography", "cryptographic", "encryption", "zero-knowledge", "secure computation", "signature", "cipher"]
+    },
+    {
+      "id": "software-engineering",
+      "label": "Software Engineering",
+      "aliases": ["software engineering", "program repair", "bug", "testing", "code review", "repository", "developer"]
+    },
+    {
+      "id": "programming-languages",
+      "label": "Programming Languages",
+      "aliases": ["programming language", "compiler", "type system", "program analysis", "static analysis", "language semantics"]
+    },
+    {
+      "id": "operating-systems",
+      "label": "Operating Systems",
+      "aliases": ["operating system", "kernel", "virtual machine", "container", "runtime", "resource management"]
+    },
+    {
+      "id": "databases",
+      "label": "Databases",
+      "aliases": ["database", "query processing", "transaction", "sql", "data management", "indexing", "olap"]
+    },
+    {
+      "id": "data-mining",
+      "label": "Data Mining",
+      "aliases": ["data mining", "graph mining", "recommendation", "recommender", "anomaly detection", "knowledge discovery"]
+    },
+    {
+      "id": "information-retrieval",
+      "label": "Information Retrieval",
+      "aliases": ["information retrieval", "search engine", "ranking", "retrieval", "question answering", "rag"]
+    },
+    {
+      "id": "algorithms-complexity",
+      "label": "Algorithms & Complexity",
+      "aliases": ["algorithm", "complexity", "approximation", "graph algorithm", "online algorithm", "lower bound", "randomized"]
+    },
+    {
+      "id": "formal-methods",
+      "label": "Formal Methods",
+      "aliases": ["formal verification", "model checking", "theorem proving", "proof", "verification", "temporal logic"]
+    },
+    {
+      "id": "computer-graphics",
+      "label": "Computer Graphics",
+      "aliases": ["graphics", "rendering", "geometry", "animation", "3d reconstruction", "neural rendering"]
+    },
+    {
+      "id": "visualization",
+      "label": "Visualization",
+      "aliases": ["visualization", "visual analytics", "scientific visualization", "information visualization"]
+    },
+    {
+      "id": "multimedia",
+      "label": "Multimedia",
+      "aliases": ["multimedia", "video", "audio", "speech", "music", "multimodal"]
+    },
+    {
+      "id": "machine-learning",
+      "label": "Machine Learning",
+      "aliases": ["machine learning", "deep learning", "neural network", "foundation model", "large language model", "reinforcement learning", "diffusion"]
+    },
+    {
+      "id": "natural-language-processing",
+      "label": "Natural Language Processing",
+      "aliases": ["natural language", "language model", "translation", "summarization", "linguistic", "text generation", "nlp"]
+    },
+    {
+      "id": "computer-vision",
+      "label": "Computer Vision",
+      "aliases": ["computer vision", "image", "visual recognition", "object detection", "segmentation", "vision-language", "video understanding"]
+    },
+    {
+      "id": "robotics",
+      "label": "Robotics",
+      "aliases": ["robot", "robotics", "navigation", "manipulation", "autonomous driving", "embodied"]
+    },
+    {
+      "id": "knowledge-reasoning",
+      "label": "Knowledge & Reasoning",
+      "aliases": ["knowledge graph", "reasoning", "planning", "constraint", "semantic web", "agent"]
+    },
+    {
+      "id": "human-computer-interaction",
+      "label": "Human-Computer Interaction",
+      "aliases": ["human-computer interaction", "user study", "interface", "interaction design", "accessibility", "collaboration"]
+    },
+    {
+      "id": "ubiquitous-computing",
+      "label": "Ubiquitous Computing",
+      "aliases": ["ubiquitous", "pervasive", "wearable", "sensor", "mobile sensing", "internet of things"]
+    },
+    {
+      "id": "web-systems",
+      "label": "Web Systems",
+      "aliases": ["web", "social network", "online platform", "web application", "content moderation"]
+    },
+    {
+      "id": "real-time-embedded",
+      "label": "Real-Time & Embedded Systems",
+      "aliases": ["real-time", "embedded", "cyber-physical", "deadline", "safety-critical"]
+    },
+    {
+      "id": "computational-economics",
+      "label": "Computational Economics",
+      "aliases": ["auction", "mechanism design", "game theory", "market", "pricing", "social choice"]
+    }
+  ],
+  "contributionTypes": [
+    {
+      "id": "algorithm-method",
+      "label": "Algorithm / Method",
+      "aliases": ["method", "algorithm", "approach", "framework", "optimization", "learning"]
+    },
+    {
+      "id": "system-infrastructure",
+      "label": "System / Infrastructure",
+      "aliases": ["system", "platform", "infrastructure", "runtime", "engine", "service"]
+    },
+    {
+      "id": "model-architecture",
+      "label": "Model / Architecture",
+      "aliases": ["architecture", "model", "network", "transformer", "module"]
+    },
+    {
+      "id": "theory-proof",
+      "label": "Theory / Proof",
+      "aliases": ["theory", "theorem", "proof", "bound", "complexity", "guarantee"]
+    },
+    {
+      "id": "dataset-benchmark",
+      "label": "Dataset / Benchmark",
+      "aliases": ["dataset", "benchmark", "corpus", "testbed", "challenge"]
+    },
+    {
+      "id": "evaluation-measurement",
+      "label": "Evaluation / Measurement",
+      "aliases": ["evaluation", "measurement", "metric", "assessment", "audit", "characterization"]
+    },
+    {
+      "id": "empirical-analysis",
+      "label": "Empirical Analysis",
+      "aliases": ["empirical", "analysis", "study", "investigation", "understanding", "revisiting"]
+    },
+    {
+      "id": "tool-resource",
+      "label": "Tool / Resource",
+      "aliases": ["tool", "library", "toolkit", "repository", "resource", "compiler"]
+    },
+    {
+      "id": "application",
+      "label": "Application",
+      "aliases": ["application", "deployed", "real-world", "clinical", "scientific", "industrial"]
+    },
+    {
+      "id": "survey-position",
+      "label": "Survey / Position",
+      "aliases": ["survey of", "survey on", "survey paper", "systematic review", "position paper", "taxonomy of", "roadmap"]
+    },
+    {
+      "id": "unknown",
+      "label": "Pending Classification",
+      "aliases": []
+    }
+  ]
+}

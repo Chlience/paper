@@ -10,6 +10,7 @@ export const paths = {
   papers: '/papers/',
   topics: '/topics/',
   authors: '/authors/',
+  conferences: '/conferences/',
   archive: '/archive/',
   workflow: '/workflow/',
   template: '/template/',

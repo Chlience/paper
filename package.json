@@ -8,8 +8,11 @@
   },
   "scripts": {
     "build:content": "node scripts/build-paper-data.mjs",
-    "dev": "npm run build:content && astro dev",
-    "build": "npm run build:content && astro build",
+    "sync:conferences": "node scripts/sync-conference-data.mjs",
+    "build:conferences": "node scripts/build-conference-data.mjs",
+    "check:conferences": "node scripts/check-conference-data.mjs && node --test scripts/check-conference-data.test.mjs scripts/conference-adapters.test.mjs && node scripts/check-conference-filter.mjs",
+    "dev": "npm run build:content && npm run build:conferences && astro dev",
+    "build": "npm run build:content && npm run build:conferences && astro build",
     "test:search": "node scripts/check-paper-search.mjs",
     "test:pins": "node scripts/check-pinned-papers.mjs",
     "test:figures": "node scripts/check-paper-figure-dialog.mjs",

@@ -1,0 +1,633 @@
+{
+  "schemaVersion": 1,
+  "ccfSnapshot": {
+    "edition": 7,
+    "publishedAt": "2026-03-31",
+    "correctedAt": "2026-04-09",
+    "sourceUrl": "https://www.ccf.org.cn/Academic_Evaluation/By_category/"
+  },
+  "areas": [
+    {
+      "id": "architecture-systems",
+      "label": "计算机体系结构/并行与分布计算/存储系统"
+    },
+    {
+      "id": "networking",
+      "label": "计算机网络"
+    },
+    {
+      "id": "security",
+      "label": "网络与信息安全"
+    },
+    {
+      "id": "software",
+      "label": "软件工程/系统软件/程序设计语言"
+    },
+    {
+      "id": "data-management",
+      "label": "数据库/数据挖掘/内容检索"
+    },
+    {
+      "id": "theory",
+      "label": "计算机科学理论"
+    },
+    {
+      "id": "graphics-multimedia",
+      "label": "计算机图形学与多媒体"
+    },
+    {
+      "id": "artificial-intelligence",
+      "label": "人工智能"
+    },
+    {
+      "id": "human-computer-interaction",
+      "label": "人机交互与普适计算"
+    },
+    {
+      "id": "interdisciplinary",
+      "label": "交叉/综合/新兴"
+    }
+  ],
+  "venues": [
+    {
+      "id": "ppopp",
+      "acronym": "PPoPP",
+      "name": "ACM SIGPLAN Symposium on Principles & Practice of Parallel Programming",
+      "ccfAreaId": "architecture-systems",
+      "ccfRank": "A",
+      "publisher": "ACM",
+      "dblpUrl": "https://dblp.org/db/conf/ppopp/",
+      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+    },
+    {
+      "id": "fast",
+      "acronym": "FAST",
+      "name": "USENIX Conference on File and Storage Technologies",
+      "ccfAreaId": "architecture-systems",
+      "ccfRank": "A",
+      "publisher": "USENIX",
+      "dblpUrl": "https://dblp.org/db/conf/fast/",
+      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+    },
+    {
+      "id": "dac",
+      "acronym": "DAC",
+      "name": "Design Automation Conference",
+      "ccfAreaId": "architecture-systems",
+      "ccfRank": "A",
+      "publisher": "ACM",
+      "dblpUrl": "https://dblp.org/db/conf/dac/",
+      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+    },
+    {
+      "id": "hpca",
+      "acronym": "HPCA",
+      "name": "IEEE International Symposium on High Performance Computer Architecture",
+      "ccfAreaId": "architecture-systems",
+      "ccfRank": "A",
+      "publisher": "IEEE",
+      "dblpUrl": "https://dblp.org/db/conf/hpca/",
+      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+    },
+    {
+      "id": "micro",
+      "acronym": "MICRO",
+      "name": "IEEE/ACM International Symposium on Microarchitecture",
+      "ccfAreaId": "architecture-systems",
+      "ccfRank": "A",
+      "publisher": "IEEE/ACM",
+      "dblpUrl": "https://dblp.org/db/conf/micro/",
+      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+    },
+    {
+      "id": "sc",
+      "acronym": "SC",
+      "name": "International Conference for High Performance Computing, Networking, Storage, and Analysis",
+      "ccfAreaId": "architecture-systems",
+      "ccfRank": "A",
+      "publisher": "IEEE",
+      "dblpUrl": "https://dblp.org/db/conf/sc/",
+      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+    },
+    {
+      "id": "asplos",
+      "acronym": "ASPLOS",
+      "name": "International Conference on Architectural Support for Programming Languages and Operating Systems",
+      "ccfAreaId": "architecture-systems",
+      "ccfRank": "A",
+      "publisher": "ACM",
+      "dblpUrl": "https://dblp.org/db/conf/asplos/",
+      "edition2026": { "status": "published", "homepage": "https://www.asplos-conference.org/asplos2026/", "acceptedListUrl": "https://www.asplos-conference.org/asplos2026/program/", "adapter": "asplos-program-html" }
+    },
+    {
+      "id": "isca",
+      "acronym": "ISCA",
+      "name": "International Symposium on Computer Architecture",
+      "ccfAreaId": "architecture-systems",
+      "ccfRank": "A",
+      "publisher": "IEEE/ACM",
+      "dblpUrl": "https://dblp.org/db/conf/isca/",
+      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+    },
+    {
+      "id": "acm-sigops-atc",
+      "acronym": "ACM SIGOPS ATC",
+      "name": "ACM SIGOPS Annual Technical Conference",
+      "ccfAreaId": "architecture-systems",
+      "ccfRank": "A",
+      "publisher": "ACM",
+      "dblpUrl": "https://dblp.org/db/conf/usenix/",
+      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+    },
+    {
+      "id": "eurosys",
+      "acronym": "EuroSys",
+      "name": "European Conference on Computer Systems",
+      "ccfAreaId": "architecture-systems",
+      "ccfRank": "A",
+      "publisher": "ACM",
+      "dblpUrl": "https://dblp.org/db/conf/eurosys/",
+      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+    },
+    {
+      "id": "hpdc",
+      "acronym": "HPDC",
+      "name": "The International ACM Symposium on High-Performance Parallel and Distributed Computing",
+      "ccfAreaId": "architecture-systems",
+      "ccfRank": "A",
+      "publisher": "IEEE",
+      "dblpUrl": "https://dblp.org/db/conf/hpdc/",
+      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+    },
+    {
+      "id": "sigcomm",
+      "acronym": "SIGCOMM",
+      "name": "ACM International Conference on Applications, Technologies, Architectures, and Protocols for Computer Communication",
+      "ccfAreaId": "networking",
+      "ccfRank": "A",
+      "publisher": "ACM",
+      "dblpUrl": "https://dblp.org/db/conf/sigcomm/",
+      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+    },
+    {
+      "id": "mobicom",
+      "acronym": "MobiCom",
+      "name": "ACM International Conference on Mobile Computing and Networking",
+      "ccfAreaId": "networking",
+      "ccfRank": "A",
+      "publisher": "ACM",
+      "dblpUrl": "https://dblp.org/db/conf/mobicom/",
+      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+    },
+    {
+      "id": "infocom",
+      "acronym": "INFOCOM",
+      "name": "IEEE International Conference on Computer Communications",
+      "ccfAreaId": "networking",
+      "ccfRank": "A",
+      "publisher": "IEEE",
+      "dblpUrl": "https://dblp.org/db/conf/infocom/",
+      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+    },
+    {
+      "id": "nsdi",
+      "acronym": "NSDI",
+      "name": "Symposium on Network System Design and Implementation",
+      "ccfAreaId": "networking",
+      "ccfRank": "A",
+      "publisher": "USENIX",
+      "dblpUrl": "https://dblp.org/db/conf/nsdi/",
+      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+    },
+    {
+      "id": "ccs",
+      "acronym": "CCS",
+      "name": "ACM Conference on Computer and Communications Security",
+      "ccfAreaId": "security",
+      "ccfRank": "A",
+      "publisher": "ACM",
+      "dblpUrl": "https://dblp.org/db/conf/ccs/",
+      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+    },
+    {
+      "id": "eurocrypt",
+      "acronym": "EUROCRYPT",
+      "name": "International Conference on the Theory and Applications of Cryptographic Techniques",
+      "ccfAreaId": "security",
+      "ccfRank": "A",
+      "publisher": "Springer",
+      "dblpUrl": "https://dblp.org/db/conf/eurocrypt/",
+      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+    },
+    {
+      "id": "ieee-sp",
+      "acronym": "S&P",
+      "name": "IEEE Symposium on Security and Privacy",
+      "ccfAreaId": "security",
+      "ccfRank": "A",
+      "publisher": "IEEE",
+      "dblpUrl": "https://dblp.org/db/conf/sp/",
+      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+    },
+    {
+      "id": "crypto",
+      "acronym": "CRYPTO",
+      "name": "International Cryptology Conference",
+      "ccfAreaId": "security",
+      "ccfRank": "A",
+      "publisher": "Springer",
+      "dblpUrl": "https://dblp.org/db/conf/crypto/",
+      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+    },
+    {
+      "id": "usenix-security",
+      "acronym": "USENIX Security",
+      "name": "USENIX Security Symposium",
+      "ccfAreaId": "security",
+      "ccfRank": "A",
+      "publisher": "USENIX Association",
+      "dblpUrl": "https://dblp.org/db/conf/uss/",
+      "edition2026": { "status": "published", "homepage": "https://www.usenix.org/conference/usenixsecurity26", "acceptedListUrl": "https://www.usenix.org/conference/usenixsecurity26/technical-sessions", "adapter": "usenix-program-html" }
+    },
+    {
+      "id": "ndss",
+      "acronym": "NDSS",
+      "name": "Network and Distributed System Security Symposium",
+      "ccfAreaId": "security",
+      "ccfRank": "A",
+      "publisher": "ISOC",
+      "dblpUrl": "https://dblp.org/db/conf/ndss/",
+      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+    },
+    {
+      "id": "pldi",
+      "acronym": "PLDI",
+      "name": "ACM SIGPLAN Conference on Programming Language Design and Implementation",
+      "ccfAreaId": "software",
+      "ccfRank": "A",
+      "publisher": "ACM",
+      "dblpUrl": "https://dblp.org/db/conf/pldi/",
+      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+    },
+    {
+      "id": "popl",
+      "acronym": "POPL",
+      "name": "ACM SIGPLAN-SIGACT Symposium on Principles of Programming Languages",
+      "ccfAreaId": "software",
+      "ccfRank": "A",
+      "publisher": "ACM",
+      "dblpUrl": "https://dblp.org/db/conf/popl/",
+      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+    },
+    {
+      "id": "fse",
+      "acronym": "FSE",
+      "name": "ACM International Conference on the Foundations of Software Engineering",
+      "ccfAreaId": "software",
+      "ccfRank": "A",
+      "publisher": "ACM",
+      "dblpUrl": "https://dblp.org/db/conf/sigsoft/",
+      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+    },
+    {
+      "id": "sosp",
+      "acronym": "SOSP",
+      "name": "ACM Symposium on Operating Systems Principles",
+      "ccfAreaId": "software",
+      "ccfRank": "A",
+      "publisher": "ACM",
+      "dblpUrl": "https://dblp.org/db/conf/sosp/",
+      "edition2026": { "status": "no-edition", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+    },
+    {
+      "id": "oopsla",
+      "acronym": "OOPSLA",
+      "name": "Conference on Object-Oriented Programming Systems, Languages, and Applications",
+      "ccfAreaId": "software",
+      "ccfRank": "A",
+      "publisher": "ACM",
+      "dblpUrl": "https://dblp.org/db/conf/oopsla/",
+      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+    },
+    {
+      "id": "ase",
+      "acronym": "ASE",
+      "name": "International Conference on Automated Software Engineering",
+      "ccfAreaId": "software",
+      "ccfRank": "A",
+      "publisher": "IEEE/ACM",
+      "dblpUrl": "https://dblp.org/db/conf/kbse/",
+      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+    },
+    {
+      "id": "icse",
+      "acronym": "ICSE",
+      "name": "International Conference on Software Engineering",
+      "ccfAreaId": "software",
+      "ccfRank": "A",
+      "publisher": "IEEE/ACM",
+      "dblpUrl": "https://dblp.org/db/conf/icse/",
+      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+    },
+    {
+      "id": "issta",
+      "acronym": "ISSTA",
+      "name": "International Symposium on Software Testing and Analysis",
+      "ccfAreaId": "software",
+      "ccfRank": "A",
+      "publisher": "ACM",
+      "dblpUrl": "https://dblp.org/db/conf/issta/",
+      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+    },
+    {
+      "id": "osdi",
+      "acronym": "OSDI",
+      "name": "USENIX Symposium on Operating Systems Design and Implementation",
+      "ccfAreaId": "software",
+      "ccfRank": "A",
+      "publisher": "USENIX",
+      "dblpUrl": "https://dblp.org/db/conf/osdi/",
+      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+    },
+    {
+      "id": "fm",
+      "acronym": "FM",
+      "name": "International Symposium on Formal Methods",
+      "ccfAreaId": "software",
+      "ccfRank": "A",
+      "publisher": "FME",
+      "dblpUrl": "https://dblp.org/db/conf/fm/",
+      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+    },
+    {
+      "id": "sigmod",
+      "acronym": "SIGMOD",
+      "name": "ACM SIGMOD Conference",
+      "ccfAreaId": "data-management",
+      "ccfRank": "A",
+      "publisher": "ACM",
+      "dblpUrl": "https://dblp.org/db/conf/sigmod/",
+      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+    },
+    {
+      "id": "sigkdd",
+      "acronym": "SIGKDD",
+      "name": "ACM SIGKDD Conference on Knowledge Discovery and Data Mining",
+      "ccfAreaId": "data-management",
+      "ccfRank": "A",
+      "publisher": "ACM",
+      "dblpUrl": "https://dblp.org/db/conf/kdd/",
+      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+    },
+    {
+      "id": "icde",
+      "acronym": "ICDE",
+      "name": "IEEE International Conference on Data Engineering",
+      "ccfAreaId": "data-management",
+      "ccfRank": "A",
+      "publisher": "IEEE",
+      "dblpUrl": "https://dblp.org/db/conf/icde/",
+      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+    },
+    {
+      "id": "sigir",
+      "acronym": "SIGIR",
+      "name": "International ACM SIGIR Conference on Research and Development in Information Retrieval",
+      "ccfAreaId": "data-management",
+      "ccfRank": "A",
+      "publisher": "ACM",
+      "dblpUrl": "https://dblp.org/db/conf/sigir/",
+      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+    },
+    {
+      "id": "vldb",
+      "acronym": "VLDB",
+      "name": "International Conference on Very Large Data Bases",
+      "ccfAreaId": "data-management",
+      "ccfRank": "A",
+      "publisher": "Morgan Kaufmann/ACM",
+      "dblpUrl": "https://dblp.org/db/conf/vldb/",
+      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+    },
+    {
+      "id": "stoc",
+      "acronym": "STOC",
+      "name": "ACM Symposium on the Theory of Computing",
+      "ccfAreaId": "theory",
+      "ccfRank": "A",
+      "publisher": "ACM",
+      "dblpUrl": "https://dblp.org/db/conf/stoc/",
+      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+    },
+    {
+      "id": "soda",
+      "acronym": "SODA",
+      "name": "ACM-SIAM Symposium on Discrete Algorithms",
+      "ccfAreaId": "theory",
+      "ccfRank": "A",
+      "publisher": "SIAM",
+      "dblpUrl": "https://dblp.org/db/conf/soda/",
+      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+    },
+    {
+      "id": "cav",
+      "acronym": "CAV",
+      "name": "International Conference on Computer Aided Verification",
+      "ccfAreaId": "theory",
+      "ccfRank": "A",
+      "publisher": "Springer",
+      "dblpUrl": "https://dblp.org/db/conf/cav/",
+      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+    },
+    {
+      "id": "focs",
+      "acronym": "FOCS",
+      "name": "IEEE Annual Symposium on Foundations of Computer Science",
+      "ccfAreaId": "theory",
+      "ccfRank": "A",
+      "publisher": "IEEE",
+      "dblpUrl": "https://dblp.org/db/conf/focs/",
+      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+    },
+    {
+      "id": "lics",
+      "acronym": "LICS",
+      "name": "ACM/IEEE Symposium on Logic in Computer Science",
+      "ccfAreaId": "theory",
+      "ccfRank": "A",
+      "publisher": "IEEE",
+      "dblpUrl": "https://dblp.org/db/conf/lics/",
+      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+    },
+    {
+      "id": "acm-mm",
+      "acronym": "ACM MM",
+      "name": "ACM International Conference on Multimedia",
+      "ccfAreaId": "graphics-multimedia",
+      "ccfRank": "A",
+      "publisher": "ACM",
+      "dblpUrl": "https://dblp.org/db/conf/mm/",
+      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+    },
+    {
+      "id": "siggraph",
+      "acronym": "SIGGRAPH",
+      "name": "ACM Special Interest Group on Computer Graphics",
+      "ccfAreaId": "graphics-multimedia",
+      "ccfRank": "A",
+      "publisher": "ACM",
+      "dblpUrl": "https://dblp.org/db/conf/siggraph/",
+      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+    },
+    {
+      "id": "vr",
+      "acronym": "VR",
+      "name": "IEEE Virtual Reality",
+      "ccfAreaId": "graphics-multimedia",
+      "ccfRank": "A",
+      "publisher": "IEEE",
+      "dblpUrl": "https://dblp.org/db/conf/vr/",
+      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+    },
+    {
+      "id": "ieee-vis",
+      "acronym": "IEEE VIS",
+      "name": "IEEE Visualization Conference",
+      "ccfAreaId": "graphics-multimedia",
+      "ccfRank": "A",
+      "publisher": "IEEE",
+      "dblpUrl": "https://dblp.org/db/conf/visualization/",
+      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+    },
+    {
+      "id": "aaai",
+      "acronym": "AAAI",
+      "name": "AAAI Conference on Artificial Intelligence",
+      "ccfAreaId": "artificial-intelligence",
+      "ccfRank": "A",
+      "publisher": "AAAI",
+      "dblpUrl": "https://dblp.org/db/conf/aaai/",
+      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+    },
+    {
+      "id": "neurips",
+      "acronym": "NeurIPS",
+      "name": "Conference on Neural Information Processing Systems",
+      "ccfAreaId": "artificial-intelligence",
+      "ccfRank": "A",
+      "publisher": "MIT Press",
+      "dblpUrl": "https://dblp.org/db/conf/nips/",
+      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+    },
+    {
+      "id": "acl",
+      "acronym": "ACL",
+      "name": "Annual Meeting of the Association for Computational Linguistics",
+      "ccfAreaId": "artificial-intelligence",
+      "ccfRank": "A",
+      "publisher": "ACL",
+      "dblpUrl": "https://dblp.org/db/conf/acl/",
+      "edition2026": { "status": "published", "homepage": "https://2026.aclweb.org/", "acceptedListUrl": "https://aclanthology.org/volumes/2026.acl-long/", "adapter": "acl-anthology-schedule" }
+    },
+    {
+      "id": "cvpr",
+      "acronym": "CVPR",
+      "name": "IEEE/CVF Computer Vision and Pattern Recognition Conference",
+      "ccfAreaId": "artificial-intelligence",
+      "ccfRank": "A",
+      "publisher": "IEEE",
+      "dblpUrl": "https://dblp.org/db/conf/cvpr/",
+      "edition2026": { "status": "published", "homepage": "https://cvpr.thecvf.com/Conferences/2026", "acceptedListUrl": "https://openaccess.thecvf.com/CVPR2026?day=all", "adapter": "cvpr-schedule-cvf-miniconf" }
+    },
+    {
+      "id": "iccv",
+      "acronym": "ICCV",
+      "name": "International Conference on Computer Vision",
+      "ccfAreaId": "artificial-intelligence",
+      "ccfRank": "A",
+      "publisher": "IEEE",
+      "dblpUrl": "https://dblp.org/db/conf/iccv/",
+      "edition2026": { "status": "no-edition", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+    },
+    {
+      "id": "icml",
+      "acronym": "ICML",
+      "name": "International Conference on Machine Learning",
+      "ccfAreaId": "artificial-intelligence",
+      "ccfRank": "A",
+      "publisher": "ACM",
+      "dblpUrl": "https://dblp.org/db/conf/icml/",
+      "edition2026": { "status": "published", "homepage": "https://icml.cc/Conferences/2026", "acceptedListUrl": "https://icml.cc/virtual/2026/papers.html", "adapter": "miniconf-json" }
+    },
+    {
+      "id": "iclr",
+      "acronym": "ICLR",
+      "name": "International Conference on Learning Representations",
+      "ccfAreaId": "artificial-intelligence",
+      "ccfRank": "A",
+      "publisher": "OpenReview",
+      "dblpUrl": "https://dblp.org/db/conf/iclr/",
+      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+    },
+    {
+      "id": "cscw",
+      "acronym": "CSCW",
+      "name": "ACM Conference on Computer-Supported Cooperative Work and Social Computing",
+      "ccfAreaId": "human-computer-interaction",
+      "ccfRank": "A",
+      "publisher": "ACM",
+      "dblpUrl": "https://dblp.org/db/conf/cscw/",
+      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+    },
+    {
+      "id": "chi",
+      "acronym": "CHI",
+      "name": "ACM Conference on Human Factors in Computing Systems",
+      "ccfAreaId": "human-computer-interaction",
+      "ccfRank": "A",
+      "publisher": "ACM",
+      "dblpUrl": "https://dblp.org/db/conf/chi/",
+      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+    },
+    {
+      "id": "ubicomp",
+      "acronym": "UbiComp",
+      "name": "ACM International Joint Conference on Pervasive and Ubiquitous Computing",
+      "ccfAreaId": "human-computer-interaction",
+      "ccfRank": "A",
+      "publisher": "ACM",
+      "dblpUrl": "https://dblp.org/db/conf/huc/",
+      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+    },
+    {
+      "id": "uist",
+      "acronym": "UIST",
+      "name": "ACM Symposium on User Interface Software and Technology",
+      "ccfAreaId": "human-computer-interaction",
+      "ccfRank": "A",
+      "publisher": "ACM",
+      "dblpUrl": "https://dblp.org/db/conf/uist/",
+      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+    },
+    {
+      "id": "www",
+      "acronym": "WWW",
+      "name": "International World Wide Web Conference",
+      "ccfAreaId": "interdisciplinary",
+      "ccfRank": "A",
+      "publisher": "ACM",
+      "dblpUrl": "https://dblp.org/db/conf/www/",
+      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+    },
+    {
+      "id": "rtss",
+      "acronym": "RTSS",
+      "name": "IEEE Real-Time Systems Symposium",
+      "ccfAreaId": "interdisciplinary",
+      "ccfRank": "A",
+      "publisher": "IEEE",
+      "dblpUrl": "https://dblp.org/db/conf/rtss/",
+      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+    }
+  ]
+}

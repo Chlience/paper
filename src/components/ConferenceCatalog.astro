@@ -1,0 +1,867 @@
+---
+import {
+  CONFERENCE_PAGE_SIZE,
+  paginateConferencePapers,
+  sortConferencePapers,
+} from '../lib/conference-filter.mjs';
+
+interface FacetOption {
+  id: string;
+  label: string;
+  count: number;
+}
+
+interface ConferencePaper {
+  id: string;
+  venueId: string;
+  venueAcronym: string;
+  venueName: string;
+  ccfAreaId: string;
+  title: string;
+  authors: (string | { name?: string })[];
+  authorStatus?: string;
+  abstractStatus?: string;
+  trackRaw?: string;
+  trackNormalized?: string;
+  presentationRaw?: string;
+  presentationNormalized?: string;
+  recognition?: (string | { label?: string; name?: string })[];
+  domains?: { id: string; label: string }[];
+  primaryDomainId?: string;
+  contributionType?: { id: string; label: string };
+  coreContribution?: string;
+  classificationConfidence?: number | string;
+  status?: string;
+  sourceUrl?: string;
+  paperUrl?: string;
+  notePath?: string;
+}
+
+interface Props {
+  papers?: ConferencePaper[];
+  facets?: Record<string, unknown> | unknown[];
+  dataUrl?: string;
+  totalPapers?: number;
+}
+
+const { papers = [], facets = {}, dataUrl = '', totalPapers = papers.length } = Astro.props;
+
+const AREA_LABELS: Record<string, string> = {
+  architecture: '体系结构、并行与存储',
+  systems: '体系结构、并行与存储',
+  'computer-architecture': '体系结构、并行与存储',
+  network: '计算机网络',
+  networks: '计算机网络',
+  security: '网络与信息安全',
+  software: '软件工程与程序语言',
+  'software-engineering': '软件工程与程序语言',
+  database: '数据库、数据挖掘与检索',
+  databases: '数据库、数据挖掘与检索',
+  theory: '计算机科学理论',
+  graphics: '图形学与多媒体',
+  multimedia: '图形学与多媒体',
+  ai: '人工智能',
+  'artificial-intelligence': '人工智能',
+  hci: '人机交互与普适计算',
+  interdisciplinary: '交叉与综合',
+};
+
+const PRESENTATION_LABELS: Record<string, string> = {
+  oral: 'Oral',
+  spotlight: 'Spotlight',
+  highlight: 'Highlight',
+  poster: 'Poster',
+  virtual: 'Virtual',
+  unknown: '待确认',
+};
+
+const humanizeId = (value: string) =>
+  value
+    .replace(/[-_]+/g, ' ')
+    .replace(/\b\w/g, (letter) => letter.toUpperCase());
+
+const makeDerivedOptions = (
+  values: { id?: string; label?: string }[],
+  fallbackLabel?: (id: string) => string,
+) => {
+  const entries = new Map<string, FacetOption>();
+
+  values.forEach((value) => {
+    const id = String(value?.id ?? '').trim();
+    if (!id) return;
+    const current = entries.get(id);
+    entries.set(id, {
+      id,
+      label: String(value?.label ?? current?.label ?? fallbackLabel?.(id) ?? humanizeId(id)),
+      count: (current?.count ?? 0) + 1,
+    });
+  });
+
+  return [...entries.values()];
+};
+
+const normalizeProvidedOptions = (raw: unknown): FacetOption[] => {
+  const values = Array.isArray(raw)
+    ? raw
+    : raw && typeof raw === 'object'
+      ? Object.entries(raw).map(([id, value]) =>
+          value && typeof value === 'object'
+            ? { id, ...(value as Record<string, unknown>) }
+            : { id, label: String(value) },
+        )
+      : [];
+
+  return values
+    .map((value) => {
+      if (typeof value === 'string') return { id: value, label: humanizeId(value), count: 0 };
+      if (!value || typeof value !== 'object') return null;
+      const item = value as Record<string, unknown>;
+      const id = String(item.id ?? item.value ?? item.key ?? '').trim();
+      if (!id) return null;
+      const count = Number(item.count ?? item.paperCount ?? 0);
+      return {
+        id,
+        label: String(item.label ?? item.name ?? item.title ?? humanizeId(id)),
+        count: Number.isFinite(count) ? count : 0,
+      };
+    })
+    .filter((value): value is FacetOption => Boolean(value));
+};
+
+const findFacetOptions = (aliases: string[]) => {
+  const roots: unknown[] = [facets];
+  if (facets && typeof facets === 'object' && !Array.isArray(facets)) {
+    const nested = (facets as Record<string, unknown>).facets;
+    if (nested) roots.push(nested);
+  }
+
+  for (const root of roots) {
+    if (Array.isArray(root)) {
+      const facet = root.find((item) => {
+        if (!item || typeof item !== 'object') return false;
+        const key = String(
+          (item as Record<string, unknown>).id ??
+            (item as Record<string, unknown>).key ??
+            (item as Record<string, unknown>).name ??
+            '',
+        );
+        return aliases.includes(key);
+      }) as Record<string, unknown> | undefined;
+      if (facet) {
+        const options = normalizeProvidedOptions(facet.options ?? facet.values ?? facet.items);
+        if (options.length > 0) return options;
+      }
+      continue;
+    }
+
+    if (root && typeof root === 'object') {
+      const record = root as Record<string, unknown>;
+      for (const alias of aliases) {
+        const options = normalizeProvidedOptions(record[alias]);
+        if (options.length > 0) return options;
+      }
+    }
+  }
+
+  return [];
+};
+
+const mergeOptions = (derived: FacetOption[], provided: FacetOption[]) => {
+  const entries = new Map(derived.map((option) => [option.id, option]));
+  provided.forEach((option) => {
+    const current = entries.get(option.id);
+    entries.set(option.id, {
+      id: option.id,
+      label: option.label || current?.label || humanizeId(option.id),
+      count: option.count || current?.count || 0,
+    });
+  });
+  return [...entries.values()].sort((left, right) =>
+    left.label.localeCompare(right.label, ['zh-CN', 'en'], { numeric: true }),
+  );
+};
+
+const venueOptions = mergeOptions(
+  makeDerivedOptions(
+    papers.map((paper) => ({
+      id: paper.venueId,
+      label:
+        paper.venueName && paper.venueName !== paper.venueAcronym
+          ? `${paper.venueAcronym} · ${paper.venueName}`
+          : paper.venueAcronym || paper.venueName,
+    })),
+  ),
+  findFacetOptions(['venues', 'venue']),
+);
+
+const areaOptions = mergeOptions(
+  makeDerivedOptions(
+    papers.map((paper) => ({ id: paper.ccfAreaId })),
+    (id) => AREA_LABELS[id] ?? humanizeId(id),
+  ),
+  findFacetOptions(['ccfAreas', 'ccfArea', 'areas', 'area']),
+);
+
+const presentationOptions = mergeOptions(
+  makeDerivedOptions(
+    papers.map((paper) => ({ id: paper.presentationNormalized })),
+    (id) => PRESENTATION_LABELS[id] ?? humanizeId(id),
+  ),
+  findFacetOptions(['presentations', 'presentation']),
+);
+
+const domainOptions = mergeOptions(
+  makeDerivedOptions(papers.flatMap((paper) => paper.domains ?? [])),
+  findFacetOptions(['domains', 'domain']),
+);
+
+const contributionOptions = mergeOptions(
+  makeDerivedOptions(
+    papers.map((paper) => ({
+      id: paper.contributionType?.id,
+      label: paper.contributionType?.label,
+    })),
+  ),
+  findFacetOptions(['contributionTypes', 'contributions', 'contribution']),
+);
+
+const safeCatalogHref = (value: unknown, { allowInternal = false } = {}) => {
+  const candidate = String(value ?? '').trim();
+  if (!candidate) return '';
+  if (allowInternal && candidate.startsWith('/') && !candidate.startsWith('//')) return candidate;
+  try {
+    const url = new URL(candidate);
+    return ['http:', 'https:'].includes(url.protocol) ? url.href : '';
+  } catch {
+    return '';
+  }
+};
+
+const paperHref = (paper: ConferencePaper) =>
+  safeCatalogHref(paper.paperUrl) ||
+  safeCatalogHref(paper.notePath, { allowInternal: true }) ||
+  safeCatalogHref(paper.sourceUrl);
+
+const initialPage = paginateConferencePapers(sortConferencePapers(papers), 1, CONFERENCE_PAGE_SIZE);
+const initialTotal = Math.max(papers.length, Number(totalPapers) || 0);
+const initialTotalPages = Math.max(1, Math.ceil(initialTotal / CONFERENCE_PAGE_SIZE));
+const serializedPapers = JSON.stringify(papers)
+  .replace(/</g, '\\u003c')
+  .replace(/\u2028/g, '\\u2028')
+  .replace(/\u2029/g, '\\u2029');
+---
+
+<section
+  class="conference-catalog"
+  data-conference-catalog
+  data-conference-data-url={dataUrl}
+  data-conference-total={initialTotal}
+  aria-busy={dataUrl ? 'true' : 'false'}
+>
+  <form class="conference-filters" data-conference-filter-form role="search">
+    <div class="conference-search-row">
+      <label for="conference-query">搜索论文</label>
+      <input
+        id="conference-query"
+        type="search"
+        name="q"
+        placeholder="标题、作者或核心贡献"
+        autocomplete="off"
+        data-conference-filter="query"
+        disabled={Boolean(dataUrl)}
+      />
+      <button
+        type="button"
+        class="conference-filter-reset"
+        data-conference-filter-reset
+        disabled={Boolean(dataUrl)}
+      >
+        清除筛选
+      </button>
+    </div>
+
+    <div class="conference-filter-grid">
+      <label>
+        <span>会议</span>
+        <select name="venue" data-conference-filter="venue" disabled={Boolean(dataUrl)}>
+          <option value="">全部会议</option>
+          {venueOptions.map((option) => (
+            <option value={option.id}>{option.label} ({option.count})</option>
+          ))}
+        </select>
+      </label>
+
+      <label>
+        <span>CCF 领域</span>
+        <select name="area" data-conference-filter="area" disabled={Boolean(dataUrl)}>
+          <option value="">全部领域</option>
+          {areaOptions.map((option) => (
+            <option value={option.id}>{option.label} ({option.count})</option>
+          ))}
+        </select>
+      </label>
+
+      <label>
+        <span>展示形式</span>
+        <select
+          name="presentation"
+          data-conference-filter="presentation"
+          disabled={Boolean(dataUrl)}
+        >
+          <option value="">全部形式</option>
+          {presentationOptions.map((option) => (
+            <option value={option.id}>{option.label} ({option.count})</option>
+          ))}
+        </select>
+      </label>
+
+      <label>
+        <span>论文领域</span>
+        <select name="domain" data-conference-filter="domain" disabled={Boolean(dataUrl)}>
+          <option value="">全部领域</option>
+          {domainOptions.map((option) => (
+            <option value={option.id}>{option.label} ({option.count})</option>
+          ))}
+        </select>
+      </label>
+
+      <label>
+        <span>贡献类型</span>
+        <select
+          name="contribution"
+          data-conference-filter="contribution"
+          disabled={Boolean(dataUrl)}
+        >
+          <option value="">全部类型</option>
+          {contributionOptions.map((option) => (
+            <option value={option.id}>{option.label} ({option.count})</option>
+          ))}
+        </select>
+      </label>
+
+      <label>
+        <span>排序</span>
+        <select name="sort" data-conference-filter="sort" disabled={Boolean(dataUrl)}>
+          <option value="presentation">展示形式</option>
+          <option value="venue">会议</option>
+          <option value="title">标题</option>
+          <option value="confidence">分类置信度</option>
+        </select>
+      </label>
+    </div>
+  </form>
+
+  <p
+    class="conference-data-status"
+    data-conference-data-status
+    data-state={dataUrl ? 'loading' : 'ready'}
+    role="status"
+    aria-live="polite"
+  >
+    {dataUrl
+      ? `正在加载完整索引，当前保留首批 ${papers.length.toLocaleString('zh-CN')} 篇。`
+      : `索引已加载，共 ${initialTotal.toLocaleString('zh-CN')} 篇。`}
+  </p>
+
+  <div class="conference-results-head">
+    <p
+      class="conference-result-count"
+      data-conference-result-count
+      role="status"
+      aria-live="polite"
+      tabindex="-1"
+    >
+      {initialTotal === 0
+        ? '当前没有可查询的论文记录'
+        : `显示 ${initialPage.start}–${initialPage.end}，共 ${initialTotal.toLocaleString('zh-CN')} 篇`}
+    </p>
+    <p>默认按 Oral、Spotlight、Highlight、Poster、Virtual 排列</p>
+  </div>
+
+  <ol class="conference-paper-list" data-conference-results>
+    {initialPage.items.map((paper) => (
+      <li class="conference-paper-row">
+        <div class="conference-paper-venue">
+          <strong>{paper.venueAcronym || paper.venueName}</strong>
+          <span>{paper.presentationRaw || PRESENTATION_LABELS[paper.presentationNormalized ?? 'unknown']}</span>
+          {paper.trackRaw && <small>{paper.trackRaw}</small>}
+        </div>
+        <article class="conference-paper-main">
+          <h2>
+            {paperHref(paper) ? (
+              <a href={paperHref(paper)}>{paper.title}</a>
+            ) : (
+              paper.title
+            )}
+          </h2>
+          {paper.authors?.length > 0 ? (
+            <p class="conference-paper-authors">
+              {paper.authors
+                .slice(0, 10)
+                .map((author) => (typeof author === 'string' ? author : author.name))
+                .filter(Boolean)
+                .join(', ')}
+              {paper.authors.length > 10 ? ` 等 ${paper.authors.length} 人` : ''}
+            </p>
+          ) : paper.authorStatus === 'embargoed' ? (
+            <p class="conference-paper-authors">作者名单暂未公开。</p>
+          ) : null}
+          <p class="conference-paper-contribution">
+            {paper.coreContribution ||
+              (paper.abstractStatus === 'embargoed' ? '摘要暂未公开。' : '核心贡献待分类。')}
+          </p>
+          <div class="conference-paper-tags">
+            {paper.contributionType?.label && <span>{paper.contributionType.label}</span>}
+            {(paper.domains ?? []).slice(0, 3).map((domain) => <span>{domain.label}</span>)}
+          </div>
+        </article>
+      </li>
+    ))}
+  </ol>
+
+  <div class="conference-empty-state" data-conference-empty hidden>
+    <h2>没有匹配结果</h2>
+    <p>调整关键词或清除一项筛选条件后再查看。</p>
+  </div>
+
+  <nav class="conference-pagination" aria-label="会议论文分页" data-conference-pagination>
+    <button type="button" data-conference-page="previous" disabled>上一页</button>
+    <span class="mono" data-conference-page-status>
+      {initialTotal === 0 ? '0 / 0' : `1 / ${initialTotalPages}`}
+    </span>
+    <button type="button" data-conference-page="next" disabled>下一页</button>
+  </nav>
+
+  <noscript>
+    <p class="conference-noscript">筛选和分页需要浏览器启用 JavaScript，当前页面仍显示首批论文。</p>
+  </noscript>
+
+  <script type="application/json" data-conference-papers set:html={serializedPapers}></script>
+</section>
+
+<script>
+  import {
+    CONFERENCE_FILTER_DEFAULTS,
+    CONFERENCE_PAGE_SIZE,
+    createConferenceFilterParams,
+    createConferenceSearchIndex,
+    filterConferencePapers,
+    paginateConferencePapers,
+    readConferenceFilterState,
+  } from '../lib/conference-filter.mjs';
+
+  const PRESENTATION_LABELS = {
+    oral: 'Oral',
+    spotlight: 'Spotlight',
+    highlight: 'Highlight',
+    poster: 'Poster',
+    virtual: 'Virtual',
+    unknown: '待确认',
+  };
+
+  const STATUS_LABELS = {
+    active: 'Accepted',
+    accepted: 'Accepted',
+    withdrawn: 'Withdrawn',
+    retracted: 'Retracted',
+  };
+
+  const createElement = (tag, className, text) => {
+    const element = document.createElement(tag);
+    if (className) element.className = className;
+    if (text != null) element.textContent = String(text);
+    return element;
+  };
+
+  const safeHref = (value) => {
+    if (!value) return '';
+    try {
+      const url = new URL(String(value), window.location.origin);
+      return ['http:', 'https:'].includes(url.protocol) ? url.href : '';
+    } catch {
+      return '';
+    }
+  };
+
+  const appendLink = (parent, label, href) => {
+    const safe = safeHref(href);
+    if (!safe) return;
+    const link = createElement('a', '', label);
+    link.href = safe;
+    if (new URL(safe).origin !== window.location.origin) link.rel = 'noreferrer';
+    parent.append(link);
+  };
+
+  const authorName = (author) =>
+    typeof author === 'string' ? author : author?.name ? String(author.name) : '';
+
+  const formatConfidence = (value) => {
+    if (value == null || value === '') return '';
+    const numeric = Number(value);
+    if (Number.isFinite(numeric)) {
+      const percentage = numeric <= 1 ? numeric * 100 : numeric;
+      return `分类置信度 ${Math.round(percentage)}%`;
+    }
+    const labels = { high: '高', medium: '中', low: '低', unknown: '待确认' };
+    const normalized = String(value).toLocaleLowerCase();
+    return `分类置信度 ${labels[normalized] ?? String(value)}`;
+  };
+
+  const renderPaper = (paper) => {
+    const row = createElement('li', 'conference-paper-row');
+    if (['withdrawn', 'retracted'].includes(paper.status)) row.classList.add('is-inactive');
+
+    const venue = createElement('div', 'conference-paper-venue');
+    venue.append(
+      createElement('strong', '', paper.venueAcronym || paper.venueName || 'Unknown venue'),
+    );
+    venue.append(
+      createElement(
+        'span',
+        `is-${paper.presentationNormalized || 'unknown'}`,
+        paper.presentationRaw ||
+          PRESENTATION_LABELS[paper.presentationNormalized] ||
+          PRESENTATION_LABELS.unknown,
+      ),
+    );
+    if (paper.trackRaw) venue.append(createElement('small', '', paper.trackRaw));
+    row.append(venue);
+
+    const main = createElement('article', 'conference-paper-main');
+    const heading = createElement('h2');
+    const primaryHref = paper.paperUrl || paper.notePath || paper.sourceUrl;
+    if (safeHref(primaryHref)) {
+      const titleLink = createElement('a', '', paper.title || 'Untitled paper');
+      titleLink.href = safeHref(primaryHref);
+      if (new URL(titleLink.href).origin !== window.location.origin) titleLink.rel = 'noreferrer';
+      heading.append(titleLink);
+    } else {
+      heading.textContent = paper.title || 'Untitled paper';
+    }
+    main.append(heading);
+
+    const authors = (paper.authors ?? []).map(authorName).filter(Boolean);
+    if (authors.length > 0) {
+      const visibleAuthors = authors.slice(0, 10).join(', ');
+      const suffix = authors.length > 10 ? ` 等 ${authors.length} 人` : '';
+      main.append(createElement('p', 'conference-paper-authors', `${visibleAuthors}${suffix}`));
+    } else if (paper.authorStatus === 'embargoed') {
+      main.append(createElement('p', 'conference-paper-authors', '作者名单暂未公开。'));
+    }
+
+    main.append(
+      createElement(
+        'p',
+        'conference-paper-contribution',
+        paper.coreContribution ||
+          (paper.abstractStatus === 'embargoed' ? '摘要暂未公开。' : '核心贡献待分类。'),
+      ),
+    );
+
+    const tags = createElement('div', 'conference-paper-tags');
+    const recognition = (paper.recognition ?? [])
+      .map((item) => (typeof item === 'string' ? item : item?.label || item?.name))
+      .filter(Boolean);
+    recognition.forEach((label) => tags.append(createElement('span', 'is-recognition', label)));
+    if (paper.contributionType?.label) {
+      tags.append(createElement('span', 'is-contribution', paper.contributionType.label));
+    }
+    const domains = [...(paper.domains ?? [])].sort((left, right) => {
+      if (left.id === paper.primaryDomainId) return -1;
+      if (right.id === paper.primaryDomainId) return 1;
+      return String(left.label).localeCompare(String(right.label), 'zh-CN');
+    });
+    domains.slice(0, 3).forEach((domain) => {
+      tags.append(
+        createElement(
+          'span',
+          domain.id === paper.primaryDomainId ? 'is-primary-domain' : '',
+          domain.label || domain.id,
+        ),
+      );
+    });
+    const confidence = formatConfidence(paper.classificationConfidence);
+    if (confidence) tags.append(createElement('span', 'is-confidence', confidence));
+    if (paper.status && !['active', 'accepted'].includes(paper.status)) {
+      tags.append(
+        createElement('span', 'is-status', STATUS_LABELS[paper.status] || paper.status),
+      );
+    }
+    if (tags.childElementCount > 0) main.append(tags);
+
+    const links = createElement('div', 'conference-paper-links');
+    appendLink(links, '官方来源', paper.sourceUrl);
+    if (paper.paperUrl && paper.paperUrl !== paper.sourceUrl) {
+      appendLink(links, '论文页面', paper.paperUrl);
+    }
+    appendLink(links, '深度笔记', paper.notePath);
+    if (links.childElementCount > 0) main.append(links);
+
+    row.append(main);
+    return row;
+  };
+
+  const initializeCatalog = (root) => {
+    if (!(root instanceof HTMLElement) || root.dataset.ready === 'true') return;
+    const dataUrl = root.dataset.conferenceDataUrl || '';
+    const expectedTotal = Number(root.dataset.conferenceTotal || 0);
+    const dataNode = root.querySelector('[data-conference-papers]');
+    const dataStatus = root.querySelector('[data-conference-data-status]');
+    const resultList = root.querySelector('[data-conference-results]');
+    const count = root.querySelector('[data-conference-result-count]');
+    const empty = root.querySelector('[data-conference-empty]');
+    const emptyTitle = empty?.querySelector('h2');
+    const emptyDescription = empty?.querySelector('p');
+    const pageStatus = root.querySelector('[data-conference-page-status]');
+    const previousButton = root.querySelector('[data-conference-page="previous"]');
+    const nextButton = root.querySelector('[data-conference-page="next"]');
+    const resetButton = root.querySelector('[data-conference-filter-reset]');
+    const form = root.querySelector('[data-conference-filter-form]');
+    const controls = [...root.querySelectorAll('[data-conference-filter]')];
+
+    if (
+      !(dataNode instanceof HTMLScriptElement) ||
+      !(dataStatus instanceof HTMLElement) ||
+      !(resultList instanceof HTMLOListElement) ||
+      !(count instanceof HTMLElement) ||
+      !(empty instanceof HTMLElement) ||
+      !(emptyTitle instanceof HTMLElement) ||
+      !(emptyDescription instanceof HTMLElement) ||
+      !(pageStatus instanceof HTMLElement) ||
+      !(previousButton instanceof HTMLButtonElement) ||
+      !(nextButton instanceof HTMLButtonElement) ||
+      !(resetButton instanceof HTMLButtonElement) ||
+      !(form instanceof HTMLFormElement)
+    ) {
+      return;
+    }
+
+    let papers = [];
+    try {
+      papers = JSON.parse(dataNode.textContent || '[]');
+    } catch {
+      dataStatus.dataset.state = 'error';
+      dataStatus.textContent = '首屏论文数据无法读取。';
+      root.setAttribute('aria-busy', 'false');
+      return;
+    }
+
+    const initialPaperCount = papers.length;
+    let searchIndex = createConferenceSearchIndex(papers);
+    let fullDataReady = !dataUrl;
+    const numberFormat = new Intl.NumberFormat('zh-CN');
+    const sanitizeState = (candidate) => {
+      let changed = false;
+      const sanitized = { ...candidate };
+      controls.forEach((control) => {
+        if (!(control instanceof HTMLSelectElement)) return;
+        const key = control.dataset.conferenceFilter;
+        if (!key || !sanitized[key]) return;
+        if ([...control.options].some((option) => option.value === sanitized[key])) return;
+        sanitized[key] = '';
+        changed = true;
+      });
+      return { state: sanitized, changed };
+    };
+
+    const initialState = sanitizeState(readConferenceFilterState(window.location.search));
+    let state = initialState.state;
+    let inputTimer;
+
+    const syncControls = () => {
+      controls.forEach((control) => {
+        if (!(control instanceof HTMLInputElement || control instanceof HTMLSelectElement)) return;
+        const key = control.dataset.conferenceFilter;
+        if (!key) return;
+        control.value = state[key] ?? '';
+      });
+    };
+
+    const setControlsDisabled = (disabled) => {
+      controls.forEach((control) => {
+        if (control instanceof HTMLInputElement || control instanceof HTMLSelectElement) {
+          control.disabled = disabled;
+        }
+      });
+      resetButton.disabled = disabled;
+    };
+
+    const writeUrl = (mode = 'replace') => {
+      const params = createConferenceFilterParams(state);
+      const query = params.toString();
+      const nextUrl = `${window.location.pathname}${query ? `?${query}` : ''}${window.location.hash}`;
+      window.history[mode === 'push' ? 'pushState' : 'replaceState']({}, '', nextUrl);
+    };
+
+    const render = ({ historyMode = '', focusResults = false, preserveState = false } = {}) => {
+      if (!fullDataReady) return;
+      const filtered = filterConferencePapers(papers, state, searchIndex);
+      const page = paginateConferencePapers(filtered, state.page, CONFERENCE_PAGE_SIZE);
+      if (!preserveState && page.page !== state.page) {
+        state = { ...state, page: page.page };
+        historyMode = historyMode || 'replace';
+      }
+      if (historyMode) writeUrl(historyMode);
+
+      resultList.replaceChildren(...page.items.map(renderPaper));
+      resultList.hidden = page.totalItems === 0;
+      empty.hidden = page.totalItems !== 0;
+      emptyTitle.textContent = papers.length === 0 ? '等待首批会议数据' : '没有匹配结果';
+      emptyDescription.textContent =
+        papers.length === 0
+          ? '覆盖矩阵已经建立，论文会在官方录用页面可用后增量进入索引。'
+          : '调整关键词或清除一项筛选条件后再查看。';
+      count.textContent =
+        page.totalItems === 0
+          ? papers.length === 0
+            ? '当前没有可查询的论文记录'
+            : '没有匹配的论文'
+          : `显示 ${numberFormat.format(page.start)}–${numberFormat.format(page.end)}，共 ${numberFormat.format(page.totalItems)} 篇`;
+      pageStatus.textContent =
+        page.totalItems === 0
+          ? '0 / 0'
+          : `${numberFormat.format(page.page)} / ${numberFormat.format(page.totalPages)}`;
+      previousButton.disabled = page.page <= 1;
+      nextButton.disabled = page.page >= page.totalPages;
+      resetButton.disabled =
+        !state.query &&
+        !state.venue &&
+        !state.area &&
+        !state.presentation &&
+        !state.domain &&
+        !state.contribution &&
+        state.sort === CONFERENCE_FILTER_DEFAULTS.sort;
+
+      if (focusResults) {
+        const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        root.querySelector('.conference-results-head')?.scrollIntoView({
+          behavior: reducedMotion ? 'auto' : 'smooth',
+          block: 'start',
+        });
+        count.focus({ preventScroll: true });
+      }
+    };
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      window.clearTimeout(inputTimer);
+      state = { ...state, page: 1 };
+      render({ historyMode: 'push' });
+    });
+
+    controls.forEach((control) => {
+      if (!(control instanceof HTMLInputElement || control instanceof HTMLSelectElement)) return;
+      const key = control.dataset.conferenceFilter;
+      if (!key) return;
+
+      if (control instanceof HTMLInputElement && control.type === 'search') {
+        control.addEventListener('input', () => {
+          window.clearTimeout(inputTimer);
+          state = { ...state, [key]: control.value, page: 1 };
+          inputTimer = window.setTimeout(() => {
+            render({ historyMode: 'replace' });
+          }, 140);
+        });
+        return;
+      }
+
+      control.addEventListener('change', () => {
+        state = { ...state, [key]: control.value, page: 1 };
+        render({ historyMode: 'push' });
+      });
+    });
+
+    resetButton.addEventListener('click', () => {
+      window.clearTimeout(inputTimer);
+      state = { ...CONFERENCE_FILTER_DEFAULTS };
+      syncControls();
+      render({ historyMode: 'push' });
+      root.querySelector('[data-conference-filter="query"]')?.focus();
+    });
+
+    previousButton.addEventListener('click', () => {
+      state = { ...state, page: Math.max(1, state.page - 1) };
+      render({ historyMode: 'push', focusResults: true });
+    });
+
+    nextButton.addEventListener('click', () => {
+      state = { ...state, page: state.page + 1 };
+      render({ historyMode: 'push', focusResults: true });
+    });
+
+    window.addEventListener('popstate', () => {
+      window.clearTimeout(inputTimer);
+      const nextState = sanitizeState(readConferenceFilterState(window.location.search));
+      state = nextState.state;
+      syncControls();
+      if (nextState.changed) writeUrl('replace');
+      if (fullDataReady) render();
+    });
+
+    root.dataset.ready = 'true';
+    syncControls();
+    if (initialState.changed) writeUrl('replace');
+
+    if (!dataUrl) {
+      setControlsDisabled(false);
+      root.setAttribute('aria-busy', 'false');
+      render();
+      return;
+    }
+
+    if (createConferenceFilterParams(state).toString()) {
+      const requestedState = state;
+      fullDataReady = true;
+      render({ preserveState: true });
+      fullDataReady = false;
+      state = requestedState;
+      syncControls();
+      setControlsDisabled(true);
+    }
+
+    const loadFullData = async () => {
+      const controller = new AbortController();
+      const timeoutId = window.setTimeout(() => controller.abort(), 30_000);
+
+      try {
+        const response = await fetch(dataUrl, {
+          headers: { Accept: 'application/json' },
+          signal: controller.signal,
+        });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const payload = await response.json();
+        const loadedPapers = Array.isArray(payload) ? payload : payload?.papers;
+        if (!Array.isArray(loadedPapers)) throw new Error('Invalid conference paper payload');
+        if (expectedTotal > 0 && loadedPapers.length !== expectedTotal) {
+          throw new Error(
+            `Conference paper payload count mismatch: expected ${expectedTotal}, received ${loadedPapers.length}`,
+          );
+        }
+
+        papers = loadedPapers;
+        searchIndex = createConferenceSearchIndex(papers);
+        fullDataReady = true;
+        setControlsDisabled(false);
+        root.setAttribute('aria-busy', 'false');
+        dataStatus.dataset.state = 'ready';
+        dataStatus.textContent = `完整索引已加载，共 ${numberFormat.format(papers.length)} 篇。`;
+        syncControls();
+        render();
+      } catch {
+        fullDataReady = true;
+        setControlsDisabled(false);
+        root.setAttribute('aria-busy', 'false');
+        dataStatus.dataset.state = 'error';
+        dataStatus.textContent = `完整索引加载失败，已进入首批数据模式：当前仅在 ${numberFormat.format(initialPaperCount)} 篇中筛选。请稍后刷新页面。`;
+        syncControls();
+        render();
+      } finally {
+        window.clearTimeout(timeoutId);
+      }
+    };
+
+    loadFullData();
+  };
+
+  document.querySelectorAll('[data-conference-catalog]').forEach(initializeCatalog);
+</script>
