@@ -9784,58 +9784,6 @@
     ]
   },
   {
-    "slug": "zilin-zhu",
-    "name": "Zilin Zhu",
-    "aliases": ["Zilin Zhu", "zhuzilin"],
-    "affiliations": ["Z.ai", "WeChat AI"],
-    "homepage": "",
-    "github": "https://github.com/zhuzilin",
-    "x": "",
-    "xConfidence": "not-found",
-    "topics": ["reinforcement learning infrastructure", "LLM post-training systems", "distributed training", "slime"],
-    "notes": "slime citation author and major maintainer. His GitHub profile identifies his current RL infrastructure work at Z.ai and prior LLM training-framework work at WeChat AI.",
-    "sources": [
-      {
-        "label": "GitHub",
-        "url": "https://github.com/zhuzilin"
-      },
-      {
-        "label": "slime repository",
-        "url": "https://github.com/THUDM/slime"
-      }
-    ]
-  },
-  {
-    "slug": "chengxing-xie",
-    "name": "Chengxing Xie",
-    "aliases": ["Chengxing Xie", "yitianlian"],
-    "affiliations": ["Tsinghua University", "Zhipu AI", "Xidian University"],
-    "homepage": "https://yitianlian.github.io/",
-    "github": "https://github.com/yitianlian",
-    "x": "",
-    "xConfidence": "not-found",
-    "topics": ["agentic reinforcement learning", "LLM post-training systems", "long-horizon agents", "slime", "SGLang"],
-    "notes": "slime citation author and core contributor. His homepage records a Tsinghua University Ph.D., a Zhipu AI internship, and core contributions to slime, GLM-4.5, and GLM-5.",
-    "sources": [
-      {
-        "label": "Homepage",
-        "url": "https://yitianlian.github.io/"
-      },
-      {
-        "label": "GitHub",
-        "url": "https://github.com/yitianlian"
-      },
-      {
-        "label": "Google Scholar",
-        "url": "https://scholar.google.com/citations?user=emzHNrIAAAAJ"
-      },
-      {
-        "label": "slime repository",
-        "url": "https://github.com/THUDM/slime"
-      }
-    ]
-  },
-  {
     "slug": "xin-lv",
     "name": "Xin Lv",
     "chineseName": "吕鑫",

@@ -304,7 +304,7 @@ local scheduler 贡献了主要增量，全局队列继续带来跨节点收益�
 | [Grape](/papers/2026-07-13-grape-micro-task-agentic-workflow-serving/) | 预声明 task DAG、partial edge | 跨 task prefill | 管理 program 内已经就绪的 LLM 微任务 |
 | [SPORK](/papers/2607.03333-spork-self-speculative-agentic-inference/) | main/probe branch、tool-call confidence | 单 turn speculation | 在一个 program 内提前执行预测的只读工具 |
 | [Parrot](/papers/2405.19888-parrot-semantic-variable-llm-serving/) | Semantic Variable、application DAG | LLM application | 同样把上层语义暴露给 serving runtime |
-| [RollArt](/papers/2512.22560-rollart-disaggregated-agentic-rl-training/) / [slime](/papers/2026-06-17-slime-rl-scaling-framework/) | trajectory、sample、训练归属 | RL rollout pipeline | ThunderAgent 聚焦采样侧 KV 与工具生命周期 |
+| [RollArt](/papers/2512.22560-rollart-disaggregated-agentic-rl-training/) / [slime](https://github.com/THUDM/slime) | trajectory、sample、训练归属 | RL rollout pipeline | ThunderAgent 聚焦采样侧 KV 与工具生命周期 |
 
 三套近期机制可以组合成不同粒度的 runtime：ThunderAgent 管 program 的长期状态、工具等待与跨节点 placement；Grape 管已经展开的 LLM task 之间如何提前 prefill；SPORK 在单个 turn 中 fork probe，让工具执行覆盖剩余 reasoning。组合系统还需要统一 admission budget、KV accounting、priority、commit / reject / cancel 事件和 foreground decode contention。
 

@@ -1,7 +1,7 @@
 # Approximating KL Divergence 技术博客笔记
 
 First-Archived-At: 2026-06-21 10:17
-Updated-At: 2026-06-21 10:17
+Updated-At: 2026-07-16 19:17
 
 ## Source
 
@@ -406,7 +406,7 @@ $$
 
 ## 跨论文关系
 
-- 与 [2026-06-16 verl](/papers/2026-06-16-verl-rl-optimization-algorithms/)：verl 笔记中提到 mismatch 指标应记录 KL、K3、chi2、IS effective sample size 等。本篇提供 K3 的数学来源，说明它为什么适合做 rollout/trainer policy drift 诊断。
+- 与 [verl 官方仓库](https://github.com/verl-project/verl)：verl 的 rollout mismatch 指标包括 KL、K3、chi2、IS effective sample size 等。本篇提供 K3 的数学来源，说明它为什么适合做 rollout/trainer policy drift 诊断。
 - 与 [2503.14476 DAPO](/papers/2503.14476-dapo-long-cot-rl-system/)：DAPO 移除 explicit KL penalty 以扩大 reasoning exploration。本篇提供 KL penalty / KL diagnostic 的底层估计语言，有助于复验移除 KL 后的 policy drift、entropy collapse 和 style drift。
 - 与 [2605.14220 TIM/VeXact](/papers/2605.14220-training-inference-mismatch-llm-rl/) 和 [2025-09-10 batch-invariant inference](/papers/2025-09-10-defeating-nondeterminism-llm-inference/)：这些材料把 rollout/trainer logprob mismatch 提升为系统稳定性问题。本篇的 `k3` 可作为数值差异的稳定估计量，但 mismatch 的根因还包括 kernel、batching、precision 和 engine path。
 - 与 [2403.03185 correlated proxies](/papers/2403.03185-correlated-proxies-reward-hacking/)：ORPO / occupancy regularization 使用 KL 类约束控制 policy 偏移。本篇补充的是 KL 数值估计层；occupancy-level reward hacking 还需要超出 action KL 的状态分布分析。
@@ -417,7 +417,7 @@ $$
 ### Target
 
 - Intended target system: 新增 John Schulman KL approximation 技术博客笔记；更新索引行和 post-training / KL estimator 关系章节；新增 John Schulman 作者档案。
-- Existing related assets: [2026-06-16 verl](/papers/2026-06-16-verl-rl-optimization-algorithms/)、[2503.14476 DAPO](/papers/2503.14476-dapo-long-cot-rl-system/)、[2605.14220 TIM/VeXact](/papers/2605.14220-training-inference-mismatch-llm-rl/)、[2025-09-10 batch-invariant inference](/papers/2025-09-10-defeating-nondeterminism-llm-inference/)。
+- Existing related assets: [2503.14476 DAPO](/papers/2503.14476-dapo-long-cot-rl-system/)、[2605.14220 TIM/VeXact](/papers/2605.14220-training-inference-mismatch-llm-rl/)、[2025-09-10 batch-invariant inference](/papers/2025-09-10-defeating-nondeterminism-llm-inference/)。
 - Proposed form: 新建独立 Markdown 文档并更新索引、作者档案和相关笔记反向链接。
 
 ### Reusable Elements

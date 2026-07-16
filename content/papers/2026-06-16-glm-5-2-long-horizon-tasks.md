@@ -1,7 +1,7 @@
 # GLM-5.2: Built for Long-Horizon Tasks 技术文章笔记
 
 First-Archived-At: 2026-06-18 13:45
-Updated-At: 2026-07-16 12:25
+Updated-At: 2026-07-16 19:17
 
 ## Source
 
@@ -24,7 +24,7 @@ Updated-At: 2026-07-16 12:25
 
 - Z.ai / GLM-5 Team: Z.ai / GLM-5 Team.
 - GLM-5 Team / Zhipu AI / Tsinghua University: [2602.15763](/papers/2602.15763-glm-5-agentic-engineering/) 的作者结构已经在本地建档。GLM-5.2 延续同一开源仓库和同一 GLM-5 series citation。
-- slime / THUDM: 博文明确说 GLM-5.2 的 agentic RL 和 parallel OPD 使用 slime，和 [2026-06-17](/papers/2026-06-17-slime-rl-scaling-framework/) 形成直接工程关系。
+- slime / THUDM: 博文明确说 GLM-5.2 的 agentic RL 和 parallel OPD 使用 slime，形成直接工程关系。
 - IndexShare / IndexCache 相关作者线：博文链接 [IndexCache](/papers/2603.12201-indexcache-cross-layer-index-reuse/)。该论文作者包括 Yushi Bai、Qian Dong、Ting Jiang、Xin Lv、Zhengxiao Du、Aohan Zeng、Jie Tang、Juanzi Li，与 GLM-5 / GLM-5.2 团队存在明显人员重叠。
 
 ## 一句话结论
@@ -187,7 +187,7 @@ GLM-5.2 的 agentic RL 覆盖更大规模、更多领域、更复杂 execution p
 - 适配不同 parallelism、routing、PD disaggregation 和 deployment patterns。
 - KV-cache FP8。
 
-GLM-5.2 使用 slime 做 parallel OPD，将十多个 expert models 融合到最终模型中，整个 OPD 约两天完成。结合 [2026-06-17](/papers/2026-06-17-slime-rl-scaling-framework/) 的记录，这说明 slime 的定位已经从“RL trainer”扩展成 GLM 系列模型训练、rollout、distillation、serving 配置复用的共同基础设施。
+GLM-5.2 使用 slime 做 parallel OPD，将十多个 expert models 融合到最终模型中，整个 OPD 约两天完成。结合 [slime 官方仓库](https://github.com/THUDM/slime) 的公开资料，这说明 slime 的定位已经从“RL trainer”扩展成 GLM 系列模型训练、rollout、distillation、serving 配置复用的共同基础设施。
 
 #### 5.6 RL for long-horizon tasks with compaction
 
@@ -200,7 +200,7 @@ GLM-5.2 因此从 group-wise optimization 转向 critic-based PPO：
 - token-level loss 处理 sub-trace 长度不均衡。
 - 不再要求同一 prompt 下 responses 数量和长度有整齐 group structure。
 
-这个选择和 [2026-06-16](/papers/2026-06-16-verl-rl-optimization-algorithms/) 中讨论的异步/partial rollout、[2026-06-17](/papers/2026-06-17-slime-rl-scaling-framework/) 的 compact trajectory 数据结构、以及 [2511.14617](/papers/2511.14617-seer-online-context-learning-llm-rl/) 的 synchronous group rollout 形成对照：当轨迹保持完整且 group structure 清晰时，group-relative 方法更自然；当轨迹被压缩、切分、异步化后，critic-based PPO 更容易接住复杂数据形态。
+这个选择和 [verl 官方仓库](https://github.com/verl-project/verl) 中讨论的异步/partial rollout、[slime 官方仓库](https://github.com/THUDM/slime) 的 compact trajectory 数据结构、以及 [2511.14617](/papers/2511.14617-seer-online-context-learning-llm-rl/) 的 synchronous group rollout 形成对照：当轨迹保持完整且 group structure 清晰时，group-relative 方法更自然；当轨迹被压缩、切分、异步化后，critic-based PPO 更容易接住复杂数据形态。
 
 #### 5.7 Anti-hack in coding agents
 
@@ -383,7 +383,7 @@ $$
 - 与 [IndexCache](/papers/2603.12201-indexcache-cross-layer-index-reuse/)：IndexCache 给出 Full / Shared 执行结构、training-free loss search 与 training-aware multi-layer distillation；GLM-5.2 将跨层 top-$k$ reuse 固化为 `index_topk_freq=4` 的 FSSS IndexShare，并扩展到 MTP iteration。公开资料没有确认 GLM-5.2 的 exact index loss。
 - 与 [Prefill CP](/papers/2026-07-14-prefill-context-parallelism-inference-scaling/)：SGLang #29421 为 GLM-5.2 的 DSA Prefill CP 增加 cache layer split，在 CP=4、8192 tokens 下把 per-rank KV/indexer cache 从 0.77 GB 降到 0.20 GB，并让 PD decode 从全部 owner ranks 拉取对应 layer ranges。该综合进一步区分 TTFT compute parallelism 与 KV ownership 带来的容量扩展。
 - 与 [MLA TP cache sharding](/papers/2026-07-16-mla-tensor-parallel-cache-sharding/)：该综合承接 GLM-5.2 的 $56.9/T$ 压缩公式，区分请求、token、latent 与 cache-tier 四类 ownership 方案，并将 IndexShare 与 MLA KV footprint 放在两个独立成本轴上。
-- 与 [2026-06-17](/papers/2026-06-17-slime-rl-scaling-framework/)：GLM-5.2 博文是 slime 支撑 GLM-5.2 的直接应用证据，覆盖 compact trajectory、sub-agent workflow、parallel OPD、KV-cache FP8 和 training-serving 配置复用。
+- 与 [slime 官方仓库](https://github.com/THUDM/slime)：GLM-5.2 博文是 slime 支撑 GLM-5.2 的直接应用证据，覆盖 compact trajectory、sub-agent workflow、parallel OPD、KV-cache FP8 和 training-serving 配置复用。
 - 与 [2606.12370](/papers/2606.12370-bebop-mtp-rejection-sampling-rl-training/)：GLM-5.2 的 MTP 明确受 Bebop 启发，引入 rejection sampling 和 end-to-end TV loss，提高 speculative decoding acceptance。
 - 与 [2605.14220](/papers/2605.14220-training-inference-mismatch-llm-rl/) 和 [2025-09-10](/papers/2025-09-10-defeating-nondeterminism-llm-inference/)：MTP 的训练-推理路径一致性、DSA indexer reuse、rollout logprob consistency 都属于 train/inference consistency 的系统问题。
 - 与 [2511.14617](/papers/2511.14617-seer-online-context-learning-llm-rl/)：Seer 优化同步 rollout tail；GLM-5.2/slime 路线处理 compaction、异步/多形态 rollout 和 production serving 复用。两者共同说明 agentic RL 的主要成本在 rollout 和 serving。
@@ -398,7 +398,7 @@ $$
 ### Target
 
 - Intended target system: 维护 GLM-5.2 技术博客笔记，同步索引行和 GLM / slime / long-horizon agentic RL 关系章节。
-- Existing related assets: [2602.15763](/papers/2602.15763-glm-5-agentic-engineering/)；[IndexCache](/papers/2603.12201-indexcache-cross-layer-index-reuse/)；[MLA TP cache sharding](/papers/2026-07-16-mla-tensor-parallel-cache-sharding/)；[2026-06-17](/papers/2026-06-17-slime-rl-scaling-framework/)；[2606.12370](/papers/2606.12370-bebop-mtp-rejection-sampling-rl-training/)；[2026-04-24](/papers/2026-04-24-deepseek-v4-million-token-context-intelligence/)。
+- Existing related assets: [2602.15763](/papers/2602.15763-glm-5-agentic-engineering/)；[IndexCache](/papers/2603.12201-indexcache-cross-layer-index-reuse/)；[MLA TP cache sharding](/papers/2026-07-16-mla-tensor-parallel-cache-sharding/)；[2606.12370](/papers/2606.12370-bebop-mtp-rejection-sampling-rl-training/)；[2026-04-24](/papers/2026-04-24-deepseek-v4-million-token-context-intelligence/)。
 - Proposed form: 维护 `2026-06-16-glm-5-2-long-horizon-tasks.md`；同步索引行和对应论文的关系章节。
 
 ### Reusable Elements

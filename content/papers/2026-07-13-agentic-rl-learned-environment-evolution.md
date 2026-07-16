@@ -1,7 +1,7 @@
 # Agentic RL Learned Environment 演进路线：从可执行 Sandbox 到可校准世界模型
 
 First-Archived-At: 2026-07-13 16:59
-Updated-At: 2026-07-13 16:59
+Updated-At: 2026-07-16 19:17
 
 ## Source
 
@@ -333,7 +333,7 @@ Policy 与 environment model 可以共享 tokenizer、base checkpoint 或架构�
 - 与 [Computer Environments](/papers/2601.16206-computer-environments-agentic-intelligence/)：它提供真实 Docker sandbox 和通用 computer interface，本路线把它放在 real-executable anchor，SWE-World 则沿同一作者线学习代码执行反馈。
 - 与 [Agentic Tool-calling RL](/papers/2606.00135-agentic-tool-calling-rl-training/)：后者分析多轮工具 RL 的评测敏感性、零方差 prompt 和训练成本，本路线进一步定位环境 transition、simulator 和 verifier 如何改变这些测量。
 - 与 [Self-Improving Agents](/papers/2026-06-25-self-improving-agents-era-experience-survey/)：后者把 environment / tool boundary 视为 trace-to-capability 的一个写入层，本路线细化该层从 executable harness 到 learned simulator 的发展。
-- 与 [RollArt](/papers/2512.22560-rollart-disaggregated-agentic-rl-training/)、[slime](/papers/2026-06-17-slime-rl-scaling-framework/)：它们负责 policy rollout、trainer 和资源调度；learned environment 作为新的 rollout backend，需要接入同样的异步生命周期、版本控制和权重隔离。
+- 与 [RollArt](/papers/2512.22560-rollart-disaggregated-agentic-rl-training/)、[slime 官方仓库](https://github.com/THUDM/slime)：它们负责 policy rollout、trainer 和资源调度；learned environment 作为新的 rollout backend，需要接入同样的异步生命周期、版本控制和权重隔离。
 - 与 [SocioHack](/papers/2606.04075-llms-hack-rewards-and-society/)：环境和 reward proxy 一旦存在系统漏洞，RL policy 会持续优化该漏洞；learned simulator 增加了可被策略利用的新代理层。
 
 ## Reference Intake Brief

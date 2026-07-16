@@ -1,7 +1,7 @@
 # 国产前沿模型技术报告时间线总览
 
 First-Archived-At: 2026-06-23 18:40
-Updated-At: 2026-07-16 12:25
+Updated-At: 2026-07-16 19:17
 Pinned: true
 
 ## Source
@@ -21,7 +21,7 @@ Pinned: true
 - Local archive: [2026-06-16 GLM-5.2](/papers/2026-06-16-glm-5-2-long-horizon-tasks/)
 - Local archive: [2606.13392 MiniMax Sparse Attention / MiniMax-M3](/papers/2606.13392-minimax-sparse-attention-m3/)
 - Local archive: [2606.30406 MOPD / Xiaomi MiMo](/papers/2606.30406-mopd-multi-teacher-on-policy-distillation/)
-- Related systems and method nodes: [2211.17192 Speculative Decoding](/papers/2211.17192-fast-inference-transformers-speculative-decoding/), [2512.02556 DeepSeek-V3.2 / DSA](/papers/2512.02556-deepseek-v3-2-open-large-language-models/), [2603.12201 IndexCache](/papers/2603.12201-indexcache-cross-layer-index-reuse/), [MLA TP cache sharding](/papers/2026-07-16-mla-tensor-parallel-cache-sharding/), [2606.12370 Qwen Bebop](/papers/2606.12370-bebop-mtp-rejection-sampling-rl-training/), [2602.06036 DFlash](/papers/2602.06036-dflash-block-diffusion-speculative-decoding/), [DSPARK-2026-06-27 DSpark](/papers/2026-06-27-dspark-confidence-scheduled-speculative-decoding/), [2511.14617 Seer](/papers/2511.14617-seer-online-context-learning-llm-rl/), [2026-06-17 slime](/papers/2026-06-17-slime-rl-scaling-framework/), [2026-06-19 Muon 综合](/papers/2026-06-19-muon-optimizer-keller-jordan-synthesis/)
+- Related systems and method nodes: [2211.17192 Speculative Decoding](/papers/2211.17192-fast-inference-transformers-speculative-decoding/), [2512.02556 DeepSeek-V3.2 / DSA](/papers/2512.02556-deepseek-v3-2-open-large-language-models/), [2603.12201 IndexCache](/papers/2603.12201-indexcache-cross-layer-index-reuse/), [MLA TP cache sharding](/papers/2026-07-16-mla-tensor-parallel-cache-sharding/), [2606.12370 Qwen Bebop](/papers/2606.12370-bebop-mtp-rejection-sampling-rl-training/), [2602.06036 DFlash](/papers/2602.06036-dflash-block-diffusion-speculative-decoding/), [DSPARK-2026-06-27 DSpark](/papers/2026-06-27-dspark-confidence-scheduled-speculative-decoding/), [2511.14617 Seer](/papers/2511.14617-seer-online-context-learning-llm-rl/), [slime 官方仓库](https://github.com/THUDM/slime), [2026-06-19 Muon 综合](/papers/2026-06-19-muon-optimizer-keller-jordan-synthesis/)
 
 ## 作者与关系
 

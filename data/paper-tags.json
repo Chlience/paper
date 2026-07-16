@@ -63,8 +63,6 @@
   "2308.16369-sarathi-chunked-prefill-decode-maximal-batching": ["inference-scheduling", "serving-runtime", "kv-cache"],
   "1910.02054-zero-memory-optimizations-trillion-parameter-models": ["training-memory", "distributed-training"],
   "2026-06-16-glm-5-2-long-horizon-tasks": ["coding-agent", "long-context", "sparse-attention", "speculative-decoding"],
-  "2026-06-17-slime-rl-scaling-framework": ["rl-infrastructure", "agent-workflow", "rollout-optimization", "agent-rl"],
-  "2026-06-16-verl-rl-optimization-algorithms": ["rl-infrastructure", "rollout-optimization", "training-stability", "agent-workflow"],
   "2606.12370-bebop-mtp-rejection-sampling-rl-training": ["rollout-optimization", "speculative-decoding", "multi-token-prediction", "training-stability"],
   "2606.10650-dynamic-linear-attention": ["linear-attention", "long-context", "memory-architecture"],
   "2606.04662-muon-outperforms-adam-curvature": ["optimizer", "training-stability"],
