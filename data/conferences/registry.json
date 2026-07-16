@@ -6,6 +6,10 @@
     "correctedAt": "2026-04-09",
     "sourceUrl": "https://www.ccf.org.cn/Academic_Evaluation/By_category/"
   },
+  "catalogScope": {
+    "excludedVenueIds": ["cvpr", "iccv"],
+    "note": "Computer vision conferences are outside this archive's current focus."
+  },
   "areas": [
     {
       "id": "architecture-systems",

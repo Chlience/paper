@@ -4,8 +4,8 @@
 
 ## 收录边界
 
-- CCF 基线固定为第 7 版目录快照，共 10 个领域、58 个 A 类会议。快照来源和发布日期记录在 `data/conferences/registry.json`。
-- 首批自动采集覆盖 ACL、CVPR、ICML、ASPLOS、USENIX Security。其余会议先保留在 registry 中，通过覆盖状态说明 2026 年数据是否可用。
+- CCF 基线固定为第 7 版目录快照，共 10 个领域、58 个 A 类会议。快照来源和发布日期记录在 `data/conferences/registry.json`。公开目录按当前研究重点排除 CVPR 与 ICCV，因此展示 56 个会议。
+- 公开目录的自动采集覆盖 ACL、ICML、ASPLOS、USENIX Security。CVPR 的既有原始数据和适配器继续保留，用于审计或显式同步；其余会议先保留在 registry 中，通过覆盖状态说明 2026 年数据是否可用。
 - 论文范围限定为主会 Main Full/Regular paper。Findings、short paper、demo、workshop、industry companion track 等条目不进入目录。
 - 数据源优先使用会议官网、官方 proceedings、ACL Anthology、CVF Open Access、OpenReview 或主办方公开的结构化数据。聚合站点可以用于排查数量差异，不能作为落库来源。
 - `presentationTypeNormalized` 将官方展示标签归并为 `oral`、`featured`、`poster`、`other` 和 `unknown`。Spotlight 与 Highlight 的原始称呼保存在 `presentationTypeRaw`，统一归入 `featured`。
@@ -21,11 +21,12 @@
 `data/conferences/registry.json` 是会议主数据：
 
 - `ccfSnapshot`：CCF 目录版本、发布日期、勘误日期和官方链接。
+- `catalogScope`：公开目录排除的会议 ID。当前为 CVPR 与 ICCV；完整 CCF 基线仍保留 58 个会议。
 - `areas`：10 个 CCF 领域及稳定 ID。
 - `venues`：58 个 A 类会议；每条包含稳定 `id`、简称、全称、CCF 领域、出版社、DBLP 链接和 `edition2026` 配置。
 - `edition2026`：2026 届状态、官网、accepted-list 链接和适配器标识。`adapter-pending` 表示 registry 已覆盖，采集适配器仍待接入。
 
-`data/conferences/previous-editions.json` 保存 58 个会议最近实际举办届次的年份、主论文截稿文本、正式会期和官方来源 URL。多轮或滚动投稿保留官方口径；FM 等非年度会议使用 2026 之前最近实际举办的届次。构建与校验会按 venue ID 将日期快照连接到覆盖表，并拒绝缺项、未知会议、无来源和无效日期范围。
+`data/conferences/previous-editions.json` 保存完整 58 个会议最近实际举办届次的年份、主论文截稿文本、正式会期和官方来源 URL。多轮或滚动投稿保留官方口径；FM 等非年度会议使用 2026 之前最近实际举办的届次。构建与校验会按 venue ID 将日期快照连接到 56 个公开目录会议，并拒绝缺项、未知会议、无来源和无效日期范围。
 
 `data/conferences/taxonomy.json` 保存页面筛选使用的领域和核心贡献类型。领域与 CCF 大类分开维护：CCF 大类描述会议归属，taxonomy 描述单篇论文的研究主题。贡献类型包括方法、系统、模型架构、理论、数据集/基准、评测、实证分析、工具、应用、综述等。
 
@@ -59,16 +60,16 @@
 | 可用性 | `authorStatus`, `abstractStatus` | 上游暂缓公开作者或摘要时保存 `embargoed`，对应字段保持为空，避免把占位文本当作论文事实 |
 | 分类与溯源 | `domains`, `primaryDomainId`, `contributionType`, `coreContribution`, `classificationConfidence`, `classifierVersion`, `sourceUrl`, `firstSeenAt`, `lastSeenAt` | 规则分类结果、来源和增量观察时间 |
 
-`src/generated/conference-data.json` 由 `npm run build:conferences` 生成，包含页面需要的扁平论文列表、58 个会议的覆盖状态和预计算 facet。该文件位于 `.gitignore`，部署和本地开发都会重新生成。页面 HTML 只内嵌默认排序的前 30 篇；`/data/conference-papers-2026.json` 在构建时生成瘦身查询索引，浏览器异步加载后启用完整筛选，避免把全量数据写入首屏 HTML。网络请求失败时页面进入“首批数据模式”，仍可筛选已内嵌记录，并明确显示该模式的实际记录数。
+`src/generated/conference-data.json` 由 `npm run build:conferences` 生成，包含页面需要的扁平论文列表、56 个公开目录会议的覆盖状态和预计算 facet。该文件位于 `.gitignore`，部署和本地开发都会重新生成。页面 HTML 只内嵌默认排序的前 30 篇；`/data/conference-papers-2026.json` 在构建时生成瘦身查询索引，浏览器异步加载后启用完整筛选，避免把全量数据写入首屏 HTML。网络请求失败时页面进入“首批数据模式”，仍可筛选已内嵌记录，并明确显示该模式的实际记录数。
 
 覆盖表的状态列只显示同步状态；上一届时间列显示主论文截稿与正式会期，并链接官方日期依据。表格同时显示每场会议已提取核心贡献的论文数。会议 roster 可以完整发布，而摘要仍处于部分公开状态；此时 roster 状态维持“已同步”，核心贡献列用于说明自动分类的可用范围。
 
 ## 适配器
 
-首批来源使用四类适配方式：
+已接入来源使用以下适配方式：
 
 - ACL：以 ACL Anthology 的 `2026.acl-long` 官方卷为录用主清单，并与官方公开日程表合并摘要及两个展示轴。`Underline/Whova Session Name` 提供 Oral/Poster 类型，`Presentation mode` 提供 In-Person/Virtual 方式；Virtual session 没有对应 Oral/Poster 信息时，展示类型保留 `unknown`。标题包含 TeX、上标或少量官方拼写差异时，适配器仅对未匹配条目执行高阈值、唯一候选的 token 相似度回退。`2026.acl-short` 的 short papers 不进入目录。
-- CVPR：以官方 presentation 日程表为录用主清单，用 CVF Open Access 和 CVPR 官方 Miniconf JSON 补充出版状态、论文链接与摘要。oral、highlight、poster 来自日程表，Award Candidate 写入独立 `recognition`；Findings Poster 不进入主论文集。
+- CVPR：适配器与原始数据仅用于历史审计或显式同步，公开目录和默认定时同步均排除该会议。数据以官方 presentation 日程表为录用主清单，用 CVF Open Access 和 CVPR 官方 Miniconf JSON 补充出版状态、论文链接与摘要。
 - ICML：读取 ICML 官方 Miniconf JSON，合并同一标题的 poster/oral 事件，仅保留 `ICML.cc/2026/Conference` Main Conference。独立 Position Paper Track、TMLR、Annals of Statistics 等受邀轨道均排除。
 - ASPLOS：读取官方 program 页面中的 research-paper session，提取标题、作者和日程支持的展示信息。当前页面没有逐篇稳定 ID 和摘要，ID 暂由规范化标题生成；标题更正可能需要在更新 PR 中人工迁移旧记录。
 - USENIX Security：读取官方 accepted-papers / technical-sessions 页面，保留官方论文链接、摘要和日程信息；独立 poster track 不进入主会论文集。HTML 注释与 embargo 占位文本在解析入口移除，未公开作者或摘要通过状态字段表达。
@@ -102,14 +103,14 @@
 
 同步过程按以下顺序执行：
 
-1. 从 registry 选择已配置的 2026 适配器，并抓取官方来源。
+1. 从 registry 选择公开目录范围内已配置的 2026 适配器，并抓取官方来源。使用 `--venue` 显式指定时可以同步保留的范围外原始数据。
 2. 解析原始条目，合并同一论文的多个日程事件，过滤范围外 track。
 3. 规范化标题、作者、track、展示类型、呈现方式和状态，生成稳定论文 ID。
 4. 使用 `taxonomy.json` 对标题、摘要和官方 topic 运行确定性规则分类，并提取一条核心贡献句。分类器使用完整词或短语匹配，并为 ACL、CVPR、ICML、ASPLOS、USENIX Security 加入对应会议主领域先验；充分的跨领域证据仍可覆盖该先验。
 5. 按论文 ID 与已有数据合并。首次发现写入 `firstSeenAt`；论文事实发生变化或从 `source-missing` 恢复时更新 `lastSeenAt`。数据集级 `lastSuccessfulSyncAt` 记录最近一次产生数据变更的成功同步时间；无内容变化的定时检查只保留在 Actions 日志中，从而避免空更新 PR。
 6. 官方源暂时缺少既有论文时，将条目标记为 `source-missing` 并保留记录，便于人工判断页面分批发布、临时故障或撤稿。官方明确撤稿时使用 `withdrawn`。
 7. 根据规范化结果计算 source content hash。内容未变化时保持数据文件稳定，定时任务不会制造空更新 PR。
-8. 校验 58 个 registry 条目、唯一 ID、枚举、Main Full/Regular 边界和来源字段，再生成页面数据并执行完整站点构建。
+8. 校验 58 个 registry 基线条目、56 个公开目录条目、唯一 ID、枚举、Main Full/Regular 边界和来源字段，再生成页面数据并执行完整站点构建。
 
 抓取或校验失败会终止工作流。已有仓库数据继续可用，失败任务不会创建更新 PR。
 
@@ -130,7 +131,7 @@ npm run sync:conferences
 排查解析器时可以复用已下载的官方原始文件，避免重复请求上游。设置 `CONFERENCE_SOURCE_CACHE_DIR` 后，适配器会按维护脚本中的固定文件名读取缓存，缺失文件仍回退到官方 URL：
 
 ```bash
-CONFERENCE_SOURCE_CACHE_DIR=/tmp npm run sync:conferences -- --venue cvpr,icml
+CONFERENCE_SOURCE_CACHE_DIR=/tmp npm run sync:conferences -- --venue acl,icml
 ```
 
 校验 registry、taxonomy、年度数据和筛选逻辑：
@@ -155,7 +156,7 @@ npm run build
 
 ## 定时任务与审核
 
-`.github/workflows/sync-conferences.yml` 每周一 04:17 UTC（台北时间 12:17）运行，也支持 `workflow_dispatch` 手动触发。任务使用 Node.js 22 和 `npm ci`，依次同步、校验、构建，然后通过 `peter-evans/create-pull-request` 更新固定 bot 分支并创建或刷新 PR。
+`.github/workflows/sync-conferences.yml` 每周一 04:17 UTC（台北时间 12:17）运行，也支持 `workflow_dispatch` 手动触发。任务使用 Node.js 22 和 `npm ci`，默认跳过 `catalogScope` 中的 CVPR 与 ICCV，随后依次校验、构建，并通过 `peter-evans/create-pull-request` 更新固定 bot 分支及其 PR。
 
 固定 bot 分支存在未合并 PR 时，下一次任务会先恢复该分支相对基线新增或修改的年度数据，再读取最新官方来源。这样可以让跨周待审 PR 中的 `firstSeenAt` 保持为首次 bot 发现时间，同时继续使用默认分支上的最新适配器与 taxonomy。无内容变化时 action 不创建新 PR；已有 bot PR 与默认分支无差异时会关闭该 PR，并按配置清理分支。
 

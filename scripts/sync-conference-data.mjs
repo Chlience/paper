@@ -1,6 +1,11 @@
 import process from 'node:process';
 import { conferenceAdapters } from './conferences/adapters.mjs';
+import { getCatalogVenues } from './conferences/catalog-scope.mjs';
 import { contentHash, mergePapers, normalizePaper, sortPapersById } from './conferences/normalize.mjs';
+import {
+  validateConferenceRegistry,
+  validateConferenceTaxonomy,
+} from './conferences/validate.mjs';
 import {
   conferenceDatasetFile,
   readConferenceRegistry,
@@ -31,6 +36,18 @@ const parseArguments = (argv) => {
   }
   options.venueIds = [...new Set(options.venueIds.map((value) => value.trim()).filter(Boolean))];
   return options;
+};
+
+const assertValidConfiguration = (registry, taxonomy) => {
+  const errors = [
+    ...validateConferenceRegistry(registry),
+    ...validateConferenceTaxonomy(taxonomy),
+  ];
+  if (errors.length > 0) {
+    throw new Error(
+      errors.map((error) => `[${error.code}] ${error.subject}: ${error.message}`).join('\n'),
+    );
+  }
 };
 
 const readExistingDataset = async (venueId) => {
@@ -180,7 +197,8 @@ const main = async () => {
   if (Number.isNaN(new Date(observedAt).getTime())) throw new Error(`Invalid --observed-at value: ${observedAt}`);
 
   const [registry, taxonomy] = await Promise.all([readConferenceRegistry(), readConferenceTaxonomy()]);
-  const configured = registry.venues.filter((venue) => venue.edition2026?.adapter);
+  assertValidConfiguration(registry, taxonomy);
+  const configured = getCatalogVenues(registry).filter((venue) => venue.edition2026?.adapter);
   const selected = options.venueIds.length
     ? options.venueIds.map((venueId) => {
         const venue = registry.venues.find((candidate) => candidate.id === venueId);

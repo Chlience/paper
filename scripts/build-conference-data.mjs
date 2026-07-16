@@ -1,5 +1,10 @@
 import fs from 'node:fs/promises';
 import {
+  getCatalogDatasets,
+  getCatalogExcludedVenueIds,
+  getCatalogVenues,
+} from './conferences/catalog-scope.mjs';
+import {
   generatedConferenceFile,
   readConferenceDatasets,
   readConferenceRegistry,
@@ -35,14 +40,17 @@ const build = async () => {
 
   const areaById = new Map(registry.areas.map((area) => [area.id, area]));
   const datasetByVenue = new Map(datasets.map((dataset) => [dataset.venueId, dataset]));
-  const papers = datasets
+  const excludedVenueIds = getCatalogExcludedVenueIds(registry);
+  const catalogVenues = getCatalogVenues(registry);
+  const catalogDatasets = getCatalogDatasets(datasets, registry);
+  const papers = catalogDatasets
     .flatMap((dataset) => dataset.papers)
     .filter((paper) => paper.status === 'active')
     .sort(
       (a, b) =>
         a.venueAcronym.localeCompare(b.venueAcronym) || a.title.localeCompare(b.title) || a.id.localeCompare(b.id),
     );
-  const coverage = registry.venues.map((venue) => {
+  const coverage = catalogVenues.map((venue) => {
     const dataset = datasetByVenue.get(venue.id);
     const activePapers = dataset?.papers.filter((paper) => paper.status === 'active') ?? [];
     const activePaperCount = activePapers.length;
@@ -116,7 +124,7 @@ const build = async () => {
     })),
   };
 
-  const generatedAtCandidates = datasets
+  const generatedAtCandidates = catalogDatasets
     .map((dataset) => dataset.source?.lastSuccessfulSyncAt)
     .filter(Boolean)
     .sort();
@@ -125,15 +133,29 @@ const build = async () => {
     generatedAt: generatedAtCandidates.at(-1) ?? new Date().toISOString(),
     year: 2026,
     ccfSnapshot: registry.ccfSnapshot,
+    catalogScope: {
+      venueCount: catalogVenues.length,
+      excludedVenueIds: [...excludedVenueIds],
+    },
     coverage,
     papers,
     facets,
   };
+  const leakedVenueIds = new Set(
+    [
+      ...data.coverage.map((item) => item.venueId),
+      ...data.papers.map((item) => item.venueId),
+      ...data.facets.venues.map((item) => item.id),
+    ].filter((venueId) => excludedVenueIds.has(venueId)),
+  );
+  if (leakedVenueIds.size > 0) {
+    throw new Error(`Excluded venues leaked into generated catalog: ${[...leakedVenueIds].join(', ')}.`);
+  }
 
   await writeJson(generatedConferenceFile, data);
   const size = (await fs.stat(generatedConferenceFile)).size;
   console.log(
-    `Generated ${papers.length} conference papers from ${datasets.length} venue datasets (${Math.round(size / 1024)} KiB).`,
+    `Generated ${papers.length} conference papers from ${catalogDatasets.length} catalog venue datasets (${Math.round(size / 1024)} KiB).`,
   );
 };
 

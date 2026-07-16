@@ -10,6 +10,7 @@ import {
   validateConferenceTaxonomy,
   validatePreviousEditionCalendar,
 } from './conferences/validate.mjs';
+import { getCatalogDatasets, getCatalogVenues } from './conferences/catalog-scope.mjs';
 
 const [registry, taxonomy, previousEditionCalendar, datasets] = await Promise.all([
   readConferenceRegistry(),
@@ -29,5 +30,12 @@ if (errors.length > 0) {
   process.exitCode = 1;
 } else {
   const paperCount = datasets.reduce((sum, dataset) => sum + dataset.papers.length, 0);
-  console.log(`Conference data check passed: ${registry.venues.length} venues, ${datasets.length} datasets, ${paperCount} papers.`);
+  const catalogVenues = getCatalogVenues(registry);
+  const catalogDatasets = getCatalogDatasets(datasets, registry);
+  const catalogPaperCount = catalogDatasets.reduce((sum, dataset) => sum + dataset.papers.length, 0);
+  console.log(
+    `Conference data check passed: ${registry.venues.length} registry venues, ` +
+      `${catalogVenues.length} catalog venues, ${datasets.length} raw datasets, ` +
+      `${catalogPaperCount}/${paperCount} catalog/raw papers.`,
+  );
 }

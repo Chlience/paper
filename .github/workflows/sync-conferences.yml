@@ -46,7 +46,30 @@ jobs:
               git diff --name-only --diff-filter=AM "$base_ref" "$bot_ref" -- 'data/conferences/2026/*.json'
             )
             if (( ${#observed_files[@]} > 0 )); then
-              git restore --source="$bot_ref" -- "${observed_files[@]}"
+              mapfile -t excluded_files < <(
+                node --input-type=module -e '
+                  import registry from "./data/conferences/registry.json" with { type: "json" };
+                  for (const venueId of registry.catalogScope.excludedVenueIds) {
+                    console.log(`data/conferences/2026/${venueId}.json`);
+                  }
+                '
+              )
+              catalog_files=()
+              for observed_file in "${observed_files[@]}"; do
+                excluded=false
+                for excluded_file in "${excluded_files[@]}"; do
+                  if [[ "$observed_file" == "$excluded_file" ]]; then
+                    excluded=true
+                    break
+                  fi
+                done
+                if [[ "$excluded" == false ]]; then
+                  catalog_files+=("$observed_file")
+                fi
+              done
+              if (( ${#catalog_files[@]} > 0 )); then
+                git restore --source="$bot_ref" -- "${catalog_files[@]}"
+              fi
             fi
           fi
 

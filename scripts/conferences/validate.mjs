@@ -75,6 +75,27 @@ export const validateConferenceRegistry = (registry) => {
   if (registry.venues.length !== 58) {
     errors.push(issue('venue-count', 'registry.json', `Expected 58 CCF-A venues, found ${registry.venues.length}.`));
   }
+  const excludedVenueIds = registry.catalogScope?.excludedVenueIds;
+  if (!Array.isArray(excludedVenueIds)) {
+    errors.push(
+      issue(
+        'catalog-scope-shape',
+        'registry.json',
+        'catalogScope.excludedVenueIds must be an array of registry venue IDs.',
+      ),
+    );
+  } else {
+    const seenExcludedVenueIds = new Set();
+    for (const venueId of excludedVenueIds) {
+      if (seenExcludedVenueIds.has(venueId)) {
+        errors.push(issue('duplicate-catalog-exclusion', venueId, 'Catalog exclusions must be unique.'));
+      }
+      if (!venueIds.has(venueId)) {
+        errors.push(issue('unknown-catalog-exclusion', venueId, 'Catalog exclusion is not in registry venues.'));
+      }
+      seenExcludedVenueIds.add(venueId);
+    }
+  }
   return errors;
 };
 

@@ -22,6 +22,7 @@ import {
   validateConferenceRegistry,
   validatePreviousEditionCalendar,
 } from './conferences/validate.mjs';
+import { getCatalogDatasets, getCatalogVenues } from './conferences/catalog-scope.mjs';
 import { getPresentationModeBadge } from '../src/lib/conference-presentation.mjs';
 
 const venue = {
@@ -31,6 +32,31 @@ const venue = {
   ccfAreaId: 'artificial-intelligence',
   edition2026: { status: 'published', adapter: 'fixture' },
 };
+
+test('catalog scope excludes CV venues from publication while retaining raw datasets', () => {
+  const registry = {
+    catalogScope: { excludedVenueIds: ['cvpr', 'iccv'] },
+    venues: [{ id: 'acl' }, { id: 'cvpr' }, { id: 'iccv' }, { id: 'icml' }],
+  };
+  const datasets = [
+    { venueId: 'acl', papers: [] },
+    { venueId: 'cvpr', papers: [{ id: 'raw-cvpr-paper' }] },
+    { venueId: 'icml', papers: [] },
+  ];
+  assert.deepEqual(
+    getCatalogVenues(registry).map((item) => item.id),
+    ['acl', 'icml'],
+  );
+  assert.deepEqual(
+    getCatalogDatasets(datasets, registry).map((item) => item.venueId),
+    ['acl', 'icml'],
+  );
+  assert.equal(datasets[1].papers.length, 1);
+  assert.throws(
+    () => getCatalogVenues({ venues: registry.venues }),
+    /catalogScope\.excludedVenueIds must be an array/,
+  );
+});
 
 test('stablePaperId prefers official IDs and falls back to normalized titles', () => {
   const officialA = stablePaperId({ venueId: 'acl', year: 2026, officialId: '42', title: 'First title' });
@@ -422,6 +448,7 @@ test('dataset validation accepts independent presentation type and mode fields',
 test('registry and dataset validation enforce edition and adapter coverage contracts', () => {
   const registry = {
     schemaVersion: 1,
+    catalogScope: { excludedVenueIds: [] },
     areas: [{ id: 'artificial-intelligence', label: 'AI' }],
     venues: Array.from({ length: 58 }, (_, index) => ({
       id: `venue-${index}`,
@@ -436,6 +463,14 @@ test('registry and dataset validation enforce edition and adapter coverage contr
     })),
   };
   assert.ok(validateConferenceRegistry(registry).some((error) => error.code === 'edition-status'));
+  const invalidScopeCodes = new Set(
+    validateConferenceRegistry({
+      ...registry,
+      catalogScope: { excludedVenueIds: ['venue-1', 'venue-1', 'missing-venue'] },
+    }).map((error) => error.code),
+  );
+  assert.ok(invalidScopeCodes.has('duplicate-catalog-exclusion'));
+  assert.ok(invalidScopeCodes.has('unknown-catalog-exclusion'));
   const calendar = {
     schemaVersion: 1,
     verifiedAt: '2026-07-16',
