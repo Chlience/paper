@@ -1,7 +1,7 @@
 # GLM-5.2: Built for Long-Horizon Tasks 技术文章笔记
 
 First-Archived-At: 2026-06-18 13:45
-Updated-At: 2026-07-16 12:16
+Updated-At: 2026-07-16 12:19
 
 ## Source
 
@@ -340,13 +340,28 @@ $$
 - GLM-5.2 的固定 FSSS 对应 $r\approx 1/4$；decode 中把上式的 $L^2$、$Lk$ 分别替换成 $L$、$k$。IndexShare 降低 indexer dot product 与 top-$k$ 调用次数，各层 KV-cache footprint 和 sparse core attention 继续保留。
 - 组合成立依赖相邻层选中位置高度重叠，以及 anchor indexer 能兼顾后续 Shared layers。GLM-5.2 从 128K mid-training 阶段引入固定 FSSS 以适应该结构；官方材料尚未披露具体 indexer distillation loss。
 
-### 4. 修正后的理解
+### 4. MLA 的 TP sharding bottleneck 与现有解法
+
+- 公开论文与框架文档把 replicated latent cache 明确归纳为 MLA 的 TP sharding bottleneck：单个 latent head 缺少可按 query-head 直接切分的维度，纯 head-TP 会让各 rank 重复加载完整 cache。[TPLA](https://arxiv.org/abs/2508.15881)、[MLRA](https://arxiv.org/abs/2603.02188) 与 [SGLang DP Attention 说明](https://www.lmsys.org/blog/2024-12-04-sglang-v0-4/) 都直接以该问题为出发点。
+
+| 路线 | 机制 | 当前成熟度 | 主要代价 |
+| --- | --- | --- | --- |
+| DP Attention / hybrid DP-TP | 把请求分给 attention DP workers；`DP=TP` 时每个请求的 KV 只驻留一个 attention rank，MoE 继续用 EP/TP | SGLang 已落地；官方文档报告最高 $1.9\times$ decode throughput，GLM-5.2 cookbook 将其列为 balanced / high-throughput 配置 | 需要跨 DP workers 汇合 attention 输出并重分发；小 batch、低延迟场景通常不占优 |
+| Decode/Context Parallel | 沿 token 轴分片 latent KV，各 rank 计算局部 attention，再合并 output 与 log-sum-exp | vLLM 已提供 MLA DCP；SGLang 为 GLM-5.2 验证了 long-prefill CP | 增加 Q/KV 交换与结果归并通信；短上下文可能被通信开销主导 |
+| FP8/FP4 KV 与 sparse MLA kernel | 降低每份 cache 的字节数，并只读取 DSA top-$k$ entries | GLM-5.2 的 SGLang/vLLM recipe 已支持 FP8 KV；FlashMLA 已发布 sparse FP8 kernel | 复制份数保持不变；量化格式、scale 与硬件 kernel 需要配套验证 |
+| P/D disaggregation | Prefill 侧采用适合大矩阵的 TP/CP，Decode 侧采用 DP Attention 或较低 attention TP，并传输 compressed KV | SGLang 已支持 heterogeneous TP KV transfer，GLM-5.2 cookbook 提供 P/D 路径 | 引入 KV transport、路由、buffer 与跨节点网络约束 |
+| Hierarchical/offloaded KV | HBM 保留热块，CPU DRAM 保存冷块；DSA 根据 top-$k$ 按需 swap-in | GLM-5.2 cookbook 已提供 HiCache；HiSparse 对 DSA 报告最高 $5\times$ long-context throughput，公开支持列表仍将其标为实验能力 | cache miss 产生 H2D IO，需要高并发或通信重叠来摊销 |
+| TPLA / GLA / MLRA | 把 latent 或低秩分支设计成可按 TP 切分的结构 | 研究阶段；TPLA 宣称无需重训兼容既有 MLA，GLA/MLRA 属于训练期架构设计 | TPLA 需要分片后 all-reduce 与精度校准；GLA/MLRA 需要新权重和专用 kernel |
+
+- 对 GLM-5.2，当前生产优先级可按 workload 排列：高并发 decode 先用 DP Attention + DeepEP + FP8 KV；单请求超长上下文评估 CP/DCP + FP8 KV；prefill 与 decode 资源形态差异大时采用 P/D disaggregation；1M DSA 的 HBM residency 压力再叠加 HiCache/HiSparse。所有配置都应同时检查 MLA latent cache、DSA index-key cache、MTP cache 与 IndexShare indices，单独优化 MLA core cache 不足以代表总缓存占用。
+
+### 5. 修正后的理解
 
 - GLM-5.2 是 [2602.15763](/papers/2602.15763-glm-5-agentic-engineering/) 的后续 release 节点。它继承 744B-A40B MoE、DSA、MTP 和 slime，并把重点推到 1M coding agent。
 - slime 在 GLM-5.2 里不仅承担 rollout，还承接 parallel OPD、compact trajectory、sub-agent workflow 和 serving 配置复用。
 - reward hacking 在 coding agent 中已经从研究风险变成 release blog 中需要正面处理的 production training issue。
 
-### 5. 后续复验指标
+### 6. 后续复验指标
 
 - 1M context 下的 prefill throughput、decode throughput、KV cache occupancy、cache transfer overhead、CPU scheduling bubbles。
 - MTP acceptance length 在不同任务、context length、draft steps 和 serving engine 下的稳定性。
