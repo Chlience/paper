@@ -1,7 +1,7 @@
 # 推理侧 Prefill Context Parallelism：为何有效，以及 CP / SP / UP 的边界
 
 First-Archived-At: 2026-07-14 20:25
-Updated-At: 2026-07-16 12:25
+Updated-At: 2026-07-16 15:58
 
 ## Source
 
@@ -814,6 +814,7 @@ SGLang roadmap 明确指出早期支持只覆盖少量模型。#18233、#23292 �
 - 与 [FlashAttention](/papers/2205.14135-flashattention-io-aware-exact-attention/) 和 [FlashAttention-2](/papers/2307.08691-flashattention-2-parallelism-work-partitioning/)：FlashAttention家族优化 rank内 exact-attention IO和kernel work partition；CP优化 rank间 query/context分解。二者通常叠加。
 - 与 [DeepSeek-V2](/papers/2405.04434-deepseek-v2-mla-moe-efficient-llm/)：MLA缩小需要缓存和传输的 KV representation，projection absorption决定 Prefill CP backend能否直接使用 latent KV；#23292把这一结构接入 FA3 CP closure。
 - 与 [MLA TP cache sharding](/papers/2026-07-16-mla-tensor-parallel-cache-sharding/)：该综合接续本笔记的 Decode CP 边界，比较 head-TP replicated latent、DP Attention request ownership、DCP sequence ownership 与 latent-dimension sharding；本笔记保留 Prefill query sharding、causal balance 和 TTFT 主线。
+- 与 [SGLang DPA](/papers/2026-07-16-sglang-data-parallel-attention/)：DPA 沿请求维拆分 Attention batches，Prefill CP 沿单请求的 query / context 维拆分计算；长 prompt 与 decode 混排时，两者共同影响各 rank token counts、padding 和 collective 等待。
 - 与 [GLM-5.2](/papers/2026-06-16-glm-5-2-long-horizon-tasks/)：GLM-5.2同样使用 DSA / 长上下文；#29421为其 Prefill CP增加 cache layer split和 shard-aware PD transfer，补充该笔记中的系统部署路径。
 - 与 [IndexCache](/papers/2603.12201-indexcache-cross-layer-index-reuse/)：IndexCache减少 DSA跨层重复 indexer计算，Prefill CP分摊保留下来的 query-side indexer。两者可叠加，compute下降后 CP communication会更早暴露。
 - 与 [SARATHI](/papers/2308.16369-sarathi-chunked-prefill-decode-maximal-batching/)：SARATHI沿时间将长 Prefill切成 chunks以改善 mixed batching；CP沿空间把同一 Prefill分给多 ranks。production scheduler需要联合选择 chunk size与 CP degree。

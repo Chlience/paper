@@ -14,6 +14,7 @@ Updated-At: 2026-07-16
 
 | 简称 | 时间 | 核心信号 |
 | --- | --- | --- |
+| [SGLang DPA](/papers/2026-07-16-sglang-data-parallel-attention/) | 2026年7月 | 在同一 TP worker 集合内按请求划分 Attention 所有权，并通过 DP-local Attention 与全局 TP / EP MoE 之间的布局转换，把 MLA KV 副本数从 $T$ 降到 $T/D$，同时显式承担权重复制、collective 和负载均衡成本。 |
 | [MLA TP](/papers/2026-07-16-mla-tensor-parallel-cache-sharding/) | 2026年7月 | 将 MLA 在纯 head-TP 下的 latent KV 复制写成随 TP degree 衰减的每卡压缩公式，并把 DP Attention、DCP/CP、P/D、量化/分层缓存与 TPLA/GLA/MLRA 统一为缓存所有权和 latent 可分片两类解法。 |
 | [Prefill CP](/papers/2026-07-14-prefill-context-parallelism-inference-scaling/) | 2026年7月 | 将单条长请求的 query rows 沿 context 维分片，并以全局 KV 可见性、因果负载均衡和通信重叠并行化 dense attention 或 DSA indexer，同时明确 KV 所有权与弹性调度决定生产扩展边界。 |
 | [HiLS-Attention](/papers/2607.02980-hils-attention-infinite-context/) | 2026年7月 | 用 hierarchical softmax 分配 chunk mass，再在选中 chunk 内做 token attention，实现可训练的长上下文稀疏注意力。 |

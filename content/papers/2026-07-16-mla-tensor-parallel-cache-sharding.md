@@ -1,7 +1,7 @@
 # MLA 在张量并行下的缓存复制：从压缩收益到可分片 Latent
 
 First-Archived-At: 2026-07-16 12:25
-Updated-At: 2026-07-16 12:25
+Updated-At: 2026-07-16 15:58
 
 ## Source
 
@@ -350,6 +350,7 @@ MLA 的模型级收益来自降低 $d_{\mathrm{stored}}$。Head-TP 可以切分 
 - 与 [DeepSeek-V3](/papers/2412.19437-deepseek-v3-technical-report/)：官方推理实现的 naive / absorb cache shape 提供 replicated latent 的直接代码证据，V3 配置也用于计算 $71.1/T$。
 - 与 [GLM-5.2](/papers/2026-06-16-glm-5-2-long-horizon-tasks/)：GLM-5.2 的 DSA、IndexShare、MTP 与 1M context 使总 cache ownership 更关键；本综合集中承接其 MLA TP 公式和解法分类。
 - 与 [Prefill CP](/papers/2026-07-14-prefill-context-parallelism-inference-scaling/)：Prefill CP 侧重长 prompt 的 query/context compute parallelism 与 TTFT；本综合侧重 Decode 中 replicated latent 的容量、逐步通信和 DCP/DP Attention 选择。
+- 与 [SGLang DPA](/papers/2026-07-16-sglang-data-parallel-attention/)：该文把这里的 request ownership 解法展开到同一 TP worker 集内的 Attention DP rank、DP-local batch、MoE layout conversion、IDLE 同步和 PR / issue 证据；本综合保留 MLA cache 公式与跨方案比较。
 - 与 [DeepSeek-V3.2 / DSA](/papers/2512.02556-deepseek-v3-2-open-large-language-models/) 及 [IndexCache](/papers/2603.12201-indexcache-cross-layer-index-reuse/)：DSA 和 IndexShare 分别减少 core attention 候选与 selector 次数，完整历史 MLA/index-key cache 的设备布局仍由 runtime 管理。
 - 与国产模型演进总结 [2026-06-23](/papers/2026-06-23-chinese-frontier-model-reports-timeline/)：该文把 MLA、DSA、IndexShare、CSA/HCA 放在注意力演进轴上；本综合新增“压缩表示—分布式所有权”这一系统轴。
 
