@@ -57,23 +57,41 @@ export const splitAuthorNames = (value = '') => {
 };
 
 export const collectAuthorReferences = (markdown = '', authorNames = '') => {
-  const authorSections = [getSection(markdown, 'Source'), getSection(markdown, '作者与关系')].join('\n');
+  const sourceSection = getSection(markdown, 'Source');
+  const authorSections = [sourceSection, getSection(markdown, '作者与关系')].join('\n');
   const slugs = new Set(
     [...authorSections.matchAll(/\/authors\/([a-z0-9]+(?:-[a-z0-9]+)*)\//g)].map((match) => match[1]),
   );
+  const sourceAuthors = sourceSection.match(/^-\s+Authors?:\s*(.+)$/mi)?.[1] ?? '';
+  const sourceAuthorLinks = [
+    ...sourceAuthors.matchAll(/\[([^\]]+)\]\(\/authors\/([a-z0-9]+(?:-[a-z0-9]+)*)\/\)/g),
+  ];
+  const authorSlugs = new Set(sourceAuthorLinks.map((match) => match[2]));
+  const authorLinkKeysBySlug = new Map();
+  for (const match of sourceAuthorLinks) {
+    const key = normalizeAuthorKey(match[1]);
+    if (!key) continue;
+    const linkKeys = authorLinkKeysBySlug.get(match[2]) ?? new Set();
+    linkKeys.add(key);
+    authorLinkKeysBySlug.set(match[2], linkKeys);
+  }
   const keys = new Set(splitAuthorNames(authorNames).map(normalizeAuthorKey).filter(Boolean));
-  return { slugs, keys };
+  return { slugs, authorSlugs, authorLinkKeysBySlug, keys };
 };
 
 export const authorProfileIsReferenced = (profile, references) => {
   if (!profile || typeof profile !== 'object' || Array.isArray(profile)) return false;
   const slug = typeof profile.slug === 'string' ? profile.slug.trim() : '';
-  if (slug && references.slugs.has(slug)) return true;
-
   const identities = [profile.name, ...(Array.isArray(profile.aliases) ? profile.aliases : [])]
     .filter((name) => typeof name === 'string')
     .map(normalizeAuthorKey)
     .filter(Boolean);
+  if (profile.matchByName === false) {
+    const linkKeys = references.authorLinkKeysBySlug?.get(slug);
+    return identities.some((key) => linkKeys?.has(key));
+  }
+  if (slug && references.slugs.has(slug)) return true;
+
   return identities.some((key) => references.keys.has(key));
 };
 

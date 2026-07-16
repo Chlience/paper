@@ -10390,5 +10390,420 @@
         "url": "https://radar.inria.fr/report/2025/polaris/index.html"
       }
     ]
+  },
+  {
+    "slug": "eric-nalisnick",
+    "name": "Eric Nalisnick",
+    "aliases": ["Eric Nalisnick", "Eric T. Nalisnick"],
+    "affiliations": [
+      "Johns Hopkins University"
+    ],
+    "homepage": "https://enalisnick.github.io/",
+    "github": "https://github.com/enalisnick",
+    "x": "https://x.com/eric_nalisnick",
+    "xConfidence": "high",
+    "topics": [
+      "probabilistic machine learning",
+      "uncertainty quantification",
+      "safe and robust AI",
+      "human-AI collaboration",
+      "learning to defer"
+    ],
+    "notes": "SelfCompact coauthor and Johns Hopkins CS assistant professor; his public research agenda covers uncertainty quantification, human-AI collaboration, and safe, robust AI. Previously at the University of Amsterdam and University of Cambridge.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://enalisnick.github.io/"
+      },
+      {
+        "label": "JHU faculty profile",
+        "url": "https://www.cs.jhu.edu/faculty/eric-nalisnick/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/enalisnick"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=en&user=cb1ZN7AAAAAJ"
+      },
+      {
+        "label": "DBLP",
+        "url": "https://dblp.org/pid/136/4057"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Eric_Nalisnick1"
+      },
+      {
+        "label": "AMLab historical profile",
+        "url": "https://amlab.science.uva.nl/people/EricNalisnick/"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/eric_nalisnick"
+      }
+    ]
+  },
+  {
+    "slug": "daniel-khashabi",
+    "name": "Daniel Khashabi",
+    "aliases": ["Daniel Khashabi"],
+    "affiliations": [
+      "Johns Hopkins University",
+      "Center for Language and Speech Processing",
+      "Johns Hopkins Data Science and AI Institute"
+    ],
+    "homepage": "https://danielkhashabi.com/",
+    "github": "https://github.com/danyaljj",
+    "x": "https://x.com/DanielKhashabi",
+    "xConfidence": "high",
+    "topics": [
+      "natural language processing",
+      "language model reasoning",
+      "language model agents",
+      "long-context systems",
+      "AI safety and oversight",
+      "AI for scientific discovery"
+    ],
+    "notes": "SelfCompact coauthor and Johns Hopkins CS assistant professor; his research agenda centers on reasoning-driven AI, safety and oversight, efficiency, and scientific discovery. His Intelligence Amplification Lab lists Tianjian Li and Jingyu Zhang as PhD students.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://danielkhashabi.com/"
+      },
+      {
+        "label": "JHU faculty profile",
+        "url": "https://www.cs.jhu.edu/faculty/daniel-khashabi/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/danyaljj"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=en&user=pK2kQvgAAAAJ"
+      },
+      {
+        "label": "DBLP",
+        "url": "https://dblp.org/pid/71/10515"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/DanielKhashabi"
+      }
+    ]
+  },
+  {
+    "slug": "tianjian-li",
+    "name": "Tianjian Li",
+    "aliases": ["Tianjian Li"],
+    "affiliations": [
+      "Johns Hopkins University",
+      "Meta FAIR (research scientist intern, 2025 and 2026)"
+    ],
+    "homepage": "https://tianjianl.github.io/",
+    "github": "https://github.com/tianjianl",
+    "huggingFace": "https://huggingface.co/dogtooth",
+    "x": "https://x.com/tli104",
+    "xConfidence": "high",
+    "topics": [
+      "natural language processing",
+      "language model post-training",
+      "adaptive data methods",
+      "reinforcement learning",
+      "agent context compaction"
+    ],
+    "notes": "SelfCompact first author and official code repository owner; Johns Hopkins CS PhD student advised by Daniel Khashabi, with Meta FAIR research scientist internships in 2025 and 2026.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://tianjianl.github.io/"
+      },
+      {
+        "label": "Homepage social configuration",
+        "url": "https://github.com/tianjianl/tianjianl.github.io/blob/master/_data/settings.yml"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/tianjianl"
+      },
+      {
+        "label": "Hugging Face",
+        "url": "https://huggingface.co/dogtooth"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=q3MvyewAAAAJ&hl=en"
+      },
+      {
+        "label": "JHU CLSP roster",
+        "url": "https://www.clsp.jhu.edu/people/graduate-students/"
+      },
+      {
+        "label": "SelfCompact code",
+        "url": "https://github.com/tianjianl/selfcompact"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/tli104"
+      }
+    ]
+  },
+  {
+    "slug": "jingyu-zhang",
+    "name": "Jingyu Zhang",
+    "chineseName": "张景昱",
+    "aliases": [
+      "Jingyu Zhang",
+      "Jingyu (Jack) Zhang",
+      "Jack Jingyu Zhang"
+    ],
+    "affiliations": [
+      "Johns Hopkins University",
+      "Apple AIML (research internship, 2026)"
+    ],
+    "homepage": "https://jackz.io/",
+    "github": "https://github.com/jackjyzhang",
+    "huggingFace": "https://huggingface.co/jackzhang",
+    "x": "https://x.com/jackjingyuzhang",
+    "xConfidence": "high",
+    "topics": [
+      "foundation model post-training",
+      "AI alignment",
+      "LLM safety",
+      "multi-agent reinforcement learning",
+      "agent evaluation"
+    ],
+    "notes": "SelfCompact coauthor and Johns Hopkins CS PhD candidate advised by Daniel Khashabi and Benjamin Van Durme; current Apple AIML intern whose research focuses on foundation-model post-training, alignment, and robustness.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://jackz.io/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/jackjyzhang"
+      },
+      {
+        "label": "Hugging Face",
+        "url": "https://huggingface.co/jackzhang"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=9EC0sDMAAAAJ&hl=en"
+      },
+      {
+        "label": "JHU CLSP roster",
+        "url": "https://www.clsp.jhu.edu/people/graduate-students/"
+      },
+      {
+        "label": "JHU Amazon fellowship announcement",
+        "url": "https://imagine.jhu.edu/blog/2025/11/13/johns-hopkins-among-nine-schools-selected-for-amazon-ai-fellowship-program/"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/jackjingyuzhang"
+      }
+    ]
+  },
+  {
+    "slug": "william-jurayj",
+    "name": "William Jurayj",
+    "aliases": ["William Jurayj"],
+    "affiliations": [
+      "Johns Hopkins University",
+      "Amazon AGI (applied scientist internship, 2026)"
+    ],
+    "homepage": "https://williamjurayj.com/",
+    "github": "https://github.com/wjurayj",
+    "huggingFace": "https://huggingface.co/wjurayj",
+    "x": "https://x.com/williamjurayj",
+    "xConfidence": "high",
+    "topics": [
+      "LLM uncertainty and calibration",
+      "test-time scaling",
+      "neuro-symbolic reasoning",
+      "deontic reasoning",
+      "LLM agents"
+    ],
+    "notes": "SelfCompact coauthor and Johns Hopkins CLSP PhD student advised by Benjamin Van Durme; current Amazon AGI applied scientist intern working on uncertainty, calibrated reasoning, and faithful rule following.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://williamjurayj.com/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/wjurayj"
+      },
+      {
+        "label": "Hugging Face",
+        "url": "https://huggingface.co/wjurayj"
+      },
+      {
+        "label": "DBLP",
+        "url": "https://dblp.org/pid/321/1018.html"
+      },
+      {
+        "label": "JHU CS profile article",
+        "url": "https://www.cs.jhu.edu/news/teaching-ai-to-admit-uncertainty/"
+      },
+      {
+        "label": "JHU CLSP roster",
+        "url": "https://www.clsp.jhu.edu/people/graduate-students/"
+      },
+      {
+        "label": "Advisor collaborator page",
+        "url": "https://www.cs.jhu.edu/~vandurme/collaborators.html"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/williamjurayj"
+      }
+    ]
+  },
+  {
+    "slug": "chuanyang-jin",
+    "name": "Chuanyang Jin",
+    "aliases": ["Chuanyang Jin"],
+    "affiliations": [
+      "Johns Hopkins University",
+      "Social Cognitive AI Lab",
+      "Meta FAIR"
+    ],
+    "homepage": "https://chuanyangjin.com/",
+    "github": "https://github.com/chuanyangjin",
+    "huggingFace": "https://huggingface.co/Chuanyang-Jin",
+    "x": "https://x.com/chuanyang_jin",
+    "xConfidence": "high",
+    "topics": [
+      "social cognitive AI",
+      "Theory of Mind",
+      "human interaction",
+      "LLM agents",
+      "multimodal reasoning",
+      "reinforcement learning"
+    ],
+    "notes": "SelfCompact coauthor and Johns Hopkins CS PhD student advised by Tianmin Shu; his work connects social cognition, human interaction, multimodal reasoning, and LLM agents. His homepage lists a student-researcher role at Meta FAIR.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://chuanyangjin.com/"
+      },
+      {
+        "label": "JHU PhD student directory",
+        "url": "https://www.cs.jhu.edu/people/phd-students/"
+      },
+      {
+        "label": "Social Cognitive AI Lab profile",
+        "url": "https://scai.cs.jhu.edu/members/chuanyang-jin.html"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/chuanyangjin"
+      },
+      {
+        "label": "Hugging Face",
+        "url": "https://huggingface.co/Chuanyang-Jin"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=en&user=OZeqpLIAAAAJ"
+      },
+      {
+        "label": "DBLP",
+        "url": "https://dblp.org/pid/350/4286"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/chuanyang_jin"
+      }
+    ]
+  },
+  {
+    "slug": "mehrdad-farajtabar",
+    "name": "Mehrdad Farajtabar",
+    "aliases": ["Mehrdad Farajtabar"],
+    "affiliations": [
+      "Apple"
+    ],
+    "homepage": "https://sites.google.com/view/mehrdad",
+    "x": "https://x.com/MFarajtabar",
+    "xConfidence": "high",
+    "topics": [
+      "LLM reasoning",
+      "planning",
+      "agentic LLMs",
+      "inference efficiency",
+      "continual learning",
+      "vision-language models"
+    ],
+    "notes": "SelfCompact coauthor and Apple senior research manager working on LLM reasoning, planning, agentic systems, and efficient inference; previously a senior research scientist at DeepMind and earned his PhD at Georgia Tech.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://sites.google.com/view/mehrdad"
+      },
+      {
+        "label": "Apple Conformal Thinking research page",
+        "url": "https://machinelearning.apple.com/research/conformal-thinking-risk-control"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=en&user=shkKxnQAAAAJ"
+      },
+      {
+        "label": "DBLP",
+        "url": "https://dblp.org/pid/21/9988"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/MFarajtabar"
+      }
+    ]
+  },
+  {
+    "slug": "xi-wang-jhu",
+    "name": "Xi Wang",
+    "aliases": ["Xi Wang"],
+    "matchByName": false,
+    "affiliations": [
+      "Johns Hopkins University"
+    ],
+    "github": "https://github.com/xidulu",
+    "x": "https://x.com/xidulu",
+    "xConfidence": "high",
+    "topics": [
+      "uncertainty quantification",
+      "efficient reasoning",
+      "test-time compute",
+      "early exiting",
+      "long-context modeling",
+      "optimization"
+    ],
+    "notes": "SelfCompact coauthor and Johns Hopkins PhD student in Eric Nalisnick's group; public work focuses on uncertainty quantification, efficient reasoning, test-time compute, early exiting, and long-context modeling.",
+    "sources": [
+      {
+        "label": "GitHub",
+        "url": "https://github.com/xidulu"
+      },
+      {
+        "label": "Eric Nalisnick group profile",
+        "url": "https://enalisnick.github.io/"
+      },
+      {
+        "label": "Apple Conformal Thinking research page",
+        "url": "https://machinelearning.apple.com/research/conformal-thinking-risk-control"
+      },
+      {
+        "label": "Conformal Thinking OpenReview paper",
+        "url": "https://openreview.net/forum?id=noDJPmA3ha"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/xidulu"
+      }
+    ]
   }
 ]

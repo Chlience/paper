@@ -90,24 +90,37 @@ const buildAuthorRecords = (papers, authorProfiles) => {
   }
 
   const authorRecordsByKey = new Map();
+  const authorRecordsBySlug = new Map();
+  const authorIdentityKeysBySlug = new Map();
+  const explicitIdentityKeys = new Set(
+    authorProfiles
+      .filter((profile) => profile.matchByName === false)
+      .flatMap((profile) => [profile.name, ...(profile.aliases ?? [])])
+      .map(normalizeAuthorKey)
+      .filter(Boolean),
+  );
   const addAuthorRecord = (key, profile, mention) => {
     const name = profile?.name ?? mention?.name;
     const chineseName = profile?.chineseName ?? '';
     const slug = profile?.slug ?? slugifyAuthor(name);
     const aliasKeys = [name, ...(profile?.aliases ?? [])].filter(Boolean).map(normalizeAuthorKey);
+    const matchByName = profile?.matchByName !== false;
     const paperSlugs = new Set();
 
-    for (const aliasKey of aliasKeys) {
-      for (const slugValue of authorMentions.get(aliasKey)?.paperSlugs ?? []) {
+    if (matchByName) {
+      for (const aliasKey of aliasKeys) {
+        for (const slugValue of authorMentions.get(aliasKey)?.paperSlugs ?? []) {
+          paperSlugs.add(slugValue);
+        }
+      }
+      for (const slugValue of mention?.paperSlugs ?? []) {
         paperSlugs.add(slugValue);
       }
     }
-    for (const slugValue of mention?.paperSlugs ?? []) {
-      paperSlugs.add(slugValue);
-    }
     if (profile) {
       for (const paper of papers) {
-        if (authorProfileIsReferenced(profile, paper.authorReferences)) paperSlugs.add(paper.slug);
+        const isReferenced = authorProfileIsReferenced(profile, paper.authorReferences);
+        if (isReferenced) paperSlugs.add(paper.slug);
       }
     }
 
@@ -147,10 +160,14 @@ const buildAuthorRecords = (papers, authorProfiles) => {
       papers: paperList,
     };
 
-    for (const aliasKey of aliasKeys) {
-      if (aliasKey) authorRecordsByKey.set(aliasKey, record);
+    authorRecordsBySlug.set(slug, record);
+    authorIdentityKeysBySlug.set(slug, new Set(aliasKeys));
+    if (matchByName) {
+      for (const aliasKey of aliasKeys) {
+        if (aliasKey) authorRecordsByKey.set(aliasKey, record);
+      }
+      if (key) authorRecordsByKey.set(key, record);
     }
-    if (key) authorRecordsByKey.set(key, record);
   };
 
   for (const profile of authorProfiles) {
@@ -159,20 +176,32 @@ const buildAuthorRecords = (papers, authorProfiles) => {
   }
 
   for (const [key, mention] of authorMentions) {
-    if (authorRecordsByKey.has(key) || mention.paperSlugs.size < 2) continue;
+    if (authorRecordsByKey.has(key) || explicitIdentityKeys.has(key) || mention.paperSlugs.size < 2) continue;
     addAuthorRecord(key, null, mention);
   }
 
-  const authors = [...new Map([...authorRecordsByKey.values()].map((author) => [author.slug, author])).values()].map((author) => {
+  const resolveAuthorRecord = (paper, name) => {
+    const key = normalizeAuthorKey(name);
+    for (const [slug, linkKeys] of paper.authorReferences.authorLinkKeysBySlug) {
+      if (linkKeys.has(key) && authorIdentityKeysBySlug.get(slug)?.has(key)) {
+        return authorRecordsBySlug.get(slug);
+      }
+    }
+    return authorRecordsByKey.get(key);
+  };
+
+  const authors = [...authorRecordsBySlug.values()].map((author) => {
     const coauthorsByKey = new Map();
     const ownKeys = [author.name, ...(author.aliases ?? [])].map(normalizeAuthorKey);
+    const paperSlugs = new Set(author.papers.map((paper) => paper.slug));
 
     for (const paper of papers) {
-      if (!paper.parsedAuthors.some((name) => ownKeys.includes(normalizeAuthorKey(name)))) continue;
+      const isPaperAuthor = paper.parsedAuthors.some((name) => ownKeys.includes(normalizeAuthorKey(name)));
+      if (!paperSlugs.has(paper.slug) || !isPaperAuthor) continue;
       for (const coauthorName of paper.parsedAuthors) {
         const key = normalizeAuthorKey(coauthorName);
         if (!key || ownKeys.includes(key)) continue;
-        const linked = authorRecordsByKey.get(key);
+        const linked = resolveAuthorRecord(paper, coauthorName);
         coauthorsByKey.set(key, {
           name: linked?.displayName ?? coauthorName,
           path: linked?.path ?? '',
@@ -193,13 +222,21 @@ const buildAuthorRecords = (papers, authorProfiles) => {
     return statusCompare || b.paperCount - a.paperCount || a.name.localeCompare(b.name);
   });
 
-  return { authors, authorRecordsByKey };
+  return { authors, authorRecordsByKey, authorRecordsBySlug, authorIdentityKeysBySlug };
 };
 
-const attachPaperAuthorEntries = (papers, authorRecordsByKey) => {
+const attachPaperAuthorEntries = (papers, authorRecordsByKey, authorRecordsBySlug, authorIdentityKeysBySlug) => {
   for (const paper of papers) {
     paper.authorEntries = paper.parsedAuthors.map((name) => {
-      const author = authorRecordsByKey.get(normalizeAuthorKey(name));
+      const key = normalizeAuthorKey(name);
+      let author;
+      for (const [slug, linkKeys] of paper.authorReferences.authorLinkKeysBySlug) {
+        if (linkKeys.has(key) && authorIdentityKeysBySlug.get(slug)?.has(key)) {
+          author = authorRecordsBySlug.get(slug);
+          break;
+        }
+      }
+      author ??= authorRecordsByKey.get(key);
       return author
         ? { name: author.displayName, path: author.path, slug: author.slug, profileStatus: author.profileStatus }
         : { name };
@@ -231,8 +268,11 @@ const build = async () => {
   const authorProfiles = await readAuthorProfiles();
 
   const papers = await buildPaperRecords(paperEntries);
-  const { authors, authorRecordsByKey } = buildAuthorRecords(papers, authorProfiles);
-  attachPaperAuthorEntries(papers, authorRecordsByKey);
+  const { authors, authorRecordsByKey, authorRecordsBySlug, authorIdentityKeysBySlug } = buildAuthorRecords(
+    papers,
+    authorProfiles,
+  );
+  attachPaperAuthorEntries(papers, authorRecordsByKey, authorRecordsBySlug, authorIdentityKeysBySlug);
 
   const utilities = await buildUtilityRecords();
   const tagRoutes = controlledTagDefinitions

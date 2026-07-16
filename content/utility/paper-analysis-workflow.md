@@ -1,7 +1,7 @@
 # Paper Analysis Workflow
 
 First-Archived-At: 2026-06-19
-Updated-At: 2026-07-14
+Updated-At: 2026-07-16
 
 ## 目标
 
@@ -629,6 +629,8 @@ facet 只负责组织导航，当前包括 Training、Inference、Architecture�
 - 无法可靠拆分的团队署名、大规模 author list、文档贡献者列表先保留在论文页，不自动拆成作者页。
 - 新增作者档案后通过本地工作流检查 profile 关联、slug、别名和来源；push 后由 GitHub Actions 生成并检查 `/authors/` 与 `/authors/<slug>/` 页面。
 - `data/authors.json` 中每个 profile 至少关联一篇剩余论文。直接作者链接、`Source -> Authors` 姓名和 alias 都可建立关联；完全没有关联的 profile 会触发 `orphan-author-profile` 硬错误。
+- 同名作者无法凭姓名安全聚合时，在已完成身份核验的 profile 中设置 `"matchByName": false`，并只在确认属于该人的论文 `Source -> Authors` 字段中显式链接 `/authors/<slug>/`。链接文字必须匹配 profile 的 `name` 或 alias；该模式不会读取关系段链接或同名文本来扩展论文集合。
+- 当前 schema 只支持同一规范化姓名下的一位 tracked profile；其余同名作者保留论文级姓名且不加作者页链接。若两位同名作者都需要 tracked profile，应先扩展为 slug-first identity，不能复用姓名或 alias 强行聚合。
 
 每次新增或更新论文时按以下顺序执行作者页维护：
 

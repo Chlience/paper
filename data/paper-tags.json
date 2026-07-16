@@ -1,4 +1,5 @@
 {
+  "2606.23525-self-compacting-language-model-agents": ["agent-memory", "agent-workflow", "long-context", "test-time-scaling"],
   "2026-04-30-preferences-multi-agent-online-learning": ["rl-theory", "reward-modeling"],
   "2026-07-16-sglang-data-parallel-attention": ["inference-parallelism", "kv-cache", "moe-systems", "inference-scheduling"],
   "2026-07-16-mla-tensor-parallel-cache-sharding": ["kv-cache", "inference-parallelism", "long-context", "attention-kernel"],

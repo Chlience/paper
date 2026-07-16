@@ -210,6 +210,8 @@ test('author references combine profile links with source author names', () => {
   );
 
   assert.deepEqual([...references.slugs], ['ada-example']);
+  assert.deepEqual([...references.authorSlugs], []);
+  assert.deepEqual([...references.authorLinkKeysBySlug], []);
   assert.deepEqual([...references.keys], ['bob example', 'carol example']);
   assert.equal(authors.authorProfileIsReferenced({ slug: 'ada-example', name: 'Ada Example' }, references), true);
   assert.equal(
@@ -219,6 +221,52 @@ test('author references combine profile links with source author names', () => {
     ),
     true,
   );
+});
+
+test('explicit author matching only accepts links in the Source Authors field', () => {
+  const linkedReferences = authors.collectAuthorReferences(
+    [
+      '## Source',
+      '',
+      '- Authors: [Xi Wang](/authors/xi-wang-jhu/), Ada Example',
+      '',
+      '## 作者与关系',
+      '',
+      '- [External Author](/authors/external-author/): collaborator.',
+    ].join('\n'),
+    'Xi Wang, Ada Example',
+  );
+  const nameOnlyReferences = authors.collectAuthorReferences(
+    '## Source\n\n- Authors: Xi Wang, Ada Example',
+    'Xi Wang, Ada Example',
+  );
+  const relationOnlyReferences = authors.collectAuthorReferences(
+    [
+      '## Source',
+      '',
+      '- Authors: Xi Wang, Ada Example',
+      '',
+      '## 作者与关系',
+      '',
+      '- [Xi Wang](/authors/xi-wang-jhu/): related identity.',
+    ].join('\n'),
+    'Xi Wang, Ada Example',
+  );
+  const mismatchedReferences = authors.collectAuthorReferences(
+    '## Source\n\n- Authors: [Ada Example](/authors/xi-wang-jhu/)',
+    'Ada Example',
+  );
+  const profile = { slug: 'xi-wang-jhu', name: 'Xi Wang', matchByName: false };
+
+  assert.deepEqual([...linkedReferences.authorSlugs], ['xi-wang-jhu']);
+  assert.deepEqual(
+    [...linkedReferences.authorLinkKeysBySlug].map(([slug, keys]) => [slug, [...keys]]),
+    [['xi-wang-jhu', ['xi wang']]],
+  );
+  assert.equal(authors.authorProfileIsReferenced(profile, linkedReferences), true);
+  assert.equal(authors.authorProfileIsReferenced(profile, nameOnlyReferences), false);
+  assert.equal(authors.authorProfileIsReferenced(profile, relationOnlyReferences), false);
+  assert.equal(authors.authorProfileIsReferenced(profile, mismatchedReferences), false);
 });
 
 test('orphan author audit ignores linked and aliased profiles and reports true orphans', () => {
@@ -763,6 +811,12 @@ test('author aliases and sources must remain arrays', () => {
   assert.ok(result.errors.some((issue) => issue.code === 'author-sources-shape'));
 });
 
+test('author matchByName must remain boolean', () => {
+  const profiles = [{ slug: 'ada-example', name: 'Ada Example', matchByName: 'false' }];
+  const result = workflow.validateAuthorProfiles(profiles);
+  assert.ok(result.errors.some((issue) => issue.code === 'author-match-by-name-shape'));
+});
+
 test('author evidence sources must contain absolute URLs', () => {
   const profiles = [
     {
@@ -827,6 +881,30 @@ test('content build associates linked author profiles with their papers', async 
     assert.ok(author, `Missing generated author ${slug}`);
     assert.ok(author.paperCount > 0, `Expected ${slug} to have at least one linked paper`);
   }
+
+  const xiWang = data.authors.find((author) => author.slug === 'xi-wang-jhu');
+  assert.ok(xiWang, 'Missing the explicitly linked JHU Xi Wang profile');
+  assert.deepEqual(xiWang.papers.map((paper) => paper.slug), ['2606.23525-self-compacting-language-model-agents']);
+  assert.ok(!xiWang.coauthors.some((author) => author.name === 'Chao Jin'));
+
+  const selfCompact = data.papers.find(
+    (paper) => paper.slug === '2606.23525-self-compacting-language-model-agents',
+  );
+  const selfCompactXi = selfCompact.authorEntries.find((author) => author.slug === 'xi-wang-jhu');
+  assert.equal(selfCompactXi?.name, 'Xi Wang');
+
+  const megaScale = data.papers.find(
+    (paper) => paper.slug === '2505.11432-megascale-moe-communication-efficient-training',
+  );
+  const megaScaleXi = megaScale.authorEntries.find((author) => author.name === 'Xi Wang');
+  assert.equal(megaScale.authorEntries.length, 19);
+  assert.deepEqual(megaScaleXi, { name: 'Xi Wang' });
+
+  const triDao = data.authors.find((author) => author.slug === 'tri-dao');
+  const triDaoPapers = new Set(triDao.papers.map((paper) => paper.slug));
+  assert.ok(triDaoPapers.has('2205.14135-flashattention-io-aware-exact-attention'));
+  assert.ok(triDaoPapers.has('2307.08691-flashattention-2-parallelism-work-partitioning'));
+  assert.ok(!triDao.coauthors.some((author) => author.name === 'Keller Jordan'));
 });
 
 test('advisory summaries group by code and bound examples', () => {

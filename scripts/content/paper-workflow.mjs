@@ -536,6 +536,9 @@ export const validateAuthorProfiles = (profiles) => {
     if (!name) {
       errors.push(issue('author-name', subject, 'Author name must be a non-empty string.'));
     }
+    if (profile.matchByName !== undefined && typeof profile.matchByName !== 'boolean') {
+      errors.push(issue('author-match-by-name-shape', subject, 'matchByName must be a boolean when present.'));
+    }
 
     if (slug && slugOwners.has(slug)) {
       errors.push(

@@ -1,6 +1,6 @@
 # 作者身份与公开账号核验 SOP
 
-Updated-At: 2026-07-10
+Updated-At: 2026-07-16
 
 ## 目的
 
@@ -255,6 +255,8 @@ Updated-At: 2026-07-10
 - `slug` 使用稳定 ASCII slug，并在整个数组中唯一。
 - `name` 使用主要公开身份中的规范英文姓名。
 - `aliases` 只收录有来源的姓名变体；规范化后不能与其他作者的姓名或别名冲突。
+- `matchByName` 是可选 boolean。默认按 `name` / `aliases` 聚合；同名消歧需要逐篇确认时设为 `false`，并在属于该人的论文 `Source -> Authors` 字段中显式链接 profile，链接文字需匹配 profile 的 `name` 或 alias。`作者与关系` 或 `跨论文关系` 中的链接不会建立该模式下的论文归属。
+- 当前校验仍要求规范化 `name` / `aliases` 在 tracked profiles 之间唯一，因此该模式用于“一位同名作者建档、其他同名作者保留论文级姓名”的情况；同时跟踪两位同名作者前需要先扩展 identity schema。
 - `affiliations` 写稳定公开机构；论文时机构仍以论文笔记为准，历史机构可在文本中加语境限定。
 - `homepage`、`github`、`huggingFace` 和 `x` 使用完整绝对 URL。
 - `topics` 反映持续研究或项目主题，避免只凭单篇论文生成过宽标签。
