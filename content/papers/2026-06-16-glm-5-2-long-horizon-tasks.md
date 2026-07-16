@@ -1,7 +1,7 @@
 # GLM-5.2: Built for Long-Horizon Tasks 技术文章笔记
 
 First-Archived-At: 2026-06-18 13:45
-Updated-At: 2026-07-16 12:02
+Updated-At: 2026-07-16 12:13
 
 ## Source
 
@@ -319,6 +319,8 @@ GLM-5.2 的结论链可以概括为：
 ### 3. DSA 与 IndexShare 的组合数据流
 
 - DSA 即 DeepSeek Sparse Attention。每个 sparse layer 先用低维、少量 head 的 lightning indexer 为当前 query 与全部 causal positions 计算相关性分数，selector 取出 top-$k$ position IDs；随后该层的 sparse core attention 只在这些位置上读取本层 K/V、重新计算 attention score、softmax 和 value aggregation。
+- 更精确的 layer forward 包含两条并行投影路径。Indexer 用独立的轻量 $W_Q^I/W_K^I$ 和 per-layer index-key cache 为历史位置打分；MLA 路径把 hidden states 投影为 compressed latent KV 与独立 RoPE 分支。两条路径在 top-$k$ position IDs 处汇合：positions 决定本层 MLA core attention 读取哪些 KV entries，indexer 本身不直接生成或承载 MLA KV。
+- “按 indices 取得 compressed KV 后执行 MLA”适合作为架构级简写。具体张量形态取决于执行模式：GLM-5 报告把 decode 描述为 576 维 latent KV 路径；通用 Transformers eager / SDPA 参考实现先通过 `kv_b_proj` 展开 head-specific K/V，再用 top-$k$ mask 限制可见集合；高性能 sparse / FlashMLA kernel 可以直接消费 indices 并融合 selected-KV 计算。三条路径保持同一逻辑语义，显存布局与实际 FLOPs 需要按 runtime 分开核算。
 - 标准 DSA 在每层都生成自己的集合 $\mathcal S_t^{(\ell)}$。GLM-5.2 的 FSSS IndexShare 把四层组成一组：Full anchor layer 计算 $\mathcal S_t$，随后三个 Shared layers 继承同一组 position IDs。Shared layers 仍使用各自的 query projection、KV cache、attention parameters 和输出，因此跨层流动的对象只有 top-$k$ positions。
 - 两个机制作用于不同维度：DSA 沿序列轴把 core attention 的候选从 $L$ 压到 $k$；IndexShare 沿层深轴把 selector 执行比例从 $1$ 压到 $r$。令 $C_I$ 和 $C_A$ 分别表示 indexer 与 core attention 处理一个位置对的成本，prefill 可写为
 
