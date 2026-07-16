@@ -1,7 +1,7 @@
 # GLM-5.2: Built for Long-Horizon Tasks 技术文章笔记
 
 First-Archived-At: 2026-06-18 13:45
-Updated-At: 2026-07-16 12:00
+Updated-At: 2026-07-16 12:02
 
 ## Source
 
@@ -316,13 +316,28 @@ GLM-5.2 的结论链可以概括为：
 - GLM-5.2 的 FSSS IndexShare 让每四层只有 anchor layer 扫描全历史，后三层复用它的 top-$k$ 位置，因而把 selector 的常数成本降到原来的约四分之一；复杂度对 $L$ 的阶数保持不变，各层 sparse core attention 与各自 KV 读取仍继续执行。
 - IndexShare 同时覆盖 prefill 与普通自回归 decode，因为共享轴是网络层深度。Prefill 中，anchor layer 为 prompt 内全部 query 生成 top-$k$ position tensor，后三层复用；decode 中，每个新 token 都由 anchor layers 针对当前长度的历史刷新 top-$k$，随后 Shared layers 复用。若 Full 层比例为 $r$，selector 的 prefill 与单步 decode 量级分别由 $O(NL^2)$、$O(NL)$ 变为 $O(rNL^2)$、$O(rNL)$。GLM-5.2 还把共享扩展到 MTP iterations，让第一步 draft 的 indices 服务后续 draft steps；这是普通 backbone 跨层复用之外的额外路径。
 
-### 3. 修正后的理解
+### 3. DSA 与 IndexShare 的组合数据流
+
+- DSA 即 DeepSeek Sparse Attention。每个 sparse layer 先用低维、少量 head 的 lightning indexer 为当前 query 与全部 causal positions 计算相关性分数，selector 取出 top-$k$ position IDs；随后该层的 sparse core attention 只在这些位置上读取本层 K/V、重新计算 attention score、softmax 和 value aggregation。
+- 标准 DSA 在每层都生成自己的集合 $\mathcal S_t^{(\ell)}$。GLM-5.2 的 FSSS IndexShare 把四层组成一组：Full anchor layer 计算 $\mathcal S_t$，随后三个 Shared layers 继承同一组 position IDs。Shared layers 仍使用各自的 query projection、KV cache、attention parameters 和输出，因此跨层流动的对象只有 top-$k$ positions。
+- 两个机制作用于不同维度：DSA 沿序列轴把 core attention 的候选从 $L$ 压到 $k$；IndexShare 沿层深轴把 selector 执行比例从 $1$ 压到 $r$。令 $C_I$ 和 $C_A$ 分别表示 indexer 与 core attention 处理一个位置对的成本，prefill 可写为
+
+$$
+T_{\mathrm{DSA}}\approx N C_I L^2+N C_A Lk,
+\qquad
+T_{\mathrm{IndexShare}}\approx rN C_I L^2+N C_A Lk.
+$$
+
+- GLM-5.2 的固定 FSSS 对应 $r\approx 1/4$；decode 中把上式的 $L^2$、$Lk$ 分别替换成 $L$、$k$。IndexShare 降低 indexer dot product 与 top-$k$ 调用次数，各层 KV-cache footprint 和 sparse core attention 继续保留。
+- 组合成立依赖相邻层选中位置高度重叠，以及 anchor indexer 能兼顾后续 Shared layers。GLM-5.2 从 128K mid-training 阶段引入固定 FSSS 以适应该结构；官方材料尚未披露具体 indexer distillation loss。
+
+### 4. 修正后的理解
 
 - GLM-5.2 是 [2602.15763](/papers/2602.15763-glm-5-agentic-engineering/) 的后续 release 节点。它继承 744B-A40B MoE、DSA、MTP 和 slime，并把重点推到 1M coding agent。
 - slime 在 GLM-5.2 里不仅承担 rollout，还承接 parallel OPD、compact trajectory、sub-agent workflow 和 serving 配置复用。
 - reward hacking 在 coding agent 中已经从研究风险变成 release blog 中需要正面处理的 production training issue。
 
-### 4. 后续复验指标
+### 5. 后续复验指标
 
 - 1M context 下的 prefill throughput、decode throughput、KV cache occupancy、cache transfer overhead、CPU scheduling bubbles。
 - MTP acceptance length 在不同任务、context length、draft steps 和 serving engine 下的稳定性。
