@@ -30,24 +30,13 @@ Next:                                                               [next turn]
 
 Token-level speculative decoding 可以缩短 reasoning 或 Action 的 decode，工具执行仍位于后续串行路径。Parallel tool calling 只覆盖同一时刻已经确定且彼此独立的多个调用；workflow prewarming 又需要预先知道执行图。开放式 agent 的工具身份和参数会在 reasoning 过程中逐步形成。
 
-SPORK 的简化时序更准确地写成：
+SPORK 把工具执行移入 main 尚在 decode 的时间窗口：
 
-```text
-time ─────────────────────────────────────────────────────────────────────→
-Main:  [(re)prefill][t1][remaining CoT decode........][tool-call A*]|main stop|
-Probe:                  └─[forced tool call Â + confidence]─┘
-Tool:                                         └─D2 commit→[async tool(Â)....]
-D3:                                                    [verify Â as draft]
-Final verify:                                                      [Â == A* ?]
-  match:                                                           use/await result
-  mismatch:                                                        [serial tool(A*)]
-```
+![Figure 6: SPORK 方法总览](/images/papers/2607.03333-spork-self-speculative-agentic-inference/fig-1-method-overview.png)
 
-其中 `t1` 是 main 的首个 streaming token，`Â` 是 probe 候选调用，`A*` 是 main 最终生成的 canonical tool call。D1 在 `t1` 后启动 probe；可解析候选通过 D2 confidence gate 后，工具才开始异步执行。低置信度 probe 可以等待更多 CoT 后重新发起，Figure 6 只画出一次代表性 probe。
+Figure 6 上方是串行 baseline，下方是 SPORK：D1 在 main 首 token 后 fork probe，D2 通过后提前执行工具，main 完整生成 tool call 后再决定接受预执行结果或串行执行 main 调用。D3 只负责复用 probe 与 main 一致的 token 前缀，后文再展开。
 
-Figure 6 原图采用“main 上路 + speculative 下分支”的布局。`tool-call A*` 是一段显式 decode，`Final verify` 是 main stop 处的完整调用比对事件。匹配时复用已经完成的结果，或等待尚未完成的剩余工具时间；不匹配时再串行执行 `tool(A*)`。因此实际 overlap 满足 $t_{\mathrm{overlap}}\leq\min(T_{\mathrm{tool}},T_{\mathrm{main,remain}})$，图中“工具恰好在 main stop 前完成”只是示意。
-
-D3 的 token verification 位于 main 的 tool-call decode 内：engine path 在 `<tool_call>` boundary 把 probe body 注入为 draft，由 target model 接受最长一致前缀。main 完整调用生成后再进行 action-level strict verification。论文 Figure 6 把 D3 recovery 与 reject fallback 收在同一区域，Figure 9 和 Algorithm 1 给出了更精确的先后关系。论文中的 `commit` 特指 D2 gate 通过后启动推测工具，最终写入 canonical trajectory 仍要等待 strict match。
+Image Source: [arXiv HTML image / Figure 6](https://arxiv.org/html/2607.03333v1/figures/fig2_method_overview_v2.png).
 
 ## 2. 核心切入点：工具身份常常先于完整参数稳定
 
@@ -71,11 +60,7 @@ Probe 使用当前 target model 的 checkpoint、chat history 和已生成 prefi
 
 ## 3. D1、D2、D3 怎样把早期意图变成可用 overlap
 
-![Figure 6: SPORK 方法总览](/images/papers/2607.03333-spork-self-speculative-agentic-inference/fig-1-method-overview.png)
-
-Figure 6 上方是严格串行的 baseline turn，下方是 SPORK turn：D1 在 main 首 token 后 fork probe，D2 选择工具 dispatch 时机，accepted tool task 与剩余 CoT decode 重叠，reject path 由 D3 回收可验证的 token 前缀。
-
-Image Source: [arXiv HTML image / Figure 6](https://arxiv.org/html/2607.03333v1/figures/fig2_method_overview_v2.png).
+下面沿 Figure 6 的 D1、D2、D3 分别看 probe 开销、dispatch 判断和 reject recovery。
 
 ### 3.1 D1：Prefix-cache fork
 
@@ -223,7 +208,7 @@ Grape 与 SPORK 处理两类不同的可提前工作。Grape 从预声明 DAG �
 
 1. **问题，2 分钟**：画出串行 ReAct 时间线，说明 16%–37% 的 tool wait 如何进入关键路径。
 2. **观察，1 分钟**：展示 tool-name accuracy 与 argument exact 的差异，建立“工具身份先稳定”的 intuition。
-3. **机制，3 分钟**：沿 Figure 6 讲 main、probe、D1/D2、tool task、strict commit 和 D3 fallback。
+3. **机制，3 分钟**：沿 Figure 6 讲 main、probe、D1/D2、tool task、strict verification 和 D3 fallback。
 4. **成本模型，1 分钟**：解释 $\alpha t_{\mathrm{overlap}}$、$T_{\mathrm{oh}}$ 与 remaining decode window。
 5. **证据，3 分钟**：保留 D1 的 1.6 秒到 0.35 秒、GAIA $P_{95}$ 下降 18% 和 tau2 latency sweep。
 6. **边界，2 分钟**：强调只读工具、thinking mode、serving capacity、D3 engine integration 和配置异质性。
