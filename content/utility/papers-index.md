@@ -56,6 +56,7 @@ Updated-At: 2026-07-16
 | [Data-Scarcity RL Survey](/papers/2604.17312-rl-llm-data-scarcity-survey/) | 2026年4月 | 把 LLM 强化学习中的高成本外部监督与有限内部生成经验统一到 data、training、framework 三层九类干预点，并组织为一份覆盖 125 条文献记录的设计地图。 |
 | [DeepSeek-V4](/papers/2026-04-24-deepseek-v4-million-token-context-intelligence/) | 2026年4月 | 以 CSA / HCA、MoE、MTP / OPD 和系统协同实现百万 token 训练、推理与 agent 能力。 |
 | [Caution](/papers/2604.04648-caution-pessimism-best-of-n-reward-hacking/) | 2026年4月 | 用 reward-feature prediction error 估计 OOD uncertainty，在 Best-of-N selection 时执行 pessimistic correction。 |
+| [Preference–Dynamics](/papers/2026-04-30-preferences-multi-agent-online-learning/) | 2026年4月 | 证明 club 对子博弈的 FTRL 稳定性充分且在无 ties 时等价，但对一般纯策略集合张成区域只给出必要约束，并用依赖收益幅度的 leaklessness 恢复吸引性充分条件。 |
 | [IndexCache](/papers/2603.12201-indexcache-cross-layer-index-reuse/) | 2026年3月 | 用 loss-guided layer search 或 multi-layer distillation 划分 Full / Shared 层，跨层复用 top-k positions 并跳过最多 75% 的 DSA indexer 计算。 |
 | [DFlash](/papers/2602.06036-dflash-block-diffusion-speculative-decoding/) | 2026年2月 | 把 block diffusion 用作 speculative drafter，并用 target hidden features 条件化整块候选生成。 |
 | [Qwen3-Coder-Next](/papers/2603.00729-qwen3-coder-next-agentic-coding/) | 2026年2月 | 用 executable environments、repo mid-training、tool-calling RL 与 expert distillation 提升低 active-compute coding agent。 |

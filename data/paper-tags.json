@@ -1,4 +1,5 @@
 {
+  "2026-04-30-preferences-multi-agent-online-learning": ["rl-theory", "reward-modeling"],
   "2026-07-16-sglang-data-parallel-attention": ["inference-parallelism", "kv-cache", "moe-systems", "inference-scheduling"],
   "2026-07-16-mla-tensor-parallel-cache-sharding": ["kv-cache", "inference-parallelism", "long-context", "attention-kernel"],
   "2026-07-14-prefill-context-parallelism-inference-scaling": ["inference-parallelism", "long-context", "attention-kernel", "kv-cache"],
