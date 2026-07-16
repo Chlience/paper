@@ -22,16 +22,13 @@ ThunderAgent 把这条跨轮状态表示为 LLM Program，再按 Reasoning / Act
 
 ```text
 Program A
-|
-+-- Round 1 / LLM-GPU
-|   `-- prefill -> reasoning decode -> tool-call decode
-|
-+-- Acting / Tool-CPU
-|   `-- tool execution / sandbox wait
-|
-`-- Round 2 / LLM-GPU
-    +-- KV retained -> resume decode
-    `-- KV evicted  -> re-prefill -> decode
+
+                Round 1                             Acting                Round 2
+                ----------------------------------  --------------------  ---------------------------
+LLM / GPU       prefill -> reasoning -> tool call   idle                  resume / re-prefill -> decode
+Tool / CPU      idle                                tool execution        idle
+KV retained     build KV                            keep resident         reuse KV -> decode
+KV evicted      build KV                            release HBM           re-prefill -> decode
 ```
 
 工具执行期间，Program A 暂时不使用 GPU 计算，上一轮生成的 KV 仍然有价值。工具一旦返回，下一轮可以从这份 KV 继续 decode；KV 若已被驱逐，完整历史需要重新 prefill。
