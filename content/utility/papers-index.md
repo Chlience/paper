@@ -1,7 +1,7 @@
 # Paper Archive Index
 
 First-Archived-At: 2026-06-21
-Updated-At: 2026-07-15
+Updated-At: 2026-07-16
 
 ## 本地工作流
 
@@ -14,6 +14,7 @@ Updated-At: 2026-07-15
 
 | 简称 | 时间 | 核心信号 |
 | --- | --- | --- |
+| [MLA TP](/papers/2026-07-16-mla-tensor-parallel-cache-sharding/) | 2026年7月 | 将 MLA 在纯 head-TP 下的 latent KV 复制写成随 TP degree 衰减的每卡压缩公式，并把 DP Attention、DCP/CP、P/D、量化/分层缓存与 TPLA/GLA/MLRA 统一为缓存所有权和 latent 可分片两类解法。 |
 | [Prefill CP](/papers/2026-07-14-prefill-context-parallelism-inference-scaling/) | 2026年7月 | 将单条长请求的 query rows 沿 context 维分片，并以全局 KV 可见性、因果负载均衡和通信重叠并行化 dense attention 或 DSA indexer，同时明确 KV 所有权与弹性调度决定生产扩展边界。 |
 | [HiLS-Attention](/papers/2607.02980-hils-attention-infinite-context/) | 2026年7月 | 用 hierarchical softmax 分配 chunk mass，再在选中 chunk 内做 token attention，实现可训练的长上下文稀疏注意力。 |
 | [SPORK](/papers/2607.03333-spork-self-speculative-agentic-inference/) | 2026年7月 | 让目标模型从共享 KV prefix 自预测下一次工具调用，提前执行只读工具，并用 target verification 回收失败 probe 的 token 前缀。 |

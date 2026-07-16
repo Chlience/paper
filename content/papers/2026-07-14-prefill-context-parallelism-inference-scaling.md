@@ -1,7 +1,7 @@
 # 推理侧 Prefill Context Parallelism：为何有效，以及 CP / SP / UP 的边界
 
 First-Archived-At: 2026-07-14 20:25
-Updated-At: 2026-07-14 20:34
+Updated-At: 2026-07-16 12:25
 
 ## Source
 
@@ -15,6 +15,7 @@ Updated-At: 2026-07-14 20:34
 - Parallelism background: [DeepSeek-V3.2](https://arxiv.org/abs/2512.02556v1)、[Context Parallelism for Scalable Million-Token Inference](https://arxiv.org/abs/2411.01783)、[Ring Attention](https://arxiv.org/abs/2310.01889)、[Striped Attention](https://arxiv.org/abs/2311.09431)、[DeepSpeed Ulysses](https://arxiv.org/abs/2309.14509)、[Megatron sequence parallelism](https://arxiv.org/abs/2205.05198)、[LoongServe](https://arxiv.org/abs/2404.09526)
 - Inference SP implementation references: [SGLang TP-SP WIP #12820](https://github.com/sgl-project/sglang/pull/12820)、[vLLM sequence-parallel compiler pass](https://docs.vllm.ai/en/latest/design/fusions/#sequence-parallelism-enable-sp)
 - Decode boundary reference: [SGLang DeepSeek-V3.2 DCP #18167](https://github.com/sgl-project/sglang/pull/18167)
+- Decode cache ownership synthesis: [MLA TP cache sharding](/papers/2026-07-16-mla-tensor-parallel-cache-sharding/)
 - Published / updated: 本综合 2026-07-14；所读 SGLang PR / roadmap 覆盖 2025-10 至 2026-07，其中 #29421 于 2026-07-09 合入
 - Current version read: SGLang `main` 公开 PR、issue 与 roadmap 截至 2026-07-14；DeepSeek-V3.2 arXiv v1；其余论文读取 arXiv 当前公开版本；vLLM developer-preview 文档截至访问日
 - Version / revision read: PR 状态以 2026-07-14 GitHub 页面为准；开放 PR 和 roadmap 只用于说明实现方向，不视为稳定 release 契约
@@ -514,6 +515,8 @@ Prefill 有 $L$ 个 query rows，可以分摊大量 compute。Decode 每一步�
 
 Decode 每个 token 都要执行 collective，且自回归 step 之间串行。通信更容易进入 token latency。SGLang #18167 的开放 DeepSeek-V3.2 DCP PR 报告 TP8+DCP8 理论上可将 KV capacity 扩大 8×，同时在其 4K/1.5K、H20×8 测试中出现 8%-13% 性能下降，主要优化项仍是通信。
 
+[MLA TP cache sharding](/papers/2026-07-16-mla-tensor-parallel-cache-sharding/) 进一步把 Decode operating region 写成缓存账本：DP Attention 沿请求减少副本，DCP 沿 token 分片，TPLA 沿 latent feature 分片，量化与分层缓存分别改变字节数和 HBM 驻留比例。这里继续聚焦 Prefill 的 query-row compute parallelism 与 TTFT。
+
 所以 Prefill CP 成立的高计算强度条件不会自动迁移到 Decode。部署时至少分别选择：
 
 $$
@@ -765,6 +768,7 @@ SGLang roadmap 明确指出早期支持只覆盖少量模型。#18233、#23292 �
 - SGLang DSA Prefill CP 的当前直观模型是“Q 按 token 分片，K/KV 全局可见，hidden 在层间继续分片”。这个模型足以解释计算收益，也直接暴露 KV复制边界。
 - SP、UP 和 CP 的名称容易形成同级错觉。更可靠的层级是：SP 管 TP activation；UP / Ring / all-gather是 global attention dataflow；CP描述 context scale-out目标。
 - Prefill CP 的核心优化对象随模型变化：dense MHA 主要是 $L^2$ attention；DSA 主要是小维度 $L^2$ indexer + $Lk$ selected attention；MLA 还要处理 projection absorption和 latent KV backend。
+- Decode 侧的 MLA latent replication、DP Attention、DCP 与训练期可分片表示已经拆到独立综合；Prefill CP 保留长 prompt 计算、cache materialization 与跨阶段 transfer 的边界。
 
 ### 2. 修正后的理解
 
@@ -809,6 +813,7 @@ SGLang roadmap 明确指出早期支持只覆盖少量模型。#18233、#23292 �
 - 与 [DeepSpeed Ulysses](/papers/2309.14509-deepspeed-ulysses-long-sequence-training/)：Ulysses通过两次 all-to-all在 sequence-sharded和 head-sharded布局间转换，提供 UP这一 attention dataflow；它与 query-sharded / Ring CP共享 context scale-out目标。
 - 与 [FlashAttention](/papers/2205.14135-flashattention-io-aware-exact-attention/) 和 [FlashAttention-2](/papers/2307.08691-flashattention-2-parallelism-work-partitioning/)：FlashAttention家族优化 rank内 exact-attention IO和kernel work partition；CP优化 rank间 query/context分解。二者通常叠加。
 - 与 [DeepSeek-V2](/papers/2405.04434-deepseek-v2-mla-moe-efficient-llm/)：MLA缩小需要缓存和传输的 KV representation，projection absorption决定 Prefill CP backend能否直接使用 latent KV；#23292把这一结构接入 FA3 CP closure。
+- 与 [MLA TP cache sharding](/papers/2026-07-16-mla-tensor-parallel-cache-sharding/)：该综合接续本笔记的 Decode CP 边界，比较 head-TP replicated latent、DP Attention request ownership、DCP sequence ownership 与 latent-dimension sharding；本笔记保留 Prefill query sharding、causal balance 和 TTFT 主线。
 - 与 [GLM-5.2](/papers/2026-06-16-glm-5-2-long-horizon-tasks/)：GLM-5.2同样使用 DSA / 长上下文；#29421为其 Prefill CP增加 cache layer split和 shard-aware PD transfer，补充该笔记中的系统部署路径。
 - 与 [IndexCache](/papers/2603.12201-indexcache-cross-layer-index-reuse/)：IndexCache减少 DSA跨层重复 indexer计算，Prefill CP分摊保留下来的 query-side indexer。两者可叠加，compute下降后 CP communication会更早暴露。
 - 与 [SARATHI](/papers/2308.16369-sarathi-chunked-prefill-decode-maximal-batching/)：SARATHI沿时间将长 Prefill切成 chunks以改善 mixed batching；CP沿空间把同一 Prefill分给多 ranks。production scheduler需要联合选择 chunk size与 CP degree。
@@ -819,7 +824,7 @@ SGLang roadmap 明确指出早期支持只覆盖少量模型。#18233、#23292 �
 ### Target
 
 - Intended target system: 新增推理侧 Prefill Context Parallelism综合文档，回答效率机制、CP / SP / UP定义和生产扩展边界。
-- Existing related assets: DeepSeek-V3.2、Ring Attention、DeepSpeed Ulysses、DeepSeek-V2、GLM-5.2、IndexCache、SARATHI和 Batch-Invariant Inference笔记；`content/utility/papers-index.md`。
+- Existing related assets: DeepSeek-V3.2、Ring Attention、DeepSpeed Ulysses、DeepSeek-V2、GLM-5.2、[MLA TP cache sharding](/papers/2026-07-16-mla-tensor-parallel-cache-sharding/)、IndexCache、SARATHI和 Batch-Invariant Inference笔记；`content/utility/papers-index.md`。
 - Proposed form: 新建 composite Markdown，并在相关独立笔记中加入反向关系。
 
 ### Reusable Elements
