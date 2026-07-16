@@ -15,7 +15,12 @@ interface CoverageRow {
   coreContributionCount: number;
   checkedAt: string;
   sourceUrl: string;
-  note: string;
+  previousEdition: {
+    year: number;
+    submissionDeadline: string;
+    conferenceDates: string;
+    sourceUrls: string[];
+  } | null;
 }
 
 const papers = Array.isArray(data.papers) ? data.papers : [];
@@ -98,6 +103,14 @@ const coverageRows: CoverageRow[] = rawCoverageRows.map((item) => {
       coreContributionCountByVenue.get(venueId) ??
       0,
   );
+  const rawPreviousEdition =
+    item.previousEdition && typeof item.previousEdition === 'object'
+      ? (item.previousEdition as Record<string, unknown>)
+      : null;
+  const previousEditionYear = Number(rawPreviousEdition?.year);
+  const previousEditionSourceUrls = Array.isArray(rawPreviousEdition?.sourceUrls)
+    ? rawPreviousEdition.sourceUrls.map(String).filter(Boolean)
+    : [];
 
   return {
     venueId,
@@ -116,7 +129,18 @@ const coverageRows: CoverageRow[] = rawCoverageRows.map((item) => {
     sourceUrl: String(
       item.sourceUrl ?? item.acceptedPapersUrl ?? item.officialUrl ?? item.url ?? '',
     ),
-    note: String(item.note ?? item.message ?? item.reason ?? ''),
+    previousEdition:
+      rawPreviousEdition &&
+      Number.isInteger(previousEditionYear) &&
+      String(rawPreviousEdition.submissionDeadline ?? '').trim() &&
+      String(rawPreviousEdition.conferenceDates ?? '').trim()
+        ? {
+            year: previousEditionYear,
+            submissionDeadline: String(rawPreviousEdition.submissionDeadline),
+            conferenceDates: String(rawPreviousEdition.conferenceDates),
+            sourceUrls: previousEditionSourceUrls,
+          }
+        : null,
   };
 });
 
@@ -137,7 +161,7 @@ if (coverageRows.length === 0) {
       coreContributionCount: coreContributionCountByVenue.get(venueId) ?? 0,
       checkedAt: '',
       sourceUrl: paper.sourceUrl || '',
-      note: '',
+      previousEdition: null,
     });
   });
 }
@@ -243,14 +267,20 @@ const ccfSnapshot = snapshotDate ? `${snapshotLabel} · ${snapshotDate}` : snaps
       </summary>
       <div class="conference-coverage-body">
         <p>
-          “待接入”表示采集适配器仍待实现；“待公布”和“需检查”记录上游状态。“核心贡献”显示已有摘要支持自动提炼的论文数。数量为零时仍保留会议记录，方便识别数据覆盖边界。
+          状态列只显示当前同步状态。“上一届时间”记录最近实际举办届次的主论文截止时间与正式会期，多轮投稿保留轮次；日期依据来自会议或学会官方页面。“核心贡献”显示已有摘要支持自动提炼的论文数。
         </p>
-        <div class="conference-coverage-table-wrap">
+        <div
+          class="conference-coverage-table-wrap"
+          role="region"
+          aria-label="会议覆盖状态表，可横向滚动"
+          tabindex="0"
+        >
           <table class="conference-coverage-table">
             <thead>
               <tr>
                 <th scope="col">会议</th>
                 <th scope="col">状态</th>
+                <th scope="col">上一届截稿 / 会期</th>
                 <th scope="col">论文</th>
                 <th scope="col">核心贡献</th>
                 <th scope="col">数据更新</th>
@@ -268,7 +298,39 @@ const ccfSnapshot = snapshotDate ? `${snapshotLabel} · ${snapshotDate}` : snaps
                     <span class:list={['conference-coverage-status', `is-${row.statusTone}`]}>
                       {row.statusLabel}
                     </span>
-                    {row.note && <small>{row.note}</small>}
+                  </td>
+                  <td class="conference-previous-edition">
+                    {row.previousEdition ? (
+                      <>
+                        <span class="conference-previous-edition-year mono">
+                          {row.previousEdition.year} 届
+                        </span>
+                        <dl>
+                          <div>
+                            <dt>截稿</dt>
+                            <dd>{row.previousEdition.submissionDeadline}</dd>
+                          </div>
+                          <div>
+                            <dt>会期</dt>
+                            <dd>{row.previousEdition.conferenceDates}</dd>
+                          </div>
+                        </dl>
+                        <div class="conference-previous-edition-sources">
+                          {row.previousEdition.sourceUrls.map((url, index, urls) =>
+                            safeExternalUrl(url) ? (
+                              <a
+                                href={safeExternalUrl(url)}
+                                aria-label={`${row.acronym} 上一届日期官方依据 ${index + 1}`}
+                              >
+                                {urls.length === 1 ? '日期依据' : `依据 ${index + 1}`}
+                              </a>
+                            ) : null,
+                          )}
+                        </div>
+                      </>
+                    ) : (
+                      <span>待补充</span>
+                    )}
                   </td>
                   <td class="mono">{row.paperCount.toLocaleString('zh-CN')}</td>
                   <td class="mono">

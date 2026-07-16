@@ -4,12 +4,14 @@ import {
   readConferenceDatasets,
   readConferenceRegistry,
   readConferenceTaxonomy,
+  readPreviousEditionCalendar,
   writeJson,
 } from './conferences/paths.mjs';
 import {
   validateConferenceDatasets,
   validateConferenceRegistry,
   validateConferenceTaxonomy,
+  validatePreviousEditionCalendar,
 } from './conferences/validate.mjs';
 
 const failOnErrors = (errors) => {
@@ -18,14 +20,16 @@ const failOnErrors = (errors) => {
 };
 
 const build = async () => {
-  const [registry, taxonomy, datasets] = await Promise.all([
+  const [registry, taxonomy, previousEditionCalendar, datasets] = await Promise.all([
     readConferenceRegistry(),
     readConferenceTaxonomy(),
+    readPreviousEditionCalendar(),
     readConferenceDatasets(),
   ]);
   failOnErrors([
     ...validateConferenceRegistry(registry),
     ...validateConferenceTaxonomy(taxonomy),
+    ...validatePreviousEditionCalendar(previousEditionCalendar, registry),
     ...validateConferenceDatasets(datasets, registry, taxonomy),
   ]);
 
@@ -59,6 +63,7 @@ const build = async () => {
       sourceUrl: dataset?.source?.url || venue.edition2026.acceptedListUrl || venue.edition2026.homepage || '',
       lastSuccessfulSyncAt: dataset?.source?.lastSuccessfulSyncAt ?? '',
       note: dataset?.coverageNote ?? '',
+      previousEdition: previousEditionCalendar.venues[venue.id],
     };
   });
 

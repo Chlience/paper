@@ -20,6 +20,7 @@ import {
 import {
   validateConferenceDatasets,
   validateConferenceRegistry,
+  validatePreviousEditionCalendar,
 } from './conferences/validate.mjs';
 import { getPresentationModeBadge } from '../src/lib/conference-presentation.mjs';
 
@@ -435,6 +436,52 @@ test('registry and dataset validation enforce edition and adapter coverage contr
     })),
   };
   assert.ok(validateConferenceRegistry(registry).some((error) => error.code === 'edition-status'));
+  const calendar = {
+    schemaVersion: 1,
+    verifiedAt: '2026-07-16',
+    venues: Object.fromEntries(
+      registry.venues.map((item) => [
+        item.id,
+        {
+          year: 2025,
+          submissionDeadline: '2024-09-01 AoE',
+          conferenceDates: '2025-05-01–2025-05-05',
+          sourceUrls: ['https://example.com/2025'],
+          confidence: 'high',
+        },
+      ]),
+    ),
+  };
+  assert.deepEqual(validatePreviousEditionCalendar(calendar, registry), []);
+  calendar.venues['venue-0'].conferenceDates =
+    'Site A 2025-05-01–2025-05-05 / Site B 2025-05-03–2025-05-07';
+  assert.deepEqual(validatePreviousEditionCalendar(calendar, registry), []);
+  calendar.verifiedAt = '2026-99-99';
+  calendar.venues['venue-0'].submissionDeadline = '2024-02-30 AoE';
+  calendar.venues['venue-0'].conferenceDates = '2025-02-31–2025-03-05';
+  const invalidDateCodes = new Set(
+    validatePreviousEditionCalendar(calendar, registry).map((error) => error.code),
+  );
+  assert.ok(invalidDateCodes.has('previous-edition-verified-at'));
+  assert.ok(invalidDateCodes.has('previous-edition-shape'));
+  calendar.verifiedAt = '2026-07-16';
+  calendar.venues['venue-0'].submissionDeadline = '2024-09-01 AoE';
+  calendar.venues['venue-0'].conferenceDates = '2025-05-01–2025-05-05';
+  calendar.venues['venue-1'] = {
+    year: 2026,
+    submissionDeadline: '',
+    conferenceDates: 'unknown',
+    sourceUrls: [],
+    confidence: 'invalid',
+  };
+  delete calendar.venues['venue-2'];
+  const calendarCodes = new Set(
+    validatePreviousEditionCalendar(calendar, registry).map((error) => error.code),
+  );
+  assert.ok(calendarCodes.has('previous-edition-shape'));
+  assert.ok(calendarCodes.has('previous-edition-source'));
+  assert.ok(calendarCodes.has('previous-edition-missing-venue'));
+  assert.ok(calendarCodes.has('previous-edition-confidence'));
 
   const configuredRegistry = {
     venues: [venue],

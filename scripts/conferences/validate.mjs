@@ -24,6 +24,12 @@ const isHttpUrl = (value) => {
 const isValidTimestamp = (value) =>
   typeof value === 'string' && value.trim() !== '' && Number.isFinite(Date.parse(value));
 
+const isValidIsoDate = (value) => {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value ?? '')) return false;
+  const timestamp = Date.parse(`${value}T00:00:00Z`);
+  return Number.isFinite(timestamp) && new Date(timestamp).toISOString().slice(0, 10) === value;
+};
+
 export const validateConferenceRegistry = (registry) => {
   const errors = [];
   if (registry?.schemaVersion !== 1 || !Array.isArray(registry?.areas) || !Array.isArray(registry?.venues)) {
@@ -68,6 +74,90 @@ export const validateConferenceRegistry = (registry) => {
   }
   if (registry.venues.length !== 58) {
     errors.push(issue('venue-count', 'registry.json', `Expected 58 CCF-A venues, found ${registry.venues.length}.`));
+  }
+  return errors;
+};
+
+export const validatePreviousEditionCalendar = (calendar, registry) => {
+  if (calendar?.schemaVersion !== 1 || !calendar?.venues || typeof calendar.venues !== 'object') {
+    return [
+      issue(
+        'previous-edition-calendar-shape',
+        'previous-editions.json',
+        'Expected schemaVersion 1 with a venues object.',
+      ),
+    ];
+  }
+
+  const errors = [];
+  if (!isValidIsoDate(calendar.verifiedAt)) {
+    errors.push(
+      issue('previous-edition-verified-at', 'previous-editions.json', 'verifiedAt must use YYYY-MM-DD.'),
+    );
+  }
+  const registryVenueIds = new Set(registry.venues.map((venue) => venue.id));
+  const calendarVenueIds = Object.keys(calendar.venues);
+  for (const venueId of calendarVenueIds) {
+    const previousEdition = calendar.venues[venueId];
+    if (!registryVenueIds.has(venueId)) {
+      errors.push(issue('previous-edition-unknown-venue', venueId, 'Venue is not in registry.json.'));
+    }
+    const conferenceRanges = [
+      ...String(previousEdition?.conferenceDates ?? '').matchAll(
+        /(\d{4}-\d{2}-\d{2})–(\d{4}-\d{2}-\d{2})/g,
+      ),
+    ];
+    const submissionDeadline = String(previousEdition?.submissionDeadline ?? '');
+    const submissionDates = submissionDeadline.match(/\d{4}-\d{2}-\d{2}/g) ?? [];
+    const submissionDeadlineValid =
+      (submissionDates.length > 0 || /每(?:年|月)/.test(submissionDeadline)) &&
+      submissionDates.every(isValidIsoDate);
+    const conferenceRangesValid =
+      conferenceRanges.length > 0 &&
+      conferenceRanges.every((range) => {
+        const start = isValidIsoDate(range[1]) ? Date.parse(`${range[1]}T00:00:00Z`) : Number.NaN;
+        const end = isValidIsoDate(range[2]) ? Date.parse(`${range[2]}T00:00:00Z`) : Number.NaN;
+        return (
+          Number.isFinite(start) &&
+          Number.isFinite(end) &&
+          start <= end &&
+          new Date(start).getUTCFullYear() === previousEdition?.year
+        );
+      });
+    if (
+      !Number.isInteger(previousEdition?.year) ||
+      previousEdition.year < 2000 ||
+      previousEdition.year > 2025 ||
+      !submissionDeadlineValid ||
+      !conferenceRangesValid
+    ) {
+      errors.push(
+        issue(
+          'previous-edition-shape',
+          venueId,
+          'Entry needs a prior year, deadline text, and one or more ordered YYYY-MM-DD–YYYY-MM-DD conference ranges.',
+        ),
+      );
+    }
+    if (!['high', 'medium', 'unknown'].includes(previousEdition?.confidence)) {
+      errors.push(
+        issue('previous-edition-confidence', venueId, 'confidence must be high, medium, or unknown.'),
+      );
+    }
+    if (
+      !Array.isArray(previousEdition?.sourceUrls) ||
+      previousEdition.sourceUrls.length === 0 ||
+      previousEdition.sourceUrls.some((url) => !isHttpUrl(url))
+    ) {
+      errors.push(
+        issue('previous-edition-source', venueId, 'Dates need at least one official HTTP(S) source URL.'),
+      );
+    }
+  }
+  for (const venueId of registryVenueIds) {
+    if (!Object.hasOwn(calendar.venues, venueId)) {
+      errors.push(issue('previous-edition-missing-venue', venueId, 'Every registry venue needs a previous-edition entry.'));
+    }
   }
   return errors;
 };

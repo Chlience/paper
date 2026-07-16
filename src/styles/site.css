@@ -1352,6 +1352,65 @@ html.is-figure-dialog-open body {
   min-width: 170px;
 }
 
+.conference-previous-edition {
+  min-width: 260px;
+}
+
+.conference-previous-edition-year {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.conference-previous-edition dl {
+  display: grid;
+  gap: 3px;
+  margin: 0;
+}
+
+.conference-previous-edition dl div {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  gap: 7px;
+}
+
+.conference-previous-edition dt,
+.conference-previous-edition dd {
+  margin: 0;
+  line-height: 1.45;
+}
+
+.conference-previous-edition dt {
+  color: var(--muted);
+}
+
+.conference-previous-edition dd {
+  color: var(--fg);
+  font-family: var(--font-mono);
+  overflow-wrap: anywhere;
+}
+
+.conference-previous-edition-sources {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  margin-top: 5px;
+}
+
+.conference-previous-edition-sources a {
+  color: oklch(36% 0.1 155);
+  font-size: 12px;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+.conference-coverage-table-wrap:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
 .conference-coverage-table tbody th span,
 .conference-coverage-table tbody th small,
 .conference-coverage-table td small {
@@ -1990,7 +2049,7 @@ html.is-figure-dialog-open body {
   }
 
   .conference-coverage-table {
-    min-width: 820px;
+    min-width: 1080px;
   }
 }
 
