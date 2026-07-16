@@ -3,6 +3,7 @@ import {
   getCatalogExcludedVenueIds,
   getCatalogVenues,
 } from './conferences/catalog-scope.mjs';
+import { compareConferencesBySubmissionDeadline } from './conferences/deadline-sort.mjs';
 import {
   generatedConferenceFile,
   readConferenceRegistry,
@@ -46,14 +47,7 @@ const build = async () => {
       dblpUrl: venue.dblpUrl,
       latestEdition: latestEditionCalendar.venues[venue.id],
     }))
-    .sort((left, right) => {
-      const leftArea = areaById.get(left.ccfAreaId)?.index ?? Number.MAX_SAFE_INTEGER;
-      const rightArea = areaById.get(right.ccfAreaId)?.index ?? Number.MAX_SAFE_INTEGER;
-      return (
-        leftArea - rightArea ||
-        left.acronym.localeCompare(right.acronym, ['zh-CN', 'en'], { numeric: true })
-      );
-    });
+    .sort(compareConferencesBySubmissionDeadline);
 
   const leakedVenueIds = conferences
     .map((conference) => conference.id)

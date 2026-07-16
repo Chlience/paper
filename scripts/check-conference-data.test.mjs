@@ -5,6 +5,10 @@ import latestEditionCalendar from '../data/conferences/latest-editions.json' wit
 import registry from '../data/conferences/registry.json' with { type: 'json' };
 import { getCatalogVenues } from './conferences/catalog-scope.mjs';
 import {
+  compareConferencesBySubmissionDeadline,
+  getEarliestSubmissionDeadlineDate,
+} from './conferences/deadline-sort.mjs';
+import {
   validateConferenceRegistry,
   validateLatestEditionCalendar,
 } from './conferences/validate.mjs';
@@ -104,6 +108,44 @@ test('latest-editions validates verification date, deadlines, conference ranges,
   }
 });
 
+test('deadline ordering uses the earliest full date and sends undated entries to the end', () => {
+  assert.equal(
+    getEarliestSubmissionDeadlineDate(
+      'Spring 2025-03-18 / Fall 2025-09-16, 23:59 AoE',
+    ),
+    '2025-03-18',
+  );
+  assert.equal(
+    getEarliestSubmissionDeadlineDate('每年 02-01 / 05-01 / 11-01（IMWUT 多周期）'),
+    null,
+  );
+
+  const fixtures = [
+    {
+      id: 'undated',
+      acronym: 'Undated',
+      latestEdition: { submissionDeadline: '每年 02-01' },
+    },
+    {
+      id: 'later',
+      acronym: 'Later',
+      latestEdition: { submissionDeadline: '2026-01-01' },
+    },
+    {
+      id: 'multi-cycle',
+      acronym: 'Multi',
+      latestEdition: { submissionDeadline: 'R1 2025-04-01 / R2 2026-02-01' },
+    },
+  ];
+
+  assert.deepEqual(
+    [...fixtures]
+      .sort(compareConferencesBySubmissionDeadline)
+      .map((conference) => conference.id),
+    ['multi-cycle', 'later', 'undated'],
+  );
+});
+
 test('generated directory contains only public conference-level data', () => {
   assert.equal(generatedDirectory.schemaVersion, 4);
   assert.deepEqual(Object.keys(generatedDirectory).sort(), [
@@ -129,4 +171,11 @@ test('generated directory contains only public conference-level data', () => {
     assert.equal(Object.hasOwn(conference, 'papers'), false);
     assert.equal(Object.hasOwn(conference.latestEdition, 'papers'), false);
   }
+
+  assert.deepEqual(
+    generatedDirectory.conferences.map((conference) => conference.id),
+    [...generatedDirectory.conferences]
+      .sort(compareConferencesBySubmissionDeadline)
+      .map((conference) => conference.id),
+  );
 });

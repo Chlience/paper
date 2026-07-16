@@ -65,6 +65,7 @@ Latest editions 按 venue ID 保存页面展示的最新届次信息：
 
 - `/conferences/` 的构建步骤连接两个元数据文件，生成轻量静态目录；页面不依赖运行时数据库或外部 API。
 - 每个会议显示简称、全称、CCF 领域、最新届次、截稿、会期、日期依据和 Accepted Papers 入口。
+- 会议按 `submissionDeadline` 中最早的完整 `YYYY-MM-DD` 日期升序排列。多轮投稿取最早一轮；缺少完整日期的条目排在末尾，并按会议简称稳定排序。
 - 页面只输出会议级信息。仓库中不再维护 `data/conferences/<year>/` 论文数据集、论文 taxonomy、预计算 facets 或会议论文查询 JSON。
 - Accepted Papers 链接使用 HTTP(S) 安全检查后输出，并保留官方 URL，便于用户判断列表范围和版本。
 

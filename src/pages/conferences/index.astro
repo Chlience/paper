@@ -85,7 +85,8 @@ const ccfSnapshot = snapshotDate ? `${snapshotLabel} · ${snapshotDate}` : snaps
       <div class="conference-section-intro">
         <h2 id="conference-directory-title">最新一届</h2>
         <p>
-          日期链接指向会议或学会官方页面。Accepted Papers 入口尚未公布或尚待核验时，状态显示“待补充”。
+          按最早一轮主论文截稿日期升序排列，缺少完整截稿日期的会议排在末尾。日期链接指向会议或学会官方页面；Accepted
+          Papers 尚未公布或待核验时显示“待补充”。
         </p>
       </div>
 
@@ -101,7 +102,9 @@ const ccfSnapshot = snapshotDate ? `${snapshotLabel} · ${snapshotDate}` : snaps
               <th scope="col">会议</th>
               <th scope="col">领域</th>
               <th scope="col">状态</th>
-              <th scope="col">最新一届截稿 / 会期</th>
+              <th scope="col" aria-sort="ascending">
+                最新一届截稿 / 会期 <span aria-hidden="true">↑</span>
+              </th>
               <th scope="col">Accepted Papers</th>
             </tr>
           </thead>
