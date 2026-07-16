@@ -127,7 +127,18 @@ $$
 
 这给 shortest-first 一个直觉基础：释放较短 program 的 KV，未来重算成本通常较低。它仍是 whole-program eviction 下的 heuristic，后文会看到这一点。
 
-## 4. Scheduler 怎样在保 KV、做计算和重新放置之间取舍
+## 4. ThunderAgent 实际怎样调度一条 program
+
+LLM Program 定义了调度状态，STP 解释了成本来源。运行时把它们落成六个动作：
+
+1. **接收生命周期事件。** Agent server 为每条轨迹传递稳定的 `program_id`。LLM 请求开始、模型发出 tool call、工具返回和任务结束时，runtime 分别更新上下文长度 $c$、Reasoning / Acting phase、Active / Paused / Terminated status、backend placement 与工具环境。
+2. **按 phase 确定工作优先级。** Tool call 把 program 从 Reasoning 切到 Acting；工具返回后再切回 Reasoning。Reasoning program 已经可以消耗 GPU 并推进任务，因此获得更高的保留与恢复优先级；Acting program 正在等待外部结果，内存压力出现时先让出容量。
+3. **分别检查恢复预算与物理容量。** 可选的 acting decay 根据工具已等待时间降低 KV 的有效预留量，用于判断 backend 能否接纳 waiting program。恢复完成后，scheduler 再按完整 token 数检查真实 KV 占用，保证物理容量安全。
+4. **容量超限时主动 pause。** Scheduler 先选择 Acting program，再选择 Reasoning program；同一 phase 内优先选择上下文较短者。`pause` 释放整条 program 的 KV、清空原 backend placement，并把 program 放入全局 waiting queue。
+5. **从全局队列选择新节点恢复。** Scheduler 按 Reasoning、new program、Acting 的优先组挑选候选，再用 Best Fit Decreasing 将候选放入有容量的 backend。恢复到新节点时通过 re-prefill 重建 KV，随后继续 decode。
+6. **用 termination signal 回收整条任务。** Program 进入 Terminated 后，runtime 清除 scheduler 与 KV accounting；生命周期 hook 通知上层 orchestrator 释放 sandbox、socket、端口和磁盘。接近恢复的 program 还可以异步准备工具环境。
+
+这条控制链把四个信号分工固定下来：phase 表示当前推进价值，context length 近似表示未来重算成本，backend capacity 触发 pause / restore，全局队列决定新的 placement。具体决策先从 phase 开始，因为相同长度的 KV 在 Reasoning 和 Acting 阶段具有不同的即时价值。
 
 ### 4.1 Phase-first：先判断 program 此刻是否需要 GPU
 
