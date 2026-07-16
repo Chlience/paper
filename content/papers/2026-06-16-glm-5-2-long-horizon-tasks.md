@@ -1,7 +1,7 @@
 # GLM-5.2: Built for Long-Horizon Tasks 技术文章笔记
 
 First-Archived-At: 2026-06-18 13:45
-Updated-At: 2026-07-14 20:25
+Updated-At: 2026-07-16 11:37
 
 ## Source
 
@@ -307,13 +307,21 @@ GLM-5.2 的结论链可以概括为：
 - MTP/KVShare 的核心是降低 draft path 和 target path 的不一致，让 speculative decoding 的 acceptance length 上升；它补的是 GLM-5 parameter-sharing MTP 无法自然解决的 KV/activation path 问题。
 - 长轨迹 compaction 改变了 RL 样本结构，使 critic-based PPO 比固定 group structure 更自然。
 
-### 2. 修正后的理解
+### 2. DSA 复杂度的直观含义
+
+- Prefill 时共有 $L$ 个 query。第 $i$ 个 query 的 indexer 要给此前约 $i$ 个位置打分，因此候选打分总数约为 $\sum_{i=1}^{L} i = O(L^2)$。sparse core attention 只对每个 query 选出的 $k$ 个位置执行完整 attention，总量为 $O(Lk)$。
+- Decode 时只有当前新 token 这一个 query。indexer 仍需扫描 $L$ 个历史位置，量级为 $O(L)$；core attention 只处理 top-$k$，量级为 $O(k)$。若每个 sparse layer 都重新选择，模型深度为 $N$ 时两项分别累积为 $O(NL)$ 与 $O(Nk)$。
+- 以 $L=1{,}000{,}000$、$k=2048$ 为例，单层单个 decode step 的 indexer 要比较约 100 万个候选，core attention 读取 2048 个候选。Prefill 的因果候选对约为 $5\times10^{11}$，被选中进入 core attention 的位置对约为 $2.05\times10^9$。
+- 这些数字比较的是位置对数量。indexer 使用较低维表示，每个候选的打分通常比完整 attention 轻；top-$k$ 选择、内存访问和 kernel 实现也影响真实延迟。因此 $O(L^2)$ 与 $O(Lk)$ 用来解释扩展趋势，端到端耗时仍需实测。
+- GLM-5.2 的 FSSS IndexShare 让每四层只有 anchor layer 扫描全历史，后三层复用它的 top-$k$ 位置，因而把 selector 的常数成本降到原来的约四分之一；复杂度对 $L$ 的阶数保持不变，各层 sparse core attention 与各自 KV 读取仍继续执行。
+
+### 3. 修正后的理解
 
 - GLM-5.2 是 [2602.15763](/papers/2602.15763-glm-5-agentic-engineering/) 的后续 release 节点。它继承 744B-A40B MoE、DSA、MTP 和 slime，并把重点推到 1M coding agent。
 - slime 在 GLM-5.2 里不仅承担 rollout，还承接 parallel OPD、compact trajectory、sub-agent workflow 和 serving 配置复用。
 - reward hacking 在 coding agent 中已经从研究风险变成 release blog 中需要正面处理的 production training issue。
 
-### 3. 后续复验指标
+### 4. 后续复验指标
 
 - 1M context 下的 prefill throughput、decode throughput、KV cache occupancy、cache transfer overhead、CPU scheduling bubbles。
 - MTP acceptance length 在不同任务、context length、draft steps 和 serving engine 下的稳定性。
