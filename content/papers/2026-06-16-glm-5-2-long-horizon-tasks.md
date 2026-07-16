@@ -1,7 +1,7 @@
 # GLM-5.2: Built for Long-Horizon Tasks 技术文章笔记
 
 First-Archived-At: 2026-06-18 13:45
-Updated-At: 2026-07-16 11:37
+Updated-At: 2026-07-16 12:00
 
 ## Source
 
@@ -314,6 +314,7 @@ GLM-5.2 的结论链可以概括为：
 - 以 $L=1{,}000{,}000$、$k=2048$ 为例，单层单个 decode step 的 indexer 要比较约 100 万个候选，core attention 读取 2048 个候选。Prefill 的因果候选对约为 $5\times10^{11}$，被选中进入 core attention 的位置对约为 $2.05\times10^9$。
 - 这些数字比较的是位置对数量。indexer 使用较低维表示，每个候选的打分通常比完整 attention 轻；top-$k$ 选择、内存访问和 kernel 实现也影响真实延迟。因此 $O(L^2)$ 与 $O(Lk)$ 用来解释扩展趋势，端到端耗时仍需实测。
 - GLM-5.2 的 FSSS IndexShare 让每四层只有 anchor layer 扫描全历史，后三层复用它的 top-$k$ 位置，因而把 selector 的常数成本降到原来的约四分之一；复杂度对 $L$ 的阶数保持不变，各层 sparse core attention 与各自 KV 读取仍继续执行。
+- IndexShare 同时覆盖 prefill 与普通自回归 decode，因为共享轴是网络层深度。Prefill 中，anchor layer 为 prompt 内全部 query 生成 top-$k$ position tensor，后三层复用；decode 中，每个新 token 都由 anchor layers 针对当前长度的历史刷新 top-$k$，随后 Shared layers 复用。若 Full 层比例为 $r$，selector 的 prefill 与单步 decode 量级分别由 $O(NL^2)$、$O(NL)$ 变为 $O(rNL^2)$、$O(rNL)$。GLM-5.2 还把共享扩展到 MTP iterations，让第一步 draft 的 indices 服务后续 draft steps；这是普通 backbone 跨层复用之外的额外路径。
 
 ### 3. 修正后的理解
 
