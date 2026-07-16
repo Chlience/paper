@@ -30,16 +30,24 @@ Next:                                                               [next turn]
 
 Token-level speculative decoding 可以缩短 reasoning 或 Action 的 decode，工具执行仍位于后续串行路径。Parallel tool calling 只覆盖同一时刻已经确定且彼此独立的多个调用；workflow prewarming 又需要预先知道执行图。开放式 agent 的工具身份和参数会在 reasoning 过程中逐步形成。
 
-SPORK 将同一轮改写为：
+SPORK 的简化时序更准确地写成：
 
 ```text
-Main:  [prefill][reasoning decode........................][final Action]
-Probe:          [forced tool-call probe]
-Tool:                                  [speculative execution..........]
-Commit:                                                       [accept/reject]
+time ─────────────────────────────────────────────────────────────────────→
+Main:  [(re)prefill][t1][remaining CoT decode........][tool-call A*]|main stop|
+Probe:                  └─[forced tool call Â + confidence]─┘
+Tool:                                         └─D2 commit→[async tool(Â)....]
+D3:                                                    [verify Â as draft]
+Final verify:                                                      [Â == A* ?]
+  match:                                                           use/await result
+  mismatch:                                                        [serial tool(A*)]
 ```
 
-工具执行能够覆盖的时间由 probe 完成后剩余的 main decode 决定。模型继续生成自己的 canonical Action；probe 只提供可提交或丢弃的候选分支。
+其中 `t1` 是 main 的首个 streaming token，`Â` 是 probe 候选调用，`A*` 是 main 最终生成的 canonical tool call。D1 在 `t1` 后启动 probe；可解析候选通过 D2 confidence gate 后，工具才开始异步执行。低置信度 probe 可以等待更多 CoT 后重新发起，Figure 6 只画出一次代表性 probe。
+
+Figure 6 原图采用“main 上路 + speculative 下分支”的布局。`tool-call A*` 是一段显式 decode，`Final verify` 是 main stop 处的完整调用比对事件。匹配时复用已经完成的结果，或等待尚未完成的剩余工具时间；不匹配时再串行执行 `tool(A*)`。因此实际 overlap 满足 $t_{\mathrm{overlap}}\leq\min(T_{\mathrm{tool}},T_{\mathrm{main,remain}})$，图中“工具恰好在 main stop 前完成”只是示意。
+
+D3 的 token verification 位于 main 的 tool-call decode 内：engine path 在 `<tool_call>` boundary 把 probe body 注入为 draft，由 target model 接受最长一致前缀。main 完整调用生成后再进行 action-level strict verification。论文 Figure 6 把 D3 recovery 与 reject fallback 收在同一区域，Figure 9 和 Algorithm 1 给出了更精确的先后关系。论文中的 `commit` 特指 D2 gate 通过后启动推测工具，最终写入 canonical trajectory 仍要等待 strict match。
 
 ## 2. 核心切入点：工具身份常常先于完整参数稳定
 
