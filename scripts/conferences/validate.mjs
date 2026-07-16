@@ -2,6 +2,7 @@ const idPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const htmlResiduePattern = /<!--|-->|<[^>]*>|&(?:#x[\da-f]+|#\d+|[a-z][a-z\d]*);/i;
 const controlResiduePattern = /[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/;
 const datasetCoverageStatuses = new Set(['partial', 'pending', 'published', 'unavailable']);
+const conferenceCatalogYear = 2026;
 const editionStatuses = new Set([
   'adapter-pending',
   'no-edition',
@@ -99,12 +100,12 @@ export const validateConferenceRegistry = (registry) => {
   return errors;
 };
 
-export const validatePreviousEditionCalendar = (calendar, registry) => {
+export const validateLatestEditionCalendar = (calendar, registry) => {
   if (calendar?.schemaVersion !== 1 || !calendar?.venues || typeof calendar.venues !== 'object') {
     return [
       issue(
-        'previous-edition-calendar-shape',
-        'previous-editions.json',
+        'latest-edition-calendar-shape',
+        'latest-editions.json',
         'Expected schemaVersion 1 with a venues object.',
       ),
     ];
@@ -113,22 +114,23 @@ export const validatePreviousEditionCalendar = (calendar, registry) => {
   const errors = [];
   if (!isValidIsoDate(calendar.verifiedAt)) {
     errors.push(
-      issue('previous-edition-verified-at', 'previous-editions.json', 'verifiedAt must use YYYY-MM-DD.'),
+      issue('latest-edition-verified-at', 'latest-editions.json', 'verifiedAt must use YYYY-MM-DD.'),
     );
   }
   const registryVenueIds = new Set(registry.venues.map((venue) => venue.id));
+  const excludedVenueIds = new Set(registry.catalogScope?.excludedVenueIds ?? []);
   const calendarVenueIds = Object.keys(calendar.venues);
   for (const venueId of calendarVenueIds) {
-    const previousEdition = calendar.venues[venueId];
+    const latestEdition = calendar.venues[venueId];
     if (!registryVenueIds.has(venueId)) {
-      errors.push(issue('previous-edition-unknown-venue', venueId, 'Venue is not in registry.json.'));
+      errors.push(issue('latest-edition-unknown-venue', venueId, 'Venue is not in registry.json.'));
     }
     const conferenceRanges = [
-      ...String(previousEdition?.conferenceDates ?? '').matchAll(
+      ...String(latestEdition?.conferenceDates ?? '').matchAll(
         /(\d{4}-\d{2}-\d{2})–(\d{4}-\d{2}-\d{2})/g,
       ),
     ];
-    const submissionDeadline = String(previousEdition?.submissionDeadline ?? '');
+    const submissionDeadline = String(latestEdition?.submissionDeadline ?? '');
     const submissionDates = submissionDeadline.match(/\d{4}-\d{2}-\d{2}/g) ?? [];
     const submissionDeadlineValid =
       (submissionDates.length > 0 || /每(?:年|月)/.test(submissionDeadline)) &&
@@ -142,42 +144,55 @@ export const validatePreviousEditionCalendar = (calendar, registry) => {
           Number.isFinite(start) &&
           Number.isFinite(end) &&
           start <= end &&
-          new Date(start).getUTCFullYear() === previousEdition?.year
+          new Date(start).getUTCFullYear() === latestEdition?.year
         );
       });
     if (
-      !Number.isInteger(previousEdition?.year) ||
-      previousEdition.year < 2000 ||
-      previousEdition.year > 2025 ||
+      !Number.isInteger(latestEdition?.year) ||
+      latestEdition.year < 2000 ||
+      latestEdition.year > conferenceCatalogYear ||
       !submissionDeadlineValid ||
       !conferenceRangesValid
     ) {
       errors.push(
         issue(
-          'previous-edition-shape',
+          'latest-edition-shape',
           venueId,
-          'Entry needs a prior year, deadline text, and one or more ordered YYYY-MM-DD–YYYY-MM-DD conference ranges.',
+          'Entry needs an edition year no later than 2026, deadline text, and one or more ordered YYYY-MM-DD–YYYY-MM-DD conference ranges.',
         ),
       );
     }
-    if (!['high', 'medium', 'unknown'].includes(previousEdition?.confidence)) {
+    if (
+      Number.isInteger(latestEdition?.year) &&
+      !excludedVenueIds.has(venueId) &&
+      latestEdition.year !== conferenceCatalogYear
+    ) {
       errors.push(
-        issue('previous-edition-confidence', venueId, 'confidence must be high, medium, or unknown.'),
+        issue(
+          'latest-edition-catalog-year',
+          venueId,
+          `Public catalog venues must use the ${conferenceCatalogYear} edition.`,
+        ),
+      );
+    }
+    if (!['high', 'medium', 'unknown'].includes(latestEdition?.confidence)) {
+      errors.push(
+        issue('latest-edition-confidence', venueId, 'confidence must be high, medium, or unknown.'),
       );
     }
     if (
-      !Array.isArray(previousEdition?.sourceUrls) ||
-      previousEdition.sourceUrls.length === 0 ||
-      previousEdition.sourceUrls.some((url) => !isHttpUrl(url))
+      !Array.isArray(latestEdition?.sourceUrls) ||
+      latestEdition.sourceUrls.length === 0 ||
+      latestEdition.sourceUrls.some((url) => !isHttpUrl(url))
     ) {
       errors.push(
-        issue('previous-edition-source', venueId, 'Dates need at least one official HTTP(S) source URL.'),
+        issue('latest-edition-source', venueId, 'Dates need at least one official HTTP(S) source URL.'),
       );
     }
   }
   for (const venueId of registryVenueIds) {
     if (!Object.hasOwn(calendar.venues, venueId)) {
-      errors.push(issue('previous-edition-missing-venue', venueId, 'Every registry venue needs a previous-edition entry.'));
+      errors.push(issue('latest-edition-missing-venue', venueId, 'Every registry venue needs a latest-edition entry.'));
     }
   }
   return errors;

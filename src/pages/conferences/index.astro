@@ -15,7 +15,7 @@ interface CoverageRow {
   coreContributionCount: number;
   checkedAt: string;
   sourceUrl: string;
-  previousEdition: {
+  latestEdition: {
     year: number;
     submissionDeadline: string;
     conferenceDates: string;
@@ -24,6 +24,12 @@ interface CoverageRow {
 }
 
 const papers = Array.isArray(data.papers) ? data.papers : [];
+const expectedConferenceDataSchemaVersion = 3;
+if (data.schemaVersion !== expectedConferenceDataSchemaVersion) {
+  throw new Error(
+    `Conference page expected generated schemaVersion ${expectedConferenceDataSchemaVersion}, received ${data.schemaVersion}.`,
+  );
+}
 const initialPapers = sortConferencePapers(papers).slice(0, CONFERENCE_PAGE_SIZE);
 const conferenceDataVersion = encodeURIComponent(
   `${data.schemaVersion ?? 1}-${data.generatedAt ?? '2026'}`,
@@ -103,13 +109,13 @@ const coverageRows: CoverageRow[] = rawCoverageRows.map((item) => {
       coreContributionCountByVenue.get(venueId) ??
       0,
   );
-  const rawPreviousEdition =
-    item.previousEdition && typeof item.previousEdition === 'object'
-      ? (item.previousEdition as Record<string, unknown>)
+  const rawLatestEdition =
+    item.latestEdition && typeof item.latestEdition === 'object'
+      ? (item.latestEdition as Record<string, unknown>)
       : null;
-  const previousEditionYear = Number(rawPreviousEdition?.year);
-  const previousEditionSourceUrls = Array.isArray(rawPreviousEdition?.sourceUrls)
-    ? rawPreviousEdition.sourceUrls.map(String).filter(Boolean)
+  const latestEditionYear = Number(rawLatestEdition?.year);
+  const latestEditionSourceUrls = Array.isArray(rawLatestEdition?.sourceUrls)
+    ? rawLatestEdition.sourceUrls.map(String).filter(Boolean)
     : [];
 
   return {
@@ -129,16 +135,16 @@ const coverageRows: CoverageRow[] = rawCoverageRows.map((item) => {
     sourceUrl: String(
       item.sourceUrl ?? item.acceptedPapersUrl ?? item.officialUrl ?? item.url ?? '',
     ),
-    previousEdition:
-      rawPreviousEdition &&
-      Number.isInteger(previousEditionYear) &&
-      String(rawPreviousEdition.submissionDeadline ?? '').trim() &&
-      String(rawPreviousEdition.conferenceDates ?? '').trim()
+    latestEdition:
+      rawLatestEdition &&
+      Number.isInteger(latestEditionYear) &&
+      String(rawLatestEdition.submissionDeadline ?? '').trim() &&
+      String(rawLatestEdition.conferenceDates ?? '').trim()
         ? {
-            year: previousEditionYear,
-            submissionDeadline: String(rawPreviousEdition.submissionDeadline),
-            conferenceDates: String(rawPreviousEdition.conferenceDates),
-            sourceUrls: previousEditionSourceUrls,
+            year: latestEditionYear,
+            submissionDeadline: String(rawLatestEdition.submissionDeadline),
+            conferenceDates: String(rawLatestEdition.conferenceDates),
+            sourceUrls: latestEditionSourceUrls,
           }
         : null,
   };
@@ -161,9 +167,18 @@ if (coverageRows.length === 0) {
       coreContributionCount: coreContributionCountByVenue.get(venueId) ?? 0,
       checkedAt: '',
       sourceUrl: paper.sourceUrl || '',
-      previousEdition: null,
+      latestEdition: null,
     });
   });
+}
+
+const missingLatestEditionVenueIds = coverageRows
+  .filter((row) => !row.latestEdition)
+  .map((row) => row.venueId || row.acronym);
+if (missingLatestEditionVenueIds.length > 0) {
+  throw new Error(
+    `Conference coverage is missing latestEdition for: ${missingLatestEditionVenueIds.join(', ')}.`,
+  );
 }
 
 coverageRows.sort((left, right) =>
@@ -268,7 +283,7 @@ const ccfSnapshot = snapshotDate ? `${snapshotLabel} · ${snapshotDate}` : snaps
       </summary>
       <div class="conference-coverage-body">
         <p>
-          状态列只显示当前同步状态。“上一届时间”记录最近实际举办届次的主论文截止时间与正式会期，多轮投稿保留轮次；日期依据来自会议或学会官方页面。“核心贡献”显示已有摘要支持自动提炼的论文数。
+          状态列只显示当前同步状态。“最新一届时间”记录不晚于 2026 目录年度、且已公布主论文截止与正式会期的最新届次；多轮投稿保留轮次，日期依据来自会议或学会官方页面。“核心贡献”显示已有摘要支持自动提炼的论文数。
         </p>
         <div
           class="conference-coverage-table-wrap"
@@ -281,7 +296,7 @@ const ccfSnapshot = snapshotDate ? `${snapshotLabel} · ${snapshotDate}` : snaps
               <tr>
                 <th scope="col">会议</th>
                 <th scope="col">状态</th>
-                <th scope="col">上一届截稿 / 会期</th>
+                <th scope="col">最新一届截稿 / 会期</th>
                 <th scope="col">论文</th>
                 <th scope="col">核心贡献</th>
                 <th scope="col">数据更新</th>
@@ -300,28 +315,28 @@ const ccfSnapshot = snapshotDate ? `${snapshotLabel} · ${snapshotDate}` : snaps
                       {row.statusLabel}
                     </span>
                   </td>
-                  <td class="conference-previous-edition">
-                    {row.previousEdition ? (
+                  <td class="conference-latest-edition">
+                    {row.latestEdition ? (
                       <>
-                        <span class="conference-previous-edition-year mono">
-                          {row.previousEdition.year} 届
+                        <span class="conference-latest-edition-year mono">
+                          {row.latestEdition.year} 届
                         </span>
                         <dl>
                           <div>
                             <dt>截稿</dt>
-                            <dd>{row.previousEdition.submissionDeadline}</dd>
+                            <dd>{row.latestEdition.submissionDeadline}</dd>
                           </div>
                           <div>
                             <dt>会期</dt>
-                            <dd>{row.previousEdition.conferenceDates}</dd>
+                            <dd>{row.latestEdition.conferenceDates}</dd>
                           </div>
                         </dl>
-                        <div class="conference-previous-edition-sources">
-                          {row.previousEdition.sourceUrls.map((url, index, urls) =>
+                        <div class="conference-latest-edition-sources">
+                          {row.latestEdition.sourceUrls.map((url, index, urls) =>
                             safeExternalUrl(url) ? (
                               <a
                                 href={safeExternalUrl(url)}
-                                aria-label={`${row.acronym} 上一届日期官方依据 ${index + 1}`}
+                                aria-label={`${row.acronym} ${row.latestEdition.year} 届日期官方依据 ${index + 1}`}
                               >
                                 {urls.length === 1 ? '日期依据' : `依据 ${index + 1}`}
                               </a>

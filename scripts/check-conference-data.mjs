@@ -2,26 +2,26 @@ import {
   readConferenceDatasets,
   readConferenceRegistry,
   readConferenceTaxonomy,
-  readPreviousEditionCalendar,
+  readLatestEditionCalendar,
 } from './conferences/paths.mjs';
 import {
   validateConferenceDatasets,
   validateConferenceRegistry,
   validateConferenceTaxonomy,
-  validatePreviousEditionCalendar,
+  validateLatestEditionCalendar,
 } from './conferences/validate.mjs';
 import { getCatalogDatasets, getCatalogVenues } from './conferences/catalog-scope.mjs';
 
-const [registry, taxonomy, previousEditionCalendar, datasets] = await Promise.all([
+const [registry, taxonomy, latestEditionCalendar, datasets] = await Promise.all([
   readConferenceRegistry(),
   readConferenceTaxonomy(),
-  readPreviousEditionCalendar(),
+  readLatestEditionCalendar(),
   readConferenceDatasets(),
 ]);
 const errors = [
   ...validateConferenceRegistry(registry),
   ...validateConferenceTaxonomy(taxonomy),
-  ...validatePreviousEditionCalendar(previousEditionCalendar, registry),
+  ...validateLatestEditionCalendar(latestEditionCalendar, registry),
   ...validateConferenceDatasets(datasets, registry, taxonomy),
 ];
 

@@ -1,0 +1,616 @@
+{
+  "schemaVersion": 1,
+  "verifiedAt": "2026-07-16",
+  "definition": "Latest complete edition no later than the 2026 catalog year; main/full-paper deadlines and official event dates.",
+  "venues": {
+    "ppopp": {
+      "year": 2026,
+      "submissionDeadline": "2025-09-01 23:59 AoE",
+      "conferenceDates": "2026-01-31–2026-02-04",
+      "sourceUrls": [
+        "https://ppopp26.sigplan.org/track/PPoPP-2026-papers"
+      ],
+      "confidence": "high",
+      "note": "PPoPP 2026 full paper；总会期含共址活动。"
+    },
+    "fast": {
+      "year": 2026,
+      "submissionDeadline": "Spring 2025-03-18 / Fall 2025-09-16, 23:59 AoE",
+      "conferenceDates": "2026-02-24–2026-02-26",
+      "sourceUrls": [
+        "https://www.usenix.org/conference/fast26/call-for-papers"
+      ],
+      "confidence": "high",
+      "note": "FAST '26 两个主论文投稿周期全部保留。"
+    },
+    "dac": {
+      "year": 2026,
+      "submissionDeadline": "2025-11-19 17:00 PST (extended)",
+      "conferenceDates": "2026-07-26–2026-07-29",
+      "sourceUrls": [
+        "https://dac.com/2026/research-manuscript-submissions",
+        "https://dac.com/2026/press-release/the-2026-dac-chips-to-systems-conference-comes-to-long-beach-for-the-first-time-with-record-growth-as-ai-reshapes-chip-and-system-design"
+      ],
+      "confidence": "high",
+      "note": "Research Manuscript 最终延期截止；必需摘要截止为 2025-11-11。"
+    },
+    "hpca": {
+      "year": 2026,
+      "submissionDeadline": "2025-08-01 23:59 UTC",
+      "conferenceDates": "2026-01-31–2026-02-04",
+      "sourceUrls": [
+        "https://2026.hpca-conf.org/track/hpca-2026-main-conference"
+      ],
+      "confidence": "high",
+      "note": "HPCA 2026 main conference full paper。"
+    },
+    "micro": {
+      "year": 2026,
+      "submissionDeadline": "2026-04-07 23:59 EDT",
+      "conferenceDates": "2026-10-31–2026-11-04",
+      "sourceUrls": [
+        "https://www.microarch.org/micro59/"
+      ],
+      "confidence": "high",
+      "note": "MICRO 59 full paper；必需摘要截止提前一周。"
+    },
+    "sc": {
+      "year": 2026,
+      "submissionDeadline": "2026-04-08 23:59 AoE (no extensions)",
+      "conferenceDates": "2026-11-15–2026-11-20",
+      "sourceUrls": [
+        "https://sc26.supercomputing.org/all-dates-deadlines/"
+      ],
+      "confidence": "high",
+      "note": "SC26 Technical Papers full paper。"
+    },
+    "asplos": {
+      "year": 2026,
+      "submissionDeadline": "Spring 2025-03-12 / Summer 2025-08-20",
+      "conferenceDates": "2026-03-22–2026-03-26",
+      "sourceUrls": [
+        "https://www.asplos-conference.org/asplos2026/cfp/"
+      ],
+      "confidence": "high",
+      "note": "ASPLOS 2026 两个主论文投稿周期全部保留；官网未在 full-paper 日期旁单独重述时区。"
+    },
+    "isca": {
+      "year": 2026,
+      "submissionDeadline": "2025-11-17 23:59 AoE",
+      "conferenceDates": "2026-06-27–2026-07-01",
+      "sourceUrls": [
+        "https://www.iscaconf.org/isca2026/submit/callforpapers.php"
+      ],
+      "confidence": "high",
+      "note": "ISCA 2026 full paper。"
+    },
+    "acm-sigops-atc": {
+      "year": 2026,
+      "submissionDeadline": "2026-06-10",
+      "conferenceDates": "2026-11-15–2026-11-18",
+      "sourceUrls": [
+        "https://sigops.org/s/conferences/atc/2026/cfp.html",
+        "https://sigops.org/s/conferences/atc/2026/"
+      ],
+      "confidence": "high",
+      "note": "ATC 2026 转由 ACM SIGOPS 举办并延续原社区和范围；CFP 将核心 conference 列为 11 月 16–18 日，主页将含前置活动的总窗口列为 11 月 15–18 日；投稿截止未标时刻或时区。CCF 官网旧 USENIX ATC 评级是否自动迁移到 ACM 后继会议尚无明确公告，日期事实与评级映射应分开理解。"
+    },
+    "eurosys": {
+      "year": 2026,
+      "submissionDeadline": "Spring 2025-05-15 / Fall 2025-09-25, AoE",
+      "conferenceDates": "2026-04-27–2026-04-30",
+      "sourceUrls": [
+        "https://2026.eurosys.org/cfp.html"
+      ],
+      "confidence": "high",
+      "note": "EuroSys 2026 两个主论文投稿周期全部保留。"
+    },
+    "hpdc": {
+      "year": 2026,
+      "submissionDeadline": "2026-02-05 AoE (firm)",
+      "conferenceDates": "2026-07-13–2026-07-16",
+      "sourceUrls": [
+        "https://hpdc.sci.utah.edu/2026/calls-cfp.html"
+      ],
+      "confidence": "high",
+      "note": "HPDC 2026 Technical Papers。"
+    },
+    "sigcomm": {
+      "year": 2026,
+      "submissionDeadline": "2026-02-06 AoE",
+      "conferenceDates": "2026-08-17–2026-08-21",
+      "sourceUrls": [
+        "https://conferences.sigcomm.org/sigcomm/2026/cfp/"
+      ],
+      "confidence": "high",
+      "note": "SIGCOMM 2026 main research/experience paper deadline。"
+    },
+    "mobicom": {
+      "year": 2026,
+      "submissionDeadline": "Summer 2025-09-03 / Winter 2026-03-13, 23:59 AoE",
+      "conferenceDates": "2026-10-26–2026-10-30",
+      "sourceUrls": [
+        "https://sigmobile.org/mobicom/2026/cfp.html"
+      ],
+      "confidence": "high",
+      "note": "MobiCom 2026 两个主论文投稿周期全部保留；各轮摘要分别于 2025-08-27 与 2026-03-06 截止。"
+    },
+    "infocom": {
+      "year": 2026,
+      "submissionDeadline": "2025-07-31 23:59 AoE",
+      "conferenceDates": "2026-05-18–2026-05-21",
+      "sourceUrls": [
+        "https://infocom2026.ieee-infocom.org/call-papers",
+        "https://www.comsoc.org/conferences-events/ieee-international-conference-computer-communications-2026"
+      ],
+      "confidence": "high",
+      "note": "INFOCOM 2026 main conference paper；IEEE ComSoc 事件页交叉确认会期。"
+    },
+    "nsdi": {
+      "year": 2026,
+      "submissionDeadline": "Spring 2025-04-25 / Fall 2025-09-18, 23:59 US PDT",
+      "conferenceDates": "2026-05-04–2026-05-06",
+      "sourceUrls": [
+        "https://www.usenix.org/conference/nsdi26/call-for-papers"
+      ],
+      "confidence": "high",
+      "note": "NSDI '26 两个主论文投稿周期全部保留。"
+    },
+    "ccs": {
+      "year": 2026,
+      "submissionDeadline": "Cycle A 2026-01-14 / Cycle B 2026-04-29, 23:59 AoE",
+      "conferenceDates": "2026-11-15–2026-11-19",
+      "sourceUrls": [
+        "https://www.sigsac.org/ccs/CCS2026/call-for/call-for-papers.html",
+        "https://www.sigsac.org/ccs/CCS2026/"
+      ],
+      "confidence": "high",
+      "note": "CCS 2026 两个主论文 review cycle 全部保留。"
+    },
+    "eurocrypt": {
+      "year": 2026,
+      "submissionDeadline": "2025-10-02 23:59 AoE",
+      "conferenceDates": "2026-05-10–2026-05-14",
+      "sourceUrls": [
+        "https://eurocrypt.iacr.org/2026/callforpapers.php"
+      ],
+      "confidence": "high",
+      "note": "IACR EUROCRYPT 2026 主论文单轮截止；官方 CFP 与事件元数据直接给出截止和会期。"
+    },
+    "ieee-sp": {
+      "year": 2026,
+      "submissionDeadline": "Cycle 1 2025-06-05 / Cycle 2 2025-11-13, 23:59:59 AoE",
+      "conferenceDates": "2026-05-18–2026-05-21",
+      "sourceUrls": [
+        "https://www.ieee-security.org/TC/SP2026/cfpapers.html"
+      ],
+      "confidence": "high",
+      "note": "IEEE S&P 2026 两个主论文周期全部保留。"
+    },
+    "crypto": {
+      "year": 2026,
+      "submissionDeadline": "2026-02-12 23:59 US Pacific time",
+      "conferenceDates": "2026-08-17–2026-08-20",
+      "sourceUrls": [
+        "https://crypto.iacr.org/2026/callforpapers.php"
+      ],
+      "confidence": "medium",
+      "note": "IACR CRYPTO 2026 主论文单轮截止；CFP 的重要日期写 23:59 US Pacific，而官方首页另有 AoE 表述，数据采用更具体的 CFP 行并保留来源内部不一致。"
+    },
+    "usenix-security": {
+      "year": 2026,
+      "submissionDeadline": "Cycle 1 2025-08-26 / Cycle 2 2026-02-05, 23:59 AoE",
+      "conferenceDates": "2026-08-12–2026-08-14",
+      "sourceUrls": [
+        "https://www.usenix.org/conference/usenixsecurity26/call-for-papers"
+      ],
+      "confidence": "high",
+      "note": "USENIX Security '26 两个主论文周期全部保留。"
+    },
+    "ndss": {
+      "year": 2026,
+      "submissionDeadline": "Summer 2025-04-23 / Fall 2025-08-06, 23:59 AoE",
+      "conferenceDates": "2026-02-23–2026-02-27",
+      "sourceUrls": [
+        "https://www.ndss-symposium.org/ndss2026/submissions/call-for-papers/"
+      ],
+      "confidence": "high",
+      "note": "NDSS 2026 两个主论文 review cycle 全部保留；会期含 symposium 与 workshops。"
+    },
+    "pldi": {
+      "year": 2026,
+      "submissionDeadline": "2025-11-13 23:59 AoE",
+      "conferenceDates": "2026-06-15–2026-06-19",
+      "sourceUrls": [
+        "https://pldi26.sigplan.org/track/pldi-2026-papers",
+        "https://pldi26.sigplan.org/"
+      ],
+      "confidence": "high",
+      "note": "PLDI 2026 Research Papers；总会期含 workshops/tutorials。"
+    },
+    "popl": {
+      "year": 2026,
+      "submissionDeadline": "2025-07-10 23:59 AoE",
+      "conferenceDates": "2026-01-11–2026-01-17",
+      "sourceUrls": [
+        "https://popl26.sigplan.org/track/POPL-2026-popl-research-papers",
+        "https://popl26.sigplan.org/"
+      ],
+      "confidence": "high",
+      "note": "POPL 2026 Research Papers；官网总活动窗口含共址会议和 workshops。"
+    },
+    "fse": {
+      "year": 2026,
+      "submissionDeadline": "2025-09-11 23:59:59 AoE",
+      "conferenceDates": "2026-07-05–2026-07-09",
+      "sourceUrls": [
+        "https://conf.researchr.org/track/fse-2026/fse-2026-research-papers",
+        "https://conf.researchr.org/home/fse-2026"
+      ],
+      "confidence": "high",
+      "note": "FSE 2026 Research Papers full paper。"
+    },
+    "sosp": {
+      "year": 2026,
+      "submissionDeadline": "2026-04-01 AoE",
+      "conferenceDates": "2026-09-29–2026-10-02",
+      "sourceUrls": [
+        "https://sigops.org/s/conferences/sosp/2026/cfp.html"
+      ],
+      "confidence": "high",
+      "note": "SOSP 已从 2024 年起改为年度会议，因此最新目录届次为 2026。"
+    },
+    "oopsla": {
+      "year": 2026,
+      "submissionDeadline": "R1 2025-10-10 / R2 2026-03-17, AoE",
+      "conferenceDates": "2026-10-03–2026-10-09",
+      "sourceUrls": [
+        "https://2026.splashcon.org/track/splash-2026/oopsla-2026",
+        "https://2026.splashcon.org/"
+      ],
+      "confidence": "high",
+      "note": "PACMPL(OOPSLA) 两轮均接收新论文；会期采用 SPLASH 2026 官方总窗口。"
+    },
+    "ase": {
+      "year": 2026,
+      "submissionDeadline": "2026-03-26 23:59 AoE",
+      "conferenceDates": "2026-10-12–2026-10-16",
+      "sourceUrls": [
+        "https://conf.researchr.org/track/ase-2026/ase-2026-research-track",
+        "https://conf.researchr.org/home/ase-2026"
+      ],
+      "confidence": "high",
+      "note": "ASE 2026 Research Track。"
+    },
+    "icse": {
+      "year": 2026,
+      "submissionDeadline": "Cycle 1 2025-03-14 / Cycle 2 2025-07-18, 23:59:59 AoE",
+      "conferenceDates": "2026-04-12–2026-04-18",
+      "sourceUrls": [
+        "https://conf.researchr.org/track/icse-2026/icse-2026-research-track",
+        "https://conf.researchr.org/home/icse-2026"
+      ],
+      "confidence": "high",
+      "note": "ICSE 2026 Research Track 两个周期全部保留；核心会议日为 4 月 15–17 日。"
+    },
+    "issta": {
+      "year": 2026,
+      "submissionDeadline": "2026-01-29 23:59 AoE",
+      "conferenceDates": "2026-10-03–2026-10-09",
+      "sourceUrls": [
+        "https://conf.researchr.org/track/issta-2026/issta-2026-research-papers",
+        "https://conf.researchr.org/home/issta-2026"
+      ],
+      "confidence": "high",
+      "note": "ISSTA 2026 Research Papers；与 SPLASH 共址，主会日为 10 月 6–8 日，日期范围采用共址活动官方总窗口。"
+    },
+    "osdi": {
+      "year": 2026,
+      "submissionDeadline": "2025-12-11 17:59 EST (22:59 UTC)",
+      "conferenceDates": "2026-07-13–2026-07-15",
+      "sourceUrls": [
+        "https://www.usenix.org/conference/osdi26/call-for-papers"
+      ],
+      "confidence": "high",
+      "note": "OSDI '26 complete paper；摘要注册截止为 2025-12-04。"
+    },
+    "fm": {
+      "year": 2026,
+      "submissionDeadline": "2025-12-02 23:59 AoE",
+      "conferenceDates": "2026-05-18–2026-05-22",
+      "sourceUrls": [
+        "https://conf.researchr.org/track/fm-2026/fm-2026-research-paper",
+        "https://conf.researchr.org/home/fm-2026"
+      ],
+      "confidence": "high",
+      "note": "FM 2026 Research Paper；主会为 5 月 20–22 日，总窗口含 workshops/tutorials。"
+    },
+    "sigmod": {
+      "year": 2026,
+      "submissionDeadline": "R1 2025-01-17 / R2 2025-04-17 / R3 2025-07-17 / R4 2025-10-17, 23:59 AoE",
+      "conferenceDates": "2026-05-31–2026-06-05",
+      "sourceUrls": [
+        "https://2026.sigmod.org/calls_papers_sigmod_research.shtml"
+      ],
+      "confidence": "high",
+      "note": "SIGMOD Research 2026 四个季度投稿轮次全部保留。"
+    },
+    "sigkdd": {
+      "year": 2026,
+      "submissionDeadline": "Cycle 1 2025-07-31 / Cycle 2 2026-02-08, AoE",
+      "conferenceDates": "2026-08-09–2026-08-13",
+      "sourceUrls": [
+        "https://kdd2026.kdd.org/research-track-call-for-papers/"
+      ],
+      "confidence": "high",
+      "note": "KDD 2026 Research Track 两个周期全部保留。"
+    },
+    "icde": {
+      "year": 2026,
+      "submissionDeadline": "R1 2025-06-18 / R2 2025-10-27, 17:00 PT",
+      "conferenceDates": "2026-05-04–2026-05-08",
+      "sourceUrls": [
+        "https://icde2026.github.io/cf-research-papers.html",
+        "https://icde2026.github.io/"
+      ],
+      "confidence": "high",
+      "note": "ICDE 2026 Research Papers 两轮投稿。"
+    },
+    "sigir": {
+      "year": 2026,
+      "submissionDeadline": "2026-01-22 23:59 AoE",
+      "conferenceDates": "2026-07-20–2026-07-24",
+      "sourceUrls": [
+        "https://sigir2026.org/en-AU/pages/submissions/full-papers-track"
+      ],
+      "confidence": "high",
+      "note": "SIGIR 2026 Full Papers。"
+    },
+    "vldb": {
+      "year": 2026,
+      "submissionDeadline": "每月 1 日（2025-04-01–2026-03-01），17:00 PT",
+      "conferenceDates": "2026-08-31–2026-09-04",
+      "sourceUrls": [
+        "https://www.vldb.org/2026/important-dates.html",
+        "https://www.vldb.org/2026/call-for-research-track.html"
+      ],
+      "confidence": "high",
+      "note": "PVLDB Research Track rolling monthly deadline。"
+    },
+    "stoc": {
+      "year": 2026,
+      "submissionDeadline": "2025-11-04 16:59 EST",
+      "conferenceDates": "2026-06-22–2026-06-27",
+      "sourceUrls": [
+        "https://acm-stoc.org/stoc2026/"
+      ],
+      "confidence": "high",
+      "note": "STOC paper；官网将六天 TheoryFest 全部列为 conference dates。"
+    },
+    "soda": {
+      "year": 2026,
+      "submissionDeadline": "2025-07-14 23:59 AoE",
+      "conferenceDates": "2026-01-11–2026-01-14",
+      "sourceUrls": [
+        "https://www.siam.org/conferences-events/past-event-archive/soda26/submissions/",
+        "https://www.siam.org/conferences-events/past-event-archive/soda26/"
+      ],
+      "confidence": "high",
+      "note": "SODA main paper。"
+    },
+    "cav": {
+      "year": 2026,
+      "submissionDeadline": "2026-01-28 AoE",
+      "conferenceDates": "2026-07-26–2026-07-29",
+      "sourceUrls": [
+        "https://conferences.i-cav.org/2026/cfp/"
+      ],
+      "confidence": "high",
+      "note": "Full paper；CAV 2026 是 FLoC 2026 的组成会议。"
+    },
+    "focs": {
+      "year": 2026,
+      "submissionDeadline": "2026-04-01 17:00 EDT (21:00 UTC)",
+      "conferenceDates": "2026-11-08–2026-11-11",
+      "sourceUrls": [
+        "https://focs.computer.org/2026/"
+      ],
+      "confidence": "high",
+      "note": "FOCS 2026 main paper。"
+    },
+    "lics": {
+      "year": 2026,
+      "submissionDeadline": "2026-01-22 AoE",
+      "conferenceDates": "2026-07-20–2026-07-23",
+      "sourceUrls": [
+        "https://lics.siglog.org/lics26/cfp.php"
+      ],
+      "confidence": "high",
+      "note": "Full paper；标题和短摘要截止 2026-01-15。"
+    },
+    "acm-mm": {
+      "year": 2026,
+      "submissionDeadline": "2026-04-01 23:59 AoE",
+      "conferenceDates": "2026-11-10–2026-11-14",
+      "sourceUrls": [
+        "https://2026.acmmm.org/site/cfp-guidelines.html",
+        "https://2026.acmmm.org/"
+      ],
+      "confidence": "high",
+      "note": "ACM Multimedia 2026 regular paper。"
+    },
+    "siggraph": {
+      "year": 2026,
+      "submissionDeadline": "2026-01-22 22:00 UTC",
+      "conferenceDates": "2026-07-19–2026-07-23",
+      "sourceUrls": [
+        "https://s2026.siggraph.org/program/technical-papers/"
+      ],
+      "confidence": "high",
+      "note": "SIGGRAPH 2026 Technical Papers；submission form 截止为 1 月 15 日。"
+    },
+    "vr": {
+      "year": 2026,
+      "submissionDeadline": "2025-09-12 23:59:59 AoE",
+      "conferenceDates": "2026-03-21–2026-03-25",
+      "sourceUrls": [
+        "https://ieeevr.org/2026/contribute/papers/",
+        "https://ieeevr.org/2026/attend/registration/"
+      ],
+      "confidence": "high",
+      "note": "IEEE VR 2026 journal/conference papers 统一审稿；必需摘要截止为 2025-09-05。"
+    },
+    "ieee-vis": {
+      "year": 2026,
+      "submissionDeadline": "2026-03-31 23:59 AoE",
+      "conferenceDates": "2026-11-09–2026-11-13",
+      "sourceUrls": [
+        "https://ieeevis.org/year/2026/info/call-participation/call-for-participation/",
+        "https://ieeevis.org/year/2026/welcome/"
+      ],
+      "confidence": "high",
+      "note": "IEEE VIS 2026 full paper；必需摘要截止为 2026-03-21。"
+    },
+    "aaai": {
+      "year": 2026,
+      "submissionDeadline": "2025-08-01 23:59 AoE (UTC−12)",
+      "conferenceDates": "2026-01-20–2026-01-27",
+      "sourceUrls": [
+        "https://aaai.org/conference/aaai/aaai-26/"
+      ],
+      "confidence": "high",
+      "note": "Main Technical Track full paper；摘要截止 2025-07-25，补充材料和代码截止 2025-08-04。"
+    },
+    "neurips": {
+      "year": 2026,
+      "submissionDeadline": "2026-05-06 AoE",
+      "conferenceDates": "2026-12-06–2026-12-12",
+      "sourceUrls": [
+        "https://neurips.cc/Conferences/2026/Dates"
+      ],
+      "confidence": "high",
+      "note": "Main Conference full paper；摘要截止 2026-05-04。Conference Sessions 为 12 月 8–10 日，前后包含 Expo、tutorials 和 workshops。"
+    },
+    "acl": {
+      "year": 2026,
+      "submissionDeadline": "2026-01-05 23:59 AoE (UTC−12)",
+      "conferenceDates": "2026-07-02–2026-07-07",
+      "sourceUrls": [
+        "https://2026.aclweb.org/"
+      ],
+      "confidence": "high",
+      "note": "论文通过 ARR 投稿；ACL 2026 commitment 截止 2026-03-14。主会议为 2026-07-05–2026-07-07。"
+    },
+    "cvpr": {
+      "year": 2026,
+      "submissionDeadline": "2025-11-13 23:59 AoE (UTC−12)",
+      "conferenceDates": "2026-06-03–2026-06-07",
+      "sourceUrls": [
+        "https://cvpr.thecvf.com/Conferences/2026/CallForPapers",
+        "https://cvpr.thecvf.com/Conferences/2026/Dates"
+      ],
+      "confidence": "high",
+      "note": "Main paper；主会议为 2026-06-05–2026-06-07，workshops/tutorials 为 2026-06-03–2026-06-04。该会议仅保留在原始 CCF 基线中，不进入公开目录。"
+    },
+    "iccv": {
+      "year": 2025,
+      "submissionDeadline": "2025-03-07 23:59 HST",
+      "conferenceDates": "2025-10-19–2025-10-23",
+      "sourceUrls": [
+        "https://iccv.thecvf.com/Conferences/2025/CallForPapers",
+        "https://iccv.thecvf.com/Conferences/2025/Dates"
+      ],
+      "confidence": "high",
+      "note": "ICCV 为双年会议，2026 目录年度内最新完整届次为 2025；主会议为 2025-10-21–2025-10-23，workshops 为 2025-10-19–2025-10-20。该会议仅保留在原始 CCF 基线中，不进入公开目录。"
+    },
+    "icml": {
+      "year": 2026,
+      "submissionDeadline": "2026-01-28 AoE (2026-01-29 12:00 UTC)",
+      "conferenceDates": "2026-07-06–2026-07-11",
+      "sourceUrls": [
+        "https://icml.cc/Conferences/2026/CallForPapers"
+      ],
+      "confidence": "high",
+      "note": "ICML 2026 main conference full paper。"
+    },
+    "iclr": {
+      "year": 2026,
+      "submissionDeadline": "2025-09-24 23:59 AoE (UTC−12)",
+      "conferenceDates": "2026-04-23–2026-04-27",
+      "sourceUrls": [
+        "https://iclr.cc/Conferences/2026/CallForPapers",
+        "https://iclr.cc/Conferences/2026/Dates"
+      ],
+      "confidence": "high",
+      "note": "Main paper；摘要截止 2025-09-19。主会议为 2026-04-23–2026-04-25，workshops 为 2026-04-26–2026-04-27。"
+    },
+    "cscw": {
+      "year": 2026,
+      "submissionDeadline": "2025-05-14 12:00 EDT",
+      "conferenceDates": "2026-10-10–2026-10-14",
+      "sourceUrls": [
+        "https://cscw.acm.org/2026/papers.html",
+        "https://cscw.acm.org/2026/"
+      ],
+      "confidence": "high",
+      "note": "CSCW 2026 新论文仅开放这一轮；2025-09-16 和 2026-01-13 均为对应论文的 revision/resubmission 截止。"
+    },
+    "chi": {
+      "year": 2026,
+      "submissionDeadline": "2025-09-11 23:59 AoE",
+      "conferenceDates": "2026-04-13–2026-04-17",
+      "sourceUrls": [
+        "https://chi2026.acm.org/",
+        "https://chi2026.acm.org/authors/papers/"
+      ],
+      "confidence": "high",
+      "note": "CHI 2026 Papers full paper；abstract/metadata 截止 2025-09-04。"
+    },
+    "ubicomp": {
+      "year": 2026,
+      "submissionDeadline": "每年 02-01 / 05-01 / 11-01（IMWUT 多周期）",
+      "conferenceDates": "2026-10-11–2026-10-15",
+      "sourceUrls": [
+        "https://www.ubicomp.org/ubicomp-iswc-2026/imwut-papers/",
+        "https://www.ubicomp.org/ubicomp-iswc-2026/iswc-cfp/",
+        "https://www.ubicomp.org/ubicomp-iswc-2026/"
+      ],
+      "confidence": "medium",
+      "note": "主技术 track 邀请 IMWUT 2025 Issue 4 与 2026 Issues 1–3；官网列出每年 2/1、5/1、11/1 三个 IMWUT 投稿周期，未注明时区。主会为 2026-10-13–2026-10-15，前置活动为 10 月 11–12 日。"
+    },
+    "uist": {
+      "year": 2026,
+      "submissionDeadline": "2026-03-31 23:59 AoE",
+      "conferenceDates": "2026-11-02–2026-11-05",
+      "sourceUrls": [
+        "https://uist.acm.org/2026/cfp/",
+        "https://uist.acm.org/2026/",
+        "https://uist.acm.org/2026/attending/"
+      ],
+      "confidence": "high",
+      "note": "Papers PDF；摘要截止 2026-03-24，材料截止 2026-04-09。主会议为 11 月 3–5 日。"
+    },
+    "www": {
+      "year": 2026,
+      "submissionDeadline": "2025-10-07 23:59 AoE",
+      "conferenceDates": "2026-06-29–2026-07-03",
+      "sourceUrls": [
+        "https://www2026.thewebconf.org/calls/research-tracks.html",
+        "https://www2026.thewebconf.org/important-dates.html"
+      ],
+      "confidence": "high",
+      "note": "Research Tracks full paper；摘要截止 2025-09-30。正式会议为 7 月 1–3 日，workshops/tutorials 为 6 月 29–30 日。"
+    },
+    "rtss": {
+      "year": 2026,
+      "submissionDeadline": "2026-05-26 AoE",
+      "conferenceDates": "2026-12-08–2026-12-11",
+      "sourceUrls": [
+        "https://2026.rtss.org/",
+        "https://2026.rtss.org/cfp/"
+      ],
+      "confidence": "high",
+      "note": "Main paper firm deadline；摘要截止 2026-05-21。Hot Topic Day 为 12 月 8 日，正式会议为 12 月 9–11 日。"
+    }
+  }
+}

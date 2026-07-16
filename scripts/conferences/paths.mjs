@@ -7,7 +7,7 @@ export const conferenceDataDir = path.join(repoRoot, 'data', 'conferences');
 export const conferenceYearDir = path.join(conferenceDataDir, '2026');
 export const conferenceRegistryFile = path.join(conferenceDataDir, 'registry.json');
 export const conferenceTaxonomyFile = path.join(conferenceDataDir, 'taxonomy.json');
-export const previousEditionCalendarFile = path.join(conferenceDataDir, 'previous-editions.json');
+export const latestEditionCalendarFile = path.join(conferenceDataDir, 'latest-editions.json');
 export const generatedConferenceFile = path.join(repoRoot, 'src', 'generated', 'conference-data.json');
 export const conferenceDatasetFile = (venueId) => path.join(conferenceYearDir, `${venueId}.json`);
 
@@ -15,7 +15,7 @@ export const readJson = async (file) => JSON.parse(await fs.readFile(file, 'utf8
 
 export const readConferenceRegistry = () => readJson(conferenceRegistryFile);
 export const readConferenceTaxonomy = () => readJson(conferenceTaxonomyFile);
-export const readPreviousEditionCalendar = () => readJson(previousEditionCalendarFile);
+export const readLatestEditionCalendar = () => readJson(latestEditionCalendarFile);
 
 export const readConferenceDatasets = async () => {
   let files = [];

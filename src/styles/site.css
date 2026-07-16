@@ -1352,53 +1352,53 @@ html.is-figure-dialog-open body {
   min-width: 170px;
 }
 
-.conference-previous-edition {
+.conference-latest-edition {
   min-width: 260px;
 }
 
-.conference-previous-edition-year {
+.conference-latest-edition-year {
   display: block;
   margin-bottom: 5px;
   color: var(--muted);
   font-size: 11px;
 }
 
-.conference-previous-edition dl {
+.conference-latest-edition dl {
   display: grid;
   gap: 3px;
   margin: 0;
 }
 
-.conference-previous-edition dl div {
+.conference-latest-edition dl div {
   display: grid;
   grid-template-columns: 34px minmax(0, 1fr);
   gap: 7px;
 }
 
-.conference-previous-edition dt,
-.conference-previous-edition dd {
+.conference-latest-edition dt,
+.conference-latest-edition dd {
   margin: 0;
   line-height: 1.45;
 }
 
-.conference-previous-edition dt {
+.conference-latest-edition dt {
   color: var(--muted);
 }
 
-.conference-previous-edition dd {
+.conference-latest-edition dd {
   color: var(--fg);
   font-family: var(--font-mono);
   overflow-wrap: anywhere;
 }
 
-.conference-previous-edition-sources {
+.conference-latest-edition-sources {
   display: flex;
   flex-wrap: wrap;
   gap: 4px 10px;
   margin-top: 5px;
 }
 
-.conference-previous-edition-sources a {
+.conference-latest-edition-sources a {
   color: oklch(36% 0.1 155);
   font-size: 12px;
   text-decoration: underline;
