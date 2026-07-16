@@ -9,6 +9,7 @@ export const paths = {
   home: '/',
   papers: '/papers/',
   topics: '/topics/',
+  mainlines: '/mainlines/',
   authors: '/authors/',
   conferences: '/conferences/',
   archive: '/archive/',

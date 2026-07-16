@@ -3,7 +3,7 @@ import PaperSearchDialog from './PaperSearchDialog.astro';
 import { paths } from '../lib/site';
 
 interface Props {
-  active?: 'home' | 'papers' | 'topics' | 'authors' | 'conferences' | 'archive' | 'workflow';
+  active?: 'home' | 'papers' | 'topics' | 'mainlines' | 'authors' | 'conferences' | 'archive' | 'workflow';
 }
 
 const { active = 'home' } = Astro.props;
@@ -13,6 +13,7 @@ const navItems = [
   { id: 'home', label: '首页', href: paths.home },
   { id: 'papers', label: '论文', href: paths.papers },
   { id: 'topics', label: '主题', href: paths.topics },
+  { id: 'mainlines', label: '主线', href: paths.mainlines },
   { id: 'authors', label: '作者', href: paths.authors },
   { id: 'conferences', label: '会议', href: paths.conferences },
   { id: 'archive', label: '索引', href: paths.archive },

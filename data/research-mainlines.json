@@ -1,0 +1,1064 @@
+{
+  "snapshot": "2026-07-16",
+  "paperCount": 102,
+  "lines": [
+    {
+      "id": "resource-frontier",
+      "name": "资源约束下的模型扩展",
+      "question": "固定算力、显存与互连条件下，怎样扩大有效模型容量并让训练闭环可运行？",
+      "thesis": "主线从参数规模律与compute-optimal配比出发，经由状态分片、MoE条件计算与通信优化，进一步走向优化器、低精度、条件记忆和模型—系统协同设计。有效扩展由激活参数、数据、通信、内存和数值稳定性的联合预算决定。",
+      "boundary": "长序列内部的状态保留与attention访问归入“长历史的状态选择与访问”；后训练rollout与策略一致性归入“保持策略语义的分布式 RL 系统”。",
+      "status": "consensus",
+      "statusLabel": "共识约束"
+    },
+    {
+      "id": "context-state",
+      "name": "长历史的状态选择与访问",
+      "question": "上下文增长后，哪些状态应保留、压缩或检索，并怎样以可控计算访问？",
+      "thesis": "主线从exact attention的IO优化与跨设备context parallel起步，扩展到线性、稀疏、混合attention和分层KV存储，再进入agent可学习压缩与可恢复记忆。核心变量是状态可见集合、表示形式、驻留层级和访问成本。",
+      "boundary": "请求级KV所有权、batch调度和workflow执行归入“语义感知的推理与 Agent Runtime”；通用模型容量扩展归入“资源约束下的模型扩展”。",
+      "status": "competing",
+      "statusLabel": "竞争路线"
+    },
+    {
+      "id": "agent-runtime",
+      "name": "语义感知的推理与 Agent Runtime",
+      "question": "服务端怎样利用工作流结构、KV所有权与推测执行减少延迟和冗余？",
+      "thesis": "主线从chunked batching和lossless token speculation开始，逐步把调度对象提升为span、semantic variable、DAG微任务、工具动作与agent session，并通过请求所有权、跨布局通信和可编辑KV维持执行语义。",
+      "boundary": "attention表示和长历史选择归入“长历史的状态选择与访问”；训练rollout吞吐、policy lag与数值一致性归入“保持策略语义的分布式 RL 系统”。",
+      "status": "consensus",
+      "statusLabel": "共识约束"
+    },
+    {
+      "id": "agent-environments",
+      "name": "可执行环境驱动的 Agent 能力",
+      "question": "Agent怎样从环境、工具和经验中获得可迁移能力？",
+      "thesis": "可执行sandbox、computer-use环境、工具反馈、合成任务和经验演化共同构成agent训练的数据供给；能力能否迁移取决于环境真实性、状态协议、验证信号和模型—训练—环境闭环。",
+      "boundary": "探索与reasoning能力边界归入“Reasoning RL 的能力边界与探索”；局部信用归入“从终局成败到局部信用与验证”；分布式训练编排归入“保持策略语义的分布式 RL 系统”。",
+      "status": "emerging",
+      "statusLabel": "新兴方向"
+    },
+    {
+      "id": "reasoning-boundary",
+      "name": "Reasoning RL 的能力边界与探索",
+      "question": "可验证奖励下，RL何时能发现新解法、何时主要重排基座能力，怎样分配探索和长思考预算？",
+      "thesis": "基座支持集、题目难度、可验证性和训练分布决定RL起点；entropy、宽度、长度和采样预算控制可达区域。主线由长CoT配方走向按任务分区的动态边界，并以pass@k、支持集和采样效率替代单一pass@1解释。",
+      "boundary": "credit estimator与process verifier归入“从终局成败到局部信用与验证”；执行一致性归入“保持策略语义的分布式 RL 系统”；reward真实性归入“优化压力下的奖励与证据完整性”。",
+      "status": "competing",
+      "statusLabel": "竞争解释"
+    },
+    {
+      "id": "credit-verification",
+      "name": "从终局成败到局部信用与验证",
+      "question": "怎样把终局成败和多样候选转成步骤、token或轨迹级可学习信号？",
+      "thesis": "过程监督、verifier、reset反事实、token baseline和隐式value把稀疏结果下沉为局部progress；Best-of-N与search-and-aggregate产生的验证计算还能回流训练。有效信号需要保持策略序、控制偏差并匹配生成分布。",
+      "boundary": "探索覆盖归入“Reasoning RL 的能力边界与探索”；异步执行与policy lag归入“保持策略语义的分布式 RL 系统”；verifier被过优化后的完整性归入“优化压力下的奖励与证据完整性”。",
+      "status": "competing",
+      "statusLabel": "竞争路线"
+    },
+    {
+      "id": "rl-systems",
+      "name": "保持策略语义的分布式 RL 系统",
+      "question": "分布式LLM RL怎样提高吞吐，同时保持on-policy更新与可复现实验语义？",
+      "thesis": "训练、rollout、reward和参数同步的异构数据流决定吞吐；异步程度、importance ratio、trust region、数值kernel和随机性决定样本是否仍可用于目标策略。系统优化需要把policy lag和train–infer mismatch列为算法变量。",
+      "boundary": "纯推理服务归入“语义感知的推理与 Agent Runtime”；reasoning探索策略归入“Reasoning RL 的能力边界与探索”；credit estimator本身归入“从终局成败到局部信用与验证”。",
+      "status": "consensus",
+      "statusLabel": "共识约束"
+    },
+    {
+      "id": "reward-integrity",
+      "name": "优化压力下的奖励与证据完整性",
+      "question": "奖励、评测与监控信号怎样在强选择和策略分布偏移下保持可信？",
+      "thesis": "proxy相关性会随occupancy shift、Best-of-N选择强度和模型先验放大而失效；unit tests、社会规则、reasoning monitor和类人解释都可能成为可优化接口。防线包括因果约束、occupancy正则、悲观估计、负控评测和独立监控。",
+      "boundary": "一般能力扩展归入“Reasoning RL 的能力边界与探索”；正常credit assignment归入“从终局成败到局部信用与验证”；环境供给归入“可执行环境驱动的 Agent 能力”。",
+      "status": "consensus",
+      "statusLabel": "共识风险"
+    }
+  ],
+  "papers": [
+    {
+      "slug": "2026-07-16-sglang-data-parallel-attention",
+      "month": "2026-07",
+      "primary": "agent-runtime",
+      "secondary": [
+        "resource-frontier",
+        "context-state"
+      ],
+      "role": "evidence"
+    },
+    {
+      "slug": "2026-07-16-mla-tensor-parallel-cache-sharding",
+      "month": "2026-07",
+      "primary": "agent-runtime",
+      "secondary": [
+        "context-state",
+        "resource-frontier"
+      ],
+      "role": "bridge"
+    },
+    {
+      "slug": "2026-07-14-prefill-context-parallelism-inference-scaling",
+      "month": "2026-07",
+      "primary": "agent-runtime",
+      "secondary": [
+        "context-state",
+        "resource-frontier"
+      ],
+      "role": "bridge"
+    },
+    {
+      "slug": "2607.02980-hils-attention-infinite-context",
+      "month": "2026-07",
+      "primary": "context-state",
+      "secondary": [
+        "agent-runtime"
+      ],
+      "role": "turn"
+    },
+    {
+      "slug": "2607.03333-spork-self-speculative-agentic-inference",
+      "month": "2026-07",
+      "primary": "agent-runtime",
+      "secondary": [
+        "agent-environments"
+      ],
+      "role": "turn"
+    },
+    {
+      "slug": "2607.05378-compactionrl-context-compaction-agent-rl",
+      "month": "2026-07",
+      "primary": "context-state",
+      "secondary": [
+        "agent-environments",
+        "reasoning-boundary"
+      ],
+      "role": "turn"
+    },
+    {
+      "slug": "2607.05391-llm-as-a-verifier",
+      "month": "2026-07",
+      "primary": "credit-verification",
+      "secondary": [
+        "reasoning-boundary",
+        "reward-integrity"
+      ],
+      "role": "evidence"
+    },
+    {
+      "slug": "2607.07508-sao-single-rollout-asynchronous-agentic-rl",
+      "month": "2026-07",
+      "primary": "rl-systems",
+      "secondary": [
+        "credit-verification",
+        "agent-environments"
+      ],
+      "role": "turn"
+    },
+    {
+      "slug": "2026-07-13-grape-micro-task-agentic-workflow-serving",
+      "month": "2026-07",
+      "primary": "agent-runtime",
+      "secondary": [
+        "agent-environments"
+      ],
+      "role": "turn"
+    },
+    {
+      "slug": "2026-07-13-rl-credit-assignment-may-july-landscape",
+      "month": "2026-07",
+      "primary": "credit-verification",
+      "secondary": [
+        "reasoning-boundary",
+        "rl-systems"
+      ],
+      "role": "bridge"
+    },
+    {
+      "slug": "2026-07-13-agentic-rl-learned-environment-evolution",
+      "month": "2026-07",
+      "primary": "agent-environments",
+      "secondary": [
+        "rl-systems",
+        "reward-integrity"
+      ],
+      "role": "bridge"
+    },
+    {
+      "slug": "2026-06-23-chinese-frontier-model-reports-timeline",
+      "month": "2026-06",
+      "primary": "resource-frontier",
+      "secondary": [
+        "context-state",
+        "agent-environments"
+      ],
+      "role": "bridge"
+    },
+    {
+      "slug": "2607.00248-seed2-model-card-real-world-complexity",
+      "month": "2026-06",
+      "primary": "reward-integrity",
+      "secondary": [
+        "agent-environments",
+        "resource-frontier"
+      ],
+      "role": "boundary"
+    },
+    {
+      "slug": "2606.31650-echo-selective-turn-memory-agentic-rl",
+      "month": "2026-06",
+      "primary": "context-state",
+      "secondary": [
+        "agent-environments",
+        "credit-verification"
+      ],
+      "role": "bridge"
+    },
+    {
+      "slug": "2606.23595-spiral-learning-search-aggregate",
+      "month": "2026-06",
+      "primary": "credit-verification",
+      "secondary": [
+        "reasoning-boundary",
+        "agent-environments"
+      ],
+      "role": "turn"
+    },
+    {
+      "slug": "2026-06-25-self-improving-agents-era-experience-survey",
+      "month": "2026-06",
+      "primary": "agent-environments",
+      "secondary": [
+        "reasoning-boundary",
+        "credit-verification"
+      ],
+      "role": "bridge"
+    },
+    {
+      "slug": "2026-06-27-dspark-confidence-scheduled-speculative-decoding",
+      "month": "2026-06",
+      "primary": "agent-runtime",
+      "secondary": [
+        "rl-systems"
+      ],
+      "role": "turn"
+    },
+    {
+      "slug": "2606.30406-mopd-multi-teacher-on-policy-distillation",
+      "month": "2026-06",
+      "primary": "credit-verification",
+      "secondary": [
+        "reasoning-boundary",
+        "agent-environments"
+      ],
+      "role": "bridge"
+    },
+    {
+      "slug": "2026-06-16-glm-5-2-long-horizon-tasks",
+      "month": "2026-06",
+      "primary": "context-state",
+      "secondary": [
+        "agent-environments",
+        "resource-frontier"
+      ],
+      "role": "evidence"
+    },
+    {
+      "slug": "2606.10650-dynamic-linear-attention",
+      "month": "2026-06",
+      "primary": "context-state",
+      "secondary": [
+        "resource-frontier",
+        "agent-runtime"
+      ],
+      "role": "turn"
+    },
+    {
+      "slug": "2606.20097-hydrahead-head-wise-hybrid-attention",
+      "month": "2026-06",
+      "primary": "context-state",
+      "secondary": [
+        "resource-frontier",
+        "agent-runtime"
+      ],
+      "role": "turn"
+    },
+    {
+      "slug": "2606.12370-bebop-mtp-rejection-sampling-rl-training",
+      "month": "2026-06",
+      "primary": "rl-systems",
+      "secondary": [
+        "agent-runtime",
+        "reasoning-boundary"
+      ],
+      "role": "bridge"
+    },
+    {
+      "slug": "2606.20008-vimpo-value-implicit-policy-optimization-llms",
+      "month": "2026-06",
+      "primary": "credit-verification",
+      "secondary": [
+        "reasoning-boundary",
+        "rl-systems"
+      ],
+      "role": "turn"
+    },
+    {
+      "slug": "2606.09079-flashmemory-deepseek-v4-lookahead-sparse-attention",
+      "month": "2026-06",
+      "primary": "context-state",
+      "secondary": [
+        "agent-runtime",
+        "resource-frontier"
+      ],
+      "role": "bridge"
+    },
+    {
+      "slug": "2606.13392-minimax-sparse-attention-m3",
+      "month": "2026-06",
+      "primary": "context-state",
+      "secondary": [
+        "resource-frontier",
+        "agent-runtime"
+      ],
+      "role": "evidence"
+    },
+    {
+      "slug": "2026-06-18-openai-beneficial-rl",
+      "month": "2026-06",
+      "primary": "reward-integrity",
+      "secondary": [
+        "agent-environments",
+        "reasoning-boundary"
+      ],
+      "role": "evidence"
+    },
+    {
+      "slug": "2606.06453-vortex-sparse-attention-serving",
+      "month": "2026-06",
+      "primary": "agent-runtime",
+      "secondary": [
+        "context-state",
+        "agent-environments"
+      ],
+      "role": "bridge"
+    },
+    {
+      "slug": "2606.04075-llms-hack-rewards-and-society",
+      "month": "2026-06",
+      "primary": "reward-integrity",
+      "secondary": [
+        "agent-environments"
+      ],
+      "role": "counterexample"
+    },
+    {
+      "slug": "2606.04101-ultraep-rack-scale-moe-load-balancing",
+      "month": "2026-06",
+      "primary": "resource-frontier",
+      "secondary": [
+        "agent-runtime",
+        "rl-systems"
+      ],
+      "role": "evidence"
+    },
+    {
+      "slug": "2606.04662-muon-outperforms-adam-curvature",
+      "month": "2026-06",
+      "primary": "resource-frontier",
+      "secondary": [],
+      "role": "evidence"
+    },
+    {
+      "slug": "2606.23525-self-compacting-language-model-agents",
+      "month": "2026-06",
+      "primary": "context-state",
+      "secondary": [
+        "agent-environments",
+        "reasoning-boundary"
+      ],
+      "role": "turn"
+    },
+    {
+      "slug": "2606.01065-leyline-kv-cache-directives-agentic-inference",
+      "month": "2026-05",
+      "primary": "agent-runtime",
+      "secondary": [
+        "context-state",
+        "agent-environments"
+      ],
+      "role": "turn"
+    },
+    {
+      "slug": "2605.25507-credit-assignment-resets-language-model-reasoning",
+      "month": "2026-05",
+      "primary": "credit-verification",
+      "secondary": [
+        "reasoning-boundary"
+      ],
+      "role": "turn"
+    },
+    {
+      "slug": "2605.14220-training-inference-mismatch-llm-rl",
+      "month": "2026-05",
+      "primary": "rl-systems",
+      "secondary": [
+        "reasoning-boundary",
+        "reward-integrity"
+      ],
+      "role": "counterexample"
+    },
+    {
+      "slug": "2606.00135-agentic-tool-calling-rl-training",
+      "month": "2026-05",
+      "primary": "agent-environments",
+      "secondary": [
+        "reasoning-boundary",
+        "rl-systems"
+      ],
+      "role": "evidence"
+    },
+    {
+      "slug": "2605.31514-age-of-empires-anthropomorphism",
+      "month": "2026-05",
+      "primary": "reward-integrity",
+      "secondary": [],
+      "role": "counterexample"
+    },
+    {
+      "slug": "2605.30290-self-trained-verification",
+      "month": "2026-05",
+      "primary": "credit-verification",
+      "secondary": [
+        "reasoning-boundary",
+        "reward-integrity"
+      ],
+      "role": "turn"
+    },
+    {
+      "slug": "2604.09459-credit-assignment-reasoning-agentic-llm-rl",
+      "month": "2026-04",
+      "primary": "credit-verification",
+      "secondary": [
+        "reasoning-boundary",
+        "agent-environments"
+      ],
+      "role": "bridge"
+    },
+    {
+      "slug": "2604.17312-rl-llm-data-scarcity-survey",
+      "month": "2026-04",
+      "primary": "agent-environments",
+      "secondary": [
+        "reasoning-boundary",
+        "credit-verification"
+      ],
+      "role": "bridge"
+    },
+    {
+      "slug": "2026-04-24-deepseek-v4-million-token-context-intelligence",
+      "month": "2026-04",
+      "primary": "context-state",
+      "secondary": [
+        "resource-frontier",
+        "agent-environments"
+      ],
+      "role": "bridge"
+    },
+    {
+      "slug": "2604.04648-caution-pessimism-best-of-n-reward-hacking",
+      "month": "2026-04",
+      "primary": "reward-integrity",
+      "secondary": [
+        "credit-verification",
+        "reasoning-boundary"
+      ],
+      "role": "turn"
+    },
+    {
+      "slug": "2026-04-30-preferences-multi-agent-online-learning",
+      "month": "2026-04",
+      "primary": "reward-integrity",
+      "secondary": [
+        "agent-environments"
+      ],
+      "role": "boundary"
+    },
+    {
+      "slug": "2603.12201-indexcache-cross-layer-index-reuse",
+      "month": "2026-03",
+      "primary": "context-state",
+      "secondary": [
+        "agent-runtime"
+      ],
+      "role": "evidence"
+    },
+    {
+      "slug": "2602.06036-dflash-block-diffusion-speculative-decoding",
+      "month": "2026-02",
+      "primary": "agent-runtime",
+      "secondary": [],
+      "role": "evidence"
+    },
+    {
+      "slug": "2603.00729-qwen3-coder-next-agentic-coding",
+      "month": "2026-02",
+      "primary": "agent-environments",
+      "secondary": [
+        "resource-frontier",
+        "rl-systems"
+      ],
+      "role": "evidence"
+    },
+    {
+      "slug": "2602.02276-kimi-k2-5-visual-agentic-intelligence",
+      "month": "2026-02",
+      "primary": "agent-environments",
+      "secondary": [
+        "resource-frontier",
+        "rl-systems"
+      ],
+      "role": "evidence"
+    },
+    {
+      "slug": "2602.07078-optimal-token-baseline-long-horizon-llm-rl",
+      "month": "2026-02",
+      "primary": "credit-verification",
+      "secondary": [
+        "reasoning-boundary",
+        "rl-systems"
+      ],
+      "role": "turn"
+    },
+    {
+      "slug": "2602.02710-maximum-likelihood-reinforcement-learning",
+      "month": "2026-02",
+      "primary": "reasoning-boundary",
+      "secondary": [
+        "credit-verification"
+      ],
+      "role": "turn"
+    },
+    {
+      "slug": "2602.15763-glm-5-agentic-engineering",
+      "month": "2026-02",
+      "primary": "agent-environments",
+      "secondary": [
+        "resource-frontier",
+        "rl-systems"
+      ],
+      "role": "bridge"
+    },
+    {
+      "slug": "2602.13692-thunderagent-program-aware-agentic-inference",
+      "month": "2026-02",
+      "primary": "agent-runtime",
+      "secondary": [
+        "agent-environments",
+        "context-state"
+      ],
+      "role": "turn"
+    },
+    {
+      "slug": "2601.16206-computer-environments-agentic-intelligence",
+      "month": "2026-01",
+      "primary": "agent-environments",
+      "secondary": [
+        "reasoning-boundary",
+        "reward-integrity"
+      ],
+      "role": "turn"
+    },
+    {
+      "slug": "2601.07372-conditional-memory-engram-scalable-lookup",
+      "month": "2026-01",
+      "primary": "resource-frontier",
+      "secondary": [
+        "context-state"
+      ],
+      "role": "turn"
+    },
+    {
+      "slug": "2512.23075-trust-region-masking-long-horizon-llm-rl",
+      "month": "2025-12",
+      "primary": "rl-systems",
+      "secondary": [
+        "reasoning-boundary",
+        "credit-verification"
+      ],
+      "role": "turn"
+    },
+    {
+      "slug": "2512.07783-interplay-pretraining-midtraining-rl-reasoning",
+      "month": "2025-12",
+      "primary": "reasoning-boundary",
+      "secondary": [
+        "resource-frontier",
+        "agent-environments"
+      ],
+      "role": "boundary"
+    },
+    {
+      "slug": "2512.22560-rollart-disaggregated-agentic-rl-training",
+      "month": "2025-12",
+      "primary": "rl-systems",
+      "secondary": [
+        "agent-environments",
+        "agent-runtime"
+      ],
+      "role": "turn"
+    },
+    {
+      "slug": "2512.02556-deepseek-v3-2-open-large-language-models",
+      "month": "2025-12",
+      "primary": "context-state",
+      "secondary": [
+        "resource-frontier",
+        "agent-runtime"
+      ],
+      "role": "evidence"
+    },
+    {
+      "slug": "2511.14617-seer-online-context-learning-llm-rl",
+      "month": "2025-11",
+      "primary": "rl-systems",
+      "secondary": [
+        "credit-verification",
+        "reasoning-boundary"
+      ],
+      "role": "turn"
+    },
+    {
+      "slug": "2511.02749-span-queries-cache-attention-locality",
+      "month": "2025-11",
+      "primary": "agent-runtime",
+      "secondary": [
+        "context-state",
+        "agent-environments"
+      ],
+      "role": "turn"
+    },
+    {
+      "slug": "2510.01180-brorl-broadened-rl-exploration",
+      "month": "2025-10",
+      "primary": "reasoning-boundary",
+      "secondary": [
+        "credit-verification",
+        "rl-systems"
+      ],
+      "role": "turn"
+    },
+    {
+      "slug": "2510.20270-impossiblebench-test-case-exploitation",
+      "month": "2025-10",
+      "primary": "reward-integrity",
+      "secondary": [
+        "agent-environments",
+        "reasoning-boundary"
+      ],
+      "role": "counterexample"
+    },
+    {
+      "slug": "2510.12633-laminar-asynchronous-rl-post-training",
+      "month": "2025-10",
+      "primary": "rl-systems",
+      "secondary": [
+        "reasoning-boundary",
+        "credit-verification"
+      ],
+      "role": "evidence"
+    },
+    {
+      "slug": "2510.19315-transformers-inherently-succinct",
+      "month": "2025-10",
+      "primary": "resource-frontier",
+      "secondary": [
+        "context-state"
+      ],
+      "role": "boundary"
+    },
+    {
+      "slug": "2025-09-10-defeating-nondeterminism-llm-inference",
+      "month": "2025-09",
+      "primary": "rl-systems",
+      "secondary": [
+        "agent-runtime",
+        "reward-integrity"
+      ],
+      "role": "turn"
+    },
+    {
+      "slug": "2509.25123-rl-compositional-skill-acquisition",
+      "month": "2025-09",
+      "primary": "reasoning-boundary",
+      "secondary": [
+        "agent-environments",
+        "credit-verification"
+      ],
+      "role": "evidence"
+    },
+    {
+      "slug": "2510.00206-lorafusion-efficient-lora-fine-tuning",
+      "month": "2025-09",
+      "primary": "resource-frontier",
+      "secondary": [
+        "rl-systems"
+      ],
+      "role": "evidence"
+    },
+    {
+      "slug": "2507.20534-kimi-k2-open-agentic-intelligence",
+      "month": "2025-07",
+      "primary": "agent-environments",
+      "secondary": [
+        "resource-frontier",
+        "rl-systems"
+      ],
+      "role": "origin"
+    },
+    {
+      "slug": "2506.13585-minimax-m1-cispo-lightning-attention",
+      "month": "2025-06",
+      "primary": "reasoning-boundary",
+      "secondary": [
+        "context-state",
+        "rl-systems"
+      ],
+      "role": "bridge"
+    },
+    {
+      "slug": "2506.10947-spurious-rewards-rethinking-rlvr",
+      "month": "2025-06",
+      "primary": "reward-integrity",
+      "secondary": [
+        "reasoning-boundary",
+        "rl-systems"
+      ],
+      "role": "counterexample"
+    },
+    {
+      "slug": "2506.19248-inference-time-reward-hacking-llms",
+      "month": "2025-06",
+      "primary": "reward-integrity",
+      "secondary": [
+        "credit-verification",
+        "reasoning-boundary"
+      ],
+      "role": "counterexample"
+    },
+    {
+      "slug": "2505.09388-qwen3-technical-report",
+      "month": "2025-05",
+      "primary": "reasoning-boundary",
+      "secondary": [
+        "resource-frontier",
+        "credit-verification"
+      ],
+      "role": "evidence"
+    },
+    {
+      "slug": "2505.22617-entropy-mechanism-rl-reasoning-language-models",
+      "month": "2025-05",
+      "primary": "reasoning-boundary",
+      "secondary": [
+        "credit-verification",
+        "rl-systems"
+      ],
+      "role": "turn"
+    },
+    {
+      "slug": "2505.24864-prorl-prolonged-rl-reasoning-boundaries",
+      "month": "2025-05",
+      "primary": "reasoning-boundary",
+      "secondary": [
+        "credit-verification",
+        "rl-systems"
+      ],
+      "role": "evidence"
+    },
+    {
+      "slug": "2505.11432-megascale-moe-communication-efficient-training",
+      "month": "2025-05",
+      "primary": "resource-frontier",
+      "secondary": [
+        "rl-systems"
+      ],
+      "role": "evidence"
+    },
+    {
+      "slug": "2504.13837-rlvr-reasoning-boundary-base-model",
+      "month": "2025-04",
+      "primary": "reasoning-boundary",
+      "secondary": [
+        "credit-verification",
+        "reward-integrity"
+      ],
+      "role": "boundary"
+    },
+    {
+      "slug": "2503.14476-dapo-long-cot-rl-system",
+      "month": "2025-03",
+      "primary": "reasoning-boundary",
+      "secondary": [
+        "credit-verification",
+        "rl-systems"
+      ],
+      "role": "turn"
+    },
+    {
+      "slug": "2503.11926-monitoring-reasoning-models-obfuscation",
+      "month": "2025-03",
+      "primary": "reward-integrity",
+      "secondary": [
+        "reasoning-boundary",
+        "credit-verification"
+      ],
+      "role": "boundary"
+    },
+    {
+      "slug": "2502.10581-do-we-need-to-verify-step-by-step-process-supervision-theory",
+      "month": "2025-02",
+      "primary": "credit-verification",
+      "secondary": [
+        "reasoning-boundary",
+        "reward-integrity"
+      ],
+      "role": "boundary"
+    },
+    {
+      "slug": "2501.12599-kimi-k1-5-scaling-rl-llms",
+      "month": "2025-01",
+      "primary": "reasoning-boundary",
+      "secondary": [
+        "credit-verification",
+        "rl-systems"
+      ],
+      "role": "evidence"
+    },
+    {
+      "slug": "2501.09620-causal-rewards-llm-alignment",
+      "month": "2025-01",
+      "primary": "reward-integrity",
+      "secondary": [
+        "reasoning-boundary",
+        "credit-verification"
+      ],
+      "role": "turn"
+    },
+    {
+      "slug": "2501.12948-deepseek-r1-rl-reasoning",
+      "month": "2025-01",
+      "primary": "reasoning-boundary",
+      "secondary": [
+        "credit-verification",
+        "resource-frontier"
+      ],
+      "role": "origin"
+    },
+    {
+      "slug": "2412.19437-deepseek-v3-technical-report",
+      "month": "2024-12",
+      "primary": "resource-frontier",
+      "secondary": [
+        "context-state",
+        "rl-systems"
+      ],
+      "role": "evidence"
+    },
+    {
+      "slug": "2412.15115-qwen2-5-technical-report",
+      "month": "2024-12",
+      "primary": "resource-frontier",
+      "secondary": [
+        "agent-environments",
+        "reasoning-boundary"
+      ],
+      "role": "evidence"
+    },
+    {
+      "slug": "2026-06-19-muon-optimizer-keller-jordan-synthesis",
+      "month": "2024-12",
+      "primary": "resource-frontier",
+      "secondary": [
+        "rl-systems"
+      ],
+      "role": "bridge"
+    },
+    {
+      "slug": "2409.19256-hybridflow-rlhf-framework",
+      "month": "2024-09",
+      "primary": "rl-systems",
+      "secondary": [
+        "reasoning-boundary",
+        "agent-environments"
+      ],
+      "role": "origin"
+    },
+    {
+      "slug": "2405.04434-deepseek-v2-mla-moe-efficient-llm",
+      "month": "2024-05",
+      "primary": "resource-frontier",
+      "secondary": [
+        "context-state",
+        "agent-runtime"
+      ],
+      "role": "turn"
+    },
+    {
+      "slug": "2405.17381-various-lengths-constant-speed-lightning-attention",
+      "month": "2024-05",
+      "primary": "context-state",
+      "secondary": [
+        "resource-frontier",
+        "agent-runtime"
+      ],
+      "role": "turn"
+    },
+    {
+      "slug": "2405.19888-parrot-semantic-variable-llm-serving",
+      "month": "2024-05",
+      "primary": "agent-runtime",
+      "secondary": [
+        "agent-environments",
+        "context-state"
+      ],
+      "role": "origin"
+    },
+    {
+      "slug": "2403.03185-correlated-proxies-reward-hacking",
+      "month": "2024-03",
+      "primary": "reward-integrity",
+      "secondary": [
+        "reasoning-boundary",
+        "credit-verification"
+      ],
+      "role": "origin"
+    },
+    {
+      "slug": "2401.06066-deepseekmoe-expert-specialization",
+      "month": "2024-01",
+      "primary": "resource-frontier",
+      "secondary": [
+        "agent-runtime"
+      ],
+      "role": "origin"
+    },
+    {
+      "slug": "2312.08935-math-shepherd-automatic-process-supervision",
+      "month": "2023-12",
+      "primary": "credit-verification",
+      "secondary": [
+        "reasoning-boundary",
+        "reward-integrity"
+      ],
+      "role": "turn"
+    },
+    {
+      "slug": "2310.01889-ring-attention-blockwise-transformers-near-infinite-context",
+      "month": "2023-10",
+      "primary": "context-state",
+      "secondary": [
+        "resource-frontier",
+        "agent-runtime"
+      ],
+      "role": "origin"
+    },
+    {
+      "slug": "2309.14509-deepspeed-ulysses-long-sequence-training",
+      "month": "2023-09",
+      "primary": "context-state",
+      "secondary": [
+        "resource-frontier",
+        "agent-runtime"
+      ],
+      "role": "origin"
+    },
+    {
+      "slug": "2308.16369-sarathi-chunked-prefill-decode-maximal-batching",
+      "month": "2023-08",
+      "primary": "agent-runtime",
+      "secondary": [
+        "context-state"
+      ],
+      "role": "turn"
+    },
+    {
+      "slug": "2307.08691-flashattention-2-parallelism-work-partitioning",
+      "month": "2023-07",
+      "primary": "context-state",
+      "secondary": [
+        "resource-frontier",
+        "agent-runtime"
+      ],
+      "role": "evidence"
+    },
+    {
+      "slug": "2306.13649-on-policy-distillation-language-models",
+      "month": "2023-06",
+      "primary": "credit-verification",
+      "secondary": [
+        "reasoning-boundary"
+      ],
+      "role": "origin"
+    },
+    {
+      "slug": "2305.20050-lets-verify-step-by-step-process-supervision",
+      "month": "2023-05",
+      "primary": "credit-verification",
+      "secondary": [
+        "reasoning-boundary",
+        "reward-integrity"
+      ],
+      "role": "origin"
+    },
+    {
+      "slug": "2211.17192-fast-inference-transformers-speculative-decoding",
+      "month": "2022-11",
+      "primary": "agent-runtime",
+      "secondary": [],
+      "role": "origin"
+    },
+    {
+      "slug": "2205.14135-flashattention-io-aware-exact-attention",
+      "month": "2022-05",
+      "primary": "context-state",
+      "secondary": [
+        "resource-frontier",
+        "agent-runtime"
+      ],
+      "role": "origin"
+    },
+    {
+      "slug": "2203.15556-training-compute-optimal-large-language-models",
+      "month": "2022-03",
+      "primary": "resource-frontier",
+      "secondary": [],
+      "role": "turn"
+    },
+    {
+      "slug": "2020-03-07-schulman-kl-divergence-approximations",
+      "month": "2020-03",
+      "primary": "rl-systems",
+      "secondary": [
+        "reasoning-boundary",
+        "reward-integrity"
+      ],
+      "role": "origin"
+    },
+    {
+      "slug": "2001.08361-scaling-laws-neural-language-models",
+      "month": "2020-01",
+      "primary": "resource-frontier",
+      "secondary": [],
+      "role": "origin"
+    },
+    {
+      "slug": "1910.02054-zero-memory-optimizations-trillion-parameter-models",
+      "month": "2019-10",
+      "primary": "resource-frontier",
+      "secondary": [
+        "rl-systems"
+      ],
+      "role": "origin"
+    }
+  ]
+}

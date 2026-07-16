@@ -7,7 +7,7 @@ Updated-At: 2026-07-16
 
 本页说明这个论文档案如何把一次阅读变成可追溯、可更新、可连接的长期记录。它面向两类读者：公开网页上的读者可以看到笔记质量如何被约束；后续维护者可以按同一套流程继续新增论文、作者档案和跨论文关系。
 
-每次用户给出 arXiv、PDF、论文项目页、技术博客或论文标题时，本目录按同一流程产出独立 Markdown 笔记，并维护 `content/utility/papers-index.md`、`data/authors.json`、`data/paper-tags.json` 和相关站点链接。
+每次用户给出 arXiv、PDF、论文项目页、技术博客或论文标题时，本目录按同一流程产出独立 Markdown 笔记，并维护 `content/utility/papers-index.md`、`data/authors.json`、`data/paper-tags.json`、`data/research-mainlines.json` 和相关站点链接。
 
 ## 快速执行卡
 
@@ -536,6 +536,7 @@ https://api2.openreview.net/notes?forum=<forum_id>&details=replyCount,directRepl
 - 已存档论文：`[2504.13837](/papers/2504.13837-rlvr-reasoning-boundary-base-model/)`。
 - 作者页：`[Tri Dao](/authors/tri-dao/)`。
 - 索引页：`[papers-index.md](/archive/)`。
+- 研究主线页：`[research-mainlines.md](/mainlines/)`。
 - 工作流页：`[paper-analysis-workflow.md](/workflow/)`。
 - 模板页：`[paper-note-template.md](/template/)`。
 
@@ -590,6 +591,18 @@ $$
 5. 索引不维护全局 `跨论文关系`；每篇论文必须在自己的 `跨论文关系` 中保留能改变理解的作者重叠、实验室连续产出、主题延展、引用或方法复用。当前没有可靠关系时明确记录 `暂无高置信跨论文关系。`。
 
 `check:workflow` 会对论文文件集合与 `当前收录` 执行双向比较，并拒绝缺失、重复、失效链接和不符合三列契约的表格行。
+
+## 研究主线更新
+
+`data/research-mainlines.json` 为每篇存档材料保留一个主归属、零到两个次级关系和一个叙事角色；[research-mainlines.md](/mainlines/) 汇总各条主线的研究问题、证据、反例、当前判断和开放问题。主线承担跨论文解释与查询，主题标签继续承担稳定词表检索。
+
+维护规则：
+
+1. 每篇论文在分类数据中恰好出现一次，主归属必须唯一；次级关系只记录会改变该论文在另一条主线中作用的交叉影响。
+2. `origin`、`turn`、`evidence`、`counterexample`、`bridge` 和 `boundary` 描述材料在当前语料叙事中的角色，不代表论文质量或会议等级。
+3. 新增论文时先完成单篇分析，再判断它会补强、转折、反驳、桥接或限制哪条既有主线。分类数据必须同步新增；只有主线判断或证据边界发生实质变化时才改写长文。
+4. 主线结论属于本地综合，页面保留语料快照日期。跨论文速度、分数、上下文长度和成本数字只有在设置可比时才并列解释。
+5. 删除论文时同步清除分类行，并检查受影响主线的计数、证据链、反例和站内链接。
 
 ## 论文标签与主题路由
 
@@ -649,7 +662,7 @@ facet 只负责组织导航，当前包括 Training、Inference、Architecture�
 
 1. 删除 `content/papers/<slug>.md`，并移除 `当前收录` 中对应的唯一表格行。
 2. 搜索该 slug，在剩余论文各自的 `跨论文关系` 中删除或修订已经失效的关系描述。
-3. 删除 `data/paper-tags.json` 中对应分配，并清理 legacy manifest 条目和只服务该论文的静态图片；目录或图片删除仍遵循高危操作确认要求。仅在某个 taxonomy 标签不再表达任何存档概念时删除该标签，并审计所有分配和站点链接。
+3. 删除 `data/paper-tags.json` 和 `data/research-mainlines.json` 中对应分配，复核受影响主线的计数、论证与论文链接，并清理 legacy manifest 条目和只服务该论文的静态图片；目录或图片删除仍遵循高危操作确认要求。仅在某个 taxonomy 标签不再表达任何存档概念时删除该标签，并审计所有分配和站点链接。
 4. 重新计算剩余论文中的作者关联。某个 `data/authors.json` profile 若没有 `/authors/<slug>/` 链接，也没有通过 `Source -> Authors` 姓名或 alias 关联任何论文，在同一提交中删除该 profile。
 5. 运行本地内容与反向完整性检查。`missing-index-entry`、`stale-index-entry`、`duplicate-index-entry` 与 `orphan-author-profile` 都属于必须修复的硬错误。
 
@@ -695,6 +708,7 @@ facet 只负责组织导航，当前包括 Training、Inference、Architecture�
 - 新增或更新内容是否已写入对应 Markdown / JSON 文件。
 - `content/utility/papers-index.md` 的 `当前收录` 是否与论文文件集合双向一致，按首次公开月份从新到旧排列，且每行包含简称、首次公开月份和索引核心信号。
 - `data/paper-tags.json` 是否覆盖每篇论文、没有失效 slug，并为每篇论文保留 1 个主标签和最多 3 个辅助标签；主标签是否绑定核心贡献。
+- `data/research-mainlines.json` 是否覆盖每篇论文、没有失效 slug，并为每篇论文保留唯一主归属、合法角色和至多两个不重复的次级关系；主线长文的快照、计数和证据边界是否同步。
 - v2 笔记是否声明工作流版本和材料类型，并记录规范来源、责任主体、发布日期或更新时间、读取版本和访问日期。
 - 是否把稳定作者来源同步到 `data/authors.json`；论文 Markdown 不应包含作者核验过程。
 - 作者页相关信息是否同步到 `data/authors.json`，论文笔记是否使用 `/authors/<slug>/` 链接。
@@ -713,5 +727,5 @@ facet 只负责组织导航，当前包括 Training、Inference、Architecture�
 - `Reference Intake Brief` 是否使用标准决策值并解释原因。
 - 是否存在先否定前项、再强调后项的对照式中文表达。
 - 是否避免长段复制论文原文。
-- 面向站点展示的内部链接是否使用 `/papers/<slug>/`、`/topics/#tag-<id>`、`/authors/<slug>/`、`/archive/`、`/workflow/` 或 `/template/`。
+- 面向站点展示的内部链接是否使用 `/papers/<slug>/`、`/topics/#tag-<id>`、`/authors/<slug>/`、`/archive/`、`/mainlines/`、`/workflow/` 或 `/template/`。
 - 本地内容工作流、元数据、公式、搜索和置顶条目检查是否全部通过；production build 与生成站点检查是否明确交给 GitHub Actions。

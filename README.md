@@ -6,10 +6,11 @@ The content source is split by role:
 
 ```text
 content/papers/      paper notes, one Markdown file per paper
-content/utility/     public workflow, template, and archive index pages
+content/utility/     public workflow, template, archive index, and research-mainline pages
 data/authors.json    maintained author profiles
 data/tag-taxonomy.json controlled tag vocabulary and facets
 data/paper-tags.json paper-to-tag assignments, primary tag first
+data/research-mainlines.json full-corpus mainline, role, and cross-line assignments
 internal/            private maintenance SOPs
 ```
 

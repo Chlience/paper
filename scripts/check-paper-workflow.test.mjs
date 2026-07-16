@@ -4,6 +4,7 @@ import fs from 'node:fs/promises';
 import test from 'node:test';
 import * as authors from './content/authors.mjs';
 import * as markdown from './content/markdown.mjs';
+import * as repository from './content/repository.mjs';
 import * as tagging from './content/tagging.mjs';
 import * as workflow from './content/paper-workflow.mjs';
 
@@ -1009,6 +1010,8 @@ test('public workflow documents index and deletion reverse-integrity contracts',
     '`orphan-author-profile`',
     '`data/paper-tags.json`',
     '`data/tag-taxonomy.json`',
+    '`data/research-mainlines.json`',
+    '研究主线更新',
   ]) {
     assert.match(workflowDoc, new RegExp(snippet.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
   }
@@ -1060,6 +1063,115 @@ test('topic routes live on the dedicated topics page', async () => {
   assert.ok(topics.includes('id={`tag-${route.id}`}'));
   assert.match(siteHeader, /id: 'topics', label: '主题'/);
   assert.match(siteLib, /topics: '\/topics\/'/);
+});
+
+test('research mainlines have a dedicated generated route and primary navigation entry', async () => {
+  const [page, content, siteHeader, siteLib, layout] = await Promise.all([
+    fs.readFile('src/pages/mainlines/index.astro', 'utf8'),
+    fs.readFile('content/utility/research-mainlines.md', 'utf8'),
+    fs.readFile('src/components/SiteHeader.astro', 'utf8'),
+    fs.readFile('src/lib/site.ts', 'utf8'),
+    fs.readFile('src/layouts/Layout.astro', 'utf8'),
+  ]);
+  const definition = repository.utilityPageDefinitions.find((entry) => entry.slug === 'mainlines');
+
+  assert.equal(definition?.file, 'content/utility/research-mainlines.md');
+  assert.equal(definition?.path, '/mainlines/');
+  assert.match(content, /^# 论文研究主线$/m);
+  assert.match(page, /active="mainlines"/);
+  assert.match(page, /canonicalPath="\/mainlines\/"/);
+  assert.match(page, /data-mainline-filters/);
+  assert.match(page, /data-mainline-row/);
+  assert.match(siteHeader, /id: 'mainlines', label: '主线'/);
+  assert.match(siteLib, /mainlines: '\/mainlines\/'/);
+  assert.match(layout, /'mainlines'/);
+});
+
+test('research mainline assignments cover the current corpus exactly once', async () => {
+  const [classificationSource, paperFiles, archiveIndex, mainlinesMarkdown] = await Promise.all([
+    fs.readFile('data/research-mainlines.json', 'utf8'),
+    fs.readdir('content/papers'),
+    fs.readFile('content/utility/papers-index.md', 'utf8'),
+    fs.readFile('content/utility/research-mainlines.md', 'utf8'),
+  ]);
+  const classification = JSON.parse(classificationSource);
+  const paperSlugs = paperFiles
+    .filter((fileName) => fileName.endsWith('.md'))
+    .map((fileName) => fileName.replace(/\.md$/, ''))
+    .sort();
+  const lineIds = classification.lines.map((line) => line.id);
+  const lineIdSet = new Set(lineIds);
+  const assignmentSlugs = classification.papers.map((paper) => paper.slug).sort();
+  const validRoles = new Set(['origin', 'turn', 'evidence', 'counterexample', 'bridge', 'boundary']);
+  const validStatuses = new Set(['consensus', 'competing', 'emerging']);
+  const archiveMonths = new Map();
+  const archiveSlugs = [];
+  const archiveRowPattern = /\/papers\/([^/]+)\/\)\s*\|\s*(\d{4})年(\d{1,2})月\s*\|/g;
+  for (const match of archiveIndex.matchAll(archiveRowPattern)) {
+    archiveMonths.set(match[1], `${match[2]}-${match[3].padStart(2, '0')}`);
+    archiveSlugs.push(match[1]);
+  }
+
+  assert.match(classification.snapshot, /^\d{4}-\d{2}-\d{2}$/);
+  assert.equal(classification.paperCount, paperSlugs.length);
+  assert.equal(classification.papers.length, paperSlugs.length);
+  assert.deepEqual(assignmentSlugs, paperSlugs);
+  assert.deepEqual(classification.papers.map((paper) => paper.slug), archiveSlugs);
+  assert.equal(new Set(assignmentSlugs).size, assignmentSlugs.length);
+  assert.equal(lineIdSet.size, lineIds.length);
+  assert.deepEqual(lineIds, [
+    'resource-frontier',
+    'context-state',
+    'agent-runtime',
+    'agent-environments',
+    'reasoning-boundary',
+    'credit-verification',
+    'rl-systems',
+    'reward-integrity',
+  ]);
+  const contentAnchors = [...mainlinesMarkdown.matchAll(/id="line-([^"]+)"/g)].map((match) => match[1]);
+  assert.deepEqual(contentAnchors, lineIds);
+  assert.ok(mainlinesMarkdown.includes(classification.snapshot));
+  assert.ok(mainlinesMarkdown.includes(`${classification.paperCount} 条归档材料`));
+  const contentPaperLinks = [...mainlinesMarkdown.matchAll(/\/papers\/([^/]+)\//g)].map((match) => match[1]);
+  const contentPaperLinkSet = new Set(contentPaperLinks);
+  assert.ok(contentPaperLinks.length > 0);
+  assert.deepEqual(contentPaperLinks.filter((slug) => !paperSlugs.includes(slug)), []);
+
+  const primaryCounts = new Map(lineIds.map((lineId) => [lineId, 0]));
+  for (const line of classification.lines) {
+    for (const field of ['name', 'question', 'thesis', 'boundary', 'statusLabel']) {
+      assert.equal(typeof line[field], 'string');
+      assert.ok(line[field].trim(), `${line.id}.${field} must be non-empty.`);
+    }
+    assert.ok(validStatuses.has(line.status), `Unknown status for ${line.id}.`);
+    assert.ok(mainlinesMarkdown.includes(`id="line-${line.id}"`), `Missing content anchor for ${line.id}.`);
+  }
+
+  for (const assignment of classification.papers) {
+    assert.ok(lineIdSet.has(assignment.primary), `Unknown primary line for ${assignment.slug}.`);
+    assert.ok(validRoles.has(assignment.role), `Unknown role for ${assignment.slug}.`);
+    assert.match(assignment.month, /^\d{4}-\d{2}$/);
+    assert.equal(assignment.month, archiveMonths.get(assignment.slug));
+    assert.ok(Array.isArray(assignment.secondary));
+    assert.ok(assignment.secondary.length <= 2);
+    assert.equal(new Set(assignment.secondary).size, assignment.secondary.length);
+    assert.ok(!assignment.secondary.includes(assignment.primary));
+    for (const secondaryLine of assignment.secondary) {
+      assert.ok(lineIdSet.has(secondaryLine), `Unknown secondary line for ${assignment.slug}.`);
+    }
+    if (assignment.role === 'origin' || assignment.role === 'counterexample') {
+      assert.ok(
+        contentPaperLinkSet.has(assignment.slug),
+        `${assignment.role} paper ${assignment.slug} must appear in the narrative.`,
+      );
+    }
+    primaryCounts.set(assignment.primary, primaryCounts.get(assignment.primary) + 1);
+  }
+
+  for (const [lineId, count] of primaryCounts) {
+    assert.ok(count > 0, `${lineId} must have at least one primary paper.`);
+  }
 });
 
 test('archive omits global author grouping while paper notes retain author relationships', async () => {

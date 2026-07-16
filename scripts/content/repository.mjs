@@ -39,6 +39,12 @@ export const utilityPageDefinitions = [
     path: '/archive/',
   },
   {
+    ...markdownEntry(utilityContentDir, 'research-mainlines.md'),
+    slug: 'mainlines',
+    title: '论文研究主线',
+    path: '/mainlines/',
+  },
+  {
     ...markdownEntry(utilityContentDir, 'paper-analysis-workflow.md'),
     slug: 'workflow',
     title: 'Paper Analysis Workflow',
