@@ -193,7 +193,7 @@ Grape 与 SPORK 处理两类不同的可提前工作。Grape 从预声明 DAG �
 
 1. 工具策略只覆盖 read-only speculation；write、支付、消息发送和其它非幂等操作需要隔离执行、事务、幂等键或补偿机制。
 2. D1/D2 依赖 streaming、arbitrary-prefix completion、token logprobs 和跨请求 prefix cache；多数 closed-source chat API 无法直接运行。
-3. D3 的论文性能来自 engine integration；公开 HTTP sidecar 使用 server-level 全局 proposer state、要求单 worker，默认 draft 上限也与论文平均前缀长度不同。Heavy batching 还会让 probe 竞争 decode slots、KV Cache 与 memory bandwidth。
+3. D3 的论文结果来自 engine integration。仓库中的 HTTP 示例把 draft 写入同一个 server slot，新 draft 会覆盖旧状态，因此评测端一次只能运行一个 agent request（`workers=1`，与 tensor parallel 数量无关）。默认最多保留 20 个 draft tokens，也会截短论文在 BrowseComp 中观测到的 29.5-token 平均可复用前缀。Heavy batching 还会让 probe 竞争 decode slots、KV Cache 与 memory bandwidth。
 4. Training-free 只表示无需训练新增参数；controller、probe traffic、工具策略和 D3 integration 会带来系统成本。
 5. Qwen3.5 原生 XML tool format 的 parse success 为 97%，fork name accuracy 只有 4.5%；改用 JSON prompting 后得到主结果，说明 tool serialization alignment 属于核心适用条件。
 6. 公开仓库缺少论文使用的 GAIA internal search backend；HotpotQA 的 MediaWiki 路径与论文内部服务尚未建立实现等价性；tau2 使用 single-turn、no-user-simulator action match，不能与官方 leaderboard reward 直接比较。
