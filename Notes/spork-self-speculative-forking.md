@@ -90,7 +90,7 @@ GAIA 的 997 个 probes 上，$\theta=0.90$ 得到 88% precision、100% recall �
 
 D3 在 main 到达 `<tool_call>` boundary 后，把 probe body 交给 speculative-decoding proposer。Target model 验证这些 draft tokens，接受最长 exact greedy prefix；第一次 mismatch 后，main 继续自回归生成 suffix。
 
-论文用 BrowseComp 做离线算术估计：50-token tool call 的 rejected turn 可以减少约 0.6 秒 decode，按 turn 摊销约 0.31 秒。这项收益缺少独立在线 D3 ablation。正文数字来自 vLLM engine integration；公开 HTTP sidecar 是并发隔离与版本兼容仍受限的参考实现。
+论文用 BrowseComp 做离线算术估计：50-token tool call 的 rejected turn 可以减少约 0.6 秒 decode，按 turn 摊销约 0.31 秒。这项收益缺少独立在线 D3 ablation。正文数字来自 paper engine mode；公开 SPORK-HTTP 通过 runtime monkey patch 实现同一 D3 机制，当前缺少与 paper path 的性能等价证据，并发隔离与版本兼容也仍受限。
 
 ### 3.4 Commit、fallback 与工具语义
 
@@ -193,7 +193,7 @@ Grape 与 SPORK 处理两类不同的可提前工作。Grape 从预声明 DAG �
 
 1. 工具策略只覆盖 read-only speculation；write、支付、消息发送和其它非幂等操作需要隔离执行、事务、幂等键或补偿机制。
 2. D1/D2 依赖 streaming、arbitrary-prefix completion、token logprobs 和跨请求 prefix cache；多数 closed-source chat API 无法直接运行。
-3. D3 的论文结果来自 engine integration。仓库中的 HTTP 示例把 draft 写入同一个 server slot，新 draft 会覆盖旧状态，因此评测端一次只能运行一个 agent request（`workers=1`，与 tensor parallel 数量无关）。默认最多保留 20 个 draft tokens，也会截短论文在 BrowseComp 中观测到的 29.5-token 平均可复用前缀。Heavy batching 还会让 probe 竞争 decode slots、KV Cache 与 memory bandwidth。
+3. D3 本身需要 engine-side 注入。论文的 `HTTP mode` 使用 stock vLLM，只运行 D1+D2；仓库的 `SPORK-HTTP` 会 monkey-patch vLLM 的 `GPUWorker` 和 drafter，可运行 D1+D2+D3，`/spork/*` 只是控制接口。它当前把 draft 写入同一个 slot，新 draft 会覆盖旧状态，因此评测端一次只能运行一个 agent request（`workers=1`，与 tensor parallel 数量无关）。默认最多保留 20 个 draft tokens，也会截短论文在 BrowseComp 中观测到的 29.5-token 平均可复用前缀。Heavy batching 还会让 probe 竞争 decode slots、KV Cache 与 memory bandwidth。
 4. Training-free 只表示无需训练新增参数；controller、probe traffic、工具策略和 D3 integration 会带来系统成本。
 5. Qwen3.5 原生 XML tool format 的 parse success 为 97%，fork name accuracy 只有 4.5%；改用 JSON prompting 后得到主结果，说明 tool serialization alignment 属于核心适用条件。
 6. 公开仓库缺少论文使用的 GAIA internal search backend；HotpotQA 的 MediaWiki 路径与论文内部服务尚未建立实现等价性；tau2 使用 single-turn、no-user-simulator action match，不能与官方 leaderboard reward 直接比较。
