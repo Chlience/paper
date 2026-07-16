@@ -1,7 +1,7 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "verifiedAt": "2026-07-16",
-  "definition": "Latest complete edition no later than the 2026 catalog year; main/full-paper deadlines and official event dates.",
+  "definition": "Latest complete edition no later than the 2026 catalog year; main/full-paper deadlines, official event dates, and an official accepted-papers URL when published.",
   "venues": {
     "ppopp": {
       "year": 2026,
@@ -68,6 +68,7 @@
       "year": 2026,
       "submissionDeadline": "Spring 2025-03-12 / Summer 2025-08-20",
       "conferenceDates": "2026-03-22–2026-03-26",
+      "acceptedPapersUrl": "https://www.asplos-conference.org/asplos2026/program/",
       "sourceUrls": [
         "https://www.asplos-conference.org/asplos2026/cfp/"
       ],
@@ -201,6 +202,7 @@
       "year": 2026,
       "submissionDeadline": "Cycle 1 2025-08-26 / Cycle 2 2026-02-05, 23:59 AoE",
       "conferenceDates": "2026-08-12–2026-08-14",
+      "acceptedPapersUrl": "https://www.usenix.org/conference/usenixsecurity26/technical-sessions",
       "sourceUrls": [
         "https://www.usenix.org/conference/usenixsecurity26/call-for-papers"
       ],
@@ -495,6 +497,7 @@
       "year": 2026,
       "submissionDeadline": "2026-01-05 23:59 AoE (UTC−12)",
       "conferenceDates": "2026-07-02–2026-07-07",
+      "acceptedPapersUrl": "https://aclanthology.org/volumes/2026.acl-long/",
       "sourceUrls": [
         "https://2026.aclweb.org/"
       ],
@@ -505,6 +508,7 @@
       "year": 2026,
       "submissionDeadline": "2025-11-13 23:59 AoE (UTC−12)",
       "conferenceDates": "2026-06-03–2026-06-07",
+      "acceptedPapersUrl": "https://openaccess.thecvf.com/CVPR2026?day=all",
       "sourceUrls": [
         "https://cvpr.thecvf.com/Conferences/2026/CallForPapers",
         "https://cvpr.thecvf.com/Conferences/2026/Dates"
@@ -527,6 +531,7 @@
       "year": 2026,
       "submissionDeadline": "2026-01-28 AoE (2026-01-29 12:00 UTC)",
       "conferenceDates": "2026-07-06–2026-07-11",
+      "acceptedPapersUrl": "https://icml.cc/virtual/2026/papers.html",
       "sourceUrls": [
         "https://icml.cc/Conferences/2026/CallForPapers"
       ],

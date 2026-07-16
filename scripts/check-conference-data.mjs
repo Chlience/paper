@@ -1,41 +1,34 @@
 import {
-  readConferenceDatasets,
   readConferenceRegistry,
-  readConferenceTaxonomy,
   readLatestEditionCalendar,
 } from './conferences/paths.mjs';
 import {
-  validateConferenceDatasets,
   validateConferenceRegistry,
-  validateConferenceTaxonomy,
   validateLatestEditionCalendar,
 } from './conferences/validate.mjs';
-import { getCatalogDatasets, getCatalogVenues } from './conferences/catalog-scope.mjs';
+import { getCatalogVenues } from './conferences/catalog-scope.mjs';
 
-const [registry, taxonomy, latestEditionCalendar, datasets] = await Promise.all([
+const [registry, latestEditionCalendar] = await Promise.all([
   readConferenceRegistry(),
-  readConferenceTaxonomy(),
   readLatestEditionCalendar(),
-  readConferenceDatasets(),
 ]);
 const errors = [
   ...validateConferenceRegistry(registry),
-  ...validateConferenceTaxonomy(taxonomy),
   ...validateLatestEditionCalendar(latestEditionCalendar, registry),
-  ...validateConferenceDatasets(datasets, registry, taxonomy),
 ];
 
 if (errors.length > 0) {
-  for (const error of errors) console.error(`[${error.code}] ${error.subject}: ${error.message}`);
+  for (const error of errors) {
+    console.error(`[${error.code}] ${error.subject}: ${error.message}`);
+  }
   process.exitCode = 1;
 } else {
-  const paperCount = datasets.reduce((sum, dataset) => sum + dataset.papers.length, 0);
   const catalogVenues = getCatalogVenues(registry);
-  const catalogDatasets = getCatalogDatasets(datasets, registry);
-  const catalogPaperCount = catalogDatasets.reduce((sum, dataset) => sum + dataset.papers.length, 0);
+  const acceptedPapersLinks = catalogVenues.filter(
+    (venue) => latestEditionCalendar.venues[venue.id]?.acceptedPapersUrl,
+  ).length;
   console.log(
-    `Conference data check passed: ${registry.venues.length} registry venues, ` +
-      `${catalogVenues.length} catalog venues, ${datasets.length} raw datasets, ` +
-      `${catalogPaperCount}/${paperCount} catalog/raw papers.`,
+    `Conference directory check passed: ${registry.venues.length} registry venues, ` +
+      `${catalogVenues.length} public venues, ${acceptedPapersLinks} accepted-papers links.`,
   );
 }

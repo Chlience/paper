@@ -7,7 +7,10 @@
     "sourceUrl": "https://www.ccf.org.cn/Academic_Evaluation/By_category/"
   },
   "catalogScope": {
-    "excludedVenueIds": ["cvpr", "iccv"],
+    "excludedVenueIds": [
+      "cvpr",
+      "iccv"
+    ],
     "note": "Computer vision conferences are outside this archive's current focus."
   },
   "areas": [
@@ -60,8 +63,7 @@
       "ccfAreaId": "architecture-systems",
       "ccfRank": "A",
       "publisher": "ACM",
-      "dblpUrl": "https://dblp.org/db/conf/ppopp/",
-      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+      "dblpUrl": "https://dblp.org/db/conf/ppopp/"
     },
     {
       "id": "fast",
@@ -70,8 +72,7 @@
       "ccfAreaId": "architecture-systems",
       "ccfRank": "A",
       "publisher": "USENIX",
-      "dblpUrl": "https://dblp.org/db/conf/fast/",
-      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+      "dblpUrl": "https://dblp.org/db/conf/fast/"
     },
     {
       "id": "dac",
@@ -80,8 +81,7 @@
       "ccfAreaId": "architecture-systems",
       "ccfRank": "A",
       "publisher": "ACM",
-      "dblpUrl": "https://dblp.org/db/conf/dac/",
-      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+      "dblpUrl": "https://dblp.org/db/conf/dac/"
     },
     {
       "id": "hpca",
@@ -90,8 +90,7 @@
       "ccfAreaId": "architecture-systems",
       "ccfRank": "A",
       "publisher": "IEEE",
-      "dblpUrl": "https://dblp.org/db/conf/hpca/",
-      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+      "dblpUrl": "https://dblp.org/db/conf/hpca/"
     },
     {
       "id": "micro",
@@ -100,8 +99,7 @@
       "ccfAreaId": "architecture-systems",
       "ccfRank": "A",
       "publisher": "IEEE/ACM",
-      "dblpUrl": "https://dblp.org/db/conf/micro/",
-      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+      "dblpUrl": "https://dblp.org/db/conf/micro/"
     },
     {
       "id": "sc",
@@ -110,8 +108,7 @@
       "ccfAreaId": "architecture-systems",
       "ccfRank": "A",
       "publisher": "IEEE",
-      "dblpUrl": "https://dblp.org/db/conf/sc/",
-      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+      "dblpUrl": "https://dblp.org/db/conf/sc/"
     },
     {
       "id": "asplos",
@@ -120,8 +117,7 @@
       "ccfAreaId": "architecture-systems",
       "ccfRank": "A",
       "publisher": "ACM",
-      "dblpUrl": "https://dblp.org/db/conf/asplos/",
-      "edition2026": { "status": "published", "homepage": "https://www.asplos-conference.org/asplos2026/", "acceptedListUrl": "https://www.asplos-conference.org/asplos2026/program/", "adapter": "asplos-program-html" }
+      "dblpUrl": "https://dblp.org/db/conf/asplos/"
     },
     {
       "id": "isca",
@@ -130,8 +126,7 @@
       "ccfAreaId": "architecture-systems",
       "ccfRank": "A",
       "publisher": "IEEE/ACM",
-      "dblpUrl": "https://dblp.org/db/conf/isca/",
-      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+      "dblpUrl": "https://dblp.org/db/conf/isca/"
     },
     {
       "id": "acm-sigops-atc",
@@ -140,8 +135,7 @@
       "ccfAreaId": "architecture-systems",
       "ccfRank": "A",
       "publisher": "ACM",
-      "dblpUrl": "https://dblp.org/db/conf/usenix/",
-      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+      "dblpUrl": "https://dblp.org/db/conf/usenix/"
     },
     {
       "id": "eurosys",
@@ -150,8 +144,7 @@
       "ccfAreaId": "architecture-systems",
       "ccfRank": "A",
       "publisher": "ACM",
-      "dblpUrl": "https://dblp.org/db/conf/eurosys/",
-      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+      "dblpUrl": "https://dblp.org/db/conf/eurosys/"
     },
     {
       "id": "hpdc",
@@ -160,8 +153,7 @@
       "ccfAreaId": "architecture-systems",
       "ccfRank": "A",
       "publisher": "IEEE",
-      "dblpUrl": "https://dblp.org/db/conf/hpdc/",
-      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+      "dblpUrl": "https://dblp.org/db/conf/hpdc/"
     },
     {
       "id": "sigcomm",
@@ -170,8 +162,7 @@
       "ccfAreaId": "networking",
       "ccfRank": "A",
       "publisher": "ACM",
-      "dblpUrl": "https://dblp.org/db/conf/sigcomm/",
-      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+      "dblpUrl": "https://dblp.org/db/conf/sigcomm/"
     },
     {
       "id": "mobicom",
@@ -180,8 +171,7 @@
       "ccfAreaId": "networking",
       "ccfRank": "A",
       "publisher": "ACM",
-      "dblpUrl": "https://dblp.org/db/conf/mobicom/",
-      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+      "dblpUrl": "https://dblp.org/db/conf/mobicom/"
     },
     {
       "id": "infocom",
@@ -190,8 +180,7 @@
       "ccfAreaId": "networking",
       "ccfRank": "A",
       "publisher": "IEEE",
-      "dblpUrl": "https://dblp.org/db/conf/infocom/",
-      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+      "dblpUrl": "https://dblp.org/db/conf/infocom/"
     },
     {
       "id": "nsdi",
@@ -200,8 +189,7 @@
       "ccfAreaId": "networking",
       "ccfRank": "A",
       "publisher": "USENIX",
-      "dblpUrl": "https://dblp.org/db/conf/nsdi/",
-      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+      "dblpUrl": "https://dblp.org/db/conf/nsdi/"
     },
     {
       "id": "ccs",
@@ -210,8 +198,7 @@
       "ccfAreaId": "security",
       "ccfRank": "A",
       "publisher": "ACM",
-      "dblpUrl": "https://dblp.org/db/conf/ccs/",
-      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+      "dblpUrl": "https://dblp.org/db/conf/ccs/"
     },
     {
       "id": "eurocrypt",
@@ -220,8 +207,7 @@
       "ccfAreaId": "security",
       "ccfRank": "A",
       "publisher": "Springer",
-      "dblpUrl": "https://dblp.org/db/conf/eurocrypt/",
-      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+      "dblpUrl": "https://dblp.org/db/conf/eurocrypt/"
     },
     {
       "id": "ieee-sp",
@@ -230,8 +216,7 @@
       "ccfAreaId": "security",
       "ccfRank": "A",
       "publisher": "IEEE",
-      "dblpUrl": "https://dblp.org/db/conf/sp/",
-      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+      "dblpUrl": "https://dblp.org/db/conf/sp/"
     },
     {
       "id": "crypto",
@@ -240,8 +225,7 @@
       "ccfAreaId": "security",
       "ccfRank": "A",
       "publisher": "Springer",
-      "dblpUrl": "https://dblp.org/db/conf/crypto/",
-      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+      "dblpUrl": "https://dblp.org/db/conf/crypto/"
     },
     {
       "id": "usenix-security",
@@ -250,8 +234,7 @@
       "ccfAreaId": "security",
       "ccfRank": "A",
       "publisher": "USENIX Association",
-      "dblpUrl": "https://dblp.org/db/conf/uss/",
-      "edition2026": { "status": "published", "homepage": "https://www.usenix.org/conference/usenixsecurity26", "acceptedListUrl": "https://www.usenix.org/conference/usenixsecurity26/technical-sessions", "adapter": "usenix-program-html" }
+      "dblpUrl": "https://dblp.org/db/conf/uss/"
     },
     {
       "id": "ndss",
@@ -260,8 +243,7 @@
       "ccfAreaId": "security",
       "ccfRank": "A",
       "publisher": "ISOC",
-      "dblpUrl": "https://dblp.org/db/conf/ndss/",
-      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+      "dblpUrl": "https://dblp.org/db/conf/ndss/"
     },
     {
       "id": "pldi",
@@ -270,8 +252,7 @@
       "ccfAreaId": "software",
       "ccfRank": "A",
       "publisher": "ACM",
-      "dblpUrl": "https://dblp.org/db/conf/pldi/",
-      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+      "dblpUrl": "https://dblp.org/db/conf/pldi/"
     },
     {
       "id": "popl",
@@ -280,8 +261,7 @@
       "ccfAreaId": "software",
       "ccfRank": "A",
       "publisher": "ACM",
-      "dblpUrl": "https://dblp.org/db/conf/popl/",
-      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+      "dblpUrl": "https://dblp.org/db/conf/popl/"
     },
     {
       "id": "fse",
@@ -290,8 +270,7 @@
       "ccfAreaId": "software",
       "ccfRank": "A",
       "publisher": "ACM",
-      "dblpUrl": "https://dblp.org/db/conf/sigsoft/",
-      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+      "dblpUrl": "https://dblp.org/db/conf/sigsoft/"
     },
     {
       "id": "sosp",
@@ -300,8 +279,7 @@
       "ccfAreaId": "software",
       "ccfRank": "A",
       "publisher": "ACM",
-      "dblpUrl": "https://dblp.org/db/conf/sosp/",
-      "edition2026": { "status": "no-edition", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+      "dblpUrl": "https://dblp.org/db/conf/sosp/"
     },
     {
       "id": "oopsla",
@@ -310,8 +288,7 @@
       "ccfAreaId": "software",
       "ccfRank": "A",
       "publisher": "ACM",
-      "dblpUrl": "https://dblp.org/db/conf/oopsla/",
-      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+      "dblpUrl": "https://dblp.org/db/conf/oopsla/"
     },
     {
       "id": "ase",
@@ -320,8 +297,7 @@
       "ccfAreaId": "software",
       "ccfRank": "A",
       "publisher": "IEEE/ACM",
-      "dblpUrl": "https://dblp.org/db/conf/kbse/",
-      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+      "dblpUrl": "https://dblp.org/db/conf/kbse/"
     },
     {
       "id": "icse",
@@ -330,8 +306,7 @@
       "ccfAreaId": "software",
       "ccfRank": "A",
       "publisher": "IEEE/ACM",
-      "dblpUrl": "https://dblp.org/db/conf/icse/",
-      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+      "dblpUrl": "https://dblp.org/db/conf/icse/"
     },
     {
       "id": "issta",
@@ -340,8 +315,7 @@
       "ccfAreaId": "software",
       "ccfRank": "A",
       "publisher": "ACM",
-      "dblpUrl": "https://dblp.org/db/conf/issta/",
-      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+      "dblpUrl": "https://dblp.org/db/conf/issta/"
     },
     {
       "id": "osdi",
@@ -350,8 +324,7 @@
       "ccfAreaId": "software",
       "ccfRank": "A",
       "publisher": "USENIX",
-      "dblpUrl": "https://dblp.org/db/conf/osdi/",
-      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+      "dblpUrl": "https://dblp.org/db/conf/osdi/"
     },
     {
       "id": "fm",
@@ -360,8 +333,7 @@
       "ccfAreaId": "software",
       "ccfRank": "A",
       "publisher": "FME",
-      "dblpUrl": "https://dblp.org/db/conf/fm/",
-      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+      "dblpUrl": "https://dblp.org/db/conf/fm/"
     },
     {
       "id": "sigmod",
@@ -370,8 +342,7 @@
       "ccfAreaId": "data-management",
       "ccfRank": "A",
       "publisher": "ACM",
-      "dblpUrl": "https://dblp.org/db/conf/sigmod/",
-      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+      "dblpUrl": "https://dblp.org/db/conf/sigmod/"
     },
     {
       "id": "sigkdd",
@@ -380,8 +351,7 @@
       "ccfAreaId": "data-management",
       "ccfRank": "A",
       "publisher": "ACM",
-      "dblpUrl": "https://dblp.org/db/conf/kdd/",
-      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+      "dblpUrl": "https://dblp.org/db/conf/kdd/"
     },
     {
       "id": "icde",
@@ -390,8 +360,7 @@
       "ccfAreaId": "data-management",
       "ccfRank": "A",
       "publisher": "IEEE",
-      "dblpUrl": "https://dblp.org/db/conf/icde/",
-      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+      "dblpUrl": "https://dblp.org/db/conf/icde/"
     },
     {
       "id": "sigir",
@@ -400,8 +369,7 @@
       "ccfAreaId": "data-management",
       "ccfRank": "A",
       "publisher": "ACM",
-      "dblpUrl": "https://dblp.org/db/conf/sigir/",
-      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+      "dblpUrl": "https://dblp.org/db/conf/sigir/"
     },
     {
       "id": "vldb",
@@ -410,8 +378,7 @@
       "ccfAreaId": "data-management",
       "ccfRank": "A",
       "publisher": "Morgan Kaufmann/ACM",
-      "dblpUrl": "https://dblp.org/db/conf/vldb/",
-      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+      "dblpUrl": "https://dblp.org/db/conf/vldb/"
     },
     {
       "id": "stoc",
@@ -420,8 +387,7 @@
       "ccfAreaId": "theory",
       "ccfRank": "A",
       "publisher": "ACM",
-      "dblpUrl": "https://dblp.org/db/conf/stoc/",
-      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+      "dblpUrl": "https://dblp.org/db/conf/stoc/"
     },
     {
       "id": "soda",
@@ -430,8 +396,7 @@
       "ccfAreaId": "theory",
       "ccfRank": "A",
       "publisher": "SIAM",
-      "dblpUrl": "https://dblp.org/db/conf/soda/",
-      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+      "dblpUrl": "https://dblp.org/db/conf/soda/"
     },
     {
       "id": "cav",
@@ -440,8 +405,7 @@
       "ccfAreaId": "theory",
       "ccfRank": "A",
       "publisher": "Springer",
-      "dblpUrl": "https://dblp.org/db/conf/cav/",
-      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+      "dblpUrl": "https://dblp.org/db/conf/cav/"
     },
     {
       "id": "focs",
@@ -450,8 +414,7 @@
       "ccfAreaId": "theory",
       "ccfRank": "A",
       "publisher": "IEEE",
-      "dblpUrl": "https://dblp.org/db/conf/focs/",
-      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+      "dblpUrl": "https://dblp.org/db/conf/focs/"
     },
     {
       "id": "lics",
@@ -460,8 +423,7 @@
       "ccfAreaId": "theory",
       "ccfRank": "A",
       "publisher": "IEEE",
-      "dblpUrl": "https://dblp.org/db/conf/lics/",
-      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+      "dblpUrl": "https://dblp.org/db/conf/lics/"
     },
     {
       "id": "acm-mm",
@@ -470,8 +432,7 @@
       "ccfAreaId": "graphics-multimedia",
       "ccfRank": "A",
       "publisher": "ACM",
-      "dblpUrl": "https://dblp.org/db/conf/mm/",
-      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+      "dblpUrl": "https://dblp.org/db/conf/mm/"
     },
     {
       "id": "siggraph",
@@ -480,8 +441,7 @@
       "ccfAreaId": "graphics-multimedia",
       "ccfRank": "A",
       "publisher": "ACM",
-      "dblpUrl": "https://dblp.org/db/conf/siggraph/",
-      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+      "dblpUrl": "https://dblp.org/db/conf/siggraph/"
     },
     {
       "id": "vr",
@@ -490,8 +450,7 @@
       "ccfAreaId": "graphics-multimedia",
       "ccfRank": "A",
       "publisher": "IEEE",
-      "dblpUrl": "https://dblp.org/db/conf/vr/",
-      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+      "dblpUrl": "https://dblp.org/db/conf/vr/"
     },
     {
       "id": "ieee-vis",
@@ -500,8 +459,7 @@
       "ccfAreaId": "graphics-multimedia",
       "ccfRank": "A",
       "publisher": "IEEE",
-      "dblpUrl": "https://dblp.org/db/conf/visualization/",
-      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+      "dblpUrl": "https://dblp.org/db/conf/visualization/"
     },
     {
       "id": "aaai",
@@ -510,8 +468,7 @@
       "ccfAreaId": "artificial-intelligence",
       "ccfRank": "A",
       "publisher": "AAAI",
-      "dblpUrl": "https://dblp.org/db/conf/aaai/",
-      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+      "dblpUrl": "https://dblp.org/db/conf/aaai/"
     },
     {
       "id": "neurips",
@@ -520,8 +477,7 @@
       "ccfAreaId": "artificial-intelligence",
       "ccfRank": "A",
       "publisher": "MIT Press",
-      "dblpUrl": "https://dblp.org/db/conf/nips/",
-      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+      "dblpUrl": "https://dblp.org/db/conf/nips/"
     },
     {
       "id": "acl",
@@ -530,8 +486,7 @@
       "ccfAreaId": "artificial-intelligence",
       "ccfRank": "A",
       "publisher": "ACL",
-      "dblpUrl": "https://dblp.org/db/conf/acl/",
-      "edition2026": { "status": "published", "homepage": "https://2026.aclweb.org/", "acceptedListUrl": "https://aclanthology.org/volumes/2026.acl-long/", "adapter": "acl-anthology-schedule" }
+      "dblpUrl": "https://dblp.org/db/conf/acl/"
     },
     {
       "id": "cvpr",
@@ -540,8 +495,7 @@
       "ccfAreaId": "artificial-intelligence",
       "ccfRank": "A",
       "publisher": "IEEE",
-      "dblpUrl": "https://dblp.org/db/conf/cvpr/",
-      "edition2026": { "status": "published", "homepage": "https://cvpr.thecvf.com/Conferences/2026", "acceptedListUrl": "https://openaccess.thecvf.com/CVPR2026?day=all", "adapter": "cvpr-schedule-cvf-miniconf" }
+      "dblpUrl": "https://dblp.org/db/conf/cvpr/"
     },
     {
       "id": "iccv",
@@ -550,8 +504,7 @@
       "ccfAreaId": "artificial-intelligence",
       "ccfRank": "A",
       "publisher": "IEEE",
-      "dblpUrl": "https://dblp.org/db/conf/iccv/",
-      "edition2026": { "status": "no-edition", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+      "dblpUrl": "https://dblp.org/db/conf/iccv/"
     },
     {
       "id": "icml",
@@ -560,8 +513,7 @@
       "ccfAreaId": "artificial-intelligence",
       "ccfRank": "A",
       "publisher": "ACM",
-      "dblpUrl": "https://dblp.org/db/conf/icml/",
-      "edition2026": { "status": "published", "homepage": "https://icml.cc/Conferences/2026", "acceptedListUrl": "https://icml.cc/virtual/2026/papers.html", "adapter": "miniconf-json" }
+      "dblpUrl": "https://dblp.org/db/conf/icml/"
     },
     {
       "id": "iclr",
@@ -570,8 +522,7 @@
       "ccfAreaId": "artificial-intelligence",
       "ccfRank": "A",
       "publisher": "OpenReview",
-      "dblpUrl": "https://dblp.org/db/conf/iclr/",
-      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+      "dblpUrl": "https://dblp.org/db/conf/iclr/"
     },
     {
       "id": "cscw",
@@ -580,8 +531,7 @@
       "ccfAreaId": "human-computer-interaction",
       "ccfRank": "A",
       "publisher": "ACM",
-      "dblpUrl": "https://dblp.org/db/conf/cscw/",
-      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+      "dblpUrl": "https://dblp.org/db/conf/cscw/"
     },
     {
       "id": "chi",
@@ -590,8 +540,7 @@
       "ccfAreaId": "human-computer-interaction",
       "ccfRank": "A",
       "publisher": "ACM",
-      "dblpUrl": "https://dblp.org/db/conf/chi/",
-      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+      "dblpUrl": "https://dblp.org/db/conf/chi/"
     },
     {
       "id": "ubicomp",
@@ -600,8 +549,7 @@
       "ccfAreaId": "human-computer-interaction",
       "ccfRank": "A",
       "publisher": "ACM",
-      "dblpUrl": "https://dblp.org/db/conf/huc/",
-      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+      "dblpUrl": "https://dblp.org/db/conf/huc/"
     },
     {
       "id": "uist",
@@ -610,8 +558,7 @@
       "ccfAreaId": "human-computer-interaction",
       "ccfRank": "A",
       "publisher": "ACM",
-      "dblpUrl": "https://dblp.org/db/conf/uist/",
-      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+      "dblpUrl": "https://dblp.org/db/conf/uist/"
     },
     {
       "id": "www",
@@ -620,8 +567,7 @@
       "ccfAreaId": "interdisciplinary",
       "ccfRank": "A",
       "publisher": "ACM",
-      "dblpUrl": "https://dblp.org/db/conf/www/",
-      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+      "dblpUrl": "https://dblp.org/db/conf/www/"
     },
     {
       "id": "rtss",
@@ -630,8 +576,7 @@
       "ccfAreaId": "interdisciplinary",
       "ccfRank": "A",
       "publisher": "IEEE",
-      "dblpUrl": "https://dblp.org/db/conf/rtss/",
-      "edition2026": { "status": "adapter-pending", "homepage": "", "acceptedListUrl": "", "adapter": "" }
+      "dblpUrl": "https://dblp.org/db/conf/rtss/"
     }
   ]
 }
