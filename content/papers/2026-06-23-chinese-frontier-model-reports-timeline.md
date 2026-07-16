@@ -1,7 +1,7 @@
 # 国产前沿模型技术报告时间线总览
 
 First-Archived-At: 2026-06-23 18:40
-Updated-At: 2026-07-14 10:19
+Updated-At: 2026-07-16 12:07
 Pinned: true
 
 ## Source
@@ -21,7 +21,7 @@ Pinned: true
 - Local archive: [2026-06-16 GLM-5.2](/papers/2026-06-16-glm-5-2-long-horizon-tasks/)
 - Local archive: [2606.13392 MiniMax Sparse Attention / MiniMax-M3](/papers/2606.13392-minimax-sparse-attention-m3/)
 - Local archive: [2606.30406 MOPD / Xiaomi MiMo](/papers/2606.30406-mopd-multi-teacher-on-policy-distillation/)
-- Related systems and method nodes: [2211.17192 Speculative Decoding](/papers/2211.17192-fast-inference-transformers-speculative-decoding/), [2512.02556 DeepSeek-V3.2 / DSA](/papers/2512.02556-deepseek-v3-2-open-large-language-models/), [2606.12370 Qwen Bebop](/papers/2606.12370-bebop-mtp-rejection-sampling-rl-training/), [2602.06036 DFlash](/papers/2602.06036-dflash-block-diffusion-speculative-decoding/), [DSPARK-2026-06-27 DSpark](/papers/2026-06-27-dspark-confidence-scheduled-speculative-decoding/), [2511.14617 Seer](/papers/2511.14617-seer-online-context-learning-llm-rl/), [2026-06-17 slime](/papers/2026-06-17-slime-rl-scaling-framework/), [2026-06-19 Muon 综合](/papers/2026-06-19-muon-optimizer-keller-jordan-synthesis/)
+- Related systems and method nodes: [2211.17192 Speculative Decoding](/papers/2211.17192-fast-inference-transformers-speculative-decoding/), [2512.02556 DeepSeek-V3.2 / DSA](/papers/2512.02556-deepseek-v3-2-open-large-language-models/), [2603.12201 IndexCache](/papers/2603.12201-indexcache-cross-layer-index-reuse/), [2606.12370 Qwen Bebop](/papers/2606.12370-bebop-mtp-rejection-sampling-rl-training/), [2602.06036 DFlash](/papers/2602.06036-dflash-block-diffusion-speculative-decoding/), [DSPARK-2026-06-27 DSpark](/papers/2026-06-27-dspark-confidence-scheduled-speculative-decoding/), [2511.14617 Seer](/papers/2511.14617-seer-online-context-learning-llm-rl/), [2026-06-17 slime](/papers/2026-06-17-slime-rl-scaling-framework/), [2026-06-19 Muon 综合](/papers/2026-06-19-muon-optimizer-keller-jordan-synthesis/)
 
 ## 作者与关系
 
@@ -159,7 +159,25 @@ DeepSeek-V4 和 GLM-5.2 又把长上下文推到 million-token 级别。DeepSeek
 
 - 国产前沿模型报告的重心已经从单一 benchmark 展示扩展到训练系统、serving 系统、agentic harness 和成本账本。
 - 评估模型报告质量时，需要把能力分数、训练披露、系统可复验性和安全/anti-hack 机制分开记录。
+- 评估 attention 创新时，需要分别核算 KV 表示与缓存、token/block 可见集合、selector 本身、跨层复用和 runtime kernel；它们改变的成本项和质量风险各不相同。
 - 后续新增国模论文时，应同步更新时间线、公司技术特色、跨论文关系和未披露项，避免索引只积累条目名。
+
+## 本地讨论补充
+
+### 注意力架构的演进关系
+
+国产模型的 attention 路线包含多个相互衔接或并行的优化轴。DeepSeek—GLM 主线可以概括为 MLA $\rightarrow$ DSA $\rightarrow$ IndexCache / IndexShare：先压缩每个 token 的 KV 表示，再稀疏当前 query 可见的历史位置，随后减少相邻层对同一选择问题的重复计算。DeepSeek-V4 的 CSA/HCA 继续把选择与压缩推向 million-token compressed-KV hierarchy；MiniMax 则同时探索 Lightning / linear attention 与 MSA block-sparse softmax 两条分支。
+
+| 机制 / 节点 | 代表模型 | 继承基础与执行语义 | 直接优化对象 | 仍需承担或复验的部分 |
+| --- | --- | --- | --- | --- |
+| MLA | DeepSeek-V2、DeepSeek-V3、GLM-5 | 把每个位置的 K/V 压成 latent KV，并用 decoupled RoPE 保留位置分支 | KV-cache 容量、访存与 decode 成本 | 单独使用 dense MLA 时，core attention 仍覆盖全部历史位置 |
+| DSA | DeepSeek-V3.2、GLM-5 | 在 MLA 上增加 lightning indexer；每个 query 先扫描历史并选择 top-$k$ latent KV entries，再执行 selected softmax | core attention 的序列维度，从 $O(L^2)$ 降到 $O(Lk)$ | indexer 的 prefill 仍为 $O(L^2)$，且标准 DSA 每层独立选择 |
+| IndexCache / IndexShare | GLM-5.2 | Full anchor layer 生成 top-$k$ position IDs，Shared layers 复用这些 positions 并读取各自 KV；GLM-5.2 使用 FSSS，每四层一次 fresh selection | 网络深度轴上的重复 indexer dot product 与 top-$k$ | 各层 sparse core attention 与 KV-cache footprint 继续保留；固定共享 pattern 需要训练适配或质量复验 |
+| CSA / HCA | DeepSeek-V4 preview | 在 compressed KV entries 上组织不同压缩率的层级选择，并叠加 local sliding-window branch | million-token context 下的选择粒度、缓存和 hybrid attention | 当前证据来自 preview，独立消融与完整成本账本仍待补 |
+| Lightning Attention | MiniMax-M1 | 采用 hybrid / linear attention 路线支撑长上下文与长输出 | 随序列长度增长的 attention 计算与状态成本 | 与 selected-softmax 路线具有不同语义和 kernel 约束，需要按任务质量与长输出吞吐比较 |
+| MSA | MiniMax-M3 | 在 GQA 上用 Index Branch 选择 KV blocks，Main Branch 对入选 blocks 执行精确 softmax | block-level sparse softmax 与 1M context kernel | 完整 428B M3 training recipe、全模型消融与跨硬件实现仍待补 |
+
+这条关系的关键口径是：MLA 决定历史信息如何表示和缓存，DSA / MSA 决定当前 query 可以读取哪些位置或 blocks，IndexShare 决定哪些层需要重新计算选择结果。三类机制可以组合，端到端收益需要分别测量 selector、top-$k$、KV gather、core attention、KV residency 和通信。
 
 ## OpenReview / 审稿意见吸收
 
@@ -180,6 +198,7 @@ DeepSeek-V4 和 GLM-5.2 又把长上下文推到 million-token 级别。DeepSeek
 ## 跨论文关系
 
 - 本文是国产模型报告的综合导航节点；DeepSeek 主线由 [DeepSeekMoE](/papers/2401.06066-deepseekmoe-expert-specialization/)、[DeepSeek-V2](/papers/2405.04434-deepseek-v2-mla-moe-efficient-llm/)、[DeepSeek-V3](/papers/2412.19437-deepseek-v3-technical-report/)、[DeepSeek-R1](/papers/2501.12948-deepseek-r1-rl-reasoning/) 和 [DeepSeek-V4](/papers/2026-04-24-deepseek-v4-million-token-context-intelligence/) 连接 MoE / MLA、reasoning RL 与 million-token system。
+- 注意力关系由 [DeepSeek-V2](/papers/2405.04434-deepseek-v2-mla-moe-efficient-llm/) / [DeepSeek-V3](/papers/2412.19437-deepseek-v3-technical-report/) 的 MLA，经 [DeepSeek-V3.2 / DSA](/papers/2512.02556-deepseek-v3-2-open-large-language-models/) 的 MLA-based token selection，连接到 [IndexCache](/papers/2603.12201-indexcache-cross-layer-index-reuse/) / [GLM-5.2](/papers/2026-06-16-glm-5-2-long-horizon-tasks/) 的跨层 index reuse，再延伸到 [DeepSeek-V4](/papers/2026-04-24-deepseek-v4-million-token-context-intelligence/) 的 CSA/HCA；[MiniMax-M1](/papers/2506.13585-minimax-m1-cispo-lightning-attention/) 与 [MiniMax-M3 / MSA](/papers/2606.13392-minimax-sparse-attention-m3/) 分别提供 linear/hybrid 与 block-sparse softmax 的并行路线。
 - [Qwen2.5](/papers/2412.15115-qwen2-5-technical-report/) / [Qwen3](/papers/2505.09388-qwen3-technical-report/)、[Kimi k1.5](/papers/2501.12599-kimi-k1-5-scaling-rl-llms/) / [Kimi K2](/papers/2507.20534-kimi-k2-open-agentic-intelligence/) / [Kimi K2.5](/papers/2602.02276-kimi-k2-5-visual-agentic-intelligence/)、[GLM-5](/papers/2602.15763-glm-5-agentic-engineering/) / [GLM-5.2](/papers/2026-06-16-glm-5-2-long-horizon-tasks/) 和 [MiniMax-M1](/papers/2506.13585-minimax-m1-cispo-lightning-attention/) / [MiniMax-M3](/papers/2606.13392-minimax-sparse-attention-m3/) 构成跨公司对照，比较重点集中在 reasoning、agentic workload、长上下文和公开训练账本。
 - [MOPD](/papers/2606.30406-mopd-multi-teacher-on-policy-distillation/)、[Bebop](/papers/2606.12370-bebop-mtp-rejection-sampling-rl-training/) 和 [DSpark](/papers/2026-06-27-dspark-confidence-scheduled-speculative-decoding/) 将时间线中的 teacher-signal integration、MTP 与 speculative decoding 分别落实为独立方法节点，适合用于核对模型报告中的简写主张。
 
