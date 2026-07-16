@@ -53,6 +53,7 @@ Updated-At: 2026-07-16
 | [Anthropomorphism](/papers/2605.31514-age-of-empires-anthropomorphism/) | 2026年5月 | 用 Age of Empires II 作为 substrate control，说明类人行为测试不足以支持类人内在属性归因。 |
 | [STV](/papers/2605.30290-self-trained-verification/) | 2026年5月 | 把 reference solution 作为 verifier privileged signal，经 OPD + verdict RL 蒸馏到无 reference verifier，并用于训练与测试时自改进。 |
 | [Credit Assignment Survey](/papers/2604.09459-credit-assignment-reasoning-agentic-llm-rl/) | 2026年4月 | 统一 reasoning 与 agentic RL 的 token / step / turn / trajectory credit-assignment 问题。 |
+| [Data-Scarcity RL Survey](/papers/2604.17312-rl-llm-data-scarcity-survey/) | 2026年4月 | 把 LLM 强化学习中的高成本外部监督与有限内部生成经验统一到 data、training、framework 三层九类干预点，并组织为一份覆盖 125 条文献记录的设计地图。 |
 | [DeepSeek-V4](/papers/2026-04-24-deepseek-v4-million-token-context-intelligence/) | 2026年4月 | 以 CSA / HCA、MoE、MTP / OPD 和系统协同实现百万 token 训练、推理与 agent 能力。 |
 | [Caution](/papers/2604.04648-caution-pessimism-best-of-n-reward-hacking/) | 2026年4月 | 用 reward-feature prediction error 估计 OOD uncertainty，在 Best-of-N selection 时执行 pessimistic correction。 |
 | [IndexCache](/papers/2603.12201-indexcache-cross-layer-index-reuse/) | 2026年3月 | 用 loss-guided layer search 或 multi-layer distillation 划分 Full / Shared 层，跨层复用 top-k positions 并跳过最多 75% 的 DSA indexer 计算。 |

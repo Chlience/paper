@@ -1,7 +1,7 @@
 # Self-Improving Agents in the Era of Experience: A Survey of Self- to Meta-Evolution 论文笔记
 
 First-Archived-At: 2026-06-28 14:18
-Updated-At: 2026-06-28 14:18
+Updated-At: 2026-07-16 15:57
 
 ## Source
 
@@ -300,7 +300,7 @@ meta-evolution 处理“谁控制更新”和“更新什么”。论文区分�
 ## 跨论文关系
 
 - 与已有论文的作者关系：[Ning Ding](/authors/ning-ding/) 和 [Bowen Zhou](/authors/bowen-zhou/) 已在 [2505.22617 Entropy Mechanism](/papers/2505.22617-entropy-mechanism-rl-reasoning-language-models/) 与 [2509.25123 RL skill acquisition](/papers/2509.25123-rl-compositional-skill-acquisition/) 中出现；Kaiyan Zhang 本次新增，并通过 TsinghuaC3I / Frontis.AI 连接 OpenPRM、TTRL、MARTI、SSRL 等 self-evolving / scalable RL 线索。
-- 与已有论文的主题关系：[2604.09459 credit assignment survey](/papers/2604.09459-credit-assignment-reasoning-agentic-llm-rl/) 处理 reasoning-to-agentic credit assignment，本 survey 处理完整 deployed agent self-improvement stack；两者共同构成 agent RL 的 map 层。
+- 与已有论文的主题关系：[2604.09459 credit assignment survey](/papers/2604.09459-credit-assignment-reasoning-agentic-llm-rl/) 处理 reasoning-to-agentic credit assignment，[2604.17312 Data-Scarcity RL Survey](/papers/2604.17312-rl-llm-data-scarcity-survey/) 处理有限监督与内部经验的 data / training / framework 干预点，本 survey 处理完整 deployed agent self-improvement stack；三者分别覆盖局部 credit、训练数据经济和长期能力沉淀。
 - 与已有论文的方法或系统关系：[SLIME-2026-06-17](/papers/2026-06-17-slime-rl-scaling-framework/)、[2602.15763 GLM-5](/papers/2602.15763-glm-5-agentic-engineering/) 和 [2511.14617 Seer](/papers/2511.14617-seer-online-context-learning-llm-rl/) 对应 survey 第 6 节的 runtime-to-parameter consolidation 和 rollout infrastructure；[2606.00135](/papers/2606.00135-agentic-tool-calling-rl-training/) 对应 environment / tool-calling learnability；[2605.30290](/papers/2605.30290-self-trained-verification/) 对应 verifier feedback self-improvement；[2025-09-10 inference determinism](/papers/2025-09-10-defeating-nondeterminism-llm-inference/) 与 [2605.14220 TIM/VeXact](/papers/2605.14220-training-inference-mismatch-llm-rl/) 对应 longitudinal evaluation 所需的 rollout consistency。
 - 跨论文关系定位：把本文设为 Self-Improving Agents、Harness 与 Experience Infrastructure 主题入口。
 

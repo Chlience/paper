@@ -10093,5 +10093,164 @@
         "url": "https://arxiv.org/abs/2605.05696"
       }
     ]
+  },
+  {
+    "slug": "zhiyin-yu",
+    "name": "Zhiyin Yu",
+    "aliases": ["Zhiyin Yu"],
+    "affiliations": [
+      "Peking University",
+      "Shanghai Artificial Intelligence Laboratory"
+    ],
+    "homepage": "",
+    "github": "https://github.com/YuZhiyin",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["data-efficient reinforcement learning", "LLM post-training", "self-evolving LLMs", "AI for science"],
+    "notes": "First author and public bibliography maintainer for the ACL 2026 data-scarcity RL survey; also first author of EasyRL and contributor to InternAgent-1.5.",
+    "sources": [
+      {
+        "label": "GitHub",
+        "url": "https://github.com/YuZhiyin"
+      },
+      {
+        "label": "ACL Anthology paper",
+        "url": "https://aclanthology.org/2026.acl-long.1045/"
+      },
+      {
+        "label": "EasyRL arXiv",
+        "url": "https://arxiv.org/abs/2604.18639"
+      }
+    ]
+  },
+  {
+    "slug": "zhonghai-wu",
+    "name": "Zhonghai Wu",
+    "aliases": ["Zhonghai Wu", "Wu Zhonghai"],
+    "chineseName": "吴中海",
+    "affiliations": [
+      "Peking University"
+    ],
+    "homepage": "https://ss.pku.edu.cn/sztd/xssbsz/f19be18d7b1f475c8c6dd76685f9f167.htm",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["big-data machine learning", "software and systems security", "privacy computing", "embedded intelligent systems"],
+    "notes": "Corresponding author of the ACL 2026 data-scarcity RL survey; professor and dean of Peking University's School of Software and Microelectronics.",
+    "sources": [
+      {
+        "label": "Peking University profile",
+        "url": "https://ss.pku.edu.cn/sztd/xssbsz/f19be18d7b1f475c8c6dd76685f9f167.htm"
+      },
+      {
+        "label": "Peking University advisor directory",
+        "url": "https://cs.pku.edu.cn/internationalization/Advisor.htm"
+      },
+      {
+        "label": "DBLP",
+        "url": "https://dblp.org/pid/01/868"
+      },
+      {
+        "label": "ACL Anthology paper",
+        "url": "https://aclanthology.org/2026.acl-long.1045/"
+      }
+    ]
+  },
+  {
+    "slug": "bo-zhang",
+    "name": "Bo Zhang",
+    "aliases": ["Bo Zhang"],
+    "chineseName": "张铂",
+    "affiliations": [
+      "Shanghai Artificial Intelligence Laboratory"
+    ],
+    "homepage": "https://bobrown.github.io/boZhang.github.io/",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["general AI agents", "multimodal reasoning", "autonomous scientific discovery", "self-evolving LLMs"],
+    "notes": "Corresponding author of the ACL 2026 data-scarcity RL survey; Young Scientist at Shanghai AI Laboratory and head of its Scientific Discovery System Team.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://bobrown.github.io/boZhang.github.io/"
+      },
+      {
+        "label": "DBLP",
+        "url": "https://dblp.org/pid/36/2259-69"
+      },
+      {
+        "label": "ACL Anthology paper",
+        "url": "https://aclanthology.org/2026.acl-long.1045/"
+      }
+    ]
+  },
+  {
+    "slug": "lei-bai",
+    "name": "Lei Bai",
+    "aliases": ["Lei Bai", "Bai Lei"],
+    "chineseName": "白磊",
+    "affiliations": [
+      "Shanghai Artificial Intelligence Laboratory",
+      "Fudan University"
+    ],
+    "homepage": "https://www.leibai.site/",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["AI for science", "autonomous scientific discovery", "foundation models", "spatiotemporal learning"],
+    "notes": "Shanghai AI Laboratory Young Scientist and Fudan University dual-appointed researcher; connects the archived Entropy Mechanism paper with the ACL 2026 data-scarcity RL survey.",
+    "sources": [
+      {
+        "label": "Fudan University profile",
+        "url": "https://aos.fudan.edu.cn/f9/c7/c15845a719303/page.htm"
+      },
+      {
+        "label": "DBLP",
+        "url": "https://dblp.org/pid/119/1223-1"
+      },
+      {
+        "label": "ORCID",
+        "url": "https://orcid.org/0000-0003-3378-7201"
+      },
+      {
+        "label": "ACL Anthology paper",
+        "url": "https://aclanthology.org/2026.acl-long.1045/"
+      }
+    ]
+  },
+  {
+    "slug": "xiao-luo",
+    "name": "Xiao Luo",
+    "aliases": ["Xiao Luo", "Luo Xiao"],
+    "affiliations": [
+      "University of Wisconsin–Madison",
+      "University of California, Los Angeles (postdoctoral affiliation)",
+      "Peking University (PhD affiliation)"
+    ],
+    "homepage": "https://luoxiao12.github.io/index.html",
+    "github": "",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["LLM post-training", "LLM agents", "graph machine learning", "dynamical systems"],
+    "notes": "Assistant Professor in the University of Wisconsin–Madison Department of Statistics and a contact author for the ACL 2026 data-scarcity RL survey.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://luoxiao12.github.io/index.html"
+      },
+      {
+        "label": "UW–Madison profile",
+        "url": "https://stat.wisc.edu/staff/luo-xiao/"
+      },
+      {
+        "label": "DBLP",
+        "url": "https://dblp.org/pid/50/1585-1"
+      },
+      {
+        "label": "ACL Anthology paper",
+        "url": "https://aclanthology.org/2026.acl-long.1045/"
+      }
+    ]
   }
 ]
