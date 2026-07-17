@@ -1,0 +1,114 @@
+---
+import MainlineGraph from '../../components/MainlineGraph.astro';
+import MainlineMethodTable from '../../components/MainlineMethodTable.astro';
+import Layout from '../../layouts/Layout.astro';
+import mainlineData from '../../generated/mainline-data.json';
+
+export function getStaticPaths() {
+  return mainlineData.lines.map((line) => ({
+    params: { id: line.id },
+    props: { line },
+  }));
+}
+
+const { line } = Astro.props;
+const isCandidate = line.status === 'candidate';
+const canonicalPath = `/mainlines/${line.id}/`;
+const description = line.question || `${line.name}的方法继承、证据关系与当前判断。`;
+const facetLabels = line.facetLabels ?? [];
+---
+
+<Layout
+  active="mainlines"
+  title={`${line.name} | Chlience Paper Archive`}
+  description={description}
+  canonicalPath={canonicalPath}
+>
+  <article class:list={['mainline-detail-page', isCandidate && 'is-candidate', 'container']}>
+    <header class="paper-header mainline-detail-header">
+      <a class="mainline-back-link mono" href="/mainlines/">← 研究主线目录</a>
+      <p class="eyebrow mono">{isCandidate ? 'Candidate Direction' : 'Research Mainline'}</p>
+      <h1>{line.name}</h1>
+      <p class="deck">{line.question}</p>
+      <div class="mainline-detail-meta">
+        <span class:list={['mainline-status', isCandidate ? 'is-candidate' : 'is-formal']}>
+          {line.statusLabel || (isCandidate ? '候选方向' : '正式主线')}
+        </span>
+        <span>{line.methodCount} 个方法节点</span>
+        {!isCandidate && <span>{line.relationCount} 条证据关系</span>}
+        {facetLabels.map((facet) => <span>{facet}</span>)}
+        <time datetime={mainlineData.snapshot}>快照 {mainlineData.snapshot}</time>
+      </div>
+    </header>
+
+    {isCandidate ? (
+      <div class="mainline-candidate-detail">
+        <section class="mainline-detail-section" aria-labelledby="scope-title">
+          <h2 id="scope-title">核心问题与范围</h2>
+          {line.scopeHtml ? <div class="prose mainline-section-prose" set:html={line.scopeHtml} /> : <p>{line.question}</p>}
+        </section>
+
+        <section class="mainline-detail-section" aria-labelledby="current-node-title">
+          <h2 id="current-node-title">当前方法节点</h2>
+          {line.currentState && <p class="mainline-candidate-state">{line.currentState}</p>}
+          <MainlineMethodTable methods={line.methods} label={`${line.name}的当前方法`} />
+        </section>
+
+        <section class="mainline-detail-section mainline-candidate-criteria" aria-labelledby="evidence-gap-title">
+          <h2 id="evidence-gap-title">证据缺口</h2>
+          <p>{line.evidenceGap}</p>
+        </section>
+
+        <section class="mainline-detail-section mainline-candidate-criteria" aria-labelledby="promotion-title">
+          <h2 id="promotion-title">晋级条件</h2>
+          <p>{line.promotionCondition}</p>
+        </section>
+      </div>
+    ) : (
+      <div class="mainline-detail-content">
+        <section class="mainline-detail-section" aria-labelledby="scope-title">
+          <h2 id="scope-title">核心问题与范围</h2>
+          <div class="mainline-scope-question">
+            <strong>核心问题</strong>
+            <p>{line.question}</p>
+          </div>
+          {line.scopeHtml && <div class="prose mainline-section-prose" set:html={line.scopeHtml} />}
+        </section>
+
+        <section class="mainline-detail-section" aria-labelledby="evolution-title">
+          <h2 id="evolution-title">演进概览</h2>
+          {line.evolutionHtml && <div class="prose mainline-section-prose" set:html={line.evolutionHtml} />}
+          {line.graphSvg && (
+            <MainlineGraph
+              lineId={line.id}
+              title={`${line.name}的方法演进图`}
+              description="从左到右按首次公开时间排列；选择方法节点可定位到下方对应表格行。"
+              svg={line.graphSvg}
+            />
+          )}
+        </section>
+
+        <section class="mainline-detail-section" aria-labelledby="method-table-title">
+          <h2 id="method-table-title">方法继承表</h2>
+          <p class="mainline-section-lead">每一行对应一个方法贡献；关系性质、证据来源和相对前序的优化分别记录。</p>
+          <MainlineMethodTable methods={line.methods} label={`${line.name}的方法继承表`} />
+        </section>
+
+        <section class="mainline-detail-section" aria-labelledby="divergences-title">
+          <h2 id="divergences-title">关键分歧与反例</h2>
+          <div class="prose mainline-section-prose" set:html={line.divergencesHtml} />
+        </section>
+
+        <section class="mainline-detail-section" aria-labelledby="judgment-title">
+          <h2 id="judgment-title">当前判断</h2>
+          <div class="prose mainline-section-prose" set:html={line.judgmentHtml} />
+        </section>
+
+        <section class="mainline-detail-section" aria-labelledby="open-questions-title">
+          <h2 id="open-questions-title">开放问题</h2>
+          <div class="prose mainline-section-prose" set:html={line.openQuestionsHtml} />
+        </section>
+      </div>
+    )}
+  </article>
+</Layout>

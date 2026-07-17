@@ -9,9 +9,11 @@
   "scripts": {
     "build:content": "node scripts/build-paper-data.mjs",
     "build:conferences": "node scripts/build-conference-data.mjs",
+    "build:mainlines": "node scripts/build-mainline-data.mjs",
     "check:conferences": "node scripts/check-conference-data.mjs && node scripts/build-conference-data.mjs && node --test scripts/check-conference-data.test.mjs",
-    "dev": "npm run build:content && npm run build:conferences && astro dev",
-    "build": "npm run build:content && npm run build:conferences && astro build",
+    "check:mainlines": "node scripts/check-research-mainlines.mjs && node --test scripts/check-research-mainlines.test.mjs",
+    "dev": "npm run build:content && npm run build:conferences && npm run build:mainlines && astro dev",
+    "build": "npm run build:content && npm run build:conferences && npm run build:mainlines && astro build",
     "test:search": "node scripts/check-paper-search.mjs",
     "test:pins": "node scripts/check-pinned-papers.mjs",
     "test:figures": "node scripts/check-paper-figure-dialog.mjs",
@@ -32,5 +34,8 @@
     "markdown-it": "^14.1.0",
     "markdown-it-anchor": "^9.2.0",
     "markdown-it-texmath": "^1.0.0"
+  },
+  "devDependencies": {
+    "@viz-js/viz": "3.28.0"
   }
 }

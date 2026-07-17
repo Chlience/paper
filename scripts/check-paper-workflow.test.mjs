@@ -1181,7 +1181,6 @@ test('public workflow and agent instructions expose one aligned v2.1 contract', 
   assert.match(workflowDoc, /从新到旧/);
   assert.match(agentInstructions, /核心信号/);
   assert.match(agentInstructions, /孤立作者/);
-  assert.match(agentInstructions, /研究主线当前保留为独立快照/);
   assert.doesNotMatch(agentInstructions, /`Reference Intake Brief`/);
   assert.match(authorSop, /不要求每位作者都创建 `data\/authors\.json` profile/);
   assert.match(authorSop, /只有已有强候选的深入核验作者进入 X 检查/);
@@ -1192,6 +1191,7 @@ test('deploy workflow validates source and builds the static site once', async (
   const requiredCommands = [
     'npm run test:workflow',
     'npm run check:workflow',
+    'npm run check:mainlines',
     'npm run check:metadata',
     'npm run test:search',
     'npm run test:pins',
@@ -1206,6 +1206,7 @@ test('deploy workflow validates source and builds the static site once', async (
   assert.doesNotMatch(source, /npm run check:(?:math|site)/);
   assert.match(source, /runs-on: ubuntu-24\.04/);
   assert.match(source, /timeout-minutes: 10/);
+  assert.doesNotMatch(source, /^\s*schedule:/m);
   assert.ok(source.indexOf('Validate source') < source.indexOf('Build and verify static site'));
   assert.ok(source.indexOf('Build and verify static site') < source.indexOf('Pack static artifact'));
 });
@@ -1232,10 +1233,12 @@ test('topic routes live on the dedicated topics page', async () => {
   assert.match(siteLib, /topics: '\/topics\/'/);
 });
 
-test('research mainlines have a dedicated generated route and primary navigation entry', async () => {
-  const [page, content, siteHeader, siteLib, layout] = await Promise.all([
+test('research mainlines expose a static directory and generated detail routes without local filtering', async () => {
+  const [page, detailPage, graph, methodTable, siteHeader, siteLib, layout] = await Promise.all([
     fs.readFile('src/pages/mainlines/index.astro', 'utf8'),
-    fs.readFile('content/utility/research-mainlines.md', 'utf8'),
+    fs.readFile('src/pages/mainlines/[id].astro', 'utf8'),
+    fs.readFile('src/components/MainlineGraph.astro', 'utf8'),
+    fs.readFile('src/components/MainlineMethodTable.astro', 'utf8'),
     fs.readFile('src/components/SiteHeader.astro', 'utf8'),
     fs.readFile('src/lib/site.ts', 'utf8'),
     fs.readFile('src/layouts/Layout.astro', 'utf8'),
@@ -1244,105 +1247,30 @@ test('research mainlines have a dedicated generated route and primary navigation
 
   assert.equal(definition?.file, 'content/utility/research-mainlines.md');
   assert.equal(definition?.path, '/mainlines/');
-  assert.match(content, /^# 论文研究主线$/m);
   assert.match(page, /active="mainlines"/);
   assert.match(page, /canonicalPath="\/mainlines\/"/);
-  assert.match(page, /data-mainline-filters/);
-  assert.match(page, /data-mainline-row/);
-  assert.match(page, /const paperEntries = classification\.papers\.map/);
-  assert.doesNotMatch(page, /const paperEntries = data\.papers\.map/);
+  assert.match(page, /href=\{`\/mainlines\/\$\{line\.id\}\/`\}/);
+  assert.match(page, /候选方向/);
+  assert.doesNotMatch(
+    page,
+    /data-mainline-(?:filters|search|select|role|row|clear)|URLSearchParams|applyFilters|role="search"/,
+  );
+  assert.doesNotMatch(page, /classification\.papers\.map|paperEntries/);
+
+  assert.match(detailPage, /export function getStaticPaths/);
+  assert.match(detailPage, /canonicalPath = `\/mainlines\/\$\{line\.id\}\//);
+  for (const heading of ['核心问题与范围', '演进概览', '方法继承表', '关键分歧与反例', '当前判断', '开放问题']) {
+    assert.match(detailPage, new RegExp(heading));
+  }
+  assert.doesNotMatch(detailPage, /client:(?:load|idle|visible|only)/);
+  assert.match(graph, /set:html=\{svg\}/);
+  assert.doesNotMatch(graph, /client:(?:load|idle|visible|only)|WebAssembly|Viz\b|Graphviz/i);
+  for (const heading of ['时间', '方法', '前序方法与关系', '前序暴露的问题', '本方法的优化']) {
+    assert.match(methodTable, new RegExp(`<th[^>]*>${heading}<\\/th>`));
+  }
   assert.match(siteHeader, /id: 'mainlines', label: '主线'/);
   assert.match(siteLib, /mainlines: '\/mainlines\/'/);
   assert.match(layout, /'mainlines'/);
-});
-
-test('research mainline snapshot stays internally consistent without blocking new papers', async () => {
-  const [classificationSource, paperFiles, archiveIndex, mainlinesMarkdown] = await Promise.all([
-    fs.readFile('data/research-mainlines.json', 'utf8'),
-    fs.readdir('content/papers'),
-    fs.readFile('content/utility/papers-index.md', 'utf8'),
-    fs.readFile('content/utility/research-mainlines.md', 'utf8'),
-  ]);
-  const classification = JSON.parse(classificationSource);
-  const paperSlugs = paperFiles
-    .filter((fileName) => fileName.endsWith('.md'))
-    .map((fileName) => fileName.replace(/\.md$/, ''))
-    .sort();
-  const lineIds = classification.lines.map((line) => line.id);
-  const lineIdSet = new Set(lineIds);
-  const assignmentSlugs = classification.papers.map((paper) => paper.slug).sort();
-  const validRoles = new Set(['origin', 'turn', 'evidence', 'counterexample', 'bridge', 'boundary']);
-  const validStatuses = new Set(['consensus', 'competing', 'emerging']);
-  const archiveMonths = new Map();
-  const archiveSlugs = [];
-  const archiveRowPattern = /\/papers\/([^/]+)\/\)\s*\|\s*(\d{4})年(\d{1,2})月\s*\|/g;
-  for (const match of archiveIndex.matchAll(archiveRowPattern)) {
-    archiveMonths.set(match[1], `${match[2]}-${match[3].padStart(2, '0')}`);
-    archiveSlugs.push(match[1]);
-  }
-
-  assert.match(classification.snapshot, /^\d{4}-\d{2}-\d{2}$/);
-  assert.equal(classification.paperCount, classification.papers.length);
-  assert.deepEqual(assignmentSlugs.filter((slug) => !paperSlugs.includes(slug)), []);
-  assert.deepEqual(
-    classification.papers.map((paper) => paper.slug),
-    archiveSlugs.filter((slug) => assignmentSlugs.includes(slug)),
-  );
-  assert.equal(new Set(assignmentSlugs).size, assignmentSlugs.length);
-  assert.equal(lineIdSet.size, lineIds.length);
-  assert.deepEqual(lineIds, [
-    'resource-frontier',
-    'context-state',
-    'agent-runtime',
-    'agent-environments',
-    'reasoning-boundary',
-    'credit-verification',
-    'rl-systems',
-    'reward-integrity',
-  ]);
-  const contentAnchors = [...mainlinesMarkdown.matchAll(/id="line-([^"]+)"/g)].map((match) => match[1]);
-  assert.deepEqual(contentAnchors, lineIds);
-  assert.ok(mainlinesMarkdown.includes(classification.snapshot));
-  assert.ok(mainlinesMarkdown.includes(`${classification.paperCount} 条归档材料`));
-  const contentPaperLinks = [...mainlinesMarkdown.matchAll(/\/papers\/([^/]+)\//g)].map((match) => match[1]);
-  const contentPaperLinkSet = new Set(contentPaperLinks);
-  assert.ok(contentPaperLinks.length > 0);
-  assert.deepEqual(contentPaperLinks.filter((slug) => !paperSlugs.includes(slug)), []);
-
-  const primaryCounts = new Map(lineIds.map((lineId) => [lineId, 0]));
-  for (const line of classification.lines) {
-    for (const field of ['name', 'question', 'thesis', 'boundary', 'statusLabel']) {
-      assert.equal(typeof line[field], 'string');
-      assert.ok(line[field].trim(), `${line.id}.${field} must be non-empty.`);
-    }
-    assert.ok(validStatuses.has(line.status), `Unknown status for ${line.id}.`);
-    assert.ok(mainlinesMarkdown.includes(`id="line-${line.id}"`), `Missing content anchor for ${line.id}.`);
-  }
-
-  for (const assignment of classification.papers) {
-    assert.ok(lineIdSet.has(assignment.primary), `Unknown primary line for ${assignment.slug}.`);
-    assert.ok(validRoles.has(assignment.role), `Unknown role for ${assignment.slug}.`);
-    assert.match(assignment.month, /^\d{4}-\d{2}$/);
-    assert.equal(assignment.month, archiveMonths.get(assignment.slug));
-    assert.ok(Array.isArray(assignment.secondary));
-    assert.ok(assignment.secondary.length <= 2);
-    assert.equal(new Set(assignment.secondary).size, assignment.secondary.length);
-    assert.ok(!assignment.secondary.includes(assignment.primary));
-    for (const secondaryLine of assignment.secondary) {
-      assert.ok(lineIdSet.has(secondaryLine), `Unknown secondary line for ${assignment.slug}.`);
-    }
-    if (assignment.role === 'origin' || assignment.role === 'counterexample') {
-      assert.ok(
-        contentPaperLinkSet.has(assignment.slug),
-        `${assignment.role} paper ${assignment.slug} must appear in the narrative.`,
-      );
-    }
-    primaryCounts.set(assignment.primary, primaryCounts.get(assignment.primary) + 1);
-  }
-
-  for (const [lineId, count] of primaryCounts) {
-    assert.ok(count > 0, `${lineId} must have at least one primary paper.`);
-  }
 });
 
 test('archive omits global author grouping while paper notes retain author relationships', async () => {

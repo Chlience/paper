@@ -1,0 +1,33 @@
+---
+interface Props {
+  lineId: string;
+  title: string;
+  description: string;
+  svg: string;
+}
+
+const { lineId, title, description, svg } = Astro.props;
+const captionId = `mainline-graph-caption-${lineId}`;
+---
+
+<figure class="mainline-graph-figure">
+  <figcaption id={captionId} class="mainline-graph-caption">
+    <strong>{title}</strong>
+    <span>{description}</span>
+  </figcaption>
+  <div
+    class="mainline-graph-scroll"
+    role="region"
+    aria-labelledby={captionId}
+    tabindex="0"
+  >
+    <div class="mainline-graph" set:html={svg} />
+  </div>
+  <ul class="mainline-graph-legend" aria-label="关系图图例">
+    <li><span class="mainline-legend-line is-explicit" aria-hidden="true"></span>论文明确引用或继承</li>
+    <li><span class="mainline-legend-line is-official" aria-hidden="true"></span>作者或官方续作</li>
+    <li><span class="mainline-legend-line is-local" aria-hidden="true"></span>有机制证据的本地判断</li>
+    <li><span class="mainline-legend-line is-counterexample" aria-hidden="true"></span>反例或边界修正</li>
+    <li><span class="mainline-legend-parallel" aria-hidden="true"></span>点线且无箭头：平行路线</li>
+  </ul>
+</figure>

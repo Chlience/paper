@@ -1,253 +1,120 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import data from '../../generated/paper-data.json';
-import classification from '../../../data/research-mainlines.json';
+import mainlineData from '../../generated/mainline-data.json';
 
-const mainlines = data.utilities.find((page) => page.slug === 'mainlines');
-
-if (!mainlines) {
-  throw new Error('Missing generated mainlines utility page.');
+const formalLines = mainlineData.lines.filter((line) => line.status === 'formal');
+const candidateLines = mainlineData.lines.filter((line) => line.status === 'candidate');
+const primaryFacetId = (line) => line.primaryFacetId || line.facetId || line.facetIds?.[0] || '';
+const facetGroups = [...mainlineData.facets]
+  .sort((a, b) => (a.order ?? 0) - (b.order ?? 0) || a.name.localeCompare(b.name, 'zh-CN'))
+  .map((facet) => ({
+    ...facet,
+    lines: formalLines.filter((line) => primaryFacetId(line) === facet.id),
+  }))
+  .filter((facet) => facet.lines.length > 0);
+const groupedLineIds = new Set(facetGroups.flatMap((facet) => facet.lines.map((line) => line.id)));
+const ungroupedLines = formalLines.filter((line) => !groupedLineIds.has(line.id));
+if (ungroupedLines.length > 0) {
+  facetGroups.push({
+    id: 'cross-facet',
+    name: '跨领域方法',
+    description: '同时连接多个研究对象、尚未指定单一目录位置的正式主线。',
+    order: Number.MAX_SAFE_INTEGER,
+    lines: ungroupedLines,
+  });
 }
 
-const roleLabels = {
-  origin: '起点',
-  turn: '转折',
-  evidence: '证据',
-  counterexample: '反例',
-  bridge: '桥接',
-  boundary: '边界',
-} as const;
-
-const linesById = new Map(classification.lines.map((line) => [line.id, line]));
-const papersBySlug = new Map(data.papers.map((paper) => [paper.slug, paper]));
-const lineCounts = new Map(classification.lines.map((line) => [line.id, 0]));
-
-const paperEntries = classification.papers.map((assignment) => {
-  const paper = papersBySlug.get(assignment.slug);
-  const primaryLine = linesById.get(assignment.primary);
-
-  if (!paper || !primaryLine) {
-    throw new Error(`Invalid mainline assignment for ${assignment.slug}.`);
-  }
-
-  lineCounts.set(primaryLine.id, (lineCounts.get(primaryLine.id) ?? 0) + 1);
-
-  return {
-    assignment,
-    paper,
-    primaryLine,
-    secondaryLines: assignment.secondary.map((lineId) => linesById.get(lineId)).filter(Boolean),
-    roleLabel: roleLabels[assignment.role],
-  };
-});
-
-const pageDescription = `基于 ${classification.snapshot} 的 ${classification.paperCount} 条材料快照收敛出的 ${classification.lines.length} 条问题驱动研究主线，包含证据、反例和快照归属查询。`;
+const pageDescription = `截至 ${mainlineData.snapshot} 的细粒度研究主线目录，收录 ${formalLines.length} 条正式主线与 ${candidateLines.length} 个候选方向。`;
 ---
 
 <Layout
   active="mainlines"
-  title="Research Mainlines | Chlience Paper Archive"
+  title="研究主线目录 | Chlience Paper Archive"
   description={pageDescription}
   canonicalPath="/mainlines/"
 >
   <article class="utility-page mainlines-page container">
     <header class="page-header mainlines-page-header">
-      <p class="eyebrow mono">Corpus Synthesis</p>
-      <h1>{mainlines.title}</h1>
+      <p class="eyebrow mono">Research Mainlines</p>
+      <h1>研究主线目录</h1>
       <p class="deck">{pageDescription}</p>
-      <div class="mainlines-snapshot" aria-label="语料快照">
-        <span>语料快照 <time datetime={classification.snapshot}>{classification.snapshot}</time></span>
-        <span>{classification.paperCount} 条归档材料</span>
-        <span>{classification.lines.length} 条主线</span>
-        <a href="#paper-coverage">查询材料归属</a>
+      <div class="mainlines-snapshot" aria-label="主线快照">
+        <span>快照 <time datetime={mainlineData.snapshot}>{mainlineData.snapshot}</time></span>
+        <span>{mainlineData.paperCount} 条语料记录</span>
+        <span>{formalLines.length} 条正式主线</span>
+        <span>{candidateLines.length} 个候选方向</span>
       </div>
     </header>
 
-    <section class="mainline-map" aria-labelledby="mainline-map-title">
+    <section class="mainline-directory-intro" aria-labelledby="mainline-directory-title">
       <div class="section-header">
         <div>
-          <h2 id="mainline-map-title">按研究问题进入</h2>
-          <p>每篇材料只有一个主归属，交叉关系保留为次级主线。</p>
+          <h2 id="mainline-directory-title">按研究领域进入</h2>
+          <p>每条主线围绕一个具体问题组织方法节点、前序关系、反例和当前判断；同一方法可以进入多条主线。</p>
         </div>
-        <a href="/archive/">查看时间索引</a>
+        <a href="/archive/">查看论文时间索引</a>
       </div>
-      <ul class="mainline-map-list">
-        {classification.lines.map((line) => (
-          <li>
-            <a class="mainline-map-link" href={`#line-${line.id}`}>
-              <span class="mainline-map-name">
-                <strong>{line.name}</strong>
-                <span class:list={['mainline-status', `is-${line.status}`]}>{line.statusLabel}</span>
-              </span>
-              <span class="mainline-map-question">{line.question}</span>
-              <span class="mainline-map-count mono">{lineCounts.get(line.id)} 篇</span>
-            </a>
-          </li>
-        ))}
-      </ul>
     </section>
 
-    <div class="prose mainline-prose" set:html={mainlines.html} />
+    <div class="mainline-directory">
+      {facetGroups.map((facet) => (
+        <section class="mainline-facet" aria-labelledby={`facet-${facet.id}`}>
+          <header class="mainline-facet-header">
+            <h2 id={`facet-${facet.id}`}>{facet.name}</h2>
+            {facet.description && <p>{facet.description}</p>}
+          </header>
+          <ul class="mainline-directory-list">
+            {facet.lines.map((line) => (
+              <li>
+                <a class="mainline-directory-link" href={`/mainlines/${line.id}/`}>
+                  <span class="mainline-directory-name">
+                    <strong>{line.name}</strong>
+                    <span class="mainline-status is-formal">{line.statusLabel || '正式主线'}</span>
+                    {line.facetLabels?.slice(1).map((label) => (
+                      <span class="mainline-directory-facet">{label}</span>
+                    ))}
+                  </span>
+                  <span class="mainline-directory-question">{line.question}</span>
+                  <span class="mainline-directory-meta mono">
+                    {line.methodCount} 方法 · {line.relationCount} 关系
+                    {line.latestDate && <time datetime={line.latestDate}>{line.latestDate}</time>}
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))}
+    </div>
 
-    <section class="mainline-explorer" id="paper-coverage" aria-labelledby="paper-coverage-title">
-      <div class="section-header">
-        <div>
-          <h2 id="paper-coverage-title">快照归属查询</h2>
-          <p>按标题、摘要、标签、主归属或材料角色筛选当前快照。次级关系保留跨线影响，并参与文本搜索。</p>
-        </div>
-      </div>
-
-      <form class="mainline-filters" data-mainline-filters role="search">
-        <label class="mainline-search-field">
-          <span>搜索论文</span>
-          <input
-            type="search"
-            name="q"
-            autocomplete="off"
-            placeholder="标题、机制、标签或 slug"
-            data-mainline-search
-          />
-        </label>
-        <label>
-          <span>主归属</span>
-          <select name="line" data-mainline-select>
-            <option value="">全部主线</option>
-            {classification.lines.map((line) => <option value={line.id}>{line.name}</option>)}
-          </select>
-        </label>
-        <label>
-          <span>材料角色</span>
-          <select name="role" data-mainline-role>
-            <option value="">全部角色</option>
-            {Object.entries(roleLabels).map(([value, label]) => <option value={value}>{label}</option>)}
-          </select>
-        </label>
-        <button type="button" class="mainline-filter-clear" data-mainline-clear>清除筛选</button>
-      </form>
-
-      <p class="mainline-result-count" aria-live="polite">
-        显示 <strong data-mainline-count>{paperEntries.length}</strong> / {paperEntries.length} 条
-      </p>
-
-      <ul class="mainline-paper-list" data-mainline-list>
-        {paperEntries.map(({ assignment, paper, primaryLine, secondaryLines, roleLabel }) => {
-          const searchableMetadata = [paper.slug, ...paper.tags].join(' ');
-
-          return (
-            <li
-              class="mainline-paper-row"
-              data-mainline-row
-              data-line={primaryLine.id}
-              data-role={assignment.role}
-              data-query={searchableMetadata}
-            >
-              <div class="mainline-paper-copy">
-                <a class="mainline-paper-title" href={paper.path}>{paper.title}</a>
-                <p>{paper.summary}</p>
-                {paper.primaryTagId && (
-                  <a class="mainline-paper-tag" href={`/topics/#tag-${paper.primaryTagId}`}>
-                    {paper.primaryTag}
-                  </a>
-                )}
-              </div>
-              <div class="mainline-paper-route">
-                <a href={`#line-${primaryLine.id}`}>{primaryLine.name}</a>
-                {secondaryLines.length > 0 && (
-                  <span>关联：{secondaryLines.map((line) => line?.name).join('、')}</span>
-                )}
-              </div>
-              <time datetime={assignment.month}>{assignment.month}</time>
-              <span class:list={['mainline-paper-role', `is-${assignment.role}`]}>{roleLabel}</span>
+    {candidateLines.length > 0 && (
+      <section class="mainline-candidate-directory" aria-labelledby="candidate-directions-title">
+        <header class="mainline-facet-header">
+          <h2 id="candidate-directions-title">候选方向</h2>
+          <p>这些方向已经出现清楚的方法信号，当前证据仍不足以建立稳定的继承链。</p>
+        </header>
+        <ul class="mainline-directory-list">
+          {candidateLines.map((line) => (
+            <li>
+              <a class="mainline-directory-link is-candidate" href={`/mainlines/${line.id}/`}>
+                <span class="mainline-directory-name">
+                  <strong>{line.name}</strong>
+                  <span class="mainline-status is-candidate">{line.statusLabel || '候选方向'}</span>
+                </span>
+                <span class="mainline-directory-question">{line.question}</span>
+                <span class="mainline-directory-meta mono">
+                  {line.methodCount} 方法
+                  {line.latestDate && <time datetime={line.latestDate}>{line.latestDate}</time>}
+                </span>
+              </a>
             </li>
-          );
-        })}
-      </ul>
-      <p class="mainline-empty" data-mainline-empty hidden>当前筛选没有匹配材料。</p>
-      <noscript><p class="mainline-noscript">筛选交互需要 JavaScript；快照列表仍按语料顺序显示。</p></noscript>
-    </section>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    <footer class="mainline-directory-note">
+      <p>关系图只呈现有来源或明确机制依据的关系。时间邻近不会自动形成继承边，完整解释以详情页的方法表为准。</p>
+    </footer>
   </article>
-
-  <script>
-    const filterForm = document.querySelector('[data-mainline-filters]');
-    const searchInput = document.querySelector('[data-mainline-search]');
-    const lineSelect = document.querySelector('[data-mainline-select]');
-    const roleSelect = document.querySelector('[data-mainline-role]');
-    const clearButton = document.querySelector('[data-mainline-clear]');
-    const countNode = document.querySelector('[data-mainline-count]');
-    const emptyNode = document.querySelector('[data-mainline-empty]');
-    const rows = Array.from(document.querySelectorAll('[data-mainline-row]'));
-
-    const normalize = (value) => String(value ?? '').trim().toLocaleLowerCase('zh-CN');
-
-    const applyFilters = ({ updateUrl = true } = {}) => {
-      if (
-        !(searchInput instanceof HTMLInputElement) ||
-        !(lineSelect instanceof HTMLSelectElement) ||
-        !(roleSelect instanceof HTMLSelectElement)
-      ) {
-        return;
-      }
-
-      const query = normalize(searchInput.value);
-      const line = lineSelect.value;
-      const role = roleSelect.value;
-      let visibleCount = 0;
-
-      rows.forEach((row) => {
-        if (!(row instanceof HTMLElement)) return;
-        const searchableText = `${row.textContent ?? ''} ${row.dataset.query ?? ''}`;
-        const matchesQuery = !query || normalize(searchableText).includes(query);
-        const matchesLine = !line || row.dataset.line === line;
-        const matchesRole = !role || row.dataset.role === role;
-        const visible = matchesQuery && matchesLine && matchesRole;
-        row.hidden = !visible;
-        if (visible) visibleCount += 1;
-      });
-
-      if (countNode) countNode.textContent = String(visibleCount);
-      if (emptyNode instanceof HTMLElement) emptyNode.hidden = visibleCount > 0;
-      if (clearButton instanceof HTMLButtonElement) clearButton.disabled = !query && !line && !role;
-
-      if (updateUrl) {
-        const url = new URL(window.location.href);
-        for (const [key, value] of [['q', searchInput.value.trim()], ['line', line], ['role', role]]) {
-          if (value) url.searchParams.set(key, value);
-          else url.searchParams.delete(key);
-        }
-        window.history.replaceState({}, '', url);
-      }
-    };
-
-    if (
-      filterForm instanceof HTMLFormElement &&
-      searchInput instanceof HTMLInputElement &&
-      lineSelect instanceof HTMLSelectElement &&
-      roleSelect instanceof HTMLSelectElement &&
-      clearButton instanceof HTMLButtonElement
-    ) {
-      const params = new URLSearchParams(window.location.search);
-      searchInput.value = params.get('q') ?? '';
-      if (Array.from(lineSelect.options).some((option) => option.value === params.get('line'))) {
-        lineSelect.value = params.get('line') ?? '';
-      }
-      if (Array.from(roleSelect.options).some((option) => option.value === params.get('role'))) {
-        roleSelect.value = params.get('role') ?? '';
-      }
-
-      filterForm.addEventListener('submit', (event) => {
-        event.preventDefault();
-        applyFilters();
-      });
-      searchInput.addEventListener('input', () => applyFilters());
-      lineSelect.addEventListener('change', () => applyFilters());
-      roleSelect.addEventListener('change', () => applyFilters());
-      clearButton.addEventListener('click', () => {
-        filterForm.reset();
-        applyFilters();
-        searchInput.focus();
-      });
-
-      applyFilters({ updateUrl: false });
-    }
-  </script>
 </Layout>

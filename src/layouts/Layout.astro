@@ -57,8 +57,9 @@ const jsonLdItems = [
     {jsonLdItems.map((item) => <script type="application/ld+json" set:html={JSON.stringify(item)} />)}
   </head>
   <body>
+    <a class="skip-link" href="#main-content">跳到主要内容</a>
     <SiteHeader active={active} />
-    <main>
+    <main id="main-content">
       <slot />
     </main>
     <dialog class="paper-figure-dialog" data-paper-figure-dialog aria-label="图片详情" tabindex="-1">

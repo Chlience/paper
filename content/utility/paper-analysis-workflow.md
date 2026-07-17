@@ -172,7 +172,7 @@ arXiv 论文优先以 abstract 页面作为规范来源，并补充 PDF、HTML�
 
 通讯作者、共同一作、项目负责人、仓库主要维护者、跨论文重复作者和身份冲突作者进入深入核验。主页、机构页、GitHub、Hugging Face、ORCID、Scholar、DBLP、OpenReview 与 X 按字段保存来源；X 只在已有强候选时核验。
 
-稳定事实进入 `data/authors.json`。查询词、候选账号、拒绝原因和搜索过程使用 `/tmp` 或未跟踪文件，不能进入公开 Markdown。完整规则见 `internal/author-x-account-search-sop.md`。
+稳定事实进入 `data/authors.json`。检索过程与未采纳的信息只在维护阶段保留，不进入论文笔记或公开页面；具体核验边界由仓库内部维护规则约束。
 
 ## 索引与主题标签
 

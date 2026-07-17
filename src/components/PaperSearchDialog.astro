@@ -3,10 +3,15 @@ import data from '../generated/paper-data.json';
 import { buildPaperSearchItems } from '../lib/paper-search.mjs';
 
 const searchItems = buildPaperSearchItems(data.papers);
-const searchJson = JSON.stringify(searchItems).replace(/</g, '\\u003c');
 ---
 
-<dialog class="paper-search-dialog" data-paper-search-dialog aria-label="搜索论文">
+<dialog
+  class="paper-search-dialog"
+  data-paper-search-dialog
+  data-search-url="/paper-search.json"
+  data-search-count={searchItems.length}
+  aria-label="搜索论文"
+>
   <div class="paper-search-panel">
     <div class="paper-search-head">
       <label for="paper-search-command">搜索论文</label>
@@ -37,7 +42,6 @@ const searchJson = JSON.stringify(searchItems).replace(/</g, '\\u003c');
     </div>
   </div>
 </dialog>
-<script id="paper-search-data" type="application/json" set:html={searchJson}></script>
 
 <script>
   import { searchPaperItems } from '../lib/paper-search.mjs';
@@ -48,7 +52,8 @@ const searchJson = JSON.stringify(searchItems).replace(/</g, '\\u003c');
   const closeButton = dialog?.querySelector('[data-paper-search-close]');
   const resultsRoot = dialog?.querySelector('[data-paper-search-results]');
   const triggers = Array.from(document.querySelectorAll('[data-paper-search-open]'));
-  const dataNode = document.getElementById('paper-search-data');
+  const searchUrl = dialog?.getAttribute('data-search-url') || '';
+  const expectedCount = Number(dialog?.getAttribute('data-search-count') || 0);
 
   if (
     dialog instanceof HTMLDialogElement &&
@@ -56,13 +61,41 @@ const searchJson = JSON.stringify(searchItems).replace(/</g, '\\u003c');
     status instanceof HTMLElement &&
     closeButton instanceof HTMLButtonElement &&
     resultsRoot instanceof HTMLElement &&
-    dataNode?.textContent
+    searchUrl
   ) {
-    const items = JSON.parse(dataNode.textContent);
+    let items = [];
+    let loadPromise;
+    let loadFailed = false;
     let activeIndex = -1;
     let results = [];
     let lockedScrollY = 0;
     let lockedScrollbarWidth = 0;
+    const idleStatus = `输入关键词搜索 ${expectedCount} 篇论文`;
+
+    const loadItems = () => {
+      if (loadPromise) return loadPromise;
+      status.textContent = '正在载入论文索引…';
+      loadPromise = fetch(searchUrl, {
+        credentials: 'same-origin',
+        headers: { Accept: 'application/json' },
+      })
+        .then((response) => {
+          if (!response.ok) throw new Error(`Search index request failed: ${response.status}`);
+          return response.json();
+        })
+        .then((payload) => {
+          if (!Array.isArray(payload)) throw new Error('Search index response must be an array.');
+          items = payload;
+          loadFailed = false;
+          return items;
+        })
+        .catch((error) => {
+          loadFailed = true;
+          loadPromise = undefined;
+          throw error;
+        });
+      return loadPromise;
+    };
 
     const escapeHtml = (value = '') =>
       String(value).replace(
@@ -103,6 +136,11 @@ const searchJson = JSON.stringify(searchItems).replace(/</g, '\\u003c');
         input.focus();
         input.select();
       });
+      loadItems()
+        .then(() => renderResults())
+        .catch(() => {
+          status.textContent = '论文索引载入失败，请稍后重试';
+        });
     };
 
     const closeSearch = () => {
@@ -125,11 +163,16 @@ const searchJson = JSON.stringify(searchItems).replace(/</g, '\\u003c');
 
     const renderResults = () => {
       const query = input.value.trim();
+      if (items.length === 0) {
+        status.textContent = loadFailed ? '论文索引载入失败，请稍后重试' : '正在载入论文索引…';
+        resultsRoot.innerHTML = '';
+        return;
+      }
       results = searchPaperItems(items, query, 12);
       activeIndex = results.length > 0 ? 0 : -1;
 
       if (!query) {
-        status.textContent = `输入关键词搜索 ${items.length} 篇论文`;
+        status.textContent = idleStatus;
         resultsRoot.innerHTML = '';
         return;
       }

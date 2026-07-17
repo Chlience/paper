@@ -77,6 +77,8 @@ const scanFiles = async (dir, predicate) => {
 
 const data = JSON.parse(await fs.readFile(generatedFile, 'utf8'));
 const sourceAuthors = JSON.parse(await fs.readFile(authorsFile, 'utf8'));
+const mainlineDataPath = path.join(repoRoot, 'src', 'generated', 'mainline-data.json');
+const mainlineData = JSON.parse(await fs.readFile(mainlineDataPath, 'utf8'));
 
 if (!Array.isArray(data.papers) || data.papers.length === 0) {
   fail('No generated paper pages found.');
@@ -181,6 +183,8 @@ const robotsTxtPath = path.join(distDir, 'robots.txt');
 const authorsIndexPath = path.join(distDir, 'authors', 'index.html');
 const papersIndexPath = path.join(distDir, 'papers', 'index.html');
 const topicsIndexPath = path.join(distDir, 'topics', 'index.html');
+const mainlinesIndexPath = path.join(distDir, 'mainlines', 'index.html');
+const paperSearchIndexPath = path.join(distDir, 'paper-search.json');
 
 if (!(await exists(sitemapXmlPath))) {
   fail('dist/sitemap.xml is missing.');
@@ -206,6 +210,82 @@ if (!(await exists(topicsIndexPath))) {
     if (!topicsHtml.includes(`id="tag-${route.id}"`)) {
       fail(`dist/topics/index.html is missing topic anchor: tag-${route.id}.`);
     }
+  }
+}
+
+if (!(await exists(paperSearchIndexPath))) {
+  fail('dist/paper-search.json is missing.');
+} else {
+  const searchItems = JSON.parse(await fs.readFile(paperSearchIndexPath, 'utf8'));
+  if (!Array.isArray(searchItems) || searchItems.length !== data.papers.length) {
+    fail('dist/paper-search.json does not match the generated paper inventory.');
+  }
+}
+
+for (const file of htmlFiles) {
+  const content = await fs.readFile(file, 'utf8');
+  if (content.includes('id="paper-search-data"')) {
+    fail(`${path.relative(repoRoot, file)} still embeds the full paper search index.`);
+  }
+}
+
+if (!Array.isArray(mainlineData.lines) || mainlineData.lines.length === 0) {
+  fail('No generated research mainlines found.');
+}
+
+if (!(await exists(mainlinesIndexPath))) {
+  fail('dist/mainlines/index.html is missing.');
+} else {
+  const mainlinesHtml = await fs.readFile(mainlinesIndexPath, 'utf8');
+  if (/data-mainline-(?:filters|search|select|role|row|clear)/.test(mainlinesHtml)) {
+    fail('dist/mainlines/index.html still contains local search or filter controls.');
+  }
+  for (const line of mainlineData.lines ?? []) {
+    if (!mainlinesHtml.includes(`/mainlines/${line.id}/`)) {
+      fail(`dist/mainlines/index.html is missing the ${line.id} directory link.`);
+    }
+  }
+}
+
+for (const line of mainlineData.lines ?? []) {
+  const detailPath = path.join(distDir, 'mainlines', line.id, 'index.html');
+  if (!(await exists(detailPath))) {
+    fail(`${path.relative(repoRoot, detailPath)} is missing.`);
+    continue;
+  }
+
+  const html = await fs.readFile(detailPath, 'utf8');
+  const expectedMethodIds = [...new Set((line.methods ?? []).map((method) => method.id))].sort();
+  const tableMethodIds = [...html.matchAll(/<tr\s+id="method-([^"]+)"/g)].map((match) => match[1]).sort();
+  if (JSON.stringify(tableMethodIds) !== JSON.stringify(expectedMethodIds)) {
+    fail(`${path.relative(repoRoot, detailPath)} method table does not match generated method IDs.`);
+  }
+
+  const graphMethodIds = [...html.matchAll(new RegExp(`\\bid="graph-method-${line.id}-([^"]+)"`, 'g'))]
+    .map((match) => match[1])
+    .sort();
+  const expectedGraphIds = line.status === 'formal' ? expectedMethodIds : [];
+  if (JSON.stringify(graphMethodIds) !== JSON.stringify(expectedGraphIds)) {
+    fail(`${path.relative(repoRoot, detailPath)} graph and method table do not share the same method IDs.`);
+  }
+
+  const generatedRelationIds = [...new Set((line.relations ?? []).map((relation) => relation.id))].sort();
+  const expectedGraphRelationIds = line.status === 'formal' ? generatedRelationIds : [];
+  const graphRelationIds = [...html.matchAll(/\bid="graph-relation-([^"]+)"/g)]
+    .map((match) => match[1])
+    .sort();
+  const tableRelationIds = [...html.matchAll(/\bdata-relation-id="([^"]+)"/g)]
+    .map((match) => match[1])
+    .sort();
+  if (JSON.stringify(graphRelationIds) !== JSON.stringify(expectedGraphRelationIds)) {
+    fail(`${path.relative(repoRoot, detailPath)} graph does not match generated relation IDs.`);
+  }
+  if (JSON.stringify(tableRelationIds) !== JSON.stringify(generatedRelationIds)) {
+    fail(`${path.relative(repoRoot, detailPath)} method table does not match generated relation IDs.`);
+  }
+
+  if (/@viz-js\/viz|viz-js|WebAssembly|Viz\s*\(/i.test(html)) {
+    fail(`${path.relative(repoRoot, detailPath)} contains a client-side graph runtime.`);
   }
 }
 
@@ -241,6 +321,13 @@ if ((await exists(sitemapXmlPath)) && (await exists(robotsTxtPath))) {
 
   if (!sitemapShard.includes(topicsUrl)) {
     fail(`sitemap-0.xml must include ${topicsUrl}.`);
+  }
+
+  for (const line of mainlineData.lines ?? []) {
+    const lineUrl = new URL(`/mainlines/${line.id}/`, expectedSiteUrl).href;
+    if (!sitemapShard.includes(lineUrl)) {
+      fail(`sitemap-0.xml must include ${lineUrl}.`);
+    }
   }
 }
 

@@ -44,6 +44,7 @@ jobs:
 
           npm run test:workflow
           npm run check:workflow
+          npm run check:mainlines
           npm run check:metadata
           npm run test:search
           npm run test:pins

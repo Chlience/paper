@@ -10,7 +10,7 @@ content/utility/     public workflow, template, archive index, and research-main
 data/authors.json    maintained author profiles
 data/tag-taxonomy.json controlled tag vocabulary and facets
 data/paper-tags.json paper-to-tag assignments, primary tag first
-data/research-mainlines.json dated mainline, role, and cross-line snapshot
+data/research-mainlines.json facets, method nodes, sourced relations, and corpus coverage
 internal/            analysis modules and private maintenance SOPs
 ```
 
@@ -34,6 +34,7 @@ http://localhost:4321
 ```bash
 npm run test:workflow
 npm run check:workflow
+npm run check:mainlines
 npm run check:metadata
 npm run check:math
 npm run test:search
@@ -49,6 +50,7 @@ GitHub Actions validates source files, runs one production build, and checks the
 ```bash
 npm run test:workflow
 npm run check:workflow
+npm run check:mainlines
 npm run check:metadata
 npm run test:search
 npm run test:pins
@@ -98,4 +100,23 @@ internal/paper-analysis-modules.md
 internal/paper-archive-maintenance-sop.md
 ```
 
-`npm run check:workflow` validates paper structure, v2/v2.1 fields, evidence locations, archive-time conflicts, local figures, controlled tag assignments, author-profile data, and recurring unprofiled authors. Historical notes remain readable under compatibility mode and produce bounded migration advisories. The research-mainline page currently renders a dated snapshot; new paper intake does not update that snapshot until its rules are revised.
+`npm run check:workflow` validates paper structure, v2/v2.1 fields, evidence locations, archive-time conflicts, local figures, controlled tag assignments, author-profile data, and recurring unprofiled authors. Historical notes remain readable under compatibility mode and produce bounded migration advisories.
+
+## Manual Research-Mainline Update
+
+Research mainlines use a manually maintained v2 snapshot. `npm run check:mainlines` validates ID formats and uniqueness, facets, method memberships, sourced relations, formal/candidate admission, and paper coverage within the recorded snapshot. It does not discover papers or infer relations.
+
+When manually refreshing the snapshot:
+
+1. Compare papers added or changed after `snapshot.asOf`.
+2. Add method nodes and line memberships; add a relation only when its evidence and locator are recorded.
+3. Record non-method papers in `materials`, including evidence, boundary, counterexample, or synthesis uses.
+4. Advance the snapshot only after the strict current-corpus check succeeds:
+
+```bash
+node scripts/check-research-mainlines.mjs --require-current
+npm run build
+node scripts/check-paper-site.mjs
+```
+
+The default check may report newer papers as snapshot advisories. The strict command requires every current paper to have exactly one material record.
