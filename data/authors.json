@@ -7291,6 +7291,7 @@
     "slug": "xinyu-yang-cmu",
     "name": "Xinyu Yang",
     "aliases": ["Xinyu Yang", "Malachy Xinyu Yang", "He Xing"],
+    "matchByName": false,
     "affiliations": ["Carnegie Mellon University"],
     "homepage": "https://xinyuyang.me/",
     "github": "",
@@ -8438,12 +8439,16 @@
     "github": "",
     "x": "",
     "xConfidence": "not-found",
-    "topics": ["LLM-in-Sandbox", "large language models", "web search", "information retrieval", "data mining"],
-    "notes": "LLM-in-Sandbox coauthor from RUC GSAI. RUC faculty page identifies him as executive dean of the Gaoling School of Artificial Intelligence, and public profiles connect him to large language models, web search and information retrieval.",
+    "topics": ["LLM-in-Sandbox", "long-horizon agents", "large language models", "web search", "information retrieval", "data mining"],
+    "notes": "LLM-in-Sandbox coauthor and Towards Long-Horizon Agents senior coauthor from RUC GSAI. RUC faculty page identifies him as executive dean of the Gaoling School of Artificial Intelligence, and public profiles connect him to large language models, web search and information retrieval.",
     "sources": [
       {
         "label": "LLM-in-Sandbox",
         "url": "https://arxiv.org/abs/2601.16206"
+      },
+      {
+        "label": "Towards Long-Horizon Agents",
+        "url": "https://openreview.net/forum?id=HyhfhlbWGh"
       },
       {
         "label": "Project page",
@@ -11194,6 +11199,173 @@
       {
         "label": "PICASSO Lab team",
         "url": "https://yufeiding.ucsd.edu/people/team"
+      }
+    ]
+  },
+  {
+    "slug": "guanting-dong",
+    "name": "Guanting Dong",
+    "chineseName": "董冠霆",
+    "aliases": ["Guanting Dong"],
+    "affiliations": ["Gaoling School of Artificial Intelligence, Renmin University of China", "Beijing University of Posts and Telecommunications"],
+    "homepage": "https://dongguanting.github.io/",
+    "github": "https://github.com/dongguanting",
+    "x": "https://x.com/kakakbibibi",
+    "xConfidence": "high",
+    "topics": ["long-horizon agents", "agentic reinforcement learning", "deep search agents", "LLM alignment", "retrieval-augmented generation"],
+    "notes": "Core contributor and repository maintainer for Towards Long-Horizon Agents. His homepage identifies him as an RUC GSAI PhD student advised by Zhicheng Dou and Ji-Rong Wen, with research on agentic RL, deep search agents and LLM alignment.",
+    "sources": [
+      {
+        "label": "Towards Long-Horizon Agents",
+        "url": "https://openreview.net/forum?id=HyhfhlbWGh"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://dongguanting.github.io/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/dongguanting"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/kakakbibibi"
+      }
+    ]
+  },
+  {
+    "slug": "xiaoshuai-song",
+    "name": "Xiaoshuai Song",
+    "chineseName": "宋晓帅",
+    "aliases": ["Xiaoshuai Song"],
+    "affiliations": ["Gaoling School of Artificial Intelligence, Renmin University of China", "Beijing University of Posts and Telecommunications"],
+    "homepage": "https://songxiaoshuai.github.io/",
+    "github": "https://github.com/songxiaoshuai",
+    "topics": ["long-horizon agents", "web information acquisition", "tool use", "agent environments", "large language models"],
+    "notes": "Core contributor and repository maintainer for Towards Long-Horizon Agents. His homepage identifies him as an RUC-NLPIR PhD student advised by Zhicheng Dou and Ji-Rong Wen, with research on web information acquisition and general tool use.",
+    "sources": [
+      {
+        "label": "Towards Long-Horizon Agents",
+        "url": "https://openreview.net/forum?id=HyhfhlbWGh"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://songxiaoshuai.github.io/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/songxiaoshuai"
+      }
+    ]
+  },
+  {
+    "slug": "yuyang-hu",
+    "name": "Yuyang Hu",
+    "chineseName": "扈煜阳",
+    "aliases": ["Yuyang Hu"],
+    "affiliations": ["Gaoling School of Artificial Intelligence, Renmin University of China", "Beijing Academy of Artificial Intelligence"],
+    "homepage": "https://namespace-eri.github.io/",
+    "github": "https://github.com/namespace-ERI",
+    "topics": ["long-horizon agents", "agent memory", "self-evolving agents", "AutoResearch agents", "information retrieval"],
+    "notes": "Core contributor and repository maintainer for Towards Long-Horizon Agents. His homepage identifies him as an RUC GSAI PhD student advised by Zhicheng Dou and a BAAI research intern working on agent memory and AutoResearch.",
+    "sources": [
+      {
+        "label": "Towards Long-Horizon Agents",
+        "url": "https://openreview.net/forum?id=HyhfhlbWGh"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://namespace-eri.github.io/"
+      },
+      {
+        "label": "ORCID",
+        "url": "https://orcid.org/0009-0007-2828-1165"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/namespace-ERI"
+      }
+    ]
+  },
+  {
+    "slug": "jiajie-jin",
+    "name": "Jiajie Jin",
+    "chineseName": "金佳杰",
+    "aliases": ["Jiajie Jin"],
+    "affiliations": ["Gaoling School of Artificial Intelligence, Renmin University of China"],
+    "homepage": "https://ignorejjj.github.io/",
+    "github": "https://github.com/ignorejjj",
+    "topics": ["long-horizon agents", "deep research agents", "knowledge utilization", "verifiable agents", "retrieval-augmented generation"],
+    "notes": "Core contributor and leading repository maintainer for Towards Long-Horizon Agents. His homepage identifies him as an RUC GSAI PhD student researching long-horizon, knowledge-efficient and verifiable LLM agents.",
+    "sources": [
+      {
+        "label": "Towards Long-Horizon Agents",
+        "url": "https://openreview.net/forum?id=HyhfhlbWGh"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://ignorejjj.github.io/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/ignorejjj"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=iHCuEo8AAAAJ"
+      }
+    ]
+  },
+  {
+    "slug": "chenghao-zhang-ruc",
+    "name": "Chenghao Zhang",
+    "aliases": ["Chenghao Zhang"],
+    "affiliations": ["Gaoling School of Artificial Intelligence, Renmin University of China"],
+    "homepage": "",
+    "github": "",
+    "topics": ["long-horizon agents", "retrieval-augmented generation", "deep research agents", "multimodal reasoning"],
+    "notes": "Core contributor to Towards Long-Horizon Agents from RUC GSAI. OpenReview and DBLP distinguish this identity from other researchers named Chenghao Zhang.",
+    "sources": [
+      {
+        "label": "Towards Long-Horizon Agents",
+        "url": "https://openreview.net/forum?id=HyhfhlbWGh"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Chenghao_Zhang3"
+      },
+      {
+        "label": "DBLP",
+        "url": "https://dblp.org/pid/186/0078-1.html"
+      }
+    ]
+  },
+  {
+    "slug": "zhicheng-dou",
+    "name": "Zhicheng Dou",
+    "chineseName": "窦志成",
+    "aliases": ["Zhicheng Dou"],
+    "affiliations": ["Gaoling School of Artificial Intelligence, Renmin University of China", "Microsoft Research Asia"],
+    "homepage": "https://playbigdata.ruc.edu.cn/dou/",
+    "github": "",
+    "topics": ["long-horizon agents", "intelligent agents", "deep search", "retrieval-augmented generation", "information retrieval"],
+    "notes": "Corresponding author of Towards Long-Horizon Agents and professor at RUC GSAI. His faculty profile lists intelligent agents, deep search/deep research, RAG and LLM-based information retrieval among his research interests.",
+    "sources": [
+      {
+        "label": "Towards Long-Horizon Agents",
+        "url": "https://openreview.net/forum?id=HyhfhlbWGh"
+      },
+      {
+        "label": "RUC faculty page",
+        "url": "https://ai.ruc.edu.cn/english/FACULTYn/ZhichengDou/index.htm"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://playbigdata.ruc.edu.cn/dou/"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Zhicheng_Dou1"
       }
     ]
   }
