@@ -17,12 +17,15 @@ export const REQUIRED_SECTION_GROUPS = [
     name: '关键实验/定理',
     headings: ['关键实验/定理', '关键实验结果', '主要实验结果', '关键定理', '文献扫描结果', '方法论论证'],
   },
+  { name: '局限', headings: ['局限', '局限与待验证问题'] },
+  { name: '跨论文关系', headings: ['跨论文关系'] },
+];
+
+export const V2_REQUIRED_SECTION_GROUPS = [
+  ...REQUIRED_SECTION_GROUPS,
   { name: '证据链强度评估', headings: ['证据链强度评估'] },
   { name: 'OpenReview / 审稿意见吸收', headings: ['OpenReview / 审稿意见吸收'] },
   { name: '主要启发', headings: ['主要启发'] },
-  { name: '局限', headings: ['局限', '局限与待验证问题'] },
-  { name: '跨论文关系', headings: ['跨论文关系'] },
-  { name: 'Reference Intake Brief', headings: ['Reference Intake Brief'] },
 ];
 
 export const MATERIAL_TYPES = new Set([
@@ -44,7 +47,15 @@ export const REVIEW_PAGE_TYPES = new Set([
   'not-applicable',
 ]);
 
-export const REFERENCE_DECISIONS = new Set(['merge', 'revise-then-merge', 'skip', 'ask-user']);
+export const ANALYSIS_MODULES = new Set([
+  'experiment',
+  'system',
+  'theory',
+  'model-report',
+  'survey',
+  'safety',
+  'docs',
+]);
 
 const evidenceSectionGroup = REQUIRED_SECTION_GROUPS.find((group) => group.name === '关键实验/定理');
 
@@ -105,6 +116,25 @@ const evidenceValue = (block) => block.match(/^- 证据定位[:：]\s*(.+)$/mi)?
 
 const resultFieldValue = (block, name) =>
   block.match(new RegExp(`^- ${name}[:：][ \\t]*(.+)$`, 'mi'))?.[1]?.trim() ?? '';
+
+const analysisModulesValue = (value = '') =>
+  scalarValue(value)
+    .split(/[,，]/)
+    .map((item) => item.trim().toLowerCase())
+    .filter(Boolean);
+
+const reviewStatusValue = (value = '') => {
+  const fields = new Map();
+  for (const item of scalarValue(value).split(';')) {
+    const separator = item.indexOf('=');
+    if (separator < 1) continue;
+    fields.set(item.slice(0, separator).trim().toLowerCase(), item.slice(separator + 1).trim());
+  }
+  return fields;
+};
+
+const hasNamedField = (markdown, name) =>
+  new RegExp(`^- ${name}[:：][ \\t]*\\S`, 'mi').test(markdown);
 
 const scalarValue = (value = '') => value.trim().replace(/^`([^`]+)`$/, '$1').trim();
 
@@ -277,6 +307,7 @@ export const validatePaperRecord = async ({
   indexMarkdown,
   knownPaperSlugs,
   legacyPaperSlugs = new Set(),
+  v2PaperSlugs = new Set(),
   imageExists,
 }) => {
   const errors = [];
@@ -284,27 +315,32 @@ export const validatePaperRecord = async ({
   const source = getSection(markdown, 'Source');
   const workflowVersion = scalarValue(getSourceFieldRaw(source, 'Workflow version'));
   const isV2 = workflowVersion.toLowerCase() === 'v2';
+  const isV21 = workflowVersion.toLowerCase() === 'v2.1';
+  const isStructured = isV2 || isV21;
   const materialType = scalarValue(getSourceFieldRaw(source, 'Material type'));
   const canonicalSource = canonicalValue(getSourceFieldRaw(source, 'Canonical source'));
   const firstArchivedAt = getFirstArchivedAt(markdown);
   const updatedAt = getTopLevelField(markdown, 'Updated-At');
 
   if (!workflowVersion && !legacyPaperSlugs.has(slug)) {
-    errors.push(issue('missing-workflow-version', slug, 'New notes must declare Workflow version: v2.'));
-  } else if (workflowVersion && !isV2) {
+    errors.push(issue('missing-workflow-version', slug, 'New notes must declare Workflow version: v2.1.'));
+  } else if (workflowVersion && !isStructured) {
     errors.push(issue('unsupported-workflow-version', slug, `Unsupported Workflow version: ${workflowVersion}.`));
+  } else if (isV2 && !legacyPaperSlugs.has(slug) && !v2PaperSlugs.has(slug)) {
+    errors.push(issue('deprecated-workflow-version', slug, 'New notes must use Workflow version: v2.1.'));
   }
 
   if (!firstArchivedAt || !updatedAt) {
     errors.push(issue('missing-archive-time', slug, 'First-Archived-At and Updated-At are required.'));
   }
 
-  for (const group of REQUIRED_SECTION_GROUPS) {
+  const requiredSectionGroups = isV21 ? REQUIRED_SECTION_GROUPS : V2_REQUIRED_SECTION_GROUPS;
+  for (const group of requiredSectionGroups) {
     if (!sectionForGroup(markdown, group)) {
       errors.push(issue('missing-core-section', slug, `Missing or empty section: ${group.name}.`));
     }
   }
-  if (!hasTraceableSource(source, knownPaperSlugs, isV2 && materialType === 'composite')) {
+  if (!hasTraceableSource(source, knownPaperSlugs, isStructured && materialType === 'composite')) {
     errors.push(issue('missing-source-link', slug, 'Source must contain an external URL or a valid archived paper link.'));
   }
   if (!indexMarkdown.includes(`/papers/${slug}/`)) {
@@ -314,7 +350,7 @@ export const validatePaperRecord = async ({
     errors.push(issue('template-placeholder', slug, 'Blank list placeholder remains in the note.'));
   }
 
-  if (!isV2) {
+  if (!isStructured) {
     advisories.push(
       issue(
         'legacy-source-snapshot',
@@ -338,13 +374,6 @@ export const validatePaperRecord = async ({
         ),
       );
     }
-    const intake = getSection(markdown, 'Reference Intake Brief');
-    const decision = intake.match(/^Decision:\s*(\S+)$/mi)?.[1] ?? '';
-    if (!REFERENCE_DECISIONS.has(decision)) {
-      advisories.push(
-        issue('legacy-reference-decision', slug, 'Standardize Decision to a supported v2 action.'),
-      );
-    }
   } else if (
     !isValidMinute(firstArchivedAt) ||
     !isValidMinute(updatedAt)
@@ -354,7 +383,7 @@ export const validatePaperRecord = async ({
     errors.push(issue('v2-time-order', slug, 'Updated-At must not precede First-Archived-At.'));
   }
 
-  if (isV2) {
+  if (isStructured) {
     const sourceField = (names) => scalarValue(getSourceFieldRaw(source, names));
     const accessed = sourceField('Accessed');
     const requiredFields = [
@@ -399,12 +428,27 @@ export const validatePaperRecord = async ({
       errors.push(issue('v2-accessed-date', slug, 'Accessed must use a valid YYYY-MM-DD date.'));
     }
 
+    const modules = analysisModulesValue(sourceField('Analysis modules'));
+    if (isV21) {
+      if (modules.length === 0) {
+        errors.push(issue('v21-analysis-modules', slug, 'v2.1 notes must declare at least one Analysis module.'));
+      }
+      if (new Set(modules).size !== modules.length) {
+        errors.push(issue('v21-analysis-modules', slug, 'Analysis modules must not contain duplicates.'));
+      }
+      for (const moduleName of modules) {
+        if (!ANALYSIS_MODULES.has(moduleName)) {
+          errors.push(issue('v21-analysis-module', slug, `Unknown Analysis module: ${moduleName}.`));
+        }
+      }
+    }
+
     for (const block of resultBlocks(sectionForGroup(markdown, evidenceSectionGroup))) {
       const locator = evidenceValue(block.body);
       if (!locator || !hasEvidenceLocator(locator)) {
         errors.push(issue('v2-evidence-location', slug, `Missing evidence location in ${block.title}.`));
       }
-      if (!resultFieldValue(block.body, '对照是否可比')) {
+      if (isV2 && !resultFieldValue(block.body, '对照是否可比')) {
         errors.push(
           issue('v2-result-comparability', slug, `Missing comparability assessment in ${block.title}.`),
         );
@@ -420,30 +464,93 @@ export const validatePaperRecord = async ({
       }
     }
 
-    const review = getSection(markdown, 'OpenReview / 审稿意见吸收');
-    for (const name of ['Page type', 'Match confidence', 'Observed at']) {
-      if (!lineValue(review, name)) {
-        errors.push(issue('v2-review-field', slug, `Missing review field: ${name}.`));
+    if (isV2) {
+      const review = getSection(markdown, 'OpenReview / 审稿意见吸收');
+      for (const name of ['Page type', 'Match confidence', 'Observed at']) {
+        if (!lineValue(review, name)) {
+          errors.push(issue('v2-review-field', slug, `Missing review field: ${name}.`));
+        }
+      }
+      if (lineValue(review, 'Page type') && !REVIEW_PAGE_TYPES.has(lineValue(review, 'Page type'))) {
+        errors.push(issue('v2-review-page-type', slug, 'Page type is outside the supported v2 set.'));
+      }
+      if (
+        lineValue(review, 'Match confidence') &&
+        !/^(high|medium|low)$/i.test(lineValue(review, 'Match confidence'))
+      ) {
+        errors.push(issue('v2-review-confidence', slug, 'Match confidence must be high, medium, or low.'));
+      }
+      const observedAt = lineValue(review, 'Observed at');
+      if (observedAt && !isValidDate(observedAt)) {
+        errors.push(issue('v2-review-date', slug, 'Observed at must use a valid YYYY-MM-DD date.'));
       }
     }
-    if (lineValue(review, 'Page type') && !REVIEW_PAGE_TYPES.has(lineValue(review, 'Page type'))) {
-      errors.push(issue('v2-review-page-type', slug, 'Page type is outside the supported v2 set.'));
-    }
-    if (
-      lineValue(review, 'Match confidence') &&
-      !/^(high|medium|low)$/i.test(lineValue(review, 'Match confidence'))
-    ) {
-      errors.push(issue('v2-review-confidence', slug, 'Match confidence must be high, medium, or low.'));
-    }
-    const observedAt = lineValue(review, 'Observed at');
-    if (observedAt && !isValidDate(observedAt)) {
-      errors.push(issue('v2-review-date', slug, 'Observed at must use a valid YYYY-MM-DD date.'));
-    }
 
-    const intake = getSection(markdown, 'Reference Intake Brief');
-    const decision = intake.match(/^Decision:\s*(\S+)$/mi)?.[1] ?? '';
-    if (!REFERENCE_DECISIONS.has(decision)) {
-      errors.push(issue('v2-reference-decision', slug, 'Reference Intake Brief has an invalid Decision value.'));
+    if (isV21) {
+      const reviewStatus = reviewStatusValue(sourceField('Review status'));
+      const pageType = reviewStatus.get('page-type') ?? '';
+      const matchConfidence = reviewStatus.get('match-confidence') ?? '';
+      const observedAt = reviewStatus.get('observed-at') ?? '';
+      const venueStatus = reviewStatus.get('venue-status') ?? '';
+
+      if (!pageType || !matchConfidence || !observedAt || !venueStatus) {
+        errors.push(
+          issue(
+            'v21-review-status',
+            slug,
+            'Review status must include page-type, match-confidence, observed-at, and venue-status.',
+          ),
+        );
+      }
+      if (pageType && !REVIEW_PAGE_TYPES.has(pageType)) {
+        errors.push(issue('v21-review-page-type', slug, 'Review page-type is outside the supported set.'));
+      }
+      if (matchConfidence && !/^(high|medium|low)$/i.test(matchConfidence)) {
+        errors.push(issue('v21-review-confidence', slug, 'Review match-confidence must be high, medium, or low.'));
+      }
+      if (observedAt && !isValidDate(observedAt)) {
+        errors.push(issue('v21-review-date', slug, 'Review observed-at must use a valid YYYY-MM-DD date.'));
+      }
+
+      if (pageType === 'official-review') {
+        const review = getSection(markdown, 'OpenReview / 审稿意见吸收');
+        if (!review.trim()) {
+          errors.push(issue('v21-official-review-section', slug, 'Official reviews require a review analysis section.'));
+        } else {
+          for (const name of ['Reviewer consensus', 'Main criticisms', 'Author response', '对可信度的影响']) {
+            if (!lineValue(review, name)) {
+              errors.push(issue('v21-official-review-field', slug, `Missing official review field: ${name}.`));
+            }
+          }
+        }
+      }
+
+      if (modules.includes('experiment')) {
+        for (const block of resultBlocks(sectionForGroup(markdown, evidenceSectionGroup))) {
+          if (!resultFieldValue(block.body, '对照是否可比')) {
+            advisories.push(
+              issue('v21-module-experiment', slug, `Add comparability assessment in ${block.title}.`),
+            );
+          }
+        }
+      }
+      const moduleFieldRules = new Map([
+        ['system', ['系统条件', '指标定义', '成本归因']],
+        ['theory', ['假设', '适用域']],
+        ['model-report', ['未披露项']],
+        ['survey', ['纳入范围']],
+        ['safety', ['威胁模型', '披露边界']],
+        ['docs', ['适用版本']],
+      ]);
+      for (const moduleName of modules) {
+        for (const fieldName of moduleFieldRules.get(moduleName) ?? []) {
+          if (!hasNamedField(markdown, fieldName)) {
+            advisories.push(
+              issue(`v21-module-${moduleName}`, slug, `Add the ${fieldName} field before module checks become strict.`),
+            );
+          }
+        }
+      }
     }
   }
 
@@ -496,11 +603,11 @@ export const validateArchiveTimes = (records) => {
   for (const [value, group] of times) {
     if (!value || group.length < 2) continue;
     for (const record of group) {
-      const isV2 = workflowVersionFor(record.markdown).toLowerCase() === 'v2';
-      const target = isV2 ? errors : advisories;
+      const isStructured = ['v2', 'v2.1'].includes(workflowVersionFor(record.markdown).toLowerCase());
+      const target = isStructured ? errors : advisories;
       target.push(
         issue(
-          isV2 ? 'v2-archive-time-conflict' : 'legacy-archive-time-conflict',
+          isStructured ? 'v2-archive-time-conflict' : 'legacy-archive-time-conflict',
           record.slug,
           `First-Archived-At ${value} is shared by ${group.map((item) => item.slug).join(', ')}.`,
         ),

@@ -6,12 +6,12 @@ The content source is split by role:
 
 ```text
 content/papers/      paper notes, one Markdown file per paper
-content/utility/     public workflow, template, archive index, and research-mainline pages
+content/utility/     public workflow, template, archive index, and research-mainline snapshot
 data/authors.json    maintained author profiles
 data/tag-taxonomy.json controlled tag vocabulary and facets
 data/paper-tags.json paper-to-tag assignments, primary tag first
-data/research-mainlines.json full-corpus mainline, role, and cross-line assignments
-internal/            private maintenance SOPs
+data/research-mainlines.json dated mainline, role, and cross-line snapshot
+internal/            analysis modules and private maintenance SOPs
 ```
 
 The Astro site reads those files through `scripts/build-paper-data.mjs`, generates `src/generated/paper-data.json`, and deploys only the built artifact to `papers.chlience.com`.
@@ -79,7 +79,7 @@ Paper-reading workflow:
 content/utility/paper-analysis-workflow.md
 ```
 
-New notes use the v2 source snapshot and evidence contract in:
+New notes use the v2.1 source snapshot, analysis modules, and seven-section contract in:
 
 ```text
 content/utility/paper-note-template.md
@@ -91,4 +91,11 @@ Author identity, profile, and public-account verification follows the internal S
 internal/author-x-account-search-sop.md
 ```
 
-`npm run check:workflow` validates paper structure, v2 fields, evidence locations, archive-time conflicts, local figures, controlled tag assignments, author-profile data, and recurring unprofiled authors. Historical notes remain readable under compatibility mode and produce bounded migration advisories.
+Module-specific analysis and repository maintenance follow:
+
+```text
+internal/paper-analysis-modules.md
+internal/paper-archive-maintenance-sop.md
+```
+
+`npm run check:workflow` validates paper structure, v2/v2.1 fields, evidence locations, archive-time conflicts, local figures, controlled tag assignments, author-profile data, and recurring unprofiled authors. Historical notes remain readable under compatibility mode and produce bounded migration advisories. The research-mainline page currently renders a dated snapshot; new paper intake does not update that snapshot until its rules are revised.

@@ -41,7 +41,7 @@ const paperEntries = classification.papers.map((assignment) => {
   };
 });
 
-const pageDescription = `逐条复核 ${classification.paperCount} 条归档材料后收敛出的 ${classification.lines.length} 条问题驱动研究主线，包含证据、反例和全量归属查询。`;
+const pageDescription = `基于 ${classification.snapshot} 的 ${classification.paperCount} 条材料快照收敛出的 ${classification.lines.length} 条问题驱动研究主线，包含证据、反例和快照归属查询。`;
 ---
 
 <Layout
@@ -92,8 +92,8 @@ const pageDescription = `逐条复核 ${classification.paperCount} 条归档材�
     <section class="mainline-explorer" id="paper-coverage" aria-labelledby="paper-coverage-title">
       <div class="section-header">
         <div>
-          <h2 id="paper-coverage-title">全量归属查询</h2>
-          <p>按标题、摘要、标签、主归属或材料角色筛选。次级关系保留跨线影响，并参与文本搜索。</p>
+          <h2 id="paper-coverage-title">快照归属查询</h2>
+          <p>按标题、摘要、标签、主归属或材料角色筛选当前快照。次级关系保留跨线影响，并参与文本搜索。</p>
         </div>
       </div>
 
@@ -163,7 +163,7 @@ const pageDescription = `逐条复核 ${classification.paperCount} 条归档材�
         })}
       </ul>
       <p class="mainline-empty" data-mainline-empty hidden>当前筛选没有匹配材料。</p>
-      <noscript><p class="mainline-noscript">筛选交互需要 JavaScript；完整列表仍按语料顺序显示。</p></noscript>
+      <noscript><p class="mainline-noscript">筛选交互需要 JavaScript；快照列表仍按语料顺序显示。</p></noscript>
     </section>
   </article>
 

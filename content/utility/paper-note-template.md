@@ -5,8 +5,9 @@ Updated-At: YYYY-MM-DD HH:mm
 
 ## Source
 
-- Workflow version: v2
+- Workflow version: v2.1
 - Material type: research-paper / technical-report / model-card / survey / blog / framework-docs / composite
+- Analysis modules: experiment / system / theory / model-report / survey / safety / docs
 - Canonical source:
 - Title:
 - Authors:
@@ -20,185 +21,93 @@ Updated-At: YYYY-MM-DD HH:mm
 - Current version read:
 - Version / revision read:
 - Accessed: YYYY-MM-DD
+- Review status: page-type=not-found; match-confidence=high; observed-at=YYYY-MM-DD; venue-status=unknown
 - Subjects:
 
-<!-- `Authors` 与 `Responsible organization` 至少填写一项，`Current version read` 与 `Version / revision read` 至少填写一项。普通材料的 Canonical source 使用官方绝对 URL；composite 可以使用其他已归档材料的 /papers/<slug>/ 或 /archive/，不能引用自身页面。按材料类型删除不适用字段。 -->
+<!--
+填写规则：
+- `Authors` 与 `Responsible organization` 至少填写一项。
+- `Current version read` 与 `Version / revision read` 至少填写一项。
+- 普通材料的 Canonical source 使用官方绝对 URL；composite 可以使用其它已归档材料的 /papers/<slug>/ 或 /archive/，不能引用自身页面。
+- Analysis modules 可以填写多个逗号分隔值，例如 `system, experiment`。
+- Review status 的 page-type 使用 official-review / metadata-only / proceedings / commentary / not-found / not-applicable；match-confidence 使用 high / medium / low。
+- 按材料类型删除不适用字段。
+-->
 
 ## 作者与关系
 
 - Author A: Institution in this paper.
-- Author B: Institution in this paper；历史机构：previously verified affiliations if already known and not already listed in the paper-time institution.
+- Author B: Institution in this paper；历史机构：previously verified affiliations.
 
-写法要求：作者条目在冒号后直接写发表该论文时的机构。若有额外已核验历史机构，再写 `历史机构：...`；历史机构中不重复列出已在当前机构中出现的机构。
+写法要求：作者条目在冒号后直接写发表该论文时的机构。额外历史机构只写已核验且不与当前机构重复的内容。正文说明同机构关系、跨机构桥接、作者角色和当前归档中的直接作者关系。
 
 ## 一句话结论
 
-用一段话说明论文最核心贡献或判断。
+用一段话说明首要贡献、主要机制、最可靠证据和关键边界。
 
-<!-- 索引核心信号：从本节提炼一条完整句子，说明论文新增了什么机制、目标、系统能力或结论；使用简称和首次公开月份写入 `papers-index.md -> 当前收录`，避免关键词堆叠。若读后讨论改变了论文核心贡献、主张边界或本地评价，可在这里添加一段 `本地评价：...`；完整推理链仍写入 `本地讨论补充`。 -->
-
-## 阅读目标与判断边界
-
-本笔记关注：
-
-1. 
-2. 
-3. 
-
-判断边界：
-
-- 
-- 
-
-证据写法：
-
-- 论文事实：正文、附录、表格、图、代码或项目页直接给出的内容。
-- 作者主张：摘要、引言、结论、项目说明或作者回应中的解释与归因。
-- 本地分析：基于来源进行的机制重建、比较、推断和可信度判断。
-- 关键判断附 `证据定位`，写明章节、图、表、附录、页码、代码路径或网页 URL。
-
-数学公式写法：
-
-- 行内公式使用 `$...$`，例如 `$\pi_\theta$`。
-- 独立公式使用 `$$...$$` 包裹；不要把数学表达式写进反引号代码样式。
+<!-- 索引核心信号从本节提炼为一条聚焦首要贡献的完整句子；简称和首次公开月份写入 papers-index.md -> 当前收录。 -->
 
 ## 论文脉络
 
 ### 1. 研究问题、背景和价值
 
+说明论文试图解决的问题、必要背景和解决价值。
 
 ### 2. 已有解决方案与不足
 
+说明已有工作如何处理该问题，以及仍然存在的假设、规模、数据、指标、工程或泛化缺口。
 
 ### 3. 作者可能的思考路径
 
+使用论文提出前已经存在的背景和失败模式重建可能的 idea 形成过程，并明确标为本地分析。
 
 ### 4. 核心假设或切入点
 
+写清成立条件和方法所依赖的关键判断。
 
 ### 5. 方法 / 系统 / 理论框架
 
-<!-- 核心内容深度检查：先确定一项首要贡献及必要的辅助贡献；让一句话结论、索引核心信号和本节最深入的小节指向同一重点；回到定义首要贡献的原始章节、公式、算法、图、附录或代码，选择适合该材料的方式回答 what / how / why / evidence / boundary。实验口径、背景和辅助工程细节应服务于这条主线。 -->
+先确定一项首要贡献及必要的辅助贡献。回到定义首要贡献的原始章节、公式、算法、图、附录或代码，回答 `what / how / why / evidence / boundary`。
 
-<!-- 若论文 TeX source、HTML、项目页或官方仓库提供架构图、训练流程图或标签构造图的原始图片文件，可缓存到 public/images/papers/<paper-slug>/，并直接放在解释该机制的小节下方。截图、PDF 裁剪和本地辅助示意图只用于高价值场景，并按 SOP 标注来源形态。示例：
-
-![Figure 1: short description](/images/papers/<paper-slug>/fig-1-short-name.png)
-
-Figure X: 原始 caption 的中文翻译或轻度修饰，保留图中变量、方法名和实验条件。Image Source: [source label](<image source URL>).
--->
+涉及效率或数学变换时，写清朴素路径、优化路径、成立条件、原始障碍和实现边界；同一段推导保持一致的 tensor / matrix 记号。
 
 ### 6. 结论链条
 
+按“假设—机制—直接证据—最窄结论—边界”组织主线。
 
 ## 关键实验/定理
 
 ### 结果 1
 
 - 设置：
-- Baseline：
 - 指标：
 - 结果：
-- 证据定位：
-- 对照是否可比：
+- 证据定位：Section / Figure / Table / Appendix / Page / URL / code path / commit
 - 支持的最窄结论：
 - 解读：
 
-<!-- 若有主结论图或失败边界图，且满足 SOP 的高价值准入标准，直接放在对应结果小节的表格或解读附近。 -->
+<!--
+按 Analysis modules 添加条件字段：
+- experiment：Baseline；对照是否可比。
+- system：系统条件；指标定义；成本归因。
+- theory：假设；适用域。
+- model-report：未披露项。
+- survey：纳入范围。
+- safety：威胁模型；披露边界。
+- docs：适用版本。
 
-### 结果 2
+结果数量由核心证据决定。删除无关字段，避免用空表格代替分析。
 
-- 设置：
-- Baseline：
-- 指标：
-- 结果：
-- 证据定位：
-- 对照是否可比：
-- 支持的最窄结论：
-- 解读：
-
-### 实验设置与 baseline 审计
-
-数字密集项优先用表格记录，正文保留判断和边界。
-
-<!-- 通用行适用于所有含实验或评测的材料。训练、系统与模型报告行按材料类型启用；无关行应删除，避免用空表格代替分析。 -->
-
-| 维度 | 记录 |
-| --- | --- |
-| 评测协议 |  |
-| 统计报告 |  |
-| Baseline 是否 tuned |  |
-| Baseline 是否 compute-matched |  |
-| Baseline 是否 implementation-matched |  |
-| Baseline 是否覆盖强替代方案 |  |
-| Baseline 是否存在弱化风险 |  |
-| 结论边界 |  |
-| 模型与初始化 |  |
-| 数据与任务 |  |
-| RL / 训练配置 |  |
-| 系统配置 |  |
-| 框架基座 / paper base | 训练、推理 / rollout、serving、并行 / kernel、agent loop、reward / evaluator 分别基于什么框架。 |
-| 框架版本与证据来源 | 记录大版本、commit、release 日期、README / requirements / 脚本来源；未披露则写“版本未披露”。 |
-| 框架改动范围 | 直接调用 / 配置适配 / fork 或 vendored code / 核心模块改写 / 新增模块；写清改动落在 trainer、rollout、scheduler、agent loop、reward、data pipeline、kernel 或 harness 的哪一层。 |
-| 技术报告训练配置 |  |
-| 训练硬件与拓扑 |  |
-| 并行方式与框架 |  |
-| 训练数据规模与组成 |  |
-| 训练过程与超参 |  |
-| 训练时间 / GPU hours / 成本 |  |
-| 未披露项 |  |
-
-## 证据链强度评估
-
-### 强证据
-
-- 
-
-### 中等强度证据
-
-- 
-
-### 需要谨慎的推论
-
-- 
-
-## OpenReview / 审稿意见吸收
-
-- Page type: official-review / metadata-only / proceedings / commentary / not-found / not-applicable
-- Match confidence: high / medium / low
-- Observed at: YYYY-MM-DD
-- Venue status:
-- Public reviews:
-- Ratings / confidence:
-- Reviewer consensus:
-- Main criticisms:
-- Author response:
-- 对可信度的影响:
-
-## 本地讨论补充
-
-### 1. 讨论收敛点
-
-- 
-
-### 2. 修正后的理解
-
-- 
-
-### 3. 后续复验指标
-
-- 
-
-## 主要启发
-
-- 
-- 
-- 
+高价值图片放在首次解释它的机制或结果附近：
+![Figure 1: short description](/images/papers/<paper-slug>/fig-1-short-name.png)
+Figure 1: caption. Image Source: [source label](<image source URL>).
+-->
 
 ## 局限
 
-1. 
-2. 
-3. 
+1. 首要贡献的成立条件与适用边界。
+2. 实验、理论、系统或来源中的主要混杂因素与未披露项。
+3. 外部有效性、失败模式和后续复验指标。
 
 ## 跨论文关系
 
@@ -206,43 +115,27 @@ Figure X: 原始 caption 的中文翻译或轻度修饰，保留图中变量、�
 - 与已有论文的主题关系：
 - 与已有论文的方法或系统关系：
 
-只保留能够改变跨论文理解的关系；若当前没有可靠关系，写明 `暂无高置信跨论文关系。`。索引行的简称、首次公开月份和核心信号单独维护在 `papers-index.md -> 当前收录`，本节不复制索引内容。
+只保留能够改变跨论文理解的关系。新论文记录本次发现；旧论文只在核心贡献理解、局限或叙事角色发生变化时回写。当前没有可靠关系时写明 `暂无高置信跨论文关系。`。
 
-链接规范：若指向已存档论文，使用 `[2504.13837](/papers/2504.13837-rlvr-reasoning-boundary-base-model/)` 这类站点路径；本地文件名只用代码样式。若指向已建档作者，使用 `[Tri Dao](/authors/tri-dao/)` 这类作者页路径。
+已存档论文使用 `[2504.13837](/papers/2504.13837-rlvr-reasoning-boundary-base-model/)`；已建档作者使用 `[Tri Dao](/authors/tri-dao/)`；本地文件名只用代码样式。
 
-## Reference Intake Brief
+<!--
+以下章节按条件添加，不保留空章节：
 
-### Target
+## OpenReview / 审稿意见吸收
 
-- Intended target system: 新增论文笔记 / 具体专题文档。
-- Existing related assets: `content/utility/papers-index.md`；已存档论文链接使用 `/papers/<slug>/`。
-- Proposed form: 新建独立 Markdown 文档 / 更新已有文档。
+仅当 Source -> Review status 的 page-type=official-review 时添加。
 
-### Reusable Elements
+- Reviewer consensus:
+- Main criticisms:
+- Author response:
+- 对可信度的影响:
 
-1. 
-2. 
-3. 
+## 本地讨论补充
 
-### Risks
+在后续交流形成长期有效的概念修正、反例、工程判断或复验指标时添加。
 
-- Copyright/over-copying:
-- Unsourced or unverifiable claims:
-- Tone/brand mismatch:
-- Safety/compliance issues:
-- Overlap with existing assets:
+## 主要启发
 
-### Skipped
-
-| Material | Reason |
-| --- | --- |
-| 公开 reviewer comments | 未发现 OpenReview/ARR/会议公开审稿页，或无法可靠匹配到当前论文版本。 |
-|  |  |
-
-### Recommendation
-
-Decision: merge
-
-Allowed values: `merge` / `revise-then-merge` / `skip` / `ask-user`
-
-Why:
+在材料产生可复用设计原则、诊断指标或实践建议时添加。
+-->

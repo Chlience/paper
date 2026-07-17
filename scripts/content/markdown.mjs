@@ -273,9 +273,13 @@ export const stripPublicUtilityMaintenance = (markdown = '') =>
     .replace(/\n{3,}/g, '\n\n')
     .trim();
 
-const publicPaperMaintenanceExemptionPattern = /^-[ \t]+Page type:[ \t]*not-found[ \t]*$/i;
+const publicPaperMaintenanceExemptionPatterns = [
+  /^-[ \t]+Page type:[ \t]*not-found[ \t]*$/i,
+  /^-[ \t]+Review status:[ \t]*page-type=not-found;[ \t]*match-confidence=(?:high|medium|low);[ \t]*observed-at=\d{4}-\d{2}-\d{2};[ \t]*venue-status=\S.*$/i,
+];
 
-export const isPublicPaperMaintenanceExemption = (line) => publicPaperMaintenanceExemptionPattern.test(line);
+export const isPublicPaperMaintenanceExemption = (line) =>
+  publicPaperMaintenanceExemptionPatterns.some((pattern) => pattern.test(line));
 
 const paperMaintenanceLinePattern =
   /(关系判断|作者\s*profile\s*pass|Author\s+profile\s+pass|作者页决策|Grok broad|Grok CLI|SuperGrok|xConfidence|not-found|账号搜索|X\s*\/\s*GitHub|逐人\s*X|逐作者档案|全量作者\s*profile|全作者\s*X|全体作者\s*X|homepage\s*\/\s*GitHub\s*\/\s*Scholar)/i;

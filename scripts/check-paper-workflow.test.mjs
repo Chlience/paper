@@ -105,6 +105,56 @@ Updated-At: 2026-07-10 09:31
 - Accessed: 2026-07-10
 ${coreBody}`;
 
+const v21CoreBody = `
+## 作者与关系
+
+- Ada Example: Example University.
+
+## 一句话结论
+
+结论。
+
+## 论文脉络
+
+问题、机制和结论链条。
+
+## 关键实验/定理
+
+### 结果 1
+
+- 对照是否可比：在相同设置下可比。
+- 证据定位：Section 4, Table 1.
+- 支持的最窄结论：仅支持当前评测设置中的结果。
+- 结果：有效。
+
+## 局限
+
+1. 局限。
+
+## 跨论文关系
+
+- 暂无高置信跨论文关系。
+`;
+
+const v21Paper = `# V2.1 note
+
+First-Archived-At: 2026-07-17 09:30
+Updated-At: 2026-07-17 09:31
+
+## Source
+
+- Workflow version: v2.1
+- Material type: research-paper
+- Analysis modules: experiment
+- Canonical source: https://arxiv.org/abs/2607.00002
+- Title: V2.1 Paper
+- Authors: Ada Example, Bob Example
+- Submitted: 2026-07-16
+- Current version read: v1
+- Accessed: 2026-07-17
+- Review status: page-type=not-found; match-confidence=high; observed-at=2026-07-17; venue-status=arXiv preprint
+${v21CoreBody}`;
+
 const validate = (slug, markdown, imageExists = async () => true) =>
   validatePaperRecord({
     slug,
@@ -117,6 +167,13 @@ const validate = (slug, markdown, imageExists = async () => true) =>
 
 test('exports the paper record validator', () => {
   assert.equal(typeof validatePaperRecord, 'function');
+});
+
+test('exports the v2.1 analysis module taxonomy', () => {
+  assert.deepEqual(
+    [...workflow.ANALYSIS_MODULES],
+    ['experiment', 'system', 'theory', 'model-report', 'survey', 'safety', 'docs'],
+  );
 });
 
 test('exports the archive time validator', () => {
@@ -413,6 +470,25 @@ test('the default v2 contract validates without errors', async () => {
   assert.deepEqual(result.errors, []);
 });
 
+test('the default v2.1 canary validates with seven core sections', async () => {
+  const result = await validate('v21-note', v21Paper);
+  assert.deepEqual(result.errors, []);
+  assert.deepEqual(result.advisories, []);
+  assert.doesNotMatch(v21Paper, /Reference Intake Brief/);
+  assert.doesNotMatch(v21Paper, /^## OpenReview \/ 审稿意见吸收$/m);
+});
+
+test('new notes cannot keep using the frozen v2 contract', async () => {
+  const result = await validatePaperRecord({
+    slug: 'new-v2-note',
+    markdown: v2Paper,
+    indexMarkdown: '- [note](/papers/new-v2-note/)',
+    knownPaperSlugs: new Set(['new-v2-note']),
+    imageExists: async () => true,
+  });
+  assert.ok(result.errors.some((issue) => issue.code === 'deprecated-workflow-version'));
+});
+
 test('new notes cannot enter compatibility mode without a workflow version', async () => {
   const result = await validatePaperRecord({
     slug: 'new-unversioned-note',
@@ -467,6 +543,22 @@ test('v2 notes restrict material type to the supported taxonomy', async () => {
   assert.ok(result.errors.some((issue) => issue.code === 'v2-material-type'));
 });
 
+test('v2.1 notes require at least one known analysis module', async () => {
+  const missing = v21Paper.replace('- Analysis modules: experiment\n', '');
+  const missingResult = await validate('missing-v21-module', missing);
+  assert.ok(missingResult.errors.some((issue) => issue.code === 'v21-analysis-modules'));
+
+  const unknown = v21Paper.replace('Analysis modules: experiment', 'Analysis modules: experiment, unknown');
+  const unknownResult = await validate('unknown-v21-module', unknown);
+  assert.ok(unknownResult.errors.some((issue) => issue.code === 'v21-analysis-module'));
+});
+
+test('v2.1 notes reject duplicate analysis modules', async () => {
+  const invalid = v21Paper.replace('Analysis modules: experiment', 'Analysis modules: experiment, experiment');
+  const result = await validate('duplicate-v21-module', invalid);
+  assert.ok(result.errors.some((issue) => issue.code === 'v21-analysis-modules'));
+});
+
 test('v2 notes require a resolvable canonical source', async () => {
   const invalid = v2Paper.replace(
     'Canonical source: https://arxiv.org/abs/2607.00001',
@@ -514,6 +606,42 @@ test('v2 access dates reject template placeholders', async () => {
   const invalid = v2Paper.replace('Accessed: 2026-07-10', 'Accessed: YYYY-MM-DD');
   const result = await validate('invalid-access-date', invalid);
   assert.ok(result.errors.some((issue) => issue.code === 'v2-accessed-date'));
+});
+
+test('v2.1 source review status requires four valid fields', async () => {
+  const missing = v21Paper.replace('; venue-status=arXiv preprint', '');
+  const missingResult = await validate('missing-v21-review-status', missing);
+  assert.ok(missingResult.errors.some((issue) => issue.code === 'v21-review-status'));
+
+  const invalidDate = v21Paper.replace('observed-at=2026-07-17', 'observed-at=YYYY-MM-DD');
+  const dateResult = await validate('invalid-v21-review-date', invalidDate);
+  assert.ok(dateResult.errors.some((issue) => issue.code === 'v21-review-date'));
+
+  const invalidType = v21Paper.replace('page-type=not-found', 'page-type=blog-post');
+  const typeResult = await validate('invalid-v21-review-type', invalidType);
+  assert.ok(typeResult.errors.some((issue) => issue.code === 'v21-review-page-type'));
+
+  const invalidConfidence = v21Paper.replace('match-confidence=high', 'match-confidence=certain');
+  const confidenceResult = await validate('invalid-v21-review-confidence', invalidConfidence);
+  assert.ok(confidenceResult.errors.some((issue) => issue.code === 'v21-review-confidence'));
+});
+
+test('v2.1 requires a full review section only for official reviews', async () => {
+  const official = v21Paper.replace('page-type=not-found', 'page-type=official-review');
+  const missingResult = await validate('missing-official-review-section', official);
+  assert.ok(missingResult.errors.some((issue) => issue.code === 'v21-official-review-section'));
+
+  const complete = `${official}
+
+## OpenReview / 审稿意见吸收
+
+- Reviewer consensus: 问题重要。
+- Main criticisms: 统计证据有限。
+- Author response: 补充实验。
+- 对可信度的影响: 核心结论保持，外推范围收缩。
+`;
+  const completeResult = await validate('complete-official-review-section', complete);
+  assert.deepEqual(completeResult.errors, []);
 });
 
 test('v2 review dates reject template placeholders', async () => {
@@ -588,6 +716,33 @@ test('v2 result blocks require a narrowest supported conclusion', async () => {
   assert.ok(result.errors.some((issue) => issue.code === 'v2-result-narrow-conclusion'));
 });
 
+test('v2.1 keeps evidence and narrow conclusions strict', async () => {
+  const withoutEvidence = v21Paper.replace('- 证据定位：Section 4, Table 1.\n', '');
+  const evidenceResult = await validate('missing-v21-evidence', withoutEvidence);
+  assert.ok(evidenceResult.errors.some((issue) => issue.code === 'v2-evidence-location'));
+
+  const withoutBoundary = v21Paper.replace('- 支持的最窄结论：仅支持当前评测设置中的结果。\n', '');
+  const boundaryResult = await validate('missing-v21-boundary', withoutBoundary);
+  assert.ok(boundaryResult.errors.some((issue) => issue.code === 'v2-result-narrow-conclusion'));
+});
+
+test('v2.1 experiment comparability starts as a canary advisory', async () => {
+  const invalid = v21Paper.replace('- 对照是否可比：在相同设置下可比。\n', '');
+  const result = await validate('v21-experiment-advisory', invalid);
+  assert.deepEqual(result.errors, []);
+  assert.ok(result.advisories.some((issue) => issue.code === 'v21-module-experiment'));
+});
+
+test('v2.1 module-specific fields start as bounded advisories', async () => {
+  const system = v21Paper.replace('Analysis modules: experiment', 'Analysis modules: system');
+  const result = await validate('v21-system-advisory', system);
+  assert.deepEqual(result.errors, []);
+  assert.deepEqual(
+    result.advisories.map((issue) => issue.code),
+    ['v21-module-system', 'v21-module-system', 'v21-module-system'],
+  );
+});
+
 test('v2 evidence checks cover result headings written in English', async () => {
   const invalid = v2Paper
     .replace('### 结果 1', '### Throughput')
@@ -632,18 +787,6 @@ test('v2 notes restrict review match confidence to three levels', async () => {
   assert.ok(result.errors.some((issue) => issue.code === 'v2-review-confidence'));
 });
 
-test('v2 notes restrict reference intake decisions to four actions', async () => {
-  const invalid = v2Paper.replace('Decision: merge', 'Decision: maybe');
-  const result = await validate('invalid-v2-reference-decision', invalid);
-  assert.ok(result.errors.some((issue) => issue.code === 'v2-reference-decision'));
-});
-
-test('v2 reference intake decisions reject trailing placeholder text', async () => {
-  const invalid = v2Paper.replace('Decision: merge', 'Decision: merge / revise-then-merge / skip');
-  const result = await validate('placeholder-v2-reference-decision', invalid);
-  assert.ok(result.errors.some((issue) => issue.code === 'v2-reference-decision'));
-});
-
 test('legacy notes report missing review classification and evidence locations', async () => {
   const legacy = legacyPaper
     .replace('- 证据定位：Section 4, Table 1.\n', '')
@@ -653,12 +796,6 @@ test('legacy notes report missing review classification and evidence locations',
   const result = await validate('legacy-advisories', legacy);
   assert.ok(result.advisories.some((issue) => issue.code === 'legacy-review-classification'));
   assert.ok(result.advisories.some((issue) => issue.code === 'legacy-evidence-location'));
-});
-
-test('legacy notes report nonstandard reference intake decisions', async () => {
-  const legacy = legacyPaper.replace('Decision: merge', 'Decision: maybe');
-  const result = await validate('legacy-reference-decision', legacy);
-  assert.ok(result.advisories.some((issue) => issue.code === 'legacy-reference-decision'));
 });
 
 test('paper figures require an existing local file', async () => {
@@ -932,6 +1069,20 @@ test('workflow CLI validates the current archive without errors', () => {
   assert.match(result.stdout, /Paper workflow check passed for \d+ papers and \d+ author profiles\./);
 });
 
+test('the frozen v2 manifest matches every pre-v2.1 structured note', async () => {
+  const [manifestSource, paperFiles] = await Promise.all([
+    fs.readFile('internal/paper-workflow-v2-slugs.json', 'utf8'),
+    fs.readdir('content/papers'),
+  ]);
+  const manifest = JSON.parse(manifestSource);
+  const v2Slugs = [];
+  for (const fileName of paperFiles.filter((name) => name.endsWith('.md'))) {
+    const source = await fs.readFile(`content/papers/${fileName}`, 'utf8');
+    if (/^- Workflow version: v2$/m.test(source)) v2Slugs.push(fileName.replace(/\.md$/, ''));
+  }
+  assert.deepEqual([...manifest.slugs].sort(), v2Slugs.sort());
+});
+
 test('public paper sanitizer retains the v2 not-found review classification', () => {
   const cleaned = stripPublicPaperMaintenance(`## OpenReview / 审稿意见吸收
 
@@ -959,11 +1110,18 @@ npm run check:site
   assert.match(sanitized, /继续公开说明。/);
 });
 
-test('the maintenance exemption accepts only the canonical single-line review field', () => {
+test('the maintenance exemption accepts canonical v2 and v2.1 review status lines', () => {
   assert.equal(typeof markdown.isPublicPaperMaintenanceExemption, 'function');
   assert.equal(markdown.isPublicPaperMaintenanceExemption?.('- Page type: not-found'), true);
+  assert.equal(
+    markdown.isPublicPaperMaintenanceExemption?.(
+      '- Review status: page-type=not-found; match-confidence=high; observed-at=2026-07-17; venue-status=arXiv preprint',
+    ),
+    true,
+  );
   assert.equal(markdown.isPublicPaperMaintenanceExemption?.('-\n Page type: not-found'), false);
   assert.equal(markdown.isPublicPaperMaintenanceExemption?.('- Page type:\nnot-found'), false);
+  assert.equal(markdown.isPublicPaperMaintenanceExemption?.('- Review status: page-type=not-found'), false);
   assert.equal(markdown.isPublicPaperMaintenanceExemption?.('- xConfidence: not-found'), false);
 });
 
@@ -979,29 +1137,33 @@ test('metadata CLI accepts the v2 not-found review classification', async () => 
   assert.match(result.stdout, /Paper metadata check passed\./);
 });
 
-test('the public template exposes every v2 contract field', async () => {
+test('the public template exposes the v2.1 seven-section contract', async () => {
   const template = await fs.readFile('content/utility/paper-note-template.md', 'utf8');
   for (const fieldName of [
-    'Workflow version',
+    'Workflow version: v2.1',
     'Material type',
+    'Analysis modules',
     'Canonical source',
     'Responsible organization',
     'Published / updated',
     'Accessed',
+    'Review status',
     '证据定位',
-    'Page type',
-    'Match confidence',
-    'Observed at',
-    'Decision: merge',
+    '支持的最窄结论',
     '索引核心信号',
   ]) {
     assert.match(template, new RegExp(fieldName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
   }
+  for (const heading of ['Source', '作者与关系', '一句话结论', '论文脉络', '关键实验/定理', '局限', '跨论文关系']) {
+    assert.match(template, new RegExp(`^## ${heading}$`, 'm'));
+  }
+  assert.doesNotMatch(template, /^## Reference Intake Brief$/m);
 });
 
-test('public workflow documents index and deletion reverse-integrity contracts', async () => {
+test('public workflow and agent instructions expose one aligned v2.1 contract', async () => {
   const workflowDoc = await fs.readFile('content/utility/paper-analysis-workflow.md', 'utf8');
   const agentInstructions = await fs.readFile('AGENTS.md', 'utf8');
+  const authorSop = await fs.readFile('internal/author-x-account-search-sop.md', 'utf8');
 
   for (const snippet of [
     '| 简称 | 时间 | 核心信号 |',
@@ -1010,14 +1172,19 @@ test('public workflow documents index and deletion reverse-integrity contracts',
     '`orphan-author-profile`',
     '`data/paper-tags.json`',
     '`data/tag-taxonomy.json`',
-    '`data/research-mainlines.json`',
-    '研究主线更新',
+    'Workflow version: v2.1',
+    'Analysis modules',
+    '五项人工语义门禁',
   ]) {
     assert.match(workflowDoc, new RegExp(snippet.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
   }
   assert.match(workflowDoc, /从新到旧/);
   assert.match(agentInstructions, /核心信号/);
   assert.match(agentInstructions, /孤立作者/);
+  assert.match(agentInstructions, /研究主线当前保留为独立快照/);
+  assert.doesNotMatch(agentInstructions, /`Reference Intake Brief`/);
+  assert.match(authorSop, /不要求每位作者都创建 `data\/authors\.json` profile/);
+  assert.match(authorSop, /只有已有强候选的深入核验作者进入 X 检查/);
 });
 
 test('deploy workflow validates source and builds the static site once', async () => {
@@ -1082,12 +1249,14 @@ test('research mainlines have a dedicated generated route and primary navigation
   assert.match(page, /canonicalPath="\/mainlines\/"/);
   assert.match(page, /data-mainline-filters/);
   assert.match(page, /data-mainline-row/);
+  assert.match(page, /const paperEntries = classification\.papers\.map/);
+  assert.doesNotMatch(page, /const paperEntries = data\.papers\.map/);
   assert.match(siteHeader, /id: 'mainlines', label: '主线'/);
   assert.match(siteLib, /mainlines: '\/mainlines\/'/);
   assert.match(layout, /'mainlines'/);
 });
 
-test('research mainline assignments cover the current corpus exactly once', async () => {
+test('research mainline snapshot stays internally consistent without blocking new papers', async () => {
   const [classificationSource, paperFiles, archiveIndex, mainlinesMarkdown] = await Promise.all([
     fs.readFile('data/research-mainlines.json', 'utf8'),
     fs.readdir('content/papers'),
@@ -1113,10 +1282,12 @@ test('research mainline assignments cover the current corpus exactly once', asyn
   }
 
   assert.match(classification.snapshot, /^\d{4}-\d{2}-\d{2}$/);
-  assert.equal(classification.paperCount, paperSlugs.length);
-  assert.equal(classification.papers.length, paperSlugs.length);
-  assert.deepEqual(assignmentSlugs, paperSlugs);
-  assert.deepEqual(classification.papers.map((paper) => paper.slug), archiveSlugs);
+  assert.equal(classification.paperCount, classification.papers.length);
+  assert.deepEqual(assignmentSlugs.filter((slug) => !paperSlugs.includes(slug)), []);
+  assert.deepEqual(
+    classification.papers.map((paper) => paper.slug),
+    archiveSlugs.filter((slug) => assignmentSlugs.includes(slug)),
+  );
   assert.equal(new Set(assignmentSlugs).size, assignmentSlugs.length);
   assert.equal(lineIdSet.size, lineIds.length);
   assert.deepEqual(lineIds, [

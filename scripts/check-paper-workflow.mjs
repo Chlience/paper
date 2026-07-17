@@ -12,14 +12,20 @@ import { validateTagConfiguration } from './content/tagging.mjs';
 
 const indexPath = path.join(repoRoot, 'content', 'utility', 'papers-index.md');
 const legacyManifestPath = path.join(repoRoot, 'internal', 'paper-workflow-legacy-slugs.json');
+const v2ManifestPath = path.join(repoRoot, 'internal', 'paper-workflow-v2-slugs.json');
 const entries = await readPaperEntries();
 const indexMarkdown = await fs.readFile(indexPath, 'utf8');
 const profiles = JSON.parse(await fs.readFile(authorsFile, 'utf8'));
 const legacyManifest = JSON.parse(await fs.readFile(legacyManifestPath, 'utf8'));
+const v2Manifest = JSON.parse(await fs.readFile(v2ManifestPath, 'utf8'));
 if (!Array.isArray(legacyManifest.slugs)) {
   throw new TypeError('internal/paper-workflow-legacy-slugs.json must contain a slugs array.');
 }
+if (!Array.isArray(v2Manifest.slugs)) {
+  throw new TypeError('internal/paper-workflow-v2-slugs.json must contain a slugs array.');
+}
 const legacyPaperSlugs = new Set(legacyManifest.slugs);
+const v2PaperSlugs = new Set(v2Manifest.slugs);
 const knownPaperSlugs = new Set(entries.map((entry) => entry.slug));
 const records = await Promise.all(
   entries.map(async (entry) => ({ ...entry, markdown: await fs.readFile(entry.sourcePath, 'utf8') })),
@@ -46,6 +52,7 @@ for (const record of records) {
     indexMarkdown,
     knownPaperSlugs,
     legacyPaperSlugs,
+    v2PaperSlugs,
     imageExists: exists,
   });
   errors.push(...result.errors);
