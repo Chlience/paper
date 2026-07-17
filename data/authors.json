@@ -10753,5 +10753,162 @@
         "url": "https://x.com/xidulu"
       }
     ]
+  },
+  {
+    "slug": "idan-shenfeld",
+    "name": "Idan Shenfeld",
+    "aliases": ["Idan Shenfeld"],
+    "affiliations": [
+      "Massachusetts Institute of Technology",
+      "Improbable AI Lab",
+      "Google DeepMind",
+      "Technion – Israel Institute of Technology"
+    ],
+    "homepage": "https://www.idanshenfeld.com/",
+    "github": "https://github.com/idanshen",
+    "x": "https://x.com/IdanShenfeld",
+    "xConfidence": "high",
+    "topics": [
+      "continual learning",
+      "self-distillation",
+      "reinforcement learning",
+      "language model post-training",
+      "robot learning"
+    ],
+    "notes": "SDFT first and corresponding author; MIT PhD student advised by Pulkit Agrawal. His public work connects on-policy learning, continual learning, language-model post-training, and robotics.",
+    "sources": [
+      {
+        "label": "SDFT OpenReview forum",
+        "url": "https://openreview.net/forum?id=qA6FgH0nnZ"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://www.idanshenfeld.com/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/idanshen"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/IdanShenfeld"
+      }
+    ]
+  },
+  {
+    "slug": "mehul-damani",
+    "name": "Mehul Damani",
+    "aliases": ["Mehul Damani"],
+    "affiliations": [
+      "Massachusetts Institute of Technology",
+      "MIT-IBM Watson AI Lab",
+      "New York University",
+      "National University of Singapore"
+    ],
+    "homepage": "https://damanimehul.github.io/",
+    "huggingFace": "https://huggingface.co/mehuldamani",
+    "topics": [
+      "reinforcement learning",
+      "large language models",
+      "uncertainty calibration",
+      "tool use",
+      "self-distillation"
+    ],
+    "notes": "SDFT coauthor and MIT PhD student advised by Jacob Andreas; his public research focuses on reinforcement learning for language-model capabilities, uncertainty, and tool use.",
+    "sources": [
+      {
+        "label": "SDFT OpenReview forum",
+        "url": "https://openreview.net/forum?id=qA6FgH0nnZ"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://damanimehul.github.io/"
+      },
+      {
+        "label": "MIT CSAIL profile",
+        "url": "https://www.csail.mit.edu/person/mehul-damani"
+      },
+      {
+        "label": "Hugging Face",
+        "url": "https://huggingface.co/mehuldamani"
+      }
+    ]
+  },
+  {
+    "slug": "jonas-hubotter",
+    "name": "Jonas Hübotter",
+    "aliases": ["Jonas Hübotter", "Jonas Hubotter"],
+    "affiliations": [
+      "ETH Zürich",
+      "Stanford University",
+      "Technical University of Munich"
+    ],
+    "homepage": "https://jonhue.github.io/",
+    "github": "https://github.com/jonhue",
+    "topics": [
+      "self-distillation",
+      "test-time training",
+      "reinforcement learning",
+      "foundation model specialization",
+      "online learning"
+    ],
+    "notes": "SDFT coauthor and ETH Zürich Learning and Adaptive Systems Group PhD student advised by Andreas Krause; his work connects self-distillation, test-time training, and reinforcement learning.",
+    "sources": [
+      {
+        "label": "SDFT OpenReview forum",
+        "url": "https://openreview.net/forum?id=qA6FgH0nnZ"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://jonhue.github.io/"
+      },
+      {
+        "label": "ETH Zürich LAS profile",
+        "url": "https://las.inf.ethz.ch/people/jonas-huebotter"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/jonhue"
+      }
+    ]
+  },
+  {
+    "slug": "pulkit-agrawal",
+    "name": "Pulkit Agrawal",
+    "aliases": ["Pulkit Agrawal"],
+    "affiliations": [
+      "Massachusetts Institute of Technology",
+      "MIT Computer Science and Artificial Intelligence Laboratory",
+      "Improbable AI Lab",
+      "University of California, Berkeley",
+      "Indian Institute of Technology Kanpur"
+    ],
+    "homepage": "https://people.csail.mit.edu/pulkitag/",
+    "topics": [
+      "reinforcement learning",
+      "robot learning",
+      "continual learning",
+      "self-supervised learning",
+      "foundation model adaptation"
+    ],
+    "notes": "SDFT senior author, MIT EECS associate professor, CSAIL principal investigator, and Improbable AI Lab lead; advisor of Idan Shenfeld.",
+    "sources": [
+      {
+        "label": "SDFT OpenReview forum",
+        "url": "https://openreview.net/forum?id=qA6FgH0nnZ"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://people.csail.mit.edu/pulkitag/"
+      },
+      {
+        "label": "MIT CSAIL profile",
+        "url": "https://www.csail.mit.edu/person/pulkit-agrawal"
+      },
+      {
+        "label": "MIT EECS profile",
+        "url": "https://www.eecs.mit.edu/people/pulkit-agrawal/"
+      }
+    ]
   }
 ]

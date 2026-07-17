@@ -22,6 +22,7 @@
   "2606.06453-vortex-sparse-attention-serving": ["serving-runtime", "sparse-attention", "attention-kernel", "long-context"],
   "2607.00248-seed2-model-card-real-world-complexity": ["benchmark", "multimodal-model", "tool-use", "coding-agent"],
   "2306.13649-on-policy-distillation-language-models": ["on-policy-distillation", "rl-algorithm"],
+  "2601.19897-self-distillation-continual-learning": ["on-policy-distillation", "training-stability"],
   "2602.02710-maximum-likelihood-reinforcement-learning": ["rl-algorithm", "rl-theory", "reasoning-rl"],
   "2606.20097-hydrahead-head-wise-hybrid-attention": ["linear-attention", "long-context", "reasoning-analysis"],
   "2606.30406-mopd-multi-teacher-on-policy-distillation": ["on-policy-distillation", "rl-algorithm", "reasoning-rl"],
