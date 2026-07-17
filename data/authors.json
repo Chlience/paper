@@ -10910,5 +10910,291 @@
         "url": "https://www.eecs.mit.edu/people/pulkit-agrawal/"
       }
     ]
+  },
+  {
+    "slug": "zaifeng-pan",
+    "name": "Zaifeng Pan",
+    "chineseName": "潘再峰",
+    "aliases": ["Zaifeng Pan"],
+    "affiliations": [
+      "University of California, San Diego",
+      "PICASSO Lab",
+      "Renmin University of China",
+      "Shanghai Jiao Tong University"
+    ],
+    "homepage": "https://panzaifeng.github.io/",
+    "github": "https://github.com/PanZaifeng",
+    "topics": [
+      "machine learning systems",
+      "LLM serving",
+      "agent serving",
+      "KV cache",
+      "GPU compilers and kernels"
+    ],
+    "notes": "SmoothAgent first author and project lead; UC San Diego PhD student advised by Yufei Ding. His work connects LLM serving, multi-agent systems, prefix caching, compilers, and GPU kernels.",
+    "sources": [
+      {
+        "label": "SmoothAgent arXiv",
+        "url": "https://arxiv.org/abs/2607.00151"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://panzaifeng.github.io/"
+      },
+      {
+        "label": "PICASSO Lab team",
+        "url": "https://yufeiding.ucsd.edu/people/team"
+      },
+      {
+        "label": "SmoothAgent repository",
+        "url": "https://github.com/PanZaifeng/SmoothAgent"
+      }
+    ]
+  },
+  {
+    "slug": "qianxu-wang-smoothagent",
+    "name": "Qianxu Wang",
+    "aliases": ["Qianxu Wang"],
+    "matchByName": false,
+    "affiliations": [
+      "University of California, San Diego",
+      "Peking University"
+    ],
+    "homepage": "https://jairitage.github.io/",
+    "github": "https://github.com/jairitAge",
+    "topics": [
+      "machine learning systems",
+      "hardware-software co-design",
+      "AI acceleration",
+      "LLM serving"
+    ],
+    "notes": "SmoothAgent coauthor and author of the public repository's initial artifact commit; the paper lists UC San Diego and his personal page records Peking University.",
+    "sources": [
+      {
+        "label": "SmoothAgent arXiv",
+        "url": "https://arxiv.org/abs/2607.00151"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://jairitage.github.io/"
+      },
+      {
+        "label": "Initial artifact commit",
+        "url": "https://github.com/PanZaifeng/SmoothAgent/commit/6268295edcfc5141c42cd8d57635c76ceab91338"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/jairitAge"
+      }
+    ]
+  },
+  {
+    "slug": "zhengding-hu",
+    "name": "Zhengding Hu",
+    "aliases": ["Zhengding Hu"],
+    "affiliations": [
+      "University of California, San Diego",
+      "PICASSO Lab",
+      "University of Science and Technology of China",
+      "Tsinghua University"
+    ],
+    "topics": [
+      "high-performance computing",
+      "machine learning systems",
+      "LLM serving",
+      "retrieval-augmented generation",
+      "agent serving"
+    ],
+    "notes": "SmoothAgent coauthor and UC San Diego PICASSO Lab postdoctoral scholar working with Yufei Ding; his research focuses on high-performance computing and ML-system optimization.",
+    "sources": [
+      {
+        "label": "SmoothAgent arXiv",
+        "url": "https://arxiv.org/abs/2607.00151"
+      },
+      {
+        "label": "UCSD profile",
+        "url": "https://profiles.ucsd.edu/zhengding.hu.2"
+      },
+      {
+        "label": "PICASSO Lab team",
+        "url": "https://yufeiding.ucsd.edu/people/team"
+      }
+    ]
+  },
+  {
+    "slug": "chang-chen-smoothagent",
+    "name": "Chang Chen",
+    "aliases": ["Chang Chen"],
+    "matchByName": false,
+    "affiliations": [
+      "University of California, San Diego",
+      "PICASSO Lab",
+      "Peking University"
+    ],
+    "topics": [
+      "machine learning systems",
+      "distributed training",
+      "communication libraries",
+      "LLM serving"
+    ],
+    "notes": "SmoothAgent coauthor and UC San Diego PICASSO Lab postdoctoral scholar working with Yufei Ding; her research focuses on distributed ML systems and communication libraries.",
+    "sources": [
+      {
+        "label": "SmoothAgent arXiv",
+        "url": "https://arxiv.org/abs/2607.00151"
+      },
+      {
+        "label": "PICASSO Lab team",
+        "url": "https://yufeiding.ucsd.edu/people/team"
+      }
+    ]
+  },
+  {
+    "slug": "yue-guan",
+    "name": "Yue Guan",
+    "aliases": ["Yue Guan"],
+    "affiliations": [
+      "University of California, San Diego",
+      "PICASSO Lab",
+      "Shanghai Jiao Tong University",
+      "Waseda University"
+    ],
+    "homepage": "https://yueguan.notion.site/",
+    "topics": [
+      "efficient machine learning",
+      "model compression",
+      "machine learning systems",
+      "LLM serving",
+      "agent serving"
+    ],
+    "notes": "SmoothAgent coauthor and UC San Diego PICASSO Lab postdoctoral scholar working with Yufei Ding; his research focuses on model-system co-design for efficient ML.",
+    "sources": [
+      {
+        "label": "SmoothAgent arXiv",
+        "url": "https://arxiv.org/abs/2607.00151"
+      },
+      {
+        "label": "PICASSO Lab team",
+        "url": "https://yufeiding.ucsd.edu/people/team"
+      },
+      {
+        "label": "UCSD profile",
+        "url": "https://profiles.ucsd.edu/yue.guan"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://yueguan.notion.site/"
+      }
+    ]
+  },
+  {
+    "slug": "yanbo-zhou",
+    "name": "Yanbo Zhou",
+    "aliases": ["Yanbo Zhou"],
+    "affiliations": [
+      "University of California, San Diego",
+      "Non-Volatile Systems Lab",
+      "Alibaba Cloud"
+    ],
+    "homepage": "https://yanbozyb.github.io/",
+    "topics": [
+      "cloud infrastructure",
+      "memory and storage systems",
+      "system reliability",
+      "software-hardware co-design",
+      "agent serving"
+    ],
+    "notes": "SmoothAgent coauthor and UC San Diego Non-Volatile Systems Lab PhD candidate advised by Steven Swanson; his work spans cloud memory, storage, reliability, and co-design.",
+    "sources": [
+      {
+        "label": "SmoothAgent arXiv",
+        "url": "https://arxiv.org/abs/2607.00151"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://yanbozyb.github.io/"
+      }
+    ]
+  },
+  {
+    "slug": "steven-swanson",
+    "name": "Steven Swanson",
+    "aliases": ["Steven Swanson", "Steven J. Swanson"],
+    "affiliations": [
+      "University of California, San Diego",
+      "Non-Volatile Systems Lab",
+      "University of Washington",
+      "University of Puget Sound"
+    ],
+    "homepage": "https://swanson.ucsd.edu/",
+    "topics": [
+      "computer systems",
+      "memory and storage systems",
+      "computer architecture",
+      "system reliability",
+      "agent serving"
+    ],
+    "notes": "SmoothAgent senior coauthor, UC San Diego CSE professor and department chair, and director of the Non-Volatile Systems Lab; advisor of Yanbo Zhou.",
+    "sources": [
+      {
+        "label": "SmoothAgent arXiv",
+        "url": "https://arxiv.org/abs/2607.00151"
+      },
+      {
+        "label": "UCSD CSE profile",
+        "url": "https://cse.ucsd.edu/people/faculty-profiles/steven-swanson"
+      },
+      {
+        "label": "UCSD Jacobs profile",
+        "url": "https://jacobsschool.ucsd.edu/people/profile/steven-swanson"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://swanson.ucsd.edu/"
+      }
+    ]
+  },
+  {
+    "slug": "yufei-ding",
+    "name": "Yufei Ding",
+    "aliases": ["Yufei Ding"],
+    "affiliations": [
+      "University of California, San Diego",
+      "PICASSO Lab",
+      "University of California, Santa Barbara",
+      "North Carolina State University",
+      "University of Science and Technology of China"
+    ],
+    "homepage": "https://yufeiding.ucsd.edu/",
+    "topics": [
+      "machine learning systems",
+      "domain-specific languages",
+      "compiler optimization",
+      "GPU systems",
+      "hardware acceleration"
+    ],
+    "notes": "SmoothAgent senior author, UC San Diego CSE associate professor, and founder of PICASSO Lab; advisor of Zaifeng Pan and project lead for the UCSD ML-systems line.",
+    "sources": [
+      {
+        "label": "SmoothAgent arXiv",
+        "url": "https://arxiv.org/abs/2607.00151"
+      },
+      {
+        "label": "UCSD Jacobs profile",
+        "url": "https://jacobs.ucsd.edu/people/profile/Yufei-Ding"
+      },
+      {
+        "label": "UCSD CSE profile",
+        "url": "https://cse.ucsd.edu/people/faculty-profiles/yufei-ding"
+      },
+      {
+        "label": "PICASSO Lab",
+        "url": "https://yufeiding.ucsd.edu/"
+      },
+      {
+        "label": "PICASSO Lab team",
+        "url": "https://yufeiding.ucsd.edu/people/team"
+      }
+    ]
   }
 ]
