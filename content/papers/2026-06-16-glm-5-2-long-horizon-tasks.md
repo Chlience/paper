@@ -1,7 +1,7 @@
 # GLM-5.2: Built for Long-Horizon Tasks 技术文章笔记
 
 First-Archived-At: 2026-06-18 13:45
-Updated-At: 2026-07-16 19:17
+Updated-At: 2026-07-17 19:25
 
 ## Source
 
@@ -381,7 +381,7 @@ $$
 
 - 与 [2602.15763](/papers/2602.15763-glm-5-agentic-engineering/)：GLM-5.2 是 GLM-5 系列后续 release，沿用 744B-A40B、DSA、MTP、slime 和 agentic engineering 方向，并把 context 从 200K 推到 1M。
 - 与 [IndexCache](/papers/2603.12201-indexcache-cross-layer-index-reuse/)：IndexCache 给出 Full / Shared 执行结构、training-free loss search 与 training-aware multi-layer distillation；GLM-5.2 将跨层 top-$k$ reuse 固化为 `index_topk_freq=4` 的 FSSS IndexShare，并扩展到 MTP iteration。公开资料没有确认 GLM-5.2 的 exact index loss。
-- 与 [Prefill CP](/papers/2026-07-14-prefill-context-parallelism-inference-scaling/)：SGLang #29421 为 GLM-5.2 的 DSA Prefill CP 增加 cache layer split，在 CP=4、8192 tokens 下把 per-rank KV/indexer cache 从 0.77 GB 降到 0.20 GB，并让 PD decode 从全部 owner ranks 拉取对应 layer ranges。该综合进一步区分 TTFT compute parallelism 与 KV ownership 带来的容量扩展。
+- 与 [SGLang PR #29421](https://github.com/sgl-project/sglang/pull/29421)：该实现为 GLM-5.2 的 DSA Prefill CP 增加 cache layer split，在 CP=4、8192 tokens 下把 per-rank KV/indexer cache 从 0.77 GB 降到 0.20 GB，并让 PD decode 从全部 owner ranks 拉取对应 layer ranges；这一区分同时展示 TTFT compute parallelism 与 KV ownership 的容量作用。
 - 与 [MLA TP cache sharding](/papers/2026-07-16-mla-tensor-parallel-cache-sharding/)：该综合承接 GLM-5.2 的 $56.9/T$ 压缩公式，区分请求、token、latent 与 cache-tier 四类 ownership 方案，并将 IndexShare 与 MLA KV footprint 放在两个独立成本轴上。
 - 与 [slime 官方仓库](https://github.com/THUDM/slime)：GLM-5.2 博文是 slime 支撑 GLM-5.2 的直接应用证据，覆盖 compact trajectory、sub-agent workflow、parallel OPD、KV-cache FP8 和 training-serving 配置复用。
 - 与 [2606.12370](/papers/2606.12370-bebop-mtp-rejection-sampling-rl-training/)：GLM-5.2 的 MTP 明确受 Bebop 启发，引入 rejection sampling 和 end-to-end TV loss，提高 speculative decoding acceptance。

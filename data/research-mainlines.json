@@ -2,8 +2,8 @@
   "schemaVersion": 2,
   "snapshot": {
     "asOf": "2026-07-17",
-    "updatedAt": "2026-07-17T18:40:30+08:00",
-    "sourceRevision": "09b0e10e41db009ab4367d910533078c42276435",
+    "updatedAt": "2026-07-17T19:25:00+08:00",
+    "sourceRevision": "99ce0a52761b8da6460f313bb2de59a308caab18",
     "updateMode": "manual"
   },
   "facets": [
@@ -2347,7 +2347,7 @@
       },
       "source": {
         "archiveState": "embedded",
-        "materialSlug": "2026-07-16-sglang-data-parallel-attention",
+        "materialSlug": "2026-07-16-mla-tensor-parallel-cache-sharding",
         "canonicalUrl": "https://github.com/sgl-project/sglang/pull/1970",
         "title": "SGLang Data Parallel Attention"
       },
@@ -5010,8 +5010,14 @@
         {
           "kind": "mechanism-experiment",
           "sourceUrl": "https://docs.vllm.ai/projects/ascend/en/main/developer_guide/Design_Documents/context_parallel.html",
-          "locator": "KV-cache sequence sharding、local Attention output merge 与 DPA ownership comparison",
-          "claim": "DCP 文档说明 token-axis KV sharding 和局部结果归并；DPA 综合说明 request-axis ownership 与 MoE layout conversion。两者 operating region 不同。"
+          "locator": "KV-cache sequence sharding 与 local Attention output merge",
+          "claim": "DCP 文档说明 token-axis KV sharding、局部 Attention 计算和输出归并。"
+        },
+        {
+          "kind": "mechanism-experiment",
+          "sourceUrl": "https://github.com/sgl-project/sglang/blob/5cbea10e2fcd269809c26237c175a470719fc9fe/docs_new/docs/advanced_features/dp_dpa_smg_guide.mdx",
+          "locator": "Data Parallel Attention topology、DP-local Attention 与 MoE parallelism",
+          "claim": "SGLang 官方指南说明 request-axis Attention ownership 以及 DP-local Attention 与全局 TP / EP MoE 之间的布局转换；它与 DCP 覆盖不同 operating region。"
         }
       ]
     },
@@ -5964,23 +5970,6 @@
   ],
   "materials": [
     {
-      "slug": "2026-07-16-sglang-data-parallel-attention",
-      "firstPublic": {
-        "value": "2026-07",
-        "precision": "month"
-      },
-      "uses": [
-        {
-          "lineId": "attention-state-ownership",
-          "role": "contribution",
-          "nodeIds": [
-            "m-dpa"
-          ],
-          "note": "该材料直接提供本线的方法、系统或训练机制节点。"
-        }
-      ]
-    },
-    {
       "slug": "2026-07-16-mla-tensor-parallel-cache-sharding",
       "firstPublic": {
         "value": "2026-07",
@@ -5999,6 +5988,7 @@
           "lineId": "attention-state-ownership",
           "role": "contribution",
           "nodeIds": [
+            "m-dpa",
             "m-dcp"
           ],
           "note": "该材料直接提供本线的方法、系统或训练机制节点。"
@@ -6010,21 +6000,6 @@
             "m-dcp"
           ],
           "note": "该材料直接提供本线的方法、系统或训练机制节点。"
-        }
-      ]
-    },
-    {
-      "slug": "2026-07-14-prefill-context-parallelism-inference-scaling",
-      "firstPublic": {
-        "value": "2026-07",
-        "precision": "month"
-      },
-      "uses": [
-        {
-          "lineId": "context-parallel-attention",
-          "role": "synthesis",
-          "nodeIds": [],
-          "note": "该材料综合 Prefill Context Parallelism 的计算分解、KV ownership 与容量边界，不单独创建方法节点。"
         }
       ]
     },
