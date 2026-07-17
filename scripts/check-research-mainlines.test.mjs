@@ -206,6 +206,7 @@ await Promise.all(
   [
     ['paper-a', '2026-07-15 10:00'],
     ['paper-b', '2026-07-16 10:00'],
+    ['paper-after-snapshot', '2026-07-17 20:32'],
   ].map(([slug, archivedAt]) =>
     fs.writeFile(
       path.join(fixtureRepo, 'content', 'papers', `${slug}.md`),
@@ -215,13 +216,13 @@ await Promise.all(
 );
 
 const validateFixture = (source, options = {}) =>
-  validateResearchMainlines(source, { repoRoot: fixtureRepo, requireCurrent: true, ...options });
+  validateResearchMainlines(source, { repoRoot: fixtureRepo, requireCurrent: false, ...options });
 
 const errorCodes = (result) => new Set(result.errors.map((item) => item.code));
 
 test('the current v2 snapshot has eight stable facets and at least 46 unique fine-grained lines', async () => {
   const source = await loadResearchMainlines();
-  const result = await validateResearchMainlines(source, { requireCurrent: true });
+  const result = await validateResearchMainlines(source);
 
   assert.deepEqual(result.errors, []);
   assert.equal(source.schemaVersion, 2);
@@ -230,6 +231,34 @@ test('the current v2 snapshot has eight stable facets and at least 46 unique fin
   assert.equal(new Set(source.lines.map((line) => line.id)).size, source.lines.length);
   assert.ok(source.lines.some((line) => line.status === 'formal'));
   assert.ok(source.lines.some((line) => line.status === 'candidate'));
+});
+
+test('same-day papers archived after updatedAt stay outside the frozen snapshot', async () => {
+  const source = fixtureSource();
+  const snapshotResult = await validateFixture(source);
+
+  assert.deepEqual(snapshotResult.errors, []);
+  assert.ok(
+    snapshotResult.advisories.some(
+      (item) => item.code === 'snapshot-outdated' && item.subject === 'paper-after-snapshot',
+    ),
+  );
+
+  const advancedSnapshot = fixtureSource();
+  advancedSnapshot.snapshot.updatedAt = '2026-07-17T21:00:00+08:00';
+  const advancedResult = await validateFixture(advancedSnapshot);
+  assert.ok(
+    advancedResult.errors.some(
+      (item) => item.code === 'material-missing' && item.subject === 'paper-after-snapshot',
+    ),
+  );
+
+  const currentResult = await validateFixture(source, { requireCurrent: true });
+  assert.ok(
+    currentResult.errors.some(
+      (item) => item.code === 'material-missing' && item.subject === 'paper-after-snapshot',
+    ),
+  );
 });
 
 test('the minimal v2 contract validates and build views preserve one graph source', async () => {
@@ -443,15 +472,13 @@ test('every archived paper has one material record and valid node ownership', as
   assert.ok(errorCodes(await validateFixture(orphanNode)).has('node-membership'));
 });
 
-test('the CLI supports snapshot and strict manual-update modes', () => {
-  for (const args of [[], ['--require-current']]) {
-    const result = spawnSync(process.execPath, ['scripts/check-research-mainlines.mjs', ...args], {
-      cwd: process.cwd(),
-      encoding: 'utf8',
-    });
-    assert.equal(result.status, 0, result.stderr);
-    assert.match(result.stdout, /Research mainline check passed/);
-  }
+test('the CLI validates snapshot mode and rejects unknown arguments', () => {
+  const result = spawnSync(process.execPath, ['scripts/check-research-mainlines.mjs'], {
+    cwd: process.cwd(),
+    encoding: 'utf8',
+  });
+  assert.equal(result.status, 0, result.stderr);
+  assert.match(result.stdout, /Research mainline check passed/);
 
   const unknown = spawnSync(process.execPath, ['scripts/check-research-mainlines.mjs', '--unknown'], {
     cwd: process.cwd(),

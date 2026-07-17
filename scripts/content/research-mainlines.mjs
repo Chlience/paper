@@ -95,6 +95,24 @@ const isConnected = (nodeIds, edges) => {
 };
 
 const dateMonth = (firstPublic) => String(firstPublic?.value ?? '').slice(0, 7);
+const archiveMinute = (value) => {
+  const match = String(value ?? '').match(/^(\d{4}-\d{2}-\d{2})(?:[ T](\d{2}:\d{2}))?/);
+  if (!match) return null;
+  return `${match[1]} ${match[2] ?? '00:00'}`;
+};
+const snapshotMinute = (snapshot) => {
+  // Paper metadata uses project-local wall time, so compare it with the local portion of updatedAt.
+  const match = String(snapshot?.updatedAt ?? '').match(/^(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2})/);
+  if (match) return `${match[1]} ${match[2]}`;
+  return snapshot?.asOf ? `${snapshot.asOf} 23:59` : null;
+};
+const isWithinSnapshot = (firstArchivedAt, snapshot) => {
+  if (!firstArchivedAt) return true;
+  const archivedAt = archiveMinute(firstArchivedAt);
+  const cutoff = snapshotMinute(snapshot);
+  if (!archivedAt || !cutoff) return firstArchivedAt.slice(0, 10) <= snapshot.asOf;
+  return archivedAt <= cutoff;
+};
 const isClearlyAfter = (left, right) => {
   const leftMonth = dateMonth(left);
   const rightMonth = dateMonth(right);
@@ -528,19 +546,22 @@ export const validateResearchMainlines = async (
     if (!paperSlugs.has(slug)) addError('material-dangling', slug, 'Material does not have a paper Markdown file.');
   }
   const requiredPapers = paperInventory.filter(
-    (paper) => requireCurrent || !paper.firstArchivedAt || paper.firstArchivedAt.slice(0, 10) <= snapshot.asOf,
+    (paper) => requireCurrent || isWithinSnapshot(paper.firstArchivedAt, snapshot),
   );
+  const requiredPaperSlugs = new Set(requiredPapers.map((paper) => paper.slug));
   for (const paper of requiredPapers) {
     if (!materialSlugSet.has(paper.slug)) {
-      addError('material-missing', paper.slug, 'Paper is within the snapshot boundary but has no material coverage.');
+      addError(
+        'material-missing',
+        paper.slug,
+        requireCurrent
+          ? 'Current-corpus mode requires material coverage for every paper.'
+          : 'Paper is within the snapshot boundary but has no material coverage.',
+      );
     }
   }
   for (const paper of paperInventory) {
-    if (
-      !materialSlugSet.has(paper.slug) &&
-      paper.firstArchivedAt &&
-      paper.firstArchivedAt.slice(0, 10) > snapshot.asOf
-    ) {
+    if (!materialSlugSet.has(paper.slug) && !requiredPaperSlugs.has(paper.slug)) {
       addAdvisory('snapshot-outdated', paper.slug, 'Paper is newer than the mainline snapshot; run a manual update when ready.');
     }
   }
