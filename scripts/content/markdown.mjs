@@ -261,6 +261,8 @@ export const stripPageChrome = (markdown) =>
     .replace(/^#\s+.+\n+/, '')
     .replace(/^First-Archived-At:\s*.+\n+/m, '')
     .replace(/^Updated-At:\s*.+\n+/m, '')
+    .replace(/^Review-Status:\s*.+\n+/m, '')
+    .replace(/^Reviewed-At:\s*.+\n+/m, '')
     .replace(/^Pinned:\s*.+\n+/m, '')
     .trim();
 

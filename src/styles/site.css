@@ -461,6 +461,82 @@ h3 {
   padding-top: 0;
 }
 
+.paper-review-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding: 16px 0;
+}
+
+.paper-review-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.paper-review-filter a {
+  --review-tone: var(--fg);
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--muted);
+  background: var(--surface);
+  font-size: 14px;
+  font-weight: 660;
+}
+
+.paper-review-filter a[data-paper-review-filter="pending"] {
+  --review-tone: oklch(43% 0.13 230);
+}
+
+.paper-review-filter a[data-paper-review-filter="needs-review"] {
+  --review-tone: oklch(43% 0.13 55);
+}
+
+.paper-review-filter a[data-paper-review-filter="approved"] {
+  --review-tone: oklch(41% 0.12 155);
+}
+
+.paper-review-filter a:hover {
+  color: var(--review-tone);
+  border-color: var(--review-tone);
+}
+
+.paper-review-filter a.is-active {
+  color: var(--surface);
+  border-color: var(--review-tone);
+  background: var(--review-tone);
+}
+
+.paper-review-filter-count {
+  min-width: 1.4em;
+  color: inherit;
+  font-size: 12px;
+  text-align: right;
+}
+
+.paper-review-summary {
+  margin: 0;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.paper-review-empty {
+  margin: 0;
+  padding: 42px 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  color: var(--muted);
+  text-align: center;
+}
+
 .section-header {
   display: flex;
   align-items: end;
@@ -492,6 +568,10 @@ h3 {
   gap: var(--space-md);
   padding: 24px 0;
   border-top: 1px solid var(--border);
+}
+
+.paper-row[hidden] {
+  display: none;
 }
 
 .paper-row:hover {
@@ -600,6 +680,27 @@ h3 {
   border-color: oklch(74% 0.055 75);
   color: oklch(34% 0.08 75);
   background: oklch(96% 0.028 75);
+}
+
+.paper-row-meta .paper-review-badge,
+.paper-meta .paper-review-badge {
+  border-color: oklch(78% 0.055 230);
+  color: oklch(37% 0.12 230);
+  background: oklch(95% 0.025 230);
+}
+
+.paper-row-meta .paper-review-badge.is-needs-review,
+.paper-meta .paper-review-badge.is-needs-review {
+  border-color: oklch(76% 0.07 55);
+  color: oklch(36% 0.11 55);
+  background: oklch(95% 0.035 55);
+}
+
+.paper-row-meta .paper-review-badge.is-approved,
+.paper-meta .paper-review-badge.is-approved {
+  border-color: oklch(76% 0.06 155);
+  color: oklch(34% 0.1 155);
+  background: oklch(95% 0.028 155);
 }
 
 .paper-row-meta a:hover,
@@ -2372,6 +2473,25 @@ html.is-figure-dialog-open body {
   .paper-row {
     grid-template-columns: 1fr;
     gap: 8px;
+  }
+
+  .paper-review-toolbar {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .paper-review-filter {
+    width: 100%;
+  }
+
+  .paper-review-filter a {
+    flex: 1 1 calc(50% - 7px);
+    justify-content: space-between;
+  }
+
+  .paper-review-summary {
+    white-space: normal;
   }
 
   .route-index,

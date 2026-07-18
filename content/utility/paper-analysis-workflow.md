@@ -1,7 +1,7 @@
 # Paper Analysis Workflow
 
 First-Archived-At: 2026-06-19
-Updated-At: 2026-07-17
+Updated-At: 2026-07-18
 
 ## 目标
 
@@ -34,6 +34,7 @@ v2.1 使用固定质量底线和条件分析模块。每篇笔记都要说明研
 - 每位可解析作者完成基础身份核验；触发深入核验的作者已按字段保存稳定来源。
 - 新论文已记录会改变理解的作者、机构、主题、引用或方法关系；旧论文只在原有理解发生变化时回写。
 - `content/utility/papers-index.md` 保留唯一三列表格行；`data/paper-tags.json` 保留一个主标签和最多三个辅助标签。
+- 笔记头部声明本地 `Review-Status`；新归档默认进入 `pending`，用户明确确认后进入 `approved`，实质更新使已审阅笔记进入 `needs-review`。
 - 五项人工语义门禁通过，本地内容工作流、元数据、公式、搜索和置顶检查通过。
 - 完整改动已创建本地 commit；推送只在用户明确要求后执行。
 
@@ -68,8 +69,19 @@ arXiv 论文优先以 abstract 页面作为规范来源，并补充 PDF、HTML�
 
 - `First-Archived-At: YYYY-MM-DD HH:mm`
 - `Updated-At: YYYY-MM-DD HH:mm`
+- `Review-Status: pending`
 
 `Updated-At` 只在结论、证据、关系或其它实质内容变化时更新。
+
+## 本地审阅状态
+
+本地审阅状态记录用户是否确认当前笔记判断，与 `Source -> Review status` 记录的公开 venue / peer-review 状态分别维护。
+
+- `Review-Status: pending`：分析已经归档，等待用户审阅。新增论文和缺少用户明确确认的历史论文使用该状态，不记录 `Reviewed-At`。
+- `Review-Status: approved`：用户已确认核心贡献、直接证据、最窄结论边界和局限，同时记录 `Reviewed-At: YYYY-MM-DD HH:mm`。`Updated-At` 不得晚于该时间。
+- `Review-Status: needs-review`：已审阅笔记发生实质更新，保留上次 `Reviewed-At`，且 `Updated-At` 晚于该时间。用户再次确认后改回 `approved` 并刷新 `Reviewed-At`。
+
+排版、错字和链接维护不改变状态。论文目录通过 `/papers/?review=pending`、`/papers/?review=needs-review` 和 `/papers/?review=approved` 提供筛选深链；无查询参数时展示全部论文。
 
 ## 七个核心章节
 

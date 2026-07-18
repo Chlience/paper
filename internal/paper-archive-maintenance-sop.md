@@ -1,6 +1,6 @@
 # Paper Archive Maintenance SOP
 
-Updated-At: 2026-07-17
+Updated-At: 2026-07-18
 
 ## 目的
 
@@ -23,6 +23,16 @@ Updated-At: 2026-07-17
 `当前收录` 固定为 `简称 | 时间 | 核心信号` 三列。每篇论文恰好一行，按首次公开月份从新到旧排列，同月保持现有相对顺序。
 
 `data/paper-tags.json` 必须覆盖全部论文。每个数组包含一个主标签和最多三个辅助标签，标签 ID 来自 `data/tag-taxonomy.json`。新增标签前先检查首选名称和 aliases；标签拆分、合并或改名需要审计全部分配与站点锚点。
+
+## 本地审阅状态
+
+每篇论文头部声明 `Review-Status`：
+
+- `pending`：分析已经归档，等待用户审阅；新增论文默认使用该状态。
+- `approved`：用户已经确认核心贡献、直接证据、结论边界与局限，同时记录 `Reviewed-At: YYYY-MM-DD HH:mm`。
+- `needs-review`：已审阅笔记在 `Reviewed-At` 之后发生实质更新，保留上次审阅时间并等待再次确认。
+
+`pending` 不记录 `Reviewed-At`。`approved` 的 `Updated-At` 不得晚于 `Reviewed-At`；`needs-review` 的 `Updated-At` 必须晚于 `Reviewed-At`。排版、错字和链接维护不改变审阅状态。`/papers/` 通过 `?review=pending`、`?review=needs-review` 和 `?review=approved` 提供可收藏的筛选入口。
 
 ## 作者数据
 

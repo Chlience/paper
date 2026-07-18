@@ -89,6 +89,7 @@ if (!Array.isArray(data.authors)) {
 }
 
 const paperSlugs = new Set((data.papers ?? []).map((paper) => paper.slug));
+const paperReviewStatuses = new Set(['pending', 'needs-review', 'approved']);
 const authorSlugs = new Set((data.authors ?? []).map((author) => author.slug));
 const generatedAuthorsBySlug = new Map((data.authors ?? []).map((author) => [author.slug, author]));
 
@@ -125,6 +126,10 @@ for (const paper of data.papers) {
 
   if (paper.sourceUrl && !/^https?:\/\//i.test(paper.sourceUrl)) {
     fail(`${paper.file} generated sourceUrl must be an absolute URL: ${paper.sourceUrl}`);
+  }
+
+  if (!paperReviewStatuses.has(paper.reviewStatus)) {
+    fail(`${paper.file} has an invalid generated reviewStatus: ${paper.reviewStatus}`);
   }
 
   for (const pattern of forbiddenPublicPaperPatterns) {
@@ -293,6 +298,14 @@ if (await exists(papersIndexPath)) {
   const papersHtml = await fs.readFile(papersIndexPath, 'utf8');
   if (papersHtml.includes('id="tag-')) {
     fail('dist/papers/index.html still contains topic route sections.');
+  }
+  for (const reviewStatus of ['all', ...paperReviewStatuses]) {
+    if (!papersHtml.includes(`data-paper-review-filter="${reviewStatus}"`)) {
+      fail(`dist/papers/index.html is missing the ${reviewStatus} review filter.`);
+    }
+  }
+  if (!papersHtml.includes('data-paper-review-status="pending"')) {
+    fail('dist/papers/index.html is missing paper review status metadata.');
   }
 }
 

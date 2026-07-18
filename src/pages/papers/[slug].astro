@@ -3,6 +3,7 @@ import AuthorList from '../../components/AuthorList.astro';
 import Layout from '../../layouts/Layout.astro';
 import data from '../../generated/paper-data.json';
 import { createArticleJsonLd, getAbsoluteUrl } from '../../lib/site';
+import { normalizePaperReviewStatus, paperReviewLabel } from '../../lib/paper-review.mjs';
 
 export function getStaticPaths() {
   return data.papers.map((paper) => ({
@@ -15,6 +16,7 @@ const { paper } = Astro.props;
 const canonicalPath = paper.path;
 const articleUrl = getAbsoluteUrl(canonicalPath, Astro.site);
 const h2Headings = paper.headings.filter((heading) => heading.depth === 2);
+const reviewStatus = normalizePaperReviewStatus(paper.reviewStatus);
 ---
 
 <Layout
@@ -44,9 +46,11 @@ const h2Headings = paper.headings.filter((heading) => heading.depth === 2);
         </p>
       )}
       <div class="paper-meta">
+        <span class:list={['paper-review-badge', `is-${reviewStatus}`]}>{paperReviewLabel(reviewStatus)}</span>
         {paper.pinned && <span class="paper-pin">Pinned</span>}
         {paper.firstArchivedAt && <span>{paper.firstArchivedAt}</span>}
         {paper.updatedAt && paper.updatedAt !== paper.firstArchivedAt && <span>Updated {paper.updatedAt}</span>}
+        {paper.reviewedAt && <span>Reviewed {paper.reviewedAt}</span>}
         {paper.currentVersion && <span>{paper.currentVersion}</span>}
         {paper.sourceUrl && <a href={paper.sourceUrl}>Source</a>}
         {paper.tags.map((tag, index) => <a href={`/topics/#tag-${paper.tagIds[index]}`}>{tag}</a>)}

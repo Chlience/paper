@@ -17,6 +17,7 @@ import {
   getSection,
   getSourceField,
   getSourceUrl,
+  getTopLevelField,
   getUpdatedAt,
   renderMarkdown,
   stripPageChrome,
@@ -29,6 +30,7 @@ import {
   tagFacets as controlledTagFacets,
   tagsForPaper,
 } from './content/tagging.mjs';
+import { normalizePaperReviewStatus } from '../src/lib/paper-review.mjs';
 
 const buildPaperRecords = async (paperEntries) => {
   const papers = [];
@@ -49,6 +51,8 @@ const buildPaperRecords = async (paperEntries) => {
       title,
       firstArchivedAt: getFirstArchivedAt(raw),
       updatedAt: getUpdatedAt(raw),
+      reviewStatus: normalizePaperReviewStatus(getTopLevelField(raw, 'Review-Status')),
+      reviewedAt: getTopLevelField(raw, 'Reviewed-At'),
       pinned: getPinned(raw),
       sourceUrl: getSourceUrl(raw),
       authors,

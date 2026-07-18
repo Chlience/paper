@@ -7,6 +7,7 @@ import {
   splitAuthorNames,
 } from './authors.mjs';
 import { getFirstArchivedAt, getSection, getSourceField, getSourceFieldRaw, getTopLevelField } from './markdown.mjs';
+import { PAPER_REVIEW_STATUSES } from '../../src/lib/paper-review.mjs';
 
 export const REQUIRED_SECTION_GROUPS = [
   { name: 'Source', headings: ['Source'] },
@@ -61,6 +62,7 @@ const evidenceSectionGroup = REQUIRED_SECTION_GROUPS.find((group) => group.name 
 
 const exactMinutePattern = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$/;
 const exactDatePattern = /^\d{4}-\d{2}-\d{2}$/;
+const paperReviewStatusSet = new Set(PAPER_REVIEW_STATUSES);
 const absoluteUrlPattern = /https?:\/\/[^\s)>；，。]+/gi;
 const internalPaperPathPattern = /\/papers\/([^/#?\s)]+)\//g;
 const markdownImagePattern = /!\[[^\]]*\]\(\s*(?:<([^>]+)>|([^\s)]+))(?:\s+["'][^"']*["'])?\s*\)/g;
@@ -321,6 +323,9 @@ export const validatePaperRecord = async ({
   const canonicalSource = canonicalValue(getSourceFieldRaw(source, 'Canonical source'));
   const firstArchivedAt = getFirstArchivedAt(markdown);
   const updatedAt = getTopLevelField(markdown, 'Updated-At');
+  const paperReviewStatus = getTopLevelField(markdown, 'Review-Status').toLowerCase();
+  const reviewedAt = getTopLevelField(markdown, 'Reviewed-At');
+  const updatedMinute = updatedAt.match(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}/)?.[0] ?? '';
 
   if (!workflowVersion && !legacyPaperSlugs.has(slug)) {
     errors.push(issue('missing-workflow-version', slug, 'New notes must declare Workflow version: v2.1.'));
@@ -332,6 +337,34 @@ export const validatePaperRecord = async ({
 
   if (!firstArchivedAt || !updatedAt) {
     errors.push(issue('missing-archive-time', slug, 'First-Archived-At and Updated-At are required.'));
+  }
+
+  if (!paperReviewStatus) {
+    errors.push(issue('missing-paper-review-status', slug, 'Review-Status is required.'));
+  } else if (!paperReviewStatusSet.has(paperReviewStatus)) {
+    errors.push(
+      issue(
+        'paper-review-status',
+        slug,
+        `Review-Status must be one of: ${PAPER_REVIEW_STATUSES.join(', ')}.`,
+      ),
+    );
+  } else if (paperReviewStatus === 'pending') {
+    if (reviewedAt) {
+      errors.push(issue('paper-reviewed-at', slug, 'Pending notes must not declare Reviewed-At.'));
+    }
+  } else if (!isValidMinute(reviewedAt)) {
+    errors.push(
+      issue('paper-reviewed-at', slug, 'Approved and needs-review notes require Reviewed-At in YYYY-MM-DD HH:mm.'),
+    );
+  } else if (paperReviewStatus === 'approved' && updatedMinute && updatedMinute > reviewedAt) {
+    errors.push(
+      issue('paper-review-state-order', slug, 'A note updated after Reviewed-At must use Review-Status: needs-review.'),
+    );
+  } else if (paperReviewStatus === 'needs-review' && updatedMinute && updatedMinute <= reviewedAt) {
+    errors.push(
+      issue('paper-review-state-order', slug, 'needs-review requires Updated-At to be later than Reviewed-At.'),
+    );
   }
 
   const requiredSectionGroups = isV21 ? REQUIRED_SECTION_GROUPS : V2_REQUIRED_SECTION_GROUPS;

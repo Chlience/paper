@@ -7,6 +7,7 @@ import * as markdown from './content/markdown.mjs';
 import * as repository from './content/repository.mjs';
 import * as tagging from './content/tagging.mjs';
 import * as workflow from './content/paper-workflow.mjs';
+import * as paperReview from '../src/lib/paper-review.mjs';
 
 const { validatePaperRecord } = workflow;
 const { stripPublicPaperMaintenance } = markdown;
@@ -82,6 +83,7 @@ const legacyPaper = `# Legacy note
 
 First-Archived-At: 2026-07-03 09:03 CST
 Updated-At: 2026-07-03 09:03 CST
+Review-Status: pending
 
 ## Source
 
@@ -92,6 +94,7 @@ const v2Paper = `# V2 note
 
 First-Archived-At: 2026-07-10 09:30
 Updated-At: 2026-07-10 09:31
+Review-Status: pending
 
 ## Source
 
@@ -140,6 +143,7 @@ const v21Paper = `# V2.1 note
 
 First-Archived-At: 2026-07-17 09:30
 Updated-At: 2026-07-17 09:31
+Review-Status: pending
 
 ## Source
 
@@ -173,6 +177,22 @@ test('exports the v2.1 analysis module taxonomy', () => {
   assert.deepEqual(
     [...workflow.ANALYSIS_MODULES],
     ['experiment', 'system', 'theory', 'model-report', 'survey', 'safety', 'docs'],
+  );
+});
+
+test('exports the paper review status taxonomy and filter helpers', () => {
+  assert.deepEqual([...paperReview.PAPER_REVIEW_STATUSES], ['pending', 'needs-review', 'approved']);
+  assert.equal(paperReview.normalizePaperReviewFilter('needs-review'), 'needs-review');
+  assert.equal(paperReview.normalizePaperReviewFilter('unknown'), 'all');
+  assert.equal(paperReview.paperMatchesReviewFilter({ reviewStatus: 'approved' }, 'approved'), true);
+  assert.equal(paperReview.paperMatchesReviewFilter({ reviewStatus: 'pending' }, 'approved'), false);
+  assert.deepEqual(
+    paperReview.countPaperReviewStatuses([
+      { reviewStatus: 'pending' },
+      { reviewStatus: 'approved' },
+      { reviewStatus: 'needs-review' },
+    ]),
+    { all: 3, pending: 1, 'needs-review': 1, approved: 1 },
   );
 });
 
@@ -523,6 +543,44 @@ test('all notes require an explicit Updated-At field', async () => {
   const invalid = legacyPaper.replace('Updated-At: 2026-07-03 09:03 CST\n', '');
   const result = await validate('missing-updated-time', invalid);
   assert.ok(result.errors.some((issue) => issue.code === 'missing-archive-time'));
+});
+
+test('all notes require a valid local review status', async () => {
+  const missing = v21Paper.replace('Review-Status: pending\n', '');
+  const missingResult = await validate('missing-paper-review-status', missing);
+  assert.ok(missingResult.errors.some((issue) => issue.code === 'missing-paper-review-status'));
+
+  const invalid = v21Paper.replace('Review-Status: pending', 'Review-Status: reviewed');
+  const invalidResult = await validate('invalid-paper-review-status', invalid);
+  assert.ok(invalidResult.errors.some((issue) => issue.code === 'paper-review-status'));
+});
+
+test('approved and needs-review states preserve the user review boundary', async () => {
+  const approved = v21Paper.replace(
+    'Review-Status: pending',
+    'Review-Status: approved\nReviewed-At: 2026-07-17 09:32',
+  );
+  assert.deepEqual((await validate('approved-paper-review', approved)).errors, []);
+
+  const staleApproved = approved.replace('Updated-At: 2026-07-17 09:31', 'Updated-At: 2026-07-17 09:33');
+  assert.ok(
+    (await validate('stale-approved-paper-review', staleApproved)).errors.some(
+      (issue) => issue.code === 'paper-review-state-order',
+    ),
+  );
+
+  const needsReview = v21Paper.replace(
+    'Review-Status: pending',
+    'Review-Status: needs-review\nReviewed-At: 2026-07-17 09:30',
+  );
+  assert.deepEqual((await validate('needs-paper-review', needsReview)).errors, []);
+
+  const pendingWithDate = v21Paper.replace('Review-Status: pending', 'Review-Status: pending\nReviewed-At: 2026-07-17 09:30');
+  assert.ok(
+    (await validate('pending-paper-review-date', pendingWithDate)).errors.some(
+      (issue) => issue.code === 'paper-reviewed-at',
+    ),
+  );
 });
 
 test('v2 timestamps must represent real calendar minutes', async () => {
@@ -1013,6 +1071,7 @@ test('content build associates linked author profiles with their papers', async 
     assert.equal(paper.primaryTagId, paper.tagIds[0]);
     assert.equal(paper.primaryTag, paper.tags[0]);
     assert.ok(paper.tagIds.length >= 1 && paper.tagIds.length <= 4);
+    assert.ok(paperReview.PAPER_REVIEW_STATUSES.includes(paper.reviewStatus));
   }
   for (const slug of ['nino-vieillard', 'gennady-pekhimenko', 'dongyang-ma-flashmemory']) {
     const author = data.authors.find((candidate) => candidate.slug === slug);
@@ -1148,6 +1207,7 @@ test('the public template exposes the v2.1 seven-section contract', async () => 
     'Published / updated',
     'Accessed',
     'Review status',
+    'Review-Status: pending',
     '证据定位',
     '支持的最窄结论',
     '索引核心信号',
@@ -1174,6 +1234,8 @@ test('public workflow and agent instructions expose one aligned v2.1 contract', 
     '`data/tag-taxonomy.json`',
     'Workflow version: v2.1',
     'Analysis modules',
+    'Review-Status',
+    'Reviewed-At',
     '五项人工语义门禁',
   ]) {
     assert.match(workflowDoc, new RegExp(snippet.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
@@ -1181,6 +1243,7 @@ test('public workflow and agent instructions expose one aligned v2.1 contract', 
   assert.match(workflowDoc, /从新到旧/);
   assert.match(agentInstructions, /核心信号/);
   assert.match(agentInstructions, /孤立作者/);
+  assert.match(agentInstructions, /Review-Status/);
   assert.doesNotMatch(agentInstructions, /`Reference Intake Brief`/);
   assert.match(authorSop, /不要求每位作者都创建 `data\/authors\.json` profile/);
   assert.match(authorSop, /只有已有强候选的深入核验作者进入 X 检查/);

@@ -1,12 +1,15 @@
 ---
 import AuthorList from './AuthorList.astro';
 import { formatDate } from '../lib/site';
+import { normalizePaperReviewStatus, paperReviewLabel } from '../lib/paper-review.mjs';
 
 interface Paper {
   slug: string;
   path: string;
   title: string;
   firstArchivedAt?: string;
+  reviewStatus?: string;
+  reviewedAt?: string;
   pinned?: boolean;
   authors?: string;
   authorEntries?: { name: string; path?: string; slug?: string; profileStatus?: string }[];
@@ -21,9 +24,10 @@ interface Props {
 }
 
 const { paper, showProvenance = true } = Astro.props;
+const reviewStatus = normalizePaperReviewStatus(paper.reviewStatus);
 ---
 
-<article class="paper-row">
+<article class="paper-row" data-paper-review-status={reviewStatus}>
   <div class="paper-row-date mono">{formatDate(paper.firstArchivedAt)}</div>
   <div class="paper-row-main">
     <h3><a href={paper.path}>{paper.title}</a></h3>
@@ -34,6 +38,7 @@ const { paper, showProvenance = true } = Astro.props;
       </p>
     )}
     <div class="paper-row-meta">
+      <span class:list={['paper-review-badge', `is-${reviewStatus}`]}>{paperReviewLabel(reviewStatus)}</span>
       {paper.pinned && <span class="paper-row-pin">Pinned</span>}
       {showProvenance && <span>{paper.slug}</span>}
       {paper.tags?.slice(0, 3).map((tag, index) => (

@@ -2,19 +2,114 @@
 import PaperRow from '../../components/PaperRow.astro';
 import Layout from '../../layouts/Layout.astro';
 import data from '../../generated/paper-data.json';
+import { countPaperReviewStatuses, PAPER_REVIEW_DEFINITIONS } from '../../lib/paper-review.mjs';
+
+const reviewCounts = countPaperReviewStatuses(data.papers);
 ---
 
 <Layout active="papers" title="Papers | Chlience Paper Archive" canonicalPath="/papers/">
   <section class="page-header container">
     <p class="eyebrow mono">All notes</p>
     <h1>论文笔记</h1>
-    <p class="deck">当前收录 {data.papers.length} 篇论文或技术文章，按首次归档时间排列并保留摘要与作者线索。</p>
+    <p class="deck">当前收录 {data.papers.length} 篇论文或技术文章，按首次归档时间排列，并区分待审阅、需复审与已审阅状态。</p>
   </section>
 
-  <section class="section compact">
-    <div class="container paper-list">
-      {data.papers.map((paper) => <PaperRow paper={paper} />)}
+  <section class="section compact" data-paper-review-root>
+    <div class="container">
+      <div class="paper-review-toolbar">
+        <nav class="paper-review-filter" aria-label="按审阅状态筛选论文">
+          {PAPER_REVIEW_DEFINITIONS.map(({ id, label }) => (
+            <a
+              href={id === 'all' ? '/papers/' : `/papers/?review=${id}`}
+              data-paper-review-filter={id}
+              class:list={[id === 'all' && 'is-active']}
+              aria-current={id === 'all' ? 'true' : undefined}
+            >
+              <span>{label}</span>
+              <span class="paper-review-filter-count mono">{reviewCounts[id]}</span>
+            </a>
+          ))}
+        </nav>
+        <p class="paper-review-summary" data-paper-review-summary aria-live="polite">
+          显示 {reviewCounts.all} / {reviewCounts.all} 篇
+        </p>
+      </div>
+
+      <div class="paper-list">
+        {data.papers.map((paper) => <PaperRow paper={paper} />)}
+      </div>
+      <p class="paper-review-empty" data-paper-review-empty hidden>当前筛选下没有论文。</p>
     </div>
   </section>
 
+<script>
+  import { normalizePaperReviewFilter, paperReviewLabel } from '../../lib/paper-review.mjs';
+
+  const root = document.querySelector('[data-paper-review-root]');
+
+  if (root instanceof HTMLElement) {
+    const rows = Array.from(root.querySelectorAll('[data-paper-review-status]'));
+    const filters = Array.from(root.querySelectorAll('[data-paper-review-filter]'));
+    const summary = root.querySelector('[data-paper-review-summary]');
+    const empty = root.querySelector('[data-paper-review-empty]');
+
+    const applyFilter = (value, updateHistory = false) => {
+      const filter = normalizePaperReviewFilter(value);
+      let visibleCount = 0;
+
+      for (const row of rows) {
+        const visible = filter === 'all' || row.getAttribute('data-paper-review-status') === filter;
+        row.toggleAttribute('hidden', !visible);
+        if (visible) visibleCount += 1;
+      }
+
+      for (const link of filters) {
+        const active = link.getAttribute('data-paper-review-filter') === filter;
+        link.classList.toggle('is-active', active);
+        if (active) link.setAttribute('aria-current', 'true');
+        else link.removeAttribute('aria-current');
+      }
+
+      if (summary instanceof HTMLElement) {
+        summary.textContent = `显示 ${visibleCount} / ${rows.length} 篇 · ${paperReviewLabel(filter)}`;
+      }
+      if (empty instanceof HTMLElement) {
+        empty.hidden = visibleCount > 0;
+        empty.textContent = `${paperReviewLabel(filter)}中暂无论文。`;
+      }
+
+      if (updateHistory) {
+        const url = new URL(window.location.href);
+        if (filter === 'all') url.searchParams.delete('review');
+        else url.searchParams.set('review', filter);
+        window.history.pushState({ review: filter }, '', url);
+      }
+    };
+
+    for (const link of filters) {
+      link.addEventListener('click', (event) => {
+        if (
+          event.defaultPrevented ||
+          event.button !== 0 ||
+          event.metaKey ||
+          event.ctrlKey ||
+          event.shiftKey ||
+          event.altKey
+        ) {
+          return;
+        }
+        event.preventDefault();
+        applyFilter(link.getAttribute('data-paper-review-filter'), true);
+      });
+    }
+
+    const applyUrlFilter = () => {
+      const params = new URL(window.location.href).searchParams;
+      applyFilter(params.get('review'));
+    };
+
+    window.addEventListener('popstate', applyUrlFilter);
+    applyUrlFilter();
+  }
+</script>
 </Layout>
