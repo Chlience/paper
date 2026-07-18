@@ -2,8 +2,10 @@
 import PaperRow from '../components/PaperRow.astro';
 import Layout from '../layouts/Layout.astro';
 import data from '../generated/paper-data.json';
+import { countPaperReviewStatuses } from '../lib/paper-review.mjs';
 
-const recentPapers = data.papers.slice(0, 8);
+const reviewCounts = countPaperReviewStatuses(data.papers);
+const recentPapers = data.papers.filter((paper) => paper.reviewStatus === 'approved').slice(0, 8);
 const routeGroups = data.tagFacets.map((facet) => ({
   ...facet,
   routes: data.tagRoutes
@@ -49,10 +51,22 @@ const routeGroups = data.tagFacets.map((facet) => ({
   <section class="section">
     <div class="container section-header">
       <div>
-        <h2>Latest Archived Notes</h2>
-        <p>最近首次归档的论文和技术文章，后续补充不会改变这里的顺序。</p>
+        <h2>Latest Reviewed Notes</h2>
+        <p>置顶条目优先，其余按首次归档时间列出最近完成本地审阅的论文和技术文章。</p>
       </div>
-      <a class="section-link" href="/papers/">View all</a>
+      <div class="section-header-actions" aria-label="论文审阅入口">
+        {reviewCounts.pending > 0 && (
+          <a class="section-link is-review-queue" href="/papers/?review=pending">
+            {reviewCounts.pending} 篇待审阅
+          </a>
+        )}
+        {reviewCounts['needs-review'] > 0 && (
+          <a class="section-link is-review-queue" href="/papers/?review=needs-review">
+            {reviewCounts['needs-review']} 篇需复审
+          </a>
+        )}
+        <a class="section-link" href="/papers/?review=approved">View all reviewed</a>
+      </div>
     </div>
     <div class="container paper-list">
       {recentPapers.map((paper) => <PaperRow paper={paper} showProvenance={false} />)}

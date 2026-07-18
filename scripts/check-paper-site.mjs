@@ -185,6 +185,7 @@ for (const file of htmlFiles) {
 const sitemapXmlPath = path.join(distDir, 'sitemap.xml');
 const sitemapShardPath = path.join(distDir, 'sitemap-0.xml');
 const robotsTxtPath = path.join(distDir, 'robots.txt');
+const homeIndexPath = path.join(distDir, 'index.html');
 const authorsIndexPath = path.join(distDir, 'authors', 'index.html');
 const papersIndexPath = path.join(distDir, 'papers', 'index.html');
 const topicsIndexPath = path.join(distDir, 'topics', 'index.html');
@@ -224,6 +225,36 @@ if (!(await exists(paperSearchIndexPath))) {
   const searchItems = JSON.parse(await fs.readFile(paperSearchIndexPath, 'utf8'));
   if (!Array.isArray(searchItems) || searchItems.length !== data.papers.length) {
     fail('dist/paper-search.json does not match the generated paper inventory.');
+  }
+}
+
+if (!(await exists(homeIndexPath))) {
+  fail('dist/index.html is missing.');
+} else {
+  const homeHtml = await fs.readFile(homeIndexPath, 'utf8');
+  const expectedHomePapers = data.papers.filter((paper) => paper.reviewStatus === 'approved').slice(0, 8);
+  const renderedReviewStatuses = [...homeHtml.matchAll(/data-paper-review-status="([^"]+)"/g)].map(
+    (match) => match[1],
+  );
+
+  if (
+    renderedReviewStatuses.length !== expectedHomePapers.length ||
+    renderedReviewStatuses.some((status) => status !== 'approved')
+  ) {
+    fail('dist/index.html must list only the latest approved papers.');
+  }
+  for (const paper of expectedHomePapers) {
+    if (!homeHtml.includes(`href="${paper.path}"`)) {
+      fail(`dist/index.html is missing the reviewed homepage paper: ${paper.slug}.`);
+    }
+  }
+
+  const pendingCount = data.papers.filter((paper) => paper.reviewStatus === 'pending').length;
+  if (pendingCount > 0 && !homeHtml.includes('href="/papers/?review=pending"')) {
+    fail('dist/index.html is missing the pending review queue link.');
+  }
+  if (!homeHtml.includes('href="/papers/?review=approved"')) {
+    fail('dist/index.html is missing the approved paper archive link.');
   }
 }
 

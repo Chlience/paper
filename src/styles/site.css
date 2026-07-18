@@ -558,6 +558,33 @@ h3 {
   white-space: nowrap;
 }
 
+.section-header-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 4px 18px;
+}
+
+.section-header-actions .section-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+
+.section-link.is-review-queue {
+  color: oklch(37% 0.12 230);
+  text-decoration: underline;
+  text-decoration-color: oklch(72% 0.07 230);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
+
+.section-link:hover,
+.section-link:focus-visible {
+  color: var(--fg);
+}
+
 .paper-list {
   display: grid;
 }
@@ -2507,6 +2534,11 @@ html.is-figure-dialog-open body {
   .site-footer-inner {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .section-header-actions {
+    justify-content: flex-start;
+    width: 100%;
   }
 
   .site-search-trigger kbd {
