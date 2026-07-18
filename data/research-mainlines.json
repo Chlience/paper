@@ -6187,21 +6187,6 @@
       ]
     },
     {
-      "slug": "2607.00248-seed2-model-card-real-world-complexity",
-      "firstPublic": {
-        "value": "2026-06",
-        "precision": "month"
-      },
-      "uses": [
-        {
-          "lineId": "proxy-reward-reliability-shift",
-          "role": "boundary",
-          "nodeIds": [],
-          "note": "该材料限定术语、能力主张或外推范围，不单独创建方法节点。"
-        }
-      ]
-    },
-    {
       "slug": "2606.31650-echo-selective-turn-memory-agentic-rl",
       "firstPublic": {
         "value": "2026-06",

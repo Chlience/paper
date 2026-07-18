@@ -25,7 +25,6 @@ Updated-At: 2026-07-18
 | [RL Credit Assignment Watch](/papers/2026-07-13-rl-credit-assignment-may-july-landscape/) | 2026年7月 | 按 token、segment、turn、memory 和 workflow role 归纳 2026 年 5-7 月方法，并把 compact 后的 state comparability 与 provenance routing 作为独立判断轴。 |
 | [Learned Environment Roadmap](/papers/2026-07-13-agentic-rl-learned-environment-evolution/) | 2026年7月 | 把 Agentic RL 的环境供给串成从可复位 sandbox、有状态模拟、可执行环境合成到 language world model 的演进路线，并以 real-sim 校准闭环约束策略利用模拟误差。 |
 | [国产模型报告时间线](/papers/2026-06-23-chinese-frontier-model-reports-timeline/) | 2026年6月 | 按 MoE / 长上下文、reasoning RL、agentic infrastructure 三条主线串联 2024-2026 年国产前沿模型演进。 |
-| [Seed2.0](/papers/2607.00248-seed2-model-card-real-world-complexity/) | 2026年6月 | 用产品任务分布重构模型评测，将能力、成本与真实工作流案例放进同一模型卡。 |
 | [SmoothAgent](/papers/2607.00151-smoothagent-lookahead-context-engineering/) | 2026年6月 | 把可提前确定的 context transformation 移入异步 lookahead stream，并用 SLO-aware scheduling 预建变换后 KV cache，降低 transform-point TTFT。 |
 | [ECHO](/papers/2606.31650-echo-selective-turn-memory-agentic-rl/) | 2026年6月 | 把 selective memory / compact / context reconstruction 做成可训练 slot。 |
 | [SPIRAL](/papers/2606.23595-spiral-learning-search-aggregate/) | 2026年6月 | 从 8 条搜索轨迹随机构造 4 个四元集合，以聚合成功率的参与集合均值更新搜索轨迹，并用同集合内中心化 reward 训练共享策略的聚合轨迹。 |
