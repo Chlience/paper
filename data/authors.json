@@ -8363,12 +8363,16 @@
     "github": "",
     "x": "",
     "xConfidence": "not-found",
-    "topics": ["LLM-in-Sandbox", "large language models", "machine intelligence", "model architecture", "natural language processing"],
-    "notes": "LLM-in-Sandbox coauthor from Microsoft Research. Microsoft profile identifies him as a Principal Researcher in the General Artificial Intelligence group; personal homepage lists publications and mentoring at Microsoft Research.",
+    "topics": ["LLM-in-Sandbox", "ReOPD", "large language models", "machine intelligence", "model architecture", "natural language processing"],
+    "notes": "LLM-in-Sandbox and ReOPD coauthor from Microsoft Research. Microsoft profile identifies him as a Principal Researcher in the General Artificial Intelligence group; personal homepage lists publications and mentoring at Microsoft Research.",
     "sources": [
       {
         "label": "LLM-in-Sandbox",
         "url": "https://arxiv.org/abs/2601.16206"
+      },
+      {
+        "label": "ReOPD",
+        "url": "https://arxiv.org/abs/2607.04763"
       },
       {
         "label": "Project page",
@@ -8478,12 +8482,16 @@
     "github": "",
     "x": "",
     "xConfidence": "not-found",
-    "topics": ["LLM-in-Sandbox", "general artificial intelligence", "large foundation models", "natural language processing", "multimodal AI"],
-    "notes": "LLM-in-Sandbox coauthor from Microsoft Research. Homepage and Microsoft profile identify him as a Distinguished Scientist and Vice President at Microsoft Research, Chief Scientist of Microsoft Research Asia, and leader of the General Artificial Intelligence group.",
+    "topics": ["LLM-in-Sandbox", "ReOPD", "general artificial intelligence", "large foundation models", "natural language processing", "multimodal AI"],
+    "notes": "LLM-in-Sandbox and ReOPD coauthor from Microsoft Research. Homepage and Microsoft profile identify him as a Distinguished Scientist and Vice President at Microsoft Research, Chief Scientist of Microsoft Research Asia, and leader of the General Artificial Intelligence group.",
     "sources": [
       {
         "label": "LLM-in-Sandbox",
         "url": "https://arxiv.org/abs/2601.16206"
+      },
+      {
+        "label": "ReOPD",
+        "url": "https://arxiv.org/abs/2607.04763"
       },
       {
         "label": "Project page",
@@ -11362,6 +11370,112 @@
       {
         "label": "OpenReview",
         "url": "https://openreview.net/profile?id=~Zhicheng_Dou1"
+      }
+    ]
+  },
+  {
+    "slug": "baohao-liao",
+    "name": "Baohao Liao",
+    "aliases": ["Baohao Liao"],
+    "affiliations": ["Microsoft Research", "University of Amsterdam", "RWTH Aachen University", "Shanghai Jiao Tong University"],
+    "homepage": "https://sites.google.com/view/baohaoliao",
+    "github": "https://github.com/BaohaoLiao",
+    "x": "https://x.com/baohao_liao",
+    "xConfidence": "high",
+    "topics": ["ReOPD", "LLM efficiency", "reasoning", "agents", "parameter-efficient finetuning"],
+    "notes": "ReOPD co-first author. The paper lists Microsoft Research and the University of Amsterdam and states that the work was completed during a Microsoft internship. His homepage identifies him as a University of Amsterdam PhD student supervised by Christof Monz and Vlad Niculae.",
+    "sources": [
+      {
+        "label": "ReOPD",
+        "url": "https://arxiv.org/abs/2607.04763"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://sites.google.com/view/baohaoliao"
+      },
+      {
+        "label": "Hugging Face",
+        "url": "https://huggingface.co/baohao/activity/all"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/BaohaoLiao"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/baohao_liao"
+      }
+    ]
+  },
+  {
+    "slug": "hanze-dong",
+    "name": "Hanze Dong",
+    "aliases": ["Hanze Dong"],
+    "affiliations": ["Microsoft Research", "Hong Kong University of Science and Technology", "Fudan University"],
+    "homepage": "https://hendrydong.github.io/",
+    "github": "",
+    "topics": ["ReOPD", "foundation model post-training", "alignment", "generative modeling", "Monte Carlo sampling"],
+    "notes": "ReOPD co-first author from Microsoft Research. His homepage lists foundation-model post-training and alignment among his current research areas and records a PhD from HKUST and undergraduate study at Fudan University.",
+    "sources": [
+      {
+        "label": "ReOPD",
+        "url": "https://arxiv.org/abs/2607.04763"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://hendrydong.github.io/"
+      }
+    ]
+  },
+  {
+    "slug": "christof-monz",
+    "name": "Christof Monz",
+    "aliases": ["Christof Monz", "C. Monz"],
+    "affiliations": ["University of Amsterdam"],
+    "homepage": "https://staff.fnwi.uva.nl/c.monz/",
+    "github": "",
+    "topics": ["ReOPD", "natural language processing", "machine translation", "information retrieval", "efficient language models"],
+    "notes": "ReOPD coauthor and professor in the University of Amsterdam Informatics Institute. Baohao Liao's homepage identifies Christof Monz as his PhD supervisor.",
+    "sources": [
+      {
+        "label": "ReOPD",
+        "url": "https://arxiv.org/abs/2607.04763"
+      },
+      {
+        "label": "University of Amsterdam",
+        "url": "https://www.uva.nl/en/profile/m/o/c.monz/c.monz.html"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://staff.fnwi.uva.nl/c.monz/"
+      },
+      {
+        "label": "Baohao Liao homepage",
+        "url": "https://sites.google.com/view/baohaoliao"
+      }
+    ]
+  },
+  {
+    "slug": "xinxing-xu",
+    "name": "Xinxing Xu",
+    "aliases": ["Xinxing Xu"],
+    "affiliations": ["Microsoft Research", "Microsoft Research Asia Singapore"],
+    "homepage": "https://sites.google.com/site/xinxingxu666",
+    "github": "",
+    "topics": ["ReOPD", "foundation models", "computer vision", "machine learning"],
+    "notes": "ReOPD coauthor from Microsoft Research. Microsoft's institutional profile identifies him as a Principal Research Manager based in Singapore.",
+    "sources": [
+      {
+        "label": "ReOPD",
+        "url": "https://arxiv.org/abs/2607.04763"
+      },
+      {
+        "label": "Microsoft Research",
+        "url": "https://www.microsoft.com/en-us/research/people/xinxingxu/"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://sites.google.com/site/xinxingxu666"
       }
     ]
   }

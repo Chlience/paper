@@ -12,6 +12,7 @@
   "2607.05378-compactionrl-context-compaction-agent-rl": ["agent-memory", "agent-rl", "credit-assignment", "rl-algorithm"],
   "2607.07508-sao-single-rollout-asynchronous-agentic-rl": ["rl-algorithm", "agent-rl", "credit-assignment", "rollout-optimization"],
   "2607.03333-spork-self-speculative-agentic-inference": ["speculative-decoding", "tool-use", "agent-workflow", "kv-cache"],
+  "2607.04763-reopd-prefix-replay-agentic-distillation": ["on-policy-distillation", "agent-rl", "rollout-optimization", "tool-use"],
   "2603.00729-qwen3-coder-next-agentic-coding": ["coding-agent", "agent-rl", "tool-use", "moe-architecture"],
   "2601.16206-computer-environments-agentic-intelligence": ["tool-use", "agent-rl", "agent-workflow", "benchmark"],
   "2607.02980-hils-attention-infinite-context": ["sparse-attention", "long-context"],
