@@ -2,8 +2,7 @@
 
 First-Archived-At: 2026-07-16 12:25
 Updated-At: 2026-07-17 19:25
-Review-Status: approved
-Reviewed-At: 2026-07-18 17:30
+Review-Status: pending
 
 ## Source
 
