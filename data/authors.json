@@ -11478,5 +11478,93 @@
         "url": "https://sites.google.com/site/xinxingxu666"
       }
     ]
+  },
+  {
+    "slug": "xinyu-zhu-uva",
+    "name": "Xinyu Zhu",
+    "aliases": ["Xinyu Zhu"],
+    "affiliations": ["Meta AI", "University of Virginia"],
+    "homepage": "https://tianhongzxy.notion.site/",
+    "github": "",
+    "topics": ["test-time training", "long-context language models", "language model reasoning", "parameter-efficient adaptation"],
+    "notes": "First author of Self-Guided Test-Time Training for Long-Context LLMs and a University of Virginia PhD student advised by Yu Meng. The paper records a joint Meta AI / UVA affiliation, and his homepage records a Meta research internship during the work period.",
+    "sources": [
+      {
+        "label": "Self-Guided Test-Time Training for Long-Context LLMs",
+        "url": "https://arxiv.org/abs/2607.09415"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://tianhongzxy.notion.site/"
+      }
+    ]
+  },
+  {
+    "slug": "zhe-xu-meta",
+    "name": "Zhe Xu",
+    "aliases": ["Zhe Xu"],
+    "affiliations": ["Meta AI", "University of Illinois Urbana-Champaign"],
+    "homepage": "https://pricexu.github.io/",
+    "github": "https://github.com/pricexu",
+    "topics": ["test-time training", "generative modeling", "graph machine learning", "long-context language models"],
+    "notes": "Execution lead of Self-Guided Test-Time Training for Long-Context LLMs. The paper lists Meta AI; his homepage records UIUC doctoral training and prior Meta research internships.",
+    "sources": [
+      {
+        "label": "Self-Guided Test-Time Training for Long-Context LLMs",
+        "url": "https://arxiv.org/abs/2607.09415"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://pricexu.github.io/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/pricexu"
+      }
+    ]
+  },
+  {
+    "slug": "yu-meng-uva",
+    "name": "Yu Meng",
+    "aliases": ["Yu Meng"],
+    "affiliations": ["University of Virginia"],
+    "homepage": "https://engineering.virginia.edu/faculty/yu-meng",
+    "github": "",
+    "topics": ["natural language processing", "machine learning", "language model reasoning", "test-time training"],
+    "notes": "Joint corresponding author of Self-Guided Test-Time Training for Long-Context LLMs and a University of Virginia computer science faculty member. Xinyu Zhu's homepage identifies Yu Meng as his PhD adviser.",
+    "sources": [
+      {
+        "label": "Self-Guided Test-Time Training for Long-Context LLMs",
+        "url": "https://arxiv.org/abs/2607.09415"
+      },
+      {
+        "label": "University of Virginia",
+        "url": "https://engineering.virginia.edu/faculty/yu-meng"
+      },
+      {
+        "label": "Xinyu Zhu homepage",
+        "url": "https://tianhongzxy.notion.site/"
+      }
+    ]
+  },
+  {
+    "slug": "xi-liu-meta",
+    "name": "Xi Liu",
+    "aliases": ["Xi Liu"],
+    "affiliations": ["Meta AI"],
+    "homepage": "https://scholar.google.com/citations?user=Z81UkSYAAAAJ",
+    "github": "",
+    "topics": ["test-time training", "generative ranking", "recommendation systems", "long-context language models"],
+    "notes": "Joint corresponding author of Self-Guided Test-Time Training for Long-Context LLMs. The paper and Google Scholar profile both identify his Meta AI affiliation; his publication record connects this work to Meta's generative ranking line.",
+    "sources": [
+      {
+        "label": "Self-Guided Test-Time Training for Long-Context LLMs",
+        "url": "https://arxiv.org/abs/2607.09415"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=Z81UkSYAAAAJ"
+      }
+    ]
   }
 ]

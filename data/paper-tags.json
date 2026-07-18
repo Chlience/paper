@@ -11,6 +11,7 @@
   "2607.05391-llm-as-a-verifier": ["verifier", "test-time-scaling", "reward-modeling", "agent-workflow"],
   "2607.05378-compactionrl-context-compaction-agent-rl": ["agent-memory", "agent-rl", "credit-assignment", "rl-algorithm"],
   "2607.07508-sao-single-rollout-asynchronous-agentic-rl": ["rl-algorithm", "agent-rl", "credit-assignment", "rollout-optimization"],
+  "2607.09415-self-guided-test-time-training-long-context": ["test-time-scaling", "long-context", "parameter-efficient-finetuning"],
   "2607.03333-spork-self-speculative-agentic-inference": ["speculative-decoding", "tool-use", "agent-workflow", "kv-cache"],
   "2607.04763-reopd-prefix-replay-agentic-distillation": ["on-policy-distillation", "agent-rl", "rollout-optimization", "tool-use"],
   "2603.00729-qwen3-coder-next-agentic-coding": ["coding-agent", "agent-rl", "tool-use", "moe-architecture"],

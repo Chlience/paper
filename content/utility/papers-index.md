@@ -22,6 +22,7 @@ Updated-At: 2026-07-18
 | [CompactionRL](/papers/2607.05378-compactionrl-context-compaction-agent-rl/) | 2026年7月 | 把同一策略生成的 context summary 纳入 PPO，用全 batch token 归一化和跨 segment GAE 在固定峰值上下文内训练长程 coding agent。 |
 | [LLM-as-a-Verifier](/papers/2607.05391-llm-as-a-verifier/) | 2026年7月 | 把评分 token 的概率期望、重复评估与 criteria decomposition 组合成连续 verifier，再用概率 pivot tournament 扩展多轨迹选择。 |
 | [SAO](/papers/2607.07508-sao-single-rollout-asynchronous-agentic-rl/) | 2026年7月 | 用每 prompt 单 rollout、强化 critic 与双侧 token mask 替代异步 GRPO 的组内等待和 group baseline。 |
+| [S-TTT](/papers/2607.09415-self-guided-test-time-training-long-context/) | 2026年7月 | 让基础模型从长上下文复制问题相关证据，并只对这些 span 做实例级 query-LoRA 更新后读取完整上下文作答。 |
 | [Grape](/papers/2026-07-13-grape-micro-task-agentic-workflow-serving/) | 2026年7月 | 把相依 LLM task 的已知 prompt、流式上游输出和 decode 拆成微任务，让下游在上游 decode 期间持续完成跨 task 增量 prefill。 |
 | [RL Credit Assignment Watch](/papers/2026-07-13-rl-credit-assignment-may-july-landscape/) | 2026年7月 | 按 token、segment、turn、memory 和 workflow role 归纳 2026 年 5-7 月方法，并把 compact 后的 state comparability 与 provenance routing 作为独立判断轴。 |
 | [Learned Environment Roadmap](/papers/2026-07-13-agentic-rl-learned-environment-evolution/) | 2026年7月 | 把 Agentic RL 的环境供给串成从可复位 sandbox、有状态模拟、可执行环境合成到 language world model 的演进路线，并以 real-sim 校准闭环约束策略利用模拟误差。 |
