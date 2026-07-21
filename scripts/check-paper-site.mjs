@@ -1,6 +1,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import process from 'node:process';
+import { comparePapersForReviewFilter } from '../src/lib/paper-review.mjs';
 import { REQUIRED_SECTION_GROUPS } from './content/paper-workflow.mjs';
 import { authorsFile, generatedFile, repoRoot } from './content/repository.mjs';
 
@@ -240,7 +241,10 @@ if (!(await exists(homeIndexPath))) {
   fail('dist/index.html is missing.');
 } else {
   const homeHtml = await fs.readFile(homeIndexPath, 'utf8');
-  const expectedHomePapers = data.papers.filter((paper) => paper.reviewStatus === 'approved').slice(0, 8);
+  const expectedHomePapers = data.papers
+    .filter((paper) => paper.reviewStatus === 'approved')
+    .sort((left, right) => comparePapersForReviewFilter(left, right, 'approved'))
+    .slice(0, 8);
   const renderedReviewStatuses = [...homeHtml.matchAll(/data-paper-review-status="([^"]+)"/g)].map(
     (match) => match[1],
   );
@@ -345,6 +349,16 @@ if (await exists(papersIndexPath)) {
   }
   if (!papersHtml.includes('data-paper-review-status="pending"')) {
     fail('dist/papers/index.html is missing paper review status metadata.');
+  }
+  for (const attribute of [
+    'data-paper-first-archived-at=',
+    'data-paper-updated-at=',
+    'data-paper-reviewed-at=',
+    'data-paper-date-field=',
+  ]) {
+    if (!papersHtml.includes(attribute)) {
+      fail(`dist/papers/index.html is missing contextual review sorting metadata: ${attribute}`);
+    }
   }
 }
 

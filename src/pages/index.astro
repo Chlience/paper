@@ -2,10 +2,13 @@
 import PaperRow from '../components/PaperRow.astro';
 import Layout from '../layouts/Layout.astro';
 import data from '../generated/paper-data.json';
-import { countPaperReviewStatuses } from '../lib/paper-review.mjs';
+import { comparePapersForReviewFilter, countPaperReviewStatuses } from '../lib/paper-review.mjs';
 
 const reviewCounts = countPaperReviewStatuses(data.papers);
-const recentPapers = data.papers.filter((paper) => paper.reviewStatus === 'approved').slice(0, 8);
+const recentPapers = data.papers
+  .filter((paper) => paper.reviewStatus === 'approved')
+  .sort((left, right) => comparePapersForReviewFilter(left, right, 'approved'))
+  .slice(0, 8);
 const routeGroups = data.tagFacets.map((facet) => ({
   ...facet,
   routes: data.tagRoutes
@@ -52,7 +55,7 @@ const routeGroups = data.tagFacets.map((facet) => ({
     <div class="container section-header">
       <div>
         <h2>Latest Reviewed Notes</h2>
-        <p>置顶条目优先，其余按首次归档时间列出最近完成本地审阅的论文和技术文章。</p>
+        <p>置顶条目优先，其余按审阅时间列出最近完成本地审阅的论文和技术文章。</p>
       </div>
       <div class="section-header-actions" aria-label="论文审阅入口">
         {reviewCounts.pending > 0 && (
@@ -69,7 +72,7 @@ const routeGroups = data.tagFacets.map((facet) => ({
       </div>
     </div>
     <div class="container paper-list">
-      {recentPapers.map((paper) => <PaperRow paper={paper} showProvenance={false} />)}
+      {recentPapers.map((paper) => <PaperRow paper={paper} showProvenance={false} dateField="reviewedAt" />)}
     </div>
   </section>
 

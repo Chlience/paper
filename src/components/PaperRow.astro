@@ -8,6 +8,7 @@ interface Paper {
   path: string;
   title: string;
   firstArchivedAt?: string;
+  updatedAt?: string;
   reviewStatus?: string;
   reviewedAt?: string;
   pinned?: boolean;
@@ -21,14 +22,36 @@ interface Paper {
 interface Props {
   paper: Paper;
   showProvenance?: boolean;
+  dateField?: 'firstArchivedAt' | 'updatedAt' | 'reviewedAt';
 }
 
-const { paper, showProvenance = true } = Astro.props;
+const { paper, showProvenance = true, dateField = 'firstArchivedAt' } = Astro.props;
 const reviewStatus = normalizePaperReviewStatus(paper.reviewStatus);
+const dateOptions = [
+  { field: 'firstArchivedAt', label: '归档', value: paper.firstArchivedAt },
+  { field: 'updatedAt', label: '更新', value: paper.updatedAt },
+  { field: 'reviewedAt', label: '审阅', value: paper.reviewedAt },
+].filter(({ value }) => Boolean(value));
+const visibleDateField = dateOptions.some(({ field }) => field === dateField) ? dateField : 'firstArchivedAt';
 ---
 
-<article class="paper-row" data-paper-review-status={reviewStatus}>
-  <div class="paper-row-date mono">{formatDate(paper.firstArchivedAt)}</div>
+<article
+  class="paper-row"
+  data-paper-review-status={reviewStatus}
+  data-paper-slug={paper.slug}
+  data-paper-first-archived-at={paper.firstArchivedAt ?? ''}
+  data-paper-updated-at={paper.updatedAt ?? ''}
+  data-paper-reviewed-at={paper.reviewedAt ?? ''}
+  data-paper-pinned={paper.pinned ? 'true' : 'false'}
+>
+  <div class="paper-row-date mono">
+    {dateOptions.map(({ field, label, value }) => (
+      <span class="paper-row-date-option" data-paper-date-field={field} hidden={field !== visibleDateField}>
+        <span class="paper-row-date-label">{label}</span>
+        <time datetime={value}>{formatDate(value)}</time>
+      </span>
+    ))}
+  </div>
   <div class="paper-row-main">
     <h3><a href={paper.path}>{paper.title}</a></h3>
     {paper.coreSignal && <p>{paper.coreSignal}</p>}

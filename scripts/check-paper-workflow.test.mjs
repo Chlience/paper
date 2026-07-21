@@ -198,6 +198,63 @@ test('exports the paper review status taxonomy and filter helpers', () => {
   );
 });
 
+test('review filters use their visible lifecycle timestamp while preserving pins', () => {
+  const papers = [
+    {
+      slug: 'newly-archived',
+      firstArchivedAt: '2026-07-20 09:00',
+      updatedAt: '2026-07-20 09:00',
+      reviewedAt: '2026-07-20 10:00',
+    },
+    {
+      slug: 'newly-reviewed',
+      firstArchivedAt: '2026-07-18 09:00',
+      updatedAt: '2026-07-21 08:00',
+      reviewedAt: '2026-07-21 09:00',
+    },
+    {
+      slug: 'pinned',
+      firstArchivedAt: '2026-07-01 09:00',
+      updatedAt: '2026-07-01 09:00',
+      reviewedAt: '2026-07-01 10:00',
+      pinned: true,
+    },
+  ];
+
+  assert.deepEqual(paperReview.paperReviewSortDefinition('approved'), {
+    field: 'reviewedAt',
+    label: '审阅时间',
+  });
+  assert.deepEqual(paperReview.paperReviewSortDefinition('needs-review'), {
+    field: 'updatedAt',
+    label: '更新时间',
+  });
+  assert.deepEqual(
+    [...papers].sort((left, right) => paperReview.comparePapersForReviewFilter(left, right, 'all')).map(
+      ({ slug }) => slug,
+    ),
+    ['pinned', 'newly-archived', 'newly-reviewed'],
+  );
+  assert.deepEqual(
+    [...papers]
+      .sort((left, right) => paperReview.comparePapersForReviewFilter(left, right, 'pending'))
+      .map(({ slug }) => slug),
+    ['pinned', 'newly-archived', 'newly-reviewed'],
+  );
+  assert.deepEqual(
+    [...papers]
+      .sort((left, right) => paperReview.comparePapersForReviewFilter(left, right, 'needs-review'))
+      .map(({ slug }) => slug),
+    ['pinned', 'newly-reviewed', 'newly-archived'],
+  );
+  assert.deepEqual(
+    [...papers]
+      .sort((left, right) => paperReview.comparePapersForReviewFilter(left, right, 'approved'))
+      .map(({ slug }) => slug),
+    ['pinned', 'newly-reviewed', 'newly-archived'],
+  );
+});
+
 test('exports the archive time validator', () => {
   assert.equal(typeof workflow.validateArchiveTimes, 'function');
 });

@@ -11,7 +11,7 @@ const reviewCounts = countPaperReviewStatuses(data.papers);
   <section class="page-header container">
     <p class="eyebrow mono">All notes</p>
     <h1>论文笔记</h1>
-    <p class="deck">当前收录 {data.papers.length} 篇论文或技术文章，按首次归档时间排列，并区分待审阅、需复审与已审阅状态。</p>
+    <p class="deck">当前收录 {data.papers.length} 篇论文或技术文章。全部与待审阅按归档时间、需复审按更新时间、已审阅按审阅时间排列，均为最新优先。</p>
   </section>
 
   <section class="section compact" data-paper-review-root>
@@ -43,23 +43,57 @@ const reviewCounts = countPaperReviewStatuses(data.papers);
   </section>
 
 <script>
-  import { normalizePaperReviewFilter, paperReviewLabel } from '../../lib/paper-review.mjs';
+  import {
+    comparePapersForReviewFilter,
+    normalizePaperReviewFilter,
+    paperReviewLabel,
+    paperReviewSortDefinition,
+  } from '../../lib/paper-review.mjs';
 
   const root = document.querySelector('[data-paper-review-root]');
 
   if (root instanceof HTMLElement) {
     const rows = Array.from(root.querySelectorAll('[data-paper-review-status]'));
     const filters = Array.from(root.querySelectorAll('[data-paper-review-filter]'));
+    const list = root.querySelector('.paper-list');
     const summary = root.querySelector('[data-paper-review-summary]');
     const empty = root.querySelector('[data-paper-review-empty]');
 
+    const paperFromRow = (row) => ({
+      slug: row.getAttribute('data-paper-slug') ?? '',
+      firstArchivedAt: row.getAttribute('data-paper-first-archived-at') ?? '',
+      updatedAt: row.getAttribute('data-paper-updated-at') ?? '',
+      reviewedAt: row.getAttribute('data-paper-reviewed-at') ?? '',
+      pinned: row.getAttribute('data-paper-pinned') === 'true',
+    });
+
+    const showDateField = (row, requestedField) => {
+      const dateOptions = Array.from(row.querySelectorAll('[data-paper-date-field]'));
+      const activeField = dateOptions.some(
+        (option) => option.getAttribute('data-paper-date-field') === requestedField,
+      )
+        ? requestedField
+        : 'firstArchivedAt';
+
+      for (const option of dateOptions) {
+        option.toggleAttribute('hidden', option.getAttribute('data-paper-date-field') !== activeField);
+      }
+    };
+
     const applyFilter = (value, updateHistory = false) => {
       const filter = normalizePaperReviewFilter(value);
+      const sortDefinition = paperReviewSortDefinition(filter);
+      const sortedRows = [...rows].sort((left, right) =>
+        comparePapersForReviewFilter(paperFromRow(left), paperFromRow(right), filter),
+      );
       let visibleCount = 0;
 
-      for (const row of rows) {
+      if (list instanceof HTMLElement) list.append(...sortedRows);
+
+      for (const row of sortedRows) {
         const visible = filter === 'all' || row.getAttribute('data-paper-review-status') === filter;
         row.toggleAttribute('hidden', !visible);
+        showDateField(row, sortDefinition.field);
         if (visible) visibleCount += 1;
       }
 
@@ -71,7 +105,7 @@ const reviewCounts = countPaperReviewStatuses(data.papers);
       }
 
       if (summary instanceof HTMLElement) {
-        summary.textContent = `显示 ${visibleCount} / ${rows.length} 篇 · ${paperReviewLabel(filter)}`;
+        summary.textContent = `显示 ${visibleCount} / ${rows.length} 篇 · ${paperReviewLabel(filter)} · 按${sortDefinition.label}`;
       }
       if (empty instanceof HTMLElement) {
         empty.hidden = visibleCount > 0;

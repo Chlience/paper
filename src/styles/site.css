@@ -622,6 +622,21 @@ h3 {
   font-size: 12px;
 }
 
+.paper-row-date-option {
+  display: grid;
+  gap: 3px;
+}
+
+.paper-row-date-option[hidden] {
+  display: none;
+}
+
+.paper-row-date-label {
+  color: oklch(46% 0.035 230);
+  font-size: 11px;
+  font-weight: 680;
+}
+
 .paper-row-main {
   min-width: 0;
 }
