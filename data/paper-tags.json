@@ -22,7 +22,6 @@
   "2602.13692-thunderagent-program-aware-agentic-inference": ["agent-workflow", "inference-scheduling", "kv-cache", "tool-use"],
   "2606.23595-spiral-learning-search-aggregate": ["test-time-scaling", "credit-assignment", "rl-algorithm", "agent-workflow"],
   "2606.31650-echo-selective-turn-memory-agentic-rl": ["agent-memory", "agent-rl", "long-context", "agent-workflow"],
-  "2606.06453-vortex-sparse-attention-serving": ["serving-runtime", "sparse-attention", "attention-kernel", "long-context"],
   "2607.00151-smoothagent-lookahead-context-engineering": ["agent-memory", "kv-cache", "inference-scheduling", "serving-runtime"],
   "2306.13649-on-policy-distillation-language-models": ["on-policy-distillation", "rl-algorithm"],
   "2601.19897-self-distillation-continual-learning": ["on-policy-distillation", "training-stability"],

@@ -476,15 +476,15 @@
         "evolution": [
           "DeepSeek Sparse Attention 用可训练 indexer 为每层 query 选择少量历史位置，把全量 KV 访问改为内容相关的 top-k 读取。",
           "IndexCache 发现相邻层 top-k 高度重合，跨层复用 position indices 并按策略刷新，直接减少重复 selector 调用。",
-          "2026 年的工作沿三条执行路径展开：MiniMax Sparse Attention 以 GQA-group block selection 和 KL 对齐换取规则 kernel；Vortex 用 vFlow/vTensor 把 selector、top-k 与 paged KV lowering 到统一 serving backend；FlashMemory 让被选中的冷 KV 可驻留 CPU 并提前预取。",
+          "2026 年的工作沿两条执行成本路径展开：MiniMax Sparse Attention 以 GQA-group block selection 和 KL 对齐换取规则 kernel；FlashMemory 让被选中的冷 KV 可驻留 CPU 并提前预取。",
           "GLM-5.2 IndexShare 将跨层索引复用固化为百万上下文模型的固定频率策略；HiLS-Attention 以 landmark summary 和 hierarchical softmax 学习 chunk/token 两级 attention mass，强化端到端训练和长度外推。"
         ],
         "divergences": [
           "DSA 与 MSA 分别采用细粒度 token 选择和 GQA-group block 选择；HiLS 先以 landmark 选择 chunk，再在 chunk 内分配 token 权重。选择分辨率越细，索引与不规则访存压力通常越高。",
-          "IndexCache 与 IndexShare优化 selector 调用频率，Vortex 优化可编程执行面，FlashMemory 优化所选 KV 的驻留位置；它们覆盖 policy、backend 与 memory 三个层级，公开证据尚未形成统一组合消融。"
+          "IndexCache 与 IndexShare 优化 selector 调用频率，MiniMax Sparse Attention 规则化 block selection 与 kernel，FlashMemory 优化所选 KV 的驻留位置；它们覆盖 policy、kernel 与 memory 三个层级，公开证据尚未形成统一组合消融。"
         ],
         "judgment": [
-          "本线已经从“学会选哪些历史”扩展到“复用索引、规则化 block、lowering serving 与供给冷 KV”；七个节点共同覆盖选择质量和端到端执行成本。",
+          "本线已经从“学会选哪些历史”扩展到“复用索引、规则化 block 与供给冷 KV”；六个节点共同覆盖选择质量、索引成本、kernel 规则性与 KV residency。",
           "各论文的稀疏率、上下文长度、召回代理指标与 backend 不同，当前适合比较机制和成本分解，吞吐数字需要在相同 KV layout 与质量约束下复验。"
         ],
         "openQuestions": [
@@ -3272,23 +3272,6 @@
       "summary": "用按 GQA group 选择 KV block 的 Index Branch 保留稀疏 softmax。"
     },
     {
-      "id": "m-vortex",
-      "name": "Vortex",
-      "kind": "system",
-      "firstPublic": {
-        "value": "2026-06",
-        "precision": "month",
-        "sourceUrl": "https://arxiv.org/abs/2606.06453"
-      },
-      "source": {
-        "archiveState": "full-note",
-        "materialSlug": "2606.06453-vortex-sparse-attention-serving",
-        "canonicalUrl": "https://arxiv.org/abs/2606.06453",
-        "title": "Vortex"
-      },
-      "summary": "用 vFlow 与 vTensor 把动态 selector 降到 paged sparse-attention serving。"
-    },
-    {
       "id": "m-glm52-indexshare",
       "name": "GLM-5.2 IndexShare",
       "kind": "system",
@@ -4441,14 +4424,6 @@
     },
     {
       "lineId": "sparse-attention-history-selection",
-      "nodeId": "m-vortex",
-      "role": "core",
-      "importance": "primary",
-      "priorProblem": "稀疏算法常停留在独立 kernel，selector、top-k 与 paged KV layout 缺少统一 serving 路径。",
-      "optimization": "用 vFlow/vTensor 表达并 lowering 完整稀疏流水，接入真实 paged decode backend。"
-    },
-    {
-      "lineId": "sparse-attention-history-selection",
       "nodeId": "m-glm52-indexshare",
       "role": "core",
       "importance": "supporting",
@@ -5550,28 +5525,6 @@
       ]
     },
     {
-      "id": "r-sparse-indexcache-vortex",
-      "from": "m-indexcache",
-      "to": "m-vortex",
-      "nature": "parallel-route",
-      "directed": false,
-      "contexts": [
-        {
-          "lineId": "sparse-attention-history-selection",
-          "priorProblem": "IndexCache 定义跨层索引复用策略，Vortex 处理 selector、top-k 与 paged KV backend 的通用实现。",
-          "optimization": "Vortex 提供 vFlow/vTensor 编程与 lowering surface；IndexCache 保留模型专属的共享与刷新策略。"
-        }
-      ],
-      "evidence": [
-        {
-          "kind": "mechanism-experiment",
-          "sourceUrl": "/papers/2606.06453-vortex-sparse-attention-serving/",
-          "locator": "跨论文关系；IndexCache 与 programmable indexer operators",
-          "claim": "两者分别覆盖 reuse policy 与 serving execution surface，公开材料尚未证明直接集成。"
-        }
-      ]
-    },
-    {
       "id": "r-sparse-indexcache-glm52",
       "from": "m-indexcache",
       "to": "m-glm52-indexshare",
@@ -6440,23 +6393,6 @@
           "role": "evidence",
           "nodeIds": [],
           "note": "该材料提供实验、模型报告或系统背景证据，不单独创建方法节点。"
-        }
-      ]
-    },
-    {
-      "slug": "2606.06453-vortex-sparse-attention-serving",
-      "firstPublic": {
-        "value": "2026-06",
-        "precision": "month"
-      },
-      "uses": [
-        {
-          "lineId": "sparse-attention-history-selection",
-          "role": "contribution",
-          "nodeIds": [
-            "m-vortex"
-          ],
-          "note": "Vortex 提供 selector、top-k 与 paged KV 的可编程 serving 执行节点。"
         }
       ]
     },

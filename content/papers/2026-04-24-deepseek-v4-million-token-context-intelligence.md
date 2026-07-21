@@ -43,7 +43,7 @@ DeepSeek-V4 的核心是把“百万 token 上下文”做成一个端到端系�
 2. CSA / HCA、mHC、Muon、MoE、Multi-Token Prediction (MTP) 之间的角色分工。
 3. DeepSeek-V4 的训练与推理 infra 如何支撑长上下文和 post-training。
 4. post-training 为什么从 mixed RL 转向 specialist training + on-policy distillation。
-5. 它和本地已存档 DeepSeek-R1、Muon、training-inference mismatch (TIM)、inference determinism、Lightning Attention、MiniMax-M1、Vortex、HybridFlow、tool-use RL 的关系。
+5. 它和本地已存档 DeepSeek-R1、Muon、training-inference mismatch (TIM)、inference determinism、Lightning Attention、MiniMax-M1、HybridFlow、tool-use RL 的关系。
 
 判断边界：
 
@@ -540,9 +540,9 @@ Instruct / Max mode：
 - 与 [2025-09-10](/papers/2025-09-10-defeating-nondeterminism-llm-inference/) 和 [2605.14220](/papers/2605.14220-training-inference-mismatch-llm-rl/)：V4 明确把 batch-invariant / deterministic kernels 和 train-inference bitwise alignment 做成内核库目标，和这两篇关于 nondeterminism / TIM 的问题定义直接相接。
 - 与 [2606.04101](/papers/2606.04101-ultraep-rack-scale-moe-load-balancing/)：UltraEP 讨论 MoE training / serving prefill 的 expert load balancing，V4 报告展示 DeepSeek 自身在 fine-grained EP、MegaMoE expert waves、communication-computation overlap、MoE determinism 上的工程方案。
 - 与 [2405.17381](/papers/2405.17381-various-lengths-constant-speed-lightning-attention/) 和 [2506.13585](/papers/2506.13585-minimax-m1-cispo-lightning-attention/)：三者都服务 long context / long output。Lightning Attention 用 recurrent/linear attention 降低长序列成本；MiniMax-M1 把 Lightning Attention 放进 long-output RL；DeepSeek-V4 用 CSA/HCA compressed attention 与 KV cache systems 支撑 1M context。
-- 与 [2606.06453](/papers/2606.06453-vortex-sparse-attention-serving/)、[2511.02749](/papers/2511.02749-span-queries-cache-attention-locality/) 和 [2405.19888](/papers/2405.19888-parrot-semantic-variable-llm-serving/)：V4 从模型内部压缩 KV 和 attention；这些 serving 论文从 sparse attention DSL、span query/cache locality、application DAG 显式化角度降低真实 workload 成本。
+- 与 [2511.02749](/papers/2511.02749-span-queries-cache-attention-locality/) 和 [2405.19888](/papers/2405.19888-parrot-semantic-variable-llm-serving/)：V4 从模型内部压缩 KV 和 attention；这些 serving 论文从 span query/cache locality 与 application DAG 显式化角度降低真实 workload 成本。
 - 与 [2409.19256](/papers/2409.19256-hybridflow-rlhf-framework/) 和 [2606.00135](/papers/2606.00135-agentic-tool-calling-rl-training/)：V4 post-training 展示了 ultra-long-context RL/OPD、rollout WAL、sandbox infra 和 tool-call schema 的生产级实现，补充了 RLHF/RLVR systems 与 tool-use RL 的工程侧细节。
-- 关系状态：本笔记的 `跨论文关系` 已将 DeepSeek-V4 连接到 DeepSeek-R1、Muon、TIM、inference determinism、Lightning Attention、MiniMax-M1、UltraEP、Vortex、HybridFlow 和 tool-use RL。
+- 关系状态：本笔记的 `跨论文关系` 已将 DeepSeek-V4 连接到 DeepSeek-R1、Muon、TIM、inference determinism、Lightning Attention、MiniMax-M1、UltraEP、HybridFlow 和 tool-use RL。
 
 ## Reference Intake Brief
 

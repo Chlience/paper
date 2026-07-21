@@ -194,7 +194,6 @@ Attention：
 - 与 [Grape](/papers/2026-07-13-grape-micro-task-agentic-workflow-serving/)：Grape 的跨 task 增量 prefill 在理想 causal 计算上与整段 prefill 等价，同时会改变 chunk 与 batch composition。本文提示有限精度 reduction order 可能改变 logits，随后由 autoregressive sampling 放大为轨迹差异；Grape 用于评测或 RL rollout 时应补充 batch-invariant output consistency 检查。
 - 与 `2409.19256` 的作者关系：未发现作者重叠。主题关系强。`2409.19256` 解决 RLHF/VERL 的多模型 dataflow、rollout 与 training backend 编排；本文补充 rollout inference 的 batch-invariant determinism 和 sampler/trainer 数值一致性。
 - 与 `2606.00135` 的作者关系：未发现作者重叠。主题关系强。`2606.00135` 讨论 tool-calling RL 中 harness、rollout 和 policy update 成本；本文解释 rollout backend 的 batch/slicing 数值差异可能改变轨迹与 logprob，从而影响 on-policy 训练和评测可复现性。
-- 与 `2606.06453` 的作者关系：未发现作者重叠。系统关系强。两者都关注 LLM serving 和 attention/kernel 层细节；Vortex 优化 sparse attention serving，本文优化 deterministic inference 所需的 batch-invariant attention。
 - 与 `2605.30290` 的作者关系：未发现作者重叠。主题关系中等。Self-trained verification 依赖 verifier/reasoner 多轮闭环，本文提示推理 determinism 会影响 test-time refinement 和 verifier-guided rollout 的复现。
 - 与 `2606.04075` 的作者关系：未发现作者重叠。主题关系中等。SocioHack 关注 RL 优化闭环中的 reward hacking；本文关注数值和 serving 调度带来的轨迹差异，二者都提醒优化闭环中的环境细节会改变行为。
 - 与 `2510.19315` 的作者关系：未发现作者重叠。关系较弱；一个是 serving 数值系统，一个是 Transformer 理论复杂性。
@@ -206,7 +205,7 @@ Attention：
 ### Target
 
 - Intended target system: `content/papers/2025-09-10-defeating-nondeterminism-llm-inference.md` 论文与技术文章存档。
-- Existing related assets: `content/utility/papers-index.md`、`2409.19256-hybridflow-rlhf-framework.md`、`2606.00135-agentic-tool-calling-rl-training.md`、`2606.06453-vortex-sparse-attention-serving.md`。
+- Existing related assets: `content/utility/papers-index.md`、`2409.19256-hybridflow-rlhf-framework.md`、`2606.00135-agentic-tool-calling-rl-training.md`。
 - Proposed form: 新建独立 Markdown 文档，并更新总索引。
 
 ### Reusable Elements
@@ -222,7 +221,7 @@ Attention：
 - Unsourced or unverifiable claims: 文章事实来自 Thinking Machines Lab 原文和公开代码仓库；跨论文关系为本地分析判断。
 - Tone/brand mismatch: 保持本目录技术笔记风格。
 - Safety/compliance issues: 该文是推理可复现和系统确定性主题，无直接安全滥用流程。
-- Overlap with existing assets: 与 `2409.19256`、`2606.00135`、`2606.06453` 有交叉，但本文作为 inference determinism 节点单独存档。
+- Overlap with existing assets: 与 `2409.19256`、`2606.00135` 有交叉，但本文作为 inference determinism 节点单独存档。
 
 ### Skipped
 
