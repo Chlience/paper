@@ -16,8 +16,12 @@ import {
 const clone = (value) => structuredClone(value);
 const catalogVenues = getCatalogVenues(registry);
 const firstCatalogVenueId = catalogVenues[0].id;
-const validationCodes = (calendar) =>
-  new Set(validateLatestEditionCalendar(calendar, registry).map((error) => error.code));
+const validationCodes = (calendar, options) =>
+  new Set(validateLatestEditionCalendar(calendar, registry, options).map((error) => error.code));
+const hasValidationIssue = (calendar, code, subject, options) =>
+  validateLatestEditionCalendar(calendar, registry, options).some(
+    (error) => error.code === code && error.subject === subject,
+  );
 
 test('registry keeps the 58-venue baseline and excludes CVPR and ICCV from the 56-venue catalog', () => {
   assert.equal(registry.venues.length, 58);
@@ -28,8 +32,9 @@ test('registry keeps the 58-venue baseline and excludes CVPR and ICCV from the 5
   assert.deepEqual(validateConferenceRegistry(registry), []);
 });
 
-test('latest-editions schema v2 covers every registry venue exactly once', () => {
-  assert.equal(latestEditionCalendar.schemaVersion, 2);
+test('latest-editions schema v3 covers every registry venue exactly once', () => {
+  assert.equal(latestEditionCalendar.schemaVersion, 3);
+  assert.equal(latestEditionCalendar.freshnessPolicy.baselineAt, '2026-07-16');
 
   const registryVenueIds = registry.venues.map((venue) => venue.id).sort();
   const latestEditionVenueIds = Object.keys(latestEditionCalendar.venues).sort();
@@ -47,19 +52,97 @@ test('latest-editions schema v2 covers every registry venue exactly once', () =>
   assert.ok(validationCodes(unknownVenue).has('latest-edition-unknown-venue'));
 });
 
-test('every public catalog venue uses the 2026 edition', () => {
-  for (const venue of catalogVenues) {
-    assert.equal(
-      latestEditionCalendar.venues[venue.id]?.year,
-      2026,
-      `${venue.id} must use its 2026 edition`,
-    );
-  }
+test('latest editions can mix the current and next calendar years', () => {
+  const mixedCalendar = clone(latestEditionCalendar);
+  mixedCalendar.venues[firstCatalogVenueId] = {
+    ...mixedCalendar.venues[firstCatalogVenueId],
+    year: 2027,
+    submissionDeadline: '2026-09-01 23:59 AoE',
+    conferenceDates: '2027-05-01–2027-05-05',
+    sourceUrls: ['https://example.com/conference/2027'],
+  };
+  assert.equal(
+    validationCodes(mixedCalendar, { asOf: '2026-07-16' }).has('latest-edition-shape'),
+    false,
+  );
 
-  const staleCalendar = clone(latestEditionCalendar);
-  staleCalendar.venues[firstCatalogVenueId].year = 2025;
-  staleCalendar.venues[firstCatalogVenueId].conferenceDates = '2025-05-01–2025-05-05';
-  assert.ok(validationCodes(staleCalendar).has('latest-edition-catalog-year'));
+  mixedCalendar.venues[firstCatalogVenueId].year = 2028;
+  mixedCalendar.venues[firstCatalogVenueId].submissionDeadline = '2027-09-01 23:59 AoE';
+  mixedCalendar.venues[firstCatalogVenueId].conferenceDates = '2028-05-01–2028-05-05';
+  assert.ok(
+    validationCodes(mixedCalendar, { asOf: '2026-07-16' }).has('latest-edition-shape'),
+  );
+});
+
+test('every finished conference enters the same recurring latest-edition review cycle', () => {
+  const reviewCalendar = clone(latestEditionCalendar);
+  reviewCalendar.verifiedAt = '2026-02-10';
+  reviewCalendar.freshnessPolicy.baselineAt = '2026-01-01';
+  reviewCalendar.venues[firstCatalogVenueId] = {
+    year: 2026,
+    submissionDeadline: '2025-09-01 23:59 AoE',
+    conferenceDates: '2026-01-01–2026-01-02',
+    sourceUrls: ['https://example.com/conference/2026'],
+    confidence: 'high',
+  };
+
+  assert.equal(
+    hasValidationIssue(
+      reviewCalendar,
+      'latest-edition-review-overdue',
+      firstCatalogVenueId,
+      { asOf: '2026-02-15' },
+    ),
+    false,
+  );
+  assert.ok(
+    hasValidationIssue(
+      reviewCalendar,
+      'latest-edition-review-overdue',
+      firstCatalogVenueId,
+      { asOf: '2026-02-16' },
+    ),
+  );
+
+  reviewCalendar.venues[firstCatalogVenueId].nextEditionCheck = {
+    status: 'not-announced',
+    checkedAt: '2026-02-16',
+    sourceUrls: ['https://example.com/conference/'],
+  };
+  assert.equal(
+    hasValidationIssue(
+      reviewCalendar,
+      'latest-edition-review-overdue',
+      firstCatalogVenueId,
+      { asOf: '2026-02-16' },
+    ),
+    false,
+  );
+  assert.ok(
+    hasValidationIssue(
+      reviewCalendar,
+      'latest-edition-review-overdue',
+      firstCatalogVenueId,
+      { asOf: '2026-04-03' },
+    ),
+  );
+
+  reviewCalendar.venues[firstCatalogVenueId] = {
+    year: 2027,
+    submissionDeadline: '2026-09-01 23:59 AoE',
+    conferenceDates: '2027-05-01–2027-05-05',
+    sourceUrls: ['https://example.com/conference/2027'],
+    confidence: 'high',
+  };
+  assert.equal(
+    hasValidationIssue(
+      reviewCalendar,
+      'latest-edition-review-overdue',
+      firstCatalogVenueId,
+      { asOf: '2026-04-03' },
+    ),
+    false,
+  );
 });
 
 test('acceptedPapersUrl is optional and uses HTTP(S) when present', () => {
@@ -106,6 +189,22 @@ test('latest-editions validates verification date, deadlines, conference ranges,
     invalidSources.venues[firstCatalogVenueId].sourceUrls = sourceUrls;
     assert.ok(validationCodes(invalidSources).has('latest-edition-source'));
   }
+
+  const invalidFreshnessPolicy = clone(latestEditionCalendar);
+  invalidFreshnessPolicy.freshnessPolicy.recheckIntervalDays = 0;
+  assert.ok(
+    validationCodes(invalidFreshnessPolicy).has('latest-edition-freshness-policy'),
+  );
+
+  const invalidNextEditionCheck = clone(latestEditionCalendar);
+  invalidNextEditionCheck.venues[firstCatalogVenueId].nextEditionCheck = {
+    status: 'guessed',
+    checkedAt: '2026-07-16',
+    sourceUrls: [],
+  };
+  assert.ok(
+    validationCodes(invalidNextEditionCheck).has('latest-edition-next-check'),
+  );
 });
 
 test('deadline ordering uses the earliest full date and sends undated entries to the end', () => {

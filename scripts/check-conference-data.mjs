@@ -12,9 +12,12 @@ const [registry, latestEditionCalendar] = await Promise.all([
   readConferenceRegistry(),
   readLatestEditionCalendar(),
 ]);
+const validationDate = new Date().toISOString().slice(0, 10);
 const errors = [
   ...validateConferenceRegistry(registry),
-  ...validateLatestEditionCalendar(latestEditionCalendar, registry),
+  ...validateLatestEditionCalendar(latestEditionCalendar, registry, {
+    asOf: validationDate,
+  }),
 ];
 
 if (errors.length > 0) {

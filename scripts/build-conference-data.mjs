@@ -27,9 +27,12 @@ const build = async () => {
     readConferenceRegistry(),
     readLatestEditionCalendar(),
   ]);
+  const validationDate = new Date().toISOString().slice(0, 10);
   failOnErrors([
     ...validateConferenceRegistry(registry),
-    ...validateLatestEditionCalendar(latestEditionCalendar, registry),
+    ...validateLatestEditionCalendar(latestEditionCalendar, registry, {
+      asOf: validationDate,
+    }),
   ]);
 
   const excludedVenueIds = getCatalogExcludedVenueIds(registry);

@@ -33,8 +33,13 @@ Latest editions 按 venue ID 保存页面展示的最新届次信息：
 
 ```json
 {
-  "schemaVersion": 2,
-  "verifiedAt": "2026-07-16",
+  "schemaVersion": 3,
+  "verifiedAt": "2026-07-21",
+  "freshnessPolicy": {
+    "baselineAt": "2026-07-16",
+    "postConferenceGraceDays": 30,
+    "recheckIntervalDays": 45
+  },
   "venues": {
     "icml": {
       "year": 2026,
@@ -58,6 +63,8 @@ Latest editions 按 venue ID 保存页面展示的最新届次信息：
 - `sourceUrls`：用于核对截稿、会期和届次的官方依据。
 - `confidence`：对当前届次信息完整性的维护信心。
 - `note`：记录多轮截稿、会期范围、会议谱系或来源口径。
+- `freshnessPolicy`：统一设置固定启用基线、会后首次复核宽限期和后续复核间隔。`baselineAt` 只记录这套门禁的迁移起点，普通数据更新保持该值不变。
+- `nextEditionCheck`：当前届次结束且下一届信息尚不完整时，记录 `status`、`checkedAt` 和官方 `sourceUrls`。`status` 使用 `not-announced` 或 `schedule-incomplete`。
 
 页面构建时按 venue ID 连接 registry 与 latest editions。两个文件必须保持 venue ID 唯一且完整对应。
 
@@ -69,15 +76,23 @@ Latest editions 按 venue ID 保存页面展示的最新届次信息：
 - 页面只输出会议级信息。仓库中不再维护 `data/conferences/<year>/` 论文数据集、论文 taxonomy、预计算 facets 或会议论文查询 JSON。
 - Accepted Papers 链接使用 HTTP(S) 安全检查后输出，并保留官方 URL，便于用户判断列表范围和版本。
 
+## 届次时效性
+
+- 同一目录快照可以同时包含当年和下一年届次。验证日期之后超过一年的届次会被拒绝，避免误录远期年份。
+- 每场公开目录会议在正式会期结束 30 天后进入下一届复核周期。完整日程已经公布时更新 `year`、截稿、会期和来源；信息尚未完整时使用 `nextEditionCheck` 保留本次官方核验。
+- `nextEditionCheck` 有效期为 45 天。到期后需要再次核验，直至下一届完整信息进入主记录。
+- 构建和 `check:conferences` 使用当前 UTC 日期执行时效性校验。`.github/workflows/check-conference-freshness.yml` 每周运行同一检查，使目录在没有代码提交时仍能发现逾期条目。
+
 ## 更新流程
 
 会议元数据通过普通代码变更人工维护：
 
 1. 从会议官网或主办学会页面确认最新届次、主论文截稿和正式会期。
-2. 更新 `latest-editions.json` 的对应条目与 `verifiedAt`，在 `sourceUrls` 保留官方依据。
-3. 官方公布录用论文后，补充 `acceptedPapersUrl`。链接应直达当届的官方列表，避免使用搜索结果页、非官方聚合页或单篇论文页。
-4. 新增或调整会议身份、CCF 领域或公开目录范围时，同步更新 `registry.json`，并确认 `latest-editions.json` 存在同 ID 条目。
-5. 运行会议元数据校验和完整静态站点构建，检查页面数量、日期、空链接状态和官方跳转。
+2. 信息完整时更新 `latest-editions.json` 的对应条目与 `verifiedAt`，在 `sourceUrls` 保留官方依据。
+3. 下一届尚未公布或日程不完整时，更新该条目的 `nextEditionCheck`，记录核验日期、状态和官方入口。
+4. 官方公布录用论文后，补充 `acceptedPapersUrl`。链接应直达当届的官方列表，避免使用搜索结果页、非官方聚合页或单篇论文页。
+5. 新增或调整会议身份、CCF 领域或公开目录范围时，同步更新 `registry.json`，并确认 `latest-editions.json` 存在同 ID 条目。
+6. 运行会议元数据校验和完整静态站点构建，检查页面数量、日期、空链接状态和官方跳转。
 
 会议目录不运行论文抓取适配器、周期性论文同步或自动论文数据 PR。上游页面改版不会触发本仓库对论文条目的增删。
 

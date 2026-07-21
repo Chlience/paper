@@ -1,7 +1,12 @@
 {
-  "schemaVersion": 2,
-  "verifiedAt": "2026-07-16",
-  "definition": "Latest complete edition no later than the 2026 catalog year; main/full-paper deadlines, official event dates, and an official accepted-papers URL when published.",
+  "schemaVersion": 3,
+  "verifiedAt": "2026-07-21",
+  "definition": "Latest complete edition published by the verification date; main/full-paper deadlines, official event dates, and an official accepted-papers URL when published.",
+  "freshnessPolicy": {
+    "baselineAt": "2026-07-16",
+    "postConferenceGraceDays": 30,
+    "recheckIntervalDays": 45
+  },
   "venues": {
     "ppopp": {
       "year": 2026,
@@ -474,14 +479,14 @@
       "note": "IEEE VIS 2026 full paper；必需摘要截止为 2026-03-21。"
     },
     "aaai": {
-      "year": 2026,
-      "submissionDeadline": "2025-08-01 23:59 AoE (UTC−12)",
-      "conferenceDates": "2026-01-20–2026-01-27",
+      "year": 2027,
+      "submissionDeadline": "2026-07-28 23:59 AoE (UTC−12)",
+      "conferenceDates": "2027-02-16–2027-02-23",
       "sourceUrls": [
-        "https://aaai.org/conference/aaai/aaai-26/"
+        "https://aaai.org/conference/aaai/aaai-27/"
       ],
       "confidence": "high",
-      "note": "Main Technical Track full paper；摘要截止 2025-07-25，补充材料和代码截止 2025-08-04。"
+      "note": "Main Technical Track full paper；摘要截止 2026-07-21，补充材料和代码截止 2026-07-31。"
     },
     "neurips": {
       "year": 2026,

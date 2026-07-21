@@ -1,5 +1,4 @@
 const idPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
-const conferenceCatalogYear = 2026;
 
 const issue = (code, subject, message) => ({ code, subject, message });
 
@@ -98,13 +97,17 @@ export const validateConferenceRegistry = (registry) => {
   return errors;
 };
 
-export const validateLatestEditionCalendar = (calendar, registry) => {
-  if (calendar?.schemaVersion !== 2 || !calendar?.venues || typeof calendar.venues !== 'object') {
+export const validateLatestEditionCalendar = (
+  calendar,
+  registry,
+  { asOf = calendar?.verifiedAt } = {},
+) => {
+  if (calendar?.schemaVersion !== 3 || !calendar?.venues || typeof calendar.venues !== 'object') {
     return [
       issue(
         'latest-edition-calendar-shape',
         'latest-editions.json',
-        'Expected schemaVersion 2 with a venues object.',
+        'Expected schemaVersion 3 with a venues object.',
       ),
     ];
   }
@@ -116,8 +119,38 @@ export const validateLatestEditionCalendar = (calendar, registry) => {
     );
   }
 
+  const asOfValid = isValidIsoDate(asOf);
+  if (!asOfValid) {
+    errors.push(
+      issue('latest-edition-as-of', 'latest-editions.json', 'Validation date must use YYYY-MM-DD.'),
+    );
+  }
+
+  const freshnessPolicy = calendar.freshnessPolicy;
+  const freshnessPolicyValid =
+    freshnessPolicy &&
+    isValidIsoDate(freshnessPolicy.baselineAt) &&
+    isValidIsoDate(calendar.verifiedAt) &&
+    freshnessPolicy.baselineAt <= calendar.verifiedAt &&
+    Number.isInteger(freshnessPolicy.postConferenceGraceDays) &&
+    freshnessPolicy.postConferenceGraceDays >= 0 &&
+    freshnessPolicy.postConferenceGraceDays <= 365 &&
+    Number.isInteger(freshnessPolicy.recheckIntervalDays) &&
+    freshnessPolicy.recheckIntervalDays >= 1 &&
+    freshnessPolicy.recheckIntervalDays <= 365;
+  if (!freshnessPolicyValid) {
+    errors.push(
+      issue(
+        'latest-edition-freshness-policy',
+        'latest-editions.json',
+        'freshnessPolicy needs a baselineAt date no later than verifiedAt plus postConferenceGraceDays and recheckIntervalDays between 0 and 365.',
+      ),
+    );
+  }
+
   const registryVenueIds = new Set(registry.venues.map((venue) => venue.id));
   const excludedVenueIds = new Set(registry.catalogScope?.excludedVenueIds ?? []);
+  const asOfYear = asOfValid ? Number(asOf.slice(0, 4)) : null;
   for (const [venueId, latestEdition] of Object.entries(calendar.venues)) {
     if (!registryVenueIds.has(venueId)) {
       errors.push(issue('latest-edition-unknown-venue', venueId, 'Venue is not in registry.json.'));
@@ -145,11 +178,12 @@ export const validateLatestEditionCalendar = (calendar, registry) => {
           new Date(start).getUTCFullYear() === latestEdition?.year
         );
       });
+    const maximumEditionYear = asOfYear === null ? null : asOfYear + 1;
 
     if (
       !Number.isInteger(latestEdition?.year) ||
       latestEdition.year < 2000 ||
-      latestEdition.year > conferenceCatalogYear ||
+      (maximumEditionYear !== null && latestEdition.year > maximumEditionYear) ||
       !submissionDeadlineValid ||
       !conferenceRangesValid
     ) {
@@ -157,22 +191,72 @@ export const validateLatestEditionCalendar = (calendar, registry) => {
         issue(
           'latest-edition-shape',
           venueId,
-          'Entry needs an edition year no later than 2026, deadline text, and one or more ordered YYYY-MM-DD–YYYY-MM-DD conference ranges.',
+          `Entry needs an edition year no later than ${maximumEditionYear ?? 'the validation horizon'}, deadline text, and one or more ordered YYYY-MM-DD–YYYY-MM-DD conference ranges.`,
         ),
       );
     }
-    if (
-      Number.isInteger(latestEdition?.year) &&
-      !excludedVenueIds.has(venueId) &&
-      latestEdition.year !== conferenceCatalogYear
-    ) {
+
+    const nextEditionCheck = latestEdition?.nextEditionCheck;
+    const nextEditionCheckValid =
+      nextEditionCheck === undefined ||
+      (nextEditionCheck &&
+        ['not-announced', 'schedule-incomplete'].includes(nextEditionCheck.status) &&
+        isValidIsoDate(nextEditionCheck.checkedAt) &&
+        Array.isArray(nextEditionCheck.sourceUrls) &&
+        nextEditionCheck.sourceUrls.length > 0 &&
+        nextEditionCheck.sourceUrls.every(isHttpUrl));
+    const conferenceEnd = conferenceRangesValid
+      ? Math.max(
+          ...conferenceRanges.map((range) => Date.parse(`${range[2]}T00:00:00Z`)),
+        )
+      : Number.NaN;
+    const asOfTimestamp = asOfValid ? Date.parse(`${asOf}T00:00:00Z`) : Number.NaN;
+    const nextEditionCheckAt =
+      nextEditionCheckValid && nextEditionCheck
+        ? Date.parse(`${nextEditionCheck.checkedAt}T00:00:00Z`)
+        : Number.NaN;
+    const nextEditionCheckTimingValid =
+      !nextEditionCheck ||
+      (Number.isFinite(nextEditionCheckAt) &&
+        Number.isFinite(conferenceEnd) &&
+        nextEditionCheckAt >= conferenceEnd &&
+        (!asOfValid || nextEditionCheckAt <= asOfTimestamp));
+    if (!nextEditionCheckValid || !nextEditionCheckTimingValid) {
       errors.push(
         issue(
-          'latest-edition-catalog-year',
+          'latest-edition-next-check',
           venueId,
-          `Public catalog venues must use the ${conferenceCatalogYear} edition.`,
+          'nextEditionCheck needs a supported status, an in-range checkedAt date after the conference, and official HTTP(S) sources.',
         ),
       );
+    }
+
+    if (
+      asOfValid &&
+      freshnessPolicyValid &&
+      conferenceRangesValid &&
+      isValidIsoDate(calendar.verifiedAt) &&
+      !excludedVenueIds.has(venueId)
+    ) {
+      const validNextCheckAt =
+        nextEditionCheckValid && nextEditionCheckTimingValid ? nextEditionCheckAt : Number.NaN;
+      const baselineCheckAt = Number.isFinite(validNextCheckAt)
+        ? validNextCheckAt
+        : Date.parse(`${freshnessPolicy.baselineAt}T00:00:00Z`);
+      const dayMs = 24 * 60 * 60 * 1000;
+      const reviewDueAt = Math.max(
+        conferenceEnd + freshnessPolicy.postConferenceGraceDays * dayMs,
+        baselineCheckAt + freshnessPolicy.recheckIntervalDays * dayMs,
+      );
+      if (asOfTimestamp > conferenceEnd && asOfTimestamp > reviewDueAt) {
+        errors.push(
+          issue(
+            'latest-edition-review-overdue',
+            venueId,
+            `Latest-edition review was due by ${new Date(reviewDueAt).toISOString().slice(0, 10)}. Update the edition or record nextEditionCheck.`,
+          ),
+        );
+      }
     }
     if (!['high', 'medium', 'unknown'].includes(latestEdition?.confidence)) {
       errors.push(
