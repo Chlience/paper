@@ -46,13 +46,26 @@ const reviewStatus = normalizePaperReviewStatus(paper.reviewStatus);
         </p>
       )}
       <div class="paper-meta">
-        <span class:list={['paper-review-badge', `is-${reviewStatus}`]}>{paperReviewLabel(reviewStatus)}</span>
-        {paper.pinned && <span class="paper-pin">Pinned</span>}
-        {paper.firstArchivedAt && <span>{paper.firstArchivedAt}</span>}
-        {paper.updatedAt && paper.updatedAt !== paper.firstArchivedAt && <span>Updated {paper.updatedAt}</span>}
-        {paper.reviewedAt && <span>Reviewed {paper.reviewedAt}</span>}
-        {paper.sourceUrl && <a href={paper.sourceUrl}>Source</a>}
-        {paper.tags.map((tag, index) => <a href={`/topics/#tag-${paper.tagIds[index]}`}>{tag}</a>)}
+        <div class="paper-meta-line" role="group" aria-label="论文状态与来源">
+          <span class:list={['paper-meta-item', 'paper-review-badge', `is-${reviewStatus}`]}>
+            {paperReviewLabel(reviewStatus)}
+          </span>
+          {paper.pinned && <span class="paper-meta-item paper-pin">Pinned</span>}
+          {paper.firstArchivedAt && <span class="paper-meta-item">Archived {paper.firstArchivedAt}</span>}
+          {paper.updatedAt && paper.updatedAt !== paper.firstArchivedAt && (
+            <span class="paper-meta-item">Updated {paper.updatedAt}</span>
+          )}
+          {paper.reviewedAt && <span class="paper-meta-item">Reviewed {paper.reviewedAt}</span>}
+          {paper.sourceUrl && <a class="paper-meta-item" href={paper.sourceUrl}>Source</a>}
+        </div>
+        {paper.tags.length > 0 && (
+          <div class="paper-meta-line paper-meta-topics" role="group" aria-label="论文主题">
+            <span class="paper-meta-label mono">Topics</span>
+            {paper.tags.map((tag, index) => (
+              <a class="paper-topic" href={`/topics/#tag-${paper.tagIds[index]}`}>{tag}</a>
+            ))}
+          </div>
+        )}
       </div>
     </header>
 

@@ -669,18 +669,28 @@ h3 {
   font-weight: 720;
 }
 
-.paper-row-meta,
 .paper-meta {
+  display: grid;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.paper-row-meta,
+.paper-meta-line {
   display: flex;
+  align-items: center;
   flex-wrap: wrap;
   gap: 8px;
+}
+
+.paper-row-meta {
   margin-top: 14px;
 }
 
 .paper-row-meta span,
 .paper-row-meta a,
-.paper-meta span,
-.paper-meta a {
+.paper-meta-item,
+.paper-topic {
   min-height: 28px;
   display: inline-flex;
   align-items: center;
@@ -696,10 +706,17 @@ h3 {
 }
 
 .paper-row-meta .topic-link,
-.paper-meta a[href*="#tag-"] {
+.paper-topic {
   border-color: oklch(80% 0.045 155);
   color: oklch(36% 0.1 155);
   background: oklch(96% 0.025 155);
+}
+
+.paper-meta-label {
+  margin-right: 4px;
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 720;
 }
 
 .paper-row-meta .paper-row-pin,
