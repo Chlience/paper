@@ -577,7 +577,7 @@
     {
       "id": "kv-representation-compression-sharding",
       "name": "KV 表示的压缩与可分片化",
-      "status": "formal",
+      "status": "candidate",
       "facets": [
         "context-state",
         "agent-runtime"
@@ -603,13 +603,9 @@
           "latent 分片怎样与 KV 量化、prefix sharing、paged allocator、DPA 和 DCP 联合设计？"
         ]
       },
-      "statusBasis": {
-        "kind": "multiple-archived-methods",
-        "nodeIds": [
-          "m-mla",
-          "m-tpla"
-        ]
-      }
+      "currentState": "MLA 已有本地完整笔记，TPLA 由 ASPLOS 2026 论文与公开来源提供外部证据，两者保留直接问题—响应关系。",
+      "evidenceGap": "当前只有 MLA 具备本地完整归档，TPLA 的机制、实验与适用边界尚未沉淀为独立论文笔记。",
+      "promotionCondition": "完成 TPLA 独立归档并复核每 rank KV 驻留量、collective 成本与端到端吞吐证据。"
     },
     {
       "id": "kv-tiered-residency-prefetch",
@@ -691,7 +687,7 @@
     {
       "id": "attention-state-ownership",
       "name": "请求、序列与阶段之间的 Attention 状态所有权",
-      "status": "formal",
+      "status": "candidate",
       "facets": [
         "agent-runtime",
         "context-state"
@@ -717,13 +713,9 @@
           "Runtime 能否根据实时 batch 形态，在请求轴 ownership 与 token 轴 ownership 之间安全迁移已有 KV？"
         ]
       },
-      "statusBasis": {
-        "kind": "multiple-archived-methods",
-        "nodeIds": [
-          "m-dpa",
-          "m-dcp"
-        ]
-      }
+      "currentState": "DPA 与 DCP 分别由 SGLang 和 vLLM Ascend 官方实现文档支撑，并保留请求轴与 token 轴两类 ownership 的平行关系。",
+      "evidenceGap": "DPA 与 DCP 当前均为外部节点，缺少本地独立笔记对统一模型、硬件和请求分布下的容量与通信边界进行复核。",
+      "promotionCondition": "至少完成 DPA 或 DCP 的独立归档，并补足两种 ownership 方案在统一协议下的直接比较证据。"
     },
     {
       "id": "token-speculative-decoding",
@@ -2261,11 +2253,17 @@
         "sourceUrl": "https://arxiv.org/abs/2508.15881"
       },
       "source": {
-        "archiveState": "embedded",
-        "materialSlug": "2026-07-16-mla-tensor-parallel-cache-sharding",
+        "archiveState": "external",
         "canonicalUrl": "https://arxiv.org/abs/2508.15881",
         "title": "Tensor-Parallel Latent Attention"
       },
+      "recognition": [
+        {
+          "kind": "top-venue",
+          "sourceUrl": "https://www.asplos-conference.org/asplos2026/program/index.html",
+          "note": "TPLA 收录于 ASPLOS 2026 正式会议日程。"
+        }
+      ],
       "summary": "分片 MLA latent 并 collective 恢复输出。"
     },
     {
@@ -2346,11 +2344,17 @@
         "sourceUrl": "https://github.com/sgl-project/sglang/pull/1970"
       },
       "source": {
-        "archiveState": "embedded",
-        "materialSlug": "2026-07-16-mla-tensor-parallel-cache-sharding",
+        "archiveState": "external",
         "canonicalUrl": "https://github.com/sgl-project/sglang/pull/1970",
         "title": "SGLang Data Parallel Attention"
       },
+      "recognition": [
+        {
+          "kind": "production-adoption",
+          "sourceUrl": "https://github.com/sgl-project/sglang/blob/main/docs/basic_usage/deepseek_v3.md",
+          "note": "SGLang 在 DeepSeek-V3 官方部署文档中提供 DPA 配置、适用负载与吞吐证据。"
+        }
+      ],
       "summary": "按请求分配 Attention ownership。"
     },
     {
@@ -2363,11 +2367,17 @@
         "sourceUrl": "https://docs.vllm.ai/projects/ascend/en/main/developer_guide/Design_Documents/context_parallel.html"
       },
       "source": {
-        "archiveState": "embedded",
-        "materialSlug": "2026-07-16-mla-tensor-parallel-cache-sharding",
+        "archiveState": "external",
         "canonicalUrl": "https://docs.vllm.ai/projects/ascend/en/main/developer_guide/Design_Documents/context_parallel.html",
         "title": "Decode Context Parallelism"
       },
+      "recognition": [
+        {
+          "kind": "production-adoption",
+          "sourceUrl": "https://docs.vllm.ai/projects/ascend/en/main/developer_guide/Design_Documents/context_parallel.html",
+          "note": "vLLM Ascend 官方设计与使用文档记录 DCP 的 KV sequence sharding、通信和实现路径。"
+        }
+      ],
       "summary": "沿 token 轴分片单请求 KV。"
     },
     {
@@ -5922,40 +5932,6 @@
     }
   ],
   "materials": [
-    {
-      "slug": "2026-07-16-mla-tensor-parallel-cache-sharding",
-      "firstPublic": {
-        "value": "2026-07",
-        "precision": "month"
-      },
-      "uses": [
-        {
-          "lineId": "kv-representation-compression-sharding",
-          "role": "contribution",
-          "nodeIds": [
-            "m-tpla"
-          ],
-          "note": "该材料直接提供本线的方法、系统或训练机制节点。"
-        },
-        {
-          "lineId": "attention-state-ownership",
-          "role": "contribution",
-          "nodeIds": [
-            "m-dpa",
-            "m-dcp"
-          ],
-          "note": "该材料直接提供本线的方法、系统或训练机制节点。"
-        },
-        {
-          "lineId": "context-parallel-attention",
-          "role": "contribution",
-          "nodeIds": [
-            "m-dcp"
-          ],
-          "note": "该材料直接提供本线的方法、系统或训练机制节点。"
-        }
-      ]
-    },
     {
       "slug": "2607.02980-hils-attention-infinite-context",
       "firstPublic": {

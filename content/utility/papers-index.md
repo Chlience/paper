@@ -15,7 +15,6 @@ Updated-At: 2026-07-18
 | 简称 | 时间 | 核心信号 |
 | --- | --- | --- |
 | [Long-Horizon Agents Survey](/papers/202607.1328-towards-long-horizon-agents-survey/) | 2026年7月 | 用 $\mathrm{Agent}=\pi_\theta\oplus H$ 与 H1/H2/H3 分层，将长程能力统一为运行时 harness 和模型内部优化共同作用的系统属性。 |
-| [MLA TP](/papers/2026-07-16-mla-tensor-parallel-cache-sharding/) | 2026年7月 | 将 MLA 在纯 head-TP 下的 latent KV 复制写成随 TP degree 衰减的每卡压缩公式，并把 DP Attention、DCP/CP、P/D、量化/分层缓存与 TPLA/GLA/MLRA 统一为缓存所有权和 latent 可分片两类解法。 |
 | [HiLS-Attention](/papers/2607.02980-hils-attention-infinite-context/) | 2026年7月 | 用 hierarchical softmax 分配 chunk mass，再在选中 chunk 内做 token attention，实现可训练的长上下文稀疏注意力。 |
 | [SPORK](/papers/2607.03333-spork-self-speculative-agentic-inference/) | 2026年7月 | 让目标模型从共享 KV prefix 自预测下一次工具调用，提前执行只读工具，并用 target verification 回收失败 probe 的 token 前缀。 |
 | [ReOPD](/papers/2607.04763-reopd-prefix-replay-agentic-distillation/) | 2026年7月 | 把教师 RL 轨迹回放为按轮次衰减采样的前缀，只让学生在当前步生成并接受教师分布监督，从而在学生蒸馏阶段关闭环境。 |

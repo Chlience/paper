@@ -18,7 +18,6 @@ Reviewed-At: 2026-07-18 17:42
 - Current version read: blog bundle last modified 2026-06-17; official docs and Hugging Face model card accessed 2026-06-24
 - Related paper: [2602.15763](/papers/2602.15763-glm-5-agentic-engineering/)
 - Related method: [IndexCache](/papers/2603.12201-indexcache-cross-layer-index-reuse/)
-- Related systems synthesis: [MLA TP cache sharding](/papers/2026-07-16-mla-tensor-parallel-cache-sharding/)
 - Subjects: long-horizon coding agents, 1M context, sparse attention, speculative decoding, agentic RL, anti-hack training
 - Review / OpenReview: 未发现 GLM-5.2 release blog 对应的官方公开审稿 forum；OpenReview 检索主要返回其它论文/材料引用 GLM-5.2 或相关 GLM-5 系列。
 
@@ -344,8 +343,6 @@ $$
 - 组合成立依赖相邻层选中位置高度重叠，以及 anchor indexer 能兼顾后续 Shared layers。GLM-5.2 从 128K mid-training 阶段引入固定 FSSS 以适应该结构；官方材料尚未披露具体 indexer distillation loss。
 
 ### 4. GLM-5.2 的 MLA TP 部署边界
-
-- [MLA TP cache sharding 综合](/papers/2026-07-16-mla-tensor-parallel-cache-sharding/) 集中给出 replicated latent 的官方代码证据、$R_{\mathrm{TP}}$ 推导，以及 DP Attention、DCP/CP、P/D、量化、分层缓存与 TPLA/GLA/MLRA 的完整分类。GLM-5.2 文保留模型特有的部署判断。
 - GLM-5.2 的 $R_{\mathrm{TP}}\approx56.9/T$ 说明 TP8 仍有约 $7.1\times$ 的 core cache 元素数优势；TP degree 继续上升时，每 rank 的相对收益逐步下降。IndexShare 减少 selector 次数，DSA top-$k$ 减少活跃 KV 读取，两者均不直接减少每层完整 MLA 历史 cache。
 - GLM-5.2 的生产配置需要同时统计 MLA latent、decoupled RoPE key、DSA index-key、MTP/KVShare state 与 allocator 开销。高并发 decode 可优先评估 DP Attention + DeepEP + FP8 KV；单请求超长上下文评估 DCP/CP；Prefill 与 Decode 的最优拓扑差异较大时使用 P/D；HBM residency 仍不足时再叠加 HiCache/HiSparse。
 
@@ -384,7 +381,6 @@ $$
 - 与 [2602.15763](/papers/2602.15763-glm-5-agentic-engineering/)：GLM-5.2 是 GLM-5 系列后续 release，沿用 744B-A40B、DSA、MTP、slime 和 agentic engineering 方向，并把 context 从 200K 推到 1M。
 - 与 [IndexCache](/papers/2603.12201-indexcache-cross-layer-index-reuse/)：IndexCache 给出 Full / Shared 执行结构、training-free loss search 与 training-aware multi-layer distillation；GLM-5.2 将跨层 top-$k$ reuse 固化为 `index_topk_freq=4` 的 FSSS IndexShare，并扩展到 MTP iteration。公开资料没有确认 GLM-5.2 的 exact index loss。
 - 与 [SGLang PR #29421](https://github.com/sgl-project/sglang/pull/29421)：该实现为 GLM-5.2 的 DSA Prefill CP 增加 cache layer split，在 CP=4、8192 tokens 下把 per-rank KV/indexer cache 从 0.77 GB 降到 0.20 GB，并让 PD decode 从全部 owner ranks 拉取对应 layer ranges；这一区分同时展示 TTFT compute parallelism 与 KV ownership 的容量作用。
-- 与 [MLA TP cache sharding](/papers/2026-07-16-mla-tensor-parallel-cache-sharding/)：该综合承接 GLM-5.2 的 $56.9/T$ 压缩公式，区分请求、token、latent 与 cache-tier 四类 ownership 方案，并将 IndexShare 与 MLA KV footprint 放在两个独立成本轴上。
 - 与 [slime 官方仓库](https://github.com/THUDM/slime)：GLM-5.2 博文是 slime 支撑 GLM-5.2 的直接应用证据，覆盖 compact trajectory、sub-agent workflow、parallel OPD、KV-cache FP8 和 training-serving 配置复用。
 - 与 [2606.12370](/papers/2606.12370-bebop-mtp-rejection-sampling-rl-training/)：GLM-5.2 的 MTP 明确受 Bebop 启发，引入 rejection sampling 和 end-to-end TV loss，提高 speculative decoding acceptance。
 - 与 [2605.14220](/papers/2605.14220-training-inference-mismatch-llm-rl/) 和 [2025-09-10](/papers/2025-09-10-defeating-nondeterminism-llm-inference/)：MTP 的训练-推理路径一致性、DSA indexer reuse、rollout logprob consistency 都属于 train/inference consistency 的系统问题。
@@ -400,7 +396,7 @@ $$
 ### Target
 
 - Intended target system: 维护 GLM-5.2 技术博客笔记，同步索引行和 GLM / slime / long-horizon agentic RL 关系章节。
-- Existing related assets: [2602.15763](/papers/2602.15763-glm-5-agentic-engineering/)；[IndexCache](/papers/2603.12201-indexcache-cross-layer-index-reuse/)；[MLA TP cache sharding](/papers/2026-07-16-mla-tensor-parallel-cache-sharding/)；[2606.12370](/papers/2606.12370-bebop-mtp-rejection-sampling-rl-training/)；[2026-04-24](/papers/2026-04-24-deepseek-v4-million-token-context-intelligence/)。
+- Existing related assets: [2602.15763](/papers/2602.15763-glm-5-agentic-engineering/)；[IndexCache](/papers/2603.12201-indexcache-cross-layer-index-reuse/)；[2606.12370](/papers/2606.12370-bebop-mtp-rejection-sampling-rl-training/)；[2026-04-24](/papers/2026-04-24-deepseek-v4-million-token-context-intelligence/)。
 - Proposed form: 维护 `2026-06-16-glm-5-2-long-horizon-tasks.md`；同步索引行和对应论文的关系章节。
 
 ### Reusable Elements
