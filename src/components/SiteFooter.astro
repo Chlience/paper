@@ -1,10 +1,46 @@
 ---
 import data from '../generated/paper-data.json';
+import { paths } from '../lib/site';
+
+const generatedDate = new Date(data.generatedAt).toISOString().slice(0, 10);
+const archiveLinks = [
+  { label: '论文', href: paths.papers },
+  { label: '主题', href: paths.topics },
+  { label: '研究主线', href: paths.mainlines },
+  { label: '作者', href: paths.authors },
+  { label: '会议', href: paths.conferences },
+];
 ---
 
 <footer class="site-footer">
   <div class="container site-footer-inner">
-    <p>Chlience Paper Archive</p>
-    <p class="muted">Generated {new Date(data.generatedAt).toISOString().slice(0, 10)} · {data.papers.length} notes</p>
+    <div class="site-footer-main">
+      <div class="site-footer-identity">
+        <a class="site-footer-brand" href={paths.home}>
+          <span class="brand-mark" aria-hidden="true"></span>
+          <span>Chlience Paper Archive</span>
+        </a>
+        <p>保存来源、证据边界与跨论文关系的研究阅读档案。</p>
+      </div>
+
+      <nav class="site-footer-nav" aria-label="档案入口">
+        {archiveLinks.map((item) => <a href={item.href}>{item.label}</a>)}
+      </nav>
+    </div>
+
+    <div class="site-footer-colophon">
+      <p class="site-footer-build mono">
+        <span>{data.papers.length} notes</span>
+        <span>{data.authors.length} authors</span>
+        <span>Built <time datetime={generatedDate}>{generatedDate}</time></span>
+      </p>
+
+      <nav class="site-footer-utility" aria-label="档案说明">
+        <a href={paths.archive}>索引</a>
+        <a href={paths.workflow}>工作流</a>
+        <a href={paths.template}>模板</a>
+        <a href={paths.mainSite}>chlience.com <span aria-hidden="true">↗</span></a>
+      </nav>
+    </div>
   </div>
 </footer>

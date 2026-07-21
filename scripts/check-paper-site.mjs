@@ -268,6 +268,19 @@ if (!(await exists(homeIndexPath))) {
   if (!homeHtml.includes('href="/papers/?review=approved"')) {
     fail('dist/index.html is missing the approved paper archive link.');
   }
+  for (const marker of [
+    'class="site-footer-main"',
+    'class="site-footer-colophon"',
+    'aria-label="档案入口"',
+    `>${data.papers.length} notes<`,
+    `>${data.authors.length} authors<`,
+    'href="/workflow/"',
+    'href="https://chlience.com"',
+  ]) {
+    if (!homeHtml.includes(marker)) {
+      fail(`dist/index.html is missing the polished footer marker: ${marker}`);
+    }
+  }
 }
 
 for (const file of htmlFiles) {
