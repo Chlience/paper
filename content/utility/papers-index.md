@@ -15,7 +15,7 @@ Updated-At: 2026-07-21
 | 简称 | 时间 | 核心信号 |
 | --- | --- | --- |
 | [Long-Horizon Agents Survey](/papers/202607.1328-towards-long-horizon-agents-survey/) | 2026年7月 | 用基础策略与运行时 harness 的组合关系以及 H1/H2/H3 分层，将长程能力统一为运行时系统和模型内部优化共同作用的系统属性。 |
-| [HiLS-Attention](/papers/2607.02980-hils-attention-infinite-context/) | 2026年7月 | 用 hierarchical softmax 分配 chunk mass，再在选中 chunk 内做 token attention，实现可训练的长上下文稀疏注意力。 |
+| [HiLS-Attention](/papers/2607.02980-hils-attention-infinite-context/) | 2026年7月 | HiLS-Attention 用 landmark 压缩键、熵偏置与分层 softmax 训练 chunk 选择器，使 8K 训练的 345M 模型在 4M RULER 单针检索仍得 96 分，并在 512K 单 H800、batch size 1 的同 Triton 基线上将 prefill 与 decode 分别加速 13.5 倍和 15.7 倍。 |
 | [SPORK](/papers/2607.03333-spork-self-speculative-agentic-inference/) | 2026年7月 | 让目标模型从共享 KV prefix 自预测下一次工具调用，提前执行只读工具，并用 target verification 回收失败 probe 的 token 前缀。 |
 | [ReOPD](/papers/2607.04763-reopd-prefix-replay-agentic-distillation/) | 2026年7月 | 把教师 RL 轨迹回放为按轮次衰减采样的前缀，只让学生在当前步生成并接受教师分布监督，从而在学生蒸馏阶段关闭环境。 |
 | [CompactionRL](/papers/2607.05378-compactionrl-context-compaction-agent-rl/) | 2026年7月 | 把同一策略生成的 context summary 纳入 PPO，用全 batch token 归一化和跨 segment GAE 在固定峰值上下文内训练长程 coding agent。 |
@@ -57,14 +57,14 @@ Updated-At: 2026-07-21
 | [Preference–Dynamics](/papers/2026-04-30-preferences-multi-agent-online-learning/) | 2026年4月 | 证明 club 对子博弈的 FTRL 稳定性充分且在无 ties 时等价，但对一般纯策略集合张成区域只给出必要约束，并用依赖收益幅度的 leaklessness 恢复吸引性充分条件。 |
 | [IndexCache](/papers/2603.12201-indexcache-cross-layer-index-reuse/) | 2026年3月 | 用 loss-guided layer search 或 multi-layer distillation 划分 Full / Shared 层，跨层复用 top-k positions 并跳过最多 75% 的 DSA indexer 计算。 |
 | [DFlash](/papers/2602.06036-dflash-block-diffusion-speculative-decoding/) | 2026年2月 | 把 block diffusion 用作 speculative drafter，并用 target hidden features 条件化整块候选生成。 |
-| [Qwen3-Coder-Next](/papers/2603.00729-qwen3-coder-next-agentic-coding/) | 2026年2月 | 用 executable environments、repo mid-training、tool-calling RL 与 expert distillation 提升低 active-compute coding agent。 |
+| [Qwen3-Coder-Next](/papers/2603.00729-qwen3-coder-next-agentic-coding/) | 2026年2月 | Qwen3-Coder-Next 在 80B 总参数中每步激活 3B 参数，并用可执行仓库任务、长上下文中训、多模板工具训练、软件工程强化学习与专家蒸馏构建编码智能体，在三种 SWE-Bench Verified scaffold 上达到 70.6% 至 71.3% 解决率，报告尚未拆分各训练组件的净贡献。 |
 | [Kimi K2.5 / PARL](/papers/2602.02276-kimi-k2-5-visual-agentic-intelligence/) | 2026年2月 | trainable orchestrator + frozen subagents，用 parallel / finish / performance reward 训练并行编排。 |
 | [OTB](/papers/2602.07078-optimal-token-baseline-long-horizon-llm-rl/) | 2026年2月 | 推导 token-level variance-minimizing baseline，并用 logit-gradient proxy 近似长轨迹 policy-gradient 权重。 |
 | [MaxRL](/papers/2602.02710-maximum-likelihood-reinforcement-learning/) | 2026年2月 | 把 binary-outcome RLVR 写成成功 rollout likelihood 最大化，优化 pass@k 覆盖。 |
 | [GLM-5](/papers/2602.15763-glm-5-agentic-engineering/) | 2026年2月 | 把 DSA / MTP / Muon 模型栈、软件工程 mid-training、agentic RL 与异步 rollout 组合为 agentic engineering pipeline。 |
 | [ThunderAgent](/papers/2602.13692-thunderagent-program-aware-agentic-inference/) | 2026年2月 | 把多轮 tool-use 的 phase、KV footprint 与 backend placement 合并为 LLM Program，用 phase-first pause / restore 和全局 waiting queue 控制工具等待期间的 KV working set。 |
 | [SDFT](/papers/2601.19897-self-distillation-continual-learning/) | 2026年1月 | 让 student 在自身轨迹上接受 query-specific demonstration-conditioned EMA 同模型的 token distribution，在提升新任务准确率时显著减少旧能力遗忘。 |
-| [LLM-in-Sandbox](/papers/2601.16206-computer-environments-agentic-intelligence/) | 2026年1月 | 把通用计算机抽象为最小 Docker sandbox，验证文件、代码和外部资源能提升非代码任务与可训练 agent 能力。 |
+| [LLM-in-Sandbox](/papers/2601.16206-computer-environments-agentic-intelligence/) | 2026年1月 | LLM-in-Sandbox 只给模型 shell、文件编辑和完成信号，使部分模型—任务组合获得最高 15.5 个百分点增益，并让 Qwen3-4B 经文件型通用任务强化学习后把平均交互轮次从 23.7 降到 7.0，这些数值来自允许联网的特定环境配置。 |
 | [Engram](/papers/2601.07372-conditional-memory-engram-scalable-lookup/) | 2026年1月 | 用 hashed N-gram lookup 和 context-aware gating 增加可离线扩展的 conditional memory。 |
 | [Trust Region Masking](/papers/2512.23075-trust-region-masking-long-horizon-llm-rl/) | 2025年12月 | 用序列级 max-token divergence 约束 rollout-policy mismatch，控制长轨迹 surrogate error。 |
 | [Interplay](/papers/2512.07783-interplay-pretraining-midtraining-rl-reasoning/) | 2025年12月 | 用合成环境拆分 pre / mid / RL training，识别 primitive seed、edge of competence 与 bridge data 条件。 |

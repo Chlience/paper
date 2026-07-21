@@ -1282,7 +1282,7 @@ test('the maintenance exemption accepts canonical v2 and v2.1 review status line
 });
 
 test('metadata CLI accepts the v2 not-found review classification', async () => {
-  const canary = await fs.readFile('content/papers/2603.00729-qwen3-coder-next-agentic-coding.md', 'utf8');
+  const canary = await fs.readFile('content/papers/2512.02556-deepseek-v3-2-open-large-language-models.md', 'utf8');
   assert.match(canary, /^- Page type: not-found$/m);
 
   const result = spawnSync(process.execPath, ['scripts/check-paper-metadata.mjs'], {
