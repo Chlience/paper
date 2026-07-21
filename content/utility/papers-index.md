@@ -73,6 +73,7 @@ Updated-At: 2026-07-21
 | [DeepSeek-V3.2](/papers/2512.02556-deepseek-v3-2-open-large-language-models/) | 2025年12月 | 用 DSA 降低 128K attention 成本，再以四层 GRPO consistency control 和 85,267 条真实/合成 agent tasks 扩展 reasoning 与 tool-use。 |
 | [Seer](/papers/2511.14617-seer-online-context-learning-llm-rl/) | 2025年11月 | 利用同 prompt rollout 的上下文相关性做 divided rollout、speculative scheduling 和 suffix-tree reuse。 |
 | [Span Query](/papers/2511.02749-span-queries-cache-attention-locality/) | 2025年11月 | 让客户端声明可重排 message spans，以表达式树重写提升 KV cache 与 attention locality。 |
+| [DRPO](/papers/2510.04474-drpo-decoupled-reward-policy-optimization/) | 2025年10月 | DRPO 在正确 rollout 内部按长度奖励重加权、独立压低错误 rollout，使 7B 蒸馏推理模型平均生成长度减少 51% 时性能仅相对下降 2.6%；证据限于 8K 预算、每题 8 条采样和 token 长度效率口径。 |
 | [BroRL](/papers/2510.01180-brorl-broadened-rl-exploration/) | 2025年10月 | 把 RLVR scaling 轴扩展到 rollout width，并用 correct-mass decomposition 解释宽采样收益。 |
 | [ImpossibleBench](/papers/2510.20270-impossiblebench-test-case-exploitation/) | 2025年10月 | 构造 specification 与 tests 冲突的 coding tasks，用 cheating rate 测量 test-case exploitation。 |
 | [Laminar](/papers/2510.12633-laminar-asynchronous-rl-post-training/) | 2025年10月 | 让完成轨迹独立进入 experience buffer，并以 CPU/RDMA relay 和同版本 repack 解除全局 batch / 权重同步 barrier。 |

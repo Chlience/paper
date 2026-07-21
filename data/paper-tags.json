@@ -78,6 +78,7 @@
   "2604.04648-caution-pessimism-best-of-n-reward-hacking": ["reward-hacking", "test-time-scaling", "reward-modeling", "ai-safety"],
   "2510.20270-impossiblebench-test-case-exploitation": ["benchmark", "reward-hacking", "coding-agent", "ai-safety"],
   "2510.01180-brorl-broadened-rl-exploration": ["rollout-optimization", "reasoning-rl", "rl-algorithm", "rl-theory"],
+  "2510.04474-drpo-decoupled-reward-policy-optimization": ["rl-algorithm", "reasoning-rl", "reward-modeling", "rl-theory"],
   "2511.14617-seer-online-context-learning-llm-rl": ["rollout-optimization", "rl-infrastructure", "speculative-decoding", "reasoning-rl"],
   "2512.07783-interplay-pretraining-midtraining-rl-reasoning": ["reasoning-analysis", "reasoning-rl"],
   "2509.25123-rl-compositional-skill-acquisition": ["reasoning-analysis", "reasoning-rl", "benchmark"],

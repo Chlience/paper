@@ -11587,5 +11587,111 @@
         "url": "https://x.com/SharonYixuanLi"
       }
     ]
+  },
+  {
+    "slug": "gang-li-tamu",
+    "name": "Gang Li",
+    "aliases": ["Gang Li"],
+    "matchByName": false,
+    "affiliations": ["Texas A&M University"],
+    "huggingFace": "https://huggingface.co/ganglii",
+    "topics": ["reinforcement learning", "efficient reasoning", "reasoning language models", "optimization"],
+    "notes": "DRPO equal-contribution first author from Texas A&M University and a coauthor of DisCO. Explicit paper links are required because Gang Li is a common name.",
+    "sources": [
+      {
+        "label": "DRPO",
+        "url": "https://arxiv.org/abs/2510.04474"
+      },
+      {
+        "label": "DisCO",
+        "url": "https://arxiv.org/abs/2505.12366"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Gang_Li17"
+      },
+      {
+        "label": "Hugging Face",
+        "url": "https://huggingface.co/ganglii"
+      }
+    ]
+  },
+  {
+    "slug": "yan-chen-uva",
+    "name": "Yan Chen",
+    "aliases": ["Yan Chen"],
+    "matchByName": false,
+    "affiliations": ["University of Virginia"],
+    "topics": ["reinforcement learning", "efficient reasoning", "reasoning language models"],
+    "notes": "DRPO equal-contribution first author from the University of Virginia. Explicit paper links are required because Yan Chen is a common name.",
+    "sources": [
+      {
+        "label": "DRPO",
+        "url": "https://arxiv.org/abs/2510.04474"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Yan_Chen38"
+      }
+    ]
+  },
+  {
+    "slug": "ming-lin-oracle",
+    "name": "Ming Lin",
+    "aliases": ["Ming Lin"],
+    "matchByName": false,
+    "affiliations": ["Oracle Cloud Infrastructure"],
+    "homepage": "https://minglin-home.github.io/",
+    "topics": ["reinforcement learning", "reasoning language models", "optimization", "generative AI"],
+    "notes": "DRPO and DisCO coauthor working in Oracle Cloud Infrastructure Generative AI Service during the paper period. The DRPO camera-ready author block omits his affiliation superscript, so the affiliation is resolved through his homepage and OpenReview profile.",
+    "sources": [
+      {
+        "label": "DRPO",
+        "url": "https://arxiv.org/abs/2510.04474"
+      },
+      {
+        "label": "DisCO",
+        "url": "https://arxiv.org/abs/2505.12366"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://minglin-home.github.io/"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Ming_Lin4"
+      }
+    ]
+  },
+  {
+    "slug": "tianbao-yang",
+    "name": "Tianbao Yang",
+    "aliases": ["Tianbao Yang"],
+    "affiliations": ["Texas A&M University"],
+    "homepage": "https://people.tamu.edu/~tianbao-yang/",
+    "topics": ["optimization", "machine learning", "reinforcement learning", "reasoning language models"],
+    "notes": "DRPO and DisCO coauthor, Texas A&M University professor, and director of the OptMAI Lab. His institutional profile provides the stable affiliation and faculty role.",
+    "sources": [
+      {
+        "label": "DRPO",
+        "url": "https://arxiv.org/abs/2510.04474"
+      },
+      {
+        "label": "DisCO",
+        "url": "https://arxiv.org/abs/2505.12366"
+      },
+      {
+        "label": "Texas A&M University",
+        "url": "https://engineering.tamu.edu/cse/profiles/yang-tianbao.html"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://people.tamu.edu/~tianbao-yang/"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Tianbao_Yang1"
+      }
+    ]
   }
 ]
