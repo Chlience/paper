@@ -224,6 +224,22 @@ const parseArchiveMonth = (value) => {
   return match ? Number(match[1]) * 12 + Number(match[2]) : null;
 };
 
+const mathDelimiterPattern = /(\$\$|\$[^$\n]+\$|\\\(|\\\)|\\\[|\\\]|\\begin\{|\\end\{)/;
+
+export const parseArchiveCoreSignals = (indexMarkdown) => {
+  const table = firstMarkdownTable(getSection(indexMarkdown, '当前收录'));
+  const signals = new Map();
+  if (!table) return signals;
+
+  for (const row of table.rows) {
+    if (row.length !== 3) continue;
+    const paperPath = row[0].links.length === 1 ? row[0].links[0] : '';
+    const slug = paperPath.match(/^\/papers\/([^/#?]+)\/$/)?.[1] ?? '';
+    if (slug) signals.set(slug, row[2].text.trim());
+  }
+  return signals;
+};
+
 export const validateArchiveIndex = (indexMarkdown, knownPaperSlugs) => {
   const errors = [];
   const table = firstMarkdownTable(getSection(indexMarkdown, '当前收录'));
@@ -282,10 +298,19 @@ export const validateArchiveIndex = (indexMarkdown, knownPaperSlugs) => {
     }
 
     const signal = signalCell.text.trim();
+    const sentenceMarks = signal.match(/[。！？!?]/g) ?? [];
     if (!signal) {
       errors.push(issue('missing-core-signal', subject, 'Archive index core signal is required.'));
-    } else if (signal.length < 8 || !/[。！？.!?]$/.test(signal)) {
-      errors.push(issue('core-signal-format', subject, 'Core signal must be one concise sentence.'));
+    } else if (signal.length < 8 || sentenceMarks.length !== 1 || !/[。！？!?]$/.test(signal)) {
+      errors.push(issue('core-signal-format', subject, 'Core signal must be one complete natural-language sentence.'));
+    } else if (mathDelimiterPattern.test(signal)) {
+      errors.push(
+        issue(
+          'core-signal-math',
+          subject,
+          'Core signal must describe the contribution in natural language without formula delimiters.',
+        ),
+      );
     }
   }
 
@@ -327,6 +352,7 @@ export const validatePaperRecord = async ({
   const reviewedAt = getTopLevelField(markdown, 'Reviewed-At');
   const updatedMinute = updatedAt.match(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}/)?.[0] ?? '';
   const visibleMarkdown = markdown.replace(/<!--[\s\S]*?-->/g, (comment) => comment.replace(/[^\n]/g, ' '));
+  const conclusion = getSection(markdown, '一句话结论');
 
   if (!workflowVersion && !legacyPaperSlugs.has(slug)) {
     errors.push(issue('missing-workflow-version', slug, 'New notes must declare Workflow version: v2.1.'));
@@ -373,6 +399,15 @@ export const validatePaperRecord = async ({
     if (!sectionForGroup(markdown, group)) {
       errors.push(issue('missing-core-section', slug, `Missing or empty section: ${group.name}.`));
     }
+  }
+  if (mathDelimiterPattern.test(conclusion)) {
+    errors.push(
+      issue(
+        'conclusion-math',
+        slug,
+        '一句话结论 must use natural-language descriptions instead of formula delimiters.',
+      ),
+    );
   }
   if (!hasTraceableSource(source, knownPaperSlugs, isStructured && materialType === 'composite')) {
     errors.push(issue('missing-source-link', slug, 'Source must contain an external URL or a valid archived paper link.'));

@@ -22,12 +22,12 @@ const reviewStatus = normalizePaperReviewStatus(paper.reviewStatus);
 <Layout
   active="papers"
   title={`${paper.title} | Chlience Paper Archive`}
-  description={paper.summary}
+  description={paper.coreSignal}
   canonicalPath={canonicalPath}
   ogType="article"
   jsonLd={createArticleJsonLd({
     title: paper.title,
-    description: paper.summary,
+    description: paper.coreSignal,
     url: articleUrl,
     firstArchivedAt: paper.firstArchivedAt,
     updatedAt: paper.updatedAt,
@@ -38,7 +38,7 @@ const reviewStatus = normalizePaperReviewStatus(paper.reviewStatus);
     <header class="paper-header">
       <p class="eyebrow mono">{paper.slug}</p>
       <h1>{paper.title}</h1>
-      <p class="deck">{paper.summary}</p>
+      <div class="deck" set:html={paper.conclusionHtml} />
       {paper.authors && paper.authors !== 'Unknown' && (
         <p class="paper-authors">
           <span class="paper-authors-label mono">Authors</span>

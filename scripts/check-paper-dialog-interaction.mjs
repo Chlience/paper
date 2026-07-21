@@ -81,15 +81,28 @@ try {
     awaitPromise: true,
     returnByValue: true,
     expression: `(async () => {
+      const waitForResultCount = async (expectedCount) => {
+        for (let attempt = 0; attempt < 100; attempt += 1) {
+          const count = document.querySelectorAll('[data-paper-search-result]').length;
+          if (count === expectedCount) return;
+          await new Promise((resolve) => setTimeout(resolve, 20));
+        }
+        throw new Error(
+          \`Timed out waiting for \${expectedCount} search results; received \${document.querySelectorAll(
+            '[data-paper-search-result]',
+          ).length}.\`,
+        );
+      };
+
       window.scrollTo(0, 720);
       const widthBefore = document.documentElement.clientWidth;
       const headerWidthBefore = document.querySelector('.site-header')?.getBoundingClientRect().width ?? 0;
       document.querySelector('[data-paper-search-open]').click();
       await new Promise((resolve) => requestAnimationFrame(resolve));
       const input = document.querySelector('[data-paper-search-input]');
-      input.value = 'flashattention';
+      input.value = 'flashattention hbm';
       input.dispatchEvent(new Event('input', { bubbles: true }));
-      await new Promise((resolve) => requestAnimationFrame(resolve));
+      await waitForResultCount(2);
 
       const results = [...document.querySelectorAll('[data-paper-search-result]')];
       results[1].dispatchEvent(new MouseEvent('pointermove', { bubbles: true }));
@@ -136,7 +149,7 @@ try {
     })()`,
   });
 
-  assert.equal(result.result.value.resultCount, 2, 'flashattention query should produce two results');
+  assert.equal(result.result.value.resultCount, 2, 'flashattention hbm query should produce two results');
   assert.deepEqual(result.result.value.activeIndexes, [1], 'pointer movement should move active highlight to hovered result');
   assert.deepEqual(result.result.value.selectedIndexes, [1], 'aria-selected should follow the active highlight');
   assert.equal(result.result.value.htmlOverflowY, 'hidden', 'opening search should hide the page scrollbar');

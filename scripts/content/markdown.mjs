@@ -212,6 +212,19 @@ export const getSection = (markdown, heading) => {
   return collected.join('\n').trim();
 };
 
+export const stripSection = (markdown, heading) => {
+  const lines = markdown.split('\n');
+  const start = lines.findIndex((line) => line.trim() === `## ${heading}`);
+  if (start === -1) return markdown.trim();
+
+  const relativeEnd = lines.slice(start + 1).findIndex((line) => line.startsWith('## '));
+  const end = relativeEnd === -1 ? lines.length : start + 1 + relativeEnd;
+  return [...lines.slice(0, start), ...lines.slice(end)]
+    .join('\n')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+};
+
 export const getSourceFieldRaw = (markdown, names) => {
   const labels = Array.isArray(names) ? names : [names];
   for (const label of labels) {

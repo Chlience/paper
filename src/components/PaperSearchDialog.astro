@@ -192,7 +192,7 @@ const searchItems = buildPaperSearchItems(data.papers);
                     aria-selected="${index === activeIndex ? 'true' : 'false'}"
                   >
                     <span class="paper-search-result-title">${escapeHtml(item.title)}</span>
-                    <span class="paper-search-result-summary">${escapeHtml(item.summary)}</span>
+                    <span class="paper-search-result-summary">${escapeHtml(item.coreSignal)}</span>
                     <span class="paper-search-result-meta mono">
                       ${escapeHtml(item.firstArchivedAt)}
                       ${item.authors ? ` · ${escapeHtml(item.authors)}` : ''}

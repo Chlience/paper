@@ -413,6 +413,14 @@ h3 {
   line-height: 1.7;
 }
 
+.deck p {
+  margin: 0;
+}
+
+.deck p + p {
+  margin-top: 0.8em;
+}
+
 .archive-panel {
   padding: 8px 0 0;
   border-top: 1px solid oklch(78% 0.035 178);

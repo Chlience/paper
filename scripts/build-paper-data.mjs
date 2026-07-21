@@ -20,11 +20,14 @@ import {
   getTopLevelField,
   getUpdatedAt,
   renderMarkdown,
+  stripMarkdown,
   stripPageChrome,
   stripPublicPaperMaintenance,
   stripPublicUtilityMaintenance,
+  stripSection,
 } from './content/markdown.mjs';
 import { generatedDir, generatedFile, readPaperEntries, readUtilityEntries } from './content/repository.mjs';
+import { parseArchiveCoreSignals } from './content/paper-workflow.mjs';
 import {
   tagDefinitions as controlledTagDefinitions,
   tagFacets as controlledTagFacets,
@@ -32,17 +35,18 @@ import {
 } from './content/tagging.mjs';
 import { normalizePaperReviewStatus } from '../src/lib/paper-review.mjs';
 
-const buildPaperRecords = async (paperEntries) => {
+const buildPaperRecords = async (paperEntries, coreSignals) => {
   const papers = [];
 
   for (const entry of paperEntries) {
     const { file, slug, sourcePath } = entry;
     const raw = await fs.readFile(sourcePath, 'utf8');
     const title = getSourceField(raw, 'Title') || getFirstHeading(raw, slug);
-    const oneSentence = getSection(raw, '一句话结论');
-    const pageMarkdown = stripPublicPaperMaintenance(stripPageChrome(raw));
+    const conclusionMarkdown = getSection(raw, '一句话结论');
+    const pageMarkdown = stripSection(stripPublicPaperMaintenance(stripPageChrome(raw)), '一句话结论');
     const authors = getSourceField(raw, ['Authors', 'Author']) || 'Unknown';
     const assignedTags = tagsForPaper(slug);
+    const coreSignal = stripMarkdown(coreSignals.get(slug) ?? '');
 
     papers.push({
       slug,
@@ -65,7 +69,9 @@ const buildPaperRecords = async (paperEntries) => {
       tagAliases: [...new Set(assignedTags.flatMap((tag) => tag.aliases))],
       primaryTag: assignedTags[0].label,
       primaryTagId: assignedTags[0].id,
-      summary: excerpt(oneSentence || getSection(raw, '论文脉络')),
+      coreSignal,
+      conclusion: stripMarkdown(conclusionMarkdown),
+      conclusionHtml: renderMarkdown(conclusionMarkdown),
       headings: collectHeadings(pageMarkdown),
       html: renderMarkdown(pageMarkdown),
     });
@@ -130,14 +136,14 @@ const buildAuthorRecords = (papers, authorProfiles) => {
 
     const paperList = papers
       .filter((paper) => paperSlugs.has(paper.slug))
-      .map(({ slug: paperSlug, path: paperPath, title, firstArchivedAt, updatedAt, pinned, summary, tags }) => ({
+      .map(({ slug: paperSlug, path: paperPath, title, firstArchivedAt, updatedAt, pinned, coreSignal, tags }) => ({
         slug: paperSlug,
         path: paperPath,
         title,
         firstArchivedAt,
         updatedAt,
         pinned,
-        summary,
+        coreSignal,
         tags,
       }));
 
@@ -270,8 +276,11 @@ const buildUtilityRecords = async () => {
 const build = async () => {
   const paperEntries = await readPaperEntries();
   const authorProfiles = await readAuthorProfiles();
+  const archiveIndexEntry = readUtilityEntries().find((entry) => entry.fileName === 'papers-index.md');
+  const archiveIndexMarkdown = await fs.readFile(archiveIndexEntry.sourcePath, 'utf8');
+  const coreSignals = parseArchiveCoreSignals(archiveIndexMarkdown);
 
-  const papers = await buildPaperRecords(paperEntries);
+  const papers = await buildPaperRecords(paperEntries, coreSignals);
   const { authors, authorRecordsByKey, authorRecordsBySlug, authorIdentityKeysBySlug } = buildAuthorRecords(
     papers,
     authorProfiles,

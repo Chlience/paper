@@ -23,7 +23,7 @@ Reviewed-At: 2026-07-18 17:42
 
 ## 一句话结论
 
-这篇博客给出了 RL 实践中常用 KL 估计器 `k1/k2/k3` 的最小数学解释：在只能从 $q$ 采样并能计算 $p(x),q(x)$ 的场景下，$k_1=-\log r$ 是无偏但高方差的 $\mathrm{KL}[q,p]$ 估计器；$k_2=\frac12(\log r)^2$ 是低方差但有偏的二阶近似；$k_3=(r-1)-\log r$ 通过控制变量 $r-1$ 保持无偏、非负和低方差，其中 $r=p(x)/q(x)$。对 RLHF/RLVR 来说，它最适合作为 KL 数值估计和 drift 诊断的基础，而当 KL 项被当作可微 loss 或 reward penalty 使用时，还必须单独处理采样分布、stop-gradient、序列自回归依赖和 rollout/trainer logprob 归属。
+这篇博客给出了 RL 实践中常用 KL 估计器 `k1/k2/k3` 的最小数学解释：当样本来自分布 q 且可以计算目标分布 p 与采样分布 q 的密度比时，`k1` 使用负对数密度比，保持无偏但方差较高；`k2` 使用对数密度比平方的一半，方差较低但带有二阶近似偏差；`k3` 用密度比减一作为控制变量，在保持无偏的同时获得非负和较低方差。对 RLHF/RLVR 来说，它最适合作为 KL 数值估计和 drift 诊断的基础，而当 KL 项被当作可微 loss 或 reward penalty 使用时，还必须单独处理采样分布、stop-gradient、序列自回归依赖和 rollout/trainer logprob 归属。
 
 ## 阅读目标与判断边界
 

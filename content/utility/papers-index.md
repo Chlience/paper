@@ -1,7 +1,7 @@
 # Paper Archive Index
 
 First-Archived-At: 2026-06-21
-Updated-At: 2026-07-18
+Updated-At: 2026-07-21
 
 ## 本地工作流
 
@@ -14,7 +14,7 @@ Updated-At: 2026-07-18
 
 | 简称 | 时间 | 核心信号 |
 | --- | --- | --- |
-| [Long-Horizon Agents Survey](/papers/202607.1328-towards-long-horizon-agents-survey/) | 2026年7月 | 用 $\mathrm{Agent}=\pi_\theta\oplus H$ 与 H1/H2/H3 分层，将长程能力统一为运行时 harness 和模型内部优化共同作用的系统属性。 |
+| [Long-Horizon Agents Survey](/papers/202607.1328-towards-long-horizon-agents-survey/) | 2026年7月 | 用基础策略与运行时 harness 的组合关系以及 H1/H2/H3 分层，将长程能力统一为运行时系统和模型内部优化共同作用的系统属性。 |
 | [HiLS-Attention](/papers/2607.02980-hils-attention-infinite-context/) | 2026年7月 | 用 hierarchical softmax 分配 chunk mass，再在选中 chunk 内做 token attention，实现可训练的长上下文稀疏注意力。 |
 | [SPORK](/papers/2607.03333-spork-self-speculative-agentic-inference/) | 2026年7月 | 让目标模型从共享 KV prefix 自预测下一次工具调用，提前执行只读工具，并用 target verification 回收失败 probe 的 token 前缀。 |
 | [ReOPD](/papers/2607.04763-reopd-prefix-replay-agentic-distillation/) | 2026年7月 | 把教师 RL 轨迹回放为按轮次衰减采样的前缀，只让学生在当前步生成并接受教师分布监督，从而在学生蒸馏阶段关闭环境。 |
@@ -27,7 +27,7 @@ Updated-At: 2026-07-18
 | [Learned Environment Roadmap](/papers/2026-07-13-agentic-rl-learned-environment-evolution/) | 2026年7月 | 把 Agentic RL 的环境供给串成从可复位 sandbox、有状态模拟、可执行环境合成到 language world model 的演进路线，并以 real-sim 校准闭环约束策略利用模拟误差。 |
 | [国产模型报告时间线](/papers/2026-06-23-chinese-frontier-model-reports-timeline/) | 2026年6月 | 按 MoE / 长上下文、reasoning RL、agentic infrastructure 三条主线串联 2024-2026 年国产前沿模型演进。 |
 | [SmoothAgent](/papers/2607.00151-smoothagent-lookahead-context-engineering/) | 2026年6月 | 把可提前确定的 context transformation 移入异步 lookahead stream，并用 SLO-aware scheduling 预建变换后 KV cache，降低 transform-point TTFT。 |
-| [ECHO](/papers/2606.31650-echo-selective-turn-memory-agentic-rl/) | 2026年6月 | 把 selective memory / compact / context reconstruction 做成可训练 slot。 |
+| [ECHO](/papers/2606.31650-echo-selective-turn-memory-agentic-rl/) | 2026年6月 | ECHO 为长程智能体保留带原始轮次标识的选择性记忆，用它重建有限上下文并将结果信用路由到被复用历史轮次及其选择动作，在 BrowseComp-Plus 上同时提高一次通过率并减少滚动摘要造成的轨迹膨胀。 |
 | [SPIRAL](/papers/2606.23595-spiral-learning-search-aggregate/) | 2026年6月 | 从 8 条搜索轨迹随机构造 4 个四元集合，以聚合成功率的参与集合均值更新搜索轨迹，并用同集合内中心化 reward 训练共享策略的聚合轨迹。 |
 | [Self-Improving Agents](/papers/2026-06-25-self-improving-agents-era-experience-survey/) | 2026年6月 | 把 agent 自改进抽象为 trace-to-capability 流水线，覆盖 skills、memory、environment、model 与 meta-layer。 |
 | [DSpark](/papers/2026-06-27-dspark-confidence-scheduled-speculative-decoding/) | 2026年6月 | 用 Markov head、置信度校准和硬件感知前缀调度，把并行 drafter 推进生产 serving。 |
@@ -68,7 +68,7 @@ Updated-At: 2026-07-18
 | [Engram](/papers/2601.07372-conditional-memory-engram-scalable-lookup/) | 2026年1月 | 用 hashed N-gram lookup 和 context-aware gating 增加可离线扩展的 conditional memory。 |
 | [Trust Region Masking](/papers/2512.23075-trust-region-masking-long-horizon-llm-rl/) | 2025年12月 | 用序列级 max-token divergence 约束 rollout-policy mismatch，控制长轨迹 surrogate error。 |
 | [Interplay](/papers/2512.07783-interplay-pretraining-midtraining-rl-reasoning/) | 2025年12月 | 用合成环境拆分 pre / mid / RL training，识别 primitive seed、edge of competence 与 bridge data 条件。 |
-| [RollArt](/papers/2512.22560-rollart-disaggregated-agentic-rl-training/) | 2025年12月 | 用声明式 task-domain 硬件亲和映射、轨迹级环境状态机和 $\alpha$-bounded 异步换权，协调 H800/H20/CPU/serverless 上的多任务 agentic RL。 |
+| [RollArt](/papers/2512.22560-rollart-disaggregated-agentic-rl-training/) | 2025年12月 | 用声明式 task-domain 硬件亲和映射、轨迹级环境状态机和带起始版本年龄上限的异步换权，协调 H800/H20/CPU/serverless 上的多任务 agentic RL。 |
 | [DeepSeek-V3.2](/papers/2512.02556-deepseek-v3-2-open-large-language-models/) | 2025年12月 | 用 DSA 降低 128K attention 成本，再以四层 GRPO consistency control 和 85,267 条真实/合成 agent tasks 扩展 reasoning 与 tool-use。 |
 | [Seer](/papers/2511.14617-seer-online-context-learning-llm-rl/) | 2025年11月 | 利用同 prompt rollout 的上下文相关性做 divided rollout、speculative scheduling 和 suffix-tree reuse。 |
 | [Span Query](/papers/2511.02749-span-queries-cache-attention-locality/) | 2025年11月 | 让客户端声明可重排 message spans，以表达式树重写提升 KV cache 与 attention locality。 |

@@ -470,6 +470,24 @@ test('archive index enforces the concise three-column contract', () => {
   assert.ok(rowResult.errors.some((issue) => issue.code === 'core-signal-format' && issue.subject === 'spiral'));
 });
 
+test('archive index extracts core signals and rejects formulas or multiple sentences', () => {
+  const valid = archiveIndex([
+    archiveRow('echo', 'ECHO', '2026年7月', '用可寻址记忆连接上下文重建和轨迹级信用分配。'),
+  ]);
+  const invalid = archiveIndex([
+    archiveRow('formula', 'Formula', '2026年7月', '用 $O(T^2)$ 描述序列成本。'),
+    archiveRow('multi', 'Multi', '2026年6月', '先重建上下文。再分配信用。'),
+  ]);
+
+  assert.equal(
+    workflow.parseArchiveCoreSignals(valid).get('echo'),
+    '用可寻址记忆连接上下文重建和轨迹级信用分配。',
+  );
+  const result = workflow.validateArchiveIndex(invalid, new Set(['formula', 'multi']));
+  assert.ok(result.errors.some((issue) => issue.code === 'core-signal-math' && issue.subject === 'formula'));
+  assert.ok(result.errors.some((issue) => issue.code === 'core-signal-format' && issue.subject === 'multi'));
+});
+
 test('archive index requires a current collection table', () => {
   const result = workflow.validateArchiveIndex('# Empty index', new Set(['echo']));
 
@@ -498,6 +516,12 @@ test('the default v2.1 canary validates with seven core sections', async () => {
   assert.deepEqual(result.advisories, []);
   assert.doesNotMatch(v21Paper, /Reference Intake Brief/);
   assert.doesNotMatch(v21Paper, /^## OpenReview \/ 审稿意见吸收$/m);
+});
+
+test('paper conclusions require natural-language descriptions without formulas', async () => {
+  const markdown = v21Paper.replace('结论。', '方法把序列成本从 $O(T^2)$ 降为线性。');
+  const result = await validate('v21-conclusion-math', markdown);
+  assert.ok(result.errors.some((issue) => issue.code === 'conclusion-math'));
 });
 
 test('v2.1 notes require an explicit key figure decision', async () => {
@@ -1140,6 +1164,11 @@ test('content build associates linked author profiles with their papers', async 
     assert.equal(paper.primaryTag, paper.tags[0]);
     assert.ok(paper.tagIds.length >= 1 && paper.tagIds.length <= 4);
     assert.ok(paperReview.PAPER_REVIEW_STATUSES.includes(paper.reviewStatus));
+    assert.ok(paper.coreSignal, `Missing core signal for ${paper.slug}`);
+    assert.ok(paper.conclusion, `Missing conclusion for ${paper.slug}`);
+    assert.match(paper.conclusionHtml, /^<p>[\s\S]*<\/p>\n$/);
+    assert.ok(!paper.html.includes('id="一句话结论"'));
+    assert.ok(!Object.hasOwn(paper, 'summary'));
   }
   for (const slug of ['nino-vieillard', 'gennady-pekhimenko', 'dongyang-ma-flashmemory']) {
     const author = data.authors.find((candidate) => candidate.slug === slug);
@@ -1281,6 +1310,7 @@ test('the public template exposes the v2.1 seven-section contract', async () => 
     '证据定位',
     '支持的最窄结论',
     '索引核心信号',
+    '不使用公式或 TeX 数学定界符',
   ]) {
     assert.match(template, new RegExp(fieldName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
   }
@@ -1314,6 +1344,7 @@ test('public workflow and agent instructions expose one aligned v2.1 contract', 
   }
   assert.match(workflowDoc, /从新到旧/);
   assert.match(agentInstructions, /核心信号/);
+  assert.match(agentInstructions, /均不使用公式或 TeX 数学定界符/);
   assert.match(agentInstructions, /孤立作者/);
   assert.match(agentInstructions, /Review-Status/);
   assert.match(agentInstructions, /Key figure rationale/);

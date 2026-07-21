@@ -25,7 +25,7 @@ export const GET: APIRoute = ({ site }) => {
   <link>${escapeXml(url)}</link>
   <guid>${escapeXml(url)}</guid>
   <pubDate>${escapeXml(pubDate)}</pubDate>
-  <description>${escapeXml(paper.summary)}</description>
+  <description>${escapeXml(paper.coreSignal)}</description>
 </item>`;
     })
     .join('\n');

@@ -132,6 +132,14 @@ for (const paper of data.papers) {
     fail(`${paper.file} has an invalid generated reviewStatus: ${paper.reviewStatus}`);
   }
 
+  if (!paper.coreSignal || !paper.conclusion || !paper.conclusionHtml) {
+    fail(`${paper.file} must generate coreSignal, conclusion, and conclusionHtml.`);
+  }
+
+  if (paper.html.includes('id="一句话结论"')) {
+    fail(`${paper.file} repeats the conclusion section below the detail-page deck.`);
+  }
+
   for (const pattern of forbiddenPublicPaperPatterns) {
     if (pattern.test(paper.html)) {
       fail(`${paper.file} generated HTML contains public maintenance text matching ${pattern}.`);

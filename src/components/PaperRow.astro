@@ -13,7 +13,7 @@ interface Paper {
   pinned?: boolean;
   authors?: string;
   authorEntries?: { name: string; path?: string; slug?: string; profileStatus?: string }[];
-  summary?: string;
+  coreSignal?: string;
   tags?: string[];
   tagIds?: string[];
 }
@@ -31,7 +31,7 @@ const reviewStatus = normalizePaperReviewStatus(paper.reviewStatus);
   <div class="paper-row-date mono">{formatDate(paper.firstArchivedAt)}</div>
   <div class="paper-row-main">
     <h3><a href={paper.path}>{paper.title}</a></h3>
-    {paper.summary && <p>{paper.summary}</p>}
+    {paper.coreSignal && <p>{paper.coreSignal}</p>}
     {paper.authors && paper.authors !== 'Unknown' && (
       <p class="paper-row-authors">
         <AuthorList authors={paper.authors} authorEntries={paper.authorEntries} limit={10} />

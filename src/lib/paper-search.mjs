@@ -18,7 +18,8 @@ export const buildPaperSearchItems = (papers = []) =>
     const searchText = normalize(
       [
         paper.title,
-        paper.summary,
+        paper.coreSignal,
+        paper.conclusion,
         paper.authors,
         paper.slug,
         paper.subjects,
@@ -35,7 +36,7 @@ export const buildPaperSearchItems = (papers = []) =>
       path: paper.path ?? '',
       firstArchivedAt: paper.firstArchivedAt ?? '',
       authors: paper.authors ?? '',
-      summary: compactText(paper.summary ?? ''),
+      coreSignal: compactText(paper.coreSignal ?? ''),
       tags,
       searchText,
     };
