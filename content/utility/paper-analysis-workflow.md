@@ -1,7 +1,7 @@
 # Paper Analysis Workflow
 
 First-Archived-At: 2026-06-19
-Updated-At: 2026-07-18
+Updated-At: 2026-07-21
 
 ## 目标
 
@@ -15,8 +15,8 @@ v2.1 使用固定质量底线和条件分析模块。每篇笔记都要说明研
 
 1. **受理与分类**：唯一识别材料，确认是否为新增、更新或综合条目，选择材料类型和分析模块。
 2. **来源快照**：记录规范来源、责任主体、日期、实际读取版本、访问日期和公开审稿状态。
-3. **结构与问题重建**：定位章节、图表、定理、实验、附录和代码，写清研究问题、已有方案缺口与核心假设。
-4. **机制与证据分析**：解释首要贡献的 `what / how / why / evidence / boundary`，为关键结果添加直接证据定位和最窄结论。
+3. **结构与问题重建**：定位章节、图表、定理、实验、附录和代码，写清研究问题、已有方案缺口与核心假设，并完成关键图准入判断。
+4. **机制与证据分析**：解释首要贡献的 `what / how / why / evidence / boundary`，为关键结果添加直接证据定位和最窄结论，把准入的高价值图放在首次解释对应机制或结果的位置。
 5. **外部核验**：核验 venue 与公开审稿状态；完成作者基础核验，并对高价值或高风险作者执行深入核验。
 6. **成文与关系归档**：按七个核心章节成文，在新论文中记录高置信跨论文关系；讨论内容在产生后继续回写。
 7. **发布元数据**：更新 `content/utility/papers-index.md`、`data/paper-tags.json` 和必要的 `data/authors.json`。
@@ -27,6 +27,7 @@ v2.1 使用固定质量底线和条件分析模块。每篇笔记都要说明研
 一篇材料完成归档需要同时满足以下条件：
 
 - `Source` 声明 `Workflow version: v2.1`、材料类型和 `Analysis modules`，并包含可复查的来源快照。
+- `Source` 声明 `Key figure decision: include` 或 `omit`；`include` 至少嵌入一张高价值本地图片并标注 `Image Source`，`omit` 写明 `Key figure rationale`。
 - 七个核心章节均有实质内容：`Source`、`作者与关系`、`一句话结论`、`论文脉络`、`关键实验/定理`、`局限`、`跨论文关系`。
 - `一句话结论`、索引核心信号和正文最深入部分指向同一项首要贡献。
 - 关键结果写明章节、公式、图、表、附录、页码、代码路径、commit 或 URL 证据定位，并给出证据支持的最窄结论。
@@ -53,6 +54,8 @@ v2.1 使用固定质量底线和条件分析模块。每篇笔记都要说明研
 - `Published / updated`、`Submitted` 或 `Published` 至少一项
 - `Current version read` 或 `Version / revision read` 至少一项
 - `Accessed: YYYY-MM-DD`
+- `Key figure decision`：`include` 或 `omit`
+- `Key figure rationale`：仅在 `omit` 时必填，说明信息价值、版权、安全或材料形态原因
 - `Review status`：使用固定键值记录 `page-type`、`match-confidence`、`observed-at` 和 `venue-status`
 
 推荐格式：
@@ -215,7 +218,8 @@ arXiv 论文优先以 abstract 页面作为规范来源，并补充 PDF、HTML�
 - 索引、工作流和模板分别使用 `/archive/`、`/workflow/`、`/template/`。
 - 本地文件名只用代码样式，不建立 `.md` 相对链接。
 - Markdown 公式使用 `$...$` 或 `$$...$$`。
-- 图片放入 `public/images/papers/<paper-slug>/`，使用 `/images/papers/<paper-slug>/...`，每张图附近标注 `Image Source`。
+- 每篇 v2.1 笔记在 `Source` 声明 `Key figure decision: include` 或 `omit`。高价值图存在时优先使用 `include`；`omit` 必须解释原因。
+- `include` 至少嵌入一张本地图片。图片放入 `public/images/papers/<paper-slug>/`，使用 `/images/papers/<paper-slug>/...`，每张图附近标注 `Image Source`。
 
 详细公式、图片准入、版权和站点维护规则见 `internal/paper-archive-maintenance-sop.md`。
 

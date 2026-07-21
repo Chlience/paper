@@ -22,6 +22,8 @@ Review-Status: pending
 - Current version read:
 - Version / revision read:
 - Accessed: YYYY-MM-DD
+- Key figure decision: include / omit
+- Key figure rationale:
 - Review status: page-type=not-found; match-confidence=high; observed-at=YYYY-MM-DD; venue-status=unknown
 - Subjects:
 
@@ -31,6 +33,7 @@ Review-Status: pending
 - `Current version read` 与 `Version / revision read` 至少填写一项。
 - 普通材料的 Canonical source 使用官方绝对 URL；composite 可以使用其它已归档材料的 /papers/<slug>/ 或 /archive/，不能引用自身页面。
 - Analysis modules 可以填写多个逗号分隔值，例如 `system, experiment`。
+- `Key figure decision` 使用 `include` 或 `omit`。存在能解释首要贡献、机制、训练信号、主结论或失败边界的高价值图时使用 `include`，至少嵌入一张本地图片；使用 `omit` 时填写实质性的 `Key figure rationale`。
 - Review status 的 page-type 使用 official-review / metadata-only / proceedings / commentary / not-found / not-applicable；match-confidence 使用 high / medium / low。
 - 按材料类型删除不适用字段。
 -->

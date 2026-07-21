@@ -326,6 +326,7 @@ export const validatePaperRecord = async ({
   const paperReviewStatus = getTopLevelField(markdown, 'Review-Status').toLowerCase();
   const reviewedAt = getTopLevelField(markdown, 'Reviewed-At');
   const updatedMinute = updatedAt.match(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}/)?.[0] ?? '';
+  const visibleMarkdown = markdown.replace(/<!--[\s\S]*?-->/g, (comment) => comment.replace(/[^\n]/g, ' '));
 
   if (!workflowVersion && !legacyPaperSlugs.has(slug)) {
     errors.push(issue('missing-workflow-version', slug, 'New notes must declare Workflow version: v2.1.'));
@@ -520,6 +521,47 @@ export const validatePaperRecord = async ({
     }
 
     if (isV21) {
+      const keyFigureDecision = sourceField('Key figure decision').toLowerCase();
+      const keyFigureRationale = sourceField('Key figure rationale');
+      const expectedImagePrefix = `/images/papers/${slug}/`;
+      const localPaperImages = [...visibleMarkdown.matchAll(markdownImagePattern)]
+        .map((match) => (match[1] ?? match[2]).trim())
+        .filter((imageUrl) => imageUrl.startsWith(expectedImagePrefix));
+
+      if (!/^(include|omit)$/.test(keyFigureDecision)) {
+        errors.push(
+          issue(
+            'v21-key-figure-decision',
+            slug,
+            'Key figure decision must be include or omit.',
+          ),
+        );
+      } else if (keyFigureDecision === 'include' && localPaperImages.length === 0) {
+        errors.push(
+          issue(
+            'v21-key-figure-required',
+            slug,
+            `Key figure decision include requires a local image under ${expectedImagePrefix}.`,
+          ),
+        );
+      } else if (keyFigureDecision === 'omit' && !keyFigureRationale) {
+        errors.push(
+          issue(
+            'v21-key-figure-rationale',
+            slug,
+            'Key figure decision omit requires a substantive Key figure rationale.',
+          ),
+        );
+      } else if (keyFigureDecision === 'omit' && localPaperImages.length > 0) {
+        errors.push(
+          issue(
+            'v21-key-figure-conflict',
+            slug,
+            'Key figure decision omit conflicts with a local paper image.',
+          ),
+        );
+      }
+
       const reviewStatus = reviewStatusValue(sourceField('Review status'));
       const pageType = reviewStatus.get('page-type') ?? '';
       const matchConfidence = reviewStatus.get('match-confidence') ?? '';
@@ -587,7 +629,6 @@ export const validatePaperRecord = async ({
     }
   }
 
-  const visibleMarkdown = markdown.replace(/<!--[\s\S]*?-->/g, (comment) => comment.replace(/[^\n]/g, ' '));
   for (const match of visibleMarkdown.matchAll(markdownImagePattern)) {
     const imageUrl = (match[1] ?? match[2]).trim();
     if (/^https?:\/\//i.test(imageUrl)) continue;

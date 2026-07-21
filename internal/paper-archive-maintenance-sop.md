@@ -1,6 +1,6 @@
 # Paper Archive Maintenance SOP
 
-Updated-At: 2026-07-18
+Updated-At: 2026-07-21
 
 ## 目的
 
@@ -14,7 +14,7 @@ Updated-At: 2026-07-18
 - `content/utility/papers-index.md`
 - `data/paper-tags.json`
 - 必要时修改 `data/authors.json`
-- 必要时添加 `public/images/papers/<slug>/...`
+- `Key figure decision: include` 时添加 `public/images/papers/<slug>/...`
 
 `data/research-mainlines.json` 和 `content/utility/research-mainlines.md` 当前是独立快照。新增论文不更新这两个文件，主线页面只展示快照内已有分配。
 
@@ -50,7 +50,12 @@ Updated-At: 2026-07-18
 
 ## 图片
 
-图片准入以信息价值为标准。架构、系统路径、训练信号、主结论和失败边界图优先；装饰图和少量数字可完整转成表格时省略。
+每篇 v2.1 笔记在 `Source` 记录图片准入结果：
+
+- `Key figure decision: include`：原材料存在能够解释首要贡献、机制、训练信号、主结论或失败边界的高价值图，正文至少嵌入一张本地图片。
+- `Key figure decision: omit`：没有达到准入标准的图片，并用 `Key figure rationale` 说明信息价值、版权、安全或材料形态原因。
+
+图片数量由信息价值决定。架构、系统路径、训练信号、主结论和失败边界图优先；装饰图和少量数字可完整转成表格时省略。综述中的 taxonomy、领域地图和概念层级图在能显著降低阅读成本时属于高价值图。
 
 文件放入：
 
@@ -58,7 +63,7 @@ Updated-At: 2026-07-18
 public/images/papers/<paper-slug>/fig-<n>-<short-name>.<ext>
 ```
 
-正文使用 `/images/papers/<paper-slug>/...`。每张图附近添加 `Image Source`，说明原始文件、截图、PDF crop 或本地示意图。优先使用许可清晰的 TeX source、HTML、项目页和官方仓库图片。安全论文中含可直接滥用流程的图片改写为高层文字。
+正文使用 `/images/papers/<paper-slug>/...`。每张图附近添加 `Image Source`，说明原始文件、截图、PDF crop 或本地示意图。优先使用许可清晰的 TeX source、HTML、项目页和官方仓库原图；保持坐标、图例、比例和关键标注完整。安全论文中含可直接滥用流程的图片改写为高层文字，并使用 `omit` 记录原因。
 
 ## 删除与反向完整性
 

@@ -13,7 +13,8 @@
 
 - 本目录只服务论文阅读、分析、作者关系跟踪和 Markdown 存档。
 - 分析任何论文前，先查看 `content/utility/paper-analysis-workflow.md`。
-- 新增论文笔记时，使用 `content/utility/paper-note-template.md` 的 v2.1 章节结构，并在 `Source` 声明 `Analysis modules`。
+- 新增论文笔记时，使用 `content/utility/paper-note-template.md` 的 v2.1 章节结构，并在 `Source` 声明 `Analysis modules` 与 `Key figure decision`。
+- 每篇 v2.1 笔记必须在 `Source` 声明 `Key figure decision: include` 或 `omit`。原材料存在能够解释首要贡献、机制、训练信号、主结论或失败边界的高价值图时使用 `include`，至少嵌入一张带 `Image Source` 的本地图片；使用 `omit` 时必须填写 `Key figure rationale`。图片数量由信息价值决定，优先使用官方 HTML、TeX source、项目页或仓库中的原图。
 - 每篇论文必须沉淀为 `content/papers/<slug>.md`，并在 `content/utility/papers-index.md` 的 `当前收录` 表中保留唯一一行。表格固定使用 `简称 | 时间 | 核心信号` 三列；核心信号从 `一句话结论` 提炼为一条聚焦核心贡献的完整句子，不能写成 Theme 式关键词列表。
 - 每篇论文必须包含 `Source`、`作者与关系`、`一句话结论`、`论文脉络`、`关键实验/定理`、`局限`、`跨论文关系`。实验、系统、理论、模型报告、综述、安全和文档类检查按 `Analysis modules` 启用。
 - 每篇论文头部必须声明 `Review-Status`。新增和未经用户明确确认的论文使用 `pending`；用户确认核心贡献、证据、结论边界和局限后改为 `approved`，并记录分钟精度的 `Reviewed-At`；已审阅论文发生实质更新时改为 `needs-review`，保留上次 `Reviewed-At`。`/papers/` 使用 `review` 查询参数筛选这些状态。

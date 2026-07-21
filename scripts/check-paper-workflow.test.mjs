@@ -156,6 +156,8 @@ Review-Status: pending
 - Submitted: 2026-07-16
 - Current version read: v1
 - Accessed: 2026-07-17
+- Key figure decision: omit
+- Key figure rationale: 测试材料没有高价值机制图，正文足以表达当前 fixture 的完整证据。
 - Review status: page-type=not-found; match-confidence=high; observed-at=2026-07-17; venue-status=arXiv preprint
 ${v21CoreBody}`;
 
@@ -496,6 +498,72 @@ test('the default v2.1 canary validates with seven core sections', async () => {
   assert.deepEqual(result.advisories, []);
   assert.doesNotMatch(v21Paper, /Reference Intake Brief/);
   assert.doesNotMatch(v21Paper, /^## OpenReview \/ 审稿意见吸收$/m);
+});
+
+test('v2.1 notes require an explicit key figure decision', async () => {
+  const markdown = v21Paper
+    .replace('- Key figure decision: omit\n', '')
+    .replace('- Key figure rationale: 测试材料没有高价值机制图，正文足以表达当前 fixture 的完整证据。\n', '');
+  const result = await validate('v21-key-figure-decision', markdown);
+  assert.ok(result.errors.some((issue) => issue.code === 'v21-key-figure-decision'));
+});
+
+test('v2.1 notes reject an unknown key figure decision', async () => {
+  const markdown = v21Paper.replace('- Key figure decision: omit', '- Key figure decision: defer');
+  const result = await validate('v21-key-figure-decision-enum', markdown);
+  assert.ok(result.errors.some((issue) => issue.code === 'v21-key-figure-decision'));
+});
+
+test('v2.1 figure inclusion requires at least one local paper image', async () => {
+  const markdown = v21Paper.replace('- Key figure decision: omit', '- Key figure decision: include');
+  const result = await validate('v21-key-figure-include', markdown);
+  assert.ok(result.errors.some((issue) => issue.code === 'v21-key-figure-required'));
+});
+
+test('v2.1 figure omission requires a substantive rationale', async () => {
+  const markdown = v21Paper.replace(
+    '- Key figure rationale: 测试材料没有高价值机制图，正文足以表达当前 fixture 的完整证据。\n',
+    '',
+  );
+  const result = await validate('v21-key-figure-omit', markdown);
+  assert.ok(result.errors.some((issue) => issue.code === 'v21-key-figure-rationale'));
+});
+
+test('v2.1 figure inclusion accepts a sourced local image', async () => {
+  const markdown = v21Paper
+    .replace('- Key figure decision: omit', '- Key figure decision: include')
+    .replace(
+      '- 结果：有效。',
+      [
+        '- 结果：有效。',
+        '',
+        '![Figure 1](/images/papers/v21-key-figure-valid/fig-1.png)',
+        '',
+        'Figure 1: result. Image Source: https://example.com/fig-1.png',
+      ].join('\n'),
+    );
+  const result = await validate('v21-key-figure-valid', markdown);
+  assert.ok(!result.errors.some((issue) => issue.code.startsWith('v21-key-figure')));
+});
+
+test('v2.1 figure omission accepts a rationale and no image', async () => {
+  const result = await validate('v21-key-figure-omitted', v21Paper);
+  assert.ok(!result.errors.some((issue) => issue.code.startsWith('v21-key-figure')));
+});
+
+test('v2.1 figure omission rejects a conflicting local image', async () => {
+  const markdown = v21Paper.replace(
+    '- 结果：有效。',
+    [
+      '- 结果：有效。',
+      '',
+      '![Figure 1](/images/papers/v21-key-figure-conflict/fig-1.png)',
+      '',
+      'Figure 1: result. Image Source: https://example.com/fig-1.png',
+    ].join('\n'),
+  );
+  const result = await validate('v21-key-figure-conflict', markdown);
+  assert.ok(result.errors.some((issue) => issue.code === 'v21-key-figure-conflict'));
 });
 
 test('new notes cannot keep using the frozen v2 contract', async () => {
@@ -1202,6 +1270,8 @@ test('the public template exposes the v2.1 seven-section contract', async () => 
     'Workflow version: v2.1',
     'Material type',
     'Analysis modules',
+    'Key figure decision',
+    'Key figure rationale',
     'Canonical source',
     'Responsible organization',
     'Published / updated',
@@ -1224,6 +1294,7 @@ test('public workflow and agent instructions expose one aligned v2.1 contract', 
   const workflowDoc = await fs.readFile('content/utility/paper-analysis-workflow.md', 'utf8');
   const agentInstructions = await fs.readFile('AGENTS.md', 'utf8');
   const authorSop = await fs.readFile('internal/author-x-account-search-sop.md', 'utf8');
+  const maintenanceSop = await fs.readFile('internal/paper-archive-maintenance-sop.md', 'utf8');
 
   for (const snippet of [
     '| 简称 | 时间 | 核心信号 |',
@@ -1234,6 +1305,7 @@ test('public workflow and agent instructions expose one aligned v2.1 contract', 
     '`data/tag-taxonomy.json`',
     'Workflow version: v2.1',
     'Analysis modules',
+    'Key figure decision',
     'Review-Status',
     'Reviewed-At',
     '五项人工语义门禁',
@@ -1244,6 +1316,10 @@ test('public workflow and agent instructions expose one aligned v2.1 contract', 
   assert.match(agentInstructions, /核心信号/);
   assert.match(agentInstructions, /孤立作者/);
   assert.match(agentInstructions, /Review-Status/);
+  assert.match(agentInstructions, /Key figure rationale/);
+  assert.match(maintenanceSop, /Key figure decision: include/);
+  assert.match(maintenanceSop, /Key figure decision: omit/);
+  assert.match(maintenanceSop, /Key figure rationale/);
   assert.doesNotMatch(agentInstructions, /`Reference Intake Brief`/);
   assert.match(authorSop, /不要求每位作者都创建 `data\/authors\.json` profile/);
   assert.match(authorSop, /只有已有强候选的深入核验作者进入 X 检查/);
