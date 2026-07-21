@@ -1372,6 +1372,16 @@ test('topic routes live on the dedicated topics page', async () => {
   assert.match(siteLib, /topics: '\/topics\/'/);
 });
 
+test('paper detail metadata omits verbose source version coverage', async () => {
+  const [paperPage, paperSearch] = await Promise.all([
+    fs.readFile('src/pages/papers/[slug].astro', 'utf8'),
+    fs.readFile('src/lib/paper-search.mjs', 'utf8'),
+  ]);
+
+  assert.doesNotMatch(paperPage, /paper\.currentVersion/);
+  assert.match(paperSearch, /paper\.currentVersion/);
+});
+
 test('research mainlines expose a static directory and generated detail routes without local filtering', async () => {
   const [page, detailPage, graph, methodTable, siteHeader, siteLib, layout] = await Promise.all([
     fs.readFile('src/pages/mainlines/index.astro', 'utf8'),

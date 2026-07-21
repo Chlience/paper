@@ -51,7 +51,6 @@ const reviewStatus = normalizePaperReviewStatus(paper.reviewStatus);
         {paper.firstArchivedAt && <span>{paper.firstArchivedAt}</span>}
         {paper.updatedAt && paper.updatedAt !== paper.firstArchivedAt && <span>Updated {paper.updatedAt}</span>}
         {paper.reviewedAt && <span>Reviewed {paper.reviewedAt}</span>}
-        {paper.currentVersion && <span>{paper.currentVersion}</span>}
         {paper.sourceUrl && <a href={paper.sourceUrl}>Source</a>}
         {paper.tags.map((tag, index) => <a href={`/topics/#tag-${paper.tagIds[index]}`}>{tag}</a>)}
       </div>
