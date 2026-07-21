@@ -58,14 +58,114 @@ const reviewStatus = normalizePaperReviewStatus(paper.reviewStatus);
 
     <div class="paper-layout">
       {h2Headings.length > 0 && (
-        <aside class="toc" aria-label="目录">
+        <aside class="toc" aria-label="目录" data-paper-toc>
           <strong>目录</strong>
-          <nav>
-            {h2Headings.map((heading) => <a href={`#${heading.id}`}>{heading.text}</a>)}
+          <nav data-paper-toc-nav>
+            {h2Headings.map((heading, index) => (
+              <a
+                href={`#${heading.id}`}
+                data-paper-toc-link
+                aria-current={index === 0 ? 'location' : undefined}
+              >
+                {heading.text}
+              </a>
+            ))}
           </nav>
         </aside>
       )}
       <div class="prose" set:html={paper.html} />
     </div>
   </article>
+
+  <script>
+    const toc = document.querySelector('[data-paper-toc]');
+
+    if (toc instanceof HTMLElement) {
+      const nav = toc.querySelector('[data-paper-toc-nav]');
+      const links = Array.from(toc.querySelectorAll('[data-paper-toc-link]')).filter(
+        (link): link is HTMLAnchorElement => link instanceof HTMLAnchorElement,
+      );
+      const entries = links.flatMap((link) => {
+        const target = link.getAttribute('href')?.slice(1);
+        if (!target) return [];
+
+        let id = target;
+        try {
+          id = decodeURIComponent(target);
+        } catch {
+          // Keep the authored fragment when it is not URI encoded.
+        }
+
+        const heading = document.getElementById(id);
+        return heading ? [{ heading, link }] : [];
+      });
+
+      if (entries.length > 0) {
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+        let activeId = '';
+        let frame = 0;
+
+        const keepActiveLinkVisible = (link: HTMLAnchorElement) => {
+          if (!(nav instanceof HTMLElement) || nav.scrollHeight <= nav.clientHeight) return;
+
+          const linkTop = link.offsetTop;
+          const linkBottom = linkTop + link.offsetHeight;
+          const visibleTop = nav.scrollTop;
+          const visibleBottom = visibleTop + nav.clientHeight;
+          if (linkTop >= visibleTop && linkBottom <= visibleBottom) return;
+
+          const top = linkTop < visibleTop ? linkTop - 8 : linkBottom - nav.clientHeight + 8;
+          nav.scrollTo({
+            top: Math.max(0, top),
+            behavior: reduceMotion.matches ? 'auto' : 'smooth',
+          });
+        };
+
+        const activate = (entry: (typeof entries)[number]) => {
+          if (entry.heading.id === activeId) return;
+          activeId = entry.heading.id;
+
+          for (const candidate of entries) {
+            if (candidate === entry) {
+              candidate.link.setAttribute('aria-current', 'location');
+            } else {
+              candidate.link.removeAttribute('aria-current');
+            }
+          }
+          keepActiveLinkVisible(entry.link);
+        };
+
+        const updateActiveHeading = () => {
+          frame = 0;
+          const headingOffset = 104;
+          const pageBottom = window.scrollY + window.innerHeight;
+          const documentBottom = document.documentElement.scrollHeight;
+          let active = entries[0];
+
+          if (pageBottom >= documentBottom - 2) {
+            active = entries.at(-1) ?? active;
+          } else {
+            for (const entry of entries) {
+              if (entry.heading.getBoundingClientRect().top > headingOffset) break;
+              active = entry;
+            }
+          }
+          activate(active);
+        };
+
+        const scheduleUpdate = () => {
+          if (frame) return;
+          frame = window.requestAnimationFrame(updateActiveHeading);
+        };
+
+        for (const entry of entries) {
+          entry.link.addEventListener('click', () => activate(entry));
+        }
+        window.addEventListener('scroll', scheduleUpdate, { passive: true });
+        window.addEventListener('resize', scheduleUpdate);
+        window.addEventListener('hashchange', scheduleUpdate);
+        scheduleUpdate();
+      }
+    }
+  </script>
 </Layout>
