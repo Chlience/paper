@@ -1403,14 +1403,28 @@ test('topic routes live on the dedicated topics page', async () => {
   assert.match(siteLib, /topics: '\/topics\/'/);
 });
 
-test('paper detail metadata omits verbose source version coverage', async () => {
-  const [paperPage, paperSearch] = await Promise.all([
+test('paper detail metadata keeps source concise and topics in a separate badge row', async () => {
+  const [paperPage, paperSearch, siteCss] = await Promise.all([
     fs.readFile('src/pages/papers/[slug].astro', 'utf8'),
     fs.readFile('src/lib/paper-search.mjs', 'utf8'),
+    fs.readFile('src/styles/site.css', 'utf8'),
   ]);
+  const paperMeta = paperPage.slice(
+    paperPage.indexOf('<div class="paper-meta">'),
+    paperPage.indexOf('</header>'),
+  );
 
   assert.doesNotMatch(paperPage, /paper\.currentVersion/);
   assert.match(paperSearch, /paper\.currentVersion/);
+  assert.match(paperMeta, /aria-label="论文状态与来源"/);
+  assert.match(paperMeta, /class="paper-meta-line paper-meta-topics"[\s\S]*aria-label="论文主题"/);
+  assert.equal(paperMeta.match(/class="paper-meta-line(?: paper-meta-topics)?"/g)?.length, 2);
+  assert.ok(paperMeta.indexOf('paper-review-badge') < paperMeta.indexOf('paper-meta-topics'));
+  assert.ok(paperMeta.indexOf('paper-meta-topics') < paperMeta.indexOf('paper.tags.map'));
+  assert.ok(paperMeta.indexOf('paper.tags.map') < paperMeta.indexOf('paper-topic'));
+  assert.doesNotMatch(paperMeta, />Topics</);
+  assert.doesNotMatch(paperMeta, /paper-meta-label/);
+  assert.doesNotMatch(siteCss, /\.paper-meta-label/);
 });
 
 test('research mainlines expose a static directory and generated detail routes without local filtering', async () => {

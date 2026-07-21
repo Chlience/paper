@@ -60,7 +60,6 @@ const reviewStatus = normalizePaperReviewStatus(paper.reviewStatus);
         </div>
         {paper.tags.length > 0 && (
           <div class="paper-meta-line paper-meta-topics" role="group" aria-label="论文主题">
-            <span class="paper-meta-label mono">Topics</span>
             {paper.tags.map((tag, index) => (
               <a class="paper-topic" href={`/topics/#tag-${paper.tagIds[index]}`}>{tag}</a>
             ))}

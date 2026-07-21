@@ -720,13 +720,6 @@ h3 {
   background: oklch(96% 0.025 155);
 }
 
-.paper-meta-label {
-  margin-right: 4px;
-  color: var(--accent);
-  font-size: 12px;
-  font-weight: 720;
-}
-
 .paper-row-meta .paper-row-pin,
 .paper-meta .paper-pin {
   border-color: oklch(74% 0.055 75);
