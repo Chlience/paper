@@ -25,6 +25,7 @@ Updated-At: 2026-07-21
 | [Grape](/papers/2026-07-13-grape-micro-task-agentic-workflow-serving/) | 2026年7月 | 把相依 LLM task 的已知 prompt、流式上游输出和 decode 拆成微任务，让下游在上游 decode 期间持续完成跨 task 增量 prefill。 |
 | [RL Credit Assignment Watch](/papers/2026-07-13-rl-credit-assignment-may-july-landscape/) | 2026年7月 | 按 token、segment、turn、memory 和 workflow role 归纳 2026 年 5-7 月方法，并把 compact 后的 state comparability 与 provenance routing 作为独立判断轴。 |
 | [Learned Environment Roadmap](/papers/2026-07-13-agentic-rl-learned-environment-evolution/) | 2026年7月 | 把 Agentic RL 的环境供给串成从可复位 sandbox、有状态模拟、可执行环境合成到 language world model 的演进路线，并以 real-sim 校准闭环约束策略利用模拟误差。 |
+| [TRACE](/papers/2607.13988-trace-turn-level-reward-assignment/) | 2026年7月 | 在已知短答案的长程搜索中，用冻结参考模型测量工具边界后的答案可预测性变化并把多步时序差信用混入终局优势，使两种 Qwen3 Thinking 模型在同设置下较 GRPO 的 BrowseComp-Plus 分数分别提高 5.6 和 6.2 个百分点。 |
 | [国产模型报告时间线](/papers/2026-06-23-chinese-frontier-model-reports-timeline/) | 2026年6月 | 按 MoE / 长上下文、reasoning RL、agentic infrastructure 三条主线串联 2024-2026 年国产前沿模型演进。 |
 | [SmoothAgent](/papers/2607.00151-smoothagent-lookahead-context-engineering/) | 2026年6月 | 把可提前确定的 context transformation 移入异步 lookahead stream，并用 SLO-aware scheduling 预建变换后 KV cache，降低 transform-point TTFT。 |
 | [ECHO](/papers/2606.31650-echo-selective-turn-memory-agentic-rl/) | 2026年6月 | ECHO 为长程智能体保留带原始轮次标识的选择性记忆，用它重建有限上下文并将结果信用路由到被复用历史轮次及其选择动作，在 BrowseComp-Plus 上同时提高一次通过率并减少滚动摘要造成的轨迹膨胀。 |

@@ -11371,5 +11371,221 @@
         "url": "https://scholar.google.com/citations?user=Z81UkSYAAAAJ"
       }
     ]
+  },
+  {
+    "slug": "leitian-tao",
+    "name": "Leitian Tao",
+    "aliases": ["Leitian Tao"],
+    "affiliations": ["University of Wisconsin–Madison", "Microsoft Research"],
+    "homepage": "https://taoleitian.github.io/",
+    "github": "https://github.com/taoleitian",
+    "topics": ["large language model post-training", "AI agents", "reinforcement learning", "reward modeling"],
+    "notes": "TRACE first author and arXiv submitter. His homepage identifies him as a University of Wisconsin–Madison PhD student advised by Sharon Li, and the paper records a joint UW–Madison / Microsoft Research affiliation.",
+    "sources": [
+      {
+        "label": "TRACE",
+        "url": "https://arxiv.org/abs/2607.13988"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://taoleitian.github.io/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/taoleitian"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Leitian_Tao1"
+      }
+    ]
+  },
+  {
+    "slug": "baolin-peng",
+    "name": "Baolin Peng",
+    "aliases": ["Baolin Peng"],
+    "affiliations": ["Microsoft Research"],
+    "homepage": "https://www.microsoft.com/en-us/research/people/baolinpeng/",
+    "topics": ["large language model agents", "complex reasoning", "planning", "reinforcement learning"],
+    "notes": "TRACE coauthor from Microsoft Research. His institutional profile connects his research to task-oriented dialogue, language-model agents, complex reasoning and planning.",
+    "sources": [
+      {
+        "label": "TRACE",
+        "url": "https://arxiv.org/abs/2607.13988"
+      },
+      {
+        "label": "Microsoft Research",
+        "url": "https://www.microsoft.com/en-us/research/people/baolinpeng/"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Baolin_Peng2"
+      }
+    ]
+  },
+  {
+    "slug": "wenlin-yao",
+    "name": "Wenlin Yao",
+    "aliases": ["Wenlin Yao"],
+    "affiliations": ["Microsoft Research"],
+    "homepage": "https://wenlinyao.github.io/",
+    "github": "https://github.com/wenlinyao",
+    "topics": ["foundation language models", "end-to-end reinforcement learning", "agentic frameworks", "tool use"],
+    "notes": "TRACE coauthor from Microsoft Research. Her homepage describes work on foundation language models, end-to-end reinforcement learning, agentic frameworks and tool use.",
+    "sources": [
+      {
+        "label": "TRACE",
+        "url": "https://arxiv.org/abs/2607.13988"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://wenlinyao.github.io/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/wenlinyao"
+      }
+    ]
+  },
+  {
+    "slug": "tao-ge",
+    "name": "Tao Ge",
+    "chineseName": "葛涛",
+    "aliases": ["Tao Ge"],
+    "affiliations": ["Microsoft Research", "Microsoft"],
+    "homepage": "https://getao.github.io/",
+    "topics": ["large language model post-training", "synthetic data", "efficient training", "agentic methods"],
+    "notes": "TRACE coauthor from Microsoft Research. His homepage records work spanning language-model training, synthetic data, efficient learning and agentic methods at Microsoft.",
+    "sources": [
+      {
+        "label": "TRACE",
+        "url": "https://arxiv.org/abs/2607.13988"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://getao.github.io/"
+      }
+    ]
+  },
+  {
+    "slug": "hao-cheng-msr",
+    "name": "Hao Cheng",
+    "aliases": ["Hao Cheng"],
+    "matchByName": false,
+    "affiliations": ["Microsoft Research", "University of Washington"],
+    "homepage": "https://sites.google.com/site/hcheng2site/",
+    "github": "https://github.com/hao-cheng",
+    "topics": ["large language model agents", "conversational AI", "tool-using agents", "natural language processing"],
+    "notes": "TRACE coauthor from Microsoft Research. The disambiguated profile uses explicit paper links because multiple researchers share the name Hao Cheng; his homepage records a University of Washington PhD and current work on conversational and tool-using AI systems.",
+    "sources": [
+      {
+        "label": "TRACE",
+        "url": "https://arxiv.org/abs/2607.13988"
+      },
+      {
+        "label": "Microsoft Research",
+        "url": "https://www.microsoft.com/en-us/research/people/chehao/"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://sites.google.com/site/hcheng2site/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/hao-cheng"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Hao_Cheng1"
+      }
+    ]
+  },
+  {
+    "slug": "mike-hang-wang",
+    "name": "Mike Hang Wang",
+    "aliases": ["Mike Hang Wang", "Mike H. Wang"],
+    "affiliations": ["Microsoft Research"],
+    "homepage": "https://ustcmike.github.io/",
+    "topics": ["reinforcement learning", "AI agents", "world models", "multi-agent reinforcement learning"],
+    "notes": "TRACE coauthor from Microsoft Research. His institutional and personal profiles describe research on reinforcement learning, AI agents, world models and multi-agent systems.",
+    "sources": [
+      {
+        "label": "TRACE",
+        "url": "https://arxiv.org/abs/2607.13988"
+      },
+      {
+        "label": "Microsoft Research",
+        "url": "https://www.microsoft.com/en-us/research/people/wangmike/"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://ustcmike.github.io/"
+      }
+    ]
+  },
+  {
+    "slug": "jianfeng-gao",
+    "name": "Jianfeng Gao",
+    "aliases": ["Jianfeng Gao"],
+    "affiliations": ["Microsoft Research", "Microsoft", "University of Washington"],
+    "homepage": "https://www.microsoft.com/en-us/research/people/jfgao/",
+    "topics": ["agentic AI", "tool use", "planning", "multimodal reasoning", "deep learning"],
+    "notes": "TRACE coauthor from Microsoft Research. His institutional profile records leadership and research across agentic AI, planning, tool use, multimodal reasoning and deep learning, together with an affiliate professorship at the University of Washington.",
+    "sources": [
+      {
+        "label": "TRACE",
+        "url": "https://arxiv.org/abs/2607.13988"
+      },
+      {
+        "label": "Microsoft Research",
+        "url": "https://www.microsoft.com/en-us/research/people/jfgao/"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Jianfeng_Gao1"
+      },
+      {
+        "label": "DBLP",
+        "url": "https://dblp.uni-trier.de/pid/92/5339.html"
+      }
+    ]
+  },
+  {
+    "slug": "sharon-li",
+    "name": "Sharon Li",
+    "aliases": ["Sharon Li", "Sharon Y. Li", "Sharon Yixuan Li", "Yixuan Li"],
+    "affiliations": ["University of Wisconsin–Madison"],
+    "homepage": "https://pages.cs.wisc.edu/~sharonli/",
+    "github": "https://github.com/yixuanli",
+    "x": "https://x.com/SharonYixuanLi",
+    "xConfidence": "high",
+    "topics": ["reliable AI", "agentic language-model systems", "reinforcement learning", "reward modeling", "uncertainty"],
+    "notes": "TRACE last author and University of Wisconsin–Madison faculty member. Her homepage identifies Leitian Tao as an advised PhD student and links the verified X account; the paper does not declare a corresponding-author role.",
+    "sources": [
+      {
+        "label": "TRACE",
+        "url": "https://arxiv.org/abs/2607.13988"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://pages.cs.wisc.edu/~sharonli/"
+      },
+      {
+        "label": "Curriculum vitae",
+        "url": "https://pages.cs.wisc.edu/~sharonli/CV_SharonLi.pdf"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/yixuanli"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Sharon_Li1"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/SharonYixuanLi"
+      }
+    ]
   }
 ]
