@@ -1,5 +1,6 @@
 {
   "2605.09539-tacomas-test-time-coevolution-mas": ["multi-agent-orchestration", "agent-workflow", "test-time-scaling", "credit-assignment"],
+  "2605.10899-rubricem-rubric-guided-meta-rl": ["agent-rl", "credit-assignment", "agent-memory", "reward-modeling"],
   "202607.1328-towards-long-horizon-agents-survey": ["agent-workflow", "agent-memory", "agent-rl", "ai-safety"],
   "2606.23525-self-compacting-language-model-agents": ["agent-memory", "agent-workflow", "long-context", "test-time-scaling"],
   "2026-04-30-preferences-multi-agent-online-learning": ["rl-theory", "reward-modeling"],

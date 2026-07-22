@@ -11804,5 +11804,85 @@
         "url": "https://orcid.org/0000-0003-2839-5799"
       }
     ]
+  },
+  {
+    "slug": "gaotang-li",
+    "name": "Gaotang Li",
+    "aliases": ["Gaotang Li", "Oliver Li", "Oliver Gaotang Li"],
+    "affiliations": [
+      "University of Illinois Urbana-Champaign",
+      "Google Cloud AI Research (RubricEM internship)",
+      "University of Michigan"
+    ],
+    "homepage": "https://gaotangli.github.io/",
+    "github": "https://github.com/GaotangLi",
+    "x": "https://x.com/GaotangLi",
+    "xConfidence": "high",
+    "topics": ["LLM post-training", "agentic reasoning", "reward modeling", "foundation models"],
+    "notes": "RubricEM first and corresponding author; UIUC computer science PhD student advised by Hanghang Tong. The paper records that this work was completed during an internship at Google Cloud AI Research.",
+    "sources": [
+      {
+        "label": "RubricEM",
+        "url": "https://arxiv.org/abs/2605.10899"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://gaotangli.github.io/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/GaotangLi"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=0aVJRykAAAAJ"
+      },
+      {
+        "label": "DBLP",
+        "url": "https://dblp.org/pid/348/5271"
+      },
+      {
+        "label": "X paper post",
+        "url": "https://x.com/GaotangLi/status/2056783117919408466"
+      }
+    ]
+  },
+  {
+    "slug": "bhavana-dalvi-mishra",
+    "name": "Bhavana Dalvi Mishra",
+    "aliases": ["Bhavana Dalvi Mishra", "Bhavana Dalvi", "Bhavana Bharat Dalvi"],
+    "affiliations": [
+      "Google",
+      "Allen Institute for AI",
+      "Carnegie Mellon University",
+      "Indian Institute of Technology Bombay"
+    ],
+    "homepage": "https://bhavanadalvi.github.io/",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["self-evolving agents", "interactive reasoning", "AI for scientific discovery", "natural language processing"],
+    "notes": "RubricEM second and corresponding author at Google Cloud AI Research. Her official research profile connects self-evolving agents, interactive reasoning, scientific discovery, and earlier work at the Allen Institute for AI.",
+    "sources": [
+      {
+        "label": "RubricEM",
+        "url": "https://arxiv.org/abs/2605.10899"
+      },
+      {
+        "label": "Google Research",
+        "url": "https://research.google/people/bhavanadalvimishra/"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://bhavanadalvi.github.io/"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=9e0uFr4AAAAJ"
+      },
+      {
+        "label": "DBLP",
+        "url": "https://dblp.org/pid/78/6527"
+      }
+    ]
   }
 ]
