@@ -1,7 +1,7 @@
 # Paper Archive Index
 
 First-Archived-At: 2026-06-21
-Updated-At: 2026-07-21
+Updated-At: 2026-07-22
 
 ## 本地工作流
 
@@ -18,7 +18,7 @@ Updated-At: 2026-07-21
 | [HiLS-Attention](/papers/2607.02980-hils-attention-infinite-context/) | 2026年7月 | HiLS-Attention 用 landmark 压缩键、熵偏置与分层 softmax 训练 chunk 选择器，使 8K 训练的 345M 模型在 4M RULER 单针检索仍得 96 分，并在 512K 单 H800、batch size 1 的同 Triton 基线上将 prefill 与 decode 分别加速 13.5 倍和 15.7 倍。 |
 | [SPORK](/papers/2607.03333-spork-self-speculative-agentic-inference/) | 2026年7月 | 让目标模型从共享 KV prefix 自预测下一次工具调用，提前执行只读工具，并用 target verification 回收失败 probe 的 token 前缀。 |
 | [ReOPD](/papers/2607.04763-reopd-prefix-replay-agentic-distillation/) | 2026年7月 | 把教师 RL 轨迹回放为按轮次衰减采样的前缀，只让学生在当前步生成并接受教师分布监督，从而在学生蒸馏阶段关闭环境。 |
-| [CompactionRL](/papers/2607.05378-compactionrl-context-compaction-agent-rl/) | 2026年7月 | 把同一策略生成的 context summary 纳入 PPO，用全 batch token 归一化和跨 segment GAE 在固定峰值上下文内训练长程 coding agent。 |
+| [CompactionRL](/papers/2607.05378-compactionrl-context-compaction-agent-rl/) | 2026年7月 | 在 SUPO 已覆盖摘要与执行联合训练的前提下，用支持单 rollout 的独立 critic 和跨 segment GAE 处理压缩轨迹；两个模型在 compacted coding 评测中均提高 Pass@1，但缺少与 SUPO 的直接对照。 |
 | [LLM-as-a-Verifier](/papers/2607.05391-llm-as-a-verifier/) | 2026年7月 | 把评分 token 的概率期望、重复评估与 criteria decomposition 组合成连续 verifier，再用概率 pivot tournament 扩展多轨迹选择。 |
 | [SAO](/papers/2607.07508-sao-single-rollout-asynchronous-agentic-rl/) | 2026年7月 | 用每 prompt 单 rollout、强化 critic 与双侧 token mask 替代异步 GRPO 的组内等待和 group baseline。 |
 | [S-TTT](/papers/2607.09415-self-guided-test-time-training-long-context/) | 2026年7月 | 让基础模型从长上下文复制问题相关证据，并只对这些 span 做实例级 query-LoRA 更新后读取完整上下文作答。 |
