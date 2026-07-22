@@ -11712,5 +11712,120 @@
         "url": "https://dblp.org/pid/78/6527"
       }
     ]
+  },
+  {
+    "slug": "mingxuan-xia",
+    "name": "Mingxuan Xia",
+    "aliases": ["Mingxuan Xia"],
+    "affiliations": ["Zhejiang University", "ByteDance", "Nanyang Technological University"],
+    "homepage": "https://mingxuanxia.github.io/",
+    "github": "https://github.com/MingxuanXia",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["large language models", "weak supervision", "rubric-based reinforcement learning", "data annotation"],
+    "notes": "CriPO co-first author and Zhejiang University PhD student advised by Haobo Wang; the paper records that this work was completed during a ByteDance internship.",
+    "sources": [
+      {
+        "label": "CriPO",
+        "url": "https://arxiv.org/abs/2607.18082v2"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://mingxuanxia.github.io/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/MingxuanXia"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=q5XeJeAAAAAJ"
+      }
+    ]
+  },
+  {
+    "slug": "yuhang-yang-zju",
+    "name": "Yuhang Yang",
+    "aliases": ["Yuhang Yang"],
+    "matchByName": false,
+    "affiliations": ["Zhejiang University", "ByteDance"],
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["large language models", "tabular reasoning", "natural language processing", "rubric-based reinforcement learning"],
+    "notes": "CriPO co-first author and Zhejiang University Software student; the paper records joint Zhejiang University–ByteDance affiliation and an internship contribution. Explicit paper links are required because the name is common.",
+    "sources": [
+      {
+        "label": "CriPO",
+        "url": "https://arxiv.org/abs/2607.18082v2"
+      },
+      {
+        "label": "ACL 2026 paper",
+        "url": "https://aclanthology.org/2026.acl-long.232/"
+      },
+      {
+        "label": "ACL Anthology author page",
+        "url": "https://aclanthology.org/people/yuhang-yang/unverified/"
+      },
+      {
+        "label": "Haobo Wang homepage",
+        "url": "https://hbzju.github.io/"
+      }
+    ]
+  },
+  {
+    "slug": "haobo-wang-zju",
+    "name": "Haobo Wang",
+    "chineseName": "王皓波",
+    "aliases": ["Haobo Wang"],
+    "matchByName": false,
+    "affiliations": ["Zhejiang University"],
+    "homepage": "https://hbzju.github.io/",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["machine learning", "large language models", "weakly supervised learning", "rubric-based reinforcement learning"],
+    "notes": "CriPO corresponding author and Zhejiang University assistant professor and PhD supervisor; his homepage records research in machine learning, data intelligence, and large language models. Explicit paper links are required because the name is common.",
+    "sources": [
+      {
+        "label": "CriPO",
+        "url": "https://arxiv.org/abs/2607.18082v2"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://hbzju.github.io/"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=DnN-rggAAAAJ"
+      },
+      {
+        "label": "DBLP",
+        "url": "https://dblp.org/pid/126/8982-1"
+      },
+      {
+        "label": "ORCID",
+        "url": "https://orcid.org/0000-0001-8586-3048"
+      }
+    ]
+  },
+  {
+    "slug": "siqing-wang-bytedance",
+    "name": "Siqing Wang",
+    "aliases": ["Siqing Wang"],
+    "matchByName": false,
+    "affiliations": ["ByteDance"],
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["large language models", "reinforcement learning", "rubric-based reinforcement learning", "on-policy self-distillation"],
+    "notes": "CriPO corresponding author at ByteDance. Public identity evidence beyond the paper and corresponding-author contact is sparse, so this profile requires explicit paper links.",
+    "sources": [
+      {
+        "label": "CriPO",
+        "url": "https://arxiv.org/abs/2607.18082v2"
+      },
+      {
+        "label": "CriPO PDF",
+        "url": "https://arxiv.org/pdf/2607.18082v2"
+      }
+    ]
   }
 ]

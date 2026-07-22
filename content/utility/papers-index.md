@@ -14,6 +14,7 @@ Updated-At: 2026-07-22
 
 | 简称 | 时间 | 核心信号 |
 | --- | --- | --- |
+| [CriPO](/papers/2607.18082-cripo-rubric-rl-self-distillation/) | 2026年7月 | 把评分量规聚合后的学习信号丢失拆成当前采样未覆盖和已满足但整体优势非正两类，用评分项条件自教师注入缺失行为，并以反事实自教师定位 token 后局部改写优势；两种 Qwen3 小模型在五项裁判评测中较 GRPO 平均提高 3.2 和 1.4 分，证据缺少多随机种子与完整硬件条件。 |
 | [Long-Horizon Agents Survey](/papers/202607.1328-towards-long-horizon-agents-survey/) | 2026年7月 | 用基础策略与运行时 harness 的组合关系以及 H1/H2/H3 分层，将长程能力统一为运行时系统和模型内部优化共同作用的系统属性。 |
 | [HiLS-Attention](/papers/2607.02980-hils-attention-infinite-context/) | 2026年7月 | HiLS-Attention 用 landmark 压缩键、熵偏置与分层 softmax 训练 chunk 选择器，使 8K 训练的 345M 模型在 4M RULER 单针检索仍得 96 分，并在 512K 单 H800、batch size 1 的同 Triton 基线上将 prefill 与 decode 分别加速 13.5 倍和 15.7 倍。 |
 | [SPORK](/papers/2607.03333-spork-self-speculative-agentic-inference/) | 2026年7月 | 让目标模型从共享 KV prefix 自预测下一次工具调用，提前执行只读工具，并用 target verification 回收失败 probe 的 token 前缀。 |
