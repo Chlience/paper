@@ -54,7 +54,6 @@ Updated-At: 2026-07-22
 | [Data-Scarcity RL Survey](/papers/2604.17312-rl-llm-data-scarcity-survey/) | 2026年4月 | 把 LLM 强化学习中的高成本外部监督与有限内部生成经验统一到 data、training、framework 三层九类干预点，并组织为一份覆盖 125 条文献记录的设计地图。 |
 | [DeepSeek-V4](/papers/2026-04-24-deepseek-v4-million-token-context-intelligence/) | 2026年4月 | 以 CSA / HCA、MoE、MTP / OPD 和系统协同实现百万 token 训练、推理与 agent 能力。 |
 | [Caution](/papers/2604.04648-caution-pessimism-best-of-n-reward-hacking/) | 2026年4月 | 用 reward-feature prediction error 估计 OOD uncertainty，在 Best-of-N selection 时执行 pessimistic correction。 |
-| [Preference–Dynamics](/papers/2026-04-30-preferences-multi-agent-online-learning/) | 2026年4月 | 对有限博弈的连续时间 FTRL，子博弈的纯策略集合对有利单边偏离闭合，在没有收益平局时与其张成区域的渐近稳定等价；一般纯策略集合存在满足该序数条件却动态不稳定的三人反例，基于收益差幅度的聚合偏离约束为其张成区域提供可检验的吸引性充分条件。 |
 | [IndexCache](/papers/2603.12201-indexcache-cross-layer-index-reuse/) | 2026年3月 | 用 loss-guided layer search 或 multi-layer distillation 划分 Full / Shared 层，跨层复用 top-k positions 并跳过最多 75% 的 DSA indexer 计算。 |
 | [DFlash](/papers/2602.06036-dflash-block-diffusion-speculative-decoding/) | 2026年2月 | 把 block diffusion 用作 speculative drafter，并用 target hidden features 条件化整块候选生成。 |
 | [Qwen3-Coder-Next](/papers/2603.00729-qwen3-coder-next-agentic-coding/) | 2026年2月 | Qwen3-Coder-Next 在 80B 总参数中每步激活 3B 参数，并用可执行仓库任务、长上下文中训、多模板工具训练、软件工程强化学习与专家蒸馏构建编码智能体，在三种 SWE-Bench Verified scaffold 上达到 70.6% 至 71.3% 解决率，报告尚未拆分各训练组件的净贡献。 |
