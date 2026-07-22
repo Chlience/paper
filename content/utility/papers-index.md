@@ -46,6 +46,7 @@ Updated-At: 2026-07-22
 | [Muon Curvature](/papers/2606.04662-muon-outperforms-adam-curvature/) | 2026年6月 | 将 Muon 相对 Adam 的训练优势归因于更低的 directional curvature penalty，step-size 的解释力较弱。 |
 | [SelfCompact](/papers/2606.23525-self-compacting-language-model-agents/) | 2026年6月 | 用要求引用轨迹证据的任务专用 rubric 选择摘要时机，让同一模型在无需训练时压缩并重建长程 agent 上下文。 |
 | [TacoMAS](/papers/2605.09539-tacomas-test-time-coevolution-mas/) | 2026年5月 | 在单个查询内逐轮依据轨迹反馈改写代理能力，并每两轮按预算增删代理与重连通信图；四个工具基准相对各自最强基线平均提高 13.3 个准确率百分点，比较未统一推理预算。 |
+| [GraphGPO](/papers/2605.26684-graphgpo-graph-credit-assignment-agentic-rl/) | 2026年5月 | 将同一任务的分组轨迹合并为状态转移图，以后继状态到成功节点的最短路径构造逐步优势，并在状态可稳定合并、目标可验证的 ALFWorld、WebShop 和 Sokoban 设置中优于 GRPO 与 GiGPO。 |
 | [SRPO](/papers/2605.25507-credit-assignment-resets-language-model-reasoning/) | 2026年5月 | 从失败轨迹重置并重采样错误点后的 continuation，只更新后缀 token 以集中 credit assignment。 |
 | [TIM / VeXact](/papers/2605.14220-training-inference-mismatch-llm-rl/) | 2026年5月 | 构造 trainer / rollout bitwise-aligned 基线，证明微小 logprob mismatch 可触发 RL collapse。 |
 | [Tool-Calling RL](/papers/2606.00135-agentic-tool-calling-rl-training/) | 2026年5月 | 量化 tool-calling 评测协议漂移，并用近期 all-correct 预测与 max-variance update 子采样压缩 GRPO wall-clock。 |

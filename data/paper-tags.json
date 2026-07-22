@@ -47,6 +47,7 @@
   "2412.19437-deepseek-v3-technical-report": ["moe-architecture", "distributed-training", "multi-token-prediction", "training-stability"],
   "2405.04434-deepseek-v2-mla-moe-efficient-llm": ["kv-cache", "moe-architecture", "moe-systems"],
   "2604.09459-credit-assignment-reasoning-agentic-llm-rl": ["credit-assignment", "reasoning-rl", "agent-rl", "rl-theory"],
+  "2605.26684-graphgpo-graph-credit-assignment-agentic-rl": ["credit-assignment", "agent-rl", "rl-algorithm", "rl-theory"],
   "2604.17312-rl-llm-data-scarcity-survey": ["reasoning-rl", "rollout-optimization", "reward-modeling", "agent-rl"],
   "2502.10581-do-we-need-to-verify-step-by-step-process-supervision-theory": ["process-supervision", "rl-theory", "credit-assignment"],
   "2312.08935-math-shepherd-automatic-process-supervision": ["process-supervision", "verifier", "reward-modeling", "reasoning-rl"],

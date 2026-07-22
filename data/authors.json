@@ -3496,6 +3496,7 @@
     "slug": "xin-cheng-deepseek",
     "name": "Xin Cheng",
     "aliases": ["Xin Cheng"],
+    "matchByName": false,
     "affiliations": ["Peking University", "DeepSeek AI"],
     "x": "",
     "xConfidence": "not-found",
@@ -11735,6 +11736,72 @@
       {
         "label": "ORCID",
         "url": "https://orcid.org/0000-0002-5199-1428"
+      }
+    ]
+  },
+  {
+    "slug": "shuo-he",
+    "name": "Shuo He",
+    "aliases": ["Shuo He"],
+    "affiliations": ["Nanyang Technological University", "University of Electronic Science and Technology of China", "Southwest University"],
+    "homepage": "https://shuohe1995.github.io/",
+    "github": "https://github.com/shuohe1995",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["agentic reinforcement learning", "multi-agent systems", "AI safety", "machine learning"],
+    "notes": "GraphGPO second author and NTU postdoctoral researcher. His homepage records a UESTC PhD and earlier Southwest University degrees, and links his continuing work on HGPO, KPO and multi-agent systems.",
+    "sources": [
+      {
+        "label": "GraphGPO",
+        "url": "https://arxiv.org/abs/2605.26684"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://shuohe1995.github.io/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/shuohe1995"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Shuo_He1"
+      },
+      {
+        "label": "HGPO",
+        "url": "https://arxiv.org/abs/2602.22817"
+      }
+    ]
+  },
+  {
+    "slug": "lei-feng-seu",
+    "name": "Lei Feng",
+    "chineseName": "冯磊",
+    "aliases": ["Lei Feng"],
+    "affiliations": ["Southeast University", "RIKEN", "Nanyang Technological University"],
+    "homepage": "https://lfeng1995.github.io/",
+    "topics": ["machine learning", "AI agents", "AI safety", "robust learning"],
+    "notes": "GraphGPO corresponding author and Southeast University professor. His university and personal profiles record a visiting scientist role at RIKEN and a PhD from Nanyang Technological University.",
+    "sources": [
+      {
+        "label": "GraphGPO",
+        "url": "https://arxiv.org/abs/2605.26684"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://lfeng1995.github.io/"
+      },
+      {
+        "label": "Southeast University",
+        "url": "https://cs.seu.edu.cn/fenglei/main.htm"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Lei_Feng1"
+      },
+      {
+        "label": "ORCID",
+        "url": "https://orcid.org/0000-0003-2839-5799"
       }
     ]
   }

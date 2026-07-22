@@ -132,7 +132,7 @@ $$
 | [DelTA](https://arxiv.org/abs/2605.21467), 05-20 | token | 用 token-gradient discrimination 方向设置侧别系数 | 属于梯度代理，因果解释有限 |
 | [OPPO](https://arxiv.org/abs/2605.21851), 05-21 | token | 累积 oracle-conditioned likelihood ratio，递归估计成功概率与 token advantage | 只需额外 forward，依赖 oracle / teacher 分布质量 |
 | [SRPO](/papers/2605.25507-credit-assignment-resets-language-model-reasoning/), 05-25 | reset 后缀 | 自定位错误点，从同一前缀重采样 suffix，只更新后缀 | 直接产生局部 counterfactual，定位错误会传入采样 |
-| [GraphGPO](https://arxiv.org/abs/2605.26684), 05-26 | graph edge / step | 聚合 rollout 为 state-transition graph，用到 goal 的距离下降构造 edge advantage | 图中 state 合并与距离是近似；arXiv 标注 ICML 2026 accepted |
+| [GraphGPO](/papers/2605.26684-graphgpo-graph-credit-assignment-agentic-rl/), 05-26 | graph edge / step | 聚合 rollout 为 state-transition graph，用到 goal 的距离下降构造 edge advantage | 图中 state 合并与距离是近似；ICML 2026 regular paper accepted |
 | [CARL](https://arxiv.org/abs/2605.27788), 05-27 | tool-boundary segment | critic 从单个 binary outcome 学习各 tool-use segment 的 signed advantage | 聚焦何时调用工具，critic 误差仍会进入 credit |
 | [GDCR / SAPO](https://arxiv.org/abs/2605.29697), 05-28 | search step | 训练期 entity-relation graph 衡量新检索 / 引用实体到答案的距离 | 依赖可构造的 task graph 与 answer entity |
 | [MMPO](https://arxiv.org/abs/2605.30159), 05-28 | summary / memory turn | 用“当前进展与缺失信息”探针得到 Belief Entropy，给摘要增加 bounded intermediate reward | belief clarity 属于自监督 proxy，低熵也可能来自过度自信 |
