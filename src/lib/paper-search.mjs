@@ -11,7 +11,7 @@ const compactText = (value = '', limit = 180) => {
 
 const getTerms = (query = '') => normalize(query).split(/\s+/).filter(Boolean);
 
-export const buildPaperSearchItems = (papers = []) =>
+const paperSearchItems = (papers = []) =>
   papers.map((paper) => {
     const tags = Array.isArray(paper.tags) ? paper.tags : [];
     const tagAliases = Array.isArray(paper.tagAliases) ? paper.tagAliases : [];
@@ -32,6 +32,8 @@ export const buildPaperSearchItems = (papers = []) =>
     );
 
     return {
+      contentType: 'paper',
+      typeLabel: '论文',
       title: paper.title ?? '',
       path: paper.path ?? '',
       firstArchivedAt: paper.firstArchivedAt ?? '',
@@ -41,6 +43,36 @@ export const buildPaperSearchItems = (papers = []) =>
       searchText,
     };
   });
+
+const mainlineSearchItems = (mainlines = []) =>
+  mainlines.map((mainline) => ({
+    contentType: 'mainline',
+    typeLabel: '主线',
+    title: mainline.title ?? '',
+    path: mainline.path ?? '',
+    firstArchivedAt: mainline.firstArchivedAt ?? '',
+    authors: '',
+    coreSignal: compactText(mainline.coreSignal ?? mainline.currentJudgment ?? ''),
+    tags: Array.isArray(mainline.classificationAxes) ? mainline.classificationAxes : [],
+    searchText: normalize(
+      [
+        mainline.title,
+        mainline.slug,
+        mainline.researchQuestion,
+        mainline.coreSignal,
+        mainline.boundary,
+        mainline.currentJudgment,
+        ...(mainline.classificationAxes ?? []),
+      ]
+        .filter(Boolean)
+        .join(' '),
+    ),
+  }));
+
+export const buildPaperSearchItems = (papers = [], mainlines = []) => [
+  ...paperSearchItems(papers),
+  ...mainlineSearchItems(mainlines),
+];
 
 export const searchPaperItems = (items = [], query = '', limit = 12) => {
   const terms = getTerms(query);

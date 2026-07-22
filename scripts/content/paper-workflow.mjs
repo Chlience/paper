@@ -36,7 +36,6 @@ export const MATERIAL_TYPES = new Set([
   'survey',
   'blog',
   'framework-docs',
-  'composite',
 ]);
 
 export const REVIEW_PAGE_TYPES = new Set([
@@ -62,8 +61,6 @@ const evidenceSectionGroup = REQUIRED_SECTION_GROUPS.find((group) => group.name 
 
 const exactMinutePattern = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$/;
 const exactDatePattern = /^\d{4}-\d{2}-\d{2}$/;
-const compositeProtocolHeadingPattern =
-  /^###\s+(?:(?:检索|搜索|纳入).*(?:协议|范围|边界)|(?:search|inclusion).*(?:protocol|scope|boundar))/mi;
 const paperReviewStatusSet = new Set(PAPER_REVIEW_STATUSES);
 const absoluteUrlPattern = /https?:\/\/[^\s)>；，。]+/gi;
 const internalPaperPathPattern = /\/papers\/([^/#?\s)]+)\//g;
@@ -161,7 +158,6 @@ const isValidMinute = (value) => {
   return isValidDate(date) && hour >= 0 && hour <= 23 && minute >= 0 && minute <= 59;
 };
 
-const searchWindowDates = (value = '') => String(value).match(/\d{4}-\d{2}-\d{2}/g) ?? [];
 
 const isHttpUrl = (value) => {
   try {
@@ -413,7 +409,7 @@ export const validatePaperRecord = async ({
       ),
     );
   }
-  if (!hasTraceableSource(source, knownPaperSlugs, isStructured && materialType === 'composite')) {
+  if (!hasTraceableSource(source, knownPaperSlugs)) {
     errors.push(issue('missing-source-link', slug, 'Source must contain an external URL or a valid archived paper link.'));
   }
   if (!indexMarkdown.includes(`/papers/${slug}/`)) {
@@ -484,16 +480,12 @@ export const validatePaperRecord = async ({
     if (!MATERIAL_TYPES.has(materialType)) {
       errors.push(issue('v2-material-type', slug, 'Material type is outside the supported v2 set.'));
     }
-    const canonicalPaper = canonicalSource.match(/^\/papers\/([^/#?]+)\/$/)?.[1];
-    const validInternalCanonical =
-      materialType === 'composite' &&
-      (canonicalSource === '/archive/' || (knownPaperSlugs.has(canonicalPaper) && canonicalPaper !== slug));
-    if (canonicalSource && !isHttpUrl(canonicalSource) && !validInternalCanonical) {
+    if (canonicalSource && !isHttpUrl(canonicalSource)) {
       errors.push(
         issue(
           'v2-canonical-source',
           slug,
-          'Canonical source must be an absolute URL, or a non-self archive path for composite material.',
+          'Canonical source must be an absolute URL.',
         ),
       );
     }
@@ -515,53 +507,6 @@ export const validatePaperRecord = async ({
         }
       }
 
-      if (materialType === 'composite') {
-        for (const fieldName of ['Responsible organization', 'Search services', 'Search window']) {
-          if (!sourceField(fieldName)) {
-            errors.push(
-              issue(
-                'v21-composite-source-field',
-                slug,
-                `v2.1 composite notes must declare ${fieldName}.`,
-              ),
-            );
-          }
-        }
-        if (!modules.includes('survey')) {
-          errors.push(
-            issue(
-              'v21-composite-analysis-module',
-              slug,
-              'v2.1 composite notes must include the survey analysis module.',
-            ),
-          );
-        }
-
-        const windowDates = searchWindowDates(sourceField('Search window'));
-        if (
-          windowDates.length < 2 ||
-          !isValidDate(windowDates[0]) ||
-          !isValidDate(windowDates.at(-1)) ||
-          windowDates[0] > windowDates.at(-1)
-        ) {
-          errors.push(
-            issue(
-              'v21-composite-search-window',
-              slug,
-              'v2.1 composite Search window must contain valid ordered start and end dates.',
-            ),
-          );
-        }
-        if (!compositeProtocolHeadingPattern.test(source)) {
-          errors.push(
-            issue(
-              'v21-composite-protocol',
-              slug,
-              'v2.1 composite Source must contain a level-three search or inclusion protocol section.',
-            ),
-          );
-        }
-      }
     }
 
     for (const block of resultBlocks(sectionForGroup(markdown, evidenceSectionGroup))) {
@@ -666,15 +611,6 @@ export const validatePaperRecord = async ({
       }
       if (pageType && !REVIEW_PAGE_TYPES.has(pageType)) {
         errors.push(issue('v21-review-page-type', slug, 'Review page-type is outside the supported set.'));
-      }
-      if (materialType === 'composite' && pageType && pageType !== 'not-applicable') {
-        errors.push(
-          issue(
-            'v21-composite-review-page-type',
-            slug,
-            'v2.1 composite notes must use Review status page-type=not-applicable.',
-          ),
-        );
       }
       if (matchConfidence && !/^(high|medium|low)$/i.test(matchConfidence)) {
         errors.push(issue('v21-review-confidence', slug, 'Review match-confidence must be high, medium, or low.'));

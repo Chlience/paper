@@ -5,8 +5,10 @@ import process from 'node:process';
 export const repoRoot = process.cwd();
 export const generatedDir = path.join(repoRoot, 'src/generated');
 export const generatedFile = path.join(generatedDir, 'paper-data.json');
+export const generatedMainlineFile = path.join(generatedDir, 'mainline-data.json');
 export const contentDir = path.join(repoRoot, 'content');
 export const paperContentDir = path.join(contentDir, 'papers');
+export const mainlineContentDir = path.join(contentDir, 'mainlines');
 export const utilityContentDir = path.join(contentDir, 'utility');
 export const dataDir = path.join(repoRoot, 'data');
 export const authorsFile = path.join(dataDir, 'authors.json');
@@ -29,6 +31,14 @@ export const readPaperEntries = async () => {
     .filter((fileName) => fileName.endsWith('.md'))
     .sort()
     .map((fileName) => markdownEntry(paperContentDir, fileName));
+};
+
+export const readMainlineEntries = async () => {
+  const files = await fs.readdir(mainlineContentDir);
+  return files
+    .filter((fileName) => fileName.endsWith('.md'))
+    .sort()
+    .map((fileName) => markdownEntry(mainlineContentDir, fileName));
 };
 
 export const utilityPageDefinitions = [
@@ -55,6 +65,12 @@ export const utilityPageDefinitions = [
     slug: 'synthesis-workflow',
     title: 'Research Synthesis Workflow',
     path: '/synthesis-workflow/',
+  },
+  {
+    ...markdownEntry(utilityContentDir, 'research-mainline-template.md'),
+    slug: 'mainline-template',
+    title: 'Research Mainline Template',
+    path: '/mainline-template/',
   },
   {
     ...markdownEntry(utilityContentDir, 'paper-note-template.md'),

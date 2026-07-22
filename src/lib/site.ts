@@ -15,6 +15,7 @@ export const paths = {
   archive: '/archive/',
   workflow: '/workflow/',
   synthesisWorkflow: '/synthesis-workflow/',
+  mainlineTemplate: '/mainline-template/',
   template: '/template/',
   mainSite: 'https://chlience.com',
 };

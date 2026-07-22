@@ -1152,40 +1152,6 @@
     ]
   },
   {
-    "slug": "keller-jordan",
-    "name": "Keller Jordan",
-    "aliases": ["Keller Jordan", "K. Jordan"],
-    "affiliations": ["Independent research blog", "Berkeley, California (GitHub location)"],
-    "homepage": "https://kellerjordan.github.io/",
-    "github": "https://github.com/KellerJordan",
-    "x": "https://x.com/kellerjordan0",
-    "xConfidence": "high",
-    "topics": ["Muon", "optimizer geometry", "NanoGPT speedrunning", "CIFAR-10 speedrunning", "neural network training"],
-    "notes": "Muon blog and KellerJordan/Muon implementation author; personal About page links the kellerjordan0 X account, and GitHub profile owns Muon, modded-nanogpt, and cifar10-airbench repositories.",
-    "sources": [
-      {
-        "label": "Homepage",
-        "url": "https://kellerjordan.github.io/"
-      },
-      {
-        "label": "About",
-        "url": "https://kellerjordan.github.io/about/"
-      },
-      {
-        "label": "GitHub",
-        "url": "https://github.com/KellerJordan"
-      },
-      {
-        "label": "Muon repo",
-        "url": "https://github.com/KellerJordan/Muon"
-      },
-      {
-        "label": "X",
-        "url": "https://x.com/kellerjordan0"
-      }
-    ]
-  },
-  {
     "slug": "john-schulman",
     "name": "John Schulman",
     "aliases": ["John Schulman", "J. Schulman", "joschu", "johnschulman2"],

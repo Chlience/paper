@@ -90,6 +90,7 @@ if (!Array.isArray(data.authors)) {
 }
 
 const paperSlugs = new Set((data.papers ?? []).map((paper) => paper.slug));
+const mainlineSlugs = new Set((mainlineData.mainlines ?? []).map((mainline) => mainline.slug));
 const paperReviewStatuses = new Set(['pending', 'needs-review', 'approved']);
 const authorSlugs = new Set((data.authors ?? []).map((author) => author.slug));
 const generatedAuthorsBySlug = new Map((data.authors ?? []).map((author) => [author.slug, author]));
@@ -109,6 +110,11 @@ const checkHtmlLinks = (label, html) => {
     const authorMatch = href.match(/^\/authors\/([^/#?]+)\//);
     if (authorMatch && !authorSlugs.has(authorMatch[1]) && authorMatch[1] !== '%3Cslug%3E') {
       fail(`${label} links to missing author page: ${href}`);
+    }
+
+    const mainlineMatch = href.match(/^\/mainlines\/([^/#?]+)\//);
+    if (mainlineMatch && !mainlineSlugs.has(mainlineMatch[1])) {
+      fail(`${label} links to missing mainline page: ${href}`);
     }
   }
 };
@@ -200,6 +206,7 @@ const papersIndexPath = path.join(distDir, 'papers', 'index.html');
 const topicsIndexPath = path.join(distDir, 'topics', 'index.html');
 const mainlinesIndexPath = path.join(distDir, 'mainlines', 'index.html');
 const synthesisWorkflowIndexPath = path.join(distDir, 'synthesis-workflow', 'index.html');
+const mainlineTemplateIndexPath = path.join(distDir, 'mainline-template', 'index.html');
 const paperSearchIndexPath = path.join(distDir, 'paper-search.json');
 
 if (!(await exists(sitemapXmlPath))) {
@@ -237,7 +244,8 @@ if (!(await exists(synthesisWorkflowIndexPath))) {
     'Research Synthesis Workflow',
     'Definition of Done',
     'Search window',
-    'policy topology',
+    'Classification axes',
+    '策略角色配置',
     'Synthesis method',
   ]) {
     if (!synthesisWorkflowHtml.includes(marker)) {
@@ -249,34 +257,51 @@ if (!(await exists(synthesisWorkflowIndexPath))) {
   }
 }
 
+if (!(await exists(mainlineTemplateIndexPath))) {
+  fail('dist/mainline-template/index.html is missing.');
+}
+
 if (!(await exists(paperSearchIndexPath))) {
   fail('dist/paper-search.json is missing.');
 } else {
   const searchItems = JSON.parse(await fs.readFile(paperSearchIndexPath, 'utf8'));
-  if (!Array.isArray(searchItems) || searchItems.length !== data.papers.length) {
-    fail('dist/paper-search.json does not match the generated paper inventory.');
+  if (!Array.isArray(searchItems) || searchItems.length !== data.papers.length + mainlineData.mainlines.length) {
+    fail('dist/paper-search.json does not match the paper and mainline inventories.');
+  }
+  if (!searchItems.some((item) => item.contentType === 'mainline')) {
+    fail('dist/paper-search.json is missing mainline entries.');
   }
 }
 
 const synthesisPagePath = path.join(
   distDir,
-  'papers',
-  '2026-07-13-rl-credit-assignment-may-july-landscape',
+  'mainlines',
+  'llm-agent-rl-credit-assignment',
   'index.html',
 );
 const regularPaperPagePath = path.join(distDir, 'papers', '2607.13988-trace-turn-level-reward-assignment', 'index.html');
+const removedPaperPaths = [
+  '2026-07-13-agentic-rl-learned-environment-evolution',
+  '2026-07-13-rl-credit-assignment-may-july-landscape',
+  '2026-06-23-chinese-frontier-model-reports-timeline',
+  '2026-06-19-muon-optimizer-keller-jordan-synthesis',
+].map((slug) => path.join(distDir, 'papers', slug, 'index.html'));
+
+for (const removedPath of removedPaperPaths) {
+  if (await exists(removedPath)) fail(`${path.relative(repoRoot, removedPath)} must stay deleted without a redirect page.`);
+}
 
 if (!(await exists(synthesisPagePath))) {
   fail('Research-synthesis canary page is missing.');
 } else {
   const synthesisHtml = await fs.readFile(synthesisPagePath, 'utf8');
   for (const marker of [
-    'class="paper-page container is-synthesis"',
-    '阶段性研究综合',
-    '2026.05',
-    '2026.07',
+    'class="paper-page mainline-detail-page is-synthesis container"',
+    '用户定义研究主线',
+    '2026-05-01',
+    '2026-07-22',
     '检索截止',
-    'id="检索协议与结果边界"',
+    'id="检索与纳入协议"',
     'href="/synthesis-workflow/"',
     '"@type":"Article"',
   ]) {
@@ -284,7 +309,7 @@ if (!(await exists(synthesisPagePath))) {
       fail(`Research-synthesis page is missing marker: ${marker}`);
     }
   }
-  for (const marker of ['id="source"', 'id="作者与关系"', 'id="openreview-审稿意见吸收"', 'id="reference-intake-brief"']) {
+  for (const marker of ['id="source"', 'id="作者与关系"', 'id="关键实验定理"', 'id="跨论文关系"']) {
     if (synthesisHtml.includes(marker)) {
       fail(`Research-synthesis page exposes archive-only section: ${marker}`);
     }
@@ -339,6 +364,7 @@ if (!(await exists(homeIndexPath))) {
     `>${data.authors.length} authors<`,
     'href="/workflow/"',
     'href="https://chlience.com"',
+    'href="/mainlines/llm-agent-rl-credit-assignment/"',
   ]) {
     if (!homeHtml.includes(marker)) {
       fail(`dist/index.html is missing the polished footer marker: ${marker}`);
@@ -353,7 +379,7 @@ for (const file of htmlFiles) {
   }
 }
 
-if (!Array.isArray(mainlineData.lines) || mainlineData.lines.length === 0) {
+if (!Array.isArray(mainlineData.mainlines) || mainlineData.mainlines.length === 0) {
   fail('No generated research mainlines found.');
 }
 
@@ -364,52 +390,39 @@ if (!(await exists(mainlinesIndexPath))) {
   if (/data-mainline-(?:filters|search|select|role|row|clear)/.test(mainlinesHtml)) {
     fail('dist/mainlines/index.html still contains local search or filter controls.');
   }
-  for (const line of mainlineData.lines ?? []) {
-    if (!mainlinesHtml.includes(`/mainlines/${line.id}/`)) {
-      fail(`dist/mainlines/index.html is missing the ${line.id} directory link.`);
+  for (const mainline of mainlineData.mainlines ?? []) {
+    if (!mainlinesHtml.includes(mainline.path)) {
+      fail(`dist/mainlines/index.html is missing the ${mainline.slug} directory link.`);
     }
+  }
+  for (const marker of ['核心问题', '边界', '分类框架', '当前判断']) {
+    if (!mainlinesHtml.includes(marker)) fail(`dist/mainlines/index.html is missing overview field: ${marker}.`);
   }
 }
 
-for (const line of mainlineData.lines ?? []) {
-  const detailPath = path.join(distDir, 'mainlines', line.id, 'index.html');
+for (const mainline of mainlineData.mainlines ?? []) {
+  const detailPath = path.join(distDir, 'mainlines', mainline.slug, 'index.html');
   if (!(await exists(detailPath))) {
     fail(`${path.relative(repoRoot, detailPath)} is missing.`);
     continue;
   }
 
   const html = await fs.readFile(detailPath, 'utf8');
-  const expectedMethodIds = [...new Set((line.methods ?? []).map((method) => method.id))].sort();
-  const tableMethodIds = [...html.matchAll(/<tr\s+id="method-([^"]+)"/g)].map((match) => match[1]).sort();
-  if (JSON.stringify(tableMethodIds) !== JSON.stringify(expectedMethodIds)) {
-    fail(`${path.relative(repoRoot, detailPath)} method table does not match generated method IDs.`);
+  for (const marker of ['id="综合判断"', 'id="分类框架"', 'id="跨材料比较"', 'id="证据强度"', 'id="更新记录"']) {
+    if (!html.includes(marker)) fail(`${path.relative(repoRoot, detailPath)} is missing article marker: ${marker}.`);
   }
+  if (!html.includes(mainline.researchQuestion) || !html.includes('"@type":"Article"')) {
+    fail(`${path.relative(repoRoot, detailPath)} is missing mainline metadata or Article JSON-LD.`);
+  }
+}
 
-  const graphMethodIds = [...html.matchAll(new RegExp(`\\bid="graph-method-${line.id}-([^"]+)"`, 'g'))]
-    .map((match) => match[1])
-    .sort();
-  const expectedGraphIds = line.status === 'formal' ? expectedMethodIds : [];
-  if (JSON.stringify(graphMethodIds) !== JSON.stringify(expectedGraphIds)) {
-    fail(`${path.relative(repoRoot, detailPath)} graph and method table do not share the same method IDs.`);
-  }
-
-  const generatedRelationIds = [...new Set((line.relations ?? []).map((relation) => relation.id))].sort();
-  const expectedGraphRelationIds = line.status === 'formal' ? generatedRelationIds : [];
-  const graphRelationIds = [...html.matchAll(/\bid="graph-relation-([^"]+)"/g)]
-    .map((match) => match[1])
-    .sort();
-  const tableRelationIds = [...html.matchAll(/\bdata-relation-id="([^"]+)"/g)]
-    .map((match) => match[1])
-    .sort();
-  if (JSON.stringify(graphRelationIds) !== JSON.stringify(expectedGraphRelationIds)) {
-    fail(`${path.relative(repoRoot, detailPath)} graph does not match generated relation IDs.`);
-  }
-  if (JSON.stringify(tableRelationIds) !== JSON.stringify(generatedRelationIds)) {
-    fail(`${path.relative(repoRoot, detailPath)} method table does not match generated relation IDs.`);
-  }
-
-  if (/@viz-js\/viz|viz-js|WebAssembly|Viz\s*\(/i.test(html)) {
-    fail(`${path.relative(repoRoot, detailPath)} contains a client-side graph runtime.`);
+for (const mainline of mainlineData.mainlines ?? []) {
+  for (const paperSlug of mainline.includedPaperSlugs ?? []) {
+    const paperPath = path.join(distDir, 'papers', paperSlug, 'index.html');
+    const html = await fs.readFile(paperPath, 'utf8');
+    if (!html.includes(`href="${mainline.path}"`)) {
+      fail(`${path.relative(repoRoot, paperPath)} is missing backlink to ${mainline.slug}.`);
+    }
   }
 }
 
@@ -465,10 +478,10 @@ if ((await exists(sitemapXmlPath)) && (await exists(robotsTxtPath))) {
     fail(`sitemap-0.xml must include ${topicsUrl}.`);
   }
 
-  for (const line of mainlineData.lines ?? []) {
-    const lineUrl = new URL(`/mainlines/${line.id}/`, expectedSiteUrl).href;
-    if (!sitemapShard.includes(lineUrl)) {
-      fail(`sitemap-0.xml must include ${lineUrl}.`);
+  for (const mainline of mainlineData.mainlines ?? []) {
+    const mainlineUrl = new URL(mainline.path, expectedSiteUrl).href;
+    if (!sitemapShard.includes(mainlineUrl)) {
+      fail(`sitemap-0.xml must include ${mainlineUrl}.`);
     }
   }
 }

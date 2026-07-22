@@ -161,22 +161,6 @@ Review-Status: pending
 - Review status: page-type=not-found; match-confidence=high; observed-at=2026-07-17; venue-status=arXiv preprint
 ${v21CoreBody}`;
 
-const v21CompositePaper = v21Paper
-  .replace('# V2.1 note', '# V2.1 composite')
-  .replace('Material type: research-paper', 'Material type: composite')
-  .replace('Analysis modules: experiment', 'Analysis modules: experiment, survey')
-  .replace('Canonical source: https://arxiv.org/abs/2607.00002', 'Canonical source: /papers/source-paper/')
-  .replace('- Authors: Ada Example, Bob Example', '- Responsible organization: Example Research Archive')
-  .replace(
-    '- Accessed: 2026-07-17',
-    '- Search services: [arXiv](https://arxiv.org/)\n- Search window: 2026-05-01 至 2026-07-17 09:00 CST\n- Accessed: 2026-07-17',
-  )
-  .replace('page-type=not-found', 'page-type=not-applicable')
-  .replace(
-    '\n## 作者与关系',
-    '\n### 检索协议与结果边界\n\n记录检索式、纳入条件、排除条件和覆盖缺口。\n\n## 作者与关系',
-  );
-
 const validate = (slug, markdown, imageExists = async () => true) =>
   validatePaperRecord({
     slug,
@@ -800,71 +784,13 @@ test('v2 canonical sources accept a Markdown link to an absolute URL', async () 
   assert.deepEqual(result.errors, []);
 });
 
-test('composite notes accept a traceable bare internal canonical source', async () => {
-  const markdown = v2Paper
-    .replace('Material type: research-paper', 'Material type: composite')
-    .replace('Canonical source: https://arxiv.org/abs/2607.00001', 'Canonical source: /papers/source-paper/');
-  const result = await validate('composite-note', markdown);
-  assert.deepEqual(result.errors, []);
-});
-
-test('non-composite notes reject internal canonical sources', async () => {
+test('paper notes reject internal canonical sources', async () => {
   const markdown = v2Paper.replace(
     'Canonical source: https://arxiv.org/abs/2607.00001',
     'Canonical source: /papers/source-paper/',
   );
   const result = await validate('internal-research-source', markdown);
   assert.ok(result.errors.some((issue) => issue.code === 'v2-canonical-source'));
-});
-
-test('composite notes reject a self-referential canonical source', async () => {
-  const markdown = v2Paper
-    .replace('Material type: research-paper', 'Material type: composite')
-    .replace('Canonical source: https://arxiv.org/abs/2607.00001', 'Canonical source: /papers/composite-self-link/');
-  const result = await validate('composite-self-link', markdown);
-  assert.ok(result.errors.some((issue) => issue.code === 'v2-canonical-source'));
-});
-
-test('v2.1 composite notes enforce the research-synthesis source contract', async () => {
-  assert.deepEqual((await validate('valid-v21-composite', v21CompositePaper)).errors, []);
-
-  const missingField = v21CompositePaper.replace(/^- Search services:.*\n/m, '');
-  assert.ok(
-    (await validate('missing-composite-field', missingField)).errors.some(
-      (issue) => issue.code === 'v21-composite-source-field',
-    ),
-  );
-
-  const missingSurvey = v21CompositePaper.replace('Analysis modules: experiment, survey', 'Analysis modules: experiment');
-  assert.ok(
-    (await validate('missing-composite-survey', missingSurvey)).errors.some(
-      (issue) => issue.code === 'v21-composite-analysis-module',
-    ),
-  );
-
-  const invalidWindow = v21CompositePaper.replace('2026-07-17 09:00 CST', '2026-99-17 09:00 CST');
-  assert.ok(
-    (await validate('invalid-composite-window', invalidWindow)).errors.some(
-      (issue) => issue.code === 'v21-composite-search-window',
-    ),
-  );
-
-  const missingProtocol = v21CompositePaper.replace(
-    /\n### 检索协议与结果边界\n\n记录检索式、纳入条件、排除条件和覆盖缺口。\n/,
-    '',
-  );
-  assert.ok(
-    (await validate('missing-composite-protocol', missingProtocol)).errors.some(
-      (issue) => issue.code === 'v21-composite-protocol',
-    ),
-  );
-
-  const wrongPageType = v21CompositePaper.replace('page-type=not-applicable', 'page-type=not-found');
-  assert.ok(
-    (await validate('invalid-composite-review-type', wrongPageType)).errors.some(
-      (issue) => issue.code === 'v21-composite-review-page-type',
-    ),
-  );
 });
 
 test('v2 access dates reject template placeholders', async () => {
@@ -1286,24 +1212,15 @@ test('content build associates linked author profiles with their papers', async 
     assert.ok(!Object.hasOwn(paper, 'summary'));
   }
 
-  const synthesis = data.papers.find(
-    (paper) => paper.slug === '2026-07-13-rl-credit-assignment-may-july-landscape',
+  assert.ok(
+    !data.papers.some((paper) => paper.materialType === 'composite'),
+    'Request-defined mainlines must stay outside generated paper data',
   );
-  assert.ok(synthesis, 'Missing the RL credit-assignment research synthesis');
-  assert.equal(synthesis.materialType, 'composite');
-  assert.equal(synthesis.responsibleOrganization, 'Chlience Paper Archive（本地综合）');
-  assert.equal(synthesis.canonicalSource, '/papers/2604.09459-credit-assignment-reasoning-agentic-llm-rl/');
-  assert.equal(synthesis.searchWindow.start, '2026-05-01');
-  assert.equal(synthesis.searchWindow.end, '2026-07-22');
-  assert.equal(synthesis.searchWindow.label, '2026.05 → 2026.07');
-  assert.match(synthesis.searchWindow.cutoff, /^2026-07-22\b/);
-  assert.match(synthesis.html, /id="检索协议与结果边界"/);
-  assert.doesNotMatch(synthesis.html, /id="(?:source|作者与关系|openreview-审稿意见吸收|reference-intake-brief)"/);
 
   const regularPaper = data.papers.find((paper) => paper.slug === '2607.13988-trace-turn-level-reward-assignment');
   assert.ok(regularPaper, 'Missing regular-paper canary TRACE');
   assert.equal(regularPaper.materialType, 'research-paper');
-  assert.equal(regularPaper.searchWindow, null);
+  assert.ok(!Object.hasOwn(regularPaper, 'searchWindow'));
   assert.match(regularPaper.html, /id="source"/);
   for (const slug of ['nino-vieillard', 'gennady-pekhimenko', 'dongyang-ma-flashmemory']) {
     const author = data.authors.find((candidate) => candidate.slug === slug);
@@ -1482,23 +1399,25 @@ test('public workflow and agent instructions expose one aligned v2.1 contract', 
   assert.match(workflowDoc, /从新到旧/);
   for (const document of [workflowDoc, template, agentInstructions]) {
     assert.match(document, /\/synthesis-workflow\//);
+    assert.match(document, /\/mainline-template\//);
   }
   for (const snippet of [
+    'Workflow version: synthesis-v1',
     'Material type: composite',
     'Analysis modules',
     'survey',
     'Responsible organization',
     'Search services',
     'Search window',
-    'policy topology',
+    '策略角色配置',
     'Review-Status: pending',
     '五项人工语义门禁',
   ]) {
     assert.match(synthesisWorkflow, new RegExp(snippet.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
   }
   assert.match(agentInstructions, /核心信号/);
-  assert.match(agentInstructions, /均不使用公式或 TeX 数学定界符/);
-  assert.match(agentInstructions, /孤立作者/);
+  assert.match(agentInstructions, /不使用公式、TeX 定界符/);
+  assert.match(agentInstructions, /无剩余论文关联/);
   assert.match(agentInstructions, /Review-Status/);
   assert.match(agentInstructions, /Key figure rationale/);
   assert.match(maintenanceSop, /Key figure decision: include/);
@@ -1606,29 +1525,33 @@ test('paper detail metadata keeps source concise and topics in a separate badge 
   assert.doesNotMatch(siteCss, /\.paper-meta-label/);
 });
 
-test('research synthesis workflow has a public route and a direct composite-page entry', async () => {
-  const [page, header, siteLib] = await Promise.all([
+test('research synthesis workflow and mainline template have public routes', async () => {
+  const [page, templatePage, header, siteLib] = await Promise.all([
     fs.readFile('src/pages/synthesis-workflow/index.astro', 'utf8'),
+    fs.readFile('src/pages/mainline-template/index.astro', 'utf8'),
     fs.readFile('src/components/ResearchSynthesisHeader.astro', 'utf8'),
     fs.readFile('src/lib/site.ts', 'utf8'),
   ]);
   const definition = repository.utilityPageDefinitions.find((entry) => entry.slug === 'synthesis-workflow');
+  const templateDefinition = repository.utilityPageDefinitions.find((entry) => entry.slug === 'mainline-template');
 
   assert.equal(definition?.file, 'content/utility/research-synthesis-workflow.md');
   assert.equal(definition?.path, '/synthesis-workflow/');
   assert.match(page, /canonicalPath="\/synthesis-workflow\/"/);
   assert.match(page, /active="workflow"/);
+  assert.equal(templateDefinition?.file, 'content/utility/research-mainline-template.md');
+  assert.equal(templateDefinition?.path, '/mainline-template/');
+  assert.match(templatePage, /canonicalPath="\/mainline-template\/"/);
   assert.match(header, /href=\{paths\.synthesisWorkflow\}/);
-  assert.match(header, /研究综合 SOP/);
+  assert.match(header, /主线综合 SOP/);
   assert.match(siteLib, /synthesisWorkflow: '\/synthesis-workflow\/'/);
+  assert.match(siteLib, /mainlineTemplate: '\/mainline-template\/'/);
 });
 
-test('research mainlines expose a static directory and generated detail routes without local filtering', async () => {
-  const [page, detailPage, graph, methodTable, siteHeader, siteLib, layout] = await Promise.all([
+test('research mainlines expose request-defined article routes without the legacy graph system', async () => {
+  const [page, detailPage, siteHeader, siteLib, layout] = await Promise.all([
     fs.readFile('src/pages/mainlines/index.astro', 'utf8'),
     fs.readFile('src/pages/mainlines/[id].astro', 'utf8'),
-    fs.readFile('src/components/MainlineGraph.astro', 'utf8'),
-    fs.readFile('src/components/MainlineMethodTable.astro', 'utf8'),
     fs.readFile('src/components/SiteHeader.astro', 'utf8'),
     fs.readFile('src/lib/site.ts', 'utf8'),
     fs.readFile('src/layouts/Layout.astro', 'utf8'),
@@ -1639,8 +1562,10 @@ test('research mainlines expose a static directory and generated detail routes w
   assert.equal(definition?.path, '/mainlines/');
   assert.match(page, /active="mainlines"/);
   assert.match(page, /canonicalPath="\/mainlines\/"/);
-  assert.match(page, /href=\{`\/mainlines\/\$\{line\.id\}\/`\}/);
-  assert.match(page, /候选方向/);
+  assert.match(page, /mainline\.path/);
+  for (const field of ['核心问题', '边界', '分类框架', '当前判断']) {
+    assert.match(page, new RegExp(field));
+  }
   assert.doesNotMatch(
     page,
     /data-mainline-(?:filters|search|select|role|row|clear)|URLSearchParams|applyFilters|role="search"/,
@@ -1648,16 +1573,14 @@ test('research mainlines expose a static directory and generated detail routes w
   assert.doesNotMatch(page, /classification\.papers\.map|paperEntries/);
 
   assert.match(detailPage, /export function getStaticPaths/);
-  assert.match(detailPage, /canonicalPath = `\/mainlines\/\$\{line\.id\}\//);
-  for (const heading of ['核心问题与范围', '演进概览', '方法继承表', '关键分歧与反例', '当前判断', '开放问题']) {
-    assert.match(detailPage, new RegExp(heading));
-  }
+  assert.match(detailPage, /mainlineData\.mainlines/);
+  assert.match(detailPage, /canonicalPath = mainline\.path/);
+  assert.match(detailPage, /mainline\.html/);
+  assert.match(detailPage, /schemaType: 'Article'/);
   assert.doesNotMatch(detailPage, /client:(?:load|idle|visible|only)/);
-  assert.match(graph, /set:html=\{svg\}/);
-  assert.doesNotMatch(graph, /client:(?:load|idle|visible|only)|WebAssembly|Viz\b|Graphviz/i);
-  for (const heading of ['时间', '方法', '前序方法与关系', '前序暴露的问题', '本方法的优化']) {
-    assert.match(methodTable, new RegExp(`<th[^>]*>${heading}<\\/th>`));
-  }
+  await assert.rejects(fs.access('src/components/MainlineGraph.astro'));
+  await assert.rejects(fs.access('src/components/MainlineMethodTable.astro'));
+  await assert.rejects(fs.access('data/research-mainlines.json'));
   assert.match(siteHeader, /id: 'mainlines', label: '主线'/);
   assert.match(siteLib, /mainlines: '\/mainlines\/'/);
   assert.match(layout, /'mainlines'/);

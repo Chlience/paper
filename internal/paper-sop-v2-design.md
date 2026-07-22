@@ -1,7 +1,9 @@
 # Paper SOP v2 Design
 
 Created-At: 2026-07-10
-Status: Implemented; cross-paper ownership amended 2026-07-10
+Status: Historical design record; single-paper portions remain implemented, composite handling was superseded by `synthesis-v1` on 2026-07-22
+
+> Current request-defined mainline rules live in `content/utility/research-synthesis-workflow.md`. References below to composite notes inside `content/papers/` describe the earlier v2 design.
 
 ## 1. 目标
 

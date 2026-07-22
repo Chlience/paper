@@ -1,8 +1,9 @@
 ---
 import data from '../generated/paper-data.json';
+import mainlineData from '../generated/mainline-data.json';
 import { buildPaperSearchItems } from '../lib/paper-search.mjs';
 
-const searchItems = buildPaperSearchItems(data.papers);
+const searchItems = buildPaperSearchItems(data.papers, mainlineData.mainlines);
 ---
 
 <dialog
@@ -10,11 +11,11 @@ const searchItems = buildPaperSearchItems(data.papers);
   data-paper-search-dialog
   data-search-url="/paper-search.json"
   data-search-count={searchItems.length}
-  aria-label="搜索论文"
+  aria-label="搜索论文与主线"
 >
   <div class="paper-search-panel">
     <div class="paper-search-head">
-      <label for="paper-search-command">搜索论文</label>
+      <label for="paper-search-command">搜索论文与主线</label>
       <button type="button" class="paper-search-close" data-paper-search-close aria-label="关闭搜索">关闭</button>
     </div>
     <input
@@ -25,12 +26,12 @@ const searchItems = buildPaperSearchItems(data.papers);
       inputmode="search"
       autocomplete="off"
       spellcheck="false"
-      placeholder="标题、作者、主题或 slug"
+      placeholder="标题、作者、分类框架或 slug"
       aria-describedby="paper-search-command-status"
       aria-controls="paper-search-command-results"
     />
     <p id="paper-search-command-status" class="paper-search-command-status mono" data-paper-search-status>
-      输入关键词搜索 {searchItems.length} 篇论文
+      输入关键词搜索 {searchItems.length} 项内容
     </p>
     <div
       id="paper-search-command-results"
@@ -70,11 +71,11 @@ const searchItems = buildPaperSearchItems(data.papers);
     let results = [];
     let lockedScrollY = 0;
     let lockedScrollbarWidth = 0;
-    const idleStatus = `输入关键词搜索 ${expectedCount} 篇论文`;
+    const idleStatus = `输入关键词搜索 ${expectedCount} 项内容`;
 
     const loadItems = () => {
       if (loadPromise) return loadPromise;
-      status.textContent = '正在载入论文索引…';
+      status.textContent = '正在载入论文与主线索引…';
       loadPromise = fetch(searchUrl, {
         credentials: 'same-origin',
         headers: { Accept: 'application/json' },
@@ -139,7 +140,7 @@ const searchItems = buildPaperSearchItems(data.papers);
       loadItems()
         .then(() => renderResults())
         .catch(() => {
-          status.textContent = '论文索引载入失败，请稍后重试';
+          status.textContent = '检索索引载入失败，请稍后重试';
         });
     };
 
@@ -164,7 +165,7 @@ const searchItems = buildPaperSearchItems(data.papers);
     const renderResults = () => {
       const query = input.value.trim();
       if (items.length === 0) {
-        status.textContent = loadFailed ? '论文索引载入失败，请稍后重试' : '正在载入论文索引…';
+        status.textContent = loadFailed ? '检索索引载入失败，请稍后重试' : '正在载入论文与主线索引…';
         resultsRoot.innerHTML = '';
         return;
       }
@@ -177,7 +178,7 @@ const searchItems = buildPaperSearchItems(data.papers);
         return;
       }
 
-      status.textContent = results.length > 0 ? `匹配 ${results.length} 篇` : '没有匹配的论文';
+      status.textContent = results.length > 0 ? `匹配 ${results.length} 项` : '没有匹配的内容';
       resultsRoot.innerHTML =
         results.length > 0
           ? results
@@ -191,7 +192,7 @@ const searchItems = buildPaperSearchItems(data.papers);
                     role="option"
                     aria-selected="${index === activeIndex ? 'true' : 'false'}"
                   >
-                    <span class="paper-search-result-title">${escapeHtml(item.title)}</span>
+                    <span class="paper-search-result-title"><small>${escapeHtml(item.typeLabel)}</small>${escapeHtml(item.title)}</span>
                     <span class="paper-search-result-summary">${escapeHtml(item.coreSignal)}</span>
                     <span class="paper-search-result-meta mono">
                       ${escapeHtml(item.firstArchivedAt)}
@@ -201,7 +202,7 @@ const searchItems = buildPaperSearchItems(data.papers);
                 `,
               )
               .join('')
-          : '<p class="paper-search-no-results">没有匹配的论文。</p>';
+          : '<p class="paper-search-no-results">没有匹配的内容。</p>';
     };
 
     for (const trigger of triggers) {

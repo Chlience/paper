@@ -1,6 +1,8 @@
 # Paper SOP v2 Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+Status: Historical implementation plan. Composite-note steps were superseded by the independent `content/mainlines/` and `synthesis-v1` contract on 2026-07-22.
+
+> The remaining steps document the original v2 implementation and are not the active execution contract.
 
 **Goal:** 将论文归档流程升级为分阶段、按材料类型启用条件模块、具备证据定位和兼容型自动检查的 SOP v2。
 

@@ -23,10 +23,7 @@ Updated-At: 2026-07-22
 | [SAO](/papers/2607.07508-sao-single-rollout-asynchronous-agentic-rl/) | 2026年7月 | 用每 prompt 单 rollout、强化 critic 与双侧 token mask 替代异步 GRPO 的组内等待和 group baseline。 |
 | [S-TTT](/papers/2607.09415-self-guided-test-time-training-long-context/) | 2026年7月 | 让基础模型从长上下文复制问题相关证据，并只对这些 span 做实例级 query-LoRA 更新后读取完整上下文作答。 |
 | [Grape](/papers/2026-07-13-grape-micro-task-agentic-workflow-serving/) | 2026年7月 | 把相依 LLM task 的已知 prompt、流式上游输出和 decode 拆成微任务，让下游在上游 decode 期间持续完成跨 task 增量 prefill。 |
-| [RL Credit Assignment Watch](/papers/2026-07-13-rl-credit-assignment-may-july-landscape/) | 2026年7月 | 按 token、segment、turn、trajectory set、memory 和 workflow role 归纳 2026 年 5—7 月方法，并把压缩后状态可比性与生成、聚合、互评、冻结参考策略之间的拓扑关系列为独立判断轴。 |
-| [Learned Environment Roadmap](/papers/2026-07-13-agentic-rl-learned-environment-evolution/) | 2026年7月 | 把 Agentic RL 的环境供给串成从可复位 sandbox、有状态模拟、可执行环境合成到 language world model 的演进路线，并以 real-sim 校准闭环约束策略利用模拟误差。 |
 | [TRACE](/papers/2607.13988-trace-turn-level-reward-assignment/) | 2026年7月 | 在已知短答案的长程搜索中，用冻结参考模型测量工具边界后的答案可预测性变化并把多步时序差信用混入终局优势，使两种 Qwen3 Thinking 模型在同设置下较 GRPO 的 BrowseComp-Plus 分数分别提高 5.6 和 6.2 个百分点。 |
-| [国产模型报告时间线](/papers/2026-06-23-chinese-frontier-model-reports-timeline/) | 2026年6月 | 按 MoE / 长上下文、reasoning RL、agentic infrastructure 三条主线串联 2024-2026 年国产前沿模型演进。 |
 | [SmoothAgent](/papers/2607.00151-smoothagent-lookahead-context-engineering/) | 2026年6月 | 把可提前确定的 context transformation 移入异步 lookahead stream，并用 SLO-aware scheduling 预建变换后 KV cache，降低 transform-point TTFT。 |
 | [ECHO](/papers/2606.31650-echo-selective-turn-memory-agentic-rl/) | 2026年6月 | ECHO 为长程智能体保留带原始轮次标识的选择性记忆，用它重建有限上下文并将结果信用路由到被复用历史轮次及其选择动作，在 BrowseComp-Plus 上同时提高一次通过率并减少滚动摘要造成的轨迹膨胀。 |
 | [SPIRAL](/papers/2606.23595-spiral-learning-search-aggregate/) | 2026年6月 | 从 8 条搜索轨迹随机构造 4 个四元集合，以聚合成功率的参与集合均值更新搜索轨迹，并用同集合内中心化 reward 训练共享策略的聚合轨迹。 |
@@ -100,7 +97,6 @@ Updated-At: 2026-07-22
 | [DeepSeek-R1](/papers/2501.12948-deepseek-r1-rl-reasoning/) | 2025年1月 | 用 outcome-based RL 从强 base model 诱导 long-CoT、自验证与策略切换，再通过 SFT / RL / distillation 转为可用模型。 |
 | [DeepSeek-V3](/papers/2412.19437-deepseek-v3-technical-report/) | 2024年12月 | 把 auxiliary-loss-free MoE balancing、MTP、FP8 与 DualPipe 组合成高效大规模训练系统。 |
 | [Qwen2.5](/papers/2412.15115-qwen2-5-technical-report/) | 2024年12月 | 把 18T 预训练、SFT / DPO / GRPO 与长上下文扩展组织为通用、代码和数学模型族。 |
-| [Muon](/papers/2026-06-19-muon-optimizer-keller-jordan-synthesis/) | 2024年12月 | 用 low-precision Newton-Schulz 把 momentum matrix 近似正交化，并给出 LLM scaling 所需的更新尺度和参数分组。 |
 | [HybridFlow](/papers/2409.19256-hybridflow-rlhf-framework/) | 2024年9月 | 用跨模型 single-controller 与模型内 multi-controller 统一编排 RLHF dataflow 和并行执行。 |
 | [DeepSeek-V2](/papers/2405.04434-deepseek-v2-mla-moe-efficient-llm/) | 2024年5月 | 把 per-head K/V cache 改成由 hidden state 下投影得到的共享 KV latent，并用 projection absorption 与 decoupled RoPE 避免恢复历史 K/V。 |
 | [Lightning Attention](/papers/2405.17381-various-lengths-constant-speed-lightning-attention/) | 2024年5月 | 把 causal linear attention 拆成块内矩阵乘和块间 recurrent state，提供 IO-aware GPU kernel。 |

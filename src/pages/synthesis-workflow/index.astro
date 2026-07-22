@@ -8,14 +8,14 @@ const workflow = data.utilities.find((page) => page.slug === 'synthesis-workflow
 <Layout
   active="workflow"
   title="Research Synthesis Workflow | Chlience Paper Archive"
-  description="阶段性研究综合的选题、检索窗口、比较框架、证据边界、公开结构和更新流程。"
+  description="用户定义研究主线的建立条件、检索窗口、分类框架、证据边界和更新流程。"
   canonicalPath="/synthesis-workflow/"
 >
   <article class="utility-page container">
     <header class="page-header slim">
       <p class="eyebrow mono">Synthesis method</p>
       <h1>{workflow?.title}</h1>
-      <p class="deck">为跨论文时间窗、方法谱系和证据综合建立可复核的检索边界、比较轴与更新契约。</p>
+      <p class="deck">一次明确的方向总结请求建立一条主线；本文规定稳定路径、检索边界、主题专属分类轴、逐结论证据强度与显式更新契约。</p>
     </header>
     <div class="prose" set:html={workflow?.html ?? ''} />
   </article>

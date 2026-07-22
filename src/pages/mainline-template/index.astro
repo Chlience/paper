@@ -1,0 +1,22 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import data from '../../generated/paper-data.json';
+
+const template = data.utilities.find((page) => page.slug === 'mainline-template');
+---
+
+<Layout
+  active="workflow"
+  title="Research Mainline Template | Chlience Paper Archive"
+  description="用户定义研究主线的独立 Markdown 模板。"
+  canonicalPath="/mainline-template/"
+>
+  <article class="utility-page container">
+    <header class="page-header slim">
+      <p class="eyebrow mono">Mainline template</p>
+      <h1>{template?.title}</h1>
+      <p class="deck">用于建立日期无关的稳定主线，并在文章内部维护检索窗口、分类框架和逐结论证据强度。</p>
+    </header>
+    <div class="prose" set:html={template?.html ?? ''} />
+  </article>
+</Layout>

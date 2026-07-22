@@ -1,7 +1,7 @@
 # Paper SOP v2.1 Design
 
 Created-At: 2026-07-17
-Status: Implemented; awaiting first real-paper canary for module-level strictness
+Status: Historical design record; single-paper v2.1 remains active, mainline coupling was superseded by `synthesis-v1` on 2026-07-22
 
 ## 目标
 
@@ -22,7 +22,7 @@ v2.1 降低单篇完整归档的固定维护成本，同时保留核心贡献、
 5. venue 与审稿状态进入 Source；完整审稿章节只由 `official-review` 触发。
 6. 作者基础核验覆盖每位可解析作者，深入核验只由角色、跨论文价值、冲突或强候选触发。
 7. 新论文拥有新发现关系；旧论文只在理解变化时回写。
-8. 受控标签保持强制；研究主线暂时保留为独立快照。
+8. 受控标签对单篇论文保持强制；当前主线已迁移到独立的 `content/mainlines/` 文章契约，本条为历史决策。
 9. 五项人工语义门禁保护核心分析深度。
 
 ## 兼容策略

@@ -2,50 +2,40 @@
 import { paperReviewLabel } from '../lib/paper-review.mjs';
 import { paths } from '../lib/site';
 
-const { paper, reviewStatus } = Astro.props;
+const { mainline } = Astro.props;
 ---
 
-<header class="paper-header synthesis-header">
-  <p class="synthesis-kicker">阶段性研究综合</p>
-  <h1>{paper.title}</h1>
-  <div class="deck" set:html={paper.conclusionHtml} />
+<header class="paper-header synthesis-header mainline-detail-header">
+  <a class="mainline-back-link mono" href={paths.mainlines}>← 研究主线</a>
+  <p class="synthesis-kicker">用户定义研究主线</p>
+  <h1>{mainline.title}</h1>
+  <p class="deck">{mainline.researchQuestion}</p>
 
-  {paper.searchWindow && (
-    <div class="synthesis-window" aria-label={`研究窗口 ${paper.searchWindow.label}`}>
-      <span class="synthesis-window-label">研究窗口</span>
+  {mainline.searchWindow && (
+    <div class="synthesis-window" aria-label={`研究窗口 ${mainline.searchWindow.label}`}>
+      <span class="synthesis-window-label">材料窗口</span>
       <span class="synthesis-window-range mono">
-        <time datetime={paper.searchWindow.start}>{paper.searchWindow.startMonth}</time>
-        {paper.searchWindow.startMonth !== paper.searchWindow.endMonth && (
-          <>
-            <span class="synthesis-window-arrow" aria-hidden="true">→</span>
-            <time datetime={paper.searchWindow.end}>{paper.searchWindow.endMonth}</time>
-          </>
-        )}
+        <time datetime={mainline.searchWindow.start}>{mainline.searchWindow.start}</time>
+        <span class="synthesis-window-arrow" aria-hidden="true">→</span>
+        <time datetime={mainline.searchWindow.end}>{mainline.searchWindow.end}</time>
       </span>
-      <span class="synthesis-window-cutoff">检索截止 {paper.searchWindow.cutoff}</span>
+      <span class="synthesis-window-cutoff">检索截止 {mainline.searchWindow.cutoff}</span>
     </div>
   )}
 
   <div class="paper-meta">
-    <div class="paper-meta-line" role="group" aria-label="研究综合状态与来源">
-      <span class:list={['paper-meta-item', 'paper-review-badge', `is-${reviewStatus}`]}>
-        {paperReviewLabel(reviewStatus)}
+    <div class="paper-meta-line" role="group" aria-label="主线文章状态与来源">
+      <span class:list={['paper-meta-item', 'paper-review-badge', `is-${mainline.reviewStatus}`]}>
+        {paperReviewLabel(mainline.reviewStatus)}
       </span>
-      <a class="paper-meta-item synthesis-kind" href={paths.synthesisWorkflow}>研究综合 SOP</a>
-      {paper.pinned && <span class="paper-meta-item paper-pin">Pinned</span>}
-      {paper.firstArchivedAt && <span class="paper-meta-item">Snapshot {paper.firstArchivedAt}</span>}
-      {paper.updatedAt && paper.updatedAt !== paper.firstArchivedAt && (
-        <span class="paper-meta-item">Updated {paper.updatedAt}</span>
-      )}
-      {paper.reviewedAt && <span class="paper-meta-item">Reviewed {paper.reviewedAt}</span>}
-      {paper.canonicalSource && <a class="paper-meta-item" href={paper.canonicalSource}>研究基线</a>}
+      <a class="paper-meta-item synthesis-kind" href={paths.synthesisWorkflow}>主线综合 SOP</a>
+      <span class="paper-meta-item">Started {mainline.firstArchivedAt}</span>
+      {mainline.updatedAt !== mainline.firstArchivedAt && <span class="paper-meta-item">Updated {mainline.updatedAt}</span>}
+      {mainline.reviewedAt && <span class="paper-meta-item">Reviewed {mainline.reviewedAt}</span>}
+      <span class="paper-meta-item">{mainline.sourceCount} 项材料</span>
     </div>
-    {paper.tags.length > 0 && (
-      <div class="paper-meta-line paper-meta-topics" role="group" aria-label="研究综合主题">
-        {paper.tags.map((tag, index) => (
-          <a class="paper-topic" href={`/topics/#tag-${paper.tagIds[index]}`}>{tag}</a>
-        ))}
-      </div>
-    )}
+    <div class="paper-meta-line paper-meta-topics" role="group" aria-label="主线分类框架">
+      {mainline.classificationAxes.map((axis) => <span class="paper-topic">{axis}</span>)}
+    </div>
   </div>
 </header>

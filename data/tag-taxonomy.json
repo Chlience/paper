@@ -48,12 +48,6 @@
           "description": "面向多轮环境交互、工具调用与 agent 行为的强化学习。"
         },
         {
-          "id": "learned-environment",
-          "label": "Learned Environment",
-          "aliases": ["language world model", "environment surrogate", "experience model"],
-          "description": "用参数化模型预测供 Agent RL rollout 使用的状态转移、工具反馈、用户响应或 reward。"
-        },
-        {
           "id": "credit-assignment",
           "label": "Credit Assignment",
           "aliases": ["advantage assignment", "token credit"],

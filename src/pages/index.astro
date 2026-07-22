@@ -2,6 +2,7 @@
 import PaperRow from '../components/PaperRow.astro';
 import Layout from '../layouts/Layout.astro';
 import data from '../generated/paper-data.json';
+import mainlineData from '../generated/mainline-data.json';
 import { comparePapersForReviewFilter, countPaperReviewStatuses } from '../lib/paper-review.mjs';
 
 const reviewCounts = countPaperReviewStatuses(data.papers);
@@ -48,6 +49,25 @@ const routeGroups = data.tagFacets.map((facet) => ({
           <dd>最近构建</dd>
         </div>
       </dl>
+    </div>
+  </section>
+
+  <section class="section home-mainlines">
+    <div class="container section-header">
+      <div>
+        <h2>Research Mainlines</h2>
+        <p>明确的方向总结请求直接建立主线；每条主线独立维护分类框架、材料窗口和当前判断。</p>
+      </div>
+      <a class="section-link" href="/mainlines/">View all mainlines</a>
+    </div>
+    <div class="container mainline-directory-list">
+      {mainlineData.mainlines.map((mainline) => (
+        <a class="mainline-directory-link" href={mainline.path}>
+          <span class="mainline-directory-name"><strong>{mainline.title}</strong></span>
+          <span class="mainline-directory-question">{mainline.researchQuestion}</span>
+          <span class="mainline-directory-meta mono">{mainline.classificationAxes.join(' × ')}</span>
+        </a>
+      ))}
     </div>
   </section>
 

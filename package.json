@@ -34,8 +34,5 @@
     "markdown-it": "^14.1.0",
     "markdown-it-anchor": "^9.2.0",
     "markdown-it-texmath": "^1.0.0"
-  },
-  "devDependencies": {
-    "@viz-js/viz": "3.28.0"
   }
 }

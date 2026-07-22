@@ -1,8 +1,8 @@
 ---
 import AuthorList from '../../components/AuthorList.astro';
-import ResearchSynthesisHeader from '../../components/ResearchSynthesisHeader.astro';
 import Layout from '../../layouts/Layout.astro';
 import data from '../../generated/paper-data.json';
+import mainlineData from '../../generated/mainline-data.json';
 import { createArticleJsonLd, getAbsoluteUrl } from '../../lib/site';
 import { normalizePaperReviewStatus, paperReviewLabel } from '../../lib/paper-review.mjs';
 
@@ -18,7 +18,7 @@ const canonicalPath = paper.path;
 const articleUrl = getAbsoluteUrl(canonicalPath, Astro.site);
 const h2Headings = paper.headings.filter((heading) => heading.depth === 2);
 const reviewStatus = normalizePaperReviewStatus(paper.reviewStatus);
-const isSynthesis = paper.materialType === 'composite';
+const relatedMainlines = mainlineData.mainlines.filter((mainline) => mainline.includedPaperSlugs.includes(paper.slug));
 ---
 
 <Layout
@@ -28,21 +28,17 @@ const isSynthesis = paper.materialType === 'composite';
   canonicalPath={canonicalPath}
   ogType="article"
   jsonLd={createArticleJsonLd({
-    schemaType: isSynthesis ? 'Article' : 'ScholarlyArticle',
+    schemaType: 'ScholarlyArticle',
     title: paper.title,
     description: paper.coreSignal,
     url: articleUrl,
     firstArchivedAt: paper.firstArchivedAt,
     updatedAt: paper.updatedAt,
-    authors: !isSynthesis && paper.authors !== 'Unknown' ? paper.authors : undefined,
-    organizationAuthor: isSynthesis ? paper.responsibleOrganization : undefined,
+    authors: paper.authors !== 'Unknown' ? paper.authors : undefined,
   })}
 >
-  <article class:list={['paper-page', 'container', { 'is-synthesis': isSynthesis }]}>
-    {isSynthesis ? (
-      <ResearchSynthesisHeader paper={paper} reviewStatus={reviewStatus} />
-    ) : (
-      <header class="paper-header">
+  <article class="paper-page container">
+    <header class="paper-header">
         <p class="eyebrow mono">{paper.slug}</p>
         <h1>{paper.title}</h1>
         <div class="deck" set:html={paper.conclusionHtml} />
@@ -73,13 +69,12 @@ const isSynthesis = paper.materialType === 'composite';
             </div>
           )}
         </div>
-      </header>
-    )}
+    </header>
 
     <div class="paper-layout">
       {h2Headings.length > 0 && (
         <aside class="toc" aria-label="目录" data-paper-toc>
-          <strong>{isSynthesis ? '阅读路径' : '目录'}</strong>
+          <strong>目录</strong>
           <nav data-paper-toc-nav>
             {h2Headings.map((heading, index) => (
               <a
@@ -95,6 +90,19 @@ const isSynthesis = paper.materialType === 'composite';
       )}
       <div class="prose" set:html={paper.html} />
     </div>
+    {relatedMainlines.length > 0 && (
+      <aside class="paper-mainline-backlinks" aria-labelledby="paper-mainline-backlinks-title">
+        <h2 id="paper-mainline-backlinks-title">进入研究主线</h2>
+        <ul>
+          {relatedMainlines.map((mainline) => (
+            <li>
+              <a href={mainline.path}>{mainline.title}</a>
+              <span>{mainline.researchQuestion}</span>
+            </li>
+          ))}
+        </ul>
+      </aside>
+    )}
   </article>
 
   <script>

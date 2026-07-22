@@ -1,20 +1,20 @@
 # Chlience Paper Archive
 
-Personal paper-reading archive for LLM, RL, systems, safety, theory, and optimizer research.
+Personal research archive for LLM, RL, systems, safety, theory, and frontier-model reports.
 
-The content source is split by role:
+The source tree separates single-material evidence from request-defined research synthesis:
 
 ```text
-content/papers/      paper notes, one Markdown file per paper
-content/utility/     public paper/synthesis workflows, template, archive index, and research-mainline snapshot
-data/authors.json    maintained author profiles
-data/tag-taxonomy.json controlled tag vocabulary and facets
-data/paper-tags.json paper-to-tag assignments, primary tag first
-data/research-mainlines.json facets, method nodes, sourced relations, and corpus coverage
-internal/            analysis modules and private maintenance SOPs
+content/papers/        one Markdown note per paper, report, model card, blog, or published survey
+content/mainlines/     one synthesis article per explicit direction-summary request
+content/utility/       public workflows, templates, archive index, and mainline policy
+data/authors.json      maintained author profiles
+data/tag-taxonomy.json controlled paper-tag vocabulary and facets
+data/paper-tags.json   paper-to-tag assignments, primary tag first
+internal/              analysis modules and private maintenance SOPs
 ```
 
-The Astro site reads those files through `scripts/build-paper-data.mjs`, generates `src/generated/paper-data.json`, and deploys only the built artifact to `papers.chlience.com`.
+`scripts/build-paper-data.mjs` builds the paper, author, topic, and utility inventory. `scripts/build-mainline-data.mjs` independently validates and builds mainline articles. The Astro site combines both inventories for global search and generates paper-to-mainline backlinks from local paper links in each mainline article.
 
 ## Local Development
 
@@ -23,13 +23,9 @@ npm install
 npm run dev
 ```
 
-Open:
+Open `http://localhost:4321`.
 
-```text
-http://localhost:4321
-```
-
-## Local Validation
+## Validation
 
 ```bash
 npm run test:workflow
@@ -39,90 +35,30 @@ npm run check:metadata
 npm run check:math
 npm run test:search
 npm run test:pins
-```
-
-These source-level checks do not produce the production `dist/` artifact. `check:math` refreshes the ignored `src/generated/` content data before validating Markdown formulas.
-
-## CI Build and Deployment
-
-GitHub Actions validates source files, runs one production build, and checks the generated output:
-
-```bash
-npm run test:workflow
-npm run check:workflow
-npm run check:mainlines
-npm run check:metadata
-npm run test:search
-npm run test:pins
 npm run build
-node scripts/check-markdown-math.mjs
-node scripts/check-paper-site.mjs
+npm run check:site
+git diff --check
 ```
 
-The workflow packages `dist/` as a static tarball and uploads it to the server. Both `dist/` and `src/generated/` are ignored by Git and are not committed.
+Generated `src/generated/` data and `dist/` are ignored and stay outside commits.
 
-Required GitHub secret:
+## Content Workflows
 
-```text
-CHLIENCE_SSH_PRIVATE_KEY
-```
+- Single materials: `content/utility/paper-analysis-workflow.md`
+- Single-material template: `content/utility/paper-note-template.md`
+- Request-defined mainlines: `content/utility/research-synthesis-workflow.md`
+- Mainline template: `content/utility/research-mainline-template.md`
+- Author verification: `internal/author-x-account-search-sop.md`
+- Repository maintenance: `internal/paper-archive-maintenance-sop.md`
 
-Server setup details live in:
+Single materials live at `/papers/<slug>/`, appear exactly once in the paper index, and receive controlled paper tags. Mainlines live at `/mainlines/<slug>/`; they remain outside paper counts, tags, and review filters while participating in global search.
 
-```text
-deploy/server-setup.md
-```
+## Mainline Update Contract
 
-## Content Workflow
+An explicit user request to summarize a direction creates one formal mainline. Each article owns its research question, stable date-free path, classification framework, search window, material membership, cross-material comparison, evidence strength per conclusion, current judgment, and update history.
 
-Paper-reading workflow:
+Mainlines update only on explicit user request. Adding a paper does not mutate a mainline. The mainline validator checks the independent synthesis structure, local paper targets, request-defined live canaries, and separation from the paper inventory.
 
-```text
-content/utility/paper-analysis-workflow.md
-```
+## Deployment
 
-Cross-paper research synthesis workflow:
-
-```text
-content/utility/research-synthesis-workflow.md
-```
-
-New notes use the v2.1 source snapshot, analysis modules, and seven-section contract in:
-
-```text
-content/utility/paper-note-template.md
-```
-
-Author identity, profile, and public-account verification follows the internal SOP:
-
-```text
-internal/author-x-account-search-sop.md
-```
-
-Module-specific analysis and repository maintenance follow:
-
-```text
-internal/paper-analysis-modules.md
-internal/paper-archive-maintenance-sop.md
-```
-
-`npm run check:workflow` validates paper structure, v2/v2.1 fields, evidence locations, archive-time conflicts, local figures, controlled tag assignments, author-profile data, and recurring unprofiled authors. Historical notes remain readable under compatibility mode and produce bounded migration advisories.
-
-## Manual Research-Mainline Update
-
-Research mainlines use a manually maintained v2 snapshot. `npm run check:mainlines` validates ID formats and uniqueness, facets, method memberships, sourced relations, formal/candidate admission, and paper coverage within the recorded snapshot. It does not discover papers or infer relations.
-
-When manually refreshing the snapshot:
-
-1. Compare papers added or changed after `snapshot.asOf`.
-2. Add method nodes and line memberships; add a relation only when its evidence and locator are recorded.
-3. Record non-method papers in `materials`, including evidence, boundary, counterexample, or synthesis uses.
-4. Advance the snapshot only after the strict current-corpus check succeeds:
-
-```bash
-node scripts/check-research-mainlines.mjs --require-current
-npm run build
-node scripts/check-paper-site.mjs
-```
-
-The default check may report newer papers as snapshot advisories. The strict command requires every current paper to have exactly one material record.
+GitHub Actions runs the source checks, builds the static site, checks generated pages, packages `dist/`, and uploads it to `papers.chlience.com`. Server setup details live in `deploy/server-setup.md`; deployment requires the `CHLIENCE_SSH_PRIVATE_KEY` GitHub secret.

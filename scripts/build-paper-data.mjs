@@ -36,41 +36,11 @@ import {
 } from './content/tagging.mjs';
 import { normalizePaperReviewStatus } from '../src/lib/paper-review.mjs';
 
-const parseSearchWindow = (value = '') => {
-  const dates = String(value).match(/\d{4}-\d{2}-\d{2}/g) ?? [];
-  if (dates.length < 2) return null;
-
-  const start = dates[0];
-  const end = dates.at(-1);
-  const startMonth = start.slice(0, 7).replace('-', '.');
-  const endMonth = end.slice(0, 7).replace('-', '.');
-  const cutoff = String(value).match(/(?:至|\bto\b)\s*(.+)$/i)?.[1]?.trim() ?? end;
-
-  return {
-    start,
-    end,
-    startMonth,
-    endMonth,
-    label: startMonth === endMonth ? startMonth : `${startMonth} → ${endMonth}`,
-    cutoff,
-  };
-};
-
 const getSourceScalar = (markdown, names) => getSourceFieldRaw(markdown, names).trim();
 
 const getSourceHref = (markdown, names) => {
   const value = getSourceScalar(markdown, names);
   return value.match(/\[[^\]]+\]\(([^)]+)\)/)?.[1] ?? value;
-};
-
-const buildCompositePageMarkdown = (markdown) => {
-  const source = getSection(markdown, 'Source');
-  const narrativeStart = source.search(/^###\s+/m);
-  const sourceNarrative =
-    narrativeStart >= 0 ? source.slice(narrativeStart).replace(/^###\s+/, '## ') : '';
-  const hiddenSections = ['Source', '作者与关系', 'OpenReview / 审稿意见吸收', 'Reference Intake Brief'];
-  const publicBody = hiddenSections.reduce((body, heading) => stripSection(body, heading), markdown);
-  return [sourceNarrative, publicBody].filter(Boolean).join('\n\n');
 };
 
 const buildPaperRecords = async (paperEntries, coreSignals) => {
@@ -82,9 +52,8 @@ const buildPaperRecords = async (paperEntries, coreSignals) => {
     const title = getSourceField(raw, 'Title') || getFirstHeading(raw, slug);
     const conclusionMarkdown = getSection(raw, '一句话结论');
     const materialType = getSourceScalar(raw, 'Material type');
-    const searchWindow = getSourceScalar(raw, 'Search window');
     const archivedBody = stripSection(stripPublicPaperMaintenance(stripPageChrome(raw)), '一句话结论');
-    const pageMarkdown = materialType === 'composite' ? buildCompositePageMarkdown(archivedBody) : archivedBody;
+    const pageMarkdown = archivedBody;
     const authors = getSourceField(raw, ['Authors', 'Author']) || 'Unknown';
     const assignedTags = tagsForPaper(slug);
     const coreSignal = stripMarkdown(coreSignals.get(slug) ?? '');
@@ -102,8 +71,6 @@ const buildPaperRecords = async (paperEntries, coreSignals) => {
       sourceUrl: getSourceUrl(raw),
       canonicalSource: getSourceHref(raw, 'Canonical source'),
       materialType,
-      responsibleOrganization: getSourceScalar(raw, 'Responsible organization'),
-      searchWindow: parseSearchWindow(searchWindow),
       authors,
       parsedAuthors: splitAuthorNames(authors),
       authorReferences: collectAuthorReferences(raw, authors),

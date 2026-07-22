@@ -1,6 +1,6 @@
 # Paper Archive Maintenance SOP
 
-Updated-At: 2026-07-21
+Updated-At: 2026-07-22
 
 ## 目的
 
@@ -16,7 +16,7 @@ Updated-At: 2026-07-21
 - 必要时修改 `data/authors.json`
 - `Key figure decision: include` 时添加 `public/images/papers/<slug>/...`
 
-`data/research-mainlines.json` 和 `content/utility/research-mainlines.md` 当前是独立快照。新增论文不更新这两个文件，主线页面只展示快照内已有分配。
+研究主线保存在 `content/mainlines/<slug>.md`，不进入论文索引或标签。新增论文不自动更新主线；主线文章中的 `/papers/<slug>/` 链接声明成员关系并生成论文页回链。
 
 ## 索引与标签
 
@@ -75,15 +75,22 @@ public/images/papers/<paper-slug>/fig-<n>-<short-name>.<ext>
 3. 修订剩余论文中的失效链接和确实受影响的跨论文判断。
 4. 清理只服务该论文的图片。
 5. 审计 `data/authors.json`，删除失去全部论文关联的 profile。
-6. 研究主线快照涉及该论文时单独确认处理范围。
+6. 检查全部主线文章；删除失效链接，并在论证或成员关系变化时同步更新文章状态。
 
-`missing-index-entry`、`stale-index-entry`、`duplicate-index-entry` 和 `orphan-author-profile` 都是硬错误。
+`missing-index-entry`、`stale-index-entry`、`duplicate-index-entry`、`orphan-author-profile` 和主线中的失效论文链接都是硬错误。
+
+## 主线维护
+
+主线只响应用户明确的建立、更新、合并、拆分、改名或删除请求。文章使用 `synthesis-v1`，固定保存在 `content/mainlines/`。主线身份不依赖审阅状态；文章内容的 `pending`、`approved` 和 `needs-review` 沿用论文文章的时间顺序约束。
+
+主线图片放入 `public/images/mainlines/<slug>/`。主线不分配 `data/paper-tags.json`，不写入 `content/utility/papers-index.md`，不计入论文数量。全局搜索和论文页回链由生成数据提供。
 
 ## 本地验证
 
 ```bash
 npm run test:workflow
 npm run check:workflow
+npm run check:mainlines
 npm run check:metadata
 npm run check:math
 npm run test:search

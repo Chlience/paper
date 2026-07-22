@@ -5,17 +5,17 @@ Updated-At: 2026-07-22
 
 ## 目标
 
-本工作流把用户指定的论文、技术报告、模型卡、博客、框架文档或综合材料转成可追溯、可更新、可连接的长期笔记。用户给出材料即代表归档范围已经确定；受理阶段负责识别材料、版本、重复条目和安全边界。
+本工作流把用户指定的单篇论文、技术报告、模型卡、博客或框架文档转成可追溯、可更新、可连接的长期笔记。用户给出材料即代表归档范围已经确定；受理阶段负责识别材料、版本、重复条目和安全边界。
 
 v2.1 使用固定质量底线和条件分析模块。每篇笔记都要说明研究问题、核心贡献、工作机制、直接证据和成立边界；实验、系统、理论、模型报告、综述、安全与文档类细节按材料实际主张启用。
 
-单篇材料使用本工作流和 [Paper Note Template](/template/)。跨论文时间窗、方法谱系或证据综合使用独立的 [Research Synthesis Workflow](/synthesis-workflow/)；它复用 v2.1 的归档底线，并增加检索窗口、增量记录、统一比较轴和公开文章结构。
+单篇材料使用本工作流和 [Paper Note Template](/template/)。用户明确请求的跨论文时间窗、方法谱系或方向综合使用独立的 [Research Synthesis Workflow](/synthesis-workflow/) 与 [Research Mainline Template](/mainline-template/)。
 
 ## 快速执行卡
 
 一次完整归档依次经过八个阶段：
 
-1. **受理与分类**：唯一识别材料，确认是否为新增、更新或综合条目，选择材料类型和分析模块。
+1. **受理与分类**：唯一识别材料，确认是否为新增或更新条目，选择材料类型和分析模块。
 2. **来源快照**：记录规范来源、责任主体、日期、实际读取版本、访问日期和公开审稿状态。
 3. **结构与问题重建**：定位章节、图表、定理、实验、附录和代码，写清研究问题、已有方案缺口与核心假设，并完成关键图准入判断。
 4. **机制与证据分析**：解释首要贡献的 `what / how / why / evidence / boundary`，为关键结果添加直接证据定位和最窄结论，把准入的高价值图放在首次解释对应机制或结果的位置。
@@ -41,16 +41,14 @@ v2.1 使用固定质量底线和条件分析模块。每篇笔记都要说明研
 - 五项人工语义门禁通过，本地内容工作流、元数据、公式、搜索和置顶检查通过。
 - 完整改动已创建本地 commit；推送只在用户明确要求后执行。
 
-`Material type: composite` 还需要满足 [Research Synthesis Workflow](/synthesis-workflow/) 的时间窗、检索协议、跨材料比较和更新契约。
-
-研究主线当前作为独立语料快照维护。新增论文暂不更新 `data/research-mainlines.json` 或 `content/utility/research-mainlines.md`，后续在主线规则更新后重新接入论文工作流。
+研究主线保存在 `content/mainlines/`，主线身份与内容契约见 [Research Synthesis Workflow](/synthesis-workflow/)。新增普通论文不会自动修改主线；论文被主线文章引用时，构建器会在论文页生成反向入口。
 
 ## Source 快照
 
 新增笔记在 `Source` 中填写：
 
 - `Workflow version: v2.1`
-- `Material type`：`research-paper`、`technical-report`、`model-card`、`survey`、`blog`、`framework-docs` 或 `composite`
+- `Material type`：`research-paper`、`technical-report`、`model-card`、`survey`、`blog` 或 `framework-docs`
 - `Analysis modules`：从 `experiment`、`system`、`theory`、`model-report`、`survey`、`safety`、`docs` 中选择一个或多个
 - `Canonical source`
 - `Title`
@@ -70,7 +68,7 @@ v2.1 使用固定质量底线和条件分析模块。每篇笔记都要说明研
 
 `page-type` 使用 `official-review`、`metadata-only`、`proceedings`、`commentary`、`not-found` 或 `not-applicable`；`match-confidence` 使用 `high`、`medium` 或 `low`。
 
-arXiv 论文优先以 abstract 页面作为规范来源，并补充 PDF、HTML、TeX source、代码与项目页。网页、模型卡和框架文档优先使用责任主体发布的页面或仓库，并记录 release、tag、commit 或页面状态。`composite` 可以使用其它已存档材料的 `/papers/<slug>/` 或 `/archive/` 作为规范入口，不能引用自身页面；其附加字段和公开协议见 [Research Synthesis Workflow](/synthesis-workflow/)。
+arXiv 论文优先以 abstract 页面作为规范来源，并补充 PDF、HTML、TeX source、代码与项目页。网页、模型卡和框架文档优先使用责任主体发布的页面或仓库，并记录 release、tag、commit 或页面状态。单篇材料的规范来源使用官方绝对 URL。
 
 每篇论文头部保留：
 
@@ -139,7 +137,7 @@ arXiv 论文优先以 abstract 页面作为规范来源，并补充 PDF、HTML�
 - `OpenReview / 审稿意见吸收`：`Review status` 为 `official-review` 时必需。
 - `本地讨论补充`：后续交流形成长期有效的概念修正、反例、工程判断或复验指标时加入。
 - `主要启发`：材料产生可复用设计原则、诊断指标或实践建议时加入。
-- `阅读目标与判断边界`：复杂材料需要先限定范围时加入，也可以把内容并入 `论文脉络` 与 `局限`。`composite` 的公开组织顺序由 [Research Synthesis Workflow](/synthesis-workflow/) 规定。
+- `阅读目标与判断边界`：复杂材料需要先限定范围时加入，也可以把内容并入 `论文脉络` 与 `局限`。
 
 `Reference Intake Brief` 已退出 v2.1。用户指定材料即确定归档对象，笔记不再记录 `merge`、`skip` 或其它准入决策。
 
@@ -225,7 +223,7 @@ arXiv 论文优先以 abstract 页面作为规范来源，并补充 PDF、HTML�
 - 已存档论文使用 `/papers/<slug>/`。
 - 作者页使用 `/authors/<slug>/`。
 - 主题使用 `/topics/#tag-<id>`。
-- 索引、单篇工作流、总结文章工作流和模板分别使用 `/archive/`、`/workflow/`、`/synthesis-workflow/`、`/template/`。
+- 索引、单篇工作流、主线综合工作流、单篇模板和主线模板分别使用 `/archive/`、`/workflow/`、`/synthesis-workflow/`、`/template/`、`/mainline-template/`。
 - 本地文件名只用代码样式，不建立 `.md` 相对链接。
 - 正文 Markdown 公式使用 `$...$` 或 `$$...$$`；索引核心信号和 `一句话结论` 只用自然语言描述。
 - 每篇 v2.1 笔记在 `Source` 声明 `Key figure decision: include` 或 `omit`。高价值图存在时优先使用 `include`；`omit` 必须解释原因。
@@ -237,7 +235,7 @@ arXiv 论文优先以 abstract 页面作为规范来源，并补充 PDF、HTML�
 
 删除论文前遵守项目高危操作确认规则，明确绝对路径、操作类型和数据丢失风险并取得用户二次确认。确认后同步处理论文文件、索引行、标签分配、失效关系、静态图片和作者 profile。
 
-作者 profile 在剩余论文中没有作者链接、姓名或别名关联时必须同提交删除；`orphan-author-profile` 属于硬错误。研究主线仍是独立快照，删除论文涉及该快照时等待主线规则或另行取得明确范围。
+作者 profile 在剩余论文中没有作者链接、姓名或别名关联时必须同提交删除；`orphan-author-profile` 属于硬错误。删除论文还要检查 `content/mainlines/` 中的引用；若论证或成员关系受影响，同步修订主线并按实质更新规则处理文章审阅状态。
 
 ## 验证与提交
 

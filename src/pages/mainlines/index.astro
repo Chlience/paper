@@ -2,119 +2,63 @@
 import Layout from '../../layouts/Layout.astro';
 import mainlineData from '../../generated/mainline-data.json';
 
-const formalLines = mainlineData.lines.filter((line) => line.status === 'formal');
-const candidateLines = mainlineData.lines.filter((line) => line.status === 'candidate');
-const primaryFacetId = (line) => line.primaryFacetId || line.facetId || line.facetIds?.[0] || '';
-const facetGroups = [...mainlineData.facets]
-  .sort((a, b) => (a.order ?? 0) - (b.order ?? 0) || a.name.localeCompare(b.name, 'zh-CN'))
-  .map((facet) => ({
-    ...facet,
-    lines: formalLines.filter((line) => primaryFacetId(line) === facet.id),
-  }))
-  .filter((facet) => facet.lines.length > 0);
-const groupedLineIds = new Set(facetGroups.flatMap((facet) => facet.lines.map((line) => line.id)));
-const ungroupedLines = formalLines.filter((line) => !groupedLineIds.has(line.id));
-if (ungroupedLines.length > 0) {
-  facetGroups.push({
-    id: 'cross-facet',
-    name: '跨领域方法',
-    description: '同时连接多个研究对象、尚未指定单一目录位置的正式主线。',
-    order: Number.MAX_SAFE_INTEGER,
-    lines: ungroupedLines,
-  });
-}
-
-const pageDescription = `截至 ${mainlineData.snapshot} 的细粒度研究主线目录，收录 ${formalLines.length} 条正式主线与 ${candidateLines.length} 个候选方向。`;
+const mainlines = mainlineData.mainlines;
+const pageDescription = `${mainlines.length} 条由明确总结请求建立的研究主线；每条主线拥有独立问题边界、分类框架与证据判断。`;
 ---
 
 <Layout
   active="mainlines"
-  title="研究主线目录 | Chlience Paper Archive"
+  title="研究主线 | Chlience Paper Archive"
   description={pageDescription}
   canonicalPath="/mainlines/"
 >
   <article class="utility-page mainlines-page container">
     <header class="page-header mainlines-page-header">
-      <p class="eyebrow mono">Research Mainlines</p>
-      <h1>研究主线目录</h1>
+      <p class="eyebrow mono">Request-defined Research Mainlines</p>
+      <h1>研究主线</h1>
       <p class="deck">{pageDescription}</p>
-      <div class="mainlines-snapshot" aria-label="主线快照">
-        <span>快照 <time datetime={mainlineData.snapshot}>{mainlineData.snapshot}</time></span>
-        <span>{mainlineData.paperCount} 条语料记录</span>
-        <span>{formalLines.length} 条正式主线</span>
-        <span>{candidateLines.length} 个候选方向</span>
+      <div class="mainlines-snapshot" aria-label="主线概况">
+        <span>{mainlines.length} 条主线</span>
+        <span>身份由用户请求直接建立</span>
+        <a href="/synthesis-workflow/">查看构建与更新契约</a>
       </div>
     </header>
 
-    <section class="mainline-directory-intro" aria-labelledby="mainline-directory-title">
-      <div class="section-header">
-        <div>
-          <h2 id="mainline-directory-title">按研究领域进入</h2>
-          <p>每条主线围绕一个具体问题组织方法节点、前序关系、反例和当前判断；同一方法可以进入多条主线。</p>
-        </div>
-        <a href="/archive/">查看论文时间索引</a>
-      </div>
-    </section>
-
     <div class="mainline-directory">
-      {facetGroups.map((facet) => (
-        <section class="mainline-facet" aria-labelledby={`facet-${facet.id}`}>
+      {mainlines.map((mainline) => (
+        <section class="mainline-facet mainline-overview-card" aria-labelledby={`mainline-${mainline.slug}`}>
           <header class="mainline-facet-header">
-            <h2 id={`facet-${facet.id}`}>{facet.name}</h2>
-            {facet.description && <p>{facet.description}</p>}
+            <p class="eyebrow mono">Research Mainline</p>
+            <h2 id={`mainline-${mainline.slug}`}>
+              <a href={mainline.path}>{mainline.title}</a>
+            </h2>
           </header>
-          <ul class="mainline-directory-list">
-            {facet.lines.map((line) => (
-              <li>
-                <a class="mainline-directory-link" href={`/mainlines/${line.id}/`}>
-                  <span class="mainline-directory-name">
-                    <strong>{line.name}</strong>
-                    <span class="mainline-status is-formal">{line.statusLabel || '正式主线'}</span>
-                    {line.facetLabels?.slice(1).map((label) => (
-                      <span class="mainline-directory-facet">{label}</span>
-                    ))}
-                  </span>
-                  <span class="mainline-directory-question">{line.question}</span>
-                  <span class="mainline-directory-meta mono">
-                    {line.methodCount} 方法 · {line.relationCount} 关系
-                    {line.latestDate && <time datetime={line.latestDate}>{line.latestDate}</time>}
-                  </span>
-                </a>
-              </li>
-            ))}
-          </ul>
+          <dl class="mainline-overview-fields">
+            <div>
+              <dt>核心问题</dt>
+              <dd>{mainline.researchQuestion}</dd>
+            </div>
+            <div>
+              <dt>边界</dt>
+              <dd>{mainline.boundary}</dd>
+            </div>
+            <div>
+              <dt>分类框架</dt>
+              <dd>{mainline.classificationAxes.join(' × ')}</dd>
+            </div>
+            <div>
+              <dt>当前判断</dt>
+              <dd>{mainline.currentJudgment}</dd>
+            </div>
+          </dl>
+          <footer class="mainline-directory-meta mono">
+            <span>{mainline.localPaperCount} 篇本地论文</span>
+            <span>{mainline.externalSourceCount} 项外部来源</span>
+            <time datetime={mainline.updatedAt}>更新 {mainline.updatedAt}</time>
+            <a href={mainline.path}>阅读全文 →</a>
+          </footer>
         </section>
       ))}
     </div>
-
-    {candidateLines.length > 0 && (
-      <section class="mainline-candidate-directory" aria-labelledby="candidate-directions-title">
-        <header class="mainline-facet-header">
-          <h2 id="candidate-directions-title">候选方向</h2>
-          <p>这些方向已经出现清楚的方法信号，当前证据仍不足以建立稳定的继承链。</p>
-        </header>
-        <ul class="mainline-directory-list">
-          {candidateLines.map((line) => (
-            <li>
-              <a class="mainline-directory-link is-candidate" href={`/mainlines/${line.id}/`}>
-                <span class="mainline-directory-name">
-                  <strong>{line.name}</strong>
-                  <span class="mainline-status is-candidate">{line.statusLabel || '候选方向'}</span>
-                </span>
-                <span class="mainline-directory-question">{line.question}</span>
-                <span class="mainline-directory-meta mono">
-                  {line.methodCount} 方法
-                  {line.latestDate && <time datetime={line.latestDate}>{line.latestDate}</time>}
-                </span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      </section>
-    )}
-
-    <footer class="mainline-directory-note">
-      <p>关系图只呈现有来源或明确机制依据的关系。时间邻近不会自动形成继承边，完整解释以详情页的方法表为准。</p>
-    </footer>
   </article>
 </Layout>

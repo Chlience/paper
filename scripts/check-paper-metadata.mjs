@@ -1,7 +1,7 @@
 import fs from 'node:fs/promises';
 import process from 'node:process';
 import { isPublicPaperMaintenanceExemption } from './content/markdown.mjs';
-import { generatedFile, readPaperEntries, readUtilityEntries } from './content/repository.mjs';
+import { generatedFile, readMainlineEntries, readPaperEntries, readUtilityEntries } from './content/repository.mjs';
 
 const maintenanceScanExemptFiles = new Set([
   'paper-analysis-workflow.md',
@@ -71,7 +71,7 @@ const getSection = (markdown, heading) => {
 
 const authorBulletPattern = /^- (?:\[[^\]]+\]\([^)]+\)|[^:：`]{1,100})[:：]\s+(.+)$/;
 
-const sourceEntries = [...(await readPaperEntries()), ...readUtilityEntries()];
+const sourceEntries = [...(await readPaperEntries()), ...(await readMainlineEntries()), ...readUtilityEntries()];
 
 for (const entry of sourceEntries) {
   const markdown = await fs.readFile(entry.sourcePath, 'utf8');

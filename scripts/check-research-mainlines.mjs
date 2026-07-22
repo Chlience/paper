@@ -1,44 +1,23 @@
 import process from 'node:process';
-import {
-  loadResearchMainlines,
-  validateResearchMainlines,
-} from './content/research-mainlines.mjs';
+import { loadResearchMainlines, validateResearchMainlines } from './content/research-mainlines.mjs';
 
 const args = new Set(process.argv.slice(2));
-const allowedArgs = new Set(['--require-current', '--help']);
-const unknownArgs = [...args].filter((arg) => !allowedArgs.has(arg));
-
-if (unknownArgs.length > 0) {
-  console.error(`Unknown argument(s): ${unknownArgs.join(', ')}`);
+if ([...args].some((arg) => arg !== '--help')) {
+  console.error(`Unknown argument(s): ${[...args].filter((arg) => arg !== '--help').join(', ')}`);
   process.exitCode = 2;
 } else if (args.has('--help')) {
-  console.log(`Usage: node scripts/check-research-mainlines.mjs [--require-current]
+  console.log(`Usage: node scripts/check-research-mainlines.mjs
 
-Validates the v2 research-mainline graph and its paper coverage.
-
-  --require-current  Require every current paper to be covered, including papers
-                     newer than the recorded manual snapshot.`);
+Validates request-defined mainline articles, their independent synthesis contract,
+local paper links, and separation from the paper inventory.`);
 } else {
-  const source = await loadResearchMainlines();
-  const result = await validateResearchMainlines(source, {
-    requireCurrent: args.has('--require-current'),
-  });
-
-  for (const item of result.errors) {
-    console.error(`ERROR [${item.code}] ${item.subject}: ${item.message}`);
-  }
-  for (const item of result.advisories) {
-    console.warn(`ADVISORY [${item.code}] ${item.subject}: ${item.message}`);
-  }
-
+  const entries = await loadResearchMainlines();
+  const result = await validateResearchMainlines(entries);
+  for (const item of result.errors) console.error(`ERROR [${item.code}] ${item.subject}: ${item.message}`);
   if (!result.valid) {
     console.error(`Research mainline check failed with ${result.errors.length} error(s).`);
     process.exitCode = 1;
   } else {
-    const status = args.has('--require-current') ? 'current corpus' : `snapshot ${source.snapshot.asOf}`;
-    console.log(
-      `Research mainline check passed for ${source.lines.length} lines, ${source.nodes.length} nodes, ` +
-        `${source.relations.length} relations, and ${source.materials.length} materials (${status}).`,
-    );
+    console.log(`Research mainline check passed for ${entries.length} request-defined mainlines.`);
   }
 }
