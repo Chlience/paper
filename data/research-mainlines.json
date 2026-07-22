@@ -830,41 +830,36 @@
     },
     {
       "id": "editable-versioned-agent-kv",
-      "name": "可编辑、可版本化的 Agent KV",
-      "status": "formal",
+      "name": "Agent KV 的位置无关复用",
+      "status": "candidate",
       "facets": [
         "agent-runtime",
         "context-state"
       ],
-      "question": "历史移动、删除或替换后，KV 怎样复用并保持明确语义？",
+      "question": "历史片段移动后，KV 怎样复用并保持位置语义？",
       "detail": {
         "scope": [
-          "位置校正、cache mutation directive 和遗忘语义。"
+          "内容寻址、位置校正和 MLA KV 复用。"
         ],
         "evolution": [
-          "Irminsul 用 content hash 识别移动后仍相同的历史片段，并以 RoPE delta rotation 校正位置，使 MLA KV 可以在上下文重排后继续复用。",
-          "Leyline 继承 delta-rotation kernel，并增加面向 Agent policy 的 cache mutation directive，用 AMORTIZE 与 FORGET 区分位置摊销和语义遗忘。"
+          "Irminsul 用 content hash 识别移动后仍相同的历史片段，并以 RoPE delta rotation 校正位置，使 MLA KV 可以在上下文重排后继续复用。"
         ],
         "divergences": [
-          "AMORTIZE 保留被替换 span 对后续 hidden state 的历史影响，能够减少重算；FORGET 需要回退到 prefix-trimmed re-prefill，才能提供更强的删除语义。",
+          "内容寻址可以跨越 exact-prefix 边界找回位移片段，delta rotation 只校正 MLA 中承载 RoPE 的 key 分量。",
           "高效实现目前集中在 MLA 与 RoPE，GQA、MHA、其他位置编码和 sequence-compressed KV 需要不同的校正路径。"
         ],
         "judgment": [
-          "Irminsul 到 Leyline 的直接继承由同一团队明确说明，位置复用机制与新增语义 contract 的边界较清楚。",
-          "该方向已经形成可用协议雏形，长期数值漂移、跨模型实现、联合 policy—kernel 效果和公开 artifact 仍限制生产判断。"
+          "Irminsul 给出 MLA 位置无关复用的具体系统路径，当前主线证据仍只有这一个外部方法节点。",
+          "长期数值漂移、跨模型实现和公开 artifact 完整性仍限制生产判断。"
         ],
         "openQuestions": [
           "怎样为 GQA、MHA、非 RoPE 和进一步压缩的 KV 表示实现可验证的位置校正与局部重算？",
-          "连续编辑、跨租户复用和恶意 directive 下，runtime 应怎样控制数值漂移、信息泄漏、资源占用与审计记录？"
+          "跨租户内容寻址下，runtime 应怎样控制 hash collision、信息泄漏、资源占用与审计记录？"
         ]
       },
-      "statusBasis": {
-        "kind": "archived-plus-external",
-        "nodeIds": [
-          "x-irminsul",
-          "m-leyline"
-        ]
-      }
+      "currentState": "Irminsul 已展示基于 content hash 和 delta rotation 的 MLA KV 位置无关复用。",
+      "evidenceGap": "当前只有单一外部方法节点，缺少归档节点、跨架构实现和同 workload 复验。",
+      "promotionCondition": "归档第二个直接相关方法，或核验一个与 Irminsul 存在高置信继承或问题响应关系的节点。"
     },
     {
       "id": "agent-action-speculation",
@@ -2483,23 +2478,6 @@
       "summary": "在上游生成时执行下游 prompt 微任务。"
     },
     {
-      "id": "m-leyline",
-      "name": "Leyline",
-      "kind": "protocol",
-      "firstPublic": {
-        "value": "2026-05-31",
-        "precision": "day",
-        "sourceUrl": "https://arxiv.org/abs/2606.01065"
-      },
-      "source": {
-        "archiveState": "full-note",
-        "materialSlug": "2606.01065-leyline-kv-cache-directives-agentic-inference",
-        "canonicalUrl": "https://arxiv.org/abs/2606.01065",
-        "title": "Leyline"
-      },
-      "summary": "用 directive 管理 KV mutation 与遗忘。"
-    },
-    {
       "id": "m-spork",
       "name": "SPORK",
       "kind": "system",
@@ -3657,7 +3635,7 @@
         {
           "kind": "official-successor",
           "sourceUrl": "https://arxiv.org/abs/2606.01065",
-          "note": "Leyline 由同一作者团队完成并明确继承 Irminsul 的 delta-rotation。"
+          "note": "同一作者团队的后续论文明确继承 Irminsul 的 delta-rotation。"
         }
       ],
       "summary": "用 content hash 和 delta rotation 复用移动后的 MLA KV。"
@@ -3999,14 +3977,6 @@
       "importance": "primary",
       "priorProblem": "上下文片段移动后内容保持相同，但 RoPE 位置发生变化，已有 K/V 会因位置编码失配而失效。",
       "optimization": "用 content hash 找到可复用片段，并对 MLA key 执行 delta rotation，使移动后的后缀无需完整 re-prefill。"
-    },
-    {
-      "lineId": "editable-versioned-agent-kv",
-      "nodeId": "m-leyline",
-      "role": "core",
-      "importance": "primary",
-      "priorProblem": "位置校正能够复用移动后的 KV，但主动删除、替换和真正遗忘缺少 policy 可声明、runtime 可执行的语义边界。",
-      "optimization": "引入带 span、replacement 和 mode 的 mutation directive，并以 AMORTIZE 与 FORGET 分别处理位置摊销和语义遗忘。"
     },
     {
       "lineId": "agent-action-speculation",
@@ -5069,28 +5039,6 @@
           "sourceUrl": "/papers/2026-07-13-grape-micro-task-agentic-workflow-serving/",
           "locator": "Related Work; Incremental Prefill",
           "claim": "Grape 明确复用 chunked-prefill 思想。"
-        }
-      ]
-    },
-    {
-      "id": "r-editable-versioned-agent-kv",
-      "from": "x-irminsul",
-      "to": "m-leyline",
-      "nature": "direct-inheritance",
-      "directed": true,
-      "contexts": [
-        {
-          "lineId": "editable-versioned-agent-kv",
-          "priorProblem": "自然位置迁移可以复用 KV，主动删除或替换仍缺显式语义。",
-          "optimization": "Leyline 复用 delta rotation 并增加 AMORTIZE/FORGET directive。"
-        }
-      ],
-      "evidence": [
-        {
-          "kind": "official-successor",
-          "sourceUrl": "https://arxiv.org/abs/2606.01065",
-          "locator": "Author relations; Method",
-          "claim": "同一团队明确说明 Leyline 继承 Irminsul。"
         }
       ]
     },
@@ -6435,23 +6383,6 @@
           "role": "contribution",
           "nodeIds": [
             "m-selfcompact"
-          ],
-          "note": "该材料直接提供本线的方法、系统或训练机制节点。"
-        }
-      ]
-    },
-    {
-      "slug": "2606.01065-leyline-kv-cache-directives-agentic-inference",
-      "firstPublic": {
-        "value": "2026-05",
-        "precision": "month"
-      },
-      "uses": [
-        {
-          "lineId": "editable-versioned-agent-kv",
-          "role": "contribution",
-          "nodeIds": [
-            "m-leyline"
           ],
           "note": "该材料直接提供本线的方法、系统或训练机制节点。"
         }

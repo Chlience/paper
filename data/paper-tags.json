@@ -3,7 +3,6 @@
   "202607.1328-towards-long-horizon-agents-survey": ["agent-workflow", "agent-memory", "agent-rl", "ai-safety"],
   "2606.23525-self-compacting-language-model-agents": ["agent-memory", "agent-workflow", "long-context", "test-time-scaling"],
   "2026-04-30-preferences-multi-agent-online-learning": ["rl-theory", "reward-modeling"],
-  "2606.01065-leyline-kv-cache-directives-agentic-inference": ["kv-cache", "agent-workflow", "serving-runtime", "agent-memory"],
   "2026-07-13-agentic-rl-learned-environment-evolution": ["learned-environment", "agent-rl", "tool-use", "rollout-optimization"],
   "2026-06-23-chinese-frontier-model-reports-timeline": ["moe-systems", "long-context", "reasoning-rl", "rl-infrastructure"],
   "2026-07-13-rl-credit-assignment-may-july-landscape": ["credit-assignment", "agent-rl", "agent-memory", "rl-algorithm"],

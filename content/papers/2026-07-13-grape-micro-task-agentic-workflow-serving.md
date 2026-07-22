@@ -349,14 +349,13 @@ Grape 对常规 decode 路径的 $d$ 改动有限，主要通过静态 prompt �
 - 与 [ThunderAgent](/papers/2602.13692-thunderagent-program-aware-agentic-inference/)：ThunderAgent 管理 program lifecycle、tool wait、KV pause / restore 和多节点 placement；Grape 优化 LLM-only workflow 内部的 prefill / decode overlap。包含 sandbox 和异步工具的完整 runtime 可以由 program-level scheduler 管外部阶段，由 Grape 式 engine 管就绪 LLM 阶段。
 - 与 [TML inference determinism](/papers/2025-09-10-defeating-nondeterminism-llm-inference/)：Grape 改变 chunk 和 batch composition，理想 causal prefill 语义保持等价，有限精度 reduction 与 sampling 输出仍可能改变；评测、cache reuse 和 RL rollout 场景应记录 batch-invariant determinism。
 - 与 [SPORK](/papers/2607.03333-spork-self-speculative-agentic-inference/)：Grape 在预声明数据流 DAG 上拆分并调度 LLM 微任务，SPORK 在运行中的 ReAct 回路里推测下一次工具 Action。组合后的 runtime 需要把 `fork`、`commit`、`reject`、`cancel` 作为动态图事件，同时管理共享前缀引用计数、工具副作用和 GPU / tool admission。
-- 与 [Leyline](/papers/2606.01065-leyline-kv-cache-directives-agentic-inference/)：Grape 的 partial edge 按上游追加 token 推进下游 prefill，Leyline 允许 policy 改写 canonical history。一次 edit 会同步改变 sequence length、partial-edge progress、重算成本和依赖就绪状态；`AMORTIZE` 保留被移除 span 对后续 token 的历史影响，`FORGET` 通过 prefix-trimmed re-prefill 重建语义。
 
 ## Reference Intake Brief
 
 ### Target
 
 - Intended target system: 更新已有 Grape 论文笔记与索引行核心信号，并生成单篇论文分享工作文档；双向关系继续在对应论文的关系章节维护，作者档案沿用现有核验结果。
-- Existing related assets: `content/utility/papers-index.md`；[Parrot](/papers/2405.19888-parrot-semantic-variable-llm-serving/)、[Sarathi](/papers/2308.16369-sarathi-chunked-prefill-decode-maximal-batching/)、[Span Query](/papers/2511.02749-span-queries-cache-attention-locality/)、[ThunderAgent](/papers/2602.13692-thunderagent-program-aware-agentic-inference/)、[TML inference determinism](/papers/2025-09-10-defeating-nondeterminism-llm-inference/)、[SPORK](/papers/2607.03333-spork-self-speculative-agentic-inference/)、[Leyline](/papers/2606.01065-leyline-kv-cache-directives-agentic-inference/)。
+- Existing related assets: `content/utility/papers-index.md`；[Parrot](/papers/2405.19888-parrot-semantic-variable-llm-serving/)、[Sarathi](/papers/2308.16369-sarathi-chunked-prefill-decode-maximal-batching/)、[Span Query](/papers/2511.02749-span-queries-cache-attention-locality/)、[ThunderAgent](/papers/2602.13692-thunderagent-program-aware-agentic-inference/)、[TML inference determinism](/papers/2025-09-10-defeating-nondeterminism-llm-inference/)、[SPORK](/papers/2607.03333-spork-self-speculative-agentic-inference/)。
 - Proposed form: 更新独立论文笔记与索引，新增 `Notes/grape-micro-task-level-parallelism.md` 作为分享工作文档；本轮没有新增可核验作者事实。
 
 ### Reusable Elements
@@ -373,7 +372,7 @@ Grape 对常规 decode 路径的 $d$ 改动有限，主要通过静态 prompt �
 - Unsourced or unverifiable claims: 匿名稿缺少完整作者、机构、版本和 artifact；只把作者主页直接支持的 Siqi Wang、Hailong Yang 与 SC 2026 状态写成公开事实。
 - Tone/brand mismatch: 使用系统论文审计口径，区分作者主张、论文事实和本地分析。
 - Safety/compliance issues: 论文是 serving systems 研究，无直接双用途操作流程。
-- Overlap with existing assets: 直接方法谱系连接 Parrot 与 Sarathi；Span Query、ThunderAgent、TML inference determinism、SPORK 和 Leyline 提供相邻系统边界。Grape 的独立价值在跨 task 微任务 overlap 与 SLO-aware engine integration。
+- Overlap with existing assets: 直接方法谱系连接 Parrot 与 Sarathi；Span Query、ThunderAgent、TML inference determinism 和 SPORK 提供相邻系统边界。Grape 的独立价值在跨 task 微任务 overlap 与 SLO-aware engine integration。
 
 ### Skipped
 
