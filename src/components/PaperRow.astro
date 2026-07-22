@@ -11,6 +11,7 @@ interface Paper {
   updatedAt?: string;
   reviewStatus?: string;
   reviewedAt?: string;
+  materialType?: string;
   pinned?: boolean;
   authors?: string;
   authorEntries?: { name: string; path?: string; slug?: string; profileStatus?: string }[];
@@ -62,6 +63,7 @@ const visibleDateField = dateOptions.some(({ field }) => field === dateField) ? 
     )}
     <div class="paper-row-meta">
       <span class:list={['paper-review-badge', `is-${reviewStatus}`]}>{paperReviewLabel(reviewStatus)}</span>
+      {paper.materialType === 'composite' && <span class="paper-row-kind">研究综合</span>}
       {paper.pinned && <span class="paper-row-pin">Pinned</span>}
       {showProvenance && <span>{paper.slug}</span>}
       {paper.tags?.slice(0, 3).map((tag, index) => (

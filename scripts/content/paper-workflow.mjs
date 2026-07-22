@@ -62,6 +62,8 @@ const evidenceSectionGroup = REQUIRED_SECTION_GROUPS.find((group) => group.name 
 
 const exactMinutePattern = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$/;
 const exactDatePattern = /^\d{4}-\d{2}-\d{2}$/;
+const compositeProtocolHeadingPattern =
+  /^###\s+(?:(?:检索|搜索|纳入).*(?:协议|范围|边界)|(?:search|inclusion).*(?:protocol|scope|boundar))/mi;
 const paperReviewStatusSet = new Set(PAPER_REVIEW_STATUSES);
 const absoluteUrlPattern = /https?:\/\/[^\s)>；，。]+/gi;
 const internalPaperPathPattern = /\/papers\/([^/#?\s)]+)\//g;
@@ -158,6 +160,8 @@ const isValidMinute = (value) => {
   const [hour, minute] = time.split(':').map(Number);
   return isValidDate(date) && hour >= 0 && hour <= 23 && minute >= 0 && minute <= 59;
 };
+
+const searchWindowDates = (value = '') => String(value).match(/\d{4}-\d{2}-\d{2}/g) ?? [];
 
 const isHttpUrl = (value) => {
   try {
@@ -510,6 +514,54 @@ export const validatePaperRecord = async ({
           errors.push(issue('v21-analysis-module', slug, `Unknown Analysis module: ${moduleName}.`));
         }
       }
+
+      if (materialType === 'composite') {
+        for (const fieldName of ['Responsible organization', 'Search services', 'Search window']) {
+          if (!sourceField(fieldName)) {
+            errors.push(
+              issue(
+                'v21-composite-source-field',
+                slug,
+                `v2.1 composite notes must declare ${fieldName}.`,
+              ),
+            );
+          }
+        }
+        if (!modules.includes('survey')) {
+          errors.push(
+            issue(
+              'v21-composite-analysis-module',
+              slug,
+              'v2.1 composite notes must include the survey analysis module.',
+            ),
+          );
+        }
+
+        const windowDates = searchWindowDates(sourceField('Search window'));
+        if (
+          windowDates.length < 2 ||
+          !isValidDate(windowDates[0]) ||
+          !isValidDate(windowDates.at(-1)) ||
+          windowDates[0] > windowDates.at(-1)
+        ) {
+          errors.push(
+            issue(
+              'v21-composite-search-window',
+              slug,
+              'v2.1 composite Search window must contain valid ordered start and end dates.',
+            ),
+          );
+        }
+        if (!compositeProtocolHeadingPattern.test(source)) {
+          errors.push(
+            issue(
+              'v21-composite-protocol',
+              slug,
+              'v2.1 composite Source must contain a level-three search or inclusion protocol section.',
+            ),
+          );
+        }
+      }
     }
 
     for (const block of resultBlocks(sectionForGroup(markdown, evidenceSectionGroup))) {
@@ -614,6 +666,15 @@ export const validatePaperRecord = async ({
       }
       if (pageType && !REVIEW_PAGE_TYPES.has(pageType)) {
         errors.push(issue('v21-review-page-type', slug, 'Review page-type is outside the supported set.'));
+      }
+      if (materialType === 'composite' && pageType && pageType !== 'not-applicable') {
+        errors.push(
+          issue(
+            'v21-composite-review-page-type',
+            slug,
+            'v2.1 composite notes must use Review status page-type=not-applicable.',
+          ),
+        );
       }
       if (matchConfidence && !/^(high|medium|low)$/i.test(matchConfidence)) {
         errors.push(issue('v21-review-confidence', slug, 'Review match-confidence must be high, medium, or low.'));

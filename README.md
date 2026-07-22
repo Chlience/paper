@@ -6,7 +6,7 @@ The content source is split by role:
 
 ```text
 content/papers/      paper notes, one Markdown file per paper
-content/utility/     public workflow, template, archive index, and research-mainline snapshot
+content/utility/     public paper/synthesis workflows, template, archive index, and research-mainline snapshot
 data/authors.json    maintained author profiles
 data/tag-taxonomy.json controlled tag vocabulary and facets
 data/paper-tags.json paper-to-tag assignments, primary tag first
@@ -79,6 +79,12 @@ Paper-reading workflow:
 
 ```text
 content/utility/paper-analysis-workflow.md
+```
+
+Cross-paper research synthesis workflow:
+
+```text
+content/utility/research-synthesis-workflow.md
 ```
 
 New notes use the v2.1 source snapshot, analysis modules, and seven-section contract in:

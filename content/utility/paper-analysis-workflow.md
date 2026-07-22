@@ -1,13 +1,15 @@
 # Paper Analysis Workflow
 
 First-Archived-At: 2026-06-19
-Updated-At: 2026-07-21
+Updated-At: 2026-07-22
 
 ## 目标
 
 本工作流把用户指定的论文、技术报告、模型卡、博客、框架文档或综合材料转成可追溯、可更新、可连接的长期笔记。用户给出材料即代表归档范围已经确定；受理阶段负责识别材料、版本、重复条目和安全边界。
 
 v2.1 使用固定质量底线和条件分析模块。每篇笔记都要说明研究问题、核心贡献、工作机制、直接证据和成立边界；实验、系统、理论、模型报告、综述、安全与文档类细节按材料实际主张启用。
+
+单篇材料使用本工作流和 [Paper Note Template](/template/)。跨论文时间窗、方法谱系或证据综合使用独立的 [Research Synthesis Workflow](/synthesis-workflow/)；它复用 v2.1 的归档底线，并增加检索窗口、增量记录、统一比较轴和公开文章结构。
 
 ## 快速执行卡
 
@@ -39,6 +41,8 @@ v2.1 使用固定质量底线和条件分析模块。每篇笔记都要说明研
 - 五项人工语义门禁通过，本地内容工作流、元数据、公式、搜索和置顶检查通过。
 - 完整改动已创建本地 commit；推送只在用户明确要求后执行。
 
+`Material type: composite` 还需要满足 [Research Synthesis Workflow](/synthesis-workflow/) 的时间窗、检索协议、跨材料比较和更新契约。
+
 研究主线当前作为独立语料快照维护。新增论文暂不更新 `data/research-mainlines.json` 或 `content/utility/research-mainlines.md`，后续在主线规则更新后重新接入论文工作流。
 
 ## Source 快照
@@ -66,7 +70,7 @@ v2.1 使用固定质量底线和条件分析模块。每篇笔记都要说明研
 
 `page-type` 使用 `official-review`、`metadata-only`、`proceedings`、`commentary`、`not-found` 或 `not-applicable`；`match-confidence` 使用 `high`、`medium` 或 `low`。
 
-arXiv 论文优先以 abstract 页面作为规范来源，并补充 PDF、HTML、TeX source、代码与项目页。网页、模型卡和框架文档优先使用责任主体发布的页面或仓库，并记录 release、tag、commit 或页面状态。`composite` 可以使用其它已存档材料的 `/papers/<slug>/` 或 `/archive/` 作为规范入口，不能引用自身页面。
+arXiv 论文优先以 abstract 页面作为规范来源，并补充 PDF、HTML、TeX source、代码与项目页。网页、模型卡和框架文档优先使用责任主体发布的页面或仓库，并记录 release、tag、commit 或页面状态。`composite` 可以使用其它已存档材料的 `/papers/<slug>/` 或 `/archive/` 作为规范入口，不能引用自身页面；其附加字段和公开协议见 [Research Synthesis Workflow](/synthesis-workflow/)。
 
 每篇论文头部保留：
 
@@ -135,7 +139,7 @@ arXiv 论文优先以 abstract 页面作为规范来源，并补充 PDF、HTML�
 - `OpenReview / 审稿意见吸收`：`Review status` 为 `official-review` 时必需。
 - `本地讨论补充`：后续交流形成长期有效的概念修正、反例、工程判断或复验指标时加入。
 - `主要启发`：材料产生可复用设计原则、诊断指标或实践建议时加入。
-- `阅读目标与判断边界`：复杂综合材料需要先限定范围时加入，也可以把内容并入 `论文脉络` 与 `局限`。
+- `阅读目标与判断边界`：复杂材料需要先限定范围时加入，也可以把内容并入 `论文脉络` 与 `局限`。`composite` 的公开组织顺序由 [Research Synthesis Workflow](/synthesis-workflow/) 规定。
 
 `Reference Intake Brief` 已退出 v2.1。用户指定材料即确定归档对象，笔记不再记录 `merge`、`skip` 或其它准入决策。
 
@@ -221,7 +225,7 @@ arXiv 论文优先以 abstract 页面作为规范来源，并补充 PDF、HTML�
 - 已存档论文使用 `/papers/<slug>/`。
 - 作者页使用 `/authors/<slug>/`。
 - 主题使用 `/topics/#tag-<id>`。
-- 索引、工作流和模板分别使用 `/archive/`、`/workflow/`、`/template/`。
+- 索引、单篇工作流、总结文章工作流和模板分别使用 `/archive/`、`/workflow/`、`/synthesis-workflow/`、`/template/`。
 - 本地文件名只用代码样式，不建立 `.md` 相对链接。
 - 正文 Markdown 公式使用 `$...$` 或 `$$...$$`；索引核心信号和 `一句话结论` 只用自然语言描述。
 - 每篇 v2.1 笔记在 `Source` 声明 `Key figure decision: include` 或 `omit`。高价值图存在时优先使用 `include`；`omit` 必须解释原因。

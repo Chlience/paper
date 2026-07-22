@@ -51,6 +51,12 @@ export const utilityPageDefinitions = [
     path: '/workflow/',
   },
   {
+    ...markdownEntry(utilityContentDir, 'research-synthesis-workflow.md'),
+    slug: 'synthesis-workflow',
+    title: 'Research Synthesis Workflow',
+    path: '/synthesis-workflow/',
+  },
+  {
     ...markdownEntry(utilityContentDir, 'paper-note-template.md'),
     slug: 'template',
     title: 'Paper Note Template',

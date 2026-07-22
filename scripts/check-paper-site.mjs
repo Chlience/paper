@@ -199,6 +199,7 @@ const authorsIndexPath = path.join(distDir, 'authors', 'index.html');
 const papersIndexPath = path.join(distDir, 'papers', 'index.html');
 const topicsIndexPath = path.join(distDir, 'topics', 'index.html');
 const mainlinesIndexPath = path.join(distDir, 'mainlines', 'index.html');
+const synthesisWorkflowIndexPath = path.join(distDir, 'synthesis-workflow', 'index.html');
 const paperSearchIndexPath = path.join(distDir, 'paper-search.json');
 
 if (!(await exists(sitemapXmlPath))) {
@@ -228,12 +229,74 @@ if (!(await exists(topicsIndexPath))) {
   }
 }
 
+if (!(await exists(synthesisWorkflowIndexPath))) {
+  fail('dist/synthesis-workflow/index.html is missing.');
+} else {
+  const synthesisWorkflowHtml = await fs.readFile(synthesisWorkflowIndexPath, 'utf8');
+  for (const marker of [
+    'Research Synthesis Workflow',
+    'Definition of Done',
+    'Search window',
+    'policy topology',
+    'Synthesis method',
+  ]) {
+    if (!synthesisWorkflowHtml.includes(marker)) {
+      fail(`Research-synthesis workflow page is missing marker: ${marker}`);
+    }
+  }
+  if (synthesisWorkflowHtml.includes('npm run test:workflow')) {
+    fail('Research-synthesis workflow page exposes maintenance-only commands.');
+  }
+}
+
 if (!(await exists(paperSearchIndexPath))) {
   fail('dist/paper-search.json is missing.');
 } else {
   const searchItems = JSON.parse(await fs.readFile(paperSearchIndexPath, 'utf8'));
   if (!Array.isArray(searchItems) || searchItems.length !== data.papers.length) {
     fail('dist/paper-search.json does not match the generated paper inventory.');
+  }
+}
+
+const synthesisPagePath = path.join(
+  distDir,
+  'papers',
+  '2026-07-13-rl-credit-assignment-may-july-landscape',
+  'index.html',
+);
+const regularPaperPagePath = path.join(distDir, 'papers', '2607.13988-trace-turn-level-reward-assignment', 'index.html');
+
+if (!(await exists(synthesisPagePath))) {
+  fail('Research-synthesis canary page is missing.');
+} else {
+  const synthesisHtml = await fs.readFile(synthesisPagePath, 'utf8');
+  for (const marker of [
+    'class="paper-page container is-synthesis"',
+    '阶段性研究综合',
+    '2026.05',
+    '2026.07',
+    '检索截止',
+    'id="检索协议与结果边界"',
+    'href="/synthesis-workflow/"',
+    '"@type":"Article"',
+  ]) {
+    if (!synthesisHtml.includes(marker)) {
+      fail(`Research-synthesis page is missing marker: ${marker}`);
+    }
+  }
+  for (const marker of ['id="source"', 'id="作者与关系"', 'id="openreview-审稿意见吸收"', 'id="reference-intake-brief"']) {
+    if (synthesisHtml.includes(marker)) {
+      fail(`Research-synthesis page exposes archive-only section: ${marker}`);
+    }
+  }
+}
+
+if (!(await exists(regularPaperPagePath))) {
+  fail('Regular-paper canary page is missing.');
+} else {
+  const regularPaperHtml = await fs.readFile(regularPaperPagePath, 'utf8');
+  if (regularPaperHtml.includes('阶段性研究综合') || !regularPaperHtml.includes('"@type":"ScholarlyArticle"')) {
+    fail('Regular paper page must retain the scholarly-paper construction.');
   }
 }
 

@@ -1,0 +1,22 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import data from '../../generated/paper-data.json';
+
+const workflow = data.utilities.find((page) => page.slug === 'synthesis-workflow');
+---
+
+<Layout
+  active="workflow"
+  title="Research Synthesis Workflow | Chlience Paper Archive"
+  description="阶段性研究综合的选题、检索窗口、比较框架、证据边界、公开结构和更新流程。"
+  canonicalPath="/synthesis-workflow/"
+>
+  <article class="utility-page container">
+    <header class="page-header slim">
+      <p class="eyebrow mono">Synthesis method</p>
+      <h1>{workflow?.title}</h1>
+      <p class="deck">为跨论文时间窗、方法谱系和证据综合建立可复核的检索边界、比较轴与更新契约。</p>
+    </header>
+    <div class="prose" set:html={workflow?.html ?? ''} />
+  </article>
+</Layout>

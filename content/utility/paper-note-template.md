@@ -4,10 +4,12 @@ First-Archived-At: YYYY-MM-DD HH:mm
 Updated-At: YYYY-MM-DD HH:mm
 Review-Status: pending
 
+> 本模板用于单篇材料。跨论文时间窗、方法谱系或证据综合使用 [Research Synthesis Workflow](/synthesis-workflow/) 中的 `composite` 契约。
+
 ## Source
 
 - Workflow version: v2.1
-- Material type: research-paper / technical-report / model-card / survey / blog / framework-docs / composite
+- Material type: research-paper / technical-report / model-card / survey / blog / framework-docs
 - Analysis modules: experiment / system / theory / model-report / survey / safety / docs
 - Canonical source:
 - Title:
@@ -32,7 +34,7 @@ Review-Status: pending
 - `Authors` 与 `Responsible organization` 至少填写一项。
 - `Authors` 保留全部可解析作者。默认新建 profile 只覆盖作者顺序前两位、论文明确标注的共同一作和明确通讯作者；普通作者只复用已有 profile，用户明确要求时可以例外新建。已建档作者使用 `/authors/<slug>/` 链接，其余作者保留姓名文本。
 - `Current version read` 与 `Version / revision read` 至少填写一项。
-- 普通材料的 Canonical source 使用官方绝对 URL；composite 可以使用其它已归档材料的 /papers/<slug>/ 或 /archive/，不能引用自身页面。
+- Canonical source 使用官方绝对 URL；`composite` 的内部基线来源规则见 [Research Synthesis Workflow](/synthesis-workflow/)。
 - Analysis modules 可以填写多个逗号分隔值，例如 `system, experiment`。
 - `Key figure decision` 使用 `include` 或 `omit`。存在能解释首要贡献、机制、训练信号、主结论或失败边界的高价值图时使用 `include`，至少嵌入一张本地图片；使用 `omit` 时填写实质性的 `Key figure rationale`。
 - Review status 的 page-type 使用 official-review / metadata-only / proceedings / commentary / not-found / not-applicable；match-confidence 使用 high / medium / low。

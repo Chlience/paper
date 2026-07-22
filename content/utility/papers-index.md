@@ -23,7 +23,7 @@ Updated-At: 2026-07-22
 | [SAO](/papers/2607.07508-sao-single-rollout-asynchronous-agentic-rl/) | 2026年7月 | 用每 prompt 单 rollout、强化 critic 与双侧 token mask 替代异步 GRPO 的组内等待和 group baseline。 |
 | [S-TTT](/papers/2607.09415-self-guided-test-time-training-long-context/) | 2026年7月 | 让基础模型从长上下文复制问题相关证据，并只对这些 span 做实例级 query-LoRA 更新后读取完整上下文作答。 |
 | [Grape](/papers/2026-07-13-grape-micro-task-agentic-workflow-serving/) | 2026年7月 | 把相依 LLM task 的已知 prompt、流式上游输出和 decode 拆成微任务，让下游在上游 decode 期间持续完成跨 task 增量 prefill。 |
-| [RL Credit Assignment Watch](/papers/2026-07-13-rl-credit-assignment-may-july-landscape/) | 2026年7月 | 按 token、segment、turn、memory 和 workflow role 归纳 2026 年 5-7 月方法，并把 compact 后的 state comparability 与 provenance routing 作为独立判断轴。 |
+| [RL Credit Assignment Watch](/papers/2026-07-13-rl-credit-assignment-may-july-landscape/) | 2026年7月 | 按 token、segment、turn、trajectory set、memory 和 workflow role 归纳 2026 年 5—7 月方法，并把压缩后状态可比性与生成、聚合、互评、冻结参考策略之间的拓扑关系列为独立判断轴。 |
 | [Learned Environment Roadmap](/papers/2026-07-13-agentic-rl-learned-environment-evolution/) | 2026年7月 | 把 Agentic RL 的环境供给串成从可复位 sandbox、有状态模拟、可执行环境合成到 language world model 的演进路线，并以 real-sim 校准闭环约束策略利用模拟误差。 |
 | [TRACE](/papers/2607.13988-trace-turn-level-reward-assignment/) | 2026年7月 | 在已知短答案的长程搜索中，用冻结参考模型测量工具边界后的答案可预测性变化并把多步时序差信用混入终局优势，使两种 Qwen3 Thinking 模型在同设置下较 GRPO 的 BrowseComp-Plus 分数分别提高 5.6 和 6.2 个百分点。 |
 | [国产模型报告时间线](/papers/2026-06-23-chinese-frontier-model-reports-timeline/) | 2026年6月 | 按 MoE / 长上下文、reasoning RL、agentic infrastructure 三条主线串联 2024-2026 年国产前沿模型演进。 |

@@ -1,0 +1,51 @@
+---
+import { paperReviewLabel } from '../lib/paper-review.mjs';
+import { paths } from '../lib/site';
+
+const { paper, reviewStatus } = Astro.props;
+---
+
+<header class="paper-header synthesis-header">
+  <p class="synthesis-kicker">阶段性研究综合</p>
+  <h1>{paper.title}</h1>
+  <div class="deck" set:html={paper.conclusionHtml} />
+
+  {paper.searchWindow && (
+    <div class="synthesis-window" aria-label={`研究窗口 ${paper.searchWindow.label}`}>
+      <span class="synthesis-window-label">研究窗口</span>
+      <span class="synthesis-window-range mono">
+        <time datetime={paper.searchWindow.start}>{paper.searchWindow.startMonth}</time>
+        {paper.searchWindow.startMonth !== paper.searchWindow.endMonth && (
+          <>
+            <span class="synthesis-window-arrow" aria-hidden="true">→</span>
+            <time datetime={paper.searchWindow.end}>{paper.searchWindow.endMonth}</time>
+          </>
+        )}
+      </span>
+      <span class="synthesis-window-cutoff">检索截止 {paper.searchWindow.cutoff}</span>
+    </div>
+  )}
+
+  <div class="paper-meta">
+    <div class="paper-meta-line" role="group" aria-label="研究综合状态与来源">
+      <span class:list={['paper-meta-item', 'paper-review-badge', `is-${reviewStatus}`]}>
+        {paperReviewLabel(reviewStatus)}
+      </span>
+      <a class="paper-meta-item synthesis-kind" href={paths.synthesisWorkflow}>研究综合 SOP</a>
+      {paper.pinned && <span class="paper-meta-item paper-pin">Pinned</span>}
+      {paper.firstArchivedAt && <span class="paper-meta-item">Snapshot {paper.firstArchivedAt}</span>}
+      {paper.updatedAt && paper.updatedAt !== paper.firstArchivedAt && (
+        <span class="paper-meta-item">Updated {paper.updatedAt}</span>
+      )}
+      {paper.reviewedAt && <span class="paper-meta-item">Reviewed {paper.reviewedAt}</span>}
+      {paper.canonicalSource && <a class="paper-meta-item" href={paper.canonicalSource}>研究基线</a>}
+    </div>
+    {paper.tags.length > 0 && (
+      <div class="paper-meta-line paper-meta-topics" role="group" aria-label="研究综合主题">
+        {paper.tags.map((tag, index) => (
+          <a class="paper-topic" href={`/topics/#tag-${paper.tagIds[index]}`}>{tag}</a>
+        ))}
+      </div>
+    )}
+  </div>
+</header>

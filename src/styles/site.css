@@ -769,6 +769,13 @@ h3 {
   background: oklch(95% 0.028 155);
 }
 
+.paper-row-meta .paper-row-kind,
+.paper-meta .synthesis-kind {
+  border-color: oklch(78% 0.055 230);
+  color: oklch(35% 0.115 230);
+  background: oklch(95% 0.025 230);
+}
+
 .paper-row-meta a:hover,
 .paper-meta a:hover {
   color: var(--fg);
@@ -1118,6 +1125,80 @@ h3 {
 
 .paper-header h1 {
   font-size: clamp(38px, 6vw, 64px);
+}
+
+.synthesis-header {
+  max-width: 980px;
+}
+
+.synthesis-header h1 {
+  max-width: 960px;
+  font-size: clamp(38px, 5.6vw, 62px);
+}
+
+.synthesis-kicker {
+  margin: 0 0 12px;
+  color: var(--info);
+  font-size: 14px;
+  font-weight: 720;
+}
+
+.synthesis-window {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 12px 24px;
+  align-items: center;
+  margin-top: 28px;
+  padding: 16px 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.synthesis-window-label,
+.synthesis-window-cutoff {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.synthesis-window-label {
+  font-weight: 720;
+}
+
+.synthesis-window-range {
+  display: inline-flex;
+  gap: 12px;
+  align-items: center;
+  color: var(--fg);
+  font-size: clamp(22px, 3vw, 30px);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+
+.synthesis-window-arrow {
+  color: var(--info);
+  font-family: var(--font-body);
+  font-weight: 560;
+}
+
+.synthesis-window-cutoff {
+  max-width: 250px;
+  text-align: right;
+}
+
+.is-synthesis .paper-layout {
+  grid-template-columns: 220px minmax(0, 860px);
+}
+
+.is-synthesis .prose {
+  max-width: 860px;
+}
+
+.is-synthesis .prose > p,
+.is-synthesis .prose > ul,
+.is-synthesis .prose > ol,
+.is-synthesis .prose > blockquote {
+  max-width: var(--content-width);
 }
 
 .paper-layout {
@@ -2721,6 +2802,16 @@ html.is-figure-dialog-open body {
 
   .deck {
     overflow-wrap: anywhere;
+  }
+
+  .synthesis-window {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  .synthesis-window-cutoff {
+    max-width: none;
+    text-align: left;
   }
 
   .paper-row {

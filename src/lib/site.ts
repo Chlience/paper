@@ -14,6 +14,7 @@ export const paths = {
   conferences: '/conferences/',
   archive: '/archive/',
   workflow: '/workflow/',
+  synthesisWorkflow: '/synthesis-workflow/',
   template: '/template/',
   mainSite: 'https://chlience.com',
 };
@@ -43,33 +44,42 @@ export const createWebsiteJsonLd = (site?: URL | null) => ({
 });
 
 export const createArticleJsonLd = ({
+  schemaType = 'ScholarlyArticle',
   title,
   description,
   url,
   firstArchivedAt,
   updatedAt,
   authors,
+  organizationAuthor,
 }: {
+  schemaType?: 'Article' | 'ScholarlyArticle';
   title: string;
   description: string;
   url: string;
   firstArchivedAt?: string;
   updatedAt?: string;
   authors?: string;
+  organizationAuthor?: string;
 }) => ({
   '@context': 'https://schema.org',
-  '@type': 'ScholarlyArticle',
+  '@type': schemaType,
   headline: title,
   description,
   url,
   datePublished: firstArchivedAt,
   dateModified: updatedAt ?? firstArchivedAt,
-  author: authors
-    ? authors.split(/,\s*/).slice(0, 12).map((name) => ({
+  author: organizationAuthor
+    ? {
+        '@type': 'Organization',
+        name: organizationAuthor,
+      }
+    : authors
+      ? authors.split(/,\s*/).slice(0, 12).map((name) => ({
         '@type': 'Person',
         name,
-      }))
-    : undefined,
+        }))
+      : undefined,
 });
 
 export const createPersonJsonLd = ({

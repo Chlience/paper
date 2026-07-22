@@ -1,5 +1,6 @@
 ---
 import AuthorList from '../../components/AuthorList.astro';
+import ResearchSynthesisHeader from '../../components/ResearchSynthesisHeader.astro';
 import Layout from '../../layouts/Layout.astro';
 import data from '../../generated/paper-data.json';
 import { createArticleJsonLd, getAbsoluteUrl } from '../../lib/site';
@@ -17,6 +18,7 @@ const canonicalPath = paper.path;
 const articleUrl = getAbsoluteUrl(canonicalPath, Astro.site);
 const h2Headings = paper.headings.filter((heading) => heading.depth === 2);
 const reviewStatus = normalizePaperReviewStatus(paper.reviewStatus);
+const isSynthesis = paper.materialType === 'composite';
 ---
 
 <Layout
@@ -26,52 +28,58 @@ const reviewStatus = normalizePaperReviewStatus(paper.reviewStatus);
   canonicalPath={canonicalPath}
   ogType="article"
   jsonLd={createArticleJsonLd({
+    schemaType: isSynthesis ? 'Article' : 'ScholarlyArticle',
     title: paper.title,
     description: paper.coreSignal,
     url: articleUrl,
     firstArchivedAt: paper.firstArchivedAt,
     updatedAt: paper.updatedAt,
-    authors: paper.authors,
+    authors: !isSynthesis && paper.authors !== 'Unknown' ? paper.authors : undefined,
+    organizationAuthor: isSynthesis ? paper.responsibleOrganization : undefined,
   })}
 >
-  <article class="paper-page container">
-    <header class="paper-header">
-      <p class="eyebrow mono">{paper.slug}</p>
-      <h1>{paper.title}</h1>
-      <div class="deck" set:html={paper.conclusionHtml} />
-      {paper.authors && paper.authors !== 'Unknown' && (
-        <p class="paper-authors">
-          <span class="paper-authors-label mono">Authors</span>
-          <AuthorList authors={paper.authors} authorEntries={paper.authorEntries} />
-        </p>
-      )}
-      <div class="paper-meta">
-        <div class="paper-meta-line" role="group" aria-label="论文状态与来源">
-          <span class:list={['paper-meta-item', 'paper-review-badge', `is-${reviewStatus}`]}>
-            {paperReviewLabel(reviewStatus)}
-          </span>
-          {paper.pinned && <span class="paper-meta-item paper-pin">Pinned</span>}
-          {paper.firstArchivedAt && <span class="paper-meta-item">Archived {paper.firstArchivedAt}</span>}
-          {paper.updatedAt && paper.updatedAt !== paper.firstArchivedAt && (
-            <span class="paper-meta-item">Updated {paper.updatedAt}</span>
-          )}
-          {paper.reviewedAt && <span class="paper-meta-item">Reviewed {paper.reviewedAt}</span>}
-          {paper.sourceUrl && <a class="paper-meta-item" href={paper.sourceUrl}>Source</a>}
-        </div>
-        {paper.tags.length > 0 && (
-          <div class="paper-meta-line paper-meta-topics" role="group" aria-label="论文主题">
-            {paper.tags.map((tag, index) => (
-              <a class="paper-topic" href={`/topics/#tag-${paper.tagIds[index]}`}>{tag}</a>
-            ))}
-          </div>
+  <article class:list={['paper-page', 'container', { 'is-synthesis': isSynthesis }]}>
+    {isSynthesis ? (
+      <ResearchSynthesisHeader paper={paper} reviewStatus={reviewStatus} />
+    ) : (
+      <header class="paper-header">
+        <p class="eyebrow mono">{paper.slug}</p>
+        <h1>{paper.title}</h1>
+        <div class="deck" set:html={paper.conclusionHtml} />
+        {paper.authors && paper.authors !== 'Unknown' && (
+          <p class="paper-authors">
+            <span class="paper-authors-label mono">Authors</span>
+            <AuthorList authors={paper.authors} authorEntries={paper.authorEntries} />
+          </p>
         )}
-      </div>
-    </header>
+        <div class="paper-meta">
+          <div class="paper-meta-line" role="group" aria-label="论文状态与来源">
+            <span class:list={['paper-meta-item', 'paper-review-badge', `is-${reviewStatus}`]}>
+              {paperReviewLabel(reviewStatus)}
+            </span>
+            {paper.pinned && <span class="paper-meta-item paper-pin">Pinned</span>}
+            {paper.firstArchivedAt && <span class="paper-meta-item">Archived {paper.firstArchivedAt}</span>}
+            {paper.updatedAt && paper.updatedAt !== paper.firstArchivedAt && (
+              <span class="paper-meta-item">Updated {paper.updatedAt}</span>
+            )}
+            {paper.reviewedAt && <span class="paper-meta-item">Reviewed {paper.reviewedAt}</span>}
+            {paper.sourceUrl && <a class="paper-meta-item" href={paper.sourceUrl}>Source</a>}
+          </div>
+          {paper.tags.length > 0 && (
+            <div class="paper-meta-line paper-meta-topics" role="group" aria-label="论文主题">
+              {paper.tags.map((tag, index) => (
+                <a class="paper-topic" href={`/topics/#tag-${paper.tagIds[index]}`}>{tag}</a>
+              ))}
+            </div>
+          )}
+        </div>
+      </header>
+    )}
 
     <div class="paper-layout">
       {h2Headings.length > 0 && (
         <aside class="toc" aria-label="目录" data-paper-toc>
-          <strong>目录</strong>
+          <strong>{isSynthesis ? '阅读路径' : '目录'}</strong>
           <nav data-paper-toc-nav>
             {h2Headings.map((heading, index) => (
               <a

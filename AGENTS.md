@@ -13,7 +13,8 @@
 
 - 本目录只服务论文阅读、分析、作者关系跟踪和 Markdown 存档。
 - 分析任何论文前，先查看 `content/utility/paper-analysis-workflow.md`。
-- 新增论文笔记时，使用 `content/utility/paper-note-template.md` 的 v2.1 章节结构，并在 `Source` 声明 `Analysis modules` 与 `Key figure decision`。
+- 新增单篇材料笔记时，使用 `content/utility/paper-note-template.md` 的 v2.1 章节结构；新增或扩展总结性文章时，使用 `content/utility/research-synthesis-workflow.md`，并将 `Material type` 设为 `composite`。
+- v2.1 `composite` 必须在 `Analysis modules` 启用 `survey`，声明 `Responsible organization`、`Search services` 与带起止日期的 `Search window`，并在 `Source` 中保留可公开提升的检索或纳入协议三级章节。
 - 每篇 v2.1 笔记必须在 `Source` 声明 `Key figure decision: include` 或 `omit`。原材料存在能够解释首要贡献、机制、训练信号、主结论或失败边界的高价值图时使用 `include`，至少嵌入一张带 `Image Source` 的本地图片；使用 `omit` 时必须填写 `Key figure rationale`。图片数量由信息价值决定，优先使用官方 HTML、TeX source、项目页或仓库中的原图。
 - 每篇论文必须沉淀为 `content/papers/<slug>.md`，并在 `content/utility/papers-index.md` 的 `当前收录` 表中保留唯一一行。表格固定使用 `简称 | 时间 | 核心信号` 三列；核心信号从 `一句话结论` 提炼，用一个可独立成立的自然语言句子说明研究对象、区别性机制和主要结果；省略某个边界会改变结论真值时，将该边界写入句子。核心信号和 `一句话结论` 均不使用公式或 TeX 数学定界符，也不能写成 Theme 式关键词列表。
 - 每篇论文必须包含 `Source`、`作者与关系`、`一句话结论`、`论文脉络`、`关键实验/定理`、`局限`、`跨论文关系`。实验、系统、理论、模型报告、综述、安全和文档类检查按 `Analysis modules` 启用。
@@ -25,7 +26,7 @@
 - `content/utility/papers-index.md` 只维护 `当前收录` 表及其简称、首次公开月份和核心信号。单篇作者关系与跨论文关系写入对应论文，已建档作者的稳定事实写入 `data/authors.json`。
 - 每篇论文必须在 `data/paper-tags.json` 中保留一个主标签和最多三个辅助标签；标签来自 `data/tag-taxonomy.json`。研究主线当前保留为独立快照，新增论文暂不维护 `data/research-mainlines.json` 或 `content/utility/research-mainlines.md`，等待主线规则更新。
 - 删除论文时必须同步删除 `当前收录` 行，并在剩余论文的 `跨论文关系` 中删除或修订失效描述，同时审计 `data/authors.json`。作者 profile 在剩余论文中没有作者链接、姓名或别名关联时，必须在同一提交中删除；孤立作者会触发工作流硬错误。
-- 论文笔记和 `content/utility/papers-index.md` 中指向已存档论文的 Markdown 链接必须使用站点路径 `/papers/<slug>/`；主题路由使用 `/topics/#tag-<id>`；工作流、模板、索引页面链接分别使用 `/workflow/`、`/template/`、`/archive/`；本地文件名用代码样式保留。
+- 论文笔记和 `content/utility/papers-index.md` 中指向已存档论文的 Markdown 链接必须使用站点路径 `/papers/<slug>/`；主题路由使用 `/topics/#tag-<id>`；单篇工作流、总结文章工作流、模板和索引页面分别使用 `/workflow/`、`/synthesis-workflow/`、`/template/`、`/archive/`；本地文件名用代码样式保留。
 - 对安全或双用途论文，保留机制、风险、评测和防御启发，避免沉淀可直接滥用的操作细节。
 - 提交前执行五项人工语义门禁：核心贡献对齐、机制或论证链、直接证据定位、最窄结论边界、局限与成立条件。自动检查通过不能替代这五项判断。
 - 新增、删除或调整任何论文工作流强制要求时，必须在同一次改动中同步检查本文件、主 SOP、模板、验证器与测试，以及至少一个新契约 fixture 或真实 canary。五项未对齐的规则保持建议级。
