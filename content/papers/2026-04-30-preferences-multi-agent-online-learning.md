@@ -1,29 +1,33 @@
 # What Preferences Can—and Cannot—Predict in Multi-Agent Online Learning 论文笔记
 
 First-Archived-At: 2026-07-16 16:02
-Updated-At: 2026-07-16 16:02
+Updated-At: 2026-07-22 15:52
 Review-Status: pending
 
 ## Source
 
-- Workflow version: v2
+- Workflow version: v2.1
 - Material type: research-paper
+- Analysis modules: theory
 - Canonical source: [OpenReview forum](https://openreview.net/forum?id=5W30WwL8wt)
 - Title: What Preferences Can—and Cannot—Predict in Multi-Agent Online Learning
-- Authors: Omar Abbadi, Rida Laraki, Panayotis Mertikopoulos
+- Authors: [Omar Abbadi](/authors/omar-abbadi/), [Rida Laraki](/authors/rida-laraki/), [Panayotis Mertikopoulos](/authors/panayotis-mertikopoulos/)
 - Responsible organization: Moroccan Center for Game Theory, UM6P；Univ. Grenoble Alpes, CNRS, Inria, Grenoble INP, LIG
-- arXiv: 截至 2026-07-16 未发现公开 arXiv 版本。
+- arXiv: 截至 2026-07-22 未发现公开 arXiv 版本。
 - PDF: [ICML 2026 camera-ready PDF](https://openreview.net/pdf/99ac87aeab1da5d4497587ae8832ee449cbcb8b4.pdf)
 - Originally submitted PDF: [OpenReview attachment](https://openreview.net/attachment?id=5W30WwL8wt&name=originally_submitted_PDF)
 - Code/Project: 未发现官方代码仓库；论文贡献为有限博弈与连续时间学习动力学的理论结果。
 - OpenReview / Review page: [OpenReview](https://openreview.net/forum?id=5W30WwL8wt)
 - Conference page: [ICML 2026 poster](https://icml.cc/virtual/2026/poster/66240)；该页面关联 [Oral 71186](https://icml.cc/virtual/2026/oral/71186)
 - Poster: [ICML 2026 official poster](https://icml.cc/media/PosterPDFs/ICML%202026/66240.png)
-- Submitted: OpenReview 公开记录发布于 2026-04-30；可检索元数据未给出更早的准确投稿日期。
+- Submitted: OpenReview Note created 2026-01-24；first made public 2026-04-30。
 - Published / updated: OpenReview published 2026-04-30, last modified 2026-06-24；Proceedings of the 43rd International Conference on Machine Learning, PMLR 306, 2026
 - Current version read: ICML 2026 camera-ready，PMLR 306
 - Version / revision read: OpenReview camera-ready PDF hash 99ac87aeab1da5d4497587ae8832ee449cbcb8b4
-- Accessed: 2026-07-16
+- Accessed: 2026-07-22
+- License: CC BY 4.0
+- Key figure decision: include
+- Review status: page-type=official-review; match-confidence=high; observed-at=2026-07-22; venue-status=ICML 2026 spotlight
 - Subjects: game theory；online learning；game dynamics；no-regret learning；follow-the-regularized-leader；stability
 
 ## 作者与关系
@@ -42,7 +46,7 @@ Review-Status: pending
 
 ## 一句话结论
 
-论文把有限博弈的序数偏好图与连续时间 FTRL 的集合稳定性联系起来：偏好闭合给出稳定结果的必要约束；对 subgame，club 在一般 FTRL 下足以保证 span 渐近稳定、在无 ties 时形成等价判据，并在 strategy flow 下直接形成 attractor 等价判据；对一般纯策略集合，三人反例表明相同的偏好方向仍可能产生不稳定 span，作者因而引入依赖收益差幅度的 leaklessness，为一般 span 恢复可检验的吸引性充分条件。
+论文证明有限博弈的序数偏好图对连续时间 FTRL 的稳定集合施加必要约束；当候选区域来自子博弈时，对有利单边偏离闭合的纯策略集合（closed under better replies, club）足以保证其张成区域（span）渐近稳定，并在没有收益平局时构成等价判据；当候选区域来自一般纯策略集合时，三人反例展示了相同偏好方向下的动态不稳定，基于收益差幅度的聚合偏离约束（leaklessness）为一般张成区域提供可检验的吸引性充分条件。
 
 ## 阅读目标与判断边界
 
@@ -235,6 +239,10 @@ $F_B$ 非负，并在 $Q(y)\in\operatorname{span}(B)$ 时取零。club 条件配
 
 Proposition 2 构造一个 $2\times2\times2$ 三人博弈。红色 pure-profile set $H$ 是唯一 proper club，其 span 为 top、right、back 三个 faces 的并集；在 entropic FTRL / replicator dynamics 下，这个 span 仍不稳定。
 
+![Figure 1：偏好图闭合与 FTRL 动力学可以失配，也可以对齐](/images/papers/2026-04-30-preferences-multi-agent-online-learning/fig-1-preference-dynamics.png)
+
+Figure 1：左侧给出 club span 附近轨迹向外逃逸的三人反例；右侧的六边循环同时具有偏好闭合和动力学吸引性。Image Source: [OpenReview camera-ready PDF, Figure 1, p. 2](https://openreview.net/pdf/99ac87aeab1da5d4497587ae8832ee449cbcb8b4.pdf), CC BY 4.0；本地图片为 PDF crop。
+
 反例从 top face 中心附近初始化。该点对前两位玩家近似静止，第三位玩家先获得朝 bottom face 的偏离激励；前两位玩家尚未来得及把轨迹带回 $H$ 的另一 face，轨迹已经离开任意给定的小邻域。escape 发生在 mixed interior，因此单独检查 proper subfaces 也无法发现失败。
 
 这一步说明了 product structure 的作用：对一般 club $H$，所有 weakly profitable pure unilateral-deviation arcs 都留在 $H$ 内，但这种逐边 ordinal closure 仍无法控制多位玩家在 mixed profile 上的 aggregate drift。相同 preference graph 的 edge directions 不包含解决该问题所需的 payoff magnitude。
@@ -374,8 +382,10 @@ $$
 ### 结果 1：稳定性给出可计算的序数必要条件
 
 - 设置：有限 normal-form game；decomposable、smooth、strongly convex regularizer；一般 FTRL stability 与 steep case 的 strategy flow 分开处理。
+- 假设：FTRL 使用连续时间累积 payoff score；strategy-flow 结论另需 Assumption 1，使 $s_i=1/\theta_i''$ 可在边界以零延拓为全局 Lipschitz 函数，该条件含意 steepness 与 face invariance。
 - 结果：stable FTRL set 的 skeleton 必为 s-club；strategy-flow attracting set 的 skeleton 必为 club。
 - 证据定位：Section 4，Proposition 1、Theorem 1，p. 5。
+- 适用域：前者覆盖论文正则器类下的 FTRL score dynamics；后者覆盖满足 Assumption 1 的 strategy flow。
 - 对照是否可比：两个结论的动力学与稳定性前提不同，存在 ties 时不能互换。
 - 支持的最窄结论：出现离开 skeleton 的严格 better reply 时，该集合不可能在 FTRL 下 stable。
 - 解读：只读 preference graph 就能排除一批候选长期结果，但无法确认剩余候选一定稳定。
@@ -383,8 +393,10 @@ $$
 ### 结果 2：club 完整刻画 subgame span
 
 - 设置：$B=\prod_iB_i$ 为 subgame；FTRL 允许 steep 与 non-steep regularizer。
+- 假设：$B$ 具有 product structure 且对 weakly profitable unilateral deviations 闭合；正则器满足正文的可分解、光滑与强凸条件。
 - 结果：club 推出 span 的 asymptotic stability；无 ties 时也构成必要条件。
 - 证据定位：Section 5.1，Theorem 3、Corollaries 1–2，p. 6。
+- 适用域：Theorem 3 覆盖单一 product-form face；无 ties 的 iff 结论按 FTRL 口径成立，strategy-flow iff 需其 flow 条件。
 - 对照是否可比：等价结论分别要求无 ties 或限定 strategy flow。
 - 支持的最窄结论：product-form face 上，ordinal closure 足以控制局部 mixed dynamics。
 - 解读：subgame 的 product structure 让 outside action 的损失能统一进入 Fenchel-gap drift。
@@ -392,17 +404,21 @@ $$
 ### 结果 3：三人反例分离 preferential 与 dynamic stability
 
 - 设置：显式 $2\times2\times2$ game；entropic FTRL / replicator dynamics；$H$ 是唯一 proper club。
+- 假设：候选 $H$ 为一般 non-product pure-profile set，其 span 是多个 faces 的并集。
 - 结果：$\operatorname{span}(H)$ 不稳定，且 escape 从 mixed interior 发生。
 - 证据定位：Section 5.2，Proposition 2、Figure 1a，p. 7；Remarks G.4–G.5。
+- 适用域：该存在性反例否定 club 对 arbitrary span 的普遍充分性，覆盖的具体动力学是 replicator。
 - 对照是否可比：这是存在性反例，足以否定一般蕴含，不提供失败频率。
-- 支持的最窄结论：在一般 non-product pure-profile sets 这一类中，club 不是保证 span 稳定的充分条件；Proposition 2 给出一个 $2\times2\times2$ 反例。
+- 支持的最窄结论：在一般 non-product pure-profile sets 这一类中，club 单独不足以保证 span 稳定；Proposition 2 给出一个 $2\times2\times2$ 反例。
 - 解读：ordinal directions 忽略的 payoff magnitude 会改变多个玩家的相对运动时间尺度与 aggregate drift。
 
 ### 结果 4：leaklessness 为一般 span 恢复充分条件
 
 - 设置：arbitrary $H\subseteq A$；strategy flow 使用 strictly leakless；replicator 使用 leakless + club。
+- 假设：对所有 inside pure profile 与 outside pure profile，aggregate leakage 在 span 上满足对应的非正或严格负符号条件。
 - 结果：前者推出 strategy-flow attractor，后者推出 replicator attractor。
 - 证据定位：Section 5.3，Theorems 4–5，p. 8。
+- 适用域：Theorem 4 覆盖 Assumption 1 下的 steep regularized strategy flow；Theorem 5 限定 entropic regularization / replicator dynamics。
 - 对照是否可比：Theorem 5 的放宽依赖 entropy / replicator 的特殊结构。
 - 支持的最窄结论：aggregate outside payoff drift 在 span 上具有适当符号时，可构造局部 Lyapunov energy。
 - 解读：leaklessness 把“每条偏离方向”提升为“所有玩家朝同一 outside profile 的合计收益”，补充了纯序数图缺失的幅度信息。
@@ -434,7 +450,7 @@ $$
 - 必要条件、subgame equivalence、counterexample 与 leaklessness sufficiency 都以正式定理或命题给出，并附证明。
 - Proposition 2 是显式有限游戏反例；一个有效实例即可否定 club 对 arbitrary span 的普遍充分性。
 - Theorem 3 与 Theorems 4–5 都给出明确 energy function，结论与 regularizer / dynamics 边界可被逐项核对。
-- camera-ready 与 ICML official poster 对“ordinal constraint、general failure、cardinal recovery”三段主线保持一致。
+- camera-ready、ICML official poster、4 份公开评审与 spotlight 决定都把“ordinal constraint、general failure、cardinal recovery”视为论文主线。
 
 ### 中等强度证据
 
@@ -447,20 +463,52 @@ $$
 - 论文没有证明 reward scale 或 cardinal realization 是所有 MARL 不稳定性的主要来源。
 - strategy-flow attractor 结论不能直接当作 finite-step training convergence guarantee。
 - arbitrary span 的充分条件没有形成完整分类；leaky set 仍可能因其他机制成为 attractor。
-- ICML Oral 是质量筛选信号，不能替代对附录证明的独立形式化验证。
+- ICML spotlight 与正面评审是 venue-level 质量信号；附录证明仍需独立形式化验证来提供更强的 correctness guarantee。
 
 ## OpenReview / 审稿意见吸收
 
-- Page type: metadata-only
-- Match confidence: high
-- Observed at: 2026-07-16
-- Venue status: ICML 2026 accepted；ICML official event page将该 poster 关联为 Oral，OpenReview 搜索元数据标签显示 spotlight。
-- Public reviews: 本次可公开检索到的 forum 索引显示稿件元数据与版本信息；未检索到可可靠匹配的 official review 正文。直接页面当前要求 browser challenge。
-- Ratings / confidence: 未发现公开评分。
-- Reviewer consensus: 无公开 review 内容可据此归纳；不从 Oral 决定反推具体 reviewer 共识。
-- Main criticisms: 未发现可引用的公开 reviewer criticism。
-- Author response: 未发现可引用的公开 rebuttal。
-- 对可信度的影响: 接收与 Oral 提供 venue-level signal；具体可信度仍由定理假设、proof structure、反例与结论边界校准。
+- Reviewer consensus: 四位评审都认可问题的基础性、三段理论结构、显式反例与 leaklessness 的概念价值，当前可见的 `overall_recommendation` 均为 5。
+- Main criticisms: 保留意见集中在 leaklessness 的条件强度、product structure 的直观解释、Fenchel gap 对 non-steep regularizer 的作用、展示清晰度与应用桥接。
+- Author response: 作者用支持集限制的非耦合性解释 subgame 边界，用 score-space 信息解释 Fenchel gap，并在 camera-ready 增设 Related Work、明确 `proper attractor` 口径；当前版本保留多组轨迹例子。
+- 对可信度的影响: 四份 final justification 和 spotlight 决定提供正面外部校准；两份 review 的 confidence 为 2，理论正确性仍以原文假设、附录证明和后续独立验证为准。
+- 访问结果：OpenReview API v2 认证请求成功，2026-07-22 可读取 18 条 Note，类型包含 submission、4 份 official review、4 份 rebuttal、acknowledgement、comment 与 decision。
+- 决定：`Accept (spotlight)`。Decision Note 将必要性结果、subgame 完整刻画、三人反例与 leaklessness 列为主要贡献，并记录四位评审整体意见积极。
+- 评分口径：下表保留 API 当前返回的数字，不补充未在表单中给出的 scale label。评审 1 的 `final_justification` 明确记录其在 rebuttal 后改为 accept；其他三位分别表示维持接收、维持积极意见或支持接收。API 未提供可还原的历史初始分数。
+
+| Review | soundness | presentation | significance | originality | overall_recommendation | confidence |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| 1 | 3 | 2 | 2 | 3 | 5 | 2 |
+| 2 | 3 | 3 | 4 | 3 | 5 | 3 |
+| 3 | 3 | 3 | 3 | 3 | 5 | 4 |
+| 4 | 4 | 3 | 3 | 3 | 5 | 2 |
+
+### Reviewer consensus
+
+- 四位评审都认可问题的基础性、三段理论结构和显式反例的价值。
+- leaklessness 被视为主要概念贡献；它在序数信息失效处引入 cardinal payoff magnitude，并为一般 span 提供可检验的稳定性条件。
+- 评审对形式结果的 soundness 没有提出具体反例或证明缺口；两份 review 的 confidence 为 2，因此这一信号仍应与原文假设和附录证明一起阅读。
+
+### Main criticisms
+
+1. `leaklessness` 的条件强度、与 evolutionary stability 等既有概念的关系，以及非平凡 leakless set 的可得性需要更直接的说明。
+2. 图结构、span / face 几何与连续时间动力学三层抽象交替较快；评审希望看到结果路线图和 product structure 使序数信息充分的直观原因。
+3. Theorem 3 使用 Fenchel gap 处理 non-steep regularizer 的关键差异需要展开；评审同时要求明确 `proper attractor` 的定义。
+4. 与 MARL、reward design 和 mechanism design 的联系主要停留在动机层，论文尚未提供离散算法、现实环境验证或可执行的 reward-design pipeline。
+5. 初稿的 related work 过于分散，图与首次引用距离较远，轨迹可视化和 toy simulation 仍可加强。
+
+### Author response
+
+- 作者用“非耦合的支持集限制”解释 subgame：每位玩家都可在不依赖其他玩家支持集选择的前提下留在该 face。一般 span 含有耦合区域，局部有利偏离会受其他玩家的 cardinal behavior 影响；leaklessness 用 aggregate unilateral gain 约束这类协调问题。
+- 对 non-steep regularizer，作者说明 choice map 可把持续变化的 score $y$ 映射到同一 strategy $x$，只使用策略空间中的 Bregman divergence 会丢失这部分动态信息；Fenchel gap 保留 score-space 变化，因而能作为 setwise Lyapunov candidate。
+- 对条件强度，作者指出显式 normal-form payoff table 下可以用多项式时间查找 leakless set，strict leaklessness 是 strict Nash equilibrium 的集合化扩展；论文也明确保留了它作为充分条件的地位。
+- 对应用性，作者补充了多机器人通行、自动驾驶 reward penalty 和 preference-aligned learning 的例子，同时将 Markov game、离散 FTRL、噪声或 bandit feedback 留为后续工作。
+- camera-ready 新增独立 Related Work 附录，并在 Theorem 2 处明确 `proper` 指 strategy space 的真子集；当前版本的 Figures 1、4、5 与 Appendix B 提供了多组 preference graph 和轨迹例子。这些内容回应了展示问题，实际应用与离散算法边界继续保留。
+
+### 对可信度的影响
+
+- 公开审稿往返为论文的问题价值、概念新意和主定理口径提供了正面外部校准，且四份 final justification 都支持接收。
+- 评审的主要保留意见聚焦于条件解释、展示与应用桥接，它们支持将结论严格限定在有限 normal-form game 的 continuous-time FTRL / strategy flow。
+- Decision Note 包含 11 条自动 reference-correctness 告警；它们指向初稿书目字段的人名或完整性核对，应使用 camera-ready 作为当前阅读版本。
 
 ## 本地讨论补充
 
@@ -501,7 +549,7 @@ $$
 5. ties 会改变 club / s-club 关系，并使部分 equivalence 失效。
 6. 论文没有大规模 MARL、reward-model training 或真实平台实验，面向 AI safety / reward specification 的意义属于理论启发。
 7. counterexample 证明一般蕴含失败，却不说明这种不稳定在某个自然 game distribution 下的发生率。
-8. 当前未取得公开 reviewer 正文与 rating，无法吸收针对 proof assumptions 或 exposition 的具体外部质疑。
+8. 公开评审整体支持接收，其中两位评审的 confidence 为 2；评审信号适合校准贡献价值与展示质量，对 proof correctness 的更强保证仍依赖独立形式化验证。
 
 ## 跨论文关系
 
@@ -509,42 +557,3 @@ $$
 - 与 [SocioHack](/papers/2606.04075-llms-hack-rewards-and-society/)：SocioHack 用模拟制度环境展示优化器会利用数值规则与制度意图之间的缺口；本论文从有限多智能体博弈给出更窄的形式化结论，即同一 ordinal preference specification 的不同 cardinal payoff realization 可能产生不同长期稳定集合。两者共同提示 reward audit 需要超出排序或表面合规。
 - 与 [Credit Assignment Survey](/papers/2604.09459-credit-assignment-reasoning-agentic-llm-rl/)：survey 讨论团队 reward 如何分配到 agent / action / message；本论文把 payoff function 视为已给定，研究所有玩家运行 no-regret learning 后的 asymptotic set。两者分别位于 reward assignment 与 game-dynamics 两个层级。
 - 与已有论文的方法或系统关系：暂无直接方法复用。论文的 FTRL / replicator 理论与本地 LLM RL 条目中的 finite-step policy optimization 口径不同，相关性主要来自 reward specification 与 multi-agent interaction。
-
-## Reference Intake Brief
-
-### Target
-
-- Intended target system: 新增 ICML 2026 理论论文笔记。
-- Existing related assets: [SocioHack](/papers/2606.04075-llms-hack-rewards-and-society/)；[Credit Assignment Survey](/papers/2604.09459-credit-assignment-reasoning-agentic-llm-rl/)；[Paper Archive Index](/archive/)。
-- Proposed form: 新建独立 Markdown 文档，并更新作者档案、索引和主题标签。
-
-### Reusable Elements
-
-1. preference graph、club / s-club、span / skeleton 的四层术语体系。
-2. subgame product structure 与 arbitrary span 的正反边界。
-3. aggregate leakage 及其 generalized Fenchel-coupling energy。
-4. 面向 reward specification 的 ordinal / cardinal 双层审计框架。
-
-### Risks
-
-- Copyright/over-copying: 仅保留公式、定理条件和短语级术语，主体为中文重建与本地分析；不复制论文长段落。
-- Unsourced or unverifiable claims: Oral、版本、机构和定理均链接官方来源；discrete-time / MARL 迁移明确标为边界。
-- Tone/brand mismatch: 保持理论对象、假设和结论逐层对应，避免把 game-theoretic result 扩写为通用工程保证。
-- Safety/compliance issues: 论文不含可直接滥用的操作流程。
-- Overlap with existing assets: 现有 reward-hacking / credit-assignment 笔记没有覆盖 preference graph 与 FTRL attractor theory，独立建档有增量价值。
-
-### Skipped
-
-| Material | Reason |
-| --- | --- |
-| 公开 reviewer comments | OpenReview forum 当前要求 browser challenge；搜索索引未暴露可可靠匹配的 official review 正文。 |
-| Ratings / rebuttal | 未发现公开、可核验内容。 |
-| arXiv source | 截至访问日未发现公开 arXiv 版本。 |
-| 代码复现 | 未发现官方代码；贡献为理论定理与显式反例。 |
-| 本地 PDF / poster 副本 | 官方 URL 稳定可引用；本次没有引入二进制资产。 |
-
-### Recommendation
-
-Decision: merge
-
-Why: 论文给出清晰的必要条件、subgame 完整刻画、一般反例与 cardinal 恢复条件，能补充本地 archive 在 multi-agent learning dynamics 与 reward specification 理论上的空白；假设与迁移边界可以明确隔离。
