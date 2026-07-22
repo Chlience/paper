@@ -56,19 +56,36 @@ const routeGroups = data.tagFacets.map((facet) => ({
     <div class="container section-header">
       <div>
         <h2>Research Mainlines</h2>
-        <p>明确的方向总结请求直接建立主线；每条主线独立维护分类框架、材料窗口和当前判断。</p>
+        <p>跨材料问题的长期分析入口。每条主线保留自己的检索窗口、分类框架和逐结论证据强度。</p>
       </div>
       <a class="section-link" href="/mainlines/">View all mainlines</a>
     </div>
-    <div class="container mainline-directory-list">
+    <ul class="container home-mainline-index">
       {mainlineData.mainlines.map((mainline) => (
-        <a class="mainline-directory-link" href={mainline.path}>
-          <span class="mainline-directory-name"><strong>{mainline.title}</strong></span>
-          <span class="mainline-directory-question">{mainline.researchQuestion}</span>
-          <span class="mainline-directory-meta mono">{mainline.classificationAxes.join(' × ')}</span>
-        </a>
+        <li>
+          <a class="home-mainline-entry" href={mainline.path}>
+            <div class="home-mainline-identity">
+              <h3>{mainline.title}</h3>
+              <div class="home-mainline-provenance mono">
+                <span>{mainline.sourceCount} 项材料</span>
+                <span>{mainline.localPaperCount} 篇本地论文</span>
+                <span>{mainline.searchWindow.label}</span>
+              </div>
+            </div>
+            <div class="home-mainline-summary">
+              <p>{mainline.researchQuestion}</p>
+              <div
+                class="home-mainline-axes"
+                aria-label={`分类框架：${mainline.classificationAxes.join('、')}`}
+              >
+                {mainline.classificationAxes.map((axis) => <span>{axis}</span>)}
+              </div>
+            </div>
+            <span class="home-mainline-enter mono">进入主线 <span aria-hidden="true">→</span></span>
+          </a>
+        </li>
       ))}
-    </div>
+    </ul>
   </section>
 
   <section class="section">
