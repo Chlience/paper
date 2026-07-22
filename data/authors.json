@@ -11693,5 +11693,123 @@
         "url": "https://openreview.net/profile?id=~Tianbao_Yang1"
       }
     ]
+  },
+  {
+    "slug": "chen-xu-cmu",
+    "name": "Chen Xu",
+    "aliases": ["Chen Xu"],
+    "matchByName": false,
+    "affiliations": ["Carnegie Mellon University", "Renmin University of China", "University of Amsterdam", "National University of Singapore"],
+    "homepage": "https://xuchen0427.github.io/",
+    "github": "https://github.com/XuChen0427",
+    "topics": ["information retrieval", "fairness in recommender systems", "AI and economics", "LLM multi-agent systems"],
+    "notes": "TacoMAS first author. The paper lists Carnegie Mellon University; his homepage dates the CMU postdoctoral appointment from June 2026 and records earlier RUC, UvA and NUS affiliations. Explicit paper links are required because Chen Xu is a common name.",
+    "sources": [
+      {
+        "label": "TacoMAS",
+        "url": "https://arxiv.org/abs/2605.09539"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://xuchen0427.github.io/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/XuChen0427"
+      },
+      {
+        "label": "ORCID",
+        "url": "https://orcid.org/0000-0002-3070-9358"
+      }
+    ]
+  },
+  {
+    "slug": "yicheng-hu-ustc",
+    "name": "Yicheng Hu",
+    "aliases": ["Yicheng Hu"],
+    "matchByName": false,
+    "affiliations": ["University of Science and Technology of China"],
+    "topics": ["LLM agents", "recommender systems", "AI for Science", "multi-agent systems"],
+    "notes": "TacoMAS coauthor and USTC undergraduate researcher. His OpenReview profile records work on LLM agents, recommendation and AI for Science; explicit paper links separate him from same-name researchers.",
+    "sources": [
+      {
+        "label": "TacoMAS",
+        "url": "https://arxiv.org/abs/2605.09539"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Yicheng_Hu1"
+      },
+      {
+        "label": "CARE",
+        "url": "https://arxiv.org/abs/2602.03692"
+      }
+    ]
+  },
+  {
+    "slug": "xinyu-lin",
+    "name": "Xinyu Lin",
+    "aliases": ["Xinyu Lin", "Linxyhaha"],
+    "affiliations": ["National University of Singapore", "Shandong University"],
+    "homepage": "https://linxyhaha.github.io/",
+    "github": "https://github.com/Linxyhaha",
+    "topics": ["recommender systems", "causal inference", "generative recommendation", "LLM agents"],
+    "notes": "TacoMAS corresponding author and NUS NExT++ researcher. The public artifact commit uses the same Linxyhaha identity linked by his homepage and GitHub profile.",
+    "sources": [
+      {
+        "label": "TacoMAS",
+        "url": "https://arxiv.org/abs/2605.09539"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://linxyhaha.github.io/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/Linxyhaha"
+      },
+      {
+        "label": "TacoMAS artifact commit",
+        "url": "https://github.com/chenxu2-gif/TacoMAS-MultiAgent/commit/6f0d545f2493cf95d2eb6a325d1a6686acf658eb"
+      },
+      {
+        "label": "ORCID",
+        "url": "https://orcid.org/0000-0002-6931-3182"
+      }
+    ]
+  },
+  {
+    "slug": "wenjie-wang-ustc",
+    "name": "Wenjie Wang",
+    "chineseName": "王文杰",
+    "aliases": ["Wenjie Wang", "Wenjie W. Wang"],
+    "matchByName": false,
+    "affiliations": ["University of Science and Technology of China", "National University of Singapore", "Shandong University"],
+    "homepage": "https://wenjiewwj.github.io/",
+    "github": "https://github.com/wenjiewwj",
+    "topics": ["recommender systems", "causal inference", "generative recommendation", "LLM agents"],
+    "notes": "TacoMAS corresponding author and USTC faculty member. His USTC and personal profiles record prior NUS and Shandong University affiliations; explicit paper links are required because Wenjie Wang is a common name.",
+    "sources": [
+      {
+        "label": "TacoMAS",
+        "url": "https://arxiv.org/abs/2605.09539"
+      },
+      {
+        "label": "USTC",
+        "url": "https://eeis.ustc.edu.cn/2025/0704/c2648a690173/page.htm"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://wenjiewwj.github.io/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/wenjiewwj"
+      },
+      {
+        "label": "ORCID",
+        "url": "https://orcid.org/0000-0002-5199-1428"
+      }
+    ]
   }
 ]

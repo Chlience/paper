@@ -30,6 +30,7 @@ Review-Status: pending
 <!--
 填写规则：
 - `Authors` 与 `Responsible organization` 至少填写一项。
+- `Authors` 保留全部可解析作者。默认新建 profile 只覆盖作者顺序前两位、论文明确标注的共同一作和明确通讯作者；普通作者只复用已有 profile，用户明确要求时可以例外新建。已建档作者使用 `/authors/<slug>/` 链接，其余作者保留姓名文本。
 - `Current version read` 与 `Version / revision read` 至少填写一项。
 - 普通材料的 Canonical source 使用官方绝对 URL；composite 可以使用其它已归档材料的 /papers/<slug>/ 或 /archive/，不能引用自身页面。
 - Analysis modules 可以填写多个逗号分隔值，例如 `system, experiment`。
@@ -43,7 +44,7 @@ Review-Status: pending
 - Author A: Institution in this paper.
 - Author B: Institution in this paper；历史机构：previously verified affiliations.
 
-写法要求：作者条目在冒号后直接写发表该论文时的机构。额外历史机构只写已核验且不与当前机构重复的内容。正文说明同机构关系、跨机构桥接、作者角色和当前归档中的直接作者关系。
+写法要求：作者条目覆盖全部可解析作者，并在冒号后直接写发表该论文时的机构。额外历史机构只写已核验且不与当前机构重复的内容。默认新建 profile 只覆盖作者顺序前两位、论文明确标注的共同一作和明确通讯作者；普通作者只复用已有 profile。正文说明同机构关系、跨机构桥接、作者角色和当前归档中的直接作者关系。
 
 ## 一句话结论
 

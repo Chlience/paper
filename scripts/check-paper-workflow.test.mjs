@@ -1379,6 +1379,7 @@ test('the public template exposes the v2.1 seven-section contract', async () => 
 
 test('public workflow and agent instructions expose one aligned v2.1 contract', async () => {
   const workflowDoc = await fs.readFile('content/utility/paper-analysis-workflow.md', 'utf8');
+  const template = await fs.readFile('content/utility/paper-note-template.md', 'utf8');
   const agentInstructions = await fs.readFile('AGENTS.md', 'utf8');
   const authorSop = await fs.readFile('internal/author-x-account-search-sop.md', 'utf8');
   const maintenanceSop = await fs.readFile('internal/paper-archive-maintenance-sop.md', 'utf8');
@@ -1410,7 +1411,33 @@ test('public workflow and agent instructions expose one aligned v2.1 contract', 
   assert.match(maintenanceSop, /Key figure rationale/);
   assert.doesNotMatch(agentInstructions, /`Reference Intake Brief`/);
   assert.match(authorSop, /不要求每位作者都创建 `data\/authors\.json` profile/);
+  for (const document of [workflowDoc, template, agentInstructions, authorSop]) {
+    assert.match(document, /作者顺序前两位/);
+    assert.match(document, /共同一作/);
+    assert.match(document, /通讯作者/);
+    assert.match(document, /普通作者[^。\n]*复用已有 profile/);
+  }
+  assert.match(authorSop, /稳定学术来源本身只完成基础核验/);
   assert.match(authorSop, /只有已有强候选的深入核验作者进入 X 检查/);
+});
+
+test('TacoMAS keeps ordinary coauthors at paper level under the core-profile contract', async () => {
+  const paper = await fs.readFile(
+    'content/papers/2605.09539-tacomas-test-time-coevolution-mas.md',
+    'utf8',
+  );
+  const profiles = JSON.parse(await fs.readFile('data/authors.json', 'utf8'));
+  const authorsLine = paper.split('\n').find((line) => line.startsWith('- Authors:'));
+
+  assert.ok(authorsLine);
+  const linkedAuthors = [...authorsLine.matchAll(/\[([^\]]+)\]\(\/authors\/[^)]+\/\)/g)].map(
+    (match) => match[1],
+  );
+  assert.deepEqual(linkedAuthors, ['Chen Xu', 'Yicheng Hu', 'Xinyu Lin', 'Wenjie Wang']);
+  for (const name of ['Ruizi Wang', 'Dongrui Liu', 'Fuli Feng']) assert.match(authorsLine, new RegExp(name));
+  for (const slug of ['ruizi-wang-ustc', 'dongrui-liu', 'fuli-feng']) {
+    assert.ok(!profiles.some((profile) => profile.slug === slug));
+  }
 });
 
 test('deploy workflow validates source and builds the static site once', async () => {
