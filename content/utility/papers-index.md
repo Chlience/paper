@@ -23,7 +23,6 @@ Updated-At: 2026-07-23
 | [CompactionRL](/papers/2607.05378-compactionrl-context-compaction-agent-rl/) | 2026年7月 | 在 SUPO 已覆盖摘要与执行联合训练的前提下，用支持单 rollout 的独立 critic 和跨 segment GAE 处理压缩轨迹；两个模型在 compacted coding 评测中均提高 Pass@1，但缺少与 SUPO 的直接对照。 |
 | [LLM-as-a-Verifier](/papers/2607.05391-llm-as-a-verifier/) | 2026年7月 | 把评分 token 的概率期望、重复评估与 criteria decomposition 组合成连续 verifier，再用概率 pivot tournament 扩展多轨迹选择。 |
 | [SAO](/papers/2607.07508-sao-single-rollout-asynchronous-agentic-rl/) | 2026年7月 | 用每 prompt 单 rollout、强化 critic 与双侧 token mask 替代异步 GRPO 的组内等待和 group baseline。 |
-| [S-TTT](/papers/2607.09415-self-guided-test-time-training-long-context/) | 2026年7月 | 让基础模型从长上下文复制问题相关证据，并只对这些 span 做实例级 query-LoRA 更新后读取完整上下文作答。 |
 | [Grape](/papers/2026-07-13-grape-micro-task-agentic-workflow-serving/) | 2026年7月 | 把相依 LLM task 的已知 prompt、流式上游输出和 decode 拆成微任务，让下游在上游 decode 期间持续完成跨 task 增量 prefill。 |
 | [TRACE](/papers/2607.13988-trace-turn-level-reward-assignment/) | 2026年7月 | 在已知短答案的长程搜索中，用冻结参考模型测量工具边界后的答案可预测性变化并把多步时序差信用混入终局优势，使两种 Qwen3 Thinking 模型在同设置下较 GRPO 的 BrowseComp-Plus 分数分别提高 5.6 和 6.2 个百分点。 |
 | [SmoothAgent](/papers/2607.00151-smoothagent-lookahead-context-engineering/) | 2026年6月 | 把可提前确定的 context transformation 移入异步 lookahead stream，并用 SLO-aware scheduling 预建变换后 KV cache，降低 transform-point TTFT。 |
