@@ -11827,5 +11827,74 @@
         "url": "https://arxiv.org/pdf/2607.18082v2"
       }
     ]
+  },
+  {
+    "slug": "jinyang-wu",
+    "name": "Jinyang Wu",
+    "aliases": ["Jinyang Wu"],
+    "affiliations": ["Tsinghua University", "Xi'an Jiaotong University"],
+    "homepage": "https://jinyangwu.github.io/",
+    "github": "https://github.com/jinyangwu",
+    "googleScholar": "https://scholar.google.com/citations?hl=en&user=t8H8Ru0AAAAJ",
+    "huggingFace": "https://huggingface.co/Jinyang23",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["agent reinforcement learning", "on-policy skill distillation", "hindsight skills", "multimodal reasoning"],
+    "notes": "SEED co-first author, project leader and corresponding author at Tsinghua University; his homepage connects SEED, OPID and SDAR and records an undergraduate degree from Xi'an Jiaotong University.",
+    "sources": [
+      {
+        "label": "SEED",
+        "url": "https://arxiv.org/abs/2607.14777"
+      },
+      {
+        "label": "Homepage",
+        "url": "https://jinyangwu.github.io/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/jinyangwu"
+      },
+      {
+        "label": "Hugging Face",
+        "url": "https://huggingface.co/Jinyang23"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?hl=en&user=t8H8Ru0AAAAJ"
+      },
+      {
+        "label": "ORCID",
+        "url": "https://orcid.org/0009-0006-0220-616X"
+      }
+    ]
+  },
+  {
+    "slug": "shuo-yang-tsinghua",
+    "name": "Shuo Yang",
+    "aliases": ["Shuo Yang"],
+    "matchByName": false,
+    "affiliations": ["Tsinghua University"],
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["agent reinforcement learning", "on-policy skill distillation", "hindsight skills", "long-horizon agents"],
+    "notes": "SEED co-first author at Tsinghua University and first author of OPID. Explicit paper links are required because the name is common.",
+    "sources": [
+      {
+        "label": "SEED",
+        "url": "https://arxiv.org/abs/2607.14777"
+      },
+      {
+        "label": "SEED project",
+        "url": "https://jinyangwu.github.io/seed/"
+      },
+      {
+        "label": "OPID",
+        "url": "https://arxiv.org/abs/2606.26790"
+      },
+      {
+        "label": "SPARK",
+        "url": "https://arxiv.org/abs/2601.20209"
+      }
+    ]
   }
 ]
