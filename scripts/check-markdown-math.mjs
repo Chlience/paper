@@ -51,4 +51,14 @@ if (optimizerPaper.html.includes('\\(') || optimizerPaper.html.includes('\\)')) 
   fail('Expected rendered HTML to remove raw inline math delimiters.');
 }
 
+const unsupportedTextSmallCapsPaper = data.papers.find((paper) =>
+  paper.html.includes('<mtext>\\textsc</mtext>'),
+);
+
+if (unsupportedTextSmallCapsPaper) {
+  fail(
+    `${unsupportedTextSmallCapsPaper.slug} renders unsupported \\textsc markup; use a KaTeX-supported text command.`,
+  );
+}
+
 console.log('Markdown math check passed.');
