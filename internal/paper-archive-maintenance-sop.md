@@ -36,7 +36,7 @@ Updated-At: 2026-07-22
 
 ## 作者数据
 
-作者身份和公开账号按 `internal/author-x-account-search-sop.md` 分层核验。`data/authors.json` 只保存稳定字段和来源。每个 profile 至少关联一篇剩余论文；删除或改名后运行反向完整性检查。
+作者身份和公开账号按 `internal/author-x-account-search-sop.md` 分层核验。`data/authors.json` 只保存稳定字段和来源；个人主页明确重点展示的论文保存在 `representativePapers`，并与构建器汇总的本站论文笔记分开。每个 profile 至少关联一篇剩余论文；删除或改名后运行反向完整性检查。
 
 同名作者需要逐篇确认时使用 `matchByName: false`，并只在属于该作者的 `Source -> Authors` 中显式链接作者页。当前 schema 只允许同一规范化姓名下的一位 tracked profile。
 

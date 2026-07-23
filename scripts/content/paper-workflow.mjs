@@ -796,6 +796,98 @@ export const validateAuthorProfiles = (profiles) => {
       }
     }
 
+    let representativePapers = [];
+    if (profile.representativePapers !== undefined && !Array.isArray(profile.representativePapers)) {
+      errors.push(
+        issue(
+          'author-representative-papers-shape',
+          subject,
+          'representativePapers must be an array when present.',
+        ),
+      );
+    } else {
+      representativePapers = profile.representativePapers ?? [];
+    }
+    if (representativePapers.length > 0 && !profile.homepage) {
+      errors.push(
+        issue(
+          'author-representative-papers-homepage',
+          subject,
+          'representativePapers requires a verified homepage.',
+        ),
+      );
+    }
+    const representativePaperTitles = new Set();
+    const representativePaperUrls = new Set();
+    for (const [paperIndex, paper] of representativePapers.entries()) {
+      if (!paper || typeof paper !== 'object' || Array.isArray(paper)) {
+        errors.push(
+          issue(
+            'author-representative-paper-shape',
+            `${subject}.representativePapers[${paperIndex}]`,
+            'Every representative paper must be an object.',
+          ),
+        );
+        continue;
+      }
+
+      const paperSubject = `${subject}.representativePapers[${paperIndex}]`;
+      const title = typeof paper.title === 'string' ? paper.title.trim() : '';
+      const url = typeof paper.url === 'string' ? paper.url.trim() : '';
+      if (!title) {
+        errors.push(
+          issue('author-representative-paper-title', paperSubject, 'Representative paper title is required.'),
+        );
+      }
+      if (!isHttpUrl(url)) {
+        errors.push(
+          issue(
+            'author-representative-paper-url',
+            paperSubject,
+            'Representative paper URL must be an absolute HTTP URL.',
+          ),
+        );
+      }
+      if (
+        paper.year !== undefined
+        && (!Number.isInteger(paper.year) || paper.year < 1000 || paper.year > 9999)
+      ) {
+        errors.push(
+          issue(
+            'author-representative-paper-year',
+            paperSubject,
+            'Representative paper year must be a four-digit integer when present.',
+          ),
+        );
+      }
+      if (paper.venue !== undefined && (typeof paper.venue !== 'string' || !paper.venue.trim())) {
+        errors.push(
+          issue(
+            'author-representative-paper-venue',
+            paperSubject,
+            'Representative paper venue must be a non-empty string when present.',
+          ),
+        );
+      }
+
+      const titleKey = normalizeAuthorKey(title);
+      const urlKey = url.toLowerCase().replace(/\/+$/, '');
+      if (
+        (titleKey && representativePaperTitles.has(titleKey))
+        || (urlKey && representativePaperUrls.has(urlKey))
+      ) {
+        errors.push(
+          issue(
+            'author-representative-paper-duplicate',
+            paperSubject,
+            'Representative papers must be unique by normalized title and URL.',
+          ),
+        );
+      }
+      if (titleKey) representativePaperTitles.add(titleKey);
+      if (urlKey) representativePaperUrls.add(urlKey);
+    }
+
     let sources = [];
     if (profile.sources !== undefined && !Array.isArray(profile.sources)) {
       errors.push(issue('author-sources-shape', subject, 'sources must be an array when present.'));
@@ -806,6 +898,22 @@ export const validateAuthorProfiles = (profiles) => {
       const value = typeof source === 'string' ? source : source?.url;
       if (typeof value !== 'string' || !isHttpUrl(value)) {
         errors.push(issue('author-source-url', subject, 'Every source must contain a valid absolute HTTP URL.'));
+      }
+    }
+    if (representativePapers.length > 0 && profile.homepage) {
+      const homepageKey = String(profile.homepage).toLowerCase().replace(/\/+$/, '');
+      const homepageIsSourced = sources.some((source) => {
+        const value = typeof source === 'string' ? source : source?.url;
+        return typeof value === 'string' && value.toLowerCase().replace(/\/+$/, '') === homepageKey;
+      });
+      if (!homepageIsSourced) {
+        errors.push(
+          issue(
+            'author-representative-papers-source',
+            subject,
+            'representativePapers requires the verified homepage in sources.',
+          ),
+        );
       }
     }
   }

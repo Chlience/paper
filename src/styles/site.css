@@ -1112,6 +1112,46 @@ h3 {
 
 .author-main {
   min-width: 0;
+  display: grid;
+  gap: var(--space-xl);
+}
+
+.author-representative-list {
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--border);
+  list-style: none;
+}
+
+.author-representative-list li {
+  border-bottom: 1px solid var(--border);
+}
+
+.author-representative-list a {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) minmax(100px, auto);
+  gap: 12px;
+  align-items: baseline;
+  min-height: 52px;
+  padding: 13px 0;
+}
+
+.author-representative-list a:hover {
+  color: var(--accent);
+}
+
+.author-representative-list strong {
+  line-height: 1.4;
+}
+
+.author-representative-index,
+.author-representative-meta {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.author-representative-meta {
+  text-align: right;
 }
 
 .paper-page {
@@ -2453,6 +2493,16 @@ html.is-figure-dialog-open body {
 
   .author-stats {
     grid-template-columns: 1fr;
+  }
+
+  .author-representative-list a {
+    grid-template-columns: 28px minmax(0, 1fr);
+    gap: 7px 10px;
+  }
+
+  .author-representative-meta {
+    grid-column: 2;
+    text-align: left;
   }
 
   .section-header {

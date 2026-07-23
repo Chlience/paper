@@ -12,6 +12,44 @@
     "x": "https://x.com/tri_dao",
     "xConfidence": "high",
     "topics": ["FlashAttention", "FlashAttention-2", "efficient attention", "GPU kernels", "LLM systems"],
+    "representativePapers": [
+      {
+        "title": "Marconi: Prefix Caching for the Era of Hybrid LLMs",
+        "url": "https://arxiv.org/abs/2411.19379",
+        "year": 2025,
+        "venue": "MLSys"
+      },
+      {
+        "title": "FlashAttention-3: Fast and Accurate Attention with Asynchrony and Low-precision",
+        "url": "https://arxiv.org/abs/2407.08608",
+        "year": 2024,
+        "venue": "NeurIPS"
+      },
+      {
+        "title": "Transformers are SSMs: Generalized Models and Efficient Algorithms Through Structured State Space Duality",
+        "url": "https://arxiv.org/abs/2405.21060",
+        "year": 2024,
+        "venue": "ICML"
+      },
+      {
+        "title": "Mamba: Linear-Time Sequence Modeling with Selective State Spaces",
+        "url": "https://arxiv.org/abs/2312.00752",
+        "year": 2024,
+        "venue": "COLM"
+      },
+      {
+        "title": "FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness",
+        "url": "https://arxiv.org/abs/2205.14135",
+        "year": 2022,
+        "venue": "NeurIPS"
+      },
+      {
+        "title": "Monarch: Expressive Structured Matrices for Efficient and Accurate Training",
+        "url": "https://arxiv.org/abs/2204.00595",
+        "year": 2022,
+        "venue": "ICML"
+      }
+    ],
     "notes": "FlashAttention first author and FlashAttention-2 single author; current public profile connects Princeton, Together AI, and the FlashAttention implementation line.",
     "sources": [
       {

@@ -92,6 +92,34 @@ const sameAs = [
       </aside>
 
       <section class="author-main">
+        {author.representativePapers.length > 0 && (
+          <section class="author-representative-section">
+            <div class="section-header">
+              <div>
+                <h2>Representative Papers</h2>
+                <p>来自作者已核验个人主页的重点论文；本站单篇归档见下方 Related Notes。</p>
+              </div>
+            </div>
+            <ol class="author-representative-list">
+              {author.representativePapers.map((paper, index) => (
+                <li>
+                  <a href={paper.url}>
+                    <span class="author-representative-index mono">
+                      {String(index + 1).padStart(2, '0')}
+                    </span>
+                    <strong>{paper.title}</strong>
+                    {(paper.venue || paper.year) && (
+                      <span class="author-representative-meta">
+                        {[paper.venue, paper.year].filter(Boolean).join(' · ')}
+                      </span>
+                    )}
+                  </a>
+                </li>
+              ))}
+            </ol>
+          </section>
+        )}
+
         <div class="section-header">
           <div>
             <h2>Related Notes</h2>

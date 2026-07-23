@@ -179,6 +179,12 @@ for (const sourceAuthor of sourceAuthors) {
       fail(`Generated author ${sourceAuthor.slug} is missing ${field} from data/authors.json.`);
     }
   }
+  if (
+    JSON.stringify(generatedAuthor.representativePapers ?? [])
+    !== JSON.stringify(sourceAuthor.representativePapers ?? [])
+  ) {
+    fail(`Generated author ${sourceAuthor.slug} has stale representativePapers data.`);
+  }
 }
 
 const distFiles = await scanFiles(distDir, (file) => file.endsWith('.html') || file.endsWith('.xml') || file.endsWith('.txt'));
@@ -223,6 +229,19 @@ if (!(await exists(robotsTxtPath))) {
 
 if (data.authors.length > 0 && !(await exists(authorsIndexPath))) {
   fail('dist/authors/index.html is missing.');
+}
+
+const triDaoAuthorPath = path.join(distDir, 'authors', 'tri-dao', 'index.html');
+if (!(await exists(triDaoAuthorPath))) {
+  fail('dist/authors/tri-dao/index.html is missing.');
+} else {
+  const triDaoHtml = await fs.readFile(triDaoAuthorPath, 'utf8');
+  if (
+    !triDaoHtml.includes('Representative Papers')
+    || !triDaoHtml.includes('Marconi: Prefix Caching for the Era of Hybrid LLMs')
+  ) {
+    fail('Tri Dao author page is missing homepage-backed representative papers.');
+  }
 }
 
 if (!(await exists(topicsIndexPath))) {

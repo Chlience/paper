@@ -32,7 +32,7 @@ Review-Status: pending
 <!--
 填写规则：
 - `Authors` 与 `Responsible organization` 至少填写一项。
-- `Authors` 保留全部可解析作者。默认新建 profile 只覆盖作者顺序前两位、论文明确标注的共同一作和明确通讯作者；普通作者只复用已有 profile，用户明确要求时可以例外新建。已建档作者使用 `/authors/<slug>/` 链接，其余作者保留姓名文本。
+- `Authors` 保留全部可解析作者。默认新建 profile 只覆盖作者顺序前两位、论文明确标注的共同一作和明确通讯作者；普通作者只复用已有 profile，用户明确要求时可以例外新建。已建档作者使用 `/authors/<slug>/` 链接，其余作者保留姓名文本。个人主页明确重点展示的代表性论文写入作者 profile 的 `representativePapers`，不混入本字段。
 - `Current version read` 与 `Version / revision read` 至少填写一项。
 - Canonical source 使用官方绝对 URL。
 - Analysis modules 可以填写多个逗号分隔值，例如 `system, experiment`。

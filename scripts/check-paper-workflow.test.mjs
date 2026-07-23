@@ -1126,18 +1126,20 @@ test('author profiles require an object with a slug and name', () => {
   assert.ok(result.errors.some((issue) => issue.code === 'author-name'));
 });
 
-test('author aliases and sources must remain arrays', () => {
+test('author aliases, sources, and representative papers must remain arrays', () => {
   const profiles = [
     {
       slug: 'ada-example',
       name: 'Ada Example',
       aliases: 'A. Example',
       sources: { label: 'Homepage', url: 'https://example.com/ada' },
+      representativePapers: 'A Representative Paper',
     },
   ];
   const result = workflow.validateAuthorProfiles(profiles);
   assert.ok(result.errors.some((issue) => issue.code === 'author-aliases-shape'));
   assert.ok(result.errors.some((issue) => issue.code === 'author-sources-shape'));
+  assert.ok(result.errors.some((issue) => issue.code === 'author-representative-papers-shape'));
 });
 
 test('author matchByName must remain boolean', () => {
@@ -1171,6 +1173,82 @@ test('author evidence accepts URL strings and labeled source objects', () => {
   ];
   const result = workflow.validateAuthorProfiles(profiles);
   assert.ok(!result.errors.some((issue) => issue.code === 'author-source-url'));
+});
+
+test('author representative papers accept the homepage-backed contract', () => {
+  const profiles = [
+    {
+      slug: 'ada-example',
+      name: 'Ada Example',
+      homepage: 'https://example.com/ada',
+      representativePapers: [
+        {
+          title: 'A Representative Paper',
+          url: 'https://arxiv.org/abs/2601.00001',
+          year: 2026,
+          venue: 'Example Conference',
+        },
+      ],
+      sources: [{ label: 'Homepage', url: 'https://example.com/ada' }],
+    },
+  ];
+  const result = workflow.validateAuthorProfiles(profiles);
+  assert.ok(!result.errors.some((issue) => issue.code.startsWith('author-representative-paper')));
+});
+
+test('author representative papers require homepage evidence in sources', () => {
+  const profiles = [
+    {
+      slug: 'ada-example',
+      name: 'Ada Example',
+      homepage: 'https://example.com/ada',
+      representativePapers: [
+        {
+          title: 'A Representative Paper',
+          url: 'https://arxiv.org/abs/2601.00001',
+        },
+      ],
+      sources: [{ label: 'Paper', url: 'https://arxiv.org/abs/2601.00001' }],
+    },
+  ];
+  const result = workflow.validateAuthorProfiles(profiles);
+  assert.ok(result.errors.some((issue) => issue.code === 'author-representative-papers-source'));
+});
+
+test('author representative papers reject missing provenance, malformed fields, and duplicates', () => {
+  const profiles = [
+    {
+      slug: 'ada-example',
+      name: 'Ada Example',
+      representativePapers: [
+        {
+          title: '',
+          url: 'invalid-paper',
+          year: '2026',
+          venue: '',
+        },
+        {
+          title: 'Duplicate Paper',
+          url: 'https://arxiv.org/abs/2601.00001',
+        },
+        {
+          title: 'Duplicate Paper',
+          url: 'https://arxiv.org/abs/2601.00002',
+        },
+      ],
+    },
+  ];
+  const result = workflow.validateAuthorProfiles(profiles);
+  for (const code of [
+    'author-representative-papers-homepage',
+    'author-representative-paper-title',
+    'author-representative-paper-url',
+    'author-representative-paper-year',
+    'author-representative-paper-venue',
+    'author-representative-paper-duplicate',
+  ]) {
+    assert.ok(result.errors.some((issue) => issue.code === code), `Missing ${code}`);
+  }
 });
 
 test('author profile data must be a JSON array', () => {
@@ -1251,6 +1329,13 @@ test('content build associates linked author profiles with their papers', async 
   assert.ok(triDaoPapers.has('2205.14135-flashattention-io-aware-exact-attention'));
   assert.ok(triDaoPapers.has('2307.08691-flashattention-2-parallelism-work-partitioning'));
   assert.ok(!triDao.coauthors.some((author) => author.name === 'Keller Jordan'));
+  assert.equal(triDao.representativePapers.length, 6);
+  assert.deepEqual(triDao.representativePapers[0], {
+    title: 'Marconi: Prefix Caching for the Era of Hybrid LLMs',
+    url: 'https://arxiv.org/abs/2411.19379',
+    year: 2025,
+    venue: 'MLSys',
+  });
 });
 
 test('advisory summaries group by code and bound examples', () => {
@@ -1433,6 +1518,11 @@ test('public workflow and agent instructions expose one aligned v2.1 contract', 
   }
   assert.match(authorSop, /稳定学术来源本身只完成基础核验/);
   assert.match(authorSop, /只有已有强候选的深入核验作者进入 X 检查/);
+  for (const document of [workflowDoc, template, agentInstructions, authorSop, maintenanceSop]) {
+    assert.match(document, /representativePapers/);
+  }
+  assert.match(authorSop, /selected、representative、featured/);
+  assert.match(authorSop, /不自动创建单篇论文笔记/);
 });
 
 test('TacoMAS keeps ordinary coauthors at paper level under the core-profile contract', async () => {

@@ -175,6 +175,7 @@ const buildAuthorRecords = (papers, authorProfiles) => {
       x: profile?.x ?? '',
       xConfidence: profile?.xConfidence ?? '',
       topics: profileTopics.length > 0 ? profileTopics : paperTopics,
+      representativePapers: profile?.representativePapers ?? [],
       notes: profile?.notes ?? '',
       sources: profile?.sources ?? [],
       profileStatus: profile ? 'tracked' : 'recurring',
