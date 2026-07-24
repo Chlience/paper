@@ -1,4 +1,5 @@
 {
+  "2607.12696-ecospec-cost-aware-moe-speculative-decoding": ["speculative-decoding", "moe-systems", "serving-runtime", "moe-architecture"],
   "2607.14777-seed-self-evolving-on-policy-distillation": ["on-policy-distillation", "agent-rl", "credit-assignment", "rl-algorithm"],
   "2607.18082-cripo-rubric-rl-self-distillation": ["credit-assignment", "on-policy-distillation", "rl-algorithm", "reward-modeling"],
   "2605.09539-tacomas-test-time-coevolution-mas": ["multi-agent-orchestration", "agent-workflow", "test-time-scaling", "credit-assignment"],
