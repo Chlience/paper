@@ -11949,5 +11949,65 @@
         "url": "https://arxiv.org/abs/2601.20209"
       }
     ]
+  },
+  {
+    "slug": "yuhui-li-eagle",
+    "name": "Yuhui Li",
+    "aliases": ["Yuhui Li"],
+    "matchByName": false,
+    "affiliations": ["University of Waterloo", "Peking University"],
+    "huggingFace": "https://huggingface.co/yuhuili",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["EAGLE", "speculative decoding", "draft-model training", "LLM inference"],
+    "notes": "First author of EAGLE, EAGLE-2 and EAGLE-3. The EAGLE-3 proceedings record University of Waterloo and Peking University affiliations; his OpenReview profile records Peking University master's study from 2022 to 2025, and the official EAGLE repository links the yuhuili Hugging Face account for released EAGLE-3 checkpoints. Explicit paper links are required because the name is common.",
+    "sources": [
+      {
+        "label": "EAGLE-3 proceedings",
+        "url": "https://proceedings.neurips.cc/paper_files/paper/2025/hash/c7b5a35ea98b62512a869c19ea7b03cb-Abstract-Conference.html"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Yuhui_Li1"
+      },
+      {
+        "label": "EAGLE repository",
+        "url": "https://github.com/SafeAILab/EAGLE"
+      },
+      {
+        "label": "Hugging Face",
+        "url": "https://huggingface.co/yuhuili"
+      }
+    ]
+  },
+  {
+    "slug": "fangyun-wei",
+    "name": "Fangyun Wei",
+    "aliases": ["Fangyun Wei"],
+    "affiliations": ["Microsoft Research Asia", "Peking University"],
+    "homepage": "https://www.microsoft.com/en-us/research/people/fawe/",
+    "googleScholar": "https://scholar.google.com/citations?user=-ncz2s8AAAAJ",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["EAGLE", "speculative decoding", "computer vision", "multimodal learning"],
+    "notes": "EAGLE, EAGLE-2 and EAGLE-3 coauthor at Microsoft Research. His Microsoft Research profile records a Peking University master's degree and Microsoft Research Asia employment, and its publication list includes the EAGLE series.",
+    "sources": [
+      {
+        "label": "Microsoft Research profile",
+        "url": "https://www.microsoft.com/en-us/research/people/fawe/"
+      },
+      {
+        "label": "Microsoft Research publications",
+        "url": "https://www.microsoft.com/en-us/research/people/fawe/publications/"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Fangyun_Wei1"
+      },
+      {
+        "label": "EAGLE-3 proceedings",
+        "url": "https://proceedings.neurips.cc/paper_files/paper/2025/hash/c7b5a35ea98b62512a869c19ea7b03cb-Abstract-Conference.html"
+      }
+    ]
   }
 ]
