@@ -7781,12 +7781,36 @@
     "github": "https://github.com/rayleizhu",
     "x": "",
     "xConfidence": "not-found",
-    "topics": ["HiLS-Attention", "native sparse attention", "long-context modeling", "sparse attention", "LLM inference acceleration"],
-    "notes": "Author of HiLS-Attention with paper-time affiliation Tencent HY Team. Homepage identifies ZHU Lei (祝磊) as a senior researcher at Tencent Hunyuan Frontier Lab focused on long-term memory, long-context modeling, sparse attention and LLM inference acceleration; no high-confidence personal X account found.",
+    "topics": ["HiLS-Attention", "native sparse attention", "long-context modeling", "sparse attention", "LLM inference acceleration", "speculative decoding", "MoE inference"],
+    "representativePapers": [
+      {
+        "title": "MoESD: Unveil Speculative Decoding's Potential for Accelerating Sparse MoE",
+        "url": "https://arxiv.org/abs/2505.19645",
+        "year": 2025,
+        "venue": "NeurIPS Spotlight"
+      },
+      {
+        "title": "RelayAttention for Efficient Large Language Model Serving with Long System Prompts",
+        "url": "https://arxiv.org/abs/2402.14808",
+        "year": 2024,
+        "venue": "ACL"
+      },
+      {
+        "title": "BiFormer: Vision Transformer with Bi-Level Routing Attention",
+        "url": "https://arxiv.org/abs/2303.08810",
+        "year": 2023,
+        "venue": "CVPR"
+      }
+    ],
+    "notes": "Author of HiLS-Attention with paper-time affiliation Tencent HY Team and author of MoESD with paper-time affiliation Huawei Noah’s Ark Lab. Homepage identifies ZHU Lei (祝磊) as a senior researcher at Tencent Hunyuan Frontier Lab focused on long-term memory, long-context modeling, sparse attention and LLM inference acceleration; its selected-publication list highlights MoESD, RelayAttention and BiFormer. No high-confidence personal X account found.",
     "sources": [
       {
         "label": "HiLS-Attention",
         "url": "https://arxiv.org/abs/2607.02980"
+      },
+      {
+        "label": "MoESD",
+        "url": "https://arxiv.org/abs/2505.19645"
       },
       {
         "label": "Homepage",
@@ -7811,6 +7835,85 @@
       {
         "label": "ORCID",
         "url": "https://orcid.org/0000-0002-0191-7086"
+      }
+    ]
+  },
+  {
+    "slug": "zongle-huang",
+    "name": "Zongle Huang",
+    "aliases": ["Zongle Huang"],
+    "affiliations": ["Tsinghua University", "Beijing National Research Center for Information Science and Technology"],
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["MoE inference acceleration", "LLM systems", "AI accelerator architecture", "pipeline parallelism"],
+    "notes": "First author of MoESD at Tsinghua University and BNRist. The OpenReview identity and DBLP record match the paper author; no high-confidence personal homepage or X account found in the local verification pass.",
+    "sources": [
+      {
+        "label": "MoESD proceedings",
+        "url": "https://proceedings.neurips.cc/paper_files/paper/2025/hash/b637af7745d3ad4cb0b9cdaa056ab41e-Abstract-Conference.html"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Zongle_Huang1"
+      },
+      {
+        "label": "DBLP",
+        "url": "https://dblp.org/pid/370/8565.html"
+      },
+      {
+        "label": "SCOPE paper",
+        "url": "https://arxiv.org/abs/2602.14393"
+      }
+    ]
+  },
+  {
+    "slug": "yongpan-liu",
+    "name": "Yongpan Liu",
+    "chineseName": "刘勇攀",
+    "aliases": ["Yongpan Liu", "Liu Yongpan"],
+    "affiliations": ["Tsinghua University", "Beijing National Research Center for Information Science and Technology"],
+    "homepage": "https://web.ee.tsinghua.edu.cn/liuyongpan/en/index.htm",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["AI accelerators", "hardware-software co-design", "energy-efficient computing", "MoE inference acceleration"],
+    "notes": "MoESD corresponding author and Tsinghua University professor. His official faculty page describes research in AI chips, energy-efficient computing and cross-layer hardware-software optimization; no high-confidence personal X account found.",
+    "sources": [
+      {
+        "label": "MoESD proceedings",
+        "url": "https://proceedings.neurips.cc/paper_files/paper/2025/hash/b637af7745d3ad4cb0b9cdaa056ab41e-Abstract-Conference.html"
+      },
+      {
+        "label": "Tsinghua faculty homepage",
+        "url": "https://web.ee.tsinghua.edu.cn/liuyongpan/en/index.htm"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Yongpan_Liu1"
+      }
+    ]
+  },
+  {
+    "slug": "tianyu-zhang-huawei",
+    "name": "Tianyu Zhang",
+    "aliases": ["Tianyu Zhang"],
+    "matchByName": false,
+    "affiliations": ["Huawei Noah’s Ark Lab"],
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["LLM inference acceleration", "speculative decoding", "test-time scaling", "MoE inference"],
+    "notes": "MoESD corresponding author at Huawei Noah’s Ark Lab. Explicit paper links are required because the name is common; no high-confidence personal homepage or X account found.",
+    "sources": [
+      {
+        "label": "MoESD proceedings",
+        "url": "https://proceedings.neurips.cc/paper_files/paper/2025/hash/b637af7745d3ad4cb0b9cdaa056ab41e-Abstract-Conference.html"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Tianyu_Zhang12"
+      },
+      {
+        "label": "Findings of EMNLP 2025 paper",
+        "url": "https://aclanthology.org/2025.findings-emnlp.928/"
       }
     ]
   },

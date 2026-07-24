@@ -33,6 +33,7 @@
   "2510.12633-laminar-asynchronous-rl-post-training": ["rl-infrastructure", "rollout-optimization", "distributed-training", "training-stability"],
   "2510.00206-lorafusion-efficient-lora-fine-tuning": ["parameter-efficient-finetuning", "distributed-training", "training-memory"],
   "2505.11432-megascale-moe-communication-efficient-training": ["moe-systems", "distributed-training", "training-memory"],
+  "2505.19645-moesd-sparse-moe-speculative-decoding": ["speculative-decoding", "moe-systems", "serving-runtime", "moe-architecture"],
   "2211.17192-fast-inference-transformers-speculative-decoding": ["speculative-decoding"],
   "2512.02556-deepseek-v3-2-open-large-language-models": ["sparse-attention", "training-stability", "agent-rl", "agent-memory"],
   "2606.13392-minimax-sparse-attention-m3": ["sparse-attention", "long-context", "moe-architecture"],

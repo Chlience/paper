@@ -1,7 +1,7 @@
 # Paper Archive Index
 
 First-Archived-At: 2026-06-21
-Updated-At: 2026-07-23
+Updated-At: 2026-07-24
 
 ## 本地工作流
 
@@ -87,6 +87,7 @@ Updated-At: 2026-07-23
 | [Qwen3](/papers/2505.09388-qwen3-technical-report/) | 2025年5月 | 用 thinking / non-thinking 双模式、thinking budget 和 strong-to-weak distillation 统一推理与通用能力。 |
 | [Entropy Mechanism](/papers/2505.22617-entropy-mechanism-rl-reasoning-language-models/) | 2025年5月 | 把 RLVR 训练能力上限关联到 policy entropy 消耗，并分析 advantage update 的熵动力学。 |
 | [ProRL](/papers/2505.24864-prorl-prolonged-rl-reasoning-boundaries/) | 2025年5月 | 用高温探索、动态采样、周期 reference / optimizer reset 延长 RL，测试 reasoning boundary 扩展。 |
+| [MoESD](/papers/2505.19645-moesd-sparse-moe-speculative-decoding/) | 2025年5月 | 在单步解码已使专家加载趋于饱和、模型仍受内存带宽限制的中等批量区间，用投机验证复用已加载专家；Qwen2-57B-A14B 在两张 H800 上最高加速 2.29 倍，适用范围依赖路由均衡、MoE 前馈网络成本占比和具体硬件。 |
 | [MegaScale-MoE](/papers/2505.11432-megascale-moe-communication-efficient-training/) | 2025年5月 | 围绕 attention SP、FFN EP、communication overlap 和 compressed communication 重构生产 MoE 训练路径。 |
 | [RLVR Reasoning Boundary](/papers/2504.13837-rlvr-reasoning-boundary-base-model/) | 2025年4月 | 用 pass@k 区分 sampling efficiency 与新增 reasoning capacity，评估 RLVR 是否突破 base model 边界。 |
 | [DAPO](/papers/2503.14476-dapo-long-cot-rl-system/) | 2025年3月 | 用 Clip-Higher、Dynamic Sampling、token-level loss 与 overlong shaping 构成可复现 long-CoT RL recipe。 |
