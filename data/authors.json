@@ -12088,5 +12088,122 @@
         "url": "https://arxiv.org/abs/2606.05742"
       }
     ]
+  },
+  {
+    "slug": "nusrat-jahan-lia",
+    "name": "Nusrat Jahan Lia",
+    "aliases": ["Nusrat Jahan Lia", "Nusrat Lia"],
+    "affiliations": [
+      "Fatima Institute for Global AI Research",
+      "University of Dhaka"
+    ],
+    "homepage": "https://nusrat-lia.github.io/",
+    "github": "https://github.com/NusRAT-LiA",
+    "googleScholar": "https://scholar.google.com/citations?user=c2tTr4UAAAAJ",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["LLM agents", "agent reliability", "agent memory", "multilingual NLP", "low-resource NLP"],
+    "representativePapers": [
+      {
+        "title": "AgentCheck: A Reproduce–Intervene–Mitigate Workbench for LLM Agents over MCP",
+        "url": "https://arxiv.org/abs/2607.11098"
+      },
+      {
+        "title": "Learning What Not to Forget: Long-Horizon Agent Memory from a Few Kilobytes of Learning",
+        "url": "https://arxiv.org/abs/2606.20954"
+      },
+      {
+        "title": "AgentCollabBench: Diagnosing When Good Agents Make Bad Collaborators",
+        "url": "https://arxiv.org/abs/2605.08647"
+      },
+      {
+        "title": "Cross-Lingual Sentiment Misalignment: Auditing Multilingual Language Models for Inversion Risk, Dialectal Representation, and Affective Stability",
+        "url": "https://aclanthology.org/2026.mellm-1.12/"
+      },
+      {
+        "title": "Read Between the Lines: A Benchmark for Uncovering Political Bias in Bangla News Articles",
+        "url": "https://aclanthology.org/2025.banglalp-1.5/"
+      },
+      {
+        "title": "Exploring Cross-Lingual Knowledge Transfer via Transliteration-Based MLM Fine-Tuning for Critically Low-resource Chakma Language",
+        "url": "https://aclanthology.org/2025.banglalp-1.23/"
+      },
+      {
+        "title": "Adult Attitudes about School Smartphone Bans: A Global Survey of 35 Countries",
+        "url": "https://jamanetwork.com/journals/jamapediatrics/fullarticle/2843672"
+      }
+    ],
+    "notes": "LRE first author and owner of its public code repository. Her homepage records University of Dhaka software-engineering training, a current Fatima Institute research fellowship, and a broader research line spanning LLM-agent reliability, memory, and multilingual NLP.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://nusrat-lia.github.io/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/NusRAT-LiA"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=c2tTr4UAAAAJ"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/profile?id=~Nusrat_Jahan_Lia1"
+      },
+      {
+        "label": "LRE",
+        "url": "https://arxiv.org/abs/2606.20954"
+      }
+    ]
+  },
+  {
+    "slug": "aritra-mazumder",
+    "name": "Aritra Mazumder",
+    "aliases": ["Aritra Mazumder"],
+    "matchByName": false,
+    "affiliations": [
+      "University of Utah",
+      "Shahjalal University of Science and Technology"
+    ],
+    "homepage": "https://www.aritramazumder.com/",
+    "github": "https://github.com/aritra741",
+    "googleScholar": "https://scholar.google.com/citations?user=B4zKBFsAAAAJ",
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["data management", "intelligent data systems", "LLM agents", "agent memory", "agent reliability"],
+    "representativePapers": [
+      {
+        "title": "AgentCollabBench: Diagnosing When Good Agents Make Bad Collaborators",
+        "url": "https://arxiv.org/abs/2605.08647"
+      },
+      {
+        "title": "Learning What Not to Forget: Long-Horizon Agent Memory from a Few Kilobytes of Learning",
+        "url": "https://arxiv.org/abs/2606.20954"
+      }
+    ],
+    "notes": "University of Utah PhD student in the UtahDB Lab, advised by Anna Fariha, and LRE coauthor. Explicit paper links are required because the same name appears in unrelated research areas.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://www.aritramazumder.com/"
+      },
+      {
+        "label": "UtahDB Lab",
+        "url": "https://mod.cs.utah.edu/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/aritra741"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=B4zKBFsAAAAJ"
+      },
+      {
+        "label": "LRE",
+        "url": "https://arxiv.org/abs/2606.20954"
+      }
+    ]
   }
 ]
