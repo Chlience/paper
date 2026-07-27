@@ -1,7 +1,7 @@
 # GLM-5.2: Built for Long-Horizon Tasks 技术文章笔记
 
 First-Archived-At: 2026-06-18 13:45
-Updated-At: 2026-07-27 13:37
+Updated-At: 2026-07-27 14:54
 Review-Status: needs-review
 Reviewed-At: 2026-07-18 17:42
 
@@ -29,7 +29,7 @@ Reviewed-At: 2026-07-18 17:42
 - Current version read: blog bundle last modified 2026-06-17；Hugging Face BF16 checkpoint commit `b4734de4facf877f85769a911abafc5283eab3d9`；Transformers v5.12.0 implementation commit `e0e7504bca2bfd1b85bb0eedb148f7b250226f06`；SGLang implementation commit `ee1736f39ab62b15fcb276d3ff9090ff13c60fc6`
 - Accessed: 2026-07-27
 - Key figure decision: omit
-- Key figure rationale: 本次架构补充的直接证据来自机器可读配置、Safetensors 元数据和权重张量形状；参数表与可复算公式保留了关键结构信息，无需引入发布图。
+- Key figure rationale: 本次架构补充的直接证据来自机器可读配置、Safetensors 元数据和权重张量形状；分层参数表和数据流说明已经保留关键结构信息，无需引入发布图。
 - Review status: page-type=not-found; match-confidence=high; observed-at=2026-07-27; venue-status=release blog and open-weight model card
 - Related paper: [2602.15763](/papers/2602.15763-glm-5-agentic-engineering/)
 - Related method: [IndexCache](/papers/2603.12201-indexcache-cross-layer-index-reuse/)
@@ -79,7 +79,7 @@ GLM-5.2 的价值在于把这些问题放在同一条 release 中处理：模型
 
 ### 2. 已有解决方案与不足
 
-GLM-5 已经提供 744B total / 40B active MoE、DSA、slime 异步 RL 和 200K context。GLM-5.1 进一步增强 coding / agentic capability，但从 GLM-5.2 博文看，长时工程任务仍有四类不足：
+GLM-5 已经提供 744.0B total / 40.0B active MoE、DSA、slime 异步 RL 和 200K context。GLM-5.1 进一步增强 coding / agentic capability，但从 GLM-5.2 博文看，长时工程任务仍有四类不足：
 
 1. 200K context 对仓库级、长日志、长工具轨迹仍偏紧。
 2. DSA core attention 已被稀疏化，但 indexer 自身还会在每层做高成本 top-k 选择。
@@ -110,144 +110,73 @@ GLM-5.2 的核心假设包括：
 
 ### 5. 方法 / 系统 / 理论框架
 
-#### 5.1 GLM-5.2 release surface、层结构与参数量
+#### 5.1 GLM-5.2 结构参数速览与阅读方法
 
-##### 5.1.1 发布口径与公开权重实数
+面向读者的模型参数表优先展示五类信息：存储规模、激活规模、网络深度、残差流宽度，以及 MoE 和注意力的实际执行路径。分片数、张量数和逐矩阵求和主要用于核验，放在结果证据中即可。参数量统一保留一位小数并使用 M/B；层数、维度、头数、专家数和上下文长度继续保留精确整数。
 
-| 项目 | GLM-5.2 |
-| --- | --- |
-| 模型系列 | GLM-5 series |
-| 发布机构 | Z.ai / GLM-5 Team |
-| GLM-5 技术报告口径 | 744B total / 40B activated；Table 10 声明计入 MTP，排除词嵌入与输出层 |
-| Hugging Face BF16 权重检查点（checkpoint） | 753,329,940,480 个参数；页面显示为 753B |
-| 骨干网络 | 78 个 Transformer blocks，包含 3 个 dense FFN blocks 与 75 个 MoE blocks |
-| MTP | 1 个额外、跨多个 draft steps 共享参数的 NextN/MTP block；权重索引中的层号为 78 |
-| 精度 | BF16 与 FP8 releases；本节精确计数基于 BF16 checkpoint |
-| 上下文 | `max_position_embeddings=1,048,576`，即 $2^{20}$ tokens |
-| 许可证 | MIT |
-| 权重 | Hugging Face 与 ModelScope |
-| 推理框架 | SGLang、vLLM、Transformers、KTransformers 与昇腾相关框架 |
-| 推理强度控制 | `reasoning_effort=max/high`；支持关闭 thinking |
+##### 5.1.1 模型规模
 
-Hugging Face commit `b4734de4facf877f85769a911abafc5283eab3d9` 的模型 API 报告 753,329,921,024 个 BF16 参数和 19,456 个 F32 参数，总计 753,329,940,480。`model.safetensors.index.json` 包含 282 个分片、59,585 个张量名，`total_size=1,506,659,919,872` bytes，恰好等于 BF16 参数乘 2 bytes 再加 F32 参数乘 4 bytes。19,456 个 F32 元素对应 76 个 MoE blocks 各自的 256 维 `e_score_correction_bias`；router 权重在 checkpoint 中仍为 BF16，官方实现会用 FP32 计算 router logits。Transformers 还把 `indexer.weights_proj` 列为运行时保留 FP32 的模块，这会增加加载后的实际内存，且不改变 checkpoint 的数据类型统计。
-
-公开权重可以按层号拆成 78 层骨干网络 `model.layers.0` 至 `model.layers.77`，以及 MTP 层 `model.layers.78`。逐张量形状重算得到：
-
-| 组成 | 结构与计数 | 参数量 |
-| --- | --- | ---: |
-| 输入词嵌入 | $154{,}880\times6{,}144$，与输出头不共享 | 951,582,720 |
-| 输出头 | $6{,}144\times154{,}880$ | 951,582,720 |
-| 骨干 MLA | 78 层，每层 165,022,208 | 12,871,732,224 |
-| 骨干 DSA Full indexer | 21 层，每层 9,371,904 | 196,809,984 |
-| Dense FFN | 前 3 层，每层 226,492,416 | 679,477,248 |
-| 路由专家组（routed expert banks） | 75 层，每层 $256\times37{,}748{,}736$ | 724,775,731,200 |
-| 共享专家（shared experts） | 75 层，每层 37,748,736 | 2,831,155,200 |
-| MoE 路由器 | 75 层；含权重与 correction bias | 117,984,000 |
-| 骨干归一化层 | 每个 block 两个 RMSNorm，末尾另有一个 RMSNorm | 964,608 |
-| **骨干网络小计** | 含输入词嵌入和输出头，不含 MTP | **743,377,019,904** |
-| **MTP 层** | 完整 MoE/MLA/indexer，加 `eh_proj` 与五个归一化权重 | **9,952,920,576** |
-| **BF16 release checkpoint 合计** | 骨干网络加 MTP；含 19,456 个 F32 correction-bias 元素 | **753,329,940,480** |
-
-MTP 小计包含 9,663,676,416 个路由专家参数、37,748,736 个共享专家参数、165,022,208 个 MLA 参数、9,371,904 个 indexer 参数、1,573,120 个 router 参数，以及 75,528,192 个融合投影和归一化参数。`eh_proj.weight` 的形状为 $6{,}144\times12{,}288$；`enorm` 与 `hnorm` 分别归一化 token embedding 和上一轮 target hidden state，二者拼接后由 `eh_proj` 投影回 6,144 维。其余三个归一化权重来自 decoder block 的 `input_layernorm`、`post_attention_layernorm` 和输出前的 `shared_head.norm`。
-
-因此，三个常见数字表达不同对象：
-
-1. **753.330B** 是 Hugging Face BF16 checkpoint 中实际保存的张量元素总数。
-2. **743.377B** 是当前 GLM-5.2 checkpoint 的 78 层 target backbone，包含独立输入词嵌入和输出头，排除额外 MTP 层。
-3. **744B / A40B** 来自 GLM-5 技术报告的系列级架构口径。
-
-[GLM-5 技术报告 Appendix A Table 10](https://arxiv.org/html/2602.15763#A1) 写明“总参数计入 MTP、排除词嵌入与输出层”。把这条注释直接应用到 GLM-5.2 checkpoint 会得到 751,426,775,040，而表中仍报告 744B，两者相差约 7.427B。当前公开材料没有说明这项差异来自报告近似、训练时参数共享语义、checkpoint 打包方式，还是后续模型结构变化。部署容量与权重下载应采用 753.330B；讨论 GLM-5 系列论文时可以保留 744B/A40B，并同时声明其统计口径。
-
-层数也存在一项发布表述差异：GLM-5 报告 §2.1 正文称 layer count 为 80，Table 10 列出 3 个 dense layers、75 个 MoE layers 和 1 个 MTP layer，合计 78 个 target blocks 加 1 个 MTP block；当前 GLM-5.2 配置与权重索引同样可复现 78+1。公开材料没有说明正文中的 80 是否采用了额外模块计数。当前可核验分层以 checkpoint 的 layers 0–77 和 MTP layer 78 为准。
-
-##### 5.1.2 核心配置与每层结构
-
-| 配置字段 | 值 | 结构含义 |
+| 展示项 | GLM-5.2 | 阅读方式 |
 | --- | ---: | --- |
-| `architectures` / `model_type` | `GlmMoeDsaForCausalLM` / `glm_moe_dsa` | decoder-only MoE + MLA + DSA |
-| `hidden_size` | 6,144 | token hidden state 与残差流宽度 |
-| `num_hidden_layers` | 78 | target backbone blocks；checkpoint 另存 1 个 MTP block |
-| `num_nextn_predict_layers` | 1 | 保存一个跨 draft steps 共享参数的 NextN/MTP block |
-| `vocab_size` | 154,880 | 输入词嵌入和输出头均为 951,582,720 参数 |
-| `tie_word_embeddings` | `false` | 输入词嵌入与输出头分别存储 |
-| `intermediate_size` | 12,288 | 前 3 个 dense SwiGLU FFN 的中间宽度 |
-| `moe_intermediate_size` | 2,048 | 路由专家与共享专家的 SwiGLU 中间宽度 |
-| `hidden_act` | `silu` | SwiGLU 的 gate activation |
-| `rms_norm_eps` | $10^{-5}$ | block 内与模型末尾 RMSNorm |
-| `dtype` | `bfloat16` | BF16 checkpoint 的默认权重类型 |
-| `max_position_embeddings` | 1,048,576 | 公开配置的精确上下文上限 |
-| `rope_theta` | 8,000,000 | default RoPE base；Q/K 的 64 维子空间应用 interleaved RoPE |
+| BF16 checkpoint 总参数 | **753.3B** | 下载、存储和完整权重驻留的主要口径 |
+| Target backbone | **743.4B** | 78 个生成主干 block，包含输入词嵌入与输出头 |
+| MTP 模块 | **10.0B** | 独立保存的 layer 78，用于 speculative decoding |
+| 报告口径激活参数 | **39.9B** | 单个 token 经过所选专家时涉及的参数规模 |
+| GLM-5 报告口径 | 744.0B total / 40.0B activated | 系列级报告数字，统计范围与当前 checkpoint 有差异 |
+| 权重精度 | BF16；另有 FP8 release | 本节计数基于 BF16 checkpoint |
+| 最大上下文 | 1,048,576 tokens | `max_position_embeddings=2^{20}` |
 
-MLA 与 DSA 相关配置为：
+这张表应同时保留“总参数”和“激活参数”。GLM-5.2 的全部专家都需要存储；每个 token 只调用其中一部分专家，因此 39.9B 描述计算路径，753.3B 描述 checkpoint 规模。MTP 的 10.0B 参数也要单列，因为普通 target-model forward 与 speculative decoding 对它的使用方式不同。
 
-| 配置字段 | 值 | 结构含义 |
+Hugging Face commit `b4734de4facf877f85769a911abafc5283eab3d9` 的模型 API、权重索引和张量形状共同支持 753.3B、743.4B 与 10.0B 三个数字。GLM-5 技术报告 Appendix A Table 10 报告 744.0B/40.0B，并声明总参数计入 MTP、排除词嵌入与输出层；该脚注无法直接复现当前 GLM-5.2 checkpoint。部署容量使用 753.3B，引用论文架构时注明 744.0B/40.0B 的报告口径。
+
+##### 5.1.2 网络深度、宽度与专家
+
+| 结构参数 | 值 | 对模型结构的影响 |
 | --- | ---: | --- |
-| `num_attention_heads` | 64 | query heads |
-| `num_key_value_heads` | 64 | 展开后的逻辑 K/V heads；MLA cache 仍保存低维 latent |
-| `attention_bias` / dropout | `false` / 0.0 | attention projections 无 bias，attention dropout 为零 |
-| `q_lora_rank` | 2,048 | query low-rank down-projection |
-| `kv_lora_rank` | 512 | compressed latent KV 宽度 |
-| `qk_nope_head_dim` | 192 | 每个 head 不使用 RoPE 的 Q/K 子空间 |
-| `qk_rope_head_dim` | 64 | 每个 head 使用 RoPE 的 Q/K 子空间 |
-| `qk_head_dim` | 256 | $192+64$；`q_b_proj` 输出 $64\times256=16{,}384$ 维 |
-| `v_head_dim` | 256 | 每个 value head 宽度；attention output 展开为 16,384 维 |
-| MLA cache logical width | 576 | 512 维 compressed KV 加 64 维 decoupled RoPE key |
-| `index_n_heads` | 32 | DSA indexer heads |
-| `index_head_dim` | 128 | 每个 indexer head 宽度 |
-| `index_topk` | 2,048 | 每个 query 进入 sparse core attention 的历史位置数上限 |
-| `index_topk_freq` / offset | 4 / 3 | offset 后形成 `full, shared, shared, shared` |
-| `rope_interleave` / `indexer_rope_interleave` | `true` / `true` | MLA 与 indexer 的 RoPE 都使用偶奇维交错布局 |
-| `index_share_for_mtp_iteration` | `true` | MTP iterations 复用 index selection |
+| Target backbone blocks | 78 | 自回归生成主干，对应 layers 0–77 |
+| Dense blocks | 3 | layers 0–2 使用 dense SwiGLU FFN |
+| MoE blocks | 75 | layers 3–77 使用稀疏 MoE |
+| MTP blocks | 1 | layer 78，跨多个 draft steps 共享参数 |
+| `hidden_size` | **6,144** | 每个 token 的 hidden state 和残差流宽度 |
+| Dense FFN intermediate size | 12,288 | 前 3 层 dense SwiGLU 的中间宽度 |
+| Expert intermediate size | 2,048 | 路由专家与共享专家的中间宽度 |
+| 路由专家数 | 256 / MoE block | 每层保存的候选专家 |
+| 激活路由专家数 | 8 / token | router 为每个 token 选择的专家数 |
+| 共享专家数 | 1 / token | 每个 token 固定经过的共享专家 |
+| Vocabulary size | 154,880 | 输入词嵌入与输出头不共享，各约 951.6M 参数 |
 
-原始 `config.json` 还保存 `head_dim=192`。这个字段等于 no-PE Q/K 子空间，完整 Q/K head 由 192 维 no-PE 部分和 64 维 RoPE 部分组成，共 256 维。Transformers v5.12.0 的配置类会把通用 `head_dim` 运行时字段改为 64，供 RoPE 频率生成使用；参数量与 attention tensor shape 应读取 `qk_nope_head_dim`、`qk_rope_head_dim` 和 `v_head_dim`。
+一层 backbone 先让 6,144 维 hidden state 通过注意力，再进入 FFN。前三层使用完整 dense FFN；后 75 层由 router 从 256 个路由专家中选择 8 个，同时执行 1 个共享专家，最后把结果写回 6,144 维残差流。单个专家约 37.7M 参数，每个 MoE block 保存约 9.7B 路由专家参数；当前 token 的专家 FFN 路径约涉及 339.7M 参数。
 
-MoE 的层级与 routing 配置为：
+这组数字解释了总参数与激活参数的差距。75 个 MoE blocks 保存全部专家，使 backbone 达到 743.4B；单个 token 在每层只走 8 个路由专家和 1 个共享专家，按报告口径汇总约为 39.9B active。MTP layer 78 复用相同宽度和完整 MoE 结构，额外保存约 10.0B 参数。
 
-| 配置字段 | 值 | 结构含义 |
+##### 5.1.3 注意力、hidden state 与稀疏选择
+
+| 注意力参数 | 值 | 数据流含义 |
 | --- | ---: | --- |
-| `first_k_dense_replace` | 3 | layers 0–2 使用 dense FFN |
-| MoE backbone layers | 75 | layers 3–77 使用 MoE |
-| `n_routed_experts` | 256 | 每个 MoE block 保存 256 个路由专家 |
-| `num_experts_per_tok` | 8 | 每个 token 选择 8 个路由专家 |
-| `n_shared_experts` | 1 | 每个 token 还通过 1 个共享专家 |
-| 单个专家参数量 | 37,748,736 | 单个 SwiGLU expert 为 $3\times6{,}144\times2{,}048$ |
-| 每层路由专家组 | 9,663,676,416 | 256 个路由专家 |
-| 每层激活专家 FFN | 339,738,624 | 8 个路由专家，加 1 个共享专家 |
-| `scoring_func` / `topk_method` | `sigmoid` / `noaux_tc` | router 以 sigmoid score 选择 top-8 |
-| `moe_router_dtype` | `float32` | router logits 以 FP32 计算 |
-| `norm_topk_prob` / scaling | `true` / 2.5 | 归一化所选 expert 权重后乘 scaling factor |
-| `n_group` / `topk_group` | 1 / 1 | 当前配置不做跨 expert group 筛选 |
+| `hidden_size` | 6,144 | 注意力和 FFN 共享的输入、输出及残差流宽度 |
+| Query heads | 64 | 64 个 query heads |
+| Logical K/V heads | 64 | MLA 展开后的逻辑头数，缓存仍使用低维 latent |
+| Q/K head dimension | 256 | 192 维 no-PE 子空间加 64 维 RoPE 子空间 |
+| Value head dimension | 256 | 每个 value head 的宽度 |
+| Q LoRA rank | 2,048 | query 先压到低秩空间，再展开到多头空间 |
+| Compressed KV width | 512 | MLA 缓存的低维 KV latent |
+| MLA logical cache width | 576 | 512 维 KV latent 加 64 维 RoPE key |
+| DSA indexer | 32 heads × 128 dims | 为历史位置计算轻量相关性分数 |
+| Sparse attention top-$k$ | 2,048 | 每个 query 最多选择 2,048 个历史位置 |
+| Backbone indexers | 21 Full + 57 Shared | Full 层重新选择位置，后续 Shared 层复用结果 |
+| MLA 参数量 | 165.0M / block | 每个 target block 的 MLA 投影与归一化参数 |
+| Full indexer 参数量 | 9.4M / Full layer | 参数规模较小，长序列候选扫描构成主要运行成本 |
 
-骨干网络只有 layers 0、1、2、6、10、14、18、22、26、30、34、38、42、46、50、54、58、62、66、70、74 保存并执行 Full indexer，共 21 个；其余 57 层在官方 Transformers 实现中将 `self.indexer` 设为 `None`，直接接收最近 Full 层的 top-$k$ positions。MTP layer 78 另存一个 Full indexer，所以完整 checkpoint 有 22 套 indexer 参数。相较 79 层都各存一套 indexer，这一配置减少 57 套、合计 534,198,528 个参数；主要运行收益仍来自超长序列下省去 57 层的候选打分与 top-$k$。
+`hidden_state` 是运行时张量，最后一维由 `hidden_size=6,144` 决定，表示 token 在层与层之间传递的残差流宽度。Q 投影会在层内展开为 $64\times256$ 的多头表示，注意力输出随后映射回 6,144 维；多头展开宽度和 hidden state 宽度对应数据流中的不同阶段。
 
-##### 5.1.3 “A40B”如何由路由配置得到
+参数表采用完整 Q/K head dimension 256，并标注为 192 维 no-PE 加 64 维 RoPE。原始 `config.json` 中的 `head_dim=192` 只对应 no-PE 子空间，单独展示会遗漏 RoPE 子空间。
 
-单个路由专家（routed expert）的参数量为：
+GLM-5.2 使用 MLA 压缩 K/V。配置层展开为 64 个逻辑 K/V heads；典型 MLA 解码路径为每个 token、每层保存 512 维 compressed KV 和 64 维 RoPE key，共 576 维。这一区分对应注意力计算时的多头表示与解码时的缓存表示。DSA indexer 再从全部历史位置中选出 top-2,048，MLA 只对这些位置执行核心注意力。
 
-$$
-P_{\mathrm{expert}}
-=3\times 6{,}144\times 2{,}048
-=37{,}748{,}736.
-$$
+IndexShare 进一步沿网络深度复用选择结果。骨干网络有 21 个 Full indexers 和 57 个 Shared layers，MTP layer 78 另带一个 Full indexer；常见四层组中第一层重新选择 top-$k$，后三层继续使用相同位置。该机制保持各层自己的 attention 参数和 KV cache。
 
-按照 GLM-5 Table 10 的 active-parameter 口径，计入 75 个 backbone MoE blocks 和 1 个 MTP MoE block，排除输入词嵌入与输出头，并把每层 256 个路由专家替换为实际选中的 8 个：
-
-$$
-\begin{aligned}
-P_{\mathrm{active,report}}
-={}&P_{\mathrm{checkpoint}}
--2P_{\mathrm{vocab}}
--76\times256P_{\mathrm{expert}}
-+76\times8P_{\mathrm{expert}}\\
-={}&39{,}938{,}598{,}912.
-\end{aligned}
-$$
-
-这个结果为 39.939B，四舍五入后对应 A40B。普通 target-model decode 只运行 layers 0–77；若计入完整输出头，把输入词嵌入表按 lookup 处理，并在 75 个 MoE blocks 中各激活 8 个路由专家，则其余参与当前 token 路径的权重为 40,298,947,584；再计入实际读取的一行 6,144 维 embedding，结果为 40,298,953,728。两种口径都接近 40B，差异来自 MTP 与词表矩阵的计入方式。
-
-激活参数量描述单个 token 的计算路径。模型仍包含全部路由专家组；没有 expert offload 时，分布式推理需要让 753.330B checkpoint 权重驻留在 GPU、CPU 或两者组成的存储层级中。参数量也不能直接替代 FLOPs：DSA indexer 只有约 9.37M 参数，但它在长上下文中扫描大量历史位置，运行成本随序列长度增长。
-
-Transformers v5.12.0 的通用 `GlmMoeDsaForCausalLM` 构造 78 个 target blocks，并通过 `_keys_to_ignore_on_load_unexpected` 忽略 `model.layers.78.*`；普通 Transformers forward 因而不执行 MTP 层。SGLang 等 speculative decoding 路径把 layer 78 作为独立 NextN/MTP module 加载，使用 `enorm`、`hnorm`、`eh_proj`、一个 decoder block 和 `shared_head.norm` 生成 draft hidden state。部署时的实际激活量还取决于是否开启 MTP、draft steps 数、IndexShare/KVShare 复用和推理框架实现。
+层数口径也需要简短保留：GLM-5 报告正文称 layer count 为 80，Table 10 与当前 checkpoint 都支持 78 个 target blocks 加 1 个 MTP block。当前公开材料没有解释这项表述差异。普通 Transformers forward 只构造 78 个 target blocks；SGLang 等 speculative decoding 路径会另行加载约 10.0B 参数的 MTP layer 78。
 
 GLM-5.2 的产品接口包括 Z.ai chat、GLM Coding Plan、ZCode、Claude Code / OpenCode 等 coding agent 接入。对本地论文目录更重要的是：它把 open-weight 1M context、agentic coding、slime RL 和 production serving 放在同一发布面上。
 
@@ -265,7 +194,7 @@ GLM-5.2 使用固定 FSSS IndexShare pattern：anchor layer 运行 indexer 并�
 
 官方 `config.json` 给出 `index_topk=2048`、`index_topk_freq=4`、`index_skip_topk_offset=3`、`index_topk_pattern=null` 和 `index_share_for_mtp_iteration=true`；offset 之后的 `indexer_types` 呈周期性的 `full, shared, shared, shared`。博文声称这一配置在 1M context 下将 per-token FLOPs 降低 2.9 倍，并从 128K sequence length 的 mid-training 阶段开始引入。
 
-这里需要把论文证据分成三层。IndexCache 在 30B 模型上验证 training-free search 与 training-aware multi-layer distillation；在 744B GLM-5 上只验证 training-free search。GLM-5.2 后续采用固定四层共享，并把机制命名为 IndexShare。固定 FSSS 与 IndexCache 的 training-aware 路线在结构上相容，因为论文中未经训练的 uniform 1/4 pattern 会明显降低 long-context 质量；GLM-5.2 官方材料没有披露 exact index loss，也没有确认完整采用 IndexCache 的 multi-layer KL distillation。
+这里需要把论文证据分成三层。IndexCache 在 30.0B 模型上验证 training-free search 与 training-aware multi-layer distillation；在 744.0B GLM-5 上只验证 training-free search。GLM-5.2 后续采用固定四层共享，并把机制命名为 IndexShare。固定 FSSS 与 IndexCache 的 training-aware 路线在结构上相容，因为论文中未经训练的 uniform 1/4 pattern 会明显降低 long-context 质量；GLM-5.2 官方材料没有披露 exact index loss，也没有确认完整采用 IndexCache 的 multi-layer KL distillation。
 
 因此可以把 IndexCache 视为方法族，把 IndexShare 视为 GLM-5.2 的 production configuration 与发布名称。两者共享 Full / Shared layers 和跨层 top-$k$ index reuse，训练 recipe 的对应范围保持未披露。
 
@@ -419,20 +348,20 @@ GLM-5.2 的结论链可以概括为：
 ### 结果 5：公开权重参数量与层结构审计
 
 - 设置：固定读取 Hugging Face BF16 checkpoint commit `b4734de4facf877f85769a911abafc5283eab3d9` 的模型 API、`config.json`、`model.safetensors.index.json` 和 282 个 Safetensors 分片头部；用 Transformers v5.12.0 与 SGLang 对应实现核对模块语义。
-- 对照是否可比：Hugging Face 元数据、配置、权重索引和张量头部来自同一 commit，可以直接交叉核验；GLM-5 报告的 744B 使用不同材料与统计口径，只作为系列级参照。
+- 对照是否可比：Hugging Face 元数据、配置、权重索引和张量头部来自同一 commit，可以直接交叉核验；GLM-5 报告的 744.0B 使用不同材料与统计口径，只作为系列级参照。
 - 指标：参数总数、数据类型、分片数、张量数、骨干层数、MTP 层数、Full indexer 层数，以及按矩阵形状重算的组件参数量。
-- 结果：完整 checkpoint 为 753,329,940,480 个参数，其中 BF16 753,329,921,024、F32 19,456；78 层骨干网络为 743,377,019,904，MTP layer 78 为 9,952,920,576；骨干网络包含 3 个 dense blocks、75 个 MoE blocks 和 21 个 Full indexers。
+- 结果：完整 checkpoint 为 753.3B 参数，78 层骨干网络为 743.4B，MTP layer 78 为 10.0B；骨干网络包含 3 个 dense blocks、75 个 MoE blocks 和 21 个 Full indexers。权重主体为 BF16，MoE correction bias 保留少量 F32 元素。
 - 证据定位：[Hugging Face model API snapshot](https://huggingface.co/api/models/zai-org/GLM-5.2/revision/b4734de4facf877f85769a911abafc5283eab3d9)；[`config.json`](https://huggingface.co/zai-org/GLM-5.2/blob/b4734de4facf877f85769a911abafc5283eab3d9/config.json)；[`model.safetensors.index.json`](https://huggingface.co/zai-org/GLM-5.2/blob/b4734de4facf877f85769a911abafc5283eab3d9/model.safetensors.index.json)；[Transformers v5.12.0 implementation](https://github.com/huggingface/transformers/blob/e0e7504bca2bfd1b85bb0eedb148f7b250226f06/src/transformers/models/glm_moe_dsa/modeling_glm_moe_dsa.py)。
-- 支持的最窄结论：公开 BF16 checkpoint 的存储参数量可以精确核验为 753.330B；744B/A40B 仍是 GLM-5 技术报告中的架构统计口径，报告对总参数的脚注无法直接复现当前 GLM-5.2 checkpoint。
-- 适用版本：参数实数适用于 Hugging Face BF16 commit `b4734de4facf877f85769a911abafc5283eab3d9`；运行路径解释对应 Transformers v5.12.0 commit `e0e7504bca2bfd1b85bb0eedb148f7b250226f06` 与 SGLang commit `ee1736f39ab62b15fcb276d3ff9090ff13c60fc6`。
-- 未披露项：官方材料尚未解释 GLM-5 Table 10 的 744B 如何映射到当前 GLM-5.2 checkpoint，也没有给出 BF16 与 FP8 release 是否逐张量同构的正式清单。
-- 解读：部署容量、下载体积和完整权重驻留应按 753.330B 估算；单 token 计算路径约为 40B active，具体值随 MTP 和词表矩阵的统计方式变化。
+- 支持的最窄结论：公开 BF16 checkpoint 的存储参数量按一位小数记为 753.3B；744.0B/40.0B（A40B）是 GLM-5 技术报告中的架构统计口径，报告对总参数的脚注无法直接复现当前 GLM-5.2 checkpoint。
+- 适用版本：参数统计适用于 Hugging Face BF16 commit `b4734de4facf877f85769a911abafc5283eab3d9`；运行路径解释对应 Transformers v5.12.0 commit `e0e7504bca2bfd1b85bb0eedb148f7b250226f06` 与 SGLang commit `ee1736f39ab62b15fcb276d3ff9090ff13c60fc6`。
+- 未披露项：官方材料尚未解释 GLM-5 Table 10 的 744.0B 如何映射到当前 GLM-5.2 checkpoint，也没有给出 BF16 与 FP8 release 是否逐张量同构的正式清单。
+- 解读：部署容量、下载体积和完整权重驻留按 753.3B 估算；报告口径的单 token 计算路径约为 39.9B active。
 
 ### 实验设置与 baseline 审计
 
 | 维度 | 记录 |
 | --- | --- |
-| 模型设置 | GLM-5 报告口径为 744B total / 40B activated；GLM-5.2 BF16 checkpoint 实际保存 753,329,940,480 个参数，其中 78 层 target backbone 为 743,377,019,904、MTP 层为 9,952,920,576；发布 BF16 / FP8 权重，支持 1,048,576-token context、SGLang / vLLM / Transformers / KTransformers 等 serving 路径，并提供 max / high reasoning effort 控制 |
+| 模型设置 | GLM-5 报告口径为 744.0B total / 40.0B activated；GLM-5.2 BF16 checkpoint 为 753.3B，其中 78 层 target backbone 为 743.4B、MTP 层为 10.0B；发布 BF16 / FP8 权重，支持 1,048,576-token context、SGLang / vLLM / Transformers / KTransformers 等 serving 路径，并提供 max / high reasoning effort 控制 |
 | 架构 / 系统设置 | DSA IndexShare / IndexCache、MTP IndexShare + KVShare、Bebop 式 rejection sampling、end-to-end TV loss、LayerSplit memory management、cache transfer / CPU scheduling 优化、slime compact trajectory / sub-agent workflow / parallel OPD、online anti-hack guard |
 | 训练设置 | release blog 没有公开完整 pretraining、post-training、critic training、reward、expert source 和 anti-hack classifier 细节；只能按 release 级信息记录机制与结果 |
 | 技术报告训练配置 | 披露 parallel OPD 约两天完成、MTP acceptance ablation、critic-based PPO / compact trajectory / anti-hack guard 等机制；缺少完整训练资源和数据表 |
@@ -444,8 +373,8 @@ GLM-5.2 的结论链可以概括为：
 
 ### 强证据
 
-- 官方模型卡和 GitHub README 确认 GLM-5.2 权重公开、MIT license、BF16/FP8、1M context 和多框架部署支持；Hugging Face 模型 API、配置与权重索引进一步确认 753,329,940,480 个 checkpoint 参数及其层结构。
-- GLM-5 技术报告给出 744B total / 40B activated 的系列口径；公开张量重算可以复现约 40B 的激活量，并显示 744B 总量脚注与当前 GLM-5.2 checkpoint 之间存在未解释差异。
+- 官方模型卡和 GitHub README 确认 GLM-5.2 权重公开、MIT license、BF16/FP8、1M context 和多框架部署支持；Hugging Face 模型 API、配置与权重索引进一步确认 753.3B checkpoint 及其层结构。
+- GLM-5 技术报告给出 744.0B total / 40.0B activated 的系列口径；公开张量重算得到 39.9B 的报告口径激活量，并显示 744.0B 总量脚注与当前 GLM-5.2 checkpoint 之间存在未解释差异。
 - MTP ablation 表直接支持 IndexShare/KVShare、rejection sampling、TV loss 对 acceptance length 的累积作用。
 - blog 与 slime 文档互相印证 GLM-5.2 使用 slime 作为 agentic RL 基础设施。
 
@@ -475,7 +404,7 @@ GLM-5.2 的结论链可以概括为：
 - GLM-5.2 的关键是围绕 1M context 改造 indexer、MTP、serving、RL data shape 和 anti-hack。
 - IndexShare / IndexCache 和 DSA 的关系是：DSA 降低主 attention 成本，IndexShare 进一步降低 sparse indexer 成本。
 - 若把当前解码步 $t$、第 $\ell$ 层的 DSA 选择集合写成 $\mathcal S_{t,\ell}$，IndexShare 让后续三层复用 anchor layer 算出的 top-$k$ positions，并在各层读取自己的 KV。它沿网络深度轴减少 indexer forward。FlashMemory 沿解码时间轴预测未来窗口需要驻留的历史 KV chunks，主要管理 HBM residency 与 CPU--GPU 预取。
-- IndexCache 的 30B uniform 1/4 training-free 结果会显著掉点，searched 1/4 与 training-aware 1/4 可以接近 DSA baseline。GLM-5.2 固定 FSSS 说明模型在训练阶段已经适应该 pattern；具体是否使用 multi-layer KL 仍未披露。
+- IndexCache 的 30.0B uniform 1/4 training-free 结果会显著掉点，searched 1/4 与 training-aware 1/4 可以接近 DSA baseline。GLM-5.2 固定 FSSS 说明模型在训练阶段已经适应该 pattern；具体是否使用 multi-layer KL 仍未披露。
 - MTP/KVShare 的核心是降低 draft path 和 target path 的不一致，让 speculative decoding 的 acceptance length 上升；它补的是 GLM-5 parameter-sharing MTP 无法自然解决的 KV/activation path 问题。
 - 长轨迹 compaction 改变了 RL 样本结构，使 critic-based PPO 比固定 group structure 更自然。
 
@@ -518,7 +447,7 @@ $$
 
 ### 5. 修正后的理解
 
-- GLM-5.2 是 [2602.15763](/papers/2602.15763-glm-5-agentic-engineering/) 的后续 release 节点。它继承报告中的 744B/A40B MoE、DSA、MTP 和 slime，并把重点推到 1M coding agent；公开 BF16 checkpoint 的实际存储参数量为 753.330B。
+- GLM-5.2 是 [2602.15763](/papers/2602.15763-glm-5-agentic-engineering/) 的后续 release 节点。它继承报告中的 744.0B/40.0B（A40B）MoE、DSA、MTP 和 slime，并把重点推到 1M coding agent；公开 BF16 checkpoint 的存储参数量为 753.3B。
 - slime 在 GLM-5.2 里承担 rollout，同时承接 parallel OPD、compact trajectory、sub-agent workflow 和 serving 配置复用。
 - reward hacking 在 coding agent 中已经从研究风险变成 release blog 中需要正面处理的 production training issue。
 
@@ -545,11 +474,11 @@ $$
 3. MTP ablation 使用 GLM-5.1 backbone / data，不完全等同 GLM-5.2 最终模型。
 4. long-horizon coding benchmarks 仍依赖大量 harness 细节和外部 judge；跨模型比较需要统一运行环境。
 5. anti-hack 防御可能引入新的 distribution shift：dummy observation、被拦截后的恢复策略、误拦截都可能影响策略学习。
-6. GLM-5 Table 10 对 744B 的脚注与 GLM-5.2 checkpoint 张量实数无法直接对齐；报告正文的 80 层也未与 Table 10 和 checkpoint 的 78 个 target blocks 加 1 个 MTP block 对齐。公开资料尚未解释 MTP 参数共享、发布权重打包和论文统计口径之间的精确映射。
+6. GLM-5 Table 10 对 744.0B 的脚注与 GLM-5.2 checkpoint 的 753.3B 存储参数量无法直接对齐；报告正文的 80 层也未与 Table 10 和 checkpoint 的 78 个 target blocks 加 1 个 MTP block 对齐。公开资料尚未解释 MTP 参数共享、发布权重打包和论文统计口径之间的精确映射。
 
 ## 跨论文关系
 
-- 与 [2602.15763](/papers/2602.15763-glm-5-agentic-engineering/)：GLM-5.2 是 GLM-5 系列后续 release，沿用报告中的 744B/A40B、DSA、MTP、slime 和 agentic engineering 方向，并把 context 从 200K 推到 1M；当前 BF16 checkpoint 含 753.330B 个存储参数。
+- 与 [2602.15763](/papers/2602.15763-glm-5-agentic-engineering/)：GLM-5.2 是 GLM-5 系列后续 release，沿用报告中的 744.0B/40.0B（A40B）、DSA、MTP、slime 和 agentic engineering 方向，并把 context 从 200K 推到 1M；当前 BF16 checkpoint 含 753.3B 个存储参数。
 - 与 [IndexCache](/papers/2603.12201-indexcache-cross-layer-index-reuse/)：IndexCache 给出 Full / Shared 执行结构、training-free loss search 与 training-aware multi-layer distillation；GLM-5.2 将跨层 top-$k$ reuse 固化为 `index_topk_freq=4` 的 FSSS IndexShare，并扩展到 MTP iteration。公开资料没有确认 GLM-5.2 的 exact index loss。
 - 与 [SGLang PR #29421](https://github.com/sgl-project/sglang/pull/29421)：该实现为 GLM-5.2 的 DSA Prefill CP 增加 cache layer split，在 CP=4、8192 tokens 下把 per-rank KV/indexer cache 从 0.77 GB 降到 0.20 GB，并让 PD decode 从全部 owner ranks 拉取对应 layer ranges；这一区分同时展示 TTFT compute parallelism 与 KV ownership 的容量作用。
 - 与 [slime 官方仓库](https://github.com/THUDM/slime)：GLM-5.2 博文是 slime 支撑 GLM-5.2 的直接应用证据，覆盖 compact trajectory、sub-agent workflow、parallel OPD、KV-cache FP8 和 training-serving 配置复用。
@@ -559,8 +488,8 @@ $$
 - 与 [2026-04-24](/papers/2026-04-24-deepseek-v4-million-token-context-intelligence/)：两者都是 1M context 级系统节点。DeepSeek-V4 强调 CSA/HCA、mHC、OPD 和 deterministic kernels；GLM-5.2 强调 DSA + IndexShare、MTP/KVShare、slime 和 coding agent long-horizon。
 - 与 [2506.19248](/papers/2506.19248-inference-time-reward-hacking-llms/)、[2510.20270](/papers/2510.20270-impossiblebench-test-case-exploitation/)、[2503.11926](/papers/2503.11926-monitoring-reasoning-models-obfuscation/)：GLM-5.2 把 coding agent reward hacking 明确纳入 release-level 防御，提供了 online guard 的 production 视角。
 - 与 [2506.13585](/papers/2506.13585-minimax-m1-cispo-lightning-attention/)：两者都围绕 long-context / long-output agentic tasks 做系统优化。MiniMax-M1 使用 Lightning Attention 和 CISPO；GLM-5.2 使用 DSA + IndexShare、MTP/KVShare、PPO + compaction 和 slime。
-- 与 [2607.07508 SAO](/papers/2607.07508-sao-single-rollout-asynchronous-agentic-rl/)：SAO 摘要声明该方法已用于 750B-A40B GLM-5.2 的 agentic RL pipeline，并补充 release blog 未展开的 single-rollout、rollout-logprob 双侧 token mask、faster critic update、frozen-attention value model 与 skip-observation GAE。SAO 的公开消融使用 Qwen3-30B-A3B，尚未披露这些配置映射到 GLM-5.2 的 scale-up 细节。
-- 与 [CompactionRL](/papers/2607.05378-compactionrl-context-compaction-agent-rl/)：CompactionRL 同样声明进入 GLM-5.2 RL pipeline，并补充 release blog 中 compact trajectory 的训练语义：shared actor 生成 summary、最近两轮参与 context reconstruction、独立 critic、全 batch token normalization 和跨 segment GAE。公开消融只覆盖 GLM-4.7-Flash 与 GLM-4.5-Air-SFT，750B-A40B 上的 compaction threshold、critic topology、训练成本和实际增益仍未披露。
+- 与 [2607.07508 SAO](/papers/2607.07508-sao-single-rollout-asynchronous-agentic-rl/)：SAO 摘要声明该方法已用于约 750.0B total / 40.0B active 的 GLM-5.2 agentic RL pipeline，并补充 release blog 未展开的 single-rollout、rollout-logprob 双侧 token mask、faster critic update、frozen-attention value model 与 skip-observation GAE。SAO 的公开消融使用 Qwen3-30B-A3B，尚未披露这些配置映射到 GLM-5.2 的 scale-up 细节。
+- 与 [CompactionRL](/papers/2607.05378-compactionrl-context-compaction-agent-rl/)：CompactionRL 同样声明进入 GLM-5.2 RL pipeline，并补充 release blog 中 compact trajectory 的训练语义：shared actor 生成 summary、最近两轮参与 context reconstruction、独立 critic、全 batch token normalization 和跨 segment GAE。公开消融只覆盖 GLM-4.7-Flash 与 GLM-4.5-Air-SFT，约 750.0B total / 40.0B active 模型上的 compaction threshold、critic topology、训练成本和实际增益仍未披露。
 
 ## Reference Intake Brief
 
@@ -572,7 +501,7 @@ $$
 
 ### Reusable Elements
 
-1. GLM-5.2 release surface：1M context、报告口径 744B/A40B、BF16 checkpoint 实数 753.330B、MIT license、BF16/FP8、SGLang/vLLM/Transformers/KTransformers。
+1. GLM-5.2 release surface：1M context、报告口径 744.0B/40.0B（A40B）、BF16 checkpoint 753.3B、MIT license、BF16/FP8、SGLang/vLLM/Transformers/KTransformers。
 2. Architecture chain：DSA -> IndexShare / IndexCache -> MTP IndexShare + KVShare -> rejection sampling -> TV loss。
 3. RL chain：slime -> compact trajectory / sub-agent workflow -> parallel OPD -> critic-based PPO -> token-level loss。
 4. Safety chain：coding reward hacking -> rule filter + LLM judge -> online guard -> dummy observation -> rollout continuation。
