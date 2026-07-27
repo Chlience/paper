@@ -118,6 +118,9 @@ const evidenceValue = (block) => block.match(/^- 证据定位[:：]\s*(.+)$/mi)?
 const resultFieldValue = (block, name) =>
   block.match(new RegExp(`^- ${name}[:：][ \\t]*(.+)$`, 'mi'))?.[1]?.trim() ?? '';
 
+const hasExplicitContributionMethodNarrative = (section) =>
+  /^###\s+.*(?:核心贡献|贡献总览).*(?:方法|系统|理论|机制)/m.test(section);
+
 const analysisModulesValue = (value = '') =>
   scalarValue(value)
     .split(/[,，]/)
@@ -553,6 +556,20 @@ export const validatePaperRecord = async ({
     }
 
     if (isV21) {
+      const paperContext = sectionForGroup(
+        markdown,
+        REQUIRED_SECTION_GROUPS.find((group) => group.name === '论文脉络'),
+      );
+      if (!hasExplicitContributionMethodNarrative(paperContext)) {
+        advisories.push(
+          issue(
+            'v21-contribution-method-narrative',
+            slug,
+            'Add an explicit core-contribution and method section ordered by execution or proof dependencies.',
+          ),
+        );
+      }
+
       const keyFigureDecision = sourceField('Key figure decision').toLowerCase();
       const keyFigureRationale = sourceField('Key figure rationale');
       const expectedImagePrefix = `/images/papers/${slug}/`;

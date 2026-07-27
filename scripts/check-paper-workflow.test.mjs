@@ -119,7 +119,29 @@ const v21CoreBody = `
 
 ## 论文脉络
 
-问题、机制和结论链条。
+### 1. 研究问题
+
+研究问题。
+
+### 2. 现有方法的缺口
+
+现有缺口。
+
+### 3. 思路形成
+
+思路形成过程。
+
+### 4. 核心假设
+
+核心假设。
+
+### 5. 核心贡献与方法逻辑
+
+首要贡献由三个阶段组成：第一阶段接收原始输入并产生中间表示，第二阶段依据该表示执行核心变换，第三阶段把结果转换为训练信号。以两个样本和一个阈值为例，样本经过三个阶段后的对象、操作与结果分别对应正式定义中的输入、变换和输出。
+
+### 6. 结论链
+
+结论链条。
 
 ## 关键实验/定理
 
@@ -573,6 +595,16 @@ test('the default v2.1 canary validates with seven core sections', async () => {
   assert.deepEqual(result.advisories, []);
   assert.doesNotMatch(v21Paper, /Reference Intake Brief/);
   assert.doesNotMatch(v21Paper, /^## OpenReview \/ 审稿意见吸收$/m);
+});
+
+test('v2.1 paper receives an advisory when contribution and method narrative is not explicit', async () => {
+  const markdown = v21Paper.replace('### 5. 核心贡献与方法逻辑', '### 5. 方法框架');
+  const result = await validate('v21-contribution-method-narrative', markdown);
+
+  assert.equal(
+    result.advisories.some((entry) => entry.code === 'v21-contribution-method-narrative'),
+    true,
+  );
 });
 
 test('paper conclusions require natural-language descriptions without formulas', async () => {
@@ -1454,6 +1486,8 @@ test('the public template exposes the v2.1 seven-section contract', async () => 
   for (const heading of ['Source', '作者与关系', '一句话结论', '论文脉络', '关键实验/定理', '局限', '跨论文关系']) {
     assert.match(template, new RegExp(`^## ${heading}$`, 'm'));
   }
+  assert.match(template, /核心贡献与方法/);
+  assert.match(template, /具体例子/);
   assert.doesNotMatch(template, /^## Reference Intake Brief$/m);
 });
 
@@ -1505,9 +1539,15 @@ test('public workflow and agent instructions expose one aligned v2.1 contract', 
   assert.match(agentInstructions, /无剩余论文关联/);
   assert.match(agentInstructions, /Review-Status/);
   assert.match(agentInstructions, /Key figure rationale/);
+  assert.match(agentInstructions, /论文脉络.*最重要的分析正文/);
+  assert.match(agentInstructions, /具体例子/);
+  assert.match(workflowDoc, /核心贡献与方法/);
+  assert.match(workflowDoc, /具体例子/);
   assert.match(maintenanceSop, /Key figure decision: include/);
   assert.match(maintenanceSop, /Key figure decision: omit/);
   assert.match(maintenanceSop, /Key figure rationale/);
+  assert.match(maintenanceSop, /分析正文语义验收/);
+  assert.match(maintenanceSop, /具体例子/);
   assert.doesNotMatch(agentInstructions, /`Reference Intake Brief`/);
   assert.match(authorSop, /不要求每位作者都创建 `data\/authors\.json` profile/);
   for (const document of [workflowDoc, template, agentInstructions, authorSop]) {

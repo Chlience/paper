@@ -1,6 +1,6 @@
 # Paper Archive Maintenance SOP
 
-Updated-At: 2026-07-22
+Updated-At: 2026-07-27
 
 ## 目的
 
@@ -33,6 +33,12 @@ Updated-At: 2026-07-22
 - `needs-review`：已审阅笔记在 `Reviewed-At` 之后发生实质更新，保留上次审阅时间并等待再次确认。
 
 `pending` 不记录 `Reviewed-At`。`approved` 的 `Updated-At` 不得晚于 `Reviewed-At`；`needs-review` 的 `Updated-At` 必须晚于 `Reviewed-At`。排版、错字和链接维护不改变审阅状态。`/papers/` 通过 `?review=pending`、`?review=needs-review` 和 `?review=approved` 提供可收藏的筛选入口。
+
+## 分析正文语义验收
+
+`论文脉络` 是单篇笔记最重要的分析正文。验收时先检查它是否给出首要贡献与辅助贡献的全景，再检查方法是否按照实际执行顺序或理论论证的依赖顺序展开。每个关键环节需要说明输入或初始条件、处理的局部问题、传递对象、输出或训练信号、设计理由，以及失败条件或成立边界。
+
+抽象机制在有助于理解时加入最小具体例子。例子中的对象、操作和结果需要与原定义逐项对应，并在例子后回到正式机制。自动检查只验证显式结构是否存在，内容完整性、顺序合理性和例子准确性仍由人工语义门禁判断。
 
 ## 作者数据
 
