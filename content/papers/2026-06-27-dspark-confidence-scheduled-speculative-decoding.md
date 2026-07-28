@@ -89,9 +89,7 @@ DFlash 等 parallel drafter 的结构优势相反：draft latency 对 block size
 3. 每个 draft position 的 target-draft total variation distance 可以作为 analytical acceptance label，用于训练 confidence head。
 4. Verification budget 在生产 serving 中需要按 engine load 与 request confidence 共同分配，静态阈值或固定长度都会浪费 batch capacity。
 
-### 5. 方法 / 系统 / 理论框架
-
-#### 5.1 Semi-autoregressive generation
+### 5.1 Semi-autoregressive generation
 
 DSpark 的 draft model 分两段：
 
@@ -111,7 +109,7 @@ B(x_{k-1}, .) = W_1[x_{k-1}] @ W_2
 
 其中 `W_1` 是 token lookup，`W_2` 是 logit projection，rank 默认为 256。这个设计把完整 `V x V` transition matrix 降成低秩矩阵，存储和每步计算都较小。论文还评估了 RNN head，它能记录块内更长 prefix，但收益主要出现在更长 proposal length，部署复杂度更高，因此默认使用 Markov head。
 
-#### 5.2 Confidence head 与 STS calibration
+### 5.2 Confidence head 与 STS calibration
 
 Confidence head 输出每个位置的条件存活概率 `c_k`：在前面 token 都被接受的条件下，第 `k` 个 draft token 通过 target verification 的概率。它使用 backbone hidden state 和上一 token 的 Markov embedding：
 
@@ -129,7 +127,7 @@ c*_k = 1 - 0.5 * ||p_d_k - p_t_k||_1
 
 因为 scheduler 需要 cumulative survival probability 的绝对值，raw confidence 只会排序还不够。DSpark 使用 Sequential Temperature Scaling (STS) 在 held-out validation set 上逐位置校准累计乘积 `prod_{i<=k} c_i`，降低 Expected Calibration Error (ECE)。
 
-#### 5.3 Hardware-aware prefix scheduler
+### 5.3 Hardware-aware prefix scheduler
 
 对活跃请求 `r=1...R`，每个请求的第 `j` 个 prefix survival probability 是：
 
@@ -159,7 +157,7 @@ Theta = tau * SPS(B)
 
 Appendix A 给出反例：如果 retrospective search 在看到 `x_1` 后再决定是否 admit 第一个 token，那么 `x_1=A` 与 `x_1=B` 会导致不同 admission length，输出分布从 target `(0.7, 0.3)` 偏成 `(0.85, 0.15)`。这个反例说明 scheduler 的因果性是 correctness 条件的一部分。
 
-#### 5.4 Production adaptation
+### 5.4 Production adaptation
 
 真实 DeepSeek-V4 serving 中有两个额外约束：
 
@@ -170,7 +168,7 @@ DSpark 因此采用异步近似：用两步前的 confidence 预测确定 dynami
 
 在 kernel 层，variable-length query 通过 flatten 所有 request 的 tokens 并用 marker tensor 表达逻辑依赖。DeepSeek-V4 架构中主要需要修改 index-attention 和 compress kernels，使动态 scheduler 可以处理不同请求的不同 verification prefix。
 
-#### 5.5 Training
+### 5.5 Training
 
 公开 DeepSpec 配置和论文描述共同给出训练路线：
 

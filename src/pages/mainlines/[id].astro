@@ -1,5 +1,6 @@
 ---
 import ResearchSynthesisHeader from '../../components/ResearchSynthesisHeader.astro';
+import ArticleToc from '../../components/ArticleToc.astro';
 import Layout from '../../layouts/Layout.astro';
 import mainlineData from '../../generated/mainline-data.json';
 import { createArticleJsonLd, getAbsoluteUrl } from '../../lib/site';
@@ -13,7 +14,6 @@ export function getStaticPaths() {
 
 const { mainline } = Astro.props;
 const canonicalPath = mainline.path;
-const h2Headings = mainline.headings.filter((heading) => heading.depth === 2);
 ---
 
 <Layout
@@ -35,47 +35,8 @@ const h2Headings = mainline.headings.filter((heading) => heading.depth === 2);
   <article class="paper-page mainline-detail-page is-synthesis container">
     <ResearchSynthesisHeader mainline={mainline} />
     <div class="paper-layout">
-      {h2Headings.length > 0 && (
-        <aside class="toc" aria-label="目录" data-paper-toc>
-          <strong>阅读路径</strong>
-          <nav data-paper-toc-nav>
-            {h2Headings.map((heading, index) => (
-              <a href={`#${heading.id}`} data-paper-toc-link aria-current={index === 0 ? 'location' : undefined}>
-                {heading.text}
-              </a>
-            ))}
-          </nav>
-        </aside>
-      )}
+      <ArticleToc headings={mainline.headings} label="阅读路径" />
       <div class="prose" set:html={mainline.html} />
     </div>
   </article>
-
-  <script>
-    const toc = document.querySelector('[data-paper-toc]');
-    if (toc instanceof HTMLElement) {
-      const links = Array.from(toc.querySelectorAll('[data-paper-toc-link]')).filter(
-        (link): link is HTMLAnchorElement => link instanceof HTMLAnchorElement,
-      );
-      const entries = links.flatMap((link) => {
-        const rawId = link.getAttribute('href')?.slice(1);
-        if (!rawId) return [];
-        const heading = document.getElementById(rawId);
-        return heading ? [{ heading, link }] : [];
-      });
-      const update = () => {
-        let active = entries[0];
-        for (const entry of entries) {
-          if (entry.heading.getBoundingClientRect().top > 104) break;
-          active = entry;
-        }
-        for (const entry of entries) {
-          if (entry === active) entry.link.setAttribute('aria-current', 'location');
-          else entry.link.removeAttribute('aria-current');
-        }
-      };
-      window.addEventListener('scroll', update, { passive: true });
-      update();
-    }
-  </script>
 </Layout>

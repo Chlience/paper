@@ -1264,7 +1264,7 @@ h3 {
 
 .toc nav {
   display: grid;
-  gap: 2px;
+  gap: 3px;
   max-height: calc(100vh - 164px);
   padding: 2px 10px 2px 0;
   overflow-x: hidden;
@@ -1283,6 +1283,21 @@ h3 {
   background: var(--border);
 }
 
+.toc-group {
+  display: grid;
+  gap: 1px;
+}
+
+.toc-children {
+  display: grid;
+  gap: 1px;
+  padding: 2px 0 5px 13px;
+}
+
+.toc[data-toc-ready] .toc-group:not([data-toc-active]) .toc-children {
+  display: none;
+}
+
 .toc a {
   position: relative;
   display: block;
@@ -1296,6 +1311,27 @@ h3 {
     color 180ms ease,
     background-color 180ms ease,
     transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.toc a[data-toc-depth="2"] {
+  font-weight: 560;
+}
+
+.toc a[data-toc-depth="2"][data-toc-section-active] {
+  color: var(--fg);
+  font-weight: 680;
+}
+
+.toc a[data-toc-depth="3"] {
+  padding-block: 5px;
+  color: oklch(44% 0.024 235);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.toc a[data-toc-depth="3"]::before {
+  width: 4px;
+  height: 4px;
 }
 
 .toc a::before {
@@ -2345,6 +2381,16 @@ html.is-figure-dialog-open body {
     max-height: none;
     padding-right: 0;
     overflow: visible;
+  }
+
+  .toc a {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+
+  .toc a[data-toc-depth="3"] {
+    font-size: 13px;
   }
 
   .route-index {

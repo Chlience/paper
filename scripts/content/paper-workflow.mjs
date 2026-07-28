@@ -118,10 +118,33 @@ const evidenceValue = (block) => block.match(/^- 证据定位[:：]\s*(.+)$/mi)?
 const resultFieldValue = (block, name) =>
   block.match(new RegExp(`^- ${name}[:：][ \\t]*(.+)$`, 'mi'))?.[1]?.trim() ?? '';
 
+const methodWrapperHeadingPattern =
+  /^5\.\s+(?:(?:核心贡献与)?方法|方法\s*\/|方法与|贡献总览.*(?:方法|系统|理论|机制))/;
+const methodStageHeadingPattern = /^5\.\d+(?:\.\d+)*\s+\S/;
+
+const hasNestedMethodWrapper = (section) => {
+  const headings = [...section.matchAll(/^###\s+(.+)$/gm)];
+  const wrapperIndex = headings.findIndex((match) => methodWrapperHeadingPattern.test(match[1].trim()));
+  if (wrapperIndex < 0) return false;
+
+  const wrapper = headings[wrapperIndex];
+  const body = section.slice(wrapper.index, headings[wrapperIndex + 1]?.index ?? section.length);
+  return /^####\s+5\.\d+(?:\.\d+)*\s+\S/m.test(body);
+};
+
 const contributionMethodNarrative = (section) => {
   const headings = [...section.matchAll(/^###\s+(.+)$/gm)];
+  const methodStageIndex = headings.findIndex((match) => methodStageHeadingPattern.test(match[1].trim()));
+  if (methodStageIndex >= 0) {
+    const firstMethodStage = headings[methodStageIndex];
+    const nextSection = headings
+      .slice(methodStageIndex + 1)
+      .find((match) => !methodStageHeadingPattern.test(match[1].trim()));
+    return section.slice(firstMethodStage.index, nextSection?.index ?? section.length);
+  }
+
   const methodHeadingIndex = headings.findIndex((match) =>
-    /(?:核心贡献|贡献总览).*(?:方法|系统|理论|机制)/.test(match[1]),
+    methodWrapperHeadingPattern.test(match[1].trim()),
   );
   if (methodHeadingIndex < 0) return '';
 
@@ -583,13 +606,22 @@ export const validatePaperRecord = async ({
         markdown,
         REQUIRED_SECTION_GROUPS.find((group) => group.name === '论文脉络'),
       );
+      if (hasNestedMethodWrapper(paperContext)) {
+        errors.push(
+          issue(
+            'v21-method-wrapper-heading',
+            slug,
+            'Promote nested 5.x method headings to direct level-three sections and remove the wrapper heading.',
+          ),
+        );
+      }
       const methodNarrative = contributionMethodNarrative(paperContext);
       if (!methodNarrative) {
         advisories.push(
           issue(
             'v21-contribution-method-narrative',
             slug,
-            'Add an explicit core-contribution and method section ordered by execution or proof dependencies.',
+            'Add direct 5.x method sections ordered by execution or proof dependencies, beginning with the contribution overview.',
           ),
         );
       } else if (!hasDetailedMethodNarrative(methodNarrative)) {

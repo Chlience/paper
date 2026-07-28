@@ -214,6 +214,12 @@ const mainlinesIndexPath = path.join(distDir, 'mainlines', 'index.html');
 const synthesisWorkflowIndexPath = path.join(distDir, 'synthesis-workflow', 'index.html');
 const mainlineTemplateIndexPath = path.join(distDir, 'mainline-template', 'index.html');
 const paperSearchIndexPath = path.join(distDir, 'paper-search.json');
+const kimiK3PaperPath = path.join(
+  distDir,
+  'papers',
+  '2026-07-27-kimi-k3-open-frontier-intelligence',
+  'index.html',
+);
 
 if (!(await exists(sitemapXmlPath))) {
   fail('dist/sitemap.xml is missing.');
@@ -278,6 +284,25 @@ if (!(await exists(synthesisWorkflowIndexPath))) {
 
 if (!(await exists(mainlineTemplateIndexPath))) {
   fail('dist/mainline-template/index.html is missing.');
+}
+
+if (!(await exists(kimiK3PaperPath))) {
+  fail('Kimi K3 paper page is missing.');
+} else {
+  const kimiK3Html = await fs.readFile(kimiK3PaperPath, 'utf8');
+  if (!kimiK3Html.includes('data-article-toc')) {
+    fail('Kimi K3 paper page is missing the article TOC.');
+  }
+  if (!kimiK3Html.includes('data-toc-depth="2"') || !kimiK3Html.includes('data-toc-depth="3"')) {
+    fail('Kimi K3 paper page must render both level-two and level-three TOC links.');
+  }
+  if (
+    !/data-toc-section-id="论文脉络"[\s\S]*?href="#51-贡献全景"[\s\S]*?data-toc-depth="3"/.test(
+      kimiK3Html,
+    )
+  ) {
+    fail('Kimi K3 paper context must contain the promoted 5.1 method heading in its TOC group.');
+  }
 }
 
 if (!(await exists(paperSearchIndexPath))) {

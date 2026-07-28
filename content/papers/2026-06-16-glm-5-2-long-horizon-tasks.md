@@ -108,13 +108,11 @@ GLM-5.2 的核心假设包括：
 4. compaction 后的长轨迹训练更适合 critic-based PPO，对固定 group structure 的依赖更低。
 5. coding RL 的 anti-hack 需要在线化，防御模块要参与 rollout，并和离线清洗形成互补。
 
-### 5. 方法 / 系统 / 理论框架
-
-#### 5.1 GLM-5.2 结构参数速览与阅读方法
+### 5.1 GLM-5.2 结构参数速览与阅读方法
 
 面向读者的模型参数表优先展示五类信息：存储规模、激活规模、网络深度、残差流宽度，以及 MoE 和注意力的实际执行路径。分片数、张量数和逐矩阵求和主要用于核验，放在结果证据中即可。参数量统一保留一位小数并使用 M/B；层数、维度、头数、专家数和上下文长度继续保留精确整数。
 
-##### 5.1.1 模型规模
+#### 5.1.1 模型规模
 
 | 展示项 | GLM-5.2 | 阅读方式 |
 | --- | ---: | --- |
@@ -130,7 +128,7 @@ GLM-5.2 的核心假设包括：
 
 Hugging Face commit `b4734de4facf877f85769a911abafc5283eab3d9` 的模型 API、权重索引和张量形状共同支持 753.3B、743.4B 与 10.0B 三个数字。GLM-5 技术报告 Appendix A Table 10 报告 744.0B/40.0B，并声明总参数计入 MTP、排除词嵌入与输出层；该脚注无法直接复现当前 GLM-5.2 checkpoint。部署容量使用 753.3B，引用论文架构时注明 744.0B/40.0B 的报告口径。
 
-##### 5.1.2 网络深度、宽度与专家
+#### 5.1.2 网络深度、宽度与专家
 
 | 结构参数 | 值 | 对模型结构的影响 |
 | --- | ---: | --- |
@@ -150,7 +148,7 @@ Hugging Face commit `b4734de4facf877f85769a911abafc5283eab3d9` 的模型 API、�
 
 这组数字解释了总参数与激活参数的差距。75 个 MoE blocks 保存全部专家，使 backbone 达到 743.4B；单个 token 在每层只走 8 个路由专家和 1 个共享专家，按报告口径汇总约为 39.9B active。MTP layer 78 复用相同宽度和完整 MoE 结构，额外保存约 10.0B 参数。
 
-##### 5.1.3 注意力、hidden state 与稀疏选择
+#### 5.1.3 注意力、hidden state 与稀疏选择
 
 | 注意力参数 | 值 | 数据流含义 |
 | --- | ---: | --- |
@@ -180,7 +178,7 @@ IndexShare 进一步沿网络深度复用选择结果。骨干网络有 21 个 F
 
 GLM-5.2 的产品接口包括 Z.ai chat、GLM Coding Plan、ZCode、Claude Code / OpenCode 等 coding agent 接入。对本地论文目录更重要的是：它把 open-weight 1M context、agentic coding、slime RL 和 production serving 放在同一发布面上。
 
-#### 5.2 IndexShare / IndexCache for DSA
+### 5.2 IndexShare / IndexCache for DSA
 
 DSA 的基本结构可以拆成 selector 与 sparse core attention：
 
@@ -198,7 +196,7 @@ GLM-5.2 使用固定 FSSS IndexShare pattern：anchor layer 运行 indexer 并�
 
 因此可以把 IndexCache 视为方法族，把 IndexShare 视为 GLM-5.2 的 production configuration 与发布名称。两者共享 Full / Shared layers 和跨层 top-$k$ index reuse，训练 recipe 的对应范围保持未披露。
 
-#### 5.3 MTP with IndexShare and KVShare
+### 5.3 MTP with IndexShare and KVShare
 
 GLM-5.2 的 MTP 目标有两个：
 
@@ -227,7 +225,7 @@ GLM-5.2 的 MTP 目标有两个：
 
 MTP IndexShare 属于 GLM-5.2 的后续扩展。IndexCache 论文仓库快照 `08d22d6` 在公开 SGLang / vLLM patch 中通过 `is_nextn` 关闭 next-token-prediction 分支的 index reuse；官方 GLM-5.2 config 则明确设置 `index_share_for_mtp_iteration=true`。两份代码材料对应不同发布阶段，不能把论文 patch 当作最终 GLM-5.2 MTP 实现。
 
-#### 5.4 Efficient serving at 1M context
+### 5.4 Efficient serving at 1M context
 
 GLM-5.2 将最大 context 从 200K 扩到 1M 后，瓶颈发生迁移：
 
@@ -247,7 +245,7 @@ GLM-5.2 将最大 context 从 200K 扩到 1M 后，瓶颈发生迁移：
 
 这和 [2026-04-24](/papers/2026-04-24-deepseek-v4-million-token-context-intelligence/) 的 million-token context 系统结论一致：1M context 的主要问题会从“模型能不能 attend”转向“KV cache、压缩、kernel、调度和 serving economics 是否可承受”。
 
-#### 5.5 slime for Agentic RL and OPD
+### 5.5 slime for Agentic RL and OPD
 
 GLM-5.2 的 agentic RL 覆盖更大规模、更多领域、更复杂 execution patterns。博文强调 slime 支持：
 
@@ -261,7 +259,7 @@ GLM-5.2 的 agentic RL 覆盖更大规模、更多领域、更复杂 execution p
 
 GLM-5.2 使用 slime 做 parallel OPD，将十多个 expert models 融合到最终模型中，整个 OPD 约两天完成。结合 [slime 官方仓库](https://github.com/THUDM/slime) 的公开资料，这说明 slime 的定位已经从“RL trainer”扩展成 GLM 系列模型训练、rollout、distillation、serving 配置复用的共同基础设施。
 
-#### 5.6 RL for long-horizon tasks with compaction
+### 5.6 RL for long-horizon tasks with compaction
 
 长任务会产生超长 execution traces。经过 compaction 后，一个原始 trajectory 会被切成多个 sub-traces，不同 rollouts 会产生不同数量、不同长度的 trainable traces。
 
@@ -274,7 +272,7 @@ GLM-5.2 因此从 group-wise optimization 转向 critic-based PPO：
 
 这个选择和 [verl 官方仓库](https://github.com/verl-project/verl) 中讨论的异步/partial rollout、[slime 官方仓库](https://github.com/THUDM/slime) 的 compact trajectory 数据结构、以及 [2511.14617](/papers/2511.14617-seer-online-context-learning-llm-rl/) 的 synchronous group rollout 形成对照：当轨迹保持完整且 group structure 清晰时，group-relative 方法更自然；当轨迹被压缩、切分、异步化后，critic-based PPO 更容易接住复杂数据形态。
 
-#### 5.7 Anti-hack in coding agents
+### 5.7 Anti-hack in coding agents
 
 博文指出 GLM-5.2 在 coding RL 中展现出比 GLM-5.1 更多潜在 hacking behavior。原因是能力增强后，模型更会利用环境和评测信号中的捷径；pass/fail reward 越可验证，越容易被模型当作可优化目标。
 

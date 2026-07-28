@@ -135,7 +135,7 @@ const v21CoreBody = `
 
 核心假设。
 
-### 5. 核心贡献与方法逻辑
+### 5.1 贡献全景与执行链
 
 首要贡献由三个阶段组成，执行顺序为输入编码、核心变换和训练目标构造。第一阶段接收原始输入并产生中间表示；第二阶段依据该表示执行核心变换，并把新状态传递给第三阶段；第三阶段输出训练信号。该设计用于隔离表示构造与目标计算，使每个阶段的作用和接口可以分别验证。以两个样本和一个阈值为例，样本经过三个阶段后的对象、操作与结果分别对应正式定义中的输入、变换和输出。直接证据位于 Section 3 和 Figure 2；来源未披露生产规模下的失败边界，因此结论只在当前实验条件下成立。
 
@@ -598,13 +598,23 @@ test('the default v2.1 canary validates with seven core sections', async () => {
 });
 
 test('v2.1 paper receives an advisory when contribution and method narrative is not explicit', async () => {
-  const markdown = v21Paper.replace('### 5. 核心贡献与方法逻辑', '### 5. 方法框架');
+  const markdown = v21Paper.replace('### 5.1 贡献全景与执行链', '### 5. 结果概览');
   const result = await validate('v21-contribution-method-narrative', markdown);
 
   assert.equal(
     result.advisories.some((entry) => entry.code === 'v21-contribution-method-narrative'),
     true,
   );
+});
+
+test('v2.1 paper rejects a method wrapper around nested 5.x headings', async () => {
+  const markdown = v21Paper.replace(
+    '### 5.1 贡献全景与执行链',
+    '### 5. 核心贡献与方法逻辑\n\n#### 5.1 贡献全景与执行链',
+  );
+  const result = await validate('v21-method-wrapper-heading', markdown);
+
+  assert.ok(result.errors.some((entry) => entry.code === 'v21-method-wrapper-heading'));
 });
 
 test('v2.1 paper receives an advisory when the method narrative omits stage-level detail', async () => {
@@ -637,10 +647,14 @@ test('K3 keeps a detailed method narrative as a real v2.1 canary', async () => {
     '5.7.1 SFT',
     '5.7.3 部分采样轨迹',
     '5.7.5 MOPD',
-    '5.8 部署约束',
   ]) {
-    assert.match(canary, new RegExp(heading.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
+    assert.match(
+      canary,
+      new RegExp(`^#### ${heading.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}`, 'm'),
+    );
   }
+  assert.match(canary, /^### 5\.8 部署约束/m);
+  assert.doesNotMatch(canary, /^### 5\. 核心贡献与方法逻辑$/m);
 });
 
 test('paper conclusions require natural-language descriptions without formulas', async () => {
@@ -1523,6 +1537,9 @@ test('the public template exposes the v2.1 seven-section contract', async () => 
     assert.match(template, new RegExp(`^## ${heading}$`, 'm'));
   }
   assert.match(template, /核心贡献与方法/);
+  assert.match(template, /^### 5\.1 贡献全景与执行链$/m);
+  assert.match(template, /^### 5\.2 按执行顺序命名的关键环节$/m);
+  assert.doesNotMatch(template, /^### 5\. 核心贡献与方法/m);
   assert.match(template, /具体例子/);
   assert.match(template, /完整执行链或论证链/);
   assert.match(template, /不设统一字数/);
@@ -1581,6 +1598,9 @@ test('public workflow and agent instructions expose one aligned v2.1 contract', 
   assert.match(agentInstructions, /论文脉络.*最重要的分析正文/);
   assert.match(agentInstructions, /具体例子/);
   assert.match(workflowDoc, /核心贡献与方法/);
+  assert.match(workflowDoc, /从 `### 5\.1` 开始直接展开/);
+  assert.match(agentInstructions, /详细方法从 `### 5\.1` 开始直接展开/);
+  assert.match(maintenanceSop, /详细方法直接使用 `### 5\.1`、`### 5\.2`/);
   assert.match(workflowDoc, /具体例子/);
   for (const document of [workflowDoc, template, agentInstructions, maintenanceSop]) {
     assert.match(document, /完整执行链|端到端/);

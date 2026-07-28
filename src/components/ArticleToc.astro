@@ -1,0 +1,191 @@
+---
+interface Heading {
+  depth: number;
+  id: string;
+  text: string;
+}
+
+interface TocGroup {
+  heading: Heading;
+  children: Heading[];
+}
+
+interface Props {
+  headings: Heading[];
+  label?: string;
+}
+
+const { headings, label = '目录' } = Astro.props;
+const groups: TocGroup[] = [];
+
+for (const heading of headings) {
+  if (heading.depth === 2) {
+    groups.push({ heading, children: [] });
+    continue;
+  }
+
+  if (heading.depth === 3 && groups.length > 0) {
+    groups.at(-1)?.children.push(heading);
+  }
+}
+---
+
+{groups.length > 0 && (
+  <aside class="toc" aria-label={label} data-article-toc>
+    <strong>{label}</strong>
+    <nav data-article-toc-nav>
+      {groups.map((group, groupIndex) => (
+        <div
+          class="toc-group"
+          data-toc-group
+          data-toc-section-id={group.heading.id}
+          data-toc-active={groupIndex === 0 ? '' : undefined}
+        >
+          <a
+            class="toc-primary"
+            href={`#${group.heading.id}`}
+            data-article-toc-link
+            data-toc-depth="2"
+            aria-current={groupIndex === 0 ? 'location' : undefined}
+          >
+            {group.heading.text}
+          </a>
+          {group.children.length > 0 && (
+            <div class="toc-children" data-toc-children>
+              {group.children.map((heading) => (
+                <a
+                  class="toc-secondary"
+                  href={`#${heading.id}`}
+                  data-article-toc-link
+                  data-toc-depth="3"
+                >
+                  {heading.text}
+                </a>
+              ))}
+            </div>
+          )}
+        </div>
+      ))}
+    </nav>
+  </aside>
+)}
+
+<script>
+  const decodeFragment = (link: HTMLAnchorElement) => {
+    const fragment = link.getAttribute('href')?.slice(1);
+    if (!fragment) return '';
+
+    try {
+      return decodeURIComponent(fragment);
+    } catch {
+      return fragment;
+    }
+  };
+
+  for (const toc of document.querySelectorAll('[data-article-toc]')) {
+    if (!(toc instanceof HTMLElement)) continue;
+
+    const nav = toc.querySelector('[data-article-toc-nav]');
+    const groups = Array.from(toc.querySelectorAll('[data-toc-group]')).filter(
+      (group): group is HTMLElement => group instanceof HTMLElement,
+    );
+    const links = Array.from(toc.querySelectorAll('[data-article-toc-link]')).filter(
+      (link): link is HTMLAnchorElement => link instanceof HTMLAnchorElement,
+    );
+    const entries = links.flatMap((link) => {
+      const id = decodeFragment(link);
+      const heading = id ? document.getElementById(id) : null;
+      const group = link.closest('[data-toc-group]');
+      if (!heading || !(group instanceof HTMLElement)) return [];
+
+      return [{
+        depth: Number(link.dataset.tocDepth),
+        group,
+        heading,
+        link,
+      }];
+    });
+
+    if (entries.length === 0) continue;
+
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let activeId = '';
+    let frame = 0;
+
+    const keepActiveLinkVisible = (link: HTMLAnchorElement) => {
+      if (!(nav instanceof HTMLElement) || nav.scrollHeight <= nav.clientHeight) return;
+
+      const linkTop = link.offsetTop;
+      const linkBottom = linkTop + link.offsetHeight;
+      const visibleTop = nav.scrollTop;
+      const visibleBottom = visibleTop + nav.clientHeight;
+      if (linkTop >= visibleTop && linkBottom <= visibleBottom) return;
+
+      const top = linkTop < visibleTop ? linkTop - 8 : linkBottom - nav.clientHeight + 8;
+      nav.scrollTo({
+        top: Math.max(0, top),
+        behavior: reduceMotion.matches ? 'auto' : 'smooth',
+      });
+    };
+
+    const activate = (entry: (typeof entries)[number]) => {
+      if (entry.heading.id === activeId) return;
+      activeId = entry.heading.id;
+
+      for (const group of groups) {
+        if (group === entry.group) {
+          group.setAttribute('data-toc-active', '');
+        } else {
+          group.removeAttribute('data-toc-active');
+        }
+      }
+
+      for (const candidate of entries) {
+        const isCurrent = candidate === entry;
+        const isCurrentSection = candidate.depth === 2 && candidate.group === entry.group;
+        candidate.link.toggleAttribute('data-toc-section-active', isCurrentSection);
+        if (isCurrent) {
+          candidate.link.setAttribute('aria-current', 'location');
+        } else {
+          candidate.link.removeAttribute('aria-current');
+        }
+      }
+
+      keepActiveLinkVisible(entry.link);
+    };
+
+    const updateActiveHeading = () => {
+      frame = 0;
+      const headingOffset = 104;
+      const pageBottom = window.scrollY + window.innerHeight;
+      const documentBottom = document.documentElement.scrollHeight;
+      let active = entries[0];
+
+      if (pageBottom >= documentBottom - 2) {
+        active = entries.at(-1) ?? active;
+      } else {
+        for (const entry of entries) {
+          if (entry.heading.getBoundingClientRect().top > headingOffset) break;
+          active = entry;
+        }
+      }
+
+      activate(active);
+    };
+
+    const scheduleUpdate = () => {
+      if (frame) return;
+      frame = window.requestAnimationFrame(updateActiveHeading);
+    };
+
+    for (const entry of entries) {
+      entry.link.addEventListener('click', () => activate(entry));
+    }
+
+    toc.setAttribute('data-toc-ready', '');
+    window.addEventListener('scroll', scheduleUpdate, { passive: true });
+    window.addEventListener('resize', scheduleUpdate);
+    window.addEventListener('hashchange', scheduleUpdate);
+    scheduleUpdate();
+  }
+</script>

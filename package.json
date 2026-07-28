@@ -17,6 +17,7 @@
     "test:search": "node scripts/check-paper-search.mjs",
     "test:pins": "node scripts/check-pinned-papers.mjs",
     "test:figures": "node scripts/check-paper-figure-dialog.mjs",
+    "test:toc": "node scripts/check-article-toc.mjs",
     "test:dialog-scroll": "node scripts/check-paper-dialog-scroll.mjs",
     "test:dialog-interaction": "node scripts/check-paper-dialog-interaction.mjs",
     "test:workflow": "node --test scripts/check-paper-workflow.test.mjs",
