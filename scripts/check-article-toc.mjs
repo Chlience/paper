@@ -106,10 +106,14 @@ try {
       const methodChildren = activeChildren.filter((link) =>
         /^#(?:5|6)(?:-|$)/.test(link.getAttribute('href') ?? '')
       );
-      const inactiveVisibleChildren = groups
+      const inactiveExpandedChildren = groups
         .filter((group) => group !== activeGroup)
         .flatMap((group) => Array.from(group.querySelectorAll('[data-toc-children]')))
-        .filter((children) => getComputedStyle(children).display !== 'none');
+        .filter((children) => children.getBoundingClientRect().height > 0.5);
+      const inactiveInteractiveChildren = groups
+        .filter((group) => group !== activeGroup)
+        .flatMap((group) => Array.from(group.querySelectorAll('[data-toc-children]')))
+        .filter((children) => !children.inert);
 
       return {
         ready: toc.hasAttribute('data-toc-ready'),
@@ -117,7 +121,8 @@ try {
         activeGroupCount: groups.filter((group) => group.hasAttribute('data-toc-active')).length,
         activeSectionId: activeGroup?.dataset.tocSectionId,
         activeChildCount: activeChildren.length,
-        inactiveVisibleChildCount: inactiveVisibleChildren.length,
+        inactiveExpandedChildCount: inactiveExpandedChildren.length,
+        inactiveInteractiveChildCount: inactiveInteractiveChildren.length,
         currentHref: toc.querySelector('[aria-current="location"]')?.getAttribute('href'),
         targetHref: methodChildren[1]?.getAttribute('href') ?? methodChildren[0]?.getAttribute('href'),
       };
@@ -130,9 +135,105 @@ try {
   assert.equal(section.activeGroupCount, 1, 'exactly one top-level TOC group must be active');
   assert.equal(section.activeSectionId, '论文脉络', 'scrolling to the paper context must activate that TOC group');
   assert.ok(section.activeChildCount >= 5, 'the active paper context must expose its level-three headings');
-  assert.equal(section.inactiveVisibleChildCount, 0, 'inactive top-level groups must keep their child lists collapsed');
+  assert.equal(section.inactiveExpandedChildCount, 0, 'inactive top-level groups must keep their child lists collapsed');
+  assert.equal(section.inactiveInteractiveChildCount, 0, 'collapsed child lists must remain outside the focus order');
   assert.equal(section.currentHref, '#论文脉络', 'the current location must initially remain on the level-two heading');
   assert.ok(section.targetHref, 'the active section must expose a child heading for the interaction check');
+
+  const switchTargetState = await page.send('Runtime.evaluate', {
+    returnByValue: true,
+    expression: `(() => {
+      const toc = document.querySelector('[data-article-toc]');
+      const activeGroup = toc.querySelector('[data-toc-group][data-toc-active]');
+      const activeHeading = document.getElementById(activeGroup.dataset.tocSectionId);
+      const targetGroup = Array.from(toc.querySelectorAll('[data-toc-group]')).find((group) => {
+        const heading = document.getElementById(group.dataset.tocSectionId);
+        return (
+          group !== activeGroup &&
+          group.querySelector('[data-toc-children]') &&
+          heading?.offsetTop > activeHeading.offsetTop
+        );
+      });
+      const heading = document.getElementById(targetGroup.dataset.tocSectionId);
+      window.scrollTo(0, heading.offsetTop - 96);
+      return {
+        previousId: activeGroup.dataset.tocSectionId,
+        targetId: targetGroup.dataset.tocSectionId,
+      };
+    })()`,
+  });
+
+  const switchTarget = switchTargetState.result.value;
+  await wait(80);
+
+  const motionState = await page.send('Runtime.evaluate', {
+    returnByValue: true,
+    expression: `(() => {
+      const toc = document.querySelector('[data-article-toc]');
+      const runningProperties = toc
+        .getAnimations({ subtree: true })
+        .filter((animation) => animation.playState === 'running')
+        .map((animation) => animation.transitionProperty)
+        .filter(Boolean);
+      return {
+        activeSectionId: toc.querySelector('[data-toc-group][data-toc-active]')?.dataset.tocSectionId,
+        runningProperties,
+        previousInert: toc.querySelector(
+          '[data-toc-section-id="${switchTarget.previousId}"] [data-toc-children]'
+        ).inert,
+        currentInert: toc.querySelector(
+          '[data-toc-section-id="${switchTarget.targetId}"] [data-toc-children]'
+        ).inert,
+      };
+    })()`,
+  });
+
+  const motion = motionState.result.value;
+  assert.equal(motion.activeSectionId, switchTarget.targetId, 'scrolling must activate the next TOC group immediately');
+  assert.equal(motion.previousInert, true, 'the collapsing child list must leave the focus order immediately');
+  assert.equal(motion.currentInert, false, 'the expanding child list must become interactive immediately');
+  assert.ok(
+    motion.runningProperties.includes('grid-template-rows'),
+    'TOC group switches must animate their expansion and collapse',
+  );
+  assert.ok(
+    motion.runningProperties.includes('opacity'),
+    'TOC group switches must soften the child-list handoff',
+  );
+
+  await wait(260);
+  const settledMotionState = await page.send('Runtime.evaluate', {
+    returnByValue: true,
+    expression: `(() => {
+      const toc = document.querySelector('[data-article-toc]');
+      const previous = toc.querySelector(
+        '[data-toc-section-id="${switchTarget.previousId}"] [data-toc-children]'
+      );
+      const current = toc.querySelector(
+        '[data-toc-section-id="${switchTarget.targetId}"] [data-toc-children]'
+      );
+      return {
+        previousHeight: previous.getBoundingClientRect().height,
+        previousVisibility: getComputedStyle(previous).visibility,
+        currentHeight: current.getBoundingClientRect().height,
+        currentVisibility: getComputedStyle(current).visibility,
+      };
+    })()`,
+  });
+
+  const settledMotion = settledMotionState.result.value;
+  assert.ok(settledMotion.previousHeight <= 0.5, 'the previous TOC child list must finish collapsed');
+  assert.equal(settledMotion.previousVisibility, 'hidden', 'the collapsed child list must leave the focus order');
+  assert.ok(settledMotion.currentHeight > 0.5, 'the next TOC child list must finish expanded');
+  assert.equal(settledMotion.currentVisibility, 'visible', 'the expanded child list must remain interactive');
+
+  await page.send('Runtime.evaluate', {
+    expression: `(() => {
+      const heading = document.getElementById('论文脉络');
+      window.scrollTo(0, heading.offsetTop - 96);
+    })()`,
+  });
+  await wait(300);
 
   await page.send('Runtime.evaluate', {
     expression: `(() => {
@@ -164,6 +265,37 @@ try {
   assert.equal(child.activeSectionId, '论文脉络', 'a child heading must keep its paper-context parent active');
   assert.equal(child.currentHref, section.targetHref, 'the current location must advance to the visible child heading');
   assert.equal(child.currentCount, 1, 'the TOC must expose one current location to assistive technology');
+
+  await page.send('Emulation.setEmulatedMedia', {
+    features: [{ name: 'prefers-reduced-motion', value: 'reduce' }],
+  });
+  await wait(50);
+
+  const reducedMotionState = await page.send('Runtime.evaluate', {
+    returnByValue: true,
+    expression: `(() => {
+      const toc = document.querySelector('[data-article-toc]');
+      const childList = toc.querySelector('[data-toc-children]');
+      const parseDuration = (duration) => {
+        const value = Number.parseFloat(duration);
+        return duration.endsWith('ms') ? value : value * 1000;
+      };
+      const durations = getComputedStyle(childList).transitionDuration
+        .split(',')
+        .map((duration) => parseDuration(duration.trim()));
+      return {
+        matches: matchMedia('(prefers-reduced-motion: reduce)').matches,
+        maxDurationMs: Math.max(...durations),
+      };
+    })()`,
+  });
+
+  const reducedMotion = reducedMotionState.result.value;
+  assert.equal(reducedMotion.matches, true, 'the browser test must emulate reduced motion');
+  assert.ok(
+    reducedMotion.maxDurationMs <= 0.1,
+    'TOC transitions must become effectively immediate when reduced motion is requested',
+  );
 
   if (screenshotPath) {
     const screenshot = await page.send('Page.captureScreenshot', {

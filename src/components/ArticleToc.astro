@@ -51,17 +51,23 @@ for (const heading of headings) {
             {group.heading.text}
           </a>
           {group.children.length > 0 && (
-            <div class="toc-children" data-toc-children>
-              {group.children.map((heading) => (
-                <a
-                  class="toc-secondary"
-                  href={`#${heading.id}`}
-                  data-article-toc-link
-                  data-toc-depth="3"
-                >
-                  {heading.text}
-                </a>
-              ))}
+            <div
+              class="toc-children"
+              data-toc-children
+              inert={groupIndex === 0 ? undefined : true}
+            >
+              <div class="toc-children-inner">
+                {group.children.map((heading) => (
+                  <a
+                    class="toc-secondary"
+                    href={`#${heading.id}`}
+                    data-article-toc-link
+                    data-toc-depth="3"
+                  >
+                    {heading.text}
+                  </a>
+                ))}
+              </div>
             </div>
           )}
         </div>
@@ -133,6 +139,10 @@ for (const heading of headings) {
       activeId = entry.heading.id;
 
       for (const group of groups) {
+        const children = group.querySelector('[data-toc-children]');
+        if (children instanceof HTMLElement) {
+          children.inert = group !== entry.group;
+        }
         if (group === entry.group) {
           group.setAttribute('data-toc-active', '');
         } else {
