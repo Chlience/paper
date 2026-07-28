@@ -1,7 +1,7 @@
 # Kimi K3: Open Frontier Intelligence 技术报告笔记
 
 First-Archived-At: 2026-07-27 23:57
-Updated-At: 2026-07-28 11:16
+Updated-At: 2026-07-28 11:47
 Review-Status: pending
 
 ## Source
@@ -20,7 +20,8 @@ Review-Status: pending
 - Published / updated: product announced 2026-07-16; full model weights and technical report released 2026-07-27
 - Current version read: PDF introduced in Git commit `521359a5cae5e79d02e5a2102c2cea9ce3b9b79a` on 2026-07-27
 - Repository snapshot checked: `692ab492deeaf311b8c8d6f130096da69e94409b` on 2026-07-27
-- Accessed: 2026-07-27
+- MoonEP snapshot checked: `0f385f038fc33bec22e3bcf5a07a8a22693e754c` on 2026-07-28; functional implementation pinned to initial commit `51e64aa55310f6c6b464deabd80de2e8b5426d3f`
+- Accessed: 2026-07-28
 - Key figure decision: include
 - Review status: page-type=not-found; match-confidence=high; observed-at=2026-07-27; venue-status=organization technical report and open-weight release
 - Subjects: mixture-of-experts, hybrid linear attention, long context, native multimodality, agentic reinforcement learning, distributed systems
@@ -30,6 +31,8 @@ Review-Status: pending
 - Kimi Team: Moonshot AI.
 
 报告采用团队署名，附录 A 按字母顺序列出贡献者，没有给出个人角色、作者顺序含义或通讯作者。附录中的 [Yifan Bai](/authors/yifan-bai-kimi/)、[Yulun Du](/authors/yulun-du/)、[Xinran Xu](/authors/xinran-xu/)、[Weiran He](/authors/weiran-he/) 和 [Weixiao Huang](/authors/weixiao-huang/) 已在本档案的 Kimi 系列论文中出现；团队级信息不足以进一步分配 K3 各模块的个人贡献。
+
+MoonEP 仓库的引用信息将该组件归于 Yutian Chen、Cong Li、Yucheng Wang 和 Ming Wei。这个归因只覆盖公开的专家并行通信库，不能据此分配 K3 报告中完整专家并行方案或训练系统的个人贡献。
 
 K3 延续 Moonshot AI 的 Kimi k1.5、Kimi K2 与 Kimi K2.5 研究线，并把 Kimi Linear、Attention Residuals、Muon、Agent Swarm 及长程智能体系统中的若干机制整合到同一个开放权重模型。
 
@@ -278,8 +281,39 @@ $$
 
 1. **KDA 内核与上下文并行**：FlashKDA 重叠 chunk 内并行计算和跨 chunk 状态传播；设备内上下文并行切分序列；跨设备 KDA Context Parallelism 对每段计算固定大小的状态转移和局部状态，通过一次 all-gather 后按顺序组合。
 2. **3T 级预训练**：Pipeline Parallelism、Virtual Pipeline、Expert Parallelism、ZeRO-1、Pipeline ZeRO-2 和 Context Parallelism共同切分模型、状态和序列。统一激活管理器配合 FP8、卸载与重计算，视觉前后向尽量放入流水线空隙。
-3. **严格均衡专家并行**：MoonEP 根据当前层和 microbatch 的路由结果动态复制专家，保证每个专家并行 rank 接收相同数量的 token；报告证明每个 rank 预留不超过专家总数除以 rank 数的冗余专家槽即可保证存在可行方案。规划器在 GPU 上生成静态形状和直接通信目的位置，通信缓冲区保持固定大小。
+3. **严格均衡专家并行**：MoonEP 保留路由器选出的逻辑专家和混合权重，根据当前层、当前微批次的实际 Top-k 结果重新安排物理执行位置。在线规划器为过载专家生成临时副本并迁移相应 token，使每个专家并行 rank 接收相同数量的真实 token；固定接收量继续转化为静态通信与计算形状。
 4. **百万 token 强化学习与服务**：训练器和 rollout 共置于数百张 GPU 内，闲置前缀写回 CPU DRAM 的外部 KV cache 池；AgentENV 用 Firecracker 微虚拟机保存、暂停、恢复和派生外部环境状态；在线服务把 KDA 状态与 MLA KV 放进统一分页池，并以缓存亲和与预算控制调度请求。
+
+##### 5.9.1 MoonEP 把路由负载转换为严格均衡的物理执行计划
+
+MoonEP 接收每个 rank 上的隐藏状态、Top-k 专家编号、路由权重和本地 `tokens_per_expert` 统计。设每个源 rank 输入 $S$ 个 token，每个 token 选择 $K$ 个专家，总专家数为 $E$，专家并行 rank 数为 $R$。规划器首先确定每个目的 rank 应接收的真实路由条目数，以及各归属专家组偏离该容量的程度：
+
+$$
+C=SK,
+\qquad
+b_h=L_h-C.
+$$
+
+$C$ 是严格均衡时每个 rank 的真实 token—专家条目容量，$L_h$ 是归属专家组 $h$ 当前承载的全局条目数，$b_h>0$ 表示该组过载，$b_h<0$ 表示对应 rank 仍有接收余量。这里的平衡对象是专家计算条目；一个 token 选择 $K$ 个专家时会产生 $K$ 条记录，因此容量使用 $SK$。
+
+官方参考实现依次完成两级分配。第一级反复选择当前最过载的归属专家组和余量最大的目的 rank，把足以填满该目的 rank 的配额从前者移出；一个欠载 rank 在一次分配后达到容量 $C$，之后不再接收其它归属组。第二级在每个过载归属组内部，反复配对“剩余 token 最多的专家”和“剩余接收配额最大的目的 rank”，分配两者的较小值。这个过程保持每个逻辑专家的 token 总数不变，只改变条目在哪个 rank 执行。由于一个目的 rank 最多接收一个远端归属组，而每个归属组包含 $E/R$ 个专家，它最多需要访问 $E/R$ 种远端专家；这对应报告中每 rank 预留不超过 $E/R$ 个冗余专家槽即可保证可行方案存在的上界。
+
+规划结果继续进入权重与 token 的物理布局。每层的 gate、up 和 down 投影分别暴露一个形状为 $[E+B,H,H']$ 的连续虚拟内存映射（Virtual Memory Management，VMM）区域：前 $E$ 行映射所有 rank 的归属专家参数，后 $B$ 行是当前 rank 的预取槽。训练使用 $B=E/R$，规划器返回 `experts_to_copy`、直接通信目的位置和 `cu_seqlens`；后者说明每个专家或预取槽在分组 GEMM 输入中的结束位置。预取槽的物理内存来自跨层复用的进程级缓冲池，因此额外常驻空间按 $B$ 个专家投影计算，无需为每层分别分配。
+
+![Figure 3: MoonEP symmetric expert-weight mapping and reusable prefetch slots](/images/papers/2026-07-27-kimi-k3-open-frontier-intelligence/fig-3-moonep-weight-buffer.png)
+
+Figure 3：MoonEP 在每个 rank 上建立布局相同的连续专家权重视图。黄色区域是物理归属于当前 rank 的专家，蓝色区域通过对称内存映射访问其它 rank 的归属专家，粉色区域是跨层复用的本地预取槽。Image Source: [MoonEP repository, `weight_buffer.png`, commit `51e64aa`](https://github.com/MoonshotAI/MoonEP/blob/51e64aa55310f6c6b464deabd80de2e8b5426d3f/figure/weight_buffer.png).
+
+前向阶段按照以下接口执行：
+
+1. `dispatch` 汇总各 rank 的专家负载，运行 GPU 在线规划器，并把隐藏状态与路由权重直接写入远端通信缓冲区中的最终专家分组位置。
+2. `prefetch_weight` 将计划使用的远端专家 gate、up 和 down 权重复制到本地预取槽；`cu_seqlens` 让分组 GEMM 只读取当前激活的专家行。
+3. 专家计算在每个 rank 上处理恰好 $SK$ 个真实条目，再加每个虚拟内存分组所需的对齐填充。固定的真实条目数与有界填充共同形成静态 `NvS` 输入形状。
+4. `combine` 按保存的通信计划把专家输出和路由权重还原到源 token 顺序。
+
+反向阶段复用同一份计划，跳过再次规划。临时副本产生的 FP32 权重梯度写入独立的归并缓冲区，不进入训练框架对正式参数执行的梯度同步；`reduce_grad` 把这些梯度累加回逻辑专家的归属 rank，随后清空已消费的临时槽。最终只有归属专家持有优化器状态并执行参数更新，因此动态副本改变物理执行路径，同时保持原有 MoE 参数更新语义。
+
+训练配置需要 $B=E/R$，使分组 GEMM 使用的专家权重均能预取到本地。只做前向的推理可以设置 $B<E/R$；超出预取槽的远端专家通过对称内存映射直接读取，结果保持一致，访问成本会上升。`zero_copy` 模式返回通信缓冲区视图，这些视图会被下一次 `dispatch` 或 `combine` 覆盖，跨通信调用保存激活时需要关闭该模式。以上执行链的直接证据来自技术报告 §5.2.1 与 Appendix E，以及固定到功能提交的 [MoonEP README](https://github.com/MoonshotAI/MoonEP/tree/51e64aa55310f6c6b464deabd80de2e8b5426d3f#readme)、[规划参考实现](https://github.com/MoonshotAI/MoonEP/blob/51e64aa55310f6c6b464deabd80de2e8b5426d3f/tests/planning_reference.py) 和 [端到端接口测试](https://github.com/MoonshotAI/MoonEP/blob/51e64aa55310f6c6b464deabd80de2e8b5426d3f/tests/test_e2e.py)。
 
 模型状态和环境状态在这里分别处理：KDA/MLA 缓存保存模型已经读取的上下文，AgentENV checkpoint 保存文件系统、进程和内存等外部世界状态。partial rollout 要在下一迭代继续一条轨迹，两类状态都必须恢复到一致位置。
 
@@ -329,14 +363,14 @@ $$
 
 ### 结果 4：MoonEP 给出严格设备负载均衡的构造与资源上界
 
-- 设置：专家并行训练中，每个 rank 初始持有一组专家；MoonEP 可按当前 microbatch 和层的路由结果复制专家并迁移 token。
-- Baseline：DeepEP 类常规专家并行，以及预设冗余专家数或 token 上限的 ECHO、UltraEP。
-- 指标：每个 rank 的 token 数、冗余专家槽上界、通信缓冲区大小和执行形状。
-- 结果：报告证明总专家数为 $E$、专家并行 rank 数为 $R$ 时，每个 rank 最多预留 $E/R$ 个冗余专家即可保证严格均衡方案存在；均衡后每个 rank 接收固定数量 token，通信缓冲区为固定大小。
-- 对照是否可比：理论上界和构造明确，正文没有给出 K3 完整训练集群上的端到端吞吐、规划耗时比例、故障率或与调优后 UltraEP 的同硬件表格。
-- 证据定位：Section 5.2.1, pp. 19–20; Appendix E, Theorems 1–2, pp. 44–46; https://github.com/MoonshotAI/MoonEP.
-- 支持的最窄结论：对任意当前路由结果，MoonEP 的构造可在每 rank 至多增加 $E/R$ 个冗余专家的条件下形成严格 token 负载均衡。
-- 解读：证明覆盖方案存在性和最坏资源上界；实际吞吐收益仍需硬件、拓扑和工作负载数据。
+- 设置：理论部分处理任意当前层、当前微批次的 Top-k 路由结果。组件仓库另在单台八卡 H20、EP=8 上比较 MoonEP 与 DeepEP v2；通信基准使用每 rank 8192 个 token、384 个专家、7168 隐藏维、Top-8 路由、32 个 SM，按固定随机种子生成相同路由，在 20 次预热后测量 50 次迭代的跨 rank 平均延迟。
+- Baseline：仓库的实测基线是 DeepEP v2 elastic expanded dispatch / reduced combine。ECHO、UltraEP 和 AcclEP 属于方法比较对象或实现启发来源，没有进入同一张实测对照图。
+- 指标：每个 rank 的真实 token—专家条目数、冗余专家槽上界、静态缓冲区形状，以及随专家最大负载违反率 `maxvio` 变化的 planning、prefetch、dispatch、combine 延迟。`maxvio` 定义为 $\max_e(T_e/\bar{T})-1$，其中 $T_e$ 是专家 $e$ 的实际条目数，$\bar{T}$ 是严格均衡时的专家平均条目数。
+- 结果：报告证明总专家数为 $E$、专家并行 rank 数为 $R$ 时，每个 rank 最多预留 $E/R$ 个冗余专家槽即可保证严格均衡方案存在；均衡后每个 rank 处理固定的 $SK$ 个真实条目。仓库在 `maxvio` 目标值 0.2、1、10 和 20 上报告 MoonEP 通信延迟随失衡程度基本保持稳定，dispatch 总时间包含在线规划和权重预取，combine 延迟在各设置下低于 DeepEP v2；README 的端到端训练图还显示 MoonEP 迭代时间保持稳定，而 DeepEP 在高失衡设置下发生显存不足。
+- 对照是否可比：通信脚本对两种库使用相同路由、输入、SM 预算、对齐方式和计时器；MoonEP 的 communication 图没有计入可与后续计算重叠的 `grad_reduce`。端到端图只由 README 给出，没有同仓库数值表。全部结果限于单机 H20、EP=8 和合成路由，缺少 K3 实际专家数、Top-16、完整训练集群拓扑、重复运行方差、规划器故障统计，以及与调优后 UltraEP 的同硬件比较。
+- 证据定位：Technical report Section 5.2.1, pp. 19–20; Appendix E, Theorems 1–2, pp. 44–46; [MoonEP README and figures at `51e64aa`](https://github.com/MoonshotAI/MoonEP/tree/51e64aa55310f6c6b464deabd80de2e8b5426d3f#readme); [`benchmarks/bench_vs_deepep.py`](https://github.com/MoonshotAI/MoonEP/blob/51e64aa55310f6c6b464deabd80de2e8b5426d3f/benchmarks/bench_vs_deepep.py).
+- 支持的最窄结论：对任意当前路由结果，MoonEP 的构造可在每 rank 至多增加 $E/R$ 个冗余专家槽的条件下形成严格 token 负载均衡；官方单机 H20、EP=8 基准进一步支持其静态执行形状能隔离合成专家失衡对通信和迭代时间的影响。
+- 解读：证明覆盖方案存在性和最坏资源上界，仓库基准覆盖一个具体单机实现。K3 完整训练中的吞吐收益及其对跨节点网络、实际路由分布和 Top-16 配置的敏感性仍待直接测量。
 
 ### 结果 5：AgentENV 支持长程强化学习所需的环境状态续接
 
@@ -378,7 +412,7 @@ $$
 ## 局限
 
 1. 约 2.5 倍缩放效率是架构、数据和训练配方的合并结果。报告只给拟合曲线示意，缺少原始点、拟合式、置信区间和组件消融。
-2. 预训练没有披露总 token、数据混合比例、GPU 型号与数量、并行度、训练时长、GPU-hours、能耗和成本，外部无法复算训练效率。
+2. 预训练没有披露总 token、数据混合比例、GPU 型号与数量、并行度、训练时长、GPU-hours、能耗和成本，外部无法复算训练效率。MoonEP 仓库补充了单机 H20、EP=8 的组件基准，仍缺 K3 实际专家数、Top-16 和完整训练拓扑下的端到端测量。
 3. 1M 上下文有模型配置、课程、基础设施和部分长程智能体结果支撑，缺少统一的长度—质量—延迟—显存曲线。
 4. Figure 6 支持视觉训练稳定性，正文声称视觉能力相当却没有对应评分表；原生多模态从头训练的净收益仍待完整消融。
 5. 九个强化学习专家和 MOPD 的流程明确，训练数据规模、奖励权重、逐 token 正则化、教师—学生距离、partial rollout 陈旧度和领域间迁移消融不足。
