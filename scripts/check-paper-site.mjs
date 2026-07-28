@@ -297,11 +297,11 @@ if (!(await exists(kimiK3PaperPath))) {
     fail('Kimi K3 paper page must render both level-two and level-three TOC links.');
   }
   if (
-    !/data-toc-section-id="论文脉络"[\s\S]*?href="#51-贡献全景"[\s\S]*?data-toc-depth="3"/.test(
+    !/data-toc-section-id="论文脉络"[\s\S]*?href="#5-贡献全景"[\s\S]*?data-toc-depth="3"/.test(
       kimiK3Html,
     )
   ) {
-    fail('Kimi K3 paper context must contain the promoted 5.1 method heading in its TOC group.');
+    fail('Kimi K3 paper context must contain the promoted section 5 method heading in its TOC group.');
   }
 }
 

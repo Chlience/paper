@@ -104,7 +104,7 @@ try {
       const activeGroup = toc.querySelector('[data-toc-group][data-toc-active]');
       const activeChildren = Array.from(activeGroup.querySelectorAll('[data-toc-depth="3"]'));
       const methodChildren = activeChildren.filter((link) =>
-        /^#5\\d(?:-|$)/.test(link.getAttribute('href') ?? '')
+        /^#(?:5|6)(?:-|$)/.test(link.getAttribute('href') ?? '')
       );
       const inactiveVisibleChildren = groups
         .filter((group) => group !== activeGroup)

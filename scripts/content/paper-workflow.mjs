@@ -120,7 +120,7 @@ const resultFieldValue = (block, name) =>
 
 const methodWrapperHeadingPattern =
   /^5\.\s+(?:(?:核心贡献与)?方法|方法\s*\/|方法与|贡献总览.*(?:方法|系统|理论|机制))/;
-const methodStageHeadingPattern = /^5\.\d+(?:\.\d+)*\s+\S/;
+const paperContextHeadingPattern = /^(\d+)\.\s+(.+)$/;
 
 const hasNestedMethodWrapper = (section) => {
   const headings = [...section.matchAll(/^###\s+(.+)$/gm)];
@@ -132,26 +132,32 @@ const hasNestedMethodWrapper = (section) => {
   return /^####\s+5\.\d+(?:\.\d+)*\s+\S/m.test(body);
 };
 
+const hasSequentialPaperContextHeadings = (section) => {
+  const headings = [...section.matchAll(/^###\s+(.+)$/gm)];
+  return (
+    headings.length > 0 &&
+    headings.every((match, index) => {
+      const parsed = match[1].trim().match(paperContextHeadingPattern);
+      return parsed && Number(parsed[1]) === index + 1;
+    })
+  );
+};
+
 const contributionMethodNarrative = (section) => {
   const headings = [...section.matchAll(/^###\s+(.+)$/gm)];
-  const methodStageIndex = headings.findIndex((match) => methodStageHeadingPattern.test(match[1].trim()));
-  if (methodStageIndex >= 0) {
-    const firstMethodStage = headings[methodStageIndex];
-    const nextSection = headings
-      .slice(methodStageIndex + 1)
-      .find((match) => !methodStageHeadingPattern.test(match[1].trim()));
-    return section.slice(firstMethodStage.index, nextSection?.index ?? section.length);
-  }
-
-  const methodHeadingIndex = headings.findIndex((match) =>
-    methodWrapperHeadingPattern.test(match[1].trim()),
-  );
+  const methodHeadingIndex = headings.findIndex((match) => {
+    const parsed = match[1].trim().match(paperContextHeadingPattern);
+    return parsed && Number(parsed[1]) === 5;
+  });
   if (methodHeadingIndex < 0) return '';
 
   const methodHeading = headings[methodHeadingIndex];
+  const conclusionHeading = headings
+    .slice(methodHeadingIndex + 1)
+    .find((match) => /结论链/.test(match[1]));
   return section.slice(
     methodHeading.index,
-    headings[methodHeadingIndex + 1]?.index ?? section.length,
+    conclusionHeading?.index ?? section.length,
   );
 };
 
@@ -606,12 +612,21 @@ export const validatePaperRecord = async ({
         markdown,
         REQUIRED_SECTION_GROUPS.find((group) => group.name === '论文脉络'),
       );
+      if (!hasSequentialPaperContextHeadings(paperContext)) {
+        errors.push(
+          issue(
+            'v21-paper-context-heading-sequence',
+            slug,
+            'Number level-three paper-context headings consecutively from 1, including each promoted method stage.',
+          ),
+        );
+      }
       if (hasNestedMethodWrapper(paperContext)) {
         errors.push(
           issue(
             'v21-method-wrapper-heading',
             slug,
-            'Promote nested 5.x method headings to direct level-three sections and remove the wrapper heading.',
+            'Promote nested method headings to consecutive level-three sections and remove the wrapper heading.',
           ),
         );
       }
@@ -621,7 +636,7 @@ export const validatePaperRecord = async ({
           issue(
             'v21-contribution-method-narrative',
             slug,
-            'Add direct 5.x method sections ordered by execution or proof dependencies, beginning with the contribution overview.',
+            'Begin the direct method sequence at section 5 and continue numbering by execution or proof dependencies.',
           ),
         );
       } else if (!hasDetailedMethodNarrative(methodNarrative)) {

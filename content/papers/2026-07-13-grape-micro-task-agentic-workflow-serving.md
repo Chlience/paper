@@ -115,7 +115,7 @@ $$
 
 这个例子把 $Y_A$ 放在 prompt 尾部。若模板为 $P_0 \Vert Y_A \Vert P_1$，$P_1$ 的 token 内容虽然已经确定，其 KV 仍依赖此前的 $Y_A$，需要等待对应 causal prefix 到齐后再计算。证据定位：Section II-C，Figure 4，PDF p.3；KV-state 记号与已知 suffix 边界为本地分析。
 
-### 5.1 TaskFlow 与自动 lowering
+### 5. TaskFlow 与自动 lowering
 
 前端提供两组声明式原语：
 
@@ -132,13 +132,13 @@ Figure 5: Grape 由 TaskFlow、微任务转换、微任务感知调度器和关�
 
 Figure 7: summarization workflow 从 task template 自动拆成 static / dynamic node、strong / partial edge，并把上游 decode chunk 流式送入下游 prefill。Image Source: PDF crop from supplied anonymous manuscript, p.4, Figure 7.
 
-### 5.2 关键路径优先级
+### 6. 关键路径优先级
 
 论文先把所有直接产出 token 的微任务定义为 agentic-latency critical path，并按拓扑顺序赋予较高优先级。其余微任务继承最近下游关键节点的优先级，距离用最少 hop 衡量。这样会提前执行即将解除关键节点依赖的 static / dynamic prefill。证据定位：Section III-D，Figure 8，PDF pp.5-6。
 
 这里的“critical path”是输出敏感的拓扑路径，和经典调度中的加权最长路径有差异。论文没有把预计服务时间、chunk FLOPs 或概率性 decode 长度纳入路径权重，也没有给出该优先级对最优 tail latency 的形式化保证。
 
-### 5.3 微 batch 约束与两阶段选择
+### 7. 微 batch 约束与两阶段选择
 
 Grape 用离线 profiling 拟合单次 forward 的执行时间：
 
@@ -155,13 +155,13 @@ $$
 
 该约束控制的是单次 forward 耗时。端到端 SLO 还包含排队、未来轮次、依赖解除、抢占和 request arrival；因此 $T \leq \mathrm{SLO}_{\min}$ 本身不足以推出严格的 request-level SLO guarantee。论文的 98.10% SLO attainment 提供经验支持，措辞上更适合称为 SLO-aware 或 SLO-constrained scheduling。证据定位：Section III-D，Figure 8-10，PDF pp.5-6；保证边界为本地分析。
 
-### 5.4 微任务级 KV Cache 抢占
+### 8. 微任务级 KV Cache 抢占
 
 显式并行会让更多 task 提前生成 KV。Grape 将抢占单位从整个 request 缩小到微任务，并比较每个 active 微任务与当前 active critical node 的 distance，优先回收距离最大的 KV。目标是降低过量回收和近期重算，同时避免关键请求因关键节点 KV 被回收而停顿。论文没有给出该 distance 的计算公式，不能直接把它等同于优先级传播所用的 minimum-hop distance。证据定位：Section III-E，Figure 11，PDF pp.6-7。
 
 已披露的抢占规则没有纳入 KV 体积、重算 FLOPs、预计重新使用时间和迁移成本；实验中的独立平均收益为 1.06 倍，说明该模块有效但增量有限。
 
-### 6. 结论链条
+### 9. 结论链条
 
 1. task 级串行执行导致 decode 空闲计算无法被下游利用，同时 task 边界完整 prefill 造成 token-gap 尖峰。
 2. 下游 prompt 中静态部分可以提前 prefill；上游 decode 输出可以按 chunk 增量追加到下游 KV，理想 causal 计算保持等价。
