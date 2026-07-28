@@ -25,6 +25,7 @@
   "2606.31650-echo-selective-turn-memory-agentic-rl": ["agent-memory", "agent-rl", "long-context", "agent-workflow"],
   "2607.00151-smoothagent-lookahead-context-engineering": ["agent-memory", "kv-cache", "inference-scheduling", "serving-runtime"],
   "2306.13649-on-policy-distillation-language-models": ["on-policy-distillation", "rl-algorithm"],
+  "2601.18734-self-distilled-reasoner-opsd": ["on-policy-distillation", "reasoning-rl", "training-stability", "rl-algorithm"],
   "2601.19897-self-distillation-continual-learning": ["on-policy-distillation", "training-stability"],
   "2602.02710-maximum-likelihood-reinforcement-learning": ["rl-algorithm", "rl-theory", "reasoning-rl"],
   "2606.20097-hydrahead-head-wise-hybrid-attention": ["linear-attention", "long-context", "reasoning-analysis"],

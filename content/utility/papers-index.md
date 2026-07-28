@@ -67,6 +67,7 @@ Updated-At: 2026-07-27
 | [GLM-5](/papers/2602.15763-glm-5-agentic-engineering/) | 2026年2月 | 把 DSA / MTP / Muon 模型栈、软件工程 mid-training、agentic RL 与异步 rollout 组合为 agentic engineering pipeline。 |
 | [ThunderAgent](/papers/2602.13692-thunderagent-program-aware-agentic-inference/) | 2026年2月 | 把多轮 tool-use 的 phase、KV footprint 与 backend placement 合并为 LLM Program，用 phase-first pause / restore 和全局 waiting queue 控制工具等待期间的 KV working set。 |
 | [SDFT](/papers/2601.19897-self-distillation-continual-learning/) | 2026年1月 | 让 student 在自身轨迹上接受 query-specific demonstration-conditioned EMA 同模型的 token distribution，在提升新任务准确率时显著减少旧能力遗忘。 |
+| [OPSD](/papers/2601.18734-self-distilled-reasoner-opsd/) | 2026年1月 | OPSD 让学生先在只看题目时采样自身轨迹，再用固定初始模型在参考解答上下文中对相同前缀给出的完整词表分布和逐词表项裁剪前向 KL 更新学生，在 Qwen3-1.7B/4B/8B 的三项数学平均分上高于基础模型、SFT 与 GRPO，但总计算、统计方差和领域外泛化仍未对齐。 |
 | [LLM-in-Sandbox](/papers/2601.16206-computer-environments-agentic-intelligence/) | 2026年1月 | LLM-in-Sandbox 只给模型 shell、文件编辑和完成信号，使部分模型—任务组合获得最高 15.5 个百分点增益，并让 Qwen3-4B 经文件型通用任务强化学习后把平均交互轮次从 23.7 降到 7.0，这些数值来自允许联网的特定环境配置。 |
 | [Engram](/papers/2601.07372-conditional-memory-engram-scalable-lookup/) | 2026年1月 | 用 hashed N-gram lookup 和 context-aware gating 增加可离线扩展的 conditional memory。 |
 | [Trust Region Masking](/papers/2512.23075-trust-region-masking-long-horizon-llm-rl/) | 2025年12月 | 用序列级 max-token divergence 约束 rollout-policy mismatch，控制长轨迹 surrogate error。 |

@@ -12205,5 +12205,224 @@
         "url": "https://arxiv.org/abs/2606.20954"
       }
     ]
+  },
+  {
+    "slug": "siyan-zhao",
+    "name": "Siyan Zhao",
+    "aliases": ["Siyan Zhao"],
+    "affiliations": [
+      "UCLA",
+      "Meta Superintelligence Labs",
+      "University of Toronto"
+    ],
+    "homepage": "https://siyan-zhao.github.io/",
+    "github": "https://github.com/siyan-zhao",
+    "googleScholar": "https://scholar.google.com/citations?user=Q7c4FaYAAAAJ",
+    "huggingFace": "https://huggingface.co/siyanzhao",
+    "x": "https://x.com/siyan_zhao",
+    "xConfidence": "high",
+    "topics": ["LLM post-training", "reasoning reinforcement learning", "on-policy distillation", "preference alignment", "LLM efficiency"],
+    "representativePapers": [
+      {
+        "title": "Self-Distilled Reasoner: On-Policy Self-Distillation for Large Language Models",
+        "url": "https://arxiv.org/abs/2601.18734",
+        "year": 2026,
+        "venue": "ICML 2026"
+      },
+      {
+        "title": "Inpainting-Guided Policy Optimization for Diffusion Large Language Models",
+        "url": "https://arxiv.org/abs/2509.10396",
+        "year": 2026,
+        "venue": "ICLR 2026"
+      },
+      {
+        "title": "d1: Scaling Reasoning in Diffusion Large Language Models via Reinforcement Learning",
+        "url": "https://arxiv.org/abs/2504.12216",
+        "year": 2025,
+        "venue": "NeurIPS 2025"
+      },
+      {
+        "title": "Do LLMs Recognize Your Preferences? Evaluating Personalized Preference Following in LLMs",
+        "url": "https://arxiv.org/abs/2502.09597",
+        "year": 2025,
+        "venue": "ICLR 2025"
+      },
+      {
+        "title": "Probing the Decision Boundaries of In-context Learning in Large Language Models",
+        "url": "https://arxiv.org/abs/2406.11233",
+        "year": 2024,
+        "venue": "NeurIPS 2024"
+      },
+      {
+        "title": "Prepacking: A Simple Method for Fast Prefilling and Increased Throughput in Large Language Models",
+        "url": "https://arxiv.org/abs/2404.09529",
+        "year": 2025,
+        "venue": "AISTATS 2025"
+      },
+      {
+        "title": "Group Preference Optimization: Few-Shot Alignment of Large Language Models",
+        "url": "https://arxiv.org/abs/2310.11523",
+        "year": 2024,
+        "venue": "ICLR 2024"
+      },
+      {
+        "title": "Decision Stacks: Flexible Reinforcement Learning via Modular Generative Models",
+        "url": "https://arxiv.org/abs/2306.06253",
+        "year": 2023,
+        "venue": "NeurIPS 2023"
+      }
+    ],
+    "notes": "OPSD first and corresponding author and UCLA computer-science PhD student advised by Aditya Grover. The paper was completed at UCLA and during a part-time Meta internship; her homepage records research spanning LLM post-training, alignment and efficiency.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://siyan-zhao.github.io/"
+      },
+      {
+        "label": "OPSD project article",
+        "url": "https://siyan-zhao.github.io/blog/2026/opsd/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/siyan-zhao"
+      },
+      {
+        "label": "Hugging Face",
+        "url": "https://huggingface.co/siyanzhao"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=Q7c4FaYAAAAJ"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/siyan_zhao"
+      },
+      {
+        "label": "OPSD",
+        "url": "https://arxiv.org/abs/2601.18734"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/forum?id=Jpxfof0EaS"
+      }
+    ]
+  },
+  {
+    "slug": "zhihui-xie",
+    "name": "Zhihui Xie",
+    "chineseName": "谢知晖",
+    "aliases": ["Zhihui Xie"],
+    "affiliations": [
+      "The University of Hong Kong",
+      "Meta Superintelligence Labs",
+      "Shanghai Jiao Tong University"
+    ],
+    "homepage": "https://zhxie.site/",
+    "github": "https://github.com/zhxieml",
+    "googleScholar": "https://scholar.google.com/citations?user=Jml8NvkAAAAJ",
+    "huggingFace": "https://huggingface.co/Zhihui",
+    "x": "https://x.com/_zhihuixie",
+    "xConfidence": "high",
+    "topics": ["LLM post-training", "self-improving reasoning", "reinforcement learning", "diffusion language models", "vision-language alignment"],
+    "representativePapers": [
+      {
+        "title": "Self-Distilled Reasoner: On-Policy Self-Distillation for Large Language Models",
+        "url": "https://arxiv.org/abs/2601.18734",
+        "year": 2026,
+        "venue": "ICML 2026"
+      },
+      {
+        "title": "Dream-Coder 7B: An Open Diffusion Language Model for Code",
+        "url": "https://arxiv.org/abs/2509.01142",
+        "year": 2025,
+        "venue": "arXiv"
+      },
+      {
+        "title": "Dream 7B: Diffusion Large Language Models",
+        "url": "https://arxiv.org/abs/2508.15487",
+        "year": 2025,
+        "venue": "arXiv"
+      },
+      {
+        "title": "Teaching Language Models to Critique via Reinforcement Learning",
+        "url": "https://arxiv.org/abs/2502.03492",
+        "year": 2025,
+        "venue": "ICML 2025"
+      },
+      {
+        "title": "Learning Versatile Skills with Curriculum Masking",
+        "url": "https://proceedings.neurips.cc/paper_files/paper/2024/hash/788f9787ec93e3e1f34658fb003a1f44-Abstract-Conference.html",
+        "year": 2024,
+        "venue": "NeurIPS 2024"
+      },
+      {
+        "title": "VLRewardBench: A Challenging Benchmark for Vision-Language Generative Reward Models",
+        "url": "https://arxiv.org/abs/2411.17451",
+        "year": 2025,
+        "venue": "CVPR 2025"
+      },
+      {
+        "title": "VLFeedback: A Large-Scale AI Feedback Dataset for Large Vision-Language Models Alignment",
+        "url": "https://aclanthology.org/2024.emnlp-main.358/",
+        "year": 2024,
+        "venue": "EMNLP 2024"
+      },
+      {
+        "title": "Calibrating Reasoning in Language Models with Internal Consistency",
+        "url": "https://proceedings.neurips.cc/paper_files/paper/2024/hash/d037fd021c9aace128b8ce25001cdb6c-Abstract-Conference.html",
+        "year": 2024,
+        "venue": "NeurIPS 2024"
+      },
+      {
+        "title": "Future-conditioned Unsupervised Pretraining for Decision Transformer",
+        "url": "https://proceedings.mlr.press/v202/xie23b.html",
+        "year": 2023,
+        "venue": "ICML 2023"
+      },
+      {
+        "title": "Discovering Low-rank Subspaces for Language-agnostic Multilingual Representations",
+        "url": "https://aclanthology.org/2022.emnlp-main.379/",
+        "year": 2022,
+        "venue": "EMNLP 2022"
+      },
+      {
+        "title": "Comparison-based Conversational Recommender System with Relative Bandit Feedback",
+        "url": "https://doi.org/10.1145/3404835.3462920",
+        "year": 2021,
+        "venue": "SIGIR 2021"
+      }
+    ],
+    "notes": "OPSD second author and HKU PhD student advised by Lingpeng Kong and Qi Liu. His homepage records a 2025 Meta Superintelligence Labs research internship and prior bachelor's and master's study at Shanghai Jiao Tong University.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://zhxie.site/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/zhxieml"
+      },
+      {
+        "label": "Hugging Face",
+        "url": "https://huggingface.co/Zhihui"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=Jml8NvkAAAAJ"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/_zhihuixie"
+      },
+      {
+        "label": "OPSD",
+        "url": "https://arxiv.org/abs/2601.18734"
+      },
+      {
+        "label": "OpenReview",
+        "url": "https://openreview.net/forum?id=Jpxfof0EaS"
+      }
+    ]
   }
 ]
