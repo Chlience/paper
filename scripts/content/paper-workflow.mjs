@@ -118,8 +118,31 @@ const evidenceValue = (block) => block.match(/^- 证据定位[:：]\s*(.+)$/mi)?
 const resultFieldValue = (block, name) =>
   block.match(new RegExp(`^- ${name}[:：][ \\t]*(.+)$`, 'mi'))?.[1]?.trim() ?? '';
 
-const hasExplicitContributionMethodNarrative = (section) =>
-  /^###\s+.*(?:核心贡献|贡献总览).*(?:方法|系统|理论|机制)/m.test(section);
+const contributionMethodNarrative = (section) => {
+  const headings = [...section.matchAll(/^###\s+(.+)$/gm)];
+  const methodHeadingIndex = headings.findIndex((match) =>
+    /(?:核心贡献|贡献总览).*(?:方法|系统|理论|机制)/.test(match[1]),
+  );
+  if (methodHeadingIndex < 0) return '';
+
+  const methodHeading = headings[methodHeadingIndex];
+  return section.slice(
+    methodHeading.index,
+    headings[methodHeadingIndex + 1]?.index ?? section.length,
+  );
+};
+
+const hasDetailedMethodNarrative = (section) => {
+  const semanticSignals = [
+    /执行顺序|论证顺序|端到端|流程|阶段|环节|路径|由.{0,24}组成|分为/,
+    /输入|初始条件|接收|给定|假设|定义|前提/,
+    /操作|变换|计算|更新|优化|训练|执行|推导|证明|构造/,
+    /传递|中间(?:表示|状态|对象)|输出|训练信号|奖励|目标函数|结论|定理|证明结果/,
+    /作用|目的|解决|设计理由|设计原因|原因|约束|用于|为什么/,
+    /证据定位|直接证据|边界|成立条件|失效|未披露|限制|尚未|缺少|§|\b(?:section|figure|table|equation|appendix)\b/i,
+  ];
+  return semanticSignals.every((pattern) => pattern.test(section));
+};
 
 const analysisModulesValue = (value = '') =>
   scalarValue(value)
@@ -560,12 +583,21 @@ export const validatePaperRecord = async ({
         markdown,
         REQUIRED_SECTION_GROUPS.find((group) => group.name === '论文脉络'),
       );
-      if (!hasExplicitContributionMethodNarrative(paperContext)) {
+      const methodNarrative = contributionMethodNarrative(paperContext);
+      if (!methodNarrative) {
         advisories.push(
           issue(
             'v21-contribution-method-narrative',
             slug,
             'Add an explicit core-contribution and method section ordered by execution or proof dependencies.',
+          ),
+        );
+      } else if (!hasDetailedMethodNarrative(methodNarrative)) {
+        advisories.push(
+          issue(
+            'v21-method-detail-narrative',
+            slug,
+            'Expand the core method section with a full execution or proof map and stage-level inputs, transformations, handoffs or outputs, rationale, evidence, and boundaries.',
           ),
         );
       }

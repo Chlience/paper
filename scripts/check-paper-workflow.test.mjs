@@ -137,7 +137,7 @@ const v21CoreBody = `
 
 ### 5. 核心贡献与方法逻辑
 
-首要贡献由三个阶段组成：第一阶段接收原始输入并产生中间表示，第二阶段依据该表示执行核心变换，第三阶段把结果转换为训练信号。以两个样本和一个阈值为例，样本经过三个阶段后的对象、操作与结果分别对应正式定义中的输入、变换和输出。
+首要贡献由三个阶段组成，执行顺序为输入编码、核心变换和训练目标构造。第一阶段接收原始输入并产生中间表示；第二阶段依据该表示执行核心变换，并把新状态传递给第三阶段；第三阶段输出训练信号。该设计用于隔离表示构造与目标计算，使每个阶段的作用和接口可以分别验证。以两个样本和一个阈值为例，样本经过三个阶段后的对象、操作与结果分别对应正式定义中的输入、变换和输出。直接证据位于 Section 3 和 Figure 2；来源未披露生产规模下的失败边界，因此结论只在当前实验条件下成立。
 
 ### 6. 结论链
 
@@ -605,6 +605,42 @@ test('v2.1 paper receives an advisory when contribution and method narrative is 
     result.advisories.some((entry) => entry.code === 'v21-contribution-method-narrative'),
     true,
   );
+});
+
+test('v2.1 paper receives an advisory when the method narrative omits stage-level detail', async () => {
+  const shallowMethod =
+    '本文提出一个多阶段方法，并通过训练优化模型。Section 3 给出方法定义，当前实验仍有边界。';
+  const markdown = v21Paper.replace(
+    /首要贡献由三个阶段组成，执行顺序[\s\S]+?当前实验条件下成立。/,
+    shallowMethod,
+  );
+  const result = await validate('v21-method-detail-narrative', markdown);
+
+  assert.equal(
+    result.advisories.some((entry) => entry.code === 'v21-method-detail-narrative'),
+    true,
+  );
+});
+
+test('K3 keeps a detailed method narrative as a real v2.1 canary', async () => {
+  const canary = await fs.readFile(
+    'content/papers/2026-07-27-kimi-k3-open-frontier-intelligence.md',
+    'utf8',
+  );
+  const result = await validate('2026-07-27-kimi-k3-open-frontier-intelligence', canary);
+
+  assert.equal(
+    result.advisories.some((entry) => entry.code === 'v21-method-detail-narrative'),
+    false,
+  );
+  for (const heading of [
+    '5.7.1 SFT',
+    '5.7.3 部分采样轨迹',
+    '5.7.5 MOPD',
+    '5.8 部署约束',
+  ]) {
+    assert.match(canary, new RegExp(heading.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
+  }
 });
 
 test('paper conclusions require natural-language descriptions without formulas', async () => {
@@ -1488,6 +1524,9 @@ test('the public template exposes the v2.1 seven-section contract', async () => 
   }
   assert.match(template, /核心贡献与方法/);
   assert.match(template, /具体例子/);
+  assert.match(template, /完整执行链或论证链/);
+  assert.match(template, /不设统一字数/);
+  assert.match(template, /直接证据位于哪里/);
   assert.doesNotMatch(template, /^## Reference Intake Brief$/m);
 });
 
@@ -1543,6 +1582,12 @@ test('public workflow and agent instructions expose one aligned v2.1 contract', 
   assert.match(agentInstructions, /具体例子/);
   assert.match(workflowDoc, /核心贡献与方法/);
   assert.match(workflowDoc, /具体例子/);
+  for (const document of [workflowDoc, template, agentInstructions, maintenanceSop]) {
+    assert.match(document, /完整执行链|端到端/);
+    assert.match(document, /不设统一字数/);
+    assert.match(document, /训练信号/);
+    assert.match(document, /失败条件|失败边界|成立边界/);
+  }
   assert.match(maintenanceSop, /Key figure decision: include/);
   assert.match(maintenanceSop, /Key figure decision: omit/);
   assert.match(maintenanceSop, /Key figure rationale/);
