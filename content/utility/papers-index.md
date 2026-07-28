@@ -1,7 +1,7 @@
 # Paper Archive Index
 
 First-Archived-At: 2026-06-21
-Updated-At: 2026-07-27
+Updated-At: 2026-07-28
 
 ## 本地工作流
 
@@ -66,6 +66,7 @@ Updated-At: 2026-07-27
 | [MaxRL](/papers/2602.02710-maximum-likelihood-reinforcement-learning/) | 2026年2月 | 把 binary-outcome RLVR 写成成功 rollout likelihood 最大化，优化 pass@k 覆盖。 |
 | [GLM-5](/papers/2602.15763-glm-5-agentic-engineering/) | 2026年2月 | 把 DSA / MTP / Muon 模型栈、软件工程 mid-training、agentic RL 与异步 rollout 组合为 agentic engineering pipeline。 |
 | [ThunderAgent](/papers/2602.13692-thunderagent-program-aware-agentic-inference/) | 2026年2月 | 把多轮 tool-use 的 phase、KV footprint 与 backend placement 合并为 LLM Program，用 phase-first pause / restore 和全局 waiting queue 控制工具等待期间的 KV working set。 |
+| [SDPO](/papers/2601.20802-reinforcement-learning-via-self-distillation/) | 2026年1月 | SDPO 在学生在线轨迹上用环境反馈条件化的 EMA 同模型重算下一词分布，将 Top-K 分布差转成 logit 级信用；Qwen3-8B 在 LiveCodeBench v6 上达到 48.8%，高于强 GRPO 的 41.2%，但依赖模型回溯能力与反馈质量。 |
 | [SDFT](/papers/2601.19897-self-distillation-continual-learning/) | 2026年1月 | 让 student 在自身轨迹上接受 query-specific demonstration-conditioned EMA 同模型的 token distribution，在提升新任务准确率时显著减少旧能力遗忘。 |
 | [OPSD](/papers/2601.18734-self-distilled-reasoner-opsd/) | 2026年1月 | OPSD 让学生先在只看题目时采样自身轨迹，再用固定初始模型在参考解答上下文中对相同前缀给出的完整词表分布和逐词表项裁剪前向 KL 更新学生，在 Qwen3-1.7B/4B/8B 的三项数学平均分上高于基础模型、SFT 与 GRPO，但总计算、统计方差和领域外泛化仍未对齐。 |
 | [LLM-in-Sandbox](/papers/2601.16206-computer-environments-agentic-intelligence/) | 2026年1月 | LLM-in-Sandbox 只给模型 shell、文件编辑和完成信号，使部分模型—任务组合获得最高 15.5 个百分点增益，并让 Qwen3-4B 经文件型通用任务强化学习后把平均交互轮次从 23.7 降到 7.0，这些数值来自允许联网的特定环境配置。 |

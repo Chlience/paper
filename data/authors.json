@@ -10562,8 +10562,12 @@
       "foundation model specialization",
       "online learning"
     ],
-    "notes": "SDFT coauthor and ETH Zürich Learning and Adaptive Systems Group PhD student advised by Andreas Krause; his work connects self-distillation, test-time training, and reinforcement learning.",
+    "notes": "SDPO first and corresponding author, SDFT coauthor, and ETH Zürich Learning and Adaptive Systems Group PhD student advised by Andreas Krause; his work connects self-distillation, test-time training, reinforcement learning, and foundation-model specialization.",
     "sources": [
+      {
+        "label": "SDPO ICML 2026 page",
+        "url": "https://icml.cc/virtual/2026/poster/64121"
+      },
       {
         "label": "SDFT OpenReview forum",
         "url": "https://openreview.net/forum?id=qA6FgH0nnZ"
@@ -10579,6 +10583,51 @@
       {
         "label": "GitHub",
         "url": "https://github.com/jonhue"
+      }
+    ]
+  },
+  {
+    "slug": "frederike-luebeck",
+    "name": "Frederike Lübeck",
+    "aliases": ["Frederike Lübeck", "Frederike Luebeck"],
+    "affiliations": [
+      "ETH Zürich",
+      "Max Planck Institute for Intelligent Systems",
+      "Harvard University",
+      "QuantCo",
+      "IBM"
+    ],
+    "homepage": "https://frederike-luebeck.de/",
+    "github": "https://github.com/FrederikeLuebeck",
+    "topics": [
+      "reinforcement learning",
+      "language model post-training",
+      "test-time training",
+      "large language model evaluation",
+      "causal inference",
+      "optimal transport"
+    ],
+    "notes": "SDPO equal second author and ETH Zürich / Max Planck Institute for Intelligent Systems machine-learning PhD candidate advised by Andreas Krause and Bernhard Schölkopf; she led the paper's code environment and test-time self-distillation design.",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://frederike-luebeck.de/"
+      },
+      {
+        "label": "Max Planck Institute profile",
+        "url": "https://is.mpg.de/ei/de/person/fluebeck"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/FrederikeLuebeck"
+      },
+      {
+        "label": "DBLP",
+        "url": "https://dblp.org/pid/330/3086"
+      },
+      {
+        "label": "SDPO ICML 2026 page",
+        "url": "https://icml.cc/virtual/2026/poster/64121"
       }
     ]
   },
