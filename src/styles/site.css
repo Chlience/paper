@@ -11,6 +11,17 @@
   --accent-soft: oklch(49% 0.14 155 / 0.11);
   --warn: oklch(56% 0.15 55);
   --info: oklch(50% 0.13 230);
+  --inline-code-bg: oklch(95.5% 0.012 230);
+  --inline-code-fg: oklch(29% 0.04 235);
+  --inline-code-border: oklch(82% 0.022 230);
+  --code-block-bg: oklch(20% 0.028 235);
+  --code-block-fg: oklch(94.5% 0.012 178);
+  --code-block-border: oklch(30% 0.034 235);
+  --code-block-scrollbar: oklch(55% 0.03 235);
+  --text-block-bg: oklch(96% 0.014 178);
+  --text-block-fg: oklch(27% 0.028 235);
+  --text-block-border: oklch(81% 0.03 178);
+  --text-block-scrollbar: oklch(60% 0.07 155);
 
   --font-body:
     "Inter",
@@ -1470,12 +1481,17 @@ h3 {
   margin-top: 0.3em;
 }
 
-.prose code {
-  padding: 0.12em 0.32em;
-  border: 1px solid var(--border);
-  border-radius: 5px;
-  background: oklch(96% 0.006 245);
-  font-size: 0.9em;
+.prose :not(pre) > code {
+  padding: 0.1em 0.34em;
+  border: 1px solid var(--inline-code-border);
+  border-radius: 4px;
+  background: var(--inline-code-bg);
+  color: var(--inline-code-fg);
+  font-size: 0.88em;
+  font-variant-ligatures: none;
+  overflow-wrap: anywhere;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
 }
 
 .prose .katex {
@@ -1489,19 +1505,63 @@ h3 {
 }
 
 .prose pre {
+  max-width: 100%;
+  margin: 1.5em 0;
   overflow-x: auto;
-  padding: 16px;
-  border: 1px solid var(--border);
+  overscroll-behavior-inline: contain;
+  padding: 18px 20px;
+  border: 1px solid var(--code-block-border);
   border-radius: var(--radius);
-  background: oklch(18% 0.018 245);
-  color: oklch(96% 0.006 245);
+  background: var(--code-block-bg);
+  color: var(--code-block-fg);
+  font-size: 0.9em;
+  line-height: 1.72;
+  scrollbar-color: var(--code-block-scrollbar) transparent;
+  scrollbar-width: thin;
+  tab-size: 2;
+  -webkit-overflow-scrolling: touch;
 }
 
 .prose pre code {
+  display: block;
+  width: max-content;
+  min-width: 100%;
   padding: 0;
   border: 0;
   background: transparent;
   color: inherit;
+  font-size: 1em;
+  font-variant-ligatures: none;
+  overflow-wrap: normal;
+  white-space: pre;
+  word-break: normal;
+}
+
+.prose pre:has(> code.language-text) {
+  border-color: var(--text-block-border);
+  background: var(--text-block-bg);
+  color: var(--text-block-fg);
+  scrollbar-color: var(--text-block-scrollbar) transparent;
+}
+
+.prose pre::-webkit-scrollbar {
+  height: 10px;
+}
+
+.prose pre::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.prose pre::-webkit-scrollbar-thumb {
+  border: 3px solid transparent;
+  border-radius: 999px;
+  background: var(--code-block-scrollbar);
+  background-clip: padding-box;
+}
+
+.prose pre:has(> code.language-text)::-webkit-scrollbar-thumb {
+  background: var(--text-block-scrollbar);
+  background-clip: padding-box;
 }
 
 .prose table {
@@ -2658,6 +2718,11 @@ html.is-figure-dialog-open body {
 
   .paper-figure {
     margin: 24px 0;
+  }
+
+  .prose pre {
+    padding: 15px 16px;
+    line-height: 1.68;
   }
 
   .paper-figure-caption {
