@@ -29,6 +29,37 @@
 - 已建档作者出现已核验个人主页时，将主页明确选中或重点展示的代表性论文写入 `data/authors.json -> representativePapers`；它们与本站已有单篇论文笔记分开记录。
 - 删除论文时同步删除索引行和标签，修订失效关系与主线引用，并审计 `data/authors.json`；无剩余论文关联的 profile 同提交删除。
 
+## Model Summary 结构
+
+- 模型技术报告、模型发布仓库等材料的 `Model Summary` 优先采用紧凑的 `Field | Value` 两列表格，字段顺序参考 K3 GitHub：
+
+  | Field | Value |
+  | --- | --- |
+  | Architecture | ... |
+  | Total Parameters | ... |
+  | Activated Parameters | ... |
+  | Number of Layers | ... |
+  | Number of Dense Layers | ... |
+  | Attention-Layer Composition | ... |
+  | Attention Hidden Dimension | ... |
+  | Number of Attention Heads | ... |
+  | Latent MoE Dimension | ... |
+  | MoE Hidden Dimension (per Expert) | ... |
+  | Number of Experts | ... |
+  | Selected Experts per Token | ... |
+  | Number of Shared Experts | ... |
+  | Vocabulary Size | ... |
+  | Context Length | ... |
+  | Attention Mechanism | ... |
+  | Activation Function | ... |
+  | Vision Encoder | ... |
+  | Parameters of Vision Encoder | ... |
+  | Quantization | ... |
+  | Modality | ... |
+
+- 按具体模型保留适用字段；架构特有且影响理解或部署的配置可在相邻位置补充。官方材料未披露的关键字段写为“未披露”，本地推导值明确标注统计口径和证据来源。
+- 总参数与激活参数、模型隐藏维度与注意力隐藏维度、MoE 潜空间与单专家隐藏维度、专家总数与每 token 选中专家数及共享专家数分别记录。量化项同时说明权重、激活值和量化感知训练状态；模态单列。
+
 ## 研究主线工作流
 
 - 用户明确提出某个方向的总结、综述、进展或时间线请求时，直接建立一条正式主线；一次请求对应一条主线，不自动合并、拆分或改名。
