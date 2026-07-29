@@ -10485,11 +10485,15 @@
       "language model post-training",
       "robot learning"
     ],
-    "notes": "SDFT first and corresponding author; MIT PhD student advised by Pulkit Agrawal. His public work connects on-policy learning, continual learning, language-model post-training, and robotics.",
+    "notes": "SDFT first and corresponding author, SDPO coauthor, and MIT PhD student advised by Pulkit Agrawal. His public work connects on-policy learning, continual learning, language-model post-training, and robotics.",
     "sources": [
       {
         "label": "SDFT OpenReview forum",
         "url": "https://openreview.net/forum?id=qA6FgH0nnZ"
+      },
+      {
+        "label": "SDPO ICML 2026 page",
+        "url": "https://icml.cc/virtual/2026/poster/64121"
       },
       {
         "label": "Homepage",
