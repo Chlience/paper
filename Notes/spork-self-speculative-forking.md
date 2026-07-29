@@ -178,12 +178,11 @@ Tau2 controlled sweep 中，完整 D1+D2+D3 从 0.5 秒工具 floor 的约 1.09�
 | --- | --- | --- | --- |
 | [Speculative Decoding](/papers/2211.17192-fast-inference-transformers-speculative-decoding/) | draft tokens | token decode | D3 延续 target verification；D1/D2 将 speculation 扩展到工具 Action |
 | [Parrot](/papers/2405.19888-parrot-semantic-variable-llm-serving/) | Semantic Variable、application DAG | LLM task | Parrot 使用显式应用语义，SPORK 使用运行中的模型状态 |
-| [Grape](/papers/2026-07-13-grape-micro-task-agentic-workflow-serving/) | 预声明 DAG、IntermediateVar | 跨 task prefill | Grape 提前计算已知下游 prompt，SPORK 提前执行预测的未来工具 |
 | [ThunderAgent](/papers/2602.13692-thunderagent-program-aware-agentic-inference/) | program phase、tool lifecycle、KV footprint | program/session | SPORK 提供单 turn speculative branch，可接入 program-aware scheduler |
 | [DSpark](/papers/2026-06-27-dspark-confidence-scheduled-speculative-decoding/) | drafter confidence | token scheduling | SPORK 用 tool-name confidence 选择外部 Action 的 dispatch 时机 |
 | [Leyline](/papers/2606.01065-leyline-kv-cache-directives-agentic-inference/) | canonical-history KV directive | 跨 turn state | SPORK branch commit 后再对 canonical history 应用 directive |
 
-Grape 与 SPORK 处理两类不同的可提前工作。Grape 从预声明 DAG 得知哪些下游 prompt token 已经确定，让下游 prefill 与上游 decode 重叠；SPORK 从运行中模型预测下一次 Action，让工具执行与当前 reasoning 重叠。统一 runtime 需要让 main decode、probe、下游 prefill 和工具任务共享 admission budget，并把 `commit`、`reject`、`cancel` 转换为显式动态图事件。
+Parrot、ThunderAgent 与 SPORK 分别从应用 DAG、跨轮 program 生命周期和单轮预测分支向 runtime 暴露不同层次的语义。组合后的 runtime 需要让 main decode、probe、工具任务与跨轮恢复共享 admission budget，并把 `commit`、`reject`、`cancel` 转换为显式动态图事件。
 
 ## 7. 适用条件与证据边界
 

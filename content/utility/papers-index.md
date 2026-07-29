@@ -1,7 +1,7 @@
 # Paper Archive Index
 
 First-Archived-At: 2026-06-21
-Updated-At: 2026-07-28
+Updated-At: 2026-07-29
 
 ## 本地工作流
 
@@ -24,7 +24,6 @@ Updated-At: 2026-07-28
 | [CompactionRL](/papers/2607.05378-compactionrl-context-compaction-agent-rl/) | 2026年7月 | 在 SUPO 已覆盖摘要与执行联合训练的前提下，用支持单 rollout 的独立 critic 和跨 segment GAE 处理压缩轨迹；两个模型在 compacted coding 评测中均提高 Pass@1，但缺少与 SUPO 的直接对照。 |
 | [LLM-as-a-Verifier](/papers/2607.05391-llm-as-a-verifier/) | 2026年7月 | 把评分 token 的概率期望、重复评估与 criteria decomposition 组合成连续 verifier，再用概率 pivot tournament 扩展多轨迹选择。 |
 | [SAO](/papers/2607.07508-sao-single-rollout-asynchronous-agentic-rl/) | 2026年7月 | 用每 prompt 单 rollout、强化 critic 与双侧 token mask 替代异步 GRPO 的组内等待和 group baseline。 |
-| [Grape](/papers/2026-07-13-grape-micro-task-agentic-workflow-serving/) | 2026年7月 | 把相依 LLM task 的已知 prompt、流式上游输出和 decode 拆成微任务，让下游在上游 decode 期间持续完成跨 task 增量 prefill。 |
 | [TRACE](/papers/2607.13988-trace-turn-level-reward-assignment/) | 2026年7月 | 在已知短答案的长程搜索中，用冻结参考模型测量工具边界后的答案可预测性变化并把多步时序差信用混入终局优势，使两种 Qwen3 Thinking 模型在同设置下较 GRPO 的 BrowseComp-Plus 分数分别提高 5.6 和 6.2 个百分点。 |
 | [EcoSpec](/papers/2607.12696-ecospec-cost-aware-moe-speculative-decoding/) | 2026年7月 | EcoSpec 用轻量路由预测器估计草稿候选会新增的专家集合，并优先选择复用已有专家的验证路径；在八张 H200、Hugging Face Transformers、主要批量为一的研究原型中，三个大规模 MoE 的贪心解码平均加速从对应投机基线相对自回归的一点一零至一点二二倍提高到一点一五至一点三六倍，HBM 流量来自估算且批量为八时投机吞吐低于自回归。 |
 | [SmoothAgent](/papers/2607.00151-smoothagent-lookahead-context-engineering/) | 2026年6月 | 把可提前确定的 context transformation 移入异步 lookahead stream，并用 SLO-aware scheduling 预建变换后 KV cache，降低 transform-point TTFT。 |

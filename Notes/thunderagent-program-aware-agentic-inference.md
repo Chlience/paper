@@ -301,12 +301,11 @@ local scheduler 贡献了主要增量，全局队列继续带来跨节点收益�
 | vLLM / SGLang | 单次 request、token、KV blocks | request / batch | ThunderAgent 在其上补充跨轮 program lifecycle |
 | KV-aware routing / session pinning | session id、prefix locality | session placement | ThunderAgent 允许释放 KV 后重新选择 backend |
 | Continuum / tiered cache | multi-turn session、TTL、offload | KV retention | ThunderAgent 用显式 phase 和 program status 控制 working set |
-| [Grape](/papers/2026-07-13-grape-micro-task-agentic-workflow-serving/) | 预声明 task DAG、partial edge | 跨 task prefill | 管理 program 内已经就绪的 LLM 微任务 |
 | [SPORK](/papers/2607.03333-spork-self-speculative-agentic-inference/) | main/probe branch、tool-call confidence | 单 turn speculation | 在一个 program 内提前执行预测的只读工具 |
 | [Parrot](/papers/2405.19888-parrot-semantic-variable-llm-serving/) | Semantic Variable、application DAG | LLM application | 同样把上层语义暴露给 serving runtime |
 | [RollArt](/papers/2512.22560-rollart-disaggregated-agentic-rl-training/) / [slime](https://github.com/THUDM/slime) | trajectory、sample、训练归属 | RL rollout pipeline | ThunderAgent 聚焦采样侧 KV 与工具生命周期 |
 
-三套近期机制可以组合成不同粒度的 runtime：ThunderAgent 管 program 的长期状态、工具等待与跨节点 placement；Grape 管已经展开的 LLM task 之间如何提前 prefill；SPORK 在单个 turn 中 fork probe，让工具执行覆盖剩余 reasoning。组合系统还需要统一 admission budget、KV accounting、priority、commit / reject / cancel 事件和 foreground decode contention。
+这些机制覆盖不同粒度的 runtime：Parrot 暴露应用 DAG 的显式语义，ThunderAgent 管理 program 的长期状态、工具等待与跨节点 placement，SPORK 在单个 turn 中 fork probe，让工具执行覆盖剩余 reasoning。组合系统还需要统一 admission budget、KV accounting、priority、commit / reject / cancel 事件和 foreground decode contention。
 
 ## 7. 适用条件与证据边界
 
@@ -367,6 +366,6 @@ Program 是不可分割的释放单位，greedy 可能为了达到容量目标�
 
 该数字来自固定模型的 OpenHands 采样侧 steps/min。完整训练还包含权重更新、checkpoint / weight sync、policy lag、数据过滤和 trainer idle time，需要端到端测量。
 
-### Grape、SPORK 和 ThunderAgent 应该怎样组合？
+### SPORK 和 ThunderAgent 应该怎样组合？
 
-ThunderAgent 维护 program 生命周期和全局容量；Grape 调度已知依赖下的 LLM 微任务；SPORK 为当前 turn 创建 speculative tool branch。统一 runtime 需要共享 program id、KV ownership、priority、tool task 状态和 cancel / commit 协议，避免 probe、incremental prefill 和 foreground decode 各自独立抢占资源。
+ThunderAgent 维护 program 生命周期、全局容量与跨节点 placement；SPORK 为当前 turn 创建 speculative tool branch。统一 runtime 需要共享 program id、KV ownership、priority、tool task 状态和 cancel / commit 协议，并协调 probe、工具执行、跨轮恢复与 foreground decode 的资源竞争。
