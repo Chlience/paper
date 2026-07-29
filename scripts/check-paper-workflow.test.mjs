@@ -1561,6 +1561,56 @@ test('the public template exposes the v2.1 seven-section contract', async () => 
   assert.doesNotMatch(template, /^## Reference Intake Brief$/m);
 });
 
+test('the public template defines evidence-backed insight construction without a discussion bucket', async () => {
+  const template = await fs.readFile('content/utility/paper-note-template.md', 'utf8');
+
+  for (const requirement of ['认识更新', '证据与机制', '迁移与边界', '来源归因']) {
+    assert.match(template, new RegExp(requirement));
+  }
+  assert.doesNotMatch(template, /^## 本地讨论补充$/m);
+});
+
+test('LRE keeps the three discussion insights in the canonical insight section', async () => {
+  const canary = await fs.readFile(
+    'content/papers/2606.20954-lre-learned-relevance-eviction.md',
+    'utf8',
+  );
+
+  assert.doesNotMatch(canary, /^## 本地讨论补充$/m);
+
+  const heading = '## 主要启发';
+  const sectionStart = canary.indexOf(heading);
+  assert.notEqual(sectionStart, -1, 'LRE must keep a 主要启发 section');
+
+  const remainder = canary.slice(sectionStart + heading.length);
+  const nextSectionOffset = remainder.search(/\n## /);
+  const insights = nextSectionOffset === -1 ? remainder : remainder.slice(0, nextSectionOffset);
+
+  assert.equal(
+    insights.match(/^### \d+\. /gm)?.length,
+    3,
+    'LRE must keep exactly the three user insights',
+  );
+  for (const [number, concept] of [
+    [1, '原文保真'],
+    [2, '可观测代理'],
+    [3, '时间距离'],
+  ]) {
+    assert.match(insights, new RegExp(`^### ${number}\\. .*${concept}`, 'm'));
+  }
+  assert.equal(
+    insights.match(/证据定位/g)?.length,
+    3,
+    'each LRE insight must retain its own evidence location',
+  );
+  assert.match(insights, /实验没有覆盖数学推理/);
+  assert.match(insights, /LoCoMo 的问题设置会主动查询跨 session 的旧事实，因此它可能放大远距离依赖/);
+  assert.doesNotMatch(
+    insights,
+    /主动淘汰应单独评测|生产预算应覆盖完整输入|最有价值的下一组复验/,
+  );
+});
+
 test('public workflow and agent instructions expose one aligned v2.1 contract', async () => {
   const workflowDoc = await fs.readFile('content/utility/paper-analysis-workflow.md', 'utf8');
   const synthesisWorkflow = await fs.readFile('content/utility/research-synthesis-workflow.md', 'utf8');
@@ -1616,6 +1666,14 @@ test('public workflow and agent instructions expose one aligned v2.1 contract', 
   assert.match(agentInstructions, /详细方法从 `### 5\.` 开始连续编号/);
   assert.match(maintenanceSop, /详细方法直接使用 `### 5\.`、`### 6\.`/);
   assert.match(workflowDoc, /具体例子/);
+  for (const document of [workflowDoc, template, agentInstructions, maintenanceSop]) {
+    for (const requirement of ['认识更新', '证据与机制', '迁移与边界', '来源归因']) {
+      assert.match(document, new RegExp(requirement));
+    }
+  }
+  assert.match(workflowDoc, /`本地讨论补充` 同样退出 v2\.1 的正式结构/);
+  assert.match(agentInstructions, /不再新增公开的 `本地讨论补充`/);
+  assert.match(maintenanceSop, /不再新增公开的 `本地讨论补充`/);
   for (const document of [workflowDoc, template, agentInstructions, maintenanceSop]) {
     assert.match(document, /完整执行链|端到端/);
     assert.match(document, /不设统一字数/);
