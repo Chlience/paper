@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-07-29 15:47",
+  "entries": [
+    {
+      "slug": "2026-06-16-glm-5-2-long-horizon-tasks",
+      "updatedAt": "2026-07-27 14:54"
+    },
+    {
+      "slug": "2026-07-27-kimi-k3-open-frontier-intelligence",
+      "updatedAt": "2026-07-28 11:47"
+    },
+    {
+      "slug": "202607.1328-towards-long-horizon-agents-survey",
+      "updatedAt": "2026-07-21 10:14"
+    },
+    {
+      "slug": "2503.01840-eagle-3-training-time-test",
+      "updatedAt": "2026-07-27 15:47"
+    },
+    {
+      "slug": "2505.19645-moesd-sparse-moe-speculative-decoding",
+      "updatedAt": "2026-07-24 14:20"
+    },
+    {
+      "slug": "2601.16206-computer-environments-agentic-intelligence",
+      "updatedAt": "2026-07-21 14:18"
+    },
+    {
+      "slug": "2601.18734-self-distilled-reasoner-opsd",
+      "updatedAt": "2026-07-28 15:34"
+    },
+    {
+      "slug": "2601.19897-self-distillation-continual-learning",
+      "updatedAt": "2026-07-29 10:39"
+    },
+    {
+      "slug": "2603.00729-qwen3-coder-next-agentic-coding",
+      "updatedAt": "2026-07-21 14:18"
+    },
+    {
+      "slug": "2605.09539-tacomas-test-time-coevolution-mas",
+      "updatedAt": "2026-07-22 11:03"
+    },
+    {
+      "slug": "2605.10899-rubricem-rubric-guided-meta-rl",
+      "updatedAt": "2026-07-22 17:16"
+    },
+    {
+      "slug": "2605.26684-graphgpo-graph-credit-assignment-agentic-rl",
+      "updatedAt": "2026-07-22 14:40"
+    },
+    {
+      "slug": "2606.20954-lre-learned-relevance-eviction",
+      "updatedAt": "2026-07-29 11:32"
+    },
+    {
+      "slug": "2607.00151-smoothagent-lookahead-context-engineering",
+      "updatedAt": "2026-07-29 13:35"
+    },
+    {
+      "slug": "2607.02980-hils-attention-infinite-context",
+      "updatedAt": "2026-07-21 14:18"
+    },
+    {
+      "slug": "2607.04763-reopd-prefix-replay-agentic-distillation",
+      "updatedAt": "2026-07-23 18:09"
+    },
+    {
+      "slug": "2607.12696-ecospec-cost-aware-moe-speculative-decoding",
+      "updatedAt": "2026-07-24 15:15"
+    },
+    {
+      "slug": "2607.13988-trace-turn-level-reward-assignment",
+      "updatedAt": "2026-07-22 15:28"
+    },
+    {
+      "slug": "2607.14777-seed-self-evolving-on-policy-distillation",
+      "updatedAt": "2026-07-23 16:10"
+    },
+    {
+      "slug": "2607.18082-cripo-rubric-rl-self-distillation",
+      "updatedAt": "2026-07-22 18:27"
+    }
+  ]
+}

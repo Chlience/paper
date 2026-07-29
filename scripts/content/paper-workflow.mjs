@@ -79,6 +79,11 @@ const textualEvidenceLocatorPatterns = [
 
 const issue = (code, subject, message) => ({ code, subject, message });
 const markdownParser = new MarkdownIt();
+const maskHtmlComments = (markdown) =>
+  markdown.replace(
+    /<!--[\s\S]*?(?:-->|$)/g,
+    (comment) => comment.replace(/[^\n]/g, ' '),
+  );
 
 const sectionForGroup = (markdown, group) => {
   for (const heading of group.headings) {
@@ -118,52 +123,136 @@ const evidenceValue = (block) => block.match(/^- 证据定位[:：]\s*(.+)$/mi)?
 const resultFieldValue = (block, name) =>
   block.match(new RegExp(`^- ${name}[:：][ \\t]*(.+)$`, 'mi'))?.[1]?.trim() ?? '';
 
-const methodWrapperHeadingPattern =
-  /^5\.\s+(?:(?:核心贡献与)?方法|方法\s*\/|方法与|贡献总览.*(?:方法|系统|理论|机制))/;
 const paperContextHeadingPattern = /^(\d+)\.\s+(.+)$/;
+const methodOverviewHeadings = new Set([
+  '贡献全景与方法总览',
+  '方法总览与完整机制',
+]);
+const methodOverviewBaselineSchemaVersion = 1;
+const methodOverviewBaselineCapturedAt = '2026-07-29 15:47';
+const frozenMethodOverviewBaseline = new Map([
+  ['2026-06-16-glm-5-2-long-horizon-tasks', '2026-07-27 14:54'],
+  ['2026-07-27-kimi-k3-open-frontier-intelligence', '2026-07-28 11:47'],
+  ['202607.1328-towards-long-horizon-agents-survey', '2026-07-21 10:14'],
+  ['2503.01840-eagle-3-training-time-test', '2026-07-27 15:47'],
+  ['2505.19645-moesd-sparse-moe-speculative-decoding', '2026-07-24 14:20'],
+  ['2601.16206-computer-environments-agentic-intelligence', '2026-07-21 14:18'],
+  ['2601.18734-self-distilled-reasoner-opsd', '2026-07-28 15:34'],
+  ['2601.19897-self-distillation-continual-learning', '2026-07-29 10:39'],
+  ['2603.00729-qwen3-coder-next-agentic-coding', '2026-07-21 14:18'],
+  ['2605.09539-tacomas-test-time-coevolution-mas', '2026-07-22 11:03'],
+  ['2605.10899-rubricem-rubric-guided-meta-rl', '2026-07-22 17:16'],
+  ['2605.26684-graphgpo-graph-credit-assignment-agentic-rl', '2026-07-22 14:40'],
+  ['2606.20954-lre-learned-relevance-eviction', '2026-07-29 11:32'],
+  ['2607.00151-smoothagent-lookahead-context-engineering', '2026-07-29 13:35'],
+  ['2607.02980-hils-attention-infinite-context', '2026-07-21 14:18'],
+  ['2607.04763-reopd-prefix-replay-agentic-distillation', '2026-07-23 18:09'],
+  ['2607.12696-ecospec-cost-aware-moe-speculative-decoding', '2026-07-24 15:15'],
+  ['2607.13988-trace-turn-level-reward-assignment', '2026-07-22 15:28'],
+  ['2607.14777-seed-self-evolving-on-policy-distillation', '2026-07-23 16:10'],
+  ['2607.18082-cripo-rubric-rl-self-distillation', '2026-07-22 18:27'],
+]);
+
+export const methodOverviewBaselineCompatibilityMap = (manifest) => {
+  if (
+    manifest?.schemaVersion !== methodOverviewBaselineSchemaVersion ||
+    manifest?.capturedAt !== methodOverviewBaselineCapturedAt
+  ) return new Map();
+
+  return new Map(
+    (Array.isArray(manifest?.entries) ? manifest.entries : [])
+      .filter((entry) => (
+        typeof entry?.slug === 'string' &&
+        typeof entry?.updatedAt === 'string' &&
+        frozenMethodOverviewBaseline.get(entry.slug.trim()) === entry.updatedAt.trim()
+      ))
+      .map((entry) => [entry.slug.trim(), entry.updatedAt.trim()]),
+  );
+};
+
+const levelThreeBlocks = (section) => {
+  const lines = section.split('\n');
+  const tokens = markdownParser.parse(maskHtmlComments(section), {});
+  const headings = tokens.flatMap((token, index) => {
+    if (
+      token.type !== 'heading_open' ||
+      token.tag !== 'h3' ||
+      token.level !== 0 ||
+      !token.map
+    ) return [];
+    return [{
+      startLine: token.map[0],
+      bodyStartLine: token.map[1],
+      title: tokens[index + 1]?.content?.trim() ?? '',
+    }];
+  });
+
+  return headings.map((heading, index) => {
+    const parsed = heading.title.match(paperContextHeadingPattern);
+    return {
+      ...heading,
+      number: parsed ? Number(parsed[1]) : null,
+      name: parsed?.[2]?.trim() ?? heading.title,
+      body: lines.slice(
+        heading.bodyStartLine,
+        headings[index + 1]?.startLine ?? lines.length,
+      ).join('\n').trim(),
+    };
+  });
+};
+
+const methodOverviewBlock = (section) =>
+  levelThreeBlocks(section).find((block) => block.number === 5);
 
 const hasNestedMethodWrapper = (section) => {
-  const headings = [...section.matchAll(/^###\s+(.+)$/gm)];
-  const wrapperIndex = headings.findIndex((match) => methodWrapperHeadingPattern.test(match[1].trim()));
-  if (wrapperIndex < 0) return false;
-
-  const wrapper = headings[wrapperIndex];
-  const body = section.slice(wrapper.index, headings[wrapperIndex + 1]?.index ?? section.length);
-  return /^####\s+5\.\d+(?:\.\d+)*\s+\S/m.test(body);
+  const overview = methodOverviewBlock(section);
+  if (!overview) return false;
+  const tokens = markdownParser.parse(maskHtmlComments(overview.body), {});
+  return tokens.some((token, index) => (
+    token.type === 'heading_open' &&
+    token.tag === 'h4' &&
+    token.level === 0 &&
+    /^5\.\d+(?:\.\d+)*\s+\S/.test(tokens[index + 1]?.content?.trim() ?? '')
+  ));
 };
 
 const hasSequentialPaperContextHeadings = (section) => {
-  const headings = [...section.matchAll(/^###\s+(.+)$/gm)];
+  const headings = levelThreeBlocks(section);
   return (
     headings.length > 0 &&
-    headings.every((match, index) => {
-      const parsed = match[1].trim().match(paperContextHeadingPattern);
-      return parsed && Number(parsed[1]) === index + 1;
-    })
+    headings.every((heading, index) => heading.number === index + 1)
   );
 };
 
 const contributionMethodNarrative = (section) => {
-  const headings = [...section.matchAll(/^###\s+(.+)$/gm)];
-  const methodHeadingIndex = headings.findIndex((match) => {
-    const parsed = match[1].trim().match(paperContextHeadingPattern);
-    return parsed && Number(parsed[1]) === 5;
-  });
+  const headings = levelThreeBlocks(section);
+  const methodHeadingIndex = headings.findIndex((heading) => heading.number === 5);
   if (methodHeadingIndex < 0) return '';
 
-  const methodHeading = headings[methodHeadingIndex];
-  const conclusionHeading = headings
-    .slice(methodHeadingIndex + 1)
-    .find((match) => /结论链/.test(match[1]));
-  return section.slice(
-    methodHeading.index,
-    conclusionHeading?.index ?? section.length,
-  );
+  const methodBlocks = [];
+  for (const heading of headings.slice(methodHeadingIndex)) {
+    if (/结论链/.test(heading.name)) break;
+    methodBlocks.push(`${heading.title}\n${heading.body}`);
+  }
+  return methodBlocks.join('\n');
+};
+
+const methodDetailNarrative = (section) => {
+  const headings = levelThreeBlocks(section);
+  const methodHeadingIndex = headings.findIndex((heading) => heading.number === 5);
+  if (methodHeadingIndex < 0) return '';
+
+  const overview = headings[methodHeadingIndex];
+  const detailBlocks = [];
+  for (const heading of headings.slice(methodHeadingIndex + 1)) {
+    if (/结论链/.test(heading.name)) break;
+    detailBlocks.push(`${heading.title}\n${heading.body}`);
+  }
+  return detailBlocks.length > 0 ? detailBlocks.join('\n') : overview.body;
 };
 
 const hasDetailedMethodNarrative = (section) => {
   const semanticSignals = [
-    /执行顺序|论证顺序|端到端|流程|阶段|环节|路径|由.{0,24}组成|分为/,
     /输入|初始条件|接收|给定|假设|定义|前提/,
     /操作|变换|计算|更新|优化|训练|执行|推导|证明|构造/,
     /传递|中间(?:表示|状态|对象)|输出|训练信号|奖励|目标函数|结论|定理|证明结果/,
@@ -171,6 +260,79 @@ const hasDetailedMethodNarrative = (section) => {
     /证据定位|直接证据|边界|成立条件|失效|未披露|限制|尚未|缺少|§|\b(?:section|figure|table|equation|appendix)\b/i,
   ];
   return semanticSignals.every((pattern) => pattern.test(section));
+};
+
+const methodOverviewViolations = (section) => {
+  const overview = methodOverviewBlock(section);
+  if (!overview || !methodOverviewHeadings.has(overview.name)) {
+    return [
+      issue(
+        'v21-method-overview-heading',
+        '论文脉络',
+        'Section 5 must be titled 贡献全景与方法总览 or 方法总览与完整机制.',
+      ),
+    ];
+  }
+
+  const headings = levelThreeBlocks(section);
+  const overviewIndex = headings.findIndex((heading) => heading.number === 5);
+  const detailHeadings = [];
+  for (const heading of headings.slice(overviewIndex + 1)) {
+    if (/结论链/.test(heading.name)) break;
+    detailHeadings.push(heading);
+  }
+
+  const violations = [];
+  if (
+    (overview.name === '贡献全景与方法总览' && detailHeadings.length === 0) ||
+    (overview.name === '方法总览与完整机制' && detailHeadings.length > 0)
+  ) {
+    violations.push(
+      issue(
+        'v21-method-overview-mode',
+        '论文脉络',
+        overview.name === '贡献全景与方法总览'
+          ? 'Multi-stage overviews require promoted method detail sections after Section 5.'
+          : 'Single-stage overviews must keep the complete mechanism inside Section 5.',
+      ),
+    );
+  }
+
+  const visibleOverview = maskHtmlComments(overview.body);
+  const commonSignals = [
+    ['首要贡献', /首要贡献|核心贡献/],
+    ['起点或输入', /起点|输入|初始(?:条件|状态)|接收|给定|问题\s*(?:\$[^$]+\$|[A-Za-z])|prompt|采样|从.{0,24}出发/i],
+    ['核心操作', /操作|变换|计算|更新|优化|训练|执行|推导|证明|构造|生成|采样|划分|重加权|聚合|匹配|约束/],
+    ['最终输出', /最终|输出|训练信号|目标函数|结论|策略更新|只更新|更新后的|得到.{0,24}(?:分布|权重|信号|结果|结论)/],
+    ['阶段作用', /作用|局部问题|目的|解决|用于|负责|支撑|使|保证|限制|控制|避免|提高|降低/],
+  ];
+  const requiredSignals = overview.name === '贡献全景与方法总览'
+    ? [
+        ...commonSignals,
+        ['辅助贡献', /辅助贡献/],
+        ['阶段或顺序', /端到端|执行链|论证链|执行顺序|论证顺序|流程|阶段|步骤|环节|路径|→/],
+        ['阶段间传递', /传递|交给|进入|写入|送入|依据|得到|组成|→/],
+      ]
+    : [
+        ...commonSignals,
+        ['直接证据', /证据定位|直接证据|§|\b(?:section|figure|table|equation|appendix)\b/i],
+        ['成立边界', /边界|成立条件|失效|未披露|限制|尚未|缺少/],
+      ];
+  const missing = requiredSignals
+    .filter(([, pattern]) => !pattern.test(visibleOverview))
+    .map(([name]) => name);
+
+  if (missing.length > 0) {
+    violations.push(
+      issue(
+        'v21-method-overview-chain',
+        '论文脉络',
+        `Section 5 must independently state the complete method map; missing signals: ${missing.join(', ')}.`,
+      ),
+    );
+  }
+
+  return violations;
 };
 
 const analysisModulesValue = (value = '') =>
@@ -390,6 +552,7 @@ export const validatePaperRecord = async ({
   knownPaperSlugs,
   legacyPaperSlugs = new Set(),
   v2PaperSlugs = new Set(),
+  methodOverviewBaseline = new Map(),
   imageExists,
 }) => {
   const errors = [];
@@ -406,7 +569,7 @@ export const validatePaperRecord = async ({
   const paperReviewStatus = getTopLevelField(markdown, 'Review-Status').toLowerCase();
   const reviewedAt = getTopLevelField(markdown, 'Reviewed-At');
   const updatedMinute = updatedAt.match(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}/)?.[0] ?? '';
-  const visibleMarkdown = markdown.replace(/<!--[\s\S]*?-->/g, (comment) => comment.replace(/[^\n]/g, ' '));
+  const visibleMarkdown = maskHtmlComments(markdown);
   const conclusion = getSection(markdown, '一句话结论');
 
   if (!workflowVersion && !legacyPaperSlugs.has(slug)) {
@@ -612,6 +775,8 @@ export const validatePaperRecord = async ({
         markdown,
         REQUIRED_SECTION_GROUPS.find((group) => group.name === '论文脉络'),
       );
+      const overviewIssueTarget =
+        methodOverviewBaseline.get(slug) === updatedAt ? advisories : errors;
       if (!hasSequentialPaperContextHeadings(paperContext)) {
         errors.push(
           issue(
@@ -622,7 +787,7 @@ export const validatePaperRecord = async ({
         );
       }
       if (hasNestedMethodWrapper(paperContext)) {
-        errors.push(
+        overviewIssueTarget.push(
           issue(
             'v21-method-wrapper-heading',
             slug,
@@ -630,21 +795,19 @@ export const validatePaperRecord = async ({
           ),
         );
       }
+      const overviewIssues = methodOverviewViolations(paperContext);
+      for (const overviewIssue of overviewIssues) {
+        overviewIssueTarget.push({ ...overviewIssue, subject: slug });
+      }
+
       const methodNarrative = contributionMethodNarrative(paperContext);
-      if (!methodNarrative) {
-        advisories.push(
-          issue(
-            'v21-contribution-method-narrative',
-            slug,
-            'Begin the direct method sequence at section 5 and continue numbering by execution or proof dependencies.',
-          ),
-        );
-      } else if (!hasDetailedMethodNarrative(methodNarrative)) {
+      const detailNarrative = methodDetailNarrative(paperContext);
+      if (methodNarrative && !hasDetailedMethodNarrative(detailNarrative)) {
         advisories.push(
           issue(
             'v21-method-detail-narrative',
             slug,
-            'Expand the core method section with a full execution or proof map and stage-level inputs, transformations, handoffs or outputs, rationale, evidence, and boundaries.',
+            'Expand the detailed method sections with stage-level inputs, transformations, handoffs or outputs, rationale, evidence, and boundaries.',
           ),
         );
       }
@@ -788,6 +951,129 @@ export const validatePaperRecord = async ({
   }
 
   return { errors, advisories };
+};
+
+export const validateMethodOverviewBaseline = ({ records, manifest }) => {
+  const errors = [];
+  const entries = manifest?.entries;
+  if (!Array.isArray(entries)) {
+    return {
+      errors: [
+        issue(
+          'v21-method-overview-baseline-shape',
+          'method-overview-baseline',
+          'Method overview baseline must contain an entries array.',
+        ),
+      ],
+    };
+  }
+
+  if (
+    manifest.schemaVersion !== methodOverviewBaselineSchemaVersion ||
+    manifest.capturedAt !== methodOverviewBaselineCapturedAt
+  ) {
+    errors.push(
+      issue(
+        'v21-method-overview-baseline-metadata',
+        'method-overview-baseline',
+        `Method overview baseline must keep schemaVersion ${methodOverviewBaselineSchemaVersion} and capturedAt ${methodOverviewBaselineCapturedAt}.`,
+      ),
+    );
+  }
+
+  const recordsBySlug = new Map(records.map((record) => [record.slug, record]));
+  const seen = new Set();
+  for (const entry of entries) {
+    const slug = typeof entry?.slug === 'string' ? entry.slug.trim() : '';
+    const baselineUpdatedAt =
+      typeof entry?.updatedAt === 'string' ? entry.updatedAt.trim() : '';
+    if (!slug || !isValidMinute(baselineUpdatedAt)) {
+      errors.push(
+        issue(
+          'v21-method-overview-baseline-entry',
+          slug || 'method-overview-baseline',
+          'Each method overview baseline entry requires a slug and a valid Updated-At minute.',
+        ),
+      );
+      continue;
+    }
+    if (seen.has(slug)) {
+      errors.push(
+        issue(
+          'v21-method-overview-baseline-duplicate',
+          slug,
+          'Method overview baseline contains a duplicate slug.',
+        ),
+      );
+      continue;
+    }
+    seen.add(slug);
+
+    if (frozenMethodOverviewBaseline.get(slug) !== baselineUpdatedAt) {
+      errors.push(
+        issue(
+          'v21-method-overview-baseline-not-frozen',
+          slug,
+          'Method overview baseline entries must come from the original frozen slug and Updated-At set.',
+        ),
+      );
+      continue;
+    }
+
+    const record = recordsBySlug.get(slug);
+    const source = record ? getSection(record.markdown, 'Source') : '';
+    const workflowVersion = scalarValue(getSourceFieldRaw(source, 'Workflow version')).toLowerCase();
+    if (!record || workflowVersion !== 'v2.1') {
+      errors.push(
+        issue(
+          'v21-method-overview-baseline-entry',
+          slug,
+          'Method overview baseline entries must reference existing v2.1 papers.',
+        ),
+      );
+      continue;
+    }
+
+    const currentUpdatedAt = getTopLevelField(record.markdown, 'Updated-At');
+    const firstArchivedAt = getFirstArchivedAt(record.markdown);
+    if (
+      baselineUpdatedAt > methodOverviewBaselineCapturedAt ||
+      firstArchivedAt > methodOverviewBaselineCapturedAt
+    ) {
+      errors.push(
+        issue(
+          'v21-method-overview-baseline-capture-boundary',
+          slug,
+          'Method overview baseline entries and their papers must predate the frozen capture minute.',
+        ),
+      );
+    }
+    if (currentUpdatedAt < baselineUpdatedAt) {
+      errors.push(
+        issue(
+          'v21-method-overview-baseline-time-regression',
+          slug,
+          'Paper Updated-At precedes its frozen method overview baseline.',
+        ),
+      );
+    }
+
+    const paperContext = sectionForGroup(
+      record.markdown,
+      REQUIRED_SECTION_GROUPS.find((group) => group.name === '论文脉络'),
+    );
+    if (methodOverviewViolations(paperContext).length === 0) {
+      errors.push(
+        issue(
+          'v21-method-overview-baseline-stale',
+          slug,
+          'Remove this paper from the method overview baseline because it now satisfies the contract.',
+        ),
+      );
+    }
+  }
+
+  return { errors };
 };
 
 export const validateArchiveTimes = (records) => {

@@ -2,9 +2,11 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import process from 'node:process';
 import {
+  methodOverviewBaselineCompatibilityMap,
   summarizeAdvisories,
   validateArchiveCollections,
   validateArchiveTimes,
+  validateMethodOverviewBaseline,
   validatePaperRecord,
 } from './content/paper-workflow.mjs';
 import { authorsFile, repoRoot, readPaperEntries } from './content/repository.mjs';
@@ -13,11 +15,19 @@ import { validateTagConfiguration } from './content/tagging.mjs';
 const indexPath = path.join(repoRoot, 'content', 'utility', 'papers-index.md');
 const legacyManifestPath = path.join(repoRoot, 'internal', 'paper-workflow-legacy-slugs.json');
 const v2ManifestPath = path.join(repoRoot, 'internal', 'paper-workflow-v2-slugs.json');
+const methodOverviewBaselinePath = path.join(
+  repoRoot,
+  'internal',
+  'paper-workflow-method-overview-baseline.json',
+);
 const entries = await readPaperEntries();
 const indexMarkdown = await fs.readFile(indexPath, 'utf8');
 const profiles = JSON.parse(await fs.readFile(authorsFile, 'utf8'));
 const legacyManifest = JSON.parse(await fs.readFile(legacyManifestPath, 'utf8'));
 const v2Manifest = JSON.parse(await fs.readFile(v2ManifestPath, 'utf8'));
+const methodOverviewBaselineManifest = JSON.parse(
+  await fs.readFile(methodOverviewBaselinePath, 'utf8'),
+);
 if (!Array.isArray(legacyManifest.slugs)) {
   throw new TypeError('internal/paper-workflow-legacy-slugs.json must contain a slugs array.');
 }
@@ -26,6 +36,9 @@ if (!Array.isArray(v2Manifest.slugs)) {
 }
 const legacyPaperSlugs = new Set(legacyManifest.slugs);
 const v2PaperSlugs = new Set(v2Manifest.slugs);
+const methodOverviewBaseline = methodOverviewBaselineCompatibilityMap(
+  methodOverviewBaselineManifest,
+);
 const knownPaperSlugs = new Set(entries.map((entry) => entry.slug));
 const records = await Promise.all(
   entries.map(async (entry) => ({ ...entry, markdown: await fs.readFile(entry.sourcePath, 'utf8') })),
@@ -53,6 +66,7 @@ for (const record of records) {
     knownPaperSlugs,
     legacyPaperSlugs,
     v2PaperSlugs,
+    methodOverviewBaseline,
     imageExists: exists,
   });
   errors.push(...result.errors);
@@ -65,6 +79,11 @@ advisories.push(...timeResult.advisories);
 const collectionResult = validateArchiveCollections({ records, profiles, indexMarkdown, knownPaperSlugs });
 errors.push(...collectionResult.errors);
 advisories.push(...collectionResult.advisories);
+const methodOverviewBaselineResult = validateMethodOverviewBaseline({
+  records,
+  manifest: methodOverviewBaselineManifest,
+});
+errors.push(...methodOverviewBaselineResult.errors);
 
 for (const item of errors) {
   console.error(`ERROR [${item.code}] ${item.subject}: ${item.message}`);

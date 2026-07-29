@@ -135,13 +135,13 @@ const v21CoreBody = `
 
 核心假设。
 
-### 5. 贡献全景与执行链
+### 5. 贡献全景与方法总览
 
-首要贡献由三个阶段组成，执行顺序为输入编码、核心变换和训练目标构造。第一阶段接收原始输入并产生中间表示；第二阶段依据该表示执行核心变换，并把新状态传递给第三阶段；第三阶段输出训练信号。该设计用于隔离表示构造与目标计算，使每个阶段的作用和接口可以分别验证。以两个样本和一个阈值为例，样本经过三个阶段后的对象、操作与结果分别对应正式定义中的输入、变换和输出。直接证据位于 Section 3 和 Figure 2；来源未披露生产规模下的失败边界，因此结论只在当前实验条件下成立。
+首要贡献由三个阶段组成，执行顺序为输入编码、核心变换和训练目标构造；辅助贡献提供接口诊断并支撑各阶段的独立验证。第一阶段接收原始输入并产生中间表示；第二阶段依据该表示执行核心变换，并把新状态传递给第三阶段；第三阶段输出训练信号。该设计用于隔离表示构造与目标计算，使每个阶段的作用和接口可以分别验证。以两个样本和一个阈值为例，样本经过三个阶段后的对象、操作与结果分别对应正式定义中的输入、变换和输出。直接证据位于 Section 3 和 Figure 2；来源未披露生产规模下的失败边界，因此结论只在当前实验条件下成立。
 
 ### 6. 核心变换与训练信号
 
-核心变换接收第一阶段的中间表示，并把更新后的状态传递给训练目标构造阶段。
+核心变换接收第一阶段的中间表示，执行受约束的状态更新，并把更新后的状态传递给训练目标构造阶段，最终输出可用于优化的训练信号。这个操作解决原始输入与目标计算直接耦合的问题。直接证据位于 Section 3 和 Figure 2；方法依赖当前表示假设，生产规模下的失败边界仍未披露。
 
 ### 7. 结论链
 
@@ -187,18 +187,30 @@ Review-Status: pending
 - Review status: page-type=not-found; match-confidence=high; observed-at=2026-07-17; venue-status=arXiv preprint
 ${v21CoreBody}`;
 
-const validate = (slug, markdown, imageExists = async () => true) =>
+const validate = (
+  slug,
+  markdown,
+  {
+    imageExists = async () => true,
+    methodOverviewBaseline = new Map(),
+  } = {},
+) =>
   validatePaperRecord({
     slug,
     markdown,
     indexMarkdown: `- [note](/papers/${slug}/)`,
     knownPaperSlugs: new Set([slug, 'source-paper']),
     legacyPaperSlugs: new Set([slug]),
+    methodOverviewBaseline,
     imageExists,
   });
 
 test('exports the paper record validator', () => {
   assert.equal(typeof validatePaperRecord, 'function');
+});
+
+test('exports the method overview baseline validator', () => {
+  assert.equal(typeof workflow.validateMethodOverviewBaseline, 'function');
 });
 
 test('exports the v2.1 analysis module taxonomy', () => {
@@ -601,20 +613,147 @@ test('the default v2.1 canary validates with seven core sections', async () => {
   assert.doesNotMatch(v21Paper, /^## OpenReview \/ 审稿意见吸收$/m);
 });
 
-test('v2.1 paper receives an advisory when contribution and method narrative is not explicit', async () => {
-  const markdown = v21Paper.replace('### 5. 贡献全景与执行链', '### 方法概览');
-  const result = await validate('v21-contribution-method-narrative', markdown);
+test('v2.1 paper rejects detailed stages without the required section 5 overview heading', async () => {
+  const markdown = v21Paper.replace('### 5. 贡献全景与方法总览', '### 5. 输入编码');
+  const result = await validate('v21-method-overview-heading', markdown);
 
-  assert.equal(
-    result.advisories.some((entry) => entry.code === 'v21-contribution-method-narrative'),
-    true,
+  assert.ok(result.errors.some((entry) => entry.code === 'v21-method-overview-heading'));
+  assert.ok(!result.advisories.some((entry) => entry.code === 'v21-method-overview-heading'));
+});
+
+test('v2.1 paper checks the section 5 overview independently from later method detail', async () => {
+  const markdown = v21Paper.replace(
+    /首要贡献由三个阶段组成，执行顺序[\s\S]+?当前实验条件下成立。/,
+    '本文给出核心贡献，详细输入、操作、传递对象、训练信号、设计理由、直接证据和失败边界见下一节。',
   );
+  const result = await validate('v21-method-overview-chain', markdown);
+
+  assert.ok(result.errors.some((entry) => entry.code === 'v21-method-overview-chain'));
+  assert.ok(!result.advisories.some((entry) => entry.code === 'v21-method-detail-narrative'));
+});
+
+test('unchanged v2.1 migration baselines downgrade method overview gaps to advisories', async () => {
+  const slug = 'v21-method-overview-baseline';
+  const markdown = v21Paper.replace('### 5. 贡献全景与方法总览', '### 5. 输入编码');
+  const result = await validate(slug, markdown, {
+    methodOverviewBaseline: new Map([[slug, '2026-07-17 09:31']]),
+  });
+
+  assert.ok(result.advisories.some((entry) => entry.code === 'v21-method-overview-heading'));
+  assert.ok(!result.errors.some((entry) => entry.code === 'v21-method-overview-heading'));
+});
+
+test('a changed baseline paper must satisfy the strict method overview contract', async () => {
+  const slug = 'v21-method-overview-updated';
+  const markdown = v21Paper
+    .replace('Updated-At: 2026-07-17 09:31', 'Updated-At: 2026-07-17 09:32')
+    .replace('### 5. 贡献全景与方法总览', '### 5. 输入编码');
+  const result = await validate(slug, markdown, {
+    methodOverviewBaseline: new Map([[slug, '2026-07-17 09:31']]),
+  });
+
+  assert.ok(result.errors.some((entry) => entry.code === 'v21-method-overview-heading'));
+});
+
+test('v2.1 paper accepts the single-stage method overview contract', async () => {
+  const singleStage = [
+    '### 5. 方法总览与完整机制',
+    '',
+    '首要贡献是一次受约束变换：给定输入和初始状态，方法计算闭式更新并最终输出训练信号。该操作用于解决输入表示与优化目标的接口不一致。直接证据位于 Section 3 和 Figure 2；成立边界是当前表示假设，来源未披露生产规模结果。',
+    '',
+    '### 6. 结论链',
+  ].join('\n');
+  const markdown = v21Paper.replace(
+    /### 5\. 贡献全景与方法总览[\s\S]+?### 7\. 结论链/,
+    singleStage,
+  );
+  const result = await validate('v21-single-stage-method-overview', markdown);
+
+  assert.ok(!result.errors.some((entry) => entry.code.startsWith('v21-method-overview')));
+  assert.ok(!result.advisories.some((entry) => entry.code === 'v21-method-detail-narrative'));
+});
+
+test('v2.1 method overviews require an explicit primary contribution', async () => {
+  const markdown = v21Paper.replace(
+    /首要贡献由三个阶段组成[^。]+。/,
+    '方法包含三个阶段，执行顺序为输入编码、核心变换和训练目标构造；辅助贡献提供接口诊断并支撑各阶段的独立验证。',
+  );
+  const result = await validate('v21-method-overview-contribution', markdown);
+
+  assert.ok(result.errors.some((entry) => entry.code === 'v21-method-overview-chain'));
+});
+
+test('HTML comments cannot satisfy method overview signals', async () => {
+  const markdown = v21Paper.replace(
+    /(?<=### 5\. 贡献全景与方法总览\n\n)[\s\S]+?(?=\n\n### 6\. 核心变换与训练信号)/,
+    '<!-- 首要贡献与辅助贡献相互支撑。输入进入阶段流程，执行核心操作并传递对象，最终输出训练信号；该阶段的作用用于解决问题。 -->',
+  );
+  const result = await validate('v21-hidden-method-overview', markdown);
+
+  assert.ok(result.errors.some((entry) => entry.code === 'v21-method-overview-chain'));
+});
+
+test('v2.1 paper requires multi-stage overviews to promote their detail sections', async () => {
+  const markdown = v21Paper.replace(
+    /### 6\. 核心变换与训练信号[\s\S]+?(?=\n### 7\. 结论链)/,
+    '',
+  );
+  const result = await validate('v21-multi-stage-overview-mode', markdown);
+
+  assert.ok(result.errors.some((entry) => entry.code === 'v21-method-overview-mode'));
+});
+
+test('v2.1 paper keeps single-stage mechanisms inside section 5', async () => {
+  const markdown = v21Paper.replace(
+    '### 5. 贡献全景与方法总览',
+    '### 5. 方法总览与完整机制',
+  );
+  const result = await validate('v21-single-stage-overview-mode', markdown);
+
+  assert.ok(result.errors.some((entry) => entry.code === 'v21-method-overview-mode'));
+});
+
+test('fenced headings cannot satisfy the v2.1 method overview contract', async () => {
+  const markdown = v21Paper
+    .replace('### 5. 贡献全景与方法总览', '### 5. 输入编码')
+    .replace(
+      '### 6. 核心变换与训练信号',
+      '```markdown\n### 5. 贡献全景与方法总览\n```\n\n### 6. 核心变换与训练信号',
+    );
+  const result = await validate('v21-fenced-method-overview', markdown);
+
+  assert.ok(result.errors.some((entry) => entry.code === 'v21-method-overview-heading'));
+});
+
+test('nested blockquote headings cannot satisfy the v2.1 method overview contract', async () => {
+  const markdown = v21Paper.replace(
+    '### 5. 贡献全景与方法总览',
+    '> ### 5. 贡献全景与方法总览',
+  );
+  const result = await validate('v21-blockquote-method-overview', markdown);
+
+  assert.ok(result.errors.some((entry) => entry.code === 'v21-method-overview-heading'));
+});
+
+test('HTML comments cannot hide a method overview heading', async () => {
+  for (const hiddenHeading of [
+    '<!--\n### 5. 贡献全景与方法总览\n-->',
+    '<!--\n### 5. 贡献全景与方法总览',
+  ]) {
+    const markdown = v21Paper.replace(
+      '### 5. 贡献全景与方法总览',
+      hiddenHeading,
+    );
+    const result = await validate('v21-commented-method-overview', markdown);
+
+    assert.ok(result.errors.some((entry) => entry.code === 'v21-method-overview-heading'));
+  }
 });
 
 test('v2.1 paper rejects a method wrapper around nested 5.x headings', async () => {
   const markdown = v21Paper.replace(
-    '### 5. 贡献全景与执行链',
-    '### 5. 核心贡献与方法逻辑\n\n#### 5.1 贡献全景与执行链',
+    '### 5. 贡献全景与方法总览',
+    '### 5. 贡献全景与方法总览\n\n#### 5.1 输入编码',
   );
   const result = await validate('v21-method-wrapper-heading', markdown);
 
@@ -632,11 +771,9 @@ test('v2.1 paper rejects hierarchical or discontinuous paper-context numbering',
 });
 
 test('v2.1 paper receives an advisory when the method narrative omits stage-level detail', async () => {
-  const shallowMethod =
-    '本文提出一个多阶段方法，并通过训练优化模型。Section 3 给出方法定义，当前实验仍有边界。';
   const markdown = v21Paper.replace(
-    /首要贡献由三个阶段组成，执行顺序[\s\S]+?当前实验条件下成立。/,
-    shallowMethod,
+    /### 6\. 核心变换与训练信号[\s\S]+?(?=\n### 7\. 结论链)/,
+    '### 6. 核心变换与训练信号\n\n本节展开第二阶段。',
   );
   const result = await validate('v21-method-detail-narrative', markdown);
 
@@ -646,17 +783,21 @@ test('v2.1 paper receives an advisory when the method narrative omits stage-leve
   );
 });
 
-test('K3 keeps a detailed method narrative as a real v2.1 canary', async () => {
+test('K3 keeps detailed method prose while its frozen overview gap remains advisory', async () => {
   const canary = await fs.readFile(
     'content/papers/2026-07-27-kimi-k3-open-frontier-intelligence.md',
     'utf8',
   );
-  const result = await validate('2026-07-27-kimi-k3-open-frontier-intelligence', canary);
+  const slug = '2026-07-27-kimi-k3-open-frontier-intelligence';
+  const result = await validate(slug, canary, {
+    methodOverviewBaseline: new Map([[slug, '2026-07-28 11:47']]),
+  });
 
   assert.equal(
     result.advisories.some((entry) => entry.code === 'v21-method-detail-narrative'),
     false,
   );
+  assert.ok(result.advisories.some((entry) => entry.code === 'v21-method-overview-heading'));
   for (const heading of ['11.1 SFT', '11.3 部分采样轨迹', '11.5 MOPD']) {
     assert.match(
       canary,
@@ -668,6 +809,19 @@ test('K3 keeps a detailed method narrative as a real v2.1 canary', async () => {
   assert.match(canary, /^### 14\. 结论链条$/m);
   assert.doesNotMatch(canary, /^### 5\.\d+\s/m);
   assert.doesNotMatch(canary, /^### 5\. 核心贡献与方法逻辑$/m);
+});
+
+test('DRPO is the real strict method overview canary', async () => {
+  const slug = '2510.04474-drpo-decoupled-reward-policy-optimization';
+  const canary = await fs.readFile(`content/papers/${slug}.md`, 'utf8');
+  const result = await validate(slug, canary);
+
+  assert.ok(!result.errors.some((entry) => entry.code.startsWith('v21-method-overview')));
+  assert.ok(!result.advisories.some((entry) => entry.code.startsWith('v21-method-overview')));
+  assert.ok(!result.advisories.some((entry) => entry.code === 'v21-method-detail-narrative'));
+  assert.match(canary, /^### 5\. 贡献全景与方法总览$/m);
+  assert.match(canary, /^### 6\. GRPO 中组合 reward 的符号翻转$/m);
+  assert.match(canary, /^### 11\. 结论链条$/m);
 });
 
 test('paper conclusions require natural-language descriptions without formulas', async () => {
@@ -1089,7 +1243,7 @@ test('paper figures require an existing local file', async () => {
     '- 结果：有效。',
     '- 结果：有效。\n\n![Figure](/images/papers/v2-note/fig-1.png)\n\nFigure 1: result. Image Source: https://example.com/fig-1.png',
   );
-  const result = await validate('v2-note', markdown, async () => false);
+  const result = await validate('v2-note', markdown, { imageExists: async () => false });
   assert.ok(result.errors.some((issue) => issue.code === 'missing-image-file'));
 });
 
@@ -1113,7 +1267,7 @@ test('paper figure paths must use the current paper slug', async () => {
 
 test('paper image checks ignore examples inside HTML comments', async () => {
   const markdown = `${v2Paper}\n<!-- ![Example](/images/papers/placeholder/fig.png) -->\n`;
-  const result = await validate('commented-image', markdown, async () => false);
+  const result = await validate('commented-image', markdown, { imageExists: async () => false });
   assert.ok(!result.errors.some((issue) => issue.code.startsWith('image-') || issue.code.startsWith('missing-image')));
 });
 
@@ -1141,9 +1295,11 @@ test('paper images reject path traversal outside the paper directory', async () 
     '- 结果：有效。\n\n![Figure](/images/papers/path-traversal/../other/fig.png)\n\nFigure 1: result. Image Source: https://example.com/fig.png',
   );
   let checkedFilesystem = false;
-  const result = await validate('path-traversal', markdown, async () => {
-    checkedFilesystem = true;
-    return true;
+  const result = await validate('path-traversal', markdown, {
+    imageExists: async () => {
+      checkedFilesystem = true;
+      return true;
+    },
   });
   assert.ok(result.errors.some((issue) => issue.code === 'image-path'));
   assert.equal(checkedFilesystem, false);
@@ -1471,6 +1627,155 @@ test('the frozen v2 manifest matches every pre-v2.1 structured note', async () =
   assert.deepEqual([...manifest.slugs].sort(), v2Slugs.sort());
 });
 
+test('the frozen method overview baseline matches current unmodified v2.1 migrations', async () => {
+  const frozenCeiling = new Set([
+    '2026-06-16-glm-5-2-long-horizon-tasks@2026-07-27 14:54',
+    '2026-07-27-kimi-k3-open-frontier-intelligence@2026-07-28 11:47',
+    '202607.1328-towards-long-horizon-agents-survey@2026-07-21 10:14',
+    '2503.01840-eagle-3-training-time-test@2026-07-27 15:47',
+    '2505.19645-moesd-sparse-moe-speculative-decoding@2026-07-24 14:20',
+    '2601.16206-computer-environments-agentic-intelligence@2026-07-21 14:18',
+    '2601.18734-self-distilled-reasoner-opsd@2026-07-28 15:34',
+    '2601.19897-self-distillation-continual-learning@2026-07-29 10:39',
+    '2603.00729-qwen3-coder-next-agentic-coding@2026-07-21 14:18',
+    '2605.09539-tacomas-test-time-coevolution-mas@2026-07-22 11:03',
+    '2605.10899-rubricem-rubric-guided-meta-rl@2026-07-22 17:16',
+    '2605.26684-graphgpo-graph-credit-assignment-agentic-rl@2026-07-22 14:40',
+    '2606.20954-lre-learned-relevance-eviction@2026-07-29 11:32',
+    '2607.00151-smoothagent-lookahead-context-engineering@2026-07-29 13:35',
+    '2607.02980-hils-attention-infinite-context@2026-07-21 14:18',
+    '2607.04763-reopd-prefix-replay-agentic-distillation@2026-07-23 18:09',
+    '2607.12696-ecospec-cost-aware-moe-speculative-decoding@2026-07-24 15:15',
+    '2607.13988-trace-turn-level-reward-assignment@2026-07-22 15:28',
+    '2607.14777-seed-self-evolving-on-policy-distillation@2026-07-23 16:10',
+    '2607.18082-cripo-rubric-rl-self-distillation@2026-07-22 18:27',
+  ]);
+  const manifest = JSON.parse(
+    await fs.readFile('internal/paper-workflow-method-overview-baseline.json', 'utf8'),
+  );
+  const records = await Promise.all(
+    manifest.entries.map(async ({ slug }) => ({
+      slug,
+      markdown: await fs.readFile(`content/papers/${slug}.md`, 'utf8'),
+    })),
+  );
+  const slugs = manifest.entries.map(({ slug }) => slug);
+
+  assert.equal(manifest.schemaVersion, 1);
+  assert.equal(manifest.capturedAt, '2026-07-29 15:47');
+  assert.equal(new Set(slugs).size, slugs.length);
+  assert.ok(!slugs.includes('2510.04474-drpo-decoupled-reward-policy-optimization'));
+  assert.ok(!slugs.includes('2601.20802-reinforcement-learning-via-self-distillation'));
+  for (const [index, entry] of manifest.entries.entries()) {
+    assert.ok(frozenCeiling.has(`${entry.slug}@${entry.updatedAt}`));
+    assert.match(records[index].markdown, /^- Workflow version: v2\.1$/m);
+    assert.match(
+      records[index].markdown,
+      new RegExp(`^Updated-At: ${entry.updatedAt.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`, 'm'),
+    );
+  }
+  assert.deepEqual(
+    workflow.validateMethodOverviewBaseline({ records, manifest }).errors,
+    [],
+  );
+  assert.deepEqual(
+    [...workflow.methodOverviewBaselineCompatibilityMap(manifest)],
+    manifest.entries.map(({ slug, updatedAt }) => [slug, updatedAt]),
+  );
+});
+
+test('method overview baseline validation rejects stale, malformed, duplicate, missing, regressed, and post-capture entries', () => {
+  const staleSlug = '2026-06-16-glm-5-2-long-horizon-tasks';
+  const staleUpdatedAt = '2026-07-27 14:54';
+  const stale = v21Paper
+    .replace('First-Archived-At: 2026-07-17 09:30', 'First-Archived-At: 2026-06-16 09:30')
+    .replace('Updated-At: 2026-07-17 09:31', `Updated-At: ${staleUpdatedAt}`);
+  const regressedSlug = '2601.18734-self-distilled-reasoner-opsd';
+  const regressedUpdatedAt = '2026-07-28 15:34';
+  const regressed = v21Paper
+    .replace('First-Archived-At: 2026-07-17 09:30', 'First-Archived-At: 2026-01-28 09:30')
+    .replace('Updated-At: 2026-07-17 09:31', 'Updated-At: 2026-07-28 15:33')
+    .replace('### 5. 贡献全景与方法总览', '### 5. 输入编码');
+  const postCaptureSlug = '2503.01840-eagle-3-training-time-test';
+  const postCapture = v21Paper
+    .replace('First-Archived-At: 2026-07-17 09:30', 'First-Archived-At: 2026-07-29 15:48')
+    .replace('Updated-At: 2026-07-17 09:31', 'Updated-At: 2026-07-29 15:47');
+  const result = workflow.validateMethodOverviewBaseline({
+    records: [
+      { slug: staleSlug, markdown: stale },
+      { slug: regressedSlug, markdown: regressed },
+      { slug: postCaptureSlug, markdown: postCapture },
+    ],
+    manifest: {
+      schemaVersion: 1,
+      capturedAt: '2026-07-29 15:47',
+      entries: [
+        { slug: staleSlug, updatedAt: staleUpdatedAt },
+        { slug: staleSlug, updatedAt: staleUpdatedAt },
+        { slug: regressedSlug, updatedAt: regressedUpdatedAt },
+        {
+          slug: '202607.1328-towards-long-horizon-agents-survey',
+          updatedAt: '2026-07-21 10:14',
+        },
+        { slug: postCaptureSlug, updatedAt: '2026-07-27 15:47' },
+        { slug: '', updatedAt: 'invalid' },
+      ],
+    },
+  });
+  const codes = new Set(result.errors.map((entry) => entry.code));
+
+  assert.ok(codes.has('v21-method-overview-baseline-stale'));
+  assert.ok(codes.has('v21-method-overview-baseline-duplicate'));
+  assert.ok(codes.has('v21-method-overview-baseline-entry'));
+  assert.ok(codes.has('v21-method-overview-baseline-time-regression'));
+  assert.ok(codes.has('v21-method-overview-baseline-capture-boundary'));
+  assert.ok(
+    workflow.validateMethodOverviewBaseline({ records: [], manifest: null }).errors.some(
+      (entry) => entry.code === 'v21-method-overview-baseline-shape',
+    ),
+  );
+  assert.ok(
+    workflow.validateMethodOverviewBaseline({
+      records: [],
+      manifest: { schemaVersion: 2, capturedAt: '2026-07-29 15:48', entries: [] },
+    }).errors.some((entry) => entry.code === 'v21-method-overview-baseline-metadata'),
+  );
+  assert.equal(
+    workflow.methodOverviewBaselineCompatibilityMap({
+      schemaVersion: 2,
+      capturedAt: '2026-07-29 15:48',
+      entries: [{ slug: staleSlug, updatedAt: staleUpdatedAt }],
+    }).size,
+    0,
+  );
+});
+
+test('new papers cannot enter method overview compatibility mode', async () => {
+  const slug = '2510.04474-drpo-decoupled-reward-policy-optimization';
+  const markdown = v21Paper.replace('### 5. 贡献全景与方法总览', '### 5. 输入编码');
+  const manifest = {
+    schemaVersion: 1,
+    capturedAt: '2026-07-29 15:47',
+    entries: [{ slug, updatedAt: '2026-07-17 09:31' }],
+  };
+  const compatibilityMap = workflow.methodOverviewBaselineCompatibilityMap(manifest);
+  const recordResult = await validate(slug, markdown, {
+    methodOverviewBaseline: compatibilityMap,
+  });
+  const baselineResult = workflow.validateMethodOverviewBaseline({
+    records: [{ slug, markdown }],
+    manifest,
+  });
+
+  assert.equal(compatibilityMap.has(slug), false);
+  assert.ok(recordResult.errors.some((entry) => entry.code === 'v21-method-overview-heading'));
+  assert.ok(
+    baselineResult.errors.some(
+      (entry) => entry.code === 'v21-method-overview-baseline-not-frozen',
+    ),
+  );
+});
+
 test('public paper sanitizer retains the v2 not-found review classification', () => {
   const cleaned = stripPublicPaperMaintenance(`## OpenReview / 审稿意见吸收
 
@@ -1549,15 +1854,24 @@ test('the public template exposes the v2.1 seven-section contract', async () => 
   for (const heading of ['Source', '作者与关系', '一句话结论', '论文脉络', '关键实验/定理', '局限', '跨论文关系']) {
     assert.match(template, new RegExp(`^## ${heading}$`, 'm'));
   }
-  assert.match(template, /核心贡献与方法/);
-  assert.match(template, /^### 5\. 贡献全景与执行链$/m);
-  assert.match(template, /^### 6\. 按执行顺序命名的关键环节$/m);
+  assert.match(template, /贡献全景与方法总览/);
+  assert.match(template, /^### 5\. 贡献全景与方法总览$/m);
+  assert.match(template, /^### 6\. <第一关键阶段：按执行或论证依赖命名>$/m);
   assert.match(template, /^### 7\. 结论链条$/m);
   assert.doesNotMatch(template, /^### 5\.\d+\s/m);
   assert.match(template, /具体例子/);
-  assert.match(template, /完整执行链或论证链/);
-  assert.match(template, /不设统一字数/);
-  assert.match(template, /直接证据位于哪里/);
+  assert.match(template, /端到端执行链或论证链/);
+  for (const requirement of [
+    '起点、输入或初始条件',
+    '关键阶段及其执行或依赖顺序',
+    '阶段间传递的数据',
+    '最终输出、训练信号或结论',
+    '后文增加关键阶段',
+    '### 5. 方法总览与完整机制',
+  ]) {
+    assert.match(template, new RegExp(requirement.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
+  }
+  assert.match(template, /直接证据/);
   assert.doesNotMatch(template, /^## Reference Intake Brief$/m);
 });
 
@@ -1662,9 +1976,9 @@ test('public workflow and agent instructions expose one aligned v2.1 contract', 
   assert.match(agentInstructions, /论文脉络.*最重要的分析正文/);
   assert.match(agentInstructions, /具体例子/);
   assert.match(workflowDoc, /核心贡献与方法/);
-  assert.match(workflowDoc, /从 `### 5\.` 开始连续编号/);
-  assert.match(agentInstructions, /详细方法从 `### 5\.` 开始连续编号/);
-  assert.match(maintenanceSop, /详细方法直接使用 `### 5\.`、`### 6\.`/);
+  assert.match(workflowDoc, /阶段详解从 `### 6\.` 开始/);
+  assert.match(agentInstructions, /阶段详解从 `### 6\.` 开始/);
+  assert.match(maintenanceSop, /阶段详解从 `### 6\.` 开始/);
   assert.match(workflowDoc, /具体例子/);
   for (const document of [workflowDoc, template, agentInstructions, maintenanceSop]) {
     for (const requirement of ['认识更新', '证据与机制', '迁移与边界', '来源归因']) {
@@ -1679,6 +1993,12 @@ test('public workflow and agent instructions expose one aligned v2.1 contract', 
     assert.match(document, /不设统一字数/);
     assert.match(document, /训练信号/);
     assert.match(document, /失败条件|失败边界|成立边界/);
+    assert.match(document, /贡献全景与方法总览/);
+    assert.match(document, /方法总览与完整机制/);
+    assert.match(document, /只(?:读|阅读)(?:本节|第 5 节)/);
+  }
+  for (const document of [workflowDoc, agentInstructions, maintenanceSop]) {
+    assert.match(document, /paper-workflow-method-overview-baseline\.json/);
   }
   assert.match(maintenanceSop, /Key figure decision: include/);
   assert.match(maintenanceSop, /Key figure decision: omit/);
