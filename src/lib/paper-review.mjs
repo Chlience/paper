@@ -1,7 +1,6 @@
 export const PAPER_REVIEW_DEFINITIONS = Object.freeze([
   Object.freeze({ id: 'all', label: '全部' }),
   Object.freeze({ id: 'pending', label: '待审阅' }),
-  Object.freeze({ id: 'needs-review', label: '需复审' }),
   Object.freeze({ id: 'approved', label: '已审阅' }),
 ]);
 
@@ -15,7 +14,6 @@ const reviewLabels = new Map(PAPER_REVIEW_DEFINITIONS.map(({ id, label }) => [id
 const reviewSortDefinitions = Object.freeze({
   all: Object.freeze({ field: 'firstArchivedAt', label: '归档时间' }),
   pending: Object.freeze({ field: 'firstArchivedAt', label: '归档时间' }),
-  'needs-review': Object.freeze({ field: 'updatedAt', label: '更新时间' }),
   approved: Object.freeze({ field: 'reviewedAt', label: '审阅时间' }),
 });
 

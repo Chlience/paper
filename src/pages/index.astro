@@ -100,11 +100,6 @@ const routeGroups = data.tagFacets.map((facet) => ({
             {reviewCounts.pending} 篇待审阅
           </a>
         )}
-        {reviewCounts['needs-review'] > 0 && (
-          <a class="section-link is-review-queue" href="/papers/?review=needs-review">
-            {reviewCounts['needs-review']} 篇需复审
-          </a>
-        )}
         <a class="section-link" href="/papers/?review=approved">View all reviewed</a>
       </div>
     </div>

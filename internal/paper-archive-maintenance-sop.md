@@ -1,6 +1,6 @@
 # Paper Archive Maintenance SOP
 
-Updated-At: 2026-07-29
+Updated-At: 2026-07-30
 
 ## 目的
 
@@ -29,10 +29,9 @@ Updated-At: 2026-07-29
 每篇论文头部声明 `Review-Status`：
 
 - `pending`：分析已经归档，等待用户审阅；新增论文默认使用该状态。
-- `approved`：用户已经确认核心贡献、直接证据、结论边界与局限，同时记录 `Reviewed-At: YYYY-MM-DD HH:mm`。
-- `needs-review`：已审阅笔记在 `Reviewed-At` 之后发生实质更新，保留上次审阅时间并等待再次确认。
+- `approved`：用户已经完成过核心贡献、直接证据、结论边界与局限的确认，同时记录 `Reviewed-At: YYYY-MM-DD HH:mm`。
 
-`pending` 不记录 `Reviewed-At`。`approved` 的 `Updated-At` 不得晚于 `Reviewed-At`；`needs-review` 的 `Updated-At` 必须晚于 `Reviewed-At`。排版、错字和链接维护不改变审阅状态。`/papers/` 通过 `?review=pending`、`?review=needs-review` 和 `?review=approved` 提供可收藏的筛选入口。
+`Review-Status` 只使用 `pending` 和 `approved`。`pending` 不记录 `Reviewed-At`；`approved` 必须记录分钟精度的 `Reviewed-At`。后续内容、排版、错字和链接修订只更新 `Updated-At`，保留原有 `Review-Status` 和 `Reviewed-At`，因此 `approved` 文章允许 `Updated-At` 晚于 `Reviewed-At`。`/papers/` 通过 `?review=pending` 和 `?review=approved` 提供可收藏的筛选入口。
 
 ## 分析正文语义验收
 
@@ -105,7 +104,7 @@ public/images/papers/<paper-slug>/fig-<n>-<short-name>.<ext>
 
 ## 主线维护
 
-主线只响应用户明确的建立、更新、合并、拆分、改名或删除请求。文章使用 `synthesis-v1`，固定保存在 `content/mainlines/`。主线身份不依赖审阅状态；文章内容的 `pending`、`approved` 和 `needs-review` 沿用论文文章的时间顺序约束。
+主线只响应用户明确的建立、更新、合并、拆分、改名或删除请求。文章使用 `synthesis-v1`，固定保存在 `content/mainlines/`。主线身份不依赖审阅状态；文章内容使用 `pending` 和 `approved`，修订时沿用论文文章的状态保留规则。
 
 主线图片放入 `public/images/mainlines/<slug>/`。主线不分配 `data/paper-tags.json`，不写入 `content/utility/papers-index.md`，不计入论文数量。全局搜索和论文页回链由生成数据提供。
 

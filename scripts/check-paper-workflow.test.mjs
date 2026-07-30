@@ -221,8 +221,8 @@ test('exports the v2.1 analysis module taxonomy', () => {
 });
 
 test('exports the paper review status taxonomy and filter helpers', () => {
-  assert.deepEqual([...paperReview.PAPER_REVIEW_STATUSES], ['pending', 'needs-review', 'approved']);
-  assert.equal(paperReview.normalizePaperReviewFilter('needs-review'), 'needs-review');
+  assert.deepEqual([...paperReview.PAPER_REVIEW_STATUSES], ['pending', 'approved']);
+  assert.equal(paperReview.normalizePaperReviewFilter('needs-review'), 'all');
   assert.equal(paperReview.normalizePaperReviewFilter('unknown'), 'all');
   assert.equal(paperReview.paperMatchesReviewFilter({ reviewStatus: 'approved' }, 'approved'), true);
   assert.equal(paperReview.paperMatchesReviewFilter({ reviewStatus: 'pending' }, 'approved'), false);
@@ -230,9 +230,8 @@ test('exports the paper review status taxonomy and filter helpers', () => {
     paperReview.countPaperReviewStatuses([
       { reviewStatus: 'pending' },
       { reviewStatus: 'approved' },
-      { reviewStatus: 'needs-review' },
     ]),
-    { all: 3, pending: 1, 'needs-review': 1, approved: 1 },
+    { all: 2, pending: 1, approved: 1 },
   );
 });
 
@@ -264,8 +263,8 @@ test('review filters use their visible lifecycle timestamp while preserving pins
     label: '审阅时间',
   });
   assert.deepEqual(paperReview.paperReviewSortDefinition('needs-review'), {
-    field: 'updatedAt',
-    label: '更新时间',
+    field: 'firstArchivedAt',
+    label: '归档时间',
   });
   assert.deepEqual(
     [...papers].sort((left, right) => paperReview.comparePapersForReviewFilter(left, right, 'all')).map(
@@ -283,7 +282,7 @@ test('review filters use their visible lifecycle timestamp while preserving pins
     [...papers]
       .sort((left, right) => paperReview.comparePapersForReviewFilter(left, right, 'needs-review'))
       .map(({ slug }) => slug),
-    ['pinned', 'newly-reviewed', 'newly-archived'],
+    ['pinned', 'newly-archived', 'newly-reviewed'],
   );
   assert.deepEqual(
     [...papers]
@@ -953,17 +952,23 @@ test('all notes require a valid local review status', async () => {
   assert.ok(invalidResult.errors.some((issue) => issue.code === 'paper-review-status'));
 });
 
-test('approved and needs-review states preserve the user review boundary', async () => {
+test('approved revisions preserve status while invalid review metadata is rejected', async () => {
   const approved = v21Paper.replace(
     'Review-Status: pending',
     'Review-Status: approved\nReviewed-At: 2026-07-17 09:32',
   );
   assert.deepEqual((await validate('approved-paper-review', approved)).errors, []);
 
-  const staleApproved = approved.replace('Updated-At: 2026-07-17 09:31', 'Updated-At: 2026-07-17 09:33');
+  const revisedApproved = approved.replace('Updated-At: 2026-07-17 09:31', 'Updated-At: 2026-07-17 09:33');
+  assert.deepEqual(
+    (await validate('revised-approved-paper-review', revisedApproved)).errors,
+    [],
+  );
+
+  const approvedWithoutDate = v21Paper.replace('Review-Status: pending', 'Review-Status: approved');
   assert.ok(
-    (await validate('stale-approved-paper-review', staleApproved)).errors.some(
-      (issue) => issue.code === 'paper-review-state-order',
+    (await validate('approved-paper-review-without-date', approvedWithoutDate)).errors.some(
+      (issue) => issue.code === 'paper-reviewed-at',
     ),
   );
 
@@ -971,7 +976,11 @@ test('approved and needs-review states preserve the user review boundary', async
     'Review-Status: pending',
     'Review-Status: needs-review\nReviewed-At: 2026-07-17 09:30',
   );
-  assert.deepEqual((await validate('needs-paper-review', needsReview)).errors, []);
+  assert.ok(
+    (await validate('needs-paper-review', needsReview)).errors.some(
+      (issue) => issue.code === 'paper-review-status',
+    ),
+  );
 
   const pendingWithDate = v21Paper.replace('Review-Status: pending', 'Review-Status: pending\nReviewed-At: 2026-07-17 09:30');
   assert.ok(
@@ -1929,9 +1938,30 @@ test('public workflow and agent instructions expose one aligned v2.1 contract', 
   const workflowDoc = await fs.readFile('content/utility/paper-analysis-workflow.md', 'utf8');
   const synthesisWorkflow = await fs.readFile('content/utility/research-synthesis-workflow.md', 'utf8');
   const template = await fs.readFile('content/utility/paper-note-template.md', 'utf8');
+  const mainlineTemplate = await fs.readFile('content/utility/research-mainline-template.md', 'utf8');
+  const mainlinesDoc = await fs.readFile('content/utility/research-mainlines.md', 'utf8');
   const agentInstructions = await fs.readFile('AGENTS.md', 'utf8');
   const authorSop = await fs.readFile('internal/author-x-account-search-sop.md', 'utf8');
   const maintenanceSop = await fs.readFile('internal/paper-archive-maintenance-sop.md', 'utf8');
+
+  for (const document of [
+    workflowDoc,
+    synthesisWorkflow,
+    template,
+    mainlineTemplate,
+    mainlinesDoc,
+    agentInstructions,
+    maintenanceSop,
+  ]) {
+    assert.doesNotMatch(document, /needs-review|需复审|待复审/);
+    assert.match(document, /pending/);
+    assert.match(document, /approved/);
+    assert.match(document, /Updated-At/);
+    assert.match(
+      document,
+      /保留原有(?:\s+`?Review-Status`?\s+和\s+`?Reviewed-At`?|审阅状态与审阅时间)/,
+    );
+  }
 
   for (const snippet of [
     '| 简称 | 时间 | 核心信号 |',

@@ -3,6 +3,7 @@
 First-Archived-At: YYYY-MM-DD HH:mm
 Updated-At: YYYY-MM-DD HH:mm
 Review-Status: pending
+<!-- Review-Status 只使用 pending 或 approved。pending 不记录 Reviewed-At；用户确认后改为 approved 并记录 Reviewed-At。后续修订只更新 Updated-At，保留原有 Review-Status 和 Reviewed-At。 -->
 
 > 本模板用于单篇材料。用户明确请求的跨论文时间窗、方法谱系或方向综合使用 [Research Synthesis Workflow](/synthesis-workflow/) 与 [Research Mainline Template](/mainline-template/)。
 

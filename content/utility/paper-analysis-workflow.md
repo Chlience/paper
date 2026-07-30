@@ -1,7 +1,7 @@
 # Paper Analysis Workflow
 
 First-Archived-At: 2026-06-19
-Updated-At: 2026-07-29
+Updated-At: 2026-07-30
 
 ## 目标
 
@@ -39,7 +39,7 @@ v2.1 使用固定质量底线和条件分析模块。每篇笔记都要说明研
 - 每位可解析作者完成基础身份核验；默认新建 profile 只覆盖作者顺序前两位、论文明确标注的共同一作和明确通讯作者，普通作者只复用已有 profile 或按用户明确要求建档；触发深入核验且进入建档范围的作者已按字段保存稳定来源，已核验个人主页明确重点展示的论文已写入作者档案。
 - 新论文已记录会改变理解的作者、机构、主题、引用或方法关系；旧论文只在原有理解发生变化时回写。
 - `content/utility/papers-index.md` 保留唯一三列表格行；`data/paper-tags.json` 保留一个主标签和最多三个辅助标签。
-- 笔记头部声明本地 `Review-Status`；新归档默认进入 `pending`，用户明确确认后进入 `approved`，实质更新使已审阅笔记进入 `needs-review`。
+- 笔记头部声明本地 `Review-Status`；新归档默认进入 `pending`，用户明确确认后进入 `approved`。后续修订更新 `Updated-At`，并保留原有审阅状态与审阅时间。
 - 五项人工语义门禁通过，本地内容工作流、元数据、公式、搜索和置顶检查通过。
 - 完整改动已创建本地 commit；推送只在用户明确要求后执行。
 
@@ -82,13 +82,12 @@ arXiv 论文优先以 abstract 页面作为规范来源，并补充 PDF、HTML�
 
 ## 本地审阅状态
 
-本地审阅状态记录用户是否确认当前笔记判断，与 `Source -> Review status` 记录的公开 venue / peer-review 状态分别维护。
+本地审阅状态记录用户是否已经完成过笔记内容确认，与 `Source -> Review status` 记录的公开 venue / peer-review 状态分别维护。`Reviewed-At` 保存用户明确确认的时间，后续修订不会改写这项历史。
 
 - `Review-Status: pending`：分析已经归档，等待用户审阅。新增论文和缺少用户明确确认的历史论文使用该状态，不记录 `Reviewed-At`。
-- `Review-Status: approved`：用户已确认核心贡献、直接证据、最窄结论边界和局限，同时记录 `Reviewed-At: YYYY-MM-DD HH:mm`。`Updated-At` 不得晚于该时间。
-- `Review-Status: needs-review`：已审阅笔记发生实质更新，保留上次 `Reviewed-At`，且 `Updated-At` 晚于该时间。用户再次确认后改回 `approved` 并刷新 `Reviewed-At`。
+- `Review-Status: approved`：用户已经完成过核心贡献、直接证据、最窄结论边界和局限的确认，同时记录 `Reviewed-At: YYYY-MM-DD HH:mm`。后续修订仍使用 `approved`，保留该审阅时间，并允许 `Updated-At` 晚于 `Reviewed-At`。
 
-排版、错字和链接维护不改变状态。论文目录通过 `/papers/?review=pending`、`/papers/?review=needs-review` 和 `/papers/?review=approved` 提供筛选深链；无查询参数时展示全部论文。
+内容、排版、错字和链接修订只更新 `Updated-At`，保留原有 `Review-Status` 和 `Reviewed-At`。论文目录通过 `/papers/?review=pending` 和 `/papers/?review=approved` 提供筛选深链；无查询参数时展示全部论文。
 
 ## 七个核心章节
 
@@ -274,7 +273,7 @@ arXiv 论文优先以 abstract 页面作为规范来源，并补充 PDF、HTML�
 
 删除论文前遵守项目高危操作确认规则，明确绝对路径、操作类型和数据丢失风险并取得用户二次确认。确认后同步处理论文文件、索引行、标签分配、失效关系、静态图片和作者 profile。
 
-作者 profile 在剩余论文中没有作者链接、姓名或别名关联时必须同提交删除；`orphan-author-profile` 属于硬错误。删除论文还要检查 `content/mainlines/` 中的引用；若论证或成员关系受影响，同步修订主线并按实质更新规则处理文章审阅状态。
+作者 profile 在剩余论文中没有作者链接、姓名或别名关联时必须同提交删除；`orphan-author-profile` 属于硬错误。删除论文还要检查 `content/mainlines/` 中的引用；若论证或成员关系受影响，同步修订主线、更新 `Updated-At`，并保留原有审阅状态与审阅时间。
 
 ## 验证与提交
 

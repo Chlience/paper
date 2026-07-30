@@ -568,7 +568,6 @@ export const validatePaperRecord = async ({
   const updatedAt = getTopLevelField(markdown, 'Updated-At');
   const paperReviewStatus = getTopLevelField(markdown, 'Review-Status').toLowerCase();
   const reviewedAt = getTopLevelField(markdown, 'Reviewed-At');
-  const updatedMinute = updatedAt.match(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}/)?.[0] ?? '';
   const visibleMarkdown = maskHtmlComments(markdown);
   const conclusion = getSection(markdown, '一句话结论');
 
@@ -600,15 +599,7 @@ export const validatePaperRecord = async ({
     }
   } else if (!isValidMinute(reviewedAt)) {
     errors.push(
-      issue('paper-reviewed-at', slug, 'Approved and needs-review notes require Reviewed-At in YYYY-MM-DD HH:mm.'),
-    );
-  } else if (paperReviewStatus === 'approved' && updatedMinute && updatedMinute > reviewedAt) {
-    errors.push(
-      issue('paper-review-state-order', slug, 'A note updated after Reviewed-At must use Review-Status: needs-review.'),
-    );
-  } else if (paperReviewStatus === 'needs-review' && updatedMinute && updatedMinute <= reviewedAt) {
-    errors.push(
-      issue('paper-review-state-order', slug, 'needs-review requires Updated-At to be later than Reviewed-At.'),
+      issue('paper-reviewed-at', slug, 'Approved notes require Reviewed-At in YYYY-MM-DD HH:mm.'),
     );
   }
 

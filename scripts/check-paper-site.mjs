@@ -1,7 +1,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import process from 'node:process';
-import { comparePapersForReviewFilter } from '../src/lib/paper-review.mjs';
+import { comparePapersForReviewFilter, PAPER_REVIEW_STATUSES } from '../src/lib/paper-review.mjs';
 import { REQUIRED_SECTION_GROUPS } from './content/paper-workflow.mjs';
 import { authorsFile, generatedFile, repoRoot } from './content/repository.mjs';
 
@@ -91,7 +91,7 @@ if (!Array.isArray(data.authors)) {
 
 const paperSlugs = new Set((data.papers ?? []).map((paper) => paper.slug));
 const mainlineSlugs = new Set((mainlineData.mainlines ?? []).map((mainline) => mainline.slug));
-const paperReviewStatuses = new Set(['pending', 'needs-review', 'approved']);
+const paperReviewStatuses = new Set(PAPER_REVIEW_STATUSES);
 const authorSlugs = new Set((data.authors ?? []).map((author) => author.slug));
 const generatedAuthorsBySlug = new Map((data.authors ?? []).map((author) => [author.slug, author]));
 
@@ -418,6 +418,9 @@ if (!(await exists(homeIndexPath))) {
 
 for (const file of htmlFiles) {
   const content = await fs.readFile(file, 'utf8');
+  if (content.includes('needs-review')) {
+    fail(`${path.relative(repoRoot, file)} exposes the removed needs-review state.`);
+  }
   if (content.includes('id="paper-search-data"')) {
     fail(`${path.relative(repoRoot, file)} still embeds the full paper search index.`);
   }

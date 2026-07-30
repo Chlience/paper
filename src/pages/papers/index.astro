@@ -11,7 +11,7 @@ const reviewCounts = countPaperReviewStatuses(data.papers);
   <section class="page-header container">
     <p class="eyebrow mono">All notes</p>
     <h1>论文笔记</h1>
-    <p class="deck">当前收录 {data.papers.length} 篇论文或技术文章。全部与待审阅按归档时间、需复审按更新时间、已审阅按审阅时间排列，均为最新优先。</p>
+    <p class="deck">当前收录 {data.papers.length} 篇论文或技术文章。全部与待审阅按归档时间、已审阅按审阅时间排列，均为最新优先。</p>
   </section>
 
   <section class="section compact" data-paper-review-root>
@@ -138,8 +138,13 @@ const reviewCounts = countPaperReviewStatuses(data.papers);
     }
 
     const applyUrlFilter = () => {
-      const params = new URL(window.location.href).searchParams;
-      applyFilter(params.get('review'));
+      const url = new URL(window.location.href);
+      const filter = normalizePaperReviewFilter(url.searchParams.get('review'));
+      if (url.searchParams.has('review') && filter === 'all') {
+        url.searchParams.delete('review');
+        window.history.replaceState({ review: filter }, '', url);
+      }
+      applyFilter(filter);
     };
 
     window.addEventListener('popstate', applyUrlFilter);

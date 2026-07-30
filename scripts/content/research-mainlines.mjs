@@ -16,6 +16,7 @@ import {
   stripPageChrome,
   stripSection,
 } from './markdown.mjs';
+import { PAPER_REVIEW_STATUSES } from '../../src/lib/paper-review.mjs';
 
 export const REQUIRED_MAINLINE_HEADINGS = [
   'Source',
@@ -40,7 +41,7 @@ const FORBIDDEN_PAPER_HEADINGS = new Set([
   'OpenReview / 审稿意见吸收',
   '跨论文关系',
 ]);
-const REVIEW_STATUSES = new Set(['pending', 'needs-review', 'approved']);
+const REVIEW_STATUSES = new Set(PAPER_REVIEW_STATUSES);
 const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const MINUTE_PATTERN = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$/;
 const SEARCH_WINDOW_PATTERN = /^(\d{4}-\d{2}-\d{2})\s+至\s+(\d{4}-\d{2}-\d{2})\s+(\d{2}:\d{2})\s+([A-Z][A-Z0-9+:-]*)$/;
@@ -140,16 +141,12 @@ export const validateResearchMainlines = async (entries, { repoRoot = process.cw
       errors.push(issue('timestamps', slug, 'First-Archived-At and Updated-At must be ordered YYYY-MM-DD HH:mm values.'));
     }
     if (!REVIEW_STATUSES.has(reviewStatus)) {
-      errors.push(issue('review-status', slug, 'Review-Status must be pending, needs-review, or approved.'));
+      errors.push(issue('review-status', slug, `Review-Status must be one of: ${PAPER_REVIEW_STATUSES.join(', ')}.`));
     }
-    if (reviewStatus !== 'pending' && !validMinute(reviewedAt)) {
-      errors.push(issue('reviewed-at', slug, 'Reviewed-At is required for approved and needs-review articles.'));
-    }
-    if (reviewStatus === 'approved' && reviewedAt && updatedAt > reviewedAt) {
-      errors.push(issue('review-order', slug, 'An article updated after review must use needs-review.'));
-    }
-    if (reviewStatus === 'needs-review' && reviewedAt && updatedAt <= reviewedAt) {
-      errors.push(issue('review-order', slug, 'needs-review requires an update later than Reviewed-At.'));
+    if (reviewStatus === 'pending' && reviewedAt) {
+      errors.push(issue('reviewed-at', slug, 'Pending articles must not declare Reviewed-At.'));
+    } else if (reviewStatus === 'approved' && !validMinute(reviewedAt)) {
+      errors.push(issue('reviewed-at', slug, 'Approved articles require Reviewed-At in YYYY-MM-DD HH:mm.'));
     }
 
     const headings = [...markdown.matchAll(/^##\s+(.+)$/gm)].map((match) => stripMarkdown(match[1]));

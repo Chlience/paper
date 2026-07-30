@@ -519,10 +519,6 @@ h3 {
   --review-tone: oklch(43% 0.13 230);
 }
 
-.paper-review-filter a[data-paper-review-filter="needs-review"] {
-  --review-tone: oklch(43% 0.13 55);
-}
-
 .paper-review-filter a[data-paper-review-filter="approved"] {
   --review-tone: oklch(41% 0.12 155);
 }
@@ -764,13 +760,6 @@ h3 {
   border-color: oklch(78% 0.055 230);
   color: oklch(37% 0.12 230);
   background: oklch(95% 0.025 230);
-}
-
-.paper-row-meta .paper-review-badge.is-needs-review,
-.paper-meta .paper-review-badge.is-needs-review {
-  border-color: oklch(76% 0.07 55);
-  color: oklch(36% 0.11 55);
-  background: oklch(95% 0.035 55);
 }
 
 .paper-row-meta .paper-review-badge.is-approved,

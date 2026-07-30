@@ -1,7 +1,7 @@
 # Research Mainline Template
 
 First-Archived-At: 2026-07-22 17:20
-Updated-At: 2026-07-22 17:20
+Updated-At: 2026-07-30 09:37
 
 > 本模板用于用户明确请求建立的跨材料研究主线。单篇论文、报告、模型卡、博客与已发表综述使用 [Paper Note Template](/template/)。完整规则见 [Research Synthesis Workflow](/synthesis-workflow/)。
 
@@ -11,6 +11,7 @@ Updated-At: 2026-07-22 17:20
 First-Archived-At: YYYY-MM-DD HH:mm
 Updated-At: YYYY-MM-DD HH:mm
 Review-Status: pending
+<!-- Review-Status 只使用 pending 或 approved。pending 不记录 Reviewed-At；用户确认后改为 approved 并记录 Reviewed-At。后续修订只更新 Updated-At，保留原有 Review-Status 和 Reviewed-At。 -->
 
 ## Source
 

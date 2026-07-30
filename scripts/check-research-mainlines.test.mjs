@@ -107,6 +107,57 @@ test('a valid independent mainline contract builds article records and paper mem
   assert.doesNotMatch(record.html, /id="source"/);
 });
 
+test('mainline review metadata follows the pending and approved lifecycle', async () => {
+  const approvedRevision = fixtureMarkdown
+    .replace('Updated-At: 2026-07-22 10:00', 'Updated-At: 2026-07-22 10:01')
+    .replace('Review-Status: pending', 'Review-Status: approved\nReviewed-At: 2026-07-22 10:00');
+  assert.deepEqual(
+    (
+      await validateResearchMainlines(
+        [{ slug: 'approved-revision', markdown: approvedRevision }],
+        { repoRoot: fixtureRoot },
+      )
+    ).errors,
+    [],
+  );
+
+  const approvedWithoutDate = fixtureMarkdown.replace('Review-Status: pending', 'Review-Status: approved');
+  assert.ok(
+    (
+      await validateResearchMainlines(
+        [{ slug: 'approved-without-date', markdown: approvedWithoutDate }],
+        { repoRoot: fixtureRoot },
+      )
+    ).errors.some((item) => item.code === 'reviewed-at'),
+  );
+
+  const pendingWithDate = fixtureMarkdown.replace(
+    'Review-Status: pending',
+    'Review-Status: pending\nReviewed-At: 2026-07-22 10:00',
+  );
+  assert.ok(
+    (
+      await validateResearchMainlines(
+        [{ slug: 'pending-with-date', markdown: pendingWithDate }],
+        { repoRoot: fixtureRoot },
+      )
+    ).errors.some((item) => item.code === 'reviewed-at'),
+  );
+
+  const needsReview = fixtureMarkdown.replace(
+    'Review-Status: pending',
+    'Review-Status: needs-review\nReviewed-At: 2026-07-22 10:00',
+  );
+  assert.ok(
+    (
+      await validateResearchMainlines(
+        [{ slug: 'needs-review-state', markdown: needsReview }],
+        { repoRoot: fixtureRoot },
+      )
+    ).errors.some((item) => item.code === 'review-status'),
+  );
+});
+
 test('mainline structure is synthesis-native and date windows stay internal', async () => {
   const dated = fixtureMarkdown.replace('# Test Direction', '# 2026 年 1—7 月 Test Direction');
   const entries = await writeFixture('2026-07-test-direction', dated);

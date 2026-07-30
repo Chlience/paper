@@ -1,7 +1,7 @@
 # 研究主线说明
 
 First-Archived-At: 2026-07-16 19:51
-Updated-At: 2026-07-22 17:20
+Updated-At: 2026-07-30 09:37
 
 研究主线由用户明确提出的方向总结请求建立。一条请求对应一条主线，主线文章保存在 `content/mainlines/`，并通过[/mainlines/](/mainlines/)提供稳定入口。主线文章是问题边界、分类框架、材料集合、证据强度和当前判断的唯一事实来源。
 
@@ -23,6 +23,6 @@ Updated-At: 2026-07-22 17:20
 
 主线只响应用户明确的建立、更新、合并、拆分、改名或删除请求。新增论文和定时构建不会自动修改文章。标题与路径保持日期无关，检索窗口和材料版本在文章内部更新。
 
-主线身份一经请求即成立；文章内容继续使用 `pending`、`approved` 和 `needs-review`。证据强度按具体结论记录，来源材料的整体声誉或发表状态不会替代直接证据与可比性审计。
+主线身份一经请求即成立；文章内容使用 `pending` 和 `approved`。后续修订只更新 `Updated-At`，并保留原有审阅状态与审阅时间。证据强度按具体结论记录，来源材料的整体声誉或发表状态不会替代直接证据与可比性审计。
 
 完整构建规范见 [Research Synthesis Workflow](/synthesis-workflow/)，新文章使用 [Research Mainline Template](/mainline-template/)。
