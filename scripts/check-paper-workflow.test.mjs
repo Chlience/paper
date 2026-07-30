@@ -782,28 +782,24 @@ test('v2.1 paper receives an advisory when the method narrative omits stage-leve
   );
 });
 
-test('K3 keeps detailed method prose while its frozen overview gap remains advisory', async () => {
+test('K3 is a strict method overview canary after migration', async () => {
   const canary = await fs.readFile(
     'content/papers/2026-07-27-kimi-k3-open-frontier-intelligence.md',
     'utf8',
   );
   const slug = '2026-07-27-kimi-k3-open-frontier-intelligence';
-  const result = await validate(slug, canary, {
-    methodOverviewBaseline: new Map([[slug, '2026-07-28 11:47']]),
-  });
+  const result = await validate(slug, canary);
 
-  assert.equal(
-    result.advisories.some((entry) => entry.code === 'v21-method-detail-narrative'),
-    false,
-  );
-  assert.ok(result.advisories.some((entry) => entry.code === 'v21-method-overview-heading'));
+  assert.ok(!result.errors.some((entry) => entry.code.startsWith('v21-method-overview')));
+  assert.ok(!result.advisories.some((entry) => entry.code.startsWith('v21-method-overview')));
+  assert.ok(!result.advisories.some((entry) => entry.code === 'v21-method-detail-narrative'));
   for (const heading of ['11.1 SFT', '11.3 部分采样轨迹', '11.5 MOPD']) {
     assert.match(
       canary,
       new RegExp(`^#### ${heading.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}`, 'm'),
     );
   }
-  assert.match(canary, /^### 5\. 贡献全景$/m);
+  assert.match(canary, /^### 5\. 贡献全景与方法总览$/m);
   assert.match(canary, /^### 12\. 部署约束/m);
   assert.match(canary, /^### 14\. 结论链条$/m);
   assert.doesNotMatch(canary, /^### 5\.\d+\s/m);
@@ -1639,7 +1635,6 @@ test('the frozen v2 manifest matches every pre-v2.1 structured note', async () =
 test('the frozen method overview baseline matches current unmodified v2.1 migrations', async () => {
   const frozenCeiling = new Set([
     '2026-06-16-glm-5-2-long-horizon-tasks@2026-07-27 14:54',
-    '2026-07-27-kimi-k3-open-frontier-intelligence@2026-07-28 11:47',
     '202607.1328-towards-long-horizon-agents-survey@2026-07-21 10:14',
     '2503.01840-eagle-3-training-time-test@2026-07-27 15:47',
     '2505.19645-moesd-sparse-moe-speculative-decoding@2026-07-24 14:20',

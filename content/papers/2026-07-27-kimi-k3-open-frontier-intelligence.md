@@ -1,7 +1,7 @@
 # Kimi K3: Open Frontier Intelligence 技术报告笔记
 
 First-Archived-At: 2026-07-27 23:57
-Updated-At: 2026-07-28 11:47
+Updated-At: 2026-07-30 16:58
 Review-Status: approved
 Reviewed-At: 2026-07-28 18:50
 
@@ -21,8 +21,8 @@ Reviewed-At: 2026-07-28 18:50
 - Published / updated: product announced 2026-07-16; full model weights and technical report released 2026-07-27
 - Current version read: PDF introduced in Git commit `521359a5cae5e79d02e5a2102c2cea9ce3b9b79a` on 2026-07-27
 - Repository snapshot checked: `692ab492deeaf311b8c8d6f130096da69e94409b` on 2026-07-27
-- MoonEP snapshot checked: `0f385f038fc33bec22e3bcf5a07a8a22693e754c` on 2026-07-28; functional implementation pinned to initial commit `51e64aa55310f6c6b464deabd80de2e8b5426d3f`
-- Accessed: 2026-07-28
+- MoonEP snapshot checked: `0f385f038fc33bec22e3bcf5a07a8a22693e754c` on 2026-07-30; functional implementation pinned to initial commit `51e64aa55310f6c6b464deabd80de2e8b5426d3f`
+- Accessed: 2026-07-30
 - Key figure decision: include
 - Review status: page-type=not-found; match-confidence=high; observed-at=2026-07-27; venue-status=organization technical report and open-weight release
 - Subjects: mixture-of-experts, hybrid linear attention, long context, native multimodality, agentic reinforcement learning, distributed systems
@@ -84,7 +84,7 @@ K3 的目标是让这些局部方案形成可共同缩放的完整系统，并�
 4. 九个同源强化学习专家与学生模型距离足够近，使逐 token 教师信号可以稳定整合多领域能力。
 5. 动态冗余专家、固定大小的递归状态和可恢复微虚拟机能够把算法中的稀疏性与长程状态转换为可预测的系统执行。
 
-### 5. 贡献全景
+### 5. 贡献全景与方法总览
 
 首要贡献是一个沿序列、深度和宽度联合缩放的模型—系统方案。它由三项结构机制构成：
 
@@ -92,12 +92,32 @@ K3 的目标是让这些局部方案形成可共同缩放的完整系统，并�
 - 深度方向：Block Attention Residuals 让每层从嵌入和此前块输出中选择需要的表示。
 - 宽度方向：Stable LatentMoE 把 896 个路由专家压到 3584 维潜空间，每个 token 选择 16 个路由专家，并保留两个全宽共享专家。
 
-辅助贡献负责让首要贡献可训练、可后训练和可部署：
+辅助贡献依次负责训练稳定性、长上下文扩展、能力整合和部署：
 
 - MoonViT-V2 从头训练原生视觉路径，Per-Head Muon 调整大矩阵正交化的粒度。
 - 8K、64K、256K、1M 的渐进式上下文课程与分散依赖的合成长序列提供长程训练信号。
 - SFT、九个强化学习专家、MOPD、量化感知训练和 EAGLE-3 形成后训练路径。
 - FlashKDA、KDA 上下文并行、MoonEP、长程强化学习基础设施、AgentENV 和混合缓存服务系统承载实际执行。
+
+全文中的三类“专家”和两类长程状态承担不同角色：
+
+- **路由专家**是 Stable LatentMoE 每层内部的 896 个前馈网络组件，随模型参数共同训练。
+- **九个强化学习专家策略**是三个领域与三档推理强度形成的九组完整策略检查点，随后作为 MOPD 教师。
+- **MoonEP 动态冗余专家**是当前层、当前微批次按实际路由临时复制到其它 rank 的物理权重视图，没有独立参数或优化器状态。
+- **模型状态**包括 KDA 递归状态和 MLA KV cache；**环境状态**包括文件系统、进程、内存和工具执行位置，由 AgentENV 保存。partial rollout 续接一条轨迹时需要同时恢复两类状态。
+
+端到端工作链按训练与部署的实际依赖分为六个阶段：
+
+| 阶段 | 输入 | 核心操作与传递对象 | 输出与作用 |
+| --- | --- | --- | --- |
+| 1. 架构前向 | 文本 token、图像或视频 | MoonViT-V2 产生视觉 token；KDA–MLA 混合层传递递归状态、压缩 KV 与隐藏表示；Block AttnRes 在块级历史表示间选择；Stable LatentMoE 产生路由结果和专家输出 | 统一多模态隐藏表示，以及供相邻层和系统执行使用的模型状态与 Top-k 路由 |
+| 2. 规模化预训练 | 多模态训练批次、模型参数和当前路由 | Per-Head Muon、RMSNorm、SiTU-GLU 与 QB 维持优化、数值和统计路由稳定；FlashKDA、上下文并行、MoonEP、流水线并行和激活管理把前向与反向映射到集群 | 8K 预训练检查点；训练信号来自下一 token 预测 |
+| 3. 长上下文扩展 | 预训练检查点、长文档、视频与合成长序列 | 上下文依次扩展到 64K、256K 和 1M；KDA 状态、MLA KV 与分段数据在设备间传递 | 百万 token 配置的预训练模型 |
+| 4. SFT 与分领域强化学习 | 预训练模型、验证轨迹、工具环境、逐题预算和部署精度 | SFT 建立工具使用冷启动；MXFP4/MXFP8 量化感知训练从 SFT 开始并贯穿强化学习；三个领域分别训练 low、high、max 三档策略；partial rollout 跨训练迭代传递模型缓存、沙箱状态和未完成轨迹 | 九个强化学习专家策略，以及供统一模型学习的轨迹和奖励 |
+| 5. 多教师能力整合 | 学生在线轨迹与对应领域—强度教师的 token 概率 | MOPD 在学生实际到达的前缀上计算截断的教师—学生对数概率比，并作为逐 token 强化学习信号；学生继续使用部署量化配置 | 支持三档推理强度的统一 K3 策略 |
+| 6. 推测解码与服务 | 统一策略和目标模型的低、中、高层表示 | 预训练 MTP 层改造为 EAGLE-3 草稿模型；服务系统分页管理 KDA 状态和 MLA KV | 开放权重模型、草稿模型和可服务的百万 token 推理路径 |
+
+阶段 1–3 形成首要模型贡献及其预训练检查点，阶段 4–6 将同一模型转成可控、可部署的智能体策略。各阶段的输入、内部机制、训练信号、直接证据与成立边界分别在 §6–§13 展开。
 
 ![Figure 2: Kimi K3 architecture across sequence, depth, width, and vision](/images/papers/2026-07-27-kimi-k3-open-frontier-intelligence/fig-2-kimi-k3-architecture.png)
 
@@ -285,7 +305,25 @@ $$
 
 #### 13.1 MoonEP 把路由负载转换为严格均衡的物理执行计划
 
-MoonEP 接收每个 rank 上的隐藏状态、Top-k 专家编号、路由权重和本地 `tokens_per_expert` 统计。设每个源 rank 输入 $S$ 个 token，每个 token 选择 $K$ 个专家，总专家数为 $E$，专家并行 rank 数为 $R$。规划器首先确定每个目的 rank 应接收的真实路由条目数，以及各归属专家组偏离该容量的程度：
+MoonEP 接收每个 rank 上的隐藏状态、Top-k 专家编号、路由权重和本地 `tokens_per_expert` 统计。它保留路由器选出的逻辑专家、混合权重和每个专家收到的 token 集合，只重新决定每条专家调用在哪个 rank 执行。动态冗余专家因此表示某个逻辑专家在当前层、当前微批次的临时物理副本。
+
+设每个源 rank 输入 $S$ 个 token，每个 token 选择 $K$ 个专家，总专家数为 $E$，专家并行 rank 数为 $R$。记 $T_e$ 为全局路由到逻辑专家 $e$ 的条目数，$A_{e,r}$ 为规划后交给目的 rank $r$ 执行的专家 $e$ 条目数。计数层面的专家工作量守恒和严格设备均衡分别要求：
+
+$$
+\sum_{r=1}^{R}A_{e,r}=T_e,
+\qquad
+\sum_{e=1}^{E}A_{e,r}=SK.
+$$
+
+第一个约束保持每个逻辑专家的总工作量，第二个约束让每个 rank 恰好执行 $SK$ 个真实 token—专家条目。实际 `dst` 映射进一步保持每条 token—专家记录的身份和路由权重，因而物理迁移不改变模型函数。若 $A_{e,r}>0$ 且 $r$ 不是专家 $e$ 的归属 rank，目的 rank 需要访问这个专家的临时副本。令 $m_r(P)$ 为计划 $P$ 在 rank $r$ 上引入的远端专家种数，原报告把规划目标写成：
+
+$$
+M(I)=\min_P\max_r m_r(P),
+$$
+
+其中 $I$ 是当前路由结果。逐层求解精确整数规划的成本过高，团队只用离线 ILP 为代表性案例建立参照，在线路径采用始终满足资源上界的 GPU 构造式规划器。
+
+规划器首先把专家按归属 rank 分成 $R$ 个组，并计算每组相对目标容量的偏差：
 
 $$
 C=SK,
@@ -295,9 +333,30 @@ $$
 
 $C$ 是严格均衡时每个 rank 的真实 token—专家条目容量，$L_h$ 是归属专家组 $h$ 当前承载的全局条目数，$b_h>0$ 表示该组过载，$b_h<0$ 表示对应 rank 仍有接收余量。这里的平衡对象是专家计算条目；一个 token 选择 $K$ 个专家时会产生 $K$ 条记录，因此容量使用 $SK$。
 
-官方参考实现依次完成两级分配。第一级反复选择当前最过载的归属专家组和余量最大的目的 rank，把足以填满该目的 rank 的配额从前者移出；一个欠载 rank 在一次分配后达到容量 $C$，之后不再接收其它归属组。第二级在每个过载归属组内部，反复配对“剩余 token 最多的专家”和“剩余接收配额最大的目的 rank”，分配两者的较小值。这个过程保持每个逻辑专家的 token 总数不变，只改变条目在哪个 rank 执行。由于一个目的 rank 最多接收一个远端归属组，而每个归属组包含 $E/R$ 个专家，它最多需要访问 $E/R$ 种远端专家；这对应报告中每 rank 预留不超过 $E/R$ 个冗余专家槽即可保证可行方案存在的上界。
+官方参考实现依次完成两级分配：
 
-规划结果继续进入权重与 token 的物理布局。每层的 gate、up 和 down 投影分别暴露一个形状为 $[E+B,H,H']$ 的连续虚拟内存映射（Virtual Memory Management，VMM）区域：前 $E$ 行映射所有 rank 的归属专家参数，后 $B$ 行是当前 rank 的预取槽。训练使用 $B=E/R$，规划器返回 `experts_to_copy`、直接通信目的位置和 `cu_seqlens`；后者说明每个专家或预取槽在分组 GEMM 输入中的结束位置。预取槽的物理内存来自跨层复用的进程级缓冲池，因此额外常驻空间按 $B$ 个专家投影计算，无需为每层分别分配。
+1. **归属组之间确定迁移配额。** 规划器反复选择当前最过载的归属专家组 $h$ 和余量最大的目的 rank $u$，从 $h$ 移出 $-b_u$ 条记录，一次把 $u$ 填到容量 $C$。迁移量可以超过 $h$ 的净过载量，此时 $h$ 转为欠载并在后续由另一个归属组填满。已经填满的目的 rank 不再接收其它归属组，因此它的远端条目最多来自一个组。
+2. **归属组内部选择具体专家。** 对每个存在外迁配额的组，规划器反复配对“剩余 token 最多的专家”和“剩余接收配额最大的目的 rank”，迁移两者的较小值。一个专家的部分 token 可以在归属 rank 执行，其余 token 在临时副本上执行；各逻辑专家的总条目数保持为 $T_e$。
+
+下面的本地构造例子说明第一级为什么允许原过载组转为欠载。取 $R=4$、$E=8$、$C=10$，四个归属组的原始负载为 $(18,12,6,4)$，初始偏差为 $(8,2,-4,-6)$。组 0 先向 rank 3 迁移 6 条，偏差变为 $(2,2,-4,0)$；再向 rank 2 迁移 4 条，偏差变为 $(-2,2,0,0)$；最后组 1 向 rank 0 迁移 2 条，全部偏差归零。rank 2 和 rank 3 的远端条目只来自组 0，rank 0 的远端条目只来自组 1。每个来源组包含两个专家，所以每个目的 rank 最多需要两个远端专家副本。
+
+这个“每个目的 rank 最多接收一个远端归属组”的构造直接给出 Theorem 1：一个归属组只有 $E/R$ 个专家，因此任意路由结果都存在满足
+
+$$
+\max_r m_r(P^*)\leq \frac{E}{R}
+$$
+
+的严格均衡计划。Theorem 2 进一步构造近紧下界：令 rank 0 的归属专家没有 token，其余 $E(R-1)/R$ 个专家均分全部 $RSK$ 条记录。rank 0 要填满 $SK$ 条记录，至少需要
+
+$$
+\left\lceil
+\frac{E(R-1)}{R^2}
+\right\rceil
+$$
+
+种远端专家；当 $R$ 增大时，这个数量接近 $E/R$。训练阶段使用 $B=E/R$ 个预取槽因此能够覆盖任意路由结果，统一保证所需的槽数无法显著缩小。
+
+规划结果继续进入权重与 token 的物理布局。每层的 gate、up 和 down 投影分别暴露一个形状为 $[E+B,H,H']$ 的连续虚拟内存映射（Virtual Memory Management，VMM）区域：前 $E$ 行映射所有 rank 的归属专家参数，后 $B$ 行是当前 rank 的预取槽。规划器输出 `dst`、`experts_to_copy`、`cu_seqlens`、对齐填充区间和通信去重映射：`dst` 编码每条记录的最终 rank 与分组位置，`experts_to_copy` 指定预取专家，`cu_seqlens` 给出各专家或预取槽在分组 GEMM 输入中的累计结束位置。预取槽的物理内存来自跨层复用的进程级缓冲池，因此额外常驻空间按 $B$ 个专家投影计算，无需为每层分别分配。
 
 ![Figure 3: MoonEP symmetric expert-weight mapping and reusable prefetch slots](/images/papers/2026-07-27-kimi-k3-open-frontier-intelligence/fig-3-moonep-weight-buffer.png)
 
@@ -305,14 +364,27 @@ Figure 3：MoonEP 在每个 rank 上建立布局相同的连续专家权重视�
 
 前向阶段按照以下接口执行：
 
-1. `dispatch` 汇总各 rank 的专家负载，运行 GPU 在线规划器，并把隐藏状态与路由权重直接写入远端通信缓冲区中的最终专家分组位置。
-2. `prefetch_weight` 将计划使用的远端专家 gate、up 和 down 权重复制到本地预取槽；`cu_seqlens` 让分组 GEMM 只读取当前激活的专家行。
-3. 专家计算在每个 rank 上处理恰好 $SK$ 个真实条目，再加每个虚拟内存分组所需的对齐填充。固定的真实条目数与有界填充共同形成静态 `NvS` 输入形状。
-4. `combine` 按保存的通信计划把专家输出和路由权重还原到源 token 顺序。
+1. `dispatch` 汇总各 rank 的专家负载，运行 GPU 在线规划器，并依据 `dst` 把隐藏状态与路由权重直接写入远端通信缓冲区中的最终专家分组位置，省去接收后的独立 permute。
+2. 同一个 token 的多个 Top-k 分支落到同一目的 rank 时，公开实现只跨 rank 发送一份隐藏向量，目的 rank 的 dispatch epilogue 再在本地展开到各专家分段；各分支的路由权重仍逐条写入。combine 前的 prologue 用 FP32 累加执行反向的本地归并，从而减少两个方向的隐藏向量通信。
+3. `prefetch_weight` 将计划使用的远端专家 gate、up 和 down 权重复制到本地预取槽；`cu_seqlens` 让分组 GEMM 按连续行号读取当前激活的专家和副本。
+4. 专家计算在每个 rank 上处理恰好 $SK$ 个真实条目。若每个专家分段按 $p=\texttt{token\_padding}$ 对齐，当前公开实现预留的静态逻辑长度上界为
+
+   $$
+   NvS
+   =
+   SK
+   +
+   2\frac{E}{R}(p-1).
+   $$
+
+   后一项覆盖至多 $E/R$ 个本地专家分段和 $E/R$ 个远端专家分段的对齐空位；物理缓冲区再按 CUDA VMM 粒度对齐。论文中的固定 $SK$ 描述真实条目容量，代码中的 `NvS` 同时包含固定上界的填充。
+5. `combine` 按保存的通信计划把专家输出和路由权重还原到源 token 顺序。`zero_copy=True` 时，专家 FFN 直接读写通信缓冲区视图，省去通信缓冲区与用户张量之间的边界复制。
 
 反向阶段复用同一份计划，跳过再次规划。临时副本产生的 FP32 权重梯度写入独立的归并缓冲区，不进入训练框架对正式参数执行的梯度同步；`reduce_grad` 把这些梯度累加回逻辑专家的归属 rank，随后清空已消费的临时槽。最终只有归属专家持有优化器状态并执行参数更新，因此动态副本改变物理执行路径，同时保持原有 MoE 参数更新语义。
 
-训练配置需要 $B=E/R$，使分组 GEMM 使用的专家权重均能预取到本地。只做前向的推理可以设置 $B<E/R$；超出预取槽的远端专家通过对称内存映射直接读取，结果保持一致，访问成本会上升。`zero_copy` 模式返回通信缓冲区视图，这些视图会被下一次 `dispatch` 或 `combine` 覆盖，跨通信调用保存激活时需要关闭该模式。以上执行链的直接证据来自技术报告 §5.2.1 与 Appendix E，以及固定到功能提交的 [MoonEP README](https://github.com/MoonshotAI/MoonEP/tree/51e64aa55310f6c6b464deabd80de2e8b5426d3f#readme)、[规划参考实现](https://github.com/MoonshotAI/MoonEP/blob/51e64aa55310f6c6b464deabd80de2e8b5426d3f/tests/planning_reference.py) 和 [端到端接口测试](https://github.com/MoonshotAI/MoonEP/blob/51e64aa55310f6c6b464deabd80de2e8b5426d3f/tests/test_e2e.py)。
+训练配置需要 $B=E/R$，使分组 GEMM 使用的专家权重均能预取到本地。只做前向的推理可以设置 $B<E/R$；超出预取槽的远端专家通过对称内存映射直接读取，结果保持一致，访问成本会上升。`zero_copy` 返回的视图会被下一次 `dispatch` 或 `combine` 覆盖，跨通信调用保存激活时需要关闭该模式。严格均衡覆盖同构专家的真实条目数；rank 内的逐专家负载仍可能偏斜，报告另用工作量感知的专家 GEMM 调度器处理这项差异。公开实现和基准集中在单机多卡 NVLink 环境，跨节点网络下的权重预取、梯度归并和尾延迟缺少直接证据。
+
+以上执行链的直接证据来自技术报告 §5.2.1 与 Appendix E，以及固定到功能提交的 [MoonEP README](https://github.com/MoonshotAI/MoonEP/tree/51e64aa55310f6c6b464deabd80de2e8b5426d3f#readme)、[规划参考实现](https://github.com/MoonshotAI/MoonEP/blob/51e64aa55310f6c6b464deabd80de2e8b5426d3f/tests/planning_reference.py)、[`dispatch` 与 `combine` 接口](https://github.com/MoonshotAI/MoonEP/blob/51e64aa55310f6c6b464deabd80de2e8b5426d3f/moonep/api.py)、[dispatch 去重实现](https://github.com/MoonshotAI/MoonEP/blob/51e64aa55310f6c6b464deabd80de2e8b5426d3f/moonep/dispatch.py)、[combine 去重归并实现](https://github.com/MoonshotAI/MoonEP/blob/51e64aa55310f6c6b464deabd80de2e8b5426d3f/moonep/combine_prologue.py)和 [端到端接口测试](https://github.com/MoonshotAI/MoonEP/blob/51e64aa55310f6c6b464deabd80de2e8b5426d3f/tests/test_e2e.py)。
 
 模型状态和环境状态在这里分别处理：KDA/MLA 缓存保存模型已经读取的上下文，AgentENV checkpoint 保存文件系统、进程和内存等外部世界状态。partial rollout 要在下一迭代继续一条轨迹，两类状态都必须恢复到一致位置。
 
@@ -365,11 +437,11 @@ Figure 3：MoonEP 在每个 rank 上建立布局相同的连续专家权重视�
 - 设置：理论部分处理任意当前层、当前微批次的 Top-k 路由结果。组件仓库另在单台八卡 H20、EP=8 上比较 MoonEP 与 DeepEP v2；通信基准使用每 rank 8192 个 token、384 个专家、7168 隐藏维、Top-8 路由、32 个 SM，按固定随机种子生成相同路由，在 20 次预热后测量 50 次迭代的跨 rank 平均延迟。
 - Baseline：仓库的实测基线是 DeepEP v2 elastic expanded dispatch / reduced combine。ECHO、UltraEP 和 AcclEP 属于方法比较对象或实现启发来源，没有进入同一张实测对照图。
 - 指标：每个 rank 的真实 token—专家条目数、冗余专家槽上界、静态缓冲区形状，以及随专家最大负载违反率 `maxvio` 变化的 planning、prefetch、dispatch、combine 延迟。`maxvio` 定义为 $\max_e(T_e/\bar{T})-1$，其中 $T_e$ 是专家 $e$ 的实际条目数，$\bar{T}$ 是严格均衡时的专家平均条目数。
-- 结果：报告证明总专家数为 $E$、专家并行 rank 数为 $R$ 时，每个 rank 最多预留 $E/R$ 个冗余专家槽即可保证严格均衡方案存在；均衡后每个 rank 处理固定的 $SK$ 个真实条目。仓库在 `maxvio` 目标值 0.2、1、10 和 20 上报告 MoonEP 通信延迟随失衡程度基本保持稳定，dispatch 总时间包含在线规划和权重预取，combine 延迟在各设置下低于 DeepEP v2；README 的端到端训练图还显示 MoonEP 迭代时间保持稳定，而 DeepEP 在高失衡设置下发生显存不足。
+- 结果：报告证明总专家数为 $E$、专家并行 rank 数为 $R$ 时，每个 rank 最多预留 $E/R$ 个冗余专家槽即可保证严格均衡方案存在；均衡后每个 rank 处理固定的 $SK$ 个真实条目。官方通信图中，`maxvio=0.2` 时 MoonEP 前向 dispatch（含规划和预取）为 2598 微秒，DeepEP v2 为 2296 微秒；MoonEP 前向 combine 为 1975 微秒，DeepEP v2 为 2126 微秒。`maxvio=20` 时，两组前向 dispatch 分别为 2413 和 2604 微秒，前向 combine 分别为 1954 和 2468 微秒。端到端图使用 EP=8、9 层、16K 序列、256 个专家、Top-8 和 2048 专家隐藏维；按图中归一化结果读取，`maxvio=0.2` 和 1 时 DeepEP 分别快约 1.9% 和 0.5%，`maxvio=5`、10 和 15 时 MoonEP 分别快约 3.9%、7.6% 和 11.1%，`maxvio=20` 时 DeepEP 标记为显存不足，MoonEP 完成运行。
 - 对照是否可比：通信脚本对两种库使用相同路由、输入、SM 预算、对齐方式和计时器；MoonEP 的 communication 图没有计入可与后续计算重叠的 `grad_reduce`。端到端图只由 README 给出，没有同仓库数值表。全部结果限于单机 H20、EP=8 和合成路由，缺少 K3 实际专家数、Top-16、完整训练集群拓扑、重复运行方差、规划器故障统计，以及与调优后 UltraEP 的同硬件比较。
 - 证据定位：Technical report Section 5.2.1, pp. 19–20; Appendix E, Theorems 1–2, pp. 44–46; [MoonEP README and figures at `51e64aa`](https://github.com/MoonshotAI/MoonEP/tree/51e64aa55310f6c6b464deabd80de2e8b5426d3f#readme); [`benchmarks/bench_vs_deepep.py`](https://github.com/MoonshotAI/MoonEP/blob/51e64aa55310f6c6b464deabd80de2e8b5426d3f/benchmarks/bench_vs_deepep.py).
 - 支持的最窄结论：对任意当前路由结果，MoonEP 的构造可在每 rank 至多增加 $E/R$ 个冗余专家槽的条件下形成严格 token 负载均衡；官方单机 H20、EP=8 基准进一步支持其静态执行形状能隔离合成专家失衡对通信和迭代时间的影响。
-- 解读：证明覆盖方案存在性和最坏资源上界，仓库基准覆盖一个具体单机实现。K3 完整训练中的吞吐收益及其对跨节点网络、实际路由分布和 Top-16 配置的敏感性仍待直接测量。
+- 解读：证明覆盖方案存在性和最坏资源上界，仓库基准覆盖一个具体单机实现。轻度失衡时，在线规划和权重预取会使 MoonEP 的前向 dispatch 慢于 DeepEP v2；combine 的零复制路径已经取得优势。失衡增大后，固定真实条目数和静态形状使 MoonEP 延迟保持稳定，收益逐步超过新增开销。K3 完整训练中的吞吐收益及其对跨节点网络、实际路由分布和 Top-16 配置的敏感性仍待直接测量。
 
 ### 结果 5：AgentENV 支持长程强化学习所需的环境状态续接
 
@@ -402,16 +474,30 @@ Figure 3：MoonEP 在每个 rank 上建立布局相同的连续专家权重视�
 
 ## 主要启发
 
-1. **模型缩放指标应同时覆盖信息流和执行路径。** K3 把序列、深度、宽度对应到 KDA–MLA、Attention Residuals、LatentMoE，再分别配置内核、通信、内存和缓存机制。
-2. **统计均衡与设备均衡是两个环节。** QB 调整下一个训练步的专家入选阈值，MoonEP 根据当前路由结果形成设备级严格均衡计划。
-3. **长程强化学习包含两类持久状态。** 模型侧要保存 KDA/MLA 缓存，环境侧要保存沙箱状态；只恢复其中一类无法继续原轨迹。
-4. **部署约束可以提前进入训练目标。** MXFP4/MXFP8 量化感知训练与 EAGLE-3 草稿层微调都在最终权重形成前处理服务约束。
-5. **复合模型报告需要组件归因表。** K3 的总体结果很强，下一步最有价值的证据是固定数据与算力后分别移除 KDA 衰减下界、AttnRes、LatentMoE 稳定组件、QB、Per-Head Muon 和系统模块。
+### 1. 模型缩放指标需要同时覆盖信息流和执行路径
+
+K3 的架构图和系统章节共同表明，序列、深度和宽度扩展分别由 KDA–MLA、Attention Residuals 和 LatentMoE 承担，随后还要为递归状态、块级表示和稀疏专家配置对应的内核、通信、内存与缓存路径。本地分析据此把“扩大模型”理解为模型表示与系统接口的联合设计：结构产生的新状态或稀疏性需要具有可执行的数据路径。这个判断适用于大规模混合架构，具体收益仍需固定数据与算力的组件消融确认。
+
+### 2. 统计路由、逻辑专家选择和物理执行计划属于三个层次
+
+报告中的 QB 调整下一训练步的专家入选偏置，MoonEP 接收当前层、当前微批次已经形成的 Top-k 结果，再改变 token—专家条目的物理执行 rank。MoonEP 保持每条 token—专家记录的身份、逻辑专家总条目数和路由权重，因此设备级严格均衡可以与模型函数保持一致。这个区分可迁移到其它 MoE 系统：统计均衡负责降低长期偏斜，执行规划负责处理当前实现负载；当专家计算成本异构或跨节点权重迁移昂贵时，条目数相等仍需补充成本加权的调度指标。
+
+### 3. 长程强化学习需要同时保存模型状态和环境状态
+
+partial rollout 会让一条轨迹跨训练迭代续接。K3 的模型侧由外部缓存保存 KDA 递归状态和 MLA KV，环境侧由 AgentENV 保存文件系统、进程、内存与工具状态；两类证据共同支持“续接位置由模型上下文和外部世界联合定义”。这项认识适用于含状态工具的长程智能体训练，恢复协议还需保证策略版本、缓存前缀、环境 checkpoint 和未完成工具调用处于一致边界。
+
+### 4. 部署约束可以在最终策略形成前进入训练信号
+
+K3 从 SFT 开始使用 MXFP4 权重和 MXFP8 激活的量化感知训练，让强化学习更新直接观察部署精度；EAGLE-3 阶段则冻结目标模型，以接受率目标训练草稿层。两条路径分别把数值格式和解码延迟提前纳入权重形成过程。报告提供了机制与最终系统配置，缺少同预算的独立消融，因此这项启发说明设计路径，尚不能量化它们各自贡献的能力保持或服务收益。
+
+### 5. 复合模型报告的总体收益需要配套组件归因
+
+K3 把约 2.5 倍缩放效率归于架构、数据和训练配方的整体变化，报告没有给出足以分离各组件作用的原始拟合点和消融。本地分析据此认为，下一步最有价值的证据是固定数据与算力后分别移除 KDA 衰减下界、AttnRes、LatentMoE 稳定组件、QB、Per-Head Muon 和系统模块，并同时记录质量、吞吐、显存和稳定性。这个要求用于校准复合系统的因果归因，无法由总体基准领先直接替代。
 
 ## 局限
 
 1. 约 2.5 倍缩放效率是架构、数据和训练配方的合并结果。报告只给拟合曲线示意，缺少原始点、拟合式、置信区间和组件消融。
-2. 预训练没有披露总 token、数据混合比例、GPU 型号与数量、并行度、训练时长、GPU-hours、能耗和成本，外部无法复算训练效率。MoonEP 仓库补充了单机 H20、EP=8 的组件基准，仍缺 K3 实际专家数、Top-16 和完整训练拓扑下的端到端测量。
+2. 预训练没有披露总 token、数据混合比例、GPU 型号与数量、并行度、训练时长、GPU-hours、能耗和成本，外部无法复算训练效率。MoonEP 的严格均衡按同构专家的 token—专家条目数定义，rank 内逐专家负载、权重预取和梯度归并仍会影响运行时间；仓库只补充了单机 H20、EP=8 的合成路由基准，缺少 K3 实际专家数、Top-16、完整训练拓扑和跨节点网络下的端到端测量。
 3. 1M 上下文有模型配置、课程、基础设施和部分长程智能体结果支撑，缺少统一的长度—质量—延迟—显存曲线。
 4. Figure 6 支持视觉训练稳定性，正文声称视觉能力相当却没有对应评分表；原生多模态从头训练的净收益仍待完整消融。
 5. 九个强化学习专家和 MOPD 的流程明确，训练数据规模、奖励权重、逐 token 正则化、教师—学生距离、partial rollout 陈旧度和领域间迁移消融不足。
