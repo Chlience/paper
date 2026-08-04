@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
-import { spawn } from 'node:child_process';
 import fs from 'node:fs/promises';
 import process from 'node:process';
+import { launchBrowserPage, wait } from './browser/cdp.mjs';
 
 const siteUrl =
   process.env.PAPER_SITE_URL ??
@@ -10,83 +10,15 @@ const screenshotPath = process.env.PAPER_TOC_SCREENSHOT;
 const viewportWidth = Number(process.env.PAPER_TOC_VIEWPORT_WIDTH ?? 1440);
 const viewportHeight = Number(process.env.PAPER_TOC_VIEWPORT_HEIGHT ?? 900);
 
-const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
-const waitForDevTools = (stream) =>
-  new Promise((resolve, reject) => {
-    let stderr = '';
-    const timeout = setTimeout(
-      () => reject(new Error(`Chrome DevTools endpoint did not start. stderr: ${stderr}`)),
-      10_000,
-    );
-
-    stream.on('data', (chunk) => {
-      stderr += chunk.toString();
-      const match = stderr.match(/DevTools listening on (ws:\/\/[^\s]+)/);
-      if (!match) return;
-      clearTimeout(timeout);
-      resolve(match[1]);
-    });
-  });
-
-const connect = async (url) => {
-  const socket = new WebSocket(url);
-  await new Promise((resolve, reject) => {
-    socket.addEventListener('open', resolve, { once: true });
-    socket.addEventListener('error', reject, { once: true });
-  });
-
-  let id = 0;
-  const pending = new Map();
-  socket.addEventListener('message', (event) => {
-    const data = JSON.parse(event.data);
-    if (!data.id || !pending.has(data.id)) return;
-    const request = pending.get(data.id);
-    pending.delete(data.id);
-    data.error ? request.reject(new Error(JSON.stringify(data.error))) : request.resolve(data.result);
-  });
-
-  const send = (method, params = {}) =>
-    new Promise((resolve, reject) => {
-      const messageId = ++id;
-      pending.set(messageId, { resolve, reject });
-      socket.send(JSON.stringify({ id: messageId, method, params }));
-    });
-
-  return { socket, send };
-};
-
-const chrome = spawn('google-chrome', [
-  '--headless=new',
-  '--disable-gpu',
-  '--no-sandbox',
-  '--remote-debugging-port=0',
-  `--user-data-dir=/tmp/paper-article-toc-${process.pid}`,
-  'about:blank',
-]);
-
+let browserSession;
 try {
-  const browserWsUrl = await waitForDevTools(chrome.stderr);
-  const browser = await connect(browserWsUrl);
-  const { targetId } = await browser.send('Target.createTarget', { url: 'about:blank' });
-  const targets = await fetch(
-    browserWsUrl.replace(/^ws:/, 'http:').replace('/devtools/browser/', '/json/list?browser='),
-  );
-  const pages = await targets.json();
-  const pageInfo = pages.find((item) => item.id === targetId);
-  assert.ok(pageInfo?.webSocketDebuggerUrl, 'created page must expose a debugger URL');
-
-  const page = await connect(pageInfo.webSocketDebuggerUrl);
-  await page.send('Page.enable');
-  await page.send('Runtime.enable');
-  await page.send('Emulation.setDeviceMetricsOverride', {
+  browserSession = await launchBrowserPage({
+    siteUrl,
+    profileName: 'paper-article-toc',
     width: viewportWidth,
     height: viewportHeight,
-    deviceScaleFactor: 1,
-    mobile: false,
   });
-  await page.send('Page.navigate', { url: siteUrl });
-  await wait(1200);
+  const { page } = browserSession;
 
   await page.send('Runtime.evaluate', {
     expression: `(() => {
@@ -305,10 +237,7 @@ try {
     await fs.writeFile(screenshotPath, Buffer.from(screenshot.data, 'base64'));
   }
 
-  await browser.send('Target.closeTarget', { targetId });
-  browser.socket.close();
-  page.socket.close();
   console.log('Article hierarchical TOC check passed.');
 } finally {
-  chrome.kill('SIGTERM');
+  await browserSession?.close();
 }

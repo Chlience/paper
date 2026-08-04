@@ -1,10 +1,12 @@
 import fs from 'node:fs/promises';
 import process from 'node:process';
-import { generatedFile, readPaperEntries, readUtilityEntries } from './content/repository.mjs';
+import { renderMarkdown } from './content/markdown.mjs';
+import { readPaperEntries, readUtilityEntries } from './content/repository.mjs';
 
-const data = JSON.parse(await fs.readFile(generatedFile, 'utf8'));
+const paperEntries = await readPaperEntries();
+const paperSlugs = new Set(paperEntries.map(({ slug }) => slug));
 const markdownEntries = [
-  ...(await readPaperEntries()),
+  ...paperEntries,
   ...readUtilityEntries().filter((entry) => entry.fileName === 'papers-index.md'),
 ];
 
@@ -18,8 +20,10 @@ const fail = (message) => {
   process.exit(1);
 };
 
+const renderedPapers = new Map();
 for (const entry of markdownEntries) {
-  const markdown = stripFencedCodeBlocks(await fs.readFile(entry.sourcePath, 'utf8'));
+  const source = await fs.readFile(entry.sourcePath, 'utf8');
+  const markdown = stripFencedCodeBlocks(source);
   const lines = markdown.split('\n');
 
   lines.forEach((line, index) => {
@@ -35,29 +39,33 @@ for (const entry of markdownEntries) {
       }
     }
   });
+
+  if (paperSlugs.has(entry.slug)) {
+    renderedPapers.set(entry.slug, renderMarkdown(source));
+  }
 }
 
-const optimizerPaper = data.papers.find((paper) => paper.slug === '2606.04662-muon-outperforms-adam-curvature');
+const optimizerPaperHtml = renderedPapers.get('2606.04662-muon-outperforms-adam-curvature');
 
-if (!optimizerPaper) {
+if (!optimizerPaperHtml) {
   fail('Missing optimizer paper fixture for Markdown math check.');
 }
 
-if (!optimizerPaper.html.includes('class="katex"')) {
+if (!optimizerPaperHtml.includes('class="katex"')) {
   fail('Expected Markdown LaTeX to render to KaTeX HTML.');
 }
 
-if (optimizerPaper.html.includes('\\(') || optimizerPaper.html.includes('\\)')) {
+if (optimizerPaperHtml.includes('\\(') || optimizerPaperHtml.includes('\\)')) {
   fail('Expected rendered HTML to remove raw inline math delimiters.');
 }
 
-const unsupportedTextSmallCapsPaper = data.papers.find((paper) =>
-  paper.html.includes('<mtext>\\textsc</mtext>'),
+const unsupportedTextSmallCapsPaper = [...renderedPapers].find(([, html]) =>
+  html.includes('<mtext>\\textsc</mtext>'),
 );
 
 if (unsupportedTextSmallCapsPaper) {
   fail(
-    `${unsupportedTextSmallCapsPaper.slug} renders unsupported \\textsc markup; use a KaTeX-supported text command.`,
+    `${unsupportedTextSmallCapsPaper[0]} renders unsupported \\textsc markup; use a KaTeX-supported text command.`,
   );
 }
 

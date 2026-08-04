@@ -147,16 +147,10 @@ Updated-At: 2026-07-30 09:37
 本地检查命令：
 
 ```bash
-npm run test:workflow
-npm run check:workflow
-npm run check:mainlines
-npm run check:metadata
-npm run check:math
-npm run test:search
-npm run test:pins
-npm run build
-npm run check:site
+npm run check:source
 git diff --check
 ```
+
+`check:source` 不生成 `src/generated/` 或 `dist/`。需要在本地复现完整 Action 时运行 `npm run check:all`，该命令只执行一次 production build。
 
 <!-- public-utility-omit:end -->

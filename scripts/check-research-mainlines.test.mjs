@@ -4,14 +4,36 @@ import os from 'node:os';
 import path from 'node:path';
 import test, { after } from 'node:test';
 import {
-  REQUIRED_MAINLINE_HEADINGS,
   buildMainlineRecords,
   loadResearchMainlines,
   validateResearchMainlines,
 } from './content/research-mainlines.mjs';
 
 const fixtureRoot = await fs.mkdtemp(path.join(os.tmpdir(), 'paper-mainline-contract-'));
-after(() => fs.rm(fixtureRoot, { recursive: true, force: true }));
+after(async () => {
+  for (const relativePath of [
+    'content/mainlines/test-direction.md',
+    'content/mainlines/2026-07-test-direction.md',
+    'content/mainlines/paper-shaped-direction.md',
+    'content/mainlines/broken-contract.md',
+    'content/papers/paper-a.md',
+    'content/papers/paper-b.md',
+    'content/utility/papers-index.md',
+    'data/paper-tags.json',
+  ]) {
+    await fs.rm(path.join(fixtureRoot, relativePath), { force: true });
+  }
+  for (const relativePath of [
+    'content/mainlines',
+    'content/papers',
+    'content/utility',
+    'content',
+    'data',
+  ]) {
+    await fs.rmdir(path.join(fixtureRoot, relativePath));
+  }
+  await fs.rmdir(fixtureRoot);
+});
 await fs.mkdir(path.join(fixtureRoot, 'content', 'mainlines'), { recursive: true });
 await fs.mkdir(path.join(fixtureRoot, 'content', 'papers'), { recursive: true });
 await fs.mkdir(path.join(fixtureRoot, 'content', 'utility'), { recursive: true });
@@ -195,18 +217,4 @@ test('search protocol, comparison structure, conclusion evidence, and paper sepa
       (item) => item.code === 'paper-inventory-leak',
     ),
   );
-});
-
-test('the live corpus contains exactly the three confirmed migration targets and no Muon synthesis', async () => {
-  const entries = await loadResearchMainlines();
-  assert.deepEqual(
-    entries.map((entry) => entry.slug).sort(),
-    [
-      'agentic-rl-learned-environment-evolution',
-      'chinese-frontier-model-reports-timeline',
-      'llm-agent-rl-credit-assignment',
-    ],
-  );
-  assert.equal(REQUIRED_MAINLINE_HEADINGS.length, 11);
-  assert.deepEqual((await validateResearchMainlines(entries)).errors, []);
 });

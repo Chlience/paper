@@ -39,24 +39,14 @@ jobs:
         run: npm ci
 
       - name: Validate source
-        run: |
-          set -euo pipefail
-
-          npm run test:workflow
-          npm run check:workflow
-          npm run check:conferences
-          npm run check:mainlines
-          npm run check:metadata
-          npm run test:search
-          npm run test:pins
+        run: npm run check:source
 
       - name: Build and verify static site
         run: |
           set -euo pipefail
 
           npm run build
-          node scripts/check-markdown-math.mjs
-          node scripts/check-paper-site.mjs
+          npm run check:dist
 
       - name: Pack static artifact
         run: tar -C dist -czf "$ARTIFACT_NAME" .

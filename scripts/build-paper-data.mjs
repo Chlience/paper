@@ -34,7 +34,10 @@ import {
   tagFacets as controlledTagFacets,
   tagsForPaper,
 } from './content/tagging.mjs';
-import { normalizePaperReviewStatus } from '../src/lib/paper-review.mjs';
+import {
+  comparePapersForReviewFilter,
+  normalizePaperReviewStatus,
+} from '../src/lib/paper-review.mjs';
 
 const getSourceScalar = (markdown, names) => getSourceFieldRaw(markdown, names).trim();
 
@@ -89,12 +92,7 @@ const buildPaperRecords = async (paperEntries, coreSignals) => {
     });
   }
 
-  papers.sort((a, b) => {
-    const pinnedCompare = Number(b.pinned) - Number(a.pinned);
-    if (pinnedCompare) return pinnedCompare;
-    const timeCompare = String(b.firstArchivedAt).localeCompare(String(a.firstArchivedAt));
-    return timeCompare || b.slug.localeCompare(a.slug);
-  });
+  papers.sort((left, right) => comparePapersForReviewFilter(left, right, 'all'));
 
   return papers;
 };

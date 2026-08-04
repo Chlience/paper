@@ -28,17 +28,11 @@ Open `http://localhost:4321`.
 ## Validation
 
 ```bash
-npm run test:workflow
-npm run check:workflow
-npm run check:mainlines
-npm run check:metadata
-npm run check:math
-npm run test:search
-npm run test:pins
-npm run build
-npm run check:site
+npm run check:source
 git diff --check
 ```
+
+`check:source` runs pure unit tests and read-only corpus checks without generating ignored files. Use `npm run check:all` to run the same source checks, build the production site once, and verify generated data and `dist/`. Browser interaction checks remain explicit manual checks under `npm run manual:browser` and require a running local site.
 
 Generated `src/generated/` data and `dist/` are ignored and stay outside commits.
 

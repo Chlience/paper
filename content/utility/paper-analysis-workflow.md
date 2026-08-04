@@ -282,16 +282,11 @@ arXiv 论文优先以 abstract 页面作为规范来源，并补充 PDF、HTML�
 本地检查命令：
 
 ```bash
-npm run test:workflow
-npm run check:workflow
-npm run check:metadata
-npm run check:math
-npm run test:search
-npm run test:pins
+npm run check:source
 git diff --check
 ```
 
-production build 与生成站点检查由 GitHub Actions 执行。
+`check:source` 只运行单元测试和只读语料检查。production build 与生成站点检查由 GitHub Actions 执行；需要在本地复现完整 Action 时运行 `npm run check:all`。
 
 <!-- public-utility-omit:end -->
 

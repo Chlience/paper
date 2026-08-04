@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import test from 'node:test';
 import { buildPaperSearchItems, searchPaperItems } from '../src/lib/paper-search.mjs';
 
 const papers = [
@@ -51,24 +52,23 @@ const mainlines = [
   },
 ];
 
-const items = buildPaperSearchItems(papers, mainlines);
+test('paper search indexes paper and mainline fields without leaking internal data', () => {
+  const items = buildPaperSearchItems(papers, mainlines);
 
-assert.equal(items.length, 4);
-assert.deepEqual(
-  Object.keys(items[0]).sort(),
-  ['authors', 'contentType', 'coreSignal', 'firstArchivedAt', 'path', 'searchText', 'tags', 'title', 'typeLabel'].sort(),
-);
-
-assert.equal(searchPaperItems(items, '').length, 0);
-assert.equal(searchPaperItems(items, 'flash').at(0)?.title, papers[0].title);
-assert.equal(searchPaperItems(items, 'tri dao').at(0)?.path, papers[0].path);
-assert.equal(searchPaperItems(items, 'optimizer partition').at(0)?.title, papers[1].title);
-assert.equal(searchPaperItems(items, 'data-parallel assigned').at(0)?.title, papers[1].title);
-assert.equal(searchPaperItems(items, 'reward safety').at(0)?.title, papers[2].title);
-assert.equal(searchPaperItems(items, 'specification gaming').at(0)?.title, papers[2].title);
-assert.equal(searchPaperItems(items, '策略角色配置').at(0)?.path, mainlines[0].path);
-assert.equal(searchPaperItems(items, '稀疏回报 工具调用').at(0)?.contentType, 'mainline');
-assert.equal(searchPaperItems(items, 'missing term').length, 0);
-assert.equal(searchPaperItems(items, 'training', 2).length, 2);
-
-console.log('Paper search check passed.');
+  assert.equal(items.length, 4);
+  assert.deepEqual(
+    Object.keys(items[0]).sort(),
+    ['authors', 'contentType', 'coreSignal', 'firstArchivedAt', 'path', 'searchText', 'tags', 'title', 'typeLabel'].sort(),
+  );
+  assert.equal(searchPaperItems(items, '').length, 0);
+  assert.equal(searchPaperItems(items, 'flash').at(0)?.title, papers[0].title);
+  assert.equal(searchPaperItems(items, 'tri dao').at(0)?.path, papers[0].path);
+  assert.equal(searchPaperItems(items, 'optimizer partition').at(0)?.title, papers[1].title);
+  assert.equal(searchPaperItems(items, 'data-parallel assigned').at(0)?.title, papers[1].title);
+  assert.equal(searchPaperItems(items, 'reward safety').at(0)?.title, papers[2].title);
+  assert.equal(searchPaperItems(items, 'specification gaming').at(0)?.title, papers[2].title);
+  assert.equal(searchPaperItems(items, '策略角色配置').at(0)?.path, mainlines[0].path);
+  assert.equal(searchPaperItems(items, '稀疏回报 工具调用').at(0)?.contentType, 'mainline');
+  assert.equal(searchPaperItems(items, 'missing term').length, 0);
+  assert.equal(searchPaperItems(items, 'training', 2).length, 2);
+});

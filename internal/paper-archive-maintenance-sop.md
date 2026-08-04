@@ -111,17 +111,11 @@ public/images/papers/<paper-slug>/fig-<n>-<short-name>.<ext>
 ## 本地验证
 
 ```bash
-npm run test:workflow
-npm run check:workflow
-npm run check:mainlines
-npm run check:metadata
-npm run check:math
-npm run test:search
-npm run test:pins
+npm run check:source
 git diff --check
 ```
 
-production build、生成页面检查和部署由 GitHub Actions 完成。`dist/` 与 `src/generated/` 不进入 commit。
+`check:source` 运行纯单元测试和只读语料检查。production build、生成页面检查和部署由 GitHub Actions 完成；本地完整复现使用 `npm run check:all`。`dist/` 与 `src/generated/` 不进入 commit。
 
 ## 提交
 

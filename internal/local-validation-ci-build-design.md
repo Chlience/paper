@@ -12,27 +12,22 @@ Status: Approved
 Paper archival uses source-level checks locally:
 
 ```bash
-npm run test:workflow
-npm run check:workflow
-npm run check:metadata
-npm run check:math
-npm run test:search
-npm run test:pins
+npm run check:source
 ```
 
-The local archival workflow does not run `npm run build` or `npm run check:site`. GitHub Actions retains responsibility for the production Astro build, generated-page checks, artifact packaging, and deployment.
+The local archival workflow does not run `npm run build` or `npm run check:dist`. `check:source` contains pure unit tests and read-only corpus checks, so every local source check can run without generated files from a preceding command. GitHub Actions retains responsibility for one production Astro build, generated-data and page checks, artifact packaging, and deployment. `npm run check:all` reproduces this validation path locally.
 
 ## Documentation Changes
 
 - Update `README.md` to separate local validation from the CI build and deployment path.
 - Update `content/utility/paper-analysis-workflow.md` wherever local completion currently requires a site build or generated-page check.
-- Keep `.github/workflows/deploy.yml`, `package.json`, validation scripts, and `.gitignore` unchanged.
+- Keep the public SOPs aligned on `check:source` and the CI workflow aligned on `check:source → build → check:dist`.
 
 ## Verification
 
 - Confirm every documented local command exists in `package.json`.
 - Check the README and paper SOP use the same local command set and CI responsibility boundary.
-- Run source-level validation commands only; skip the Astro production build and `check:site` locally.
+- Run `npm run check:source` for ordinary archive changes; use `npm run check:all` only when reproducing the full Action.
 - Run `git diff --check` and review the final diff before committing.
 
 ## Consequences

@@ -1,6 +1,5 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import generatedDirectory from '../src/generated/conference-data.json' with { type: 'json' };
 import latestEditionCalendar from '../data/conferences/latest-editions.json' with { type: 'json' };
 import registry from '../data/conferences/registry.json' with { type: 'json' };
 import { getCatalogVenues } from './conferences/catalog-scope.mjs';
@@ -242,39 +241,5 @@ test('deadline ordering uses the earliest full date and sends undated entries to
       .sort(compareConferencesBySubmissionDeadline)
       .map((conference) => conference.id),
     ['multi-cycle', 'later', 'undated'],
-  );
-});
-
-test('generated directory contains only public conference-level data', () => {
-  assert.equal(generatedDirectory.schemaVersion, 4);
-  assert.deepEqual(Object.keys(generatedDirectory).sort(), [
-    'areas',
-    'catalogScope',
-    'ccfSnapshot',
-    'conferences',
-    'schemaVersion',
-    'verifiedAt',
-  ]);
-  assert.equal(generatedDirectory.conferences.length, 56);
-  assert.equal(Object.hasOwn(generatedDirectory, 'papers'), false);
-  assert.equal(Object.hasOwn(generatedDirectory, 'coverage'), false);
-  assert.equal(Object.hasOwn(generatedDirectory, 'facets'), false);
-
-  const generatedVenueIds = new Set(
-    generatedDirectory.conferences.map((conference) => conference.id),
-  );
-  for (const excludedVenueId of registry.catalogScope.excludedVenueIds) {
-    assert.equal(generatedVenueIds.has(excludedVenueId), false);
-  }
-  for (const conference of generatedDirectory.conferences) {
-    assert.equal(Object.hasOwn(conference, 'papers'), false);
-    assert.equal(Object.hasOwn(conference.latestEdition, 'papers'), false);
-  }
-
-  assert.deepEqual(
-    generatedDirectory.conferences.map((conference) => conference.id),
-    [...generatedDirectory.conferences]
-      .sort(compareConferencesBySubmissionDeadline)
-      .map((conference) => conference.id),
   );
 });

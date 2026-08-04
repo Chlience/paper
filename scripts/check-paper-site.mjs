@@ -373,6 +373,19 @@ if (!(await exists(regularPaperPagePath))) {
   if (regularPaperHtml.includes('阶段性研究综合') || !regularPaperHtml.includes('"@type":"ScholarlyArticle"')) {
     fail('Regular paper page must retain the scholarly-paper construction.');
   }
+  for (const marker of [
+    'aria-label="论文状态与来源"',
+    'class="paper-meta-line paper-meta-topics"',
+    'aria-label="论文主题"',
+    'href="/topics/#tag-',
+  ]) {
+    if (!regularPaperHtml.includes(marker)) {
+      fail(`Regular paper page is missing public metadata marker: ${marker}`);
+    }
+  }
+  if (regularPaperHtml.match(/class="paper-meta-line(?: paper-meta-topics)?"/g)?.length !== 2) {
+    fail('Regular paper page must render exactly two metadata rows.');
+  }
 }
 
 if (!(await exists(homeIndexPath))) {
@@ -405,6 +418,9 @@ if (!(await exists(homeIndexPath))) {
   }
   if (!homeHtml.includes('href="/papers/?review=approved"')) {
     fail('dist/index.html is missing the approved paper archive link.');
+  }
+  if (!homeHtml.includes('href="/topics/#tag-')) {
+    fail('dist/index.html is missing paper topic links.');
   }
   for (const marker of [
     'class="site-footer-main"',
