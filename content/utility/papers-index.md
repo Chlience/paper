@@ -94,7 +94,7 @@ Updated-At: 2026-07-29
 | [MoESD](/papers/2505.19645-moesd-sparse-moe-speculative-decoding/) | 2025年5月 | 在单步解码已使专家加载趋于饱和、模型仍受内存带宽限制的中等批量区间，用投机验证复用已加载专家；Qwen2-57B-A14B 在两张 H800 上最高加速 2.29 倍，适用范围依赖路由均衡、MoE 前馈网络成本占比和具体硬件。 |
 | [MegaScale-MoE](/papers/2505.11432-megascale-moe-communication-efficient-training/) | 2025年5月 | 围绕 attention SP、FFN EP、communication overlap 和 compressed communication 重构生产 MoE 训练路径。 |
 | [RLVR Reasoning Boundary](/papers/2504.13837-rlvr-reasoning-boundary-base-model/) | 2025年4月 | 用 pass@k 区分 sampling efficiency 与新增 reasoning capacity，评估 RLVR 是否突破 base model 边界。 |
-| [DAPO](/papers/2503.14476-dapo-long-cot-rl-system/) | 2025年3月 | 用 Clip-Higher、Dynamic Sampling、token-level loss 与 overlong shaping 构成可复现 long-CoT RL recipe。 |
+| [DAPO](/papers/2503.14476-dapo-long-cot-rl-system/) | 2025年3月 | 在 Qwen2.5-32B 与 AIME 2024 设置中，用解耦裁剪、动态采样、token 级损失和超长奖励整形将朴素 GRPO 的 avg@32 从 30 提高到 50，并开源代码、数据与模型。 |
 | [CoT Monitoring](/papers/2503.11926-monitoring-reasoning-models-obfuscation/) | 2025年3月 | 验证 CoT monitor 对 agent reward hacking 的检测优势，并量化直接训练规避 monitor 的 monitorability tax。 |
 | [EAGLE-3](/papers/2503.01840-eagle-3-training-time-test/) | 2025年3月 | EAGLE-3 去除特征回归约束，用多层目标特征融合和训练时多步自生成展开直接训练草稿 token 分布；LLaMA-3.1-8B 在 MT-Bench 从 EAGLE-2 的 3.16 倍提高到 4.40 倍，6.47 倍是单批量研究原型峰值，SGLang 批量 64 为 1.38 倍。 |
 | [Process Supervision Theory](/papers/2502.10581-do-we-need-to-verify-step-by-step-process-supervision-theory/) | 2025年2月 | 证明在 coverage 条件下 outcome reward 可经 reward imputation 支持过程级学习，给出过程监督的优势边界。 |

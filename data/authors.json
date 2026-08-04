@@ -12421,5 +12421,171 @@
         "url": "https://openreview.net/forum?id=Jpxfof0EaS"
       }
     ]
+  },
+  {
+    "slug": "qiying-yu",
+    "name": "Qiying Yu",
+    "chineseName": "禹棋赢",
+    "aliases": ["Qiying Yu"],
+    "affiliations": [
+      "Institute for AI Industry Research, Tsinghua University",
+      "ByteDance Seed",
+      "SIA-Lab of Tsinghua AIR and ByteDance Seed"
+    ],
+    "homepage": "https://yqy2001.github.io/",
+    "topics": ["self-supervised learning", "multimodal foundation models", "LLM reinforcement learning"],
+    "representativePapers": [
+      {
+        "title": "CapsFusion: Rethinking Image-Text Data at Scale",
+        "url": "https://arxiv.org/abs/2310.20550",
+        "year": 2024,
+        "venue": "CVPR 2024"
+      },
+      {
+        "title": "Generative Multimodal Models are In-Context Learners",
+        "url": "https://arxiv.org/abs/2312.13286",
+        "year": 2024,
+        "venue": "CVPR 2024"
+      },
+      {
+        "title": "Generative Pretraining in Multimodality",
+        "url": "https://arxiv.org/abs/2307.05222",
+        "year": 2024,
+        "venue": "ICLR 2024"
+      },
+      {
+        "title": "Multimodal Molecular Pretraining via Modality Blending",
+        "url": "https://arxiv.org/abs/2307.06235",
+        "year": 2024,
+        "venue": "ICLR 2024"
+      },
+      {
+        "title": "Multimodal Federated Learning via Contrastive Representation Ensemble",
+        "url": "https://arxiv.org/abs/2302.08888",
+        "year": 2023,
+        "venue": "ICLR 2023"
+      },
+      {
+        "title": "Adversarial Contrastive Learning via Asymmetric InfoNCE",
+        "url": "https://arxiv.org/abs/2207.08374",
+        "year": 2022,
+        "venue": "ECCV 2022"
+      },
+      {
+        "title": "EVA-CLIP-18B: Scaling CLIP to 18 Billion Parameters",
+        "url": "https://arxiv.org/abs/2402.04252",
+        "year": 2024,
+        "venue": "arXiv"
+      }
+    ],
+    "notes": "DAPO共同第一作者。个人主页将其列为清华大学智能产业研究院博士生，并将多模态基础模型与大语言模型强化学习列为研究方向；DAPO arXiv v2 的贡献声明将其列为项目负责人。",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://yqy2001.github.io/"
+      },
+      {
+        "label": "DAPO",
+        "url": "https://proceedings.neurips.cc/paper_files/paper/2025/hash/a4277440d50f1f15d2cb4c14f7e0c0d2-Abstract-Conference.html"
+      },
+      {
+        "label": "OpenReview profile",
+        "url": "https://openreview.net/profile?id=~Qiying_Yu1"
+      }
+    ]
+  },
+  {
+    "slug": "zheng-zhang-bytedance",
+    "name": "Zheng Zhang",
+    "aliases": ["Zheng Zhang"],
+    "matchByName": false,
+    "affiliations": ["ByteDance Seed"],
+    "topics": ["large language models", "human alignment", "pretraining data", "model editing"],
+    "notes": "DAPO共同第一作者。OpenReview 个人资料记录其自 2024 年起任职于 ByteDance，并将预训练数据、人类对齐、模型编辑和大语言模型列为研究方向；DAPO arXiv v2 的贡献声明将其列入算法团队。",
+    "sources": [
+      {
+        "label": "DAPO",
+        "url": "https://proceedings.neurips.cc/paper_files/paper/2025/hash/a4277440d50f1f15d2cb4c14f7e0c0d2-Abstract-Conference.html"
+      },
+      {
+        "label": "OpenReview profile",
+        "url": "https://openreview.net/profile?id=~Zheng_Zhang12"
+      }
+    ]
+  },
+  {
+    "slug": "hao-zhou-air",
+    "name": "Hao Zhou",
+    "chineseName": "周浩",
+    "aliases": ["Hao Zhou"],
+    "matchByName": false,
+    "affiliations": [
+      "Institute for AI Industry Research, Tsinghua University",
+      "SIA-Lab of Tsinghua AIR and ByteDance Seed"
+    ],
+    "homepage": "https://zhouh.github.io/",
+    "topics": ["large language models", "scientific discovery", "biological agents", "generative models"],
+    "representativePapers": [
+      {
+        "title": "AMix-1: A Pathway to Test-Time Scalable Protein Foundation Model",
+        "url": "https://arxiv.org/abs/2507.08920",
+        "year": 2025,
+        "venue": "arXiv"
+      },
+      {
+        "title": "MemAgent: Reshaping Long-Context LLM with Multi-Conv RL-based Memory Agent",
+        "url": "https://arxiv.org/abs/2507.02259",
+        "year": 2025,
+        "venue": "arXiv"
+      },
+      {
+        "title": "DAPO: An Open-Source LLM Reinforcement Learning System at Scale",
+        "url": "https://openreview.net/forum?id=2a36EMSSTp",
+        "year": 2025,
+        "venue": "NeurIPS 2025"
+      }
+    ],
+    "notes": "DAPO通讯作者。清华大学智能产业研究院资料将其列为副教授；其个人主页重点展示 DAPO、AMix-1 与 MemAgent 等项目。",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://zhouh.github.io/"
+      },
+      {
+        "label": "AIR profile",
+        "url": "https://air.tsinghua.edu.cn/en/info/1046/1491.htm"
+      },
+      {
+        "label": "DAPO",
+        "url": "https://openreview.net/forum?id=2a36EMSSTp"
+      },
+      {
+        "label": "OpenReview profile",
+        "url": "https://openreview.net/profile?id=~Hao_Zhou5"
+      }
+    ]
+  },
+  {
+    "slug": "mingxuan-wang-bytedance",
+    "name": "Mingxuan Wang",
+    "aliases": ["Mingxuan Wang"],
+    "matchByName": false,
+    "affiliations": ["ByteDance Seed", "SIA-Lab of Tsinghua AIR and ByteDance Seed"],
+    "topics": ["large language models", "reasoning reinforcement learning", "post-training"],
+    "notes": "DAPO通讯作者与 VAPO 合作者。论文作者块与 OpenReview 身份资料共同确认其 ByteDance Seed 和 SIA-Lab 关系。",
+    "sources": [
+      {
+        "label": "DAPO",
+        "url": "https://proceedings.neurips.cc/paper_files/paper/2025/hash/a4277440d50f1f15d2cb4c14f7e0c0d2-Abstract-Conference.html"
+      },
+      {
+        "label": "VAPO",
+        "url": "https://arxiv.org/abs/2504.05118"
+      },
+      {
+        "label": "OpenReview profile",
+        "url": "https://openreview.net/profile?id=~Mingxuan_Wang1"
+      }
+    ]
   }
 ]
