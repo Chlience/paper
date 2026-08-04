@@ -1,7 +1,7 @@
 # Paper Archive Index
 
 First-Archived-At: 2026-06-21
-Updated-At: 2026-07-29
+Updated-At: 2026-08-04
 
 ## 本地工作流
 
@@ -26,6 +26,7 @@ Updated-At: 2026-07-29
 | [SAO](/papers/2607.07508-sao-single-rollout-asynchronous-agentic-rl/) | 2026年7月 | 用每 prompt 单 rollout、强化 critic 与双侧 token mask 替代异步 GRPO 的组内等待和 group baseline。 |
 | [TRACE](/papers/2607.13988-trace-turn-level-reward-assignment/) | 2026年7月 | 在已知短答案的长程搜索中，用冻结参考模型测量工具边界后的答案可预测性变化并把多步时序差信用混入终局优势，使两种 Qwen3 Thinking 模型在同设置下较 GRPO 的 BrowseComp-Plus 分数分别提高 5.6 和 6.2 个百分点。 |
 | [EcoSpec](/papers/2607.12696-ecospec-cost-aware-moe-speculative-decoding/) | 2026年7月 | EcoSpec 用轻量路由预测器估计草稿候选会新增的专家集合，并优先选择复用已有专家的验证路径；在八张 H200、Hugging Face Transformers、主要批量为一的研究原型中，三个大规模 MoE 的贪心解码平均加速从对应投机基线相对自回归的一点一零至一点二二倍提高到一点一五至一点三六倍，HBM 流量来自估算且批量为八时投机吞吐低于自回归。 |
+| [W2S-OPD](/papers/2607.26246-w2s-opd-weak-to-strong-distillation/) | 2026年7月 | W2S-OPD 将较弱正负模型的 logits 差分叠加到冻结的强学生基座分布，再在学生自身轨迹上执行逐 token 反向 KL；Qwen3-8B 的强化学习前后对比设置相对直接 OPD 的数学与代码平均准确率分别提高 5.3 和 2.2 个百分点，跨模型家族与独立训练复验仍待验证。 |
 | [SmoothAgent](/papers/2607.00151-smoothagent-lookahead-context-engineering/) | 2026年6月 | 把可提前确定的 context transformation 移入异步 lookahead stream，并用 SLO-aware scheduling 预建变换后 KV cache，降低 transform-point TTFT。 |
 | [ECHO](/papers/2606.31650-echo-selective-turn-memory-agentic-rl/) | 2026年6月 | ECHO 为长程智能体保留带原始轮次标识的选择性记忆，用它重建有限上下文并将结果信用路由到被复用历史轮次及其选择动作，在 BrowseComp-Plus 上同时提高一次通过率并减少滚动摘要造成的轨迹膨胀。 |
 | [SPIRAL](/papers/2606.23595-spiral-learning-search-aggregate/) | 2026年6月 | 从 8 条搜索轨迹随机构造 4 个四元集合，以聚合成功率的参与集合均值更新搜索轨迹，并用同集合内中心化 reward 训练共享策略的聚合轨迹。 |

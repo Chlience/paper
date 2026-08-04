@@ -12587,5 +12587,63 @@
         "url": "https://openreview.net/profile?id=~Mingxuan_Wang1"
       }
     ]
+  },
+  {
+    "slug": "fangxu-yu",
+    "name": "Fangxu Yu",
+    "aliases": ["Fangxu Yu", "Yu Fangxu"],
+    "affiliations": [
+      "University of Maryland, College Park",
+      "Microsoft Research (internship)"
+    ],
+    "homepage": "https://yu-fangxu.github.io/",
+    "github": "https://github.com/Yu-Fangxu",
+    "topics": ["LLM reasoning", "on-policy distillation", "post-training"],
+    "representativePapers": [
+      {
+        "title": "Weak-to-Strong On-Policy Distillation",
+        "url": "https://arxiv.org/abs/2607.26246v2",
+        "year": 2026,
+        "venue": "arXiv"
+      }
+    ],
+    "notes": "W2S-OPD 第一作者。个人主页将其列为 University of Maryland, College Park 计算机科学博士生、Tianyi Zhou 的学生，并将 W2S-OPD 列入近期大语言模型推理与后训练研究；论文注明该工作在 Microsoft Research 实习期间完成。",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://yu-fangxu.github.io/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/Yu-Fangxu"
+      },
+      {
+        "label": "W2S-OPD arXiv v2",
+        "url": "https://arxiv.org/abs/2607.26246v2"
+      }
+    ]
+  },
+  {
+    "slug": "weijia-xu",
+    "name": "Weijia Xu",
+    "aliases": ["Weijia Xu"],
+    "affiliations": [
+      "Microsoft Research",
+      "University of Maryland, College Park (PhD)"
+    ],
+    "homepage": "https://weijia-xu.github.io/",
+    "github": "https://github.com/Izecson",
+    "topics": ["generative AI", "agentic systems", "human feedback", "on-policy distillation"],
+    "notes": "W2S-OPD 第二作者。个人主页将其列为 Microsoft Research Redmond Senior Researcher，并记录其在 University of Maryland, College Park 获得计算机科学博士学位。",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://weijia-xu.github.io/"
+      },
+      {
+        "label": "W2S-OPD arXiv v2",
+        "url": "https://arxiv.org/abs/2607.26246v2"
+      }
+    ]
   }
 ]
