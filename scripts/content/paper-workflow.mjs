@@ -124,9 +124,11 @@ const resultFieldValue = (block, name) =>
   block.match(new RegExp(`^- ${name}[:：][ \\t]*(.+)$`, 'mi'))?.[1]?.trim() ?? '';
 
 const paperContextHeadingPattern = /^(\d+)\.\s+(.+)$/;
+export const MULTI_STAGE_METHOD_OVERVIEW_HEADING = '贡献全景与方法总览';
+export const SINGLE_STAGE_METHOD_OVERVIEW_HEADING = '方法总览与完整机制';
 const methodOverviewHeadings = new Set([
-  '贡献全景与方法总览',
-  '方法总览与完整机制',
+  MULTI_STAGE_METHOD_OVERVIEW_HEADING,
+  SINGLE_STAGE_METHOD_OVERVIEW_HEADING,
 ]);
 const methodOverviewBaselineSchemaVersion = 1;
 const methodOverviewBaselineCapturedAt = '2026-07-29 15:47';

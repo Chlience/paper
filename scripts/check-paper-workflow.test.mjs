@@ -220,6 +220,11 @@ test('exports the v2.1 analysis module taxonomy', () => {
   );
 });
 
+test('exports the canonical method overview headings for downstream checks', () => {
+  assert.equal(workflow.MULTI_STAGE_METHOD_OVERVIEW_HEADING, '贡献全景与方法总览');
+  assert.equal(workflow.SINGLE_STAGE_METHOD_OVERVIEW_HEADING, '方法总览与完整机制');
+});
+
 test('exports the paper review status taxonomy and filter helpers', () => {
   assert.deepEqual([...paperReview.PAPER_REVIEW_STATUSES], ['pending', 'approved']);
   assert.equal(paperReview.normalizePaperReviewFilter('needs-review'), 'all');

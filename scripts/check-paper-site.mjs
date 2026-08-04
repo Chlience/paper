@@ -2,7 +2,10 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import process from 'node:process';
 import { comparePapersForReviewFilter, PAPER_REVIEW_STATUSES } from '../src/lib/paper-review.mjs';
-import { REQUIRED_SECTION_GROUPS } from './content/paper-workflow.mjs';
+import {
+  MULTI_STAGE_METHOD_OVERVIEW_HEADING,
+  REQUIRED_SECTION_GROUPS,
+} from './content/paper-workflow.mjs';
 import { authorsFile, generatedFile, repoRoot } from './content/repository.mjs';
 
 const distDir = path.join(repoRoot, 'dist');
@@ -51,6 +54,8 @@ const fail = (message) => {
   console.error(message);
   process.exitCode = 1;
 };
+
+const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 const exists = async (target) => {
   try {
@@ -290,6 +295,7 @@ if (!(await exists(kimiK3PaperPath))) {
   fail('Kimi K3 paper page is missing.');
 } else {
   const kimiK3Html = await fs.readFile(kimiK3PaperPath, 'utf8');
+  const methodOverviewHref = `#5-${MULTI_STAGE_METHOD_OVERVIEW_HEADING}`;
   if (!kimiK3Html.includes('data-article-toc')) {
     fail('Kimi K3 paper page is missing the article TOC.');
   }
@@ -297,9 +303,9 @@ if (!(await exists(kimiK3PaperPath))) {
     fail('Kimi K3 paper page must render both level-two and level-three TOC links.');
   }
   if (
-    !/data-toc-section-id="论文脉络"[\s\S]*?href="#5-贡献全景"[\s\S]*?data-toc-depth="3"/.test(
-      kimiK3Html,
-    )
+    !new RegExp(
+      `data-toc-section-id="论文脉络"[\\s\\S]*?href="${escapeRegExp(methodOverviewHref)}"[\\s\\S]*?data-toc-depth="3"`,
+    ).test(kimiK3Html)
   ) {
     fail('Kimi K3 paper context must contain the promoted section 5 method heading in its TOC group.');
   }
