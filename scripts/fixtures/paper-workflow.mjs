@@ -179,6 +179,20 @@ Review-Status: pending
 - Review status: page-type=not-found; match-confidence=high; observed-at=2026-07-17; venue-status=arXiv preprint
 ${v21CoreBody}`;
 
+export const v21InsightPaper = `${v21Paper.replace(
+  'Updated-At: 2026-07-17 09:31',
+  'Updated-At: 2026-08-05 10:41',
+)}
+
+## 主要启发
+
+### 1. 分离表示构造与目标计算可以减少接口耦合
+
+原有流程让目标计算直接依赖原始输入，局部表示变化会同时改变训练目标。Section 3 和 Figure 2 的阶段对照显示，先构造中间表示再计算目标，可以把变化限制在单个接口；该证据支持的机制是中间状态隔离了表示选择与目标计算。
+
+这一关系可以在其它多阶段训练流程中重新实例化：当两个阶段只需通过稳定中间状态交互时，增加显式接口应当减少单阶段改动影响的下游位置。若替换中间表示后目标定义仍需同步修改，说明接口没有形成所需隔离，这项迁移预测不成立。
+`;
+
 export const validatePaperFixture = (
   slug,
   markdown,

@@ -5,6 +5,7 @@ import {
   legacyPaper,
   v2Paper,
   v21CoreBody,
+  v21InsightPaper,
   v21Paper,
   validatePaperFixture,
 } from './fixtures/paper-workflow.mjs';
@@ -21,6 +22,10 @@ test('exports the v2.1 analysis module taxonomy', () => {
 test('exports the canonical method overview headings for downstream checks', () => {
   assert.equal(workflow.MULTI_STAGE_METHOD_OVERVIEW_HEADING, '贡献全景与方法总览');
   assert.equal(workflow.SINGLE_STAGE_METHOD_OVERVIEW_HEADING, '方法总览与完整机制');
+  assert.equal(
+    workflow.INSIGHT_CONSTRUCTION_CONTRACT_ACTIVATED_AT,
+    '2026-08-05 10:40',
+  );
 });
 
 test('legacy notes accept internal sources and report migration advisories', async () => {
@@ -41,6 +46,52 @@ test('the default v2.1 canary validates with seven core sections', async () => {
   assert.deepEqual(result.advisories, []);
   assert.doesNotMatch(v21Paper, /Reference Intake Brief/);
   assert.doesNotMatch(v21Paper, /^## OpenReview \/ 审稿意见吸收$/m);
+});
+
+test('v2.1 insight construction contract accepts numbered evidence-backed natural paragraphs', async () => {
+  const result = await validatePaperFixture('v21-insight-note', v21InsightPaper);
+
+  assert.deepEqual(result.errors, []);
+  assert.deepEqual(result.advisories, []);
+});
+
+test('v2.1 insight construction contract rejects malformed updated insight sections', async () => {
+  const unnumbered = v21InsightPaper.replace(
+    '### 1. 分离表示构造与目标计算可以减少接口耦合',
+    '### 分离表示构造与目标计算可以减少接口耦合',
+  );
+  const headingResult = await validatePaperFixture('v21-insight-heading', unnumbered);
+  assert.ok(headingResult.errors.some((entry) => entry.code === 'v21-insight-heading-sequence'));
+
+  const oneParagraph = v21InsightPaper.replace(
+    '\n\n这一关系可以在其它多阶段训练流程中重新实例化',
+    ' 这一关系可以在其它多阶段训练流程中重新实例化',
+  );
+  const paragraphResult = await validatePaperFixture('v21-insight-paragraph', oneParagraph);
+  assert.ok(
+    paragraphResult.errors.some((entry) => entry.code === 'v21-insight-natural-paragraphs'),
+  );
+
+  const withoutLocator = v21InsightPaper.replace(
+    'Section 3 和 Figure 2 的阶段对照',
+    '论文中的阶段对照',
+  );
+  const evidenceResult = await validatePaperFixture('v21-insight-evidence', withoutLocator);
+  assert.ok(
+    evidenceResult.errors.some((entry) => entry.code === 'v21-insight-evidence-location'),
+  );
+});
+
+test('v2.1 insight construction contract leaves pre-activation notes unchanged', async () => {
+  const legacyInsight = v21InsightPaper
+    .replace('Updated-At: 2026-08-05 10:41', 'Updated-At: 2026-07-17 09:31')
+    .replace(
+      '### 1. 分离表示构造与目标计算可以减少接口耦合',
+      '未迁移的存量启发。',
+    );
+  const result = await validatePaperFixture('v21-insight-compatibility', legacyInsight);
+
+  assert.ok(!result.errors.some((entry) => entry.code.startsWith('v21-insight')));
 });
 
 test('v2.1 paper rejects detailed stages without the required section 5 overview heading', async () => {
@@ -828,4 +879,3 @@ test('new papers cannot enter method overview compatibility mode', async () => {
     ),
   );
 });
-

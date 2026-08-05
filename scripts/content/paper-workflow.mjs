@@ -126,6 +126,7 @@ const resultFieldValue = (block, name) =>
 const paperContextHeadingPattern = /^(\d+)\.\s+(.+)$/;
 export const MULTI_STAGE_METHOD_OVERVIEW_HEADING = '贡献全景与方法总览';
 export const SINGLE_STAGE_METHOD_OVERVIEW_HEADING = '方法总览与完整机制';
+export const INSIGHT_CONSTRUCTION_CONTRACT_ACTIVATED_AT = '2026-08-05 10:40';
 const methodOverviewHeadings = new Set([
   MULTI_STAGE_METHOD_OVERVIEW_HEADING,
   SINGLE_STAGE_METHOD_OVERVIEW_HEADING,
@@ -392,6 +393,61 @@ const hasEvidenceLocator = (value) => {
     if (isHttpUrl(match[0])) return true;
   }
   return textualEvidenceLocatorPatterns.some((pattern) => pattern.test(value));
+};
+
+const insightSectionViolations = (section) => {
+  if (!section.trim()) return [];
+
+  const blocks = levelThreeBlocks(section);
+  if (blocks.length === 0) {
+    return [
+      issue(
+        'v21-insight-heading',
+        '主要启发',
+        'Insight sections must use numbered level-three headings starting from 1.',
+      ),
+    ];
+  }
+
+  const violations = [];
+  if (!blocks.every((block, index) => block.number === index + 1)) {
+    violations.push(
+      issue(
+        'v21-insight-heading-sequence',
+        '主要启发',
+        'Number insight headings consecutively from 1.',
+      ),
+    );
+  }
+
+  for (const block of blocks) {
+    const subject = block.number ? `主要启发 ${block.number}` : block.title;
+    const tokens = markdownParser.parse(maskHtmlComments(block.body), {});
+    const paragraphCount = tokens.filter(
+      (token) => token.type === 'paragraph_open' && token.level === 0,
+    ).length;
+
+    if (paragraphCount < 2) {
+      violations.push(
+        issue(
+          'v21-insight-natural-paragraphs',
+          subject,
+          'Each insight must use at least two top-level natural-language paragraphs.',
+        ),
+      );
+    }
+    if (!hasEvidenceLocator(block.body)) {
+      violations.push(
+        issue(
+          'v21-insight-evidence-location',
+          subject,
+          'Each insight must identify paper-specific evidence by section, figure, table, appendix, page, code path, commit, or URL.',
+        ),
+      );
+    }
+  }
+
+  return violations;
 };
 
 const isSafePaperImagePath = (imageUrl, expectedPrefix) => {
@@ -764,6 +820,16 @@ export const validatePaperRecord = async ({
     }
 
     if (isV21) {
+      const insightSection = getSection(markdown, '主要启发');
+      if (
+        insightSection.trim() &&
+        updatedAt >= INSIGHT_CONSTRUCTION_CONTRACT_ACTIVATED_AT
+      ) {
+        for (const insightIssue of insightSectionViolations(insightSection)) {
+          errors.push({ ...insightIssue, subject: `${slug}: ${insightIssue.subject}` });
+        }
+      }
+
       const paperContext = sectionForGroup(
         markdown,
         REQUIRED_SECTION_GROUPS.find((group) => group.name === '论文脉络'),

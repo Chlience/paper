@@ -189,11 +189,25 @@ test('the public template exposes the v2.1 seven-section contract', async () => 
   assert.doesNotMatch(template, /^## Reference Intake Brief$/m);
 });
 
-test('the public template defines evidence-backed insight construction without a discussion bucket', async () => {
-  const template = await fs.readFile('content/utility/paper-note-template.md', 'utf8');
+test('the workflow documents define one aligned primary-insight construction process', async () => {
+  const [workflowDoc, template, agentInstructions, maintenanceSop] = await Promise.all([
+    fs.readFile('content/utility/paper-analysis-workflow.md', 'utf8'),
+    fs.readFile('content/utility/paper-note-template.md', 'utf8'),
+    fs.readFile('AGENTS.md', 'utf8'),
+    fs.readFile('internal/paper-archive-maintenance-sop.md', 'utf8'),
+  ]);
 
-  for (const requirement of ['认识更新', '证据与机制', '迁移与边界', '来源归因']) {
-    assert.match(template, new RegExp(requirement));
+  for (const document of [workflowDoc, template, agentInstructions, maintenanceSop]) {
+    for (const requirement of [
+      '首要启发',
+      '不设置目标数量',
+      '原有判断',
+      '区分性证据',
+      '抽象关系',
+      '可证伪预测',
+    ]) {
+      assert.match(document, new RegExp(requirement));
+    }
   }
   assert.doesNotMatch(template, /^## 本地讨论补充$/m);
 });
@@ -236,6 +250,36 @@ test('LRE keeps the three discussion insights in the canonical insight section',
   assert.doesNotMatch(
     insights,
     /主动淘汰应单独评测|生产预算应覆盖完整输入|最有价值的下一组复验/,
+  );
+});
+
+test('LatentMoE is the strict primary-insight construction canary', async () => {
+  const slug = '2601.18089-latentmoe-accuracy-per-flop-parameter';
+  const canary = await fs.readFile(`content/papers/${slug}.md`, 'utf8');
+  const result = await validatePaperFixture(slug, canary);
+  const insightErrors = result.errors.filter((entry) => entry.code.startsWith('v21-insight'));
+
+  assert.deepEqual(insightErrors, []);
+
+  const sectionStart = canary.indexOf('## 主要启发');
+  assert.notEqual(sectionStart, -1);
+  const remainder = canary.slice(sectionStart + '## 主要启发'.length);
+  const nextSectionOffset = remainder.search(/\n## /);
+  const insights = nextSectionOffset === -1 ? remainder : remainder.slice(0, nextSectionOffset);
+
+  assert.equal(insights.match(/^### \d+\. /gm)?.length, 1);
+  assert.match(
+    insights,
+    /^### 1\. 高成本数据路径可以使用较窄表示，节省的预算可以增加按需激活的容量$/m,
+  );
+  for (const locator of ['Section 2', 'Figure 3', 'Figures 4–5', 'Table 5']) {
+    assert.match(insights, new RegExp(locator));
+  }
+  assert.match(insights, /迁移成立时/);
+  assert.match(insights, /该预测会失败/);
+  assert.doesNotMatch(
+    insights,
+    /服务预算需要同时记录|转换规则需要消融验证|解析成本守恒需要通过目标负载下的系统测量闭合/,
   );
 });
 
@@ -316,7 +360,7 @@ test('public workflow and agent instructions expose one aligned v2.1 contract', 
   assert.match(maintenanceSop, /阶段详解从 `### 6\.` 开始/);
   assert.match(workflowDoc, /具体例子/);
   for (const document of [workflowDoc, template, agentInstructions, maintenanceSop]) {
-    for (const requirement of ['认识更新', '证据与机制', '迁移与边界', '来源归因']) {
+    for (const requirement of ['首要启发', '区分性证据', '抽象关系', '可证伪预测']) {
       assert.match(document, new RegExp(requirement));
     }
   }
