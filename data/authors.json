@@ -12645,5 +12645,54 @@
         "url": "https://arxiv.org/abs/2607.26246v2"
       }
     ]
+  },
+  {
+    "slug": "venmugil-elango",
+    "name": "Venmugil Elango",
+    "aliases": ["Venmugil Elango"],
+    "affiliations": ["NVIDIA"],
+    "topics": ["GPU systems", "distributed deep learning", "model-hardware co-design", "MoE inference"],
+    "notes": "LatentMoE 第一作者。NVIDIA 官方项目页、PLDI 个人资料、DBLP 与 OpenReview 记录共同确认其 NVIDIA 身份和从 GPU 数据移动到分布式深度学习系统的持续研究路径。",
+    "sources": [
+      {
+        "label": "NVIDIA LatentMoE project",
+        "url": "https://research.nvidia.com/labs/nemotron/LatentMoE/"
+      },
+      {
+        "label": "PLDI profile",
+        "url": "https://pldi18.sigplan.org/profile/venmugilelango"
+      },
+      {
+        "label": "DBLP",
+        "url": "https://dblp.org/pid/140/7204"
+      },
+      {
+        "label": "OpenReview profile",
+        "url": "https://openreview.net/profile?id=~Venmugil_Elango2"
+      }
+    ]
+  },
+  {
+    "slug": "nidhi-bhatia",
+    "name": "Nidhi Bhatia",
+    "aliases": ["Nidhi Bhatia"],
+    "affiliations": ["NVIDIA"],
+    "homepage": "https://developer.nvidia.com/blog/author/nidhibhatia/",
+    "topics": ["generative AI inference", "model-hardware co-design", "performance modeling", "distributed inference"],
+    "notes": "LatentMoE 第二作者。NVIDIA 官方简介将其列为高级 AI/ML 工程师，并记录其模型—硬件协同、GPU 性能建模和分布式生成式 AI 推理方向。",
+    "sources": [
+      {
+        "label": "NVIDIA author profile",
+        "url": "https://developer.nvidia.com/blog/author/nidhibhatia/"
+      },
+      {
+        "label": "NVIDIA LatentMoE project",
+        "url": "https://research.nvidia.com/labs/nemotron/LatentMoE/"
+      },
+      {
+        "label": "OpenReview profile",
+        "url": "https://openreview.net/profile?id=~Nidhi_Bhatia1"
+      }
+    ]
   }
 ]
