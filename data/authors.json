@@ -12694,5 +12694,109 @@
         "url": "https://openreview.net/profile?id=~Nidhi_Bhatia1"
       }
     ]
+  },
+  {
+    "slug": "guangyu-chen",
+    "name": "Guangyu Chen",
+    "aliases": ["Guangyu Chen", "Nathan Chen", "Nathancgy"],
+    "affiliations": ["Moonshot AI", "Kimi Team"],
+    "homepage": "https://nathanchen.me/",
+    "github": "https://github.com/Nathancgy",
+    "x": "https://x.com/nathancgy4",
+    "xConfidence": "high",
+    "topics": ["model architecture", "optimization", "continual learning", "efficient attention", "Attention Residuals"],
+    "notes": "Attention Residuals 共同贡献作者。个人主页说明其在 Kimi / Moonshot AI 从事机器学习研究；个人主页、GitHub 与 X 账号形成相互链接，GitHub 还重点展示官方 Attention Residuals 项目。",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://nathanchen.me/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/Nathancgy"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/nathancgy4"
+      },
+      {
+        "label": "Attention Residuals arXiv",
+        "url": "https://arxiv.org/abs/2603.15031"
+      }
+    ]
+  },
+  {
+    "slug": "yu-zhang",
+    "name": "Yu Zhang",
+    "chineseName": "张宇",
+    "aliases": ["Yu Zhang", "張宇"],
+    "affiliations": ["Moonshot AI", "Soochow University"],
+    "homepage": "https://yzhang.site/",
+    "github": "https://github.com/yzhangcs",
+    "x": "https://x.com/yzhang_cs",
+    "xConfidence": "high",
+    "topics": ["scalable LLM architecture", "model-system co-design", "long-context sequence modeling", "Flash Linear Attention", "Attention Residuals"],
+    "notes": "Attention Residuals 共同贡献作者和 Moonshot AI 研究员。个人主页与履历记录其在苏州大学攻读博士，并将可扩展、硬件高效的大语言模型架构与系统协同列为研究方向；主页、GitHub 与 X 账号相互连接。",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://yzhang.site/"
+      },
+      {
+        "label": "CV",
+        "url": "https://yzhang.site/assets/files/cv.pdf"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/yzhangcs"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/yzhang_cs"
+      },
+      {
+        "label": "Attention Residuals arXiv",
+        "url": "https://arxiv.org/abs/2603.15031"
+      }
+    ]
+  },
+  {
+    "slug": "jianlin-su",
+    "name": "Jianlin Su",
+    "chineseName": "苏剑林",
+    "aliases": ["Jianlin Su", "苏剑林", "BoJone"],
+    "affiliations": ["Moonshot AI", "Sun Yat-sen University", "South China Normal University"],
+    "homepage": "https://kexue.fm/",
+    "github": "https://github.com/bojone",
+    "x": "https://x.com/Jianlin_S",
+    "xConfidence": "high",
+    "topics": ["mathematics", "machine learning", "LLM architecture", "efficient attention", "Attention Residuals"],
+    "notes": "Attention Residuals 共同贡献作者。科学空间个人简介、OpenReview 档案和公开项目记录连接其中山大学、华南师范大学与 Kimi / Moonshot AI 研究经历；个人页面与 X 账号相互连接。",
+    "sources": [
+      {
+        "label": "Scientific Spaces profile",
+        "url": "https://kexue.fm/me.html"
+      },
+      {
+        "label": "Attention Residuals retrospective",
+        "url": "https://kexue.fm/archives/11664"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/bojone"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/Jianlin_S"
+      },
+      {
+        "label": "OpenReview profile",
+        "url": "https://openreview.net/profile?id=~Jianlin_Su1"
+      },
+      {
+        "label": "Attention Residuals arXiv",
+        "url": "https://arxiv.org/abs/2603.15031"
+      }
+    ]
   }
 ]
