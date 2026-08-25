@@ -180,7 +180,7 @@ test('the public template exposes the v2.1 seven-section contract', async () => 
     '关键阶段及其执行或依赖顺序',
     '阶段间传递的数据',
     '最终输出、训练信号或结论',
-    '后文增加关键阶段',
+    '后文增加关键角色',
     '### 5. 方法总览与完整机制',
   ]) {
     assert.match(template, new RegExp(requirement.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
@@ -200,7 +200,8 @@ test('the workflow documents define one aligned primary-insight construction pro
   for (const document of [workflowDoc, template, agentInstructions, maintenanceSop]) {
     for (const requirement of [
       '首要启发',
-      '不设置目标数量',
+      '没有独立认识更新时省略本节',
+      '辅助启发',
       '原有判断',
       '区分性证据',
       '抽象关系',
@@ -355,9 +356,9 @@ test('public workflow and agent instructions expose one aligned v2.1 contract', 
   assert.match(agentInstructions, /论文脉络.*最重要的分析正文/);
   assert.match(agentInstructions, /具体例子/);
   assert.match(workflowDoc, /核心贡献与方法/);
-  assert.match(workflowDoc, /阶段详解从 `### 6\.` 开始/);
-  assert.match(agentInstructions, /阶段详解从 `### 6\.` 开始/);
-  assert.match(maintenanceSop, /阶段详解从 `### 6\.` 开始/);
+  assert.match(workflowDoc, /从 `### 6\.` 开始至少展开首要机制/);
+  assert.match(agentInstructions, /从 `### 6\.` 开始至少展开首要机制/);
+  assert.match(maintenanceSop, /阶段详解从 `### 6\.` 开始.*至少展开首要机制/);
   assert.match(workflowDoc, /具体例子/);
   for (const document of [workflowDoc, template, agentInstructions, maintenanceSop]) {
     for (const requirement of ['首要启发', '区分性证据', '抽象关系', '可证伪预测']) {
@@ -385,15 +386,16 @@ test('public workflow and agent instructions expose one aligned v2.1 contract', 
   assert.match(maintenanceSop, /分析正文语义验收/);
   assert.match(maintenanceSop, /具体例子/);
   assert.doesNotMatch(agentInstructions, /`Reference Intake Brief`/);
-  assert.match(authorSop, /不要求每位作者都创建 `data\/authors\.json` profile/);
+  assert.match(authorSop, /论文级采集的完成标准/);
+  assert.match(authorSop, /个人主页、机构页、GitHub、学术档案和社交账号不属于本层要求/);
   for (const document of [workflowDoc, template, agentInstructions, authorSop]) {
     assert.match(document, /作者顺序前两位/);
     assert.match(document, /共同一作/);
     assert.match(document, /通讯作者/);
     assert.match(document, /普通作者[^。\n]*复用已有 profile/);
   }
-  assert.match(authorSop, /稳定学术来源本身只完成基础核验/);
-  assert.match(authorSop, /只有已有强候选的深入核验作者进入 X 检查/);
+  assert.match(authorSop, /稳定学术来源本身只完成身份核验/);
+  assert.match(authorSop, /X 或 profile 完善属于当前目标字段/);
   for (const document of [workflowDoc, template, agentInstructions, authorSop, maintenanceSop]) {
     assert.match(document, /representativePapers/);
   }

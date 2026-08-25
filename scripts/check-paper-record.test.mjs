@@ -40,12 +40,17 @@ test('the default v2 contract validates without errors', async () => {
   assert.deepEqual(result.errors, []);
 });
 
-test('the default v2.1 canary validates with seven core sections', async () => {
+test('the archive-core v2.1 canary validates without enrichment artifacts', async () => {
   const result = await validatePaperFixture('v21-note', v21Paper);
   assert.deepEqual(result.errors, []);
   assert.deepEqual(result.advisories, []);
   assert.doesNotMatch(v21Paper, /Reference Intake Brief/);
   assert.doesNotMatch(v21Paper, /^## OpenReview \/ 审稿意见吸收$/m);
+  assert.doesNotMatch(v21Paper, /^## 主要启发$/m);
+  assert.doesNotMatch(v21Paper, /\/authors\//);
+  assert.doesNotMatch(v21Paper, /\/images\/papers\//);
+  assert.doesNotMatch(v21Paper, /^- (?:Delivery mode|Workflow mode|Enrichment):/m);
+  assert.match(v21Paper, /- Key figure decision: omit/);
 });
 
 test('v2.1 insight construction contract accepts numbered evidence-backed natural paragraphs', async () => {
@@ -516,7 +521,7 @@ test('v2.1 source review status requires four valid fields', async () => {
   assert.ok(confidenceResult.errors.some((issue) => issue.code === 'v21-review-confidence'));
 });
 
-test('v2.1 requires a full review section only for official reviews', async () => {
+test('v2.1 requires a review section only for official reviews', async () => {
   const official = v21Paper.replace('page-type=not-found', 'page-type=official-review');
   const missingResult = await validatePaperFixture('missing-official-review-section', official);
   assert.ok(missingResult.errors.some((issue) => issue.code === 'v21-official-review-section'));
@@ -525,7 +530,7 @@ test('v2.1 requires a full review section only for official reviews', async () =
 
 ## OpenReview / 审稿意见吸收
 
-- Reviewer consensus: 问题重要。
+- Reviewer consensus: decision 与 meta-review 对问题重要性形成共识。
 - Main criticisms: 统计证据有限。
 - Author response: 补充实验。
 - 对可信度的影响: 核心结论保持，外推范围收缩。

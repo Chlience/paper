@@ -104,6 +104,7 @@ export const v21CoreBody = `
 ## 作者与关系
 
 - Ada Example: Example University.
+- Bob Example: Example Institute.
 
 ## 一句话结论
 

@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import * as authors from './content/authors.mjs';
 import * as workflow from './content/paper-workflow.mjs';
-import { archiveIndex, archiveRow } from './fixtures/paper-workflow.mjs';
+import { archiveIndex, archiveRow, v21Paper } from './fixtures/paper-workflow.mjs';
 
 test('author references combine profile links with source author names', () => {
   const references = authors.collectAuthorReferences(
@@ -124,6 +124,18 @@ test('archive collection audit combines index and author reverse-integrity error
 
   assert.ok(result.errors.some((issue) => issue.code === 'missing-index-entry'));
   assert.ok(result.errors.some((issue) => issue.code === 'orphan-author-profile'));
+});
+
+test('archive-core accepts plain-text authors without creating profiles', () => {
+  const result = workflow.validateArchiveCollections({
+    records: [{ slug: 'v21-note', markdown: v21Paper }],
+    profiles: [],
+    indexMarkdown: archiveIndex([archiveRow('v21-note', 'V2.1')]),
+    knownPaperSlugs: new Set(['v21-note']),
+  });
+
+  assert.deepEqual(result.errors, []);
+  assert.deepEqual(result.advisories, []);
 });
 
 test('author aliases cannot resolve to two different profiles', () => {
