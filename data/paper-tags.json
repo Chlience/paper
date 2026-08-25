@@ -93,6 +93,7 @@
   "2506.19248-inference-time-reward-hacking-llms": ["reward-hacking", "test-time-scaling", "rl-theory", "ai-safety"],
   "2505.24864-prorl-prolonged-rl-reasoning-boundaries": ["reasoning-rl", "rl-algorithm", "rollout-optimization", "training-stability"],
   "2504.13837-rlvr-reasoning-boundary-base-model": ["reasoning-analysis", "reasoning-rl", "benchmark"],
+  "2508.08221-tricks-or-traps-lite-ppo": ["rl-algorithm", "reasoning-rl", "training-stability", "reasoning-analysis"],
   "2503.14476-dapo-long-cot-rl-system": ["rl-algorithm", "reasoning-rl", "rl-infrastructure", "reward-modeling"],
   "2506.10947-spurious-rewards-rethinking-rlvr": ["reward-hacking", "reasoning-rl", "reward-modeling", "benchmark"],
   "2602.15763-glm-5-agentic-engineering": ["coding-agent", "agent-rl", "moe-architecture", "long-context"],

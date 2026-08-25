@@ -12798,5 +12798,262 @@
         "url": "https://arxiv.org/abs/2603.15031"
       }
     ]
+  },
+  {
+    "slug": "zihe-liu-bjtu",
+    "name": "Zihe Liu",
+    "chineseName": "刘子贺",
+    "aliases": ["Zihe Liu", "刘子贺"],
+    "matchByName": false,
+    "affiliations": ["Alibaba Group", "Beijing Jiaotong University"],
+    "x": "",
+    "xConfidence": "not-found",
+    "topics": ["RL post-training", "LLM reasoning", "continual learning", "temporal knowledge graph reasoning"],
+    "notes": "LitePPO / Tricks or Traps 共同贡献作者与 ROLL 贡献者。目标论文列出 Alibaba Group 和 Beijing Jiaotong University；北京交通大学记录确认其中文名为刘子贺，并记录其为 2023 级硕士生。",
+    "sources": [
+      {
+        "label": "Tricks or Traps arXiv",
+        "url": "https://arxiv.org/abs/2508.08221"
+      },
+      {
+        "label": "Tricks or Traps ICLR 2026",
+        "url": "https://openreview.net/forum?id=R0JM3BWP7W"
+      },
+      {
+        "label": "OpenReview profile",
+        "url": "https://openreview.net/profile?id=~Zihe_Liu2"
+      },
+      {
+        "label": "ACL 2024 paper",
+        "url": "https://aclanthology.org/2024.findings-acl.853/"
+      },
+      {
+        "label": "NAACL 2025 paper",
+        "url": "https://aclanthology.org/2025.findings-naacl.303/"
+      },
+      {
+        "label": "Beijing Jiaotong University record",
+        "url": "https://cs.bjtu.edu.cn/docs/20241008174901685655.pdf"
+      },
+      {
+        "label": "ROLL repository",
+        "url": "https://github.com/alibaba/ROLL"
+      },
+      {
+        "label": "ROLL arXiv",
+        "url": "https://arxiv.org/abs/2506.06122"
+      }
+    ]
+  },
+  {
+    "slug": "jiashun-liu-hkust",
+    "name": "Jiashun Liu",
+    "chineseName": "刘嘉顺",
+    "aliases": ["Jiashun Liu", "Liu Jiashun", "刘嘉顺"],
+    "matchByName": false,
+    "affiliations": ["Hong Kong University of Science and Technology", "Alibaba Group"],
+    "homepage": "https://torressliu.github.io/",
+    "github": "https://github.com/torressliu",
+    "x": "https://x.com/JasonLiu106968",
+    "xConfidence": "high",
+    "topics": ["deep reinforcement learning", "LLM reinforcement learning", "RL post-training", "plasticity loss", "GFlowNets"],
+    "representativePapers": [
+      {
+        "title": "Tricks or Traps? A Deep Dive into RL for LLM Reasoning",
+        "url": "https://openreview.net/forum?id=R0JM3BWP7W",
+        "year": 2026,
+        "venue": "ICLR"
+      },
+      {
+        "title": "Asymmetric Proximal Policy Optimization: mini-critics boost LLM reasoning",
+        "url": "https://openreview.net/forum?id=0vgzrcv4Dr",
+        "year": 2026,
+        "venue": "ICLR"
+      },
+      {
+        "title": "Let It Flow: Agentic Crafting on Rock and Roll",
+        "url": "https://arxiv.org/abs/2512.24873",
+        "year": 2025,
+        "venue": "arXiv"
+      },
+      {
+        "title": "Part II: ROLL Flash -- Accelerating RLVR and Agentic Training with Asynchrony",
+        "url": "https://arxiv.org/abs/2510.11345",
+        "year": 2025,
+        "venue": "arXiv"
+      },
+      {
+        "title": "Measure gradients, not activations! Enhancing neuronal activity in deep reinforcement learning",
+        "url": "https://papers.nips.cc/paper_files/paper/2025/hash/722f3f9298a961d2639eadd3f14a2816-Abstract-Conference.html",
+        "year": 2025,
+        "venue": "NeurIPS"
+      },
+      {
+        "title": "The Courage to Stop: Overcoming Sunk Cost Fallacy in Deep Reinforcement Learning",
+        "url": "https://proceedings.mlr.press/v267/liu25ay.html",
+        "year": 2025,
+        "venue": "ICML"
+      },
+      {
+        "title": "Neuroplastic Expansion in Deep Reinforcement Learning",
+        "url": "https://openreview.net/forum?id=20qZK2T7fa",
+        "year": 2025,
+        "venue": "ICLR"
+      },
+      {
+        "title": "Flow Factorization for Efficient Generative Flow Networks",
+        "url": "https://ojs.aaai.org/index.php/AAAI/article/view/34887",
+        "year": 2025,
+        "venue": "AAAI"
+      },
+      {
+        "title": "Unlock the Intermittent Control Ability of Model Free Reinforcement Learning",
+        "url": "https://proceedings.neurips.cc/paper_files/paper/2024/hash/dc300c4d75b94b211b149ae4bcbbf2d2-Abstract-Conference.html",
+        "year": 2024,
+        "venue": "NeurIPS"
+      },
+      {
+        "title": "Unlock the Cognitive Generalization of Deep Reinforcement Learning via Granular Ball Representation",
+        "url": "https://proceedings.mlr.press/v235/liu24u.html",
+        "year": 2024,
+        "venue": "ICML"
+      },
+      {
+        "title": "Hybrid CtrlFormer: Learning Adaptive Search Space Partition for Hybrid Action Control via Transformer-based Monte Carlo Tree Search",
+        "url": "https://proceedings.mlr.press/v244/liu24a.html",
+        "year": 2024,
+        "venue": "UAI"
+      }
+    ],
+    "notes": "香港科技大学 Ling Pan 研究组博士生与 Tricks or Traps 共同贡献作者，研究覆盖深度强化学习可塑性、GFlowNets 和大语言模型强化学习后训练；早期公开论文记录包含 Tianjin University 机构关系。",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://torressliu.github.io/"
+      },
+      {
+        "label": "Ling Pan Group",
+        "url": "https://ling-pan.github.io/group/"
+      },
+      {
+        "label": "HKUST faculty supervision profile",
+        "url": "https://facultyprofiles.hkust.edu.hk/profiles.php?profile=ling-pan-lingpan"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/torressliu"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/JasonLiu106968"
+      },
+      {
+        "label": "OpenReview profile",
+        "url": "https://openreview.net/profile?id=~Jiashun_Liu1"
+      },
+      {
+        "label": "BAAI profile",
+        "url": "https://hub.baai.ac.cn/view/50819"
+      },
+      {
+        "label": "Tricks or Traps arXiv",
+        "url": "https://arxiv.org/abs/2508.08221"
+      }
+    ]
+  },
+  {
+    "slug": "yancheng-he-alibaba",
+    "name": "Yancheng He",
+    "chineseName": "贺彦程",
+    "aliases": ["Yancheng He", "贺彦程"],
+    "matchByName": false,
+    "affiliations": ["Alibaba Group"],
+    "homepage": "https://sydney170.github.io/",
+    "github": "https://github.com/sydney170",
+    "x": "https://x.com/helansydney",
+    "xConfidence": "high",
+    "topics": ["agentic RL", "LLM reasoning", "RL post-training", "LLM evaluation", "long-chain-of-thought critique"],
+    "representativePapers": [
+      {
+        "title": "Let It Flow: Agentic Crafting on Rock and Roll, Building the ROME Model within an Open Agentic Learning Ecosystem",
+        "url": "https://arxiv.org/abs/2512.24873",
+        "venue": "arXiv"
+      },
+      {
+        "title": "Tricks or Traps? A Deep Dive into RL for LLM Reasoning",
+        "url": "https://openreview.net/forum?id=R0JM3BWP7W",
+        "year": 2026,
+        "venue": "ICLR"
+      },
+      {
+        "title": "Part II: ROLL Flash -- Accelerating RLVR and Agentic Training with Asynchrony",
+        "url": "https://arxiv.org/abs/2510.11345",
+        "year": 2025,
+        "venue": "arXiv"
+      },
+      {
+        "title": "Asymmetric Proximal Policy Optimization: mini-critics boost LLM reasoning",
+        "url": "https://openreview.net/forum?id=0vgzrcv4Dr",
+        "year": 2026,
+        "venue": "ICLR"
+      },
+      {
+        "title": "Think-J: Learning to Think for Generative LLM-as-a-Judge",
+        "url": "https://doi.org/10.1609/aaai.v40i37.40377",
+        "year": 2026,
+        "venue": "AAAI"
+      },
+      {
+        "title": "MuSC: Improving Complex Instruction Following with Multi-granularity Self-Contrastive Training",
+        "url": "https://aclanthology.org/2025.acl-long.523/",
+        "year": 2025,
+        "venue": "ACL"
+      },
+      {
+        "title": "Can Large Language Models Detect Errors in Long Chain-of-Thought Reasoning?",
+        "url": "https://aclanthology.org/2025.acl-long.905/",
+        "year": 2025,
+        "venue": "ACL"
+      }
+    ],
+    "notes": "Alibaba Group 大语言模型研究者，研究方向包括智能体智能、推理强化学习与后训练；Tricks or Traps 共同贡献作者、DeltaBench 第一作者。OpenReview 和哈尔滨工业大学记录确认其 2021–2023 年硕士学习经历，个人主页重点展示 ROLL、ROME 与 Agentic Learning Ecosystem。个人主页当前可见的社交链接与 `_data/social.yml` 指向 @helansydney；`_config.yml` 保留的 he_yancheng 是陈旧 SEO 字段。",
+    "sources": [
+      {
+        "label": "Homepage",
+        "url": "https://sydney170.github.io/"
+      },
+      {
+        "label": "Homepage repository config",
+        "url": "https://github.com/sydney170/sydney170.github.io/blob/master/_config.yml"
+      },
+      {
+        "label": "Homepage social links",
+        "url": "https://github.com/sydney170/sydney170.github.io/blob/master/_data/social.yml"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/sydney170"
+      },
+      {
+        "label": "Google Scholar",
+        "url": "https://scholar.google.com/citations?user=WicqLFsAAAAJ"
+      },
+      {
+        "label": "OpenReview profile",
+        "url": "https://openreview.net/profile?id=~Yancheng_He4"
+      },
+      {
+        "label": "HIT MIT Lab",
+        "url": "https://mitlab.hit.edu.cn/2023/0525/c9188a309739/page.htm"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/helansydney"
+      },
+      {
+        "label": "Tricks or Traps arXiv",
+        "url": "https://arxiv.org/abs/2508.08221"
+      }
+    ]
   }
 ]

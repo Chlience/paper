@@ -1,7 +1,7 @@
 # Paper Archive Index
 
 First-Archived-At: 2026-06-21
-Updated-At: 2026-08-06
+Updated-At: 2026-08-25
 
 ## 本地工作流
 
@@ -87,6 +87,7 @@ Updated-At: 2026-08-06
 | [Batch-Invariant Inference](/papers/2025-09-10-defeating-nondeterminism-llm-inference/) | 2025年9月 | 用 batch-invariant RMSNorm、matmul 与 attention kernel 消除 temperature=0 推理的批次依赖漂移。 |
 | [RL Skill Composition](/papers/2509.25123-rl-compositional-skill-acquisition/) | 2025年9月 | 在受控任务中证明 RL 可组合 base model 已掌握的 atomic skills，形成未见组合能力。 |
 | [LoRAFusion](/papers/2510.00206-lorafusion-efficient-lora-fine-tuning/) | 2025年9月 | 用 split-graph kernel fusion 与 multi-adapter packing 同时减少 LoRA memory traffic 和 pipeline bubbles。 |
+| [Tricks or Traps / Lite PPO](/papers/2508.08221-tricks-or-traps-lite-ppo/) | 2025年8月 | 在同一训练框架下、覆盖范围并不完全重合的 Qwen3 4B/8B Base 与对齐后数学强化学习实验中分别检查优势归一化、概率比裁剪、损失聚合和超长过滤，并将组内均值—批级标准差归一化与 token 级损失组成不训练价值模型的 Lite PPO；OpenReview 补充的一个 Qwen3-8B Base 三随机种子设置仍优于 GRPO 与 DAPO，但奖励范围异常、计算量未对齐和有限模型任务覆盖限制普适结论。 |
 | [Kimi K2](/papers/2507.20534-kimi-k2-open-agentic-intelligence/) | 2025年7月 | 用大规模 MoE、MuonClip、工具数据和 agentic RL 构建开放的软件工程智能体模型。 |
 | [MiniMax-M1](/papers/2506.13585-minimax-m1-cispo-lightning-attention/) | 2025年6月 | 用 Lightning Attention、CISPO 和大规模 RL rollout 降低长 CoT 的 test-time compute 成本。 |
 | [Spurious Rewards](/papers/2506.10947-spurious-rewards-rethinking-rlvr/) | 2025年6月 | 通过随机、格式和错误答案 reward 实验，揭示 pretrained prior 与 clipping bias 可产生伪 RLVR 增益。 |
