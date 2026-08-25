@@ -206,9 +206,11 @@ test('the workflow documents define one aligned primary-insight construction pro
       '区分性证据',
       '抽象关系',
       '可证伪预测',
+      '不预设数量上限或目标数量',
     ]) {
       assert.match(document, new RegExp(requirement));
     }
+    assert.doesNotMatch(document, /一至三个|至多(?:保留|形成|写|构建)一条/);
   }
   assert.doesNotMatch(template, /^## 本地讨论补充$/m);
 });
@@ -355,6 +357,9 @@ test('public workflow and agent instructions expose one aligned v2.1 contract', 
   assert.match(agentInstructions, /Key figure rationale/);
   assert.match(agentInstructions, /论文脉络.*最重要的分析正文/);
   assert.match(agentInstructions, /具体例子/);
+  for (const document of [workflowDoc, agentInstructions]) {
+    assert.doesNotMatch(document, /20 分钟|35 分钟|60 分钟|耗时检查点/);
+  }
   assert.match(workflowDoc, /核心贡献与方法/);
   assert.match(workflowDoc, /从 `### 6\.` 开始至少展开首要机制/);
   assert.match(agentInstructions, /从 `### 6\.` 开始至少展开首要机制/);
