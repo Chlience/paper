@@ -1,4 +1,5 @@
 {
+  "2026-08-26-qwen3-8-flash-next-architecture": ["sparse-attention", "linear-attention", "training-stability", "moe-architecture"],
   "2601.18089-latentmoe-accuracy-per-flop-parameter": ["moe-architecture", "moe-systems", "serving-runtime"],
   "2026-07-27-kimi-k3-open-frontier-intelligence": ["moe-architecture", "linear-attention", "long-context", "agent-rl"],
   "2607.26246-w2s-opd-weak-to-strong-distillation": ["on-policy-distillation", "reasoning-rl", "training-stability", "rl-theory"],

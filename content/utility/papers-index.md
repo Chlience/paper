@@ -1,7 +1,7 @@
 # Paper Archive Index
 
 First-Archived-At: 2026-06-21
-Updated-At: 2026-08-25
+Updated-At: 2026-08-28
 
 ## 本地工作流
 
@@ -14,6 +14,7 @@ Updated-At: 2026-08-25
 
 | 简称 | 时间 | 核心信号 |
 | --- | --- | --- |
+| [Qwen3.8-Flash-Next](/papers/2026-08-26-qwen3-8-flash-next-architecture/) | 2026年8月 | Qwen3.8-Flash-Next 将三层 Gated DeltaNet 与一层 Qwen Sparse Attention 交错，并用四分支门控残差、可卸载的 N-gram Embedding 和重新拟合的 Muon 训练配方共同降低训练与长上下文推理成本；125B 主模型每个 token 激活约 6B 参数，在十四项预训练评测中有八项超过 397B-A17B 的 Qwen3.7-Plus-Base，同时使用约三分之一的训练 token 和约九分之一的训练 FLOPs，但报告没有披露完整数据账本、端到端服务测量或多随机种子复验。 |
 | [Kimi K3](/papers/2026-07-27-kimi-k3-open-frontier-intelligence/) | 2026年7月 | Kimi K3 将三层 KDA 与一层全局注意力交错、跨块 Attention Residuals 和每个 token 激活 16 个路由专家的 Stable LatentMoE 组合为 2.78 万亿总参数、1042 亿激活参数、百万 token 上下文的原生多模态模型；报告的缩放律拟合把架构、数据与训练配方的合并收益估计为相对 Kimi K2 约 2.5 倍，尚未拆分单个组件贡献。 |
 | [SEED](/papers/2607.14777-seed-self-evolving-on-policy-distillation/) | 2026年7月 | 先用外部模型标注的轨迹—技能数据把策略训练成轨迹分析器，再让每轮最新策略从自身完整轨迹生成事后技能并对同批采样 token 做门控似然训练；三种小模型在 12 个汇总指标中取得 10 个最优或并列最优，但直接前作 OPID 未进入主表，且证据缺少多随机种子、技能正确性评测与总训练成本对齐。 |
 | [CriPO](/papers/2607.18082-cripo-rubric-rl-self-distillation/) | 2026年7月 | 把评分量规聚合后的学习信号丢失拆成当前采样未覆盖和已满足但整体优势非正两类，用评分项条件自教师注入缺失行为，并以反事实自教师定位 token 后局部改写优势；两种 Qwen3 小模型在五项裁判评测中较 GRPO 平均提高 3.2 和 1.4 分，证据缺少多随机种子与完整硬件条件。 |
