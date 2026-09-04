@@ -11,7 +11,6 @@ export const paths = {
   topics: '/topics/',
   mainlines: '/mainlines/',
   authors: '/authors/',
-  conferences: '/conferences/',
   archive: '/archive/',
   workflow: '/workflow/',
   synthesisWorkflow: '/synthesis-workflow/',

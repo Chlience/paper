@@ -1,16 +1,10 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
-import latestEditionCalendar from '../data/conferences/latest-editions.json' with { type: 'json' };
-import registry from '../data/conferences/registry.json' with { type: 'json' };
 import { comparePapersForReviewFilter, PAPER_REVIEW_STATUSES } from '../src/lib/paper-review.mjs';
-import { compareConferencesBySubmissionDeadline } from './conferences/deadline-sort.mjs';
 import { generatedFile } from './content/repository.mjs';
 import { tagDefinitions, tagFacets } from './content/tagging.mjs';
 
 const paperData = JSON.parse(await fs.readFile(generatedFile, 'utf8'));
-const conferenceData = JSON.parse(
-  await fs.readFile('src/generated/conference-data.json', 'utf8'),
-);
 
 assert.equal(paperData.tagFacets.length, tagFacets.length);
 assert.equal(paperData.tagRoutes.length, tagDefinitions.length);
@@ -75,31 +69,4 @@ assert.deepEqual(triDao?.representativePapers[0], {
   venue: 'MLSys',
 });
 
-assert.equal(conferenceData.schemaVersion, 4);
-assert.deepEqual(Object.keys(conferenceData).sort(), [
-  'areas',
-  'catalogScope',
-  'ccfSnapshot',
-  'conferences',
-  'schemaVersion',
-  'verifiedAt',
-]);
-assert.equal(conferenceData.conferences.length, 56);
-for (const key of ['papers', 'coverage', 'facets']) assert.equal(Object.hasOwn(conferenceData, key), false);
-const generatedVenueIds = new Set(conferenceData.conferences.map((conference) => conference.id));
-for (const excludedVenueId of registry.catalogScope.excludedVenueIds) {
-  assert.equal(generatedVenueIds.has(excludedVenueId), false);
-}
-for (const conference of conferenceData.conferences) {
-  assert.equal(Object.hasOwn(conference, 'papers'), false);
-  assert.equal(Object.hasOwn(conference.latestEdition, 'papers'), false);
-}
-assert.deepEqual(
-  conferenceData.conferences.map(({ id }) => id),
-  [...conferenceData.conferences]
-    .sort(compareConferencesBySubmissionDeadline)
-    .map(({ id }) => id),
-);
-assert.equal(latestEditionCalendar.schemaVersion, 3);
-
-console.log(`Generated-content check passed for ${paperData.papers.length} papers and ${conferenceData.conferences.length} conferences.`);
+console.log(`Generated-content check passed for ${paperData.papers.length} papers.`);
