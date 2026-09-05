@@ -1,7 +1,7 @@
 # Paper Archive Index
 
 First-Archived-At: 2026-06-21
-Updated-At: 2026-09-04
+Updated-At: 2026-09-05
 
 ## 本地工作流
 
@@ -15,6 +15,7 @@ Updated-At: 2026-09-04
 | 简称 | 时间 | 核心信号 |
 | --- | --- | --- |
 | [SMELT](/papers/2609.01343-smelt-compute-matched-moe-looped-transformers/) | 2026年9月 | SMELT 在近似匹配每 token FLOPs、非嵌入参数量与 KV cache 的 MoE 对照中，将中间一半层重复执行两次并以缩窄隐藏维度和增加专家数补偿预算；四规模三稀疏度的独立缩放面拟合估计，在拟合覆盖的十的二十次方至十的二十一次方 FLOPs 区间达到相同验证损失可节省 6.8% 至 18.0% 训练计算，但报告使用专有数据与训练栈且未验证实际时延。 |
+| [Statistical MoE](/papers/2609.03501-statistical-understanding-mixture-of-experts/) | 2026年9月 | 本文将 MoE 建模为局部聚合，在专家误差受控和路由正则条件下分解逼近、专家学习与路由估计风险，给出 Top-K 的额外边界稳定性代价，并解释路由几何与特定学习规则下共享残差分解的作用。 |
 | [Qwen3.8-Flash-Next](/papers/2026-08-26-qwen3-8-flash-next-architecture/) | 2026年8月 | Qwen3.8-Flash-Next 将三层 Gated DeltaNet 与一层 Qwen Sparse Attention 交错，并用四分支门控残差、可卸载的 N-gram Embedding 和重新拟合的 Muon 训练配方共同降低训练与长上下文推理成本；125B 主模型每个 token 激活约 6B 参数，在十四项预训练评测中有八项超过 397B-A17B 的 Qwen3.7-Plus-Base，同时使用约三分之一的训练 token 和约九分之一的训练 FLOPs，但报告没有披露完整数据账本、端到端服务测量或多随机种子复验。 |
 | [Kimi K3](/papers/2026-07-27-kimi-k3-open-frontier-intelligence/) | 2026年7月 | Kimi K3 将三层 KDA 与一层全局注意力交错、跨块 Attention Residuals 和每个 token 激活 16 个路由专家的 Stable LatentMoE 组合为 2.78 万亿总参数、1042 亿激活参数、百万 token 上下文的原生多模态模型；报告的缩放律拟合把架构、数据与训练配方的合并收益估计为相对 Kimi K2 约 2.5 倍，尚未拆分单个组件贡献。 |
 | [SEED](/papers/2607.14777-seed-self-evolving-on-policy-distillation/) | 2026年7月 | 先用外部模型标注的轨迹—技能数据把策略训练成轨迹分析器，再让每轮最新策略从自身完整轨迹生成事后技能并对同批采样 token 做门控似然训练；三种小模型在 12 个汇总指标中取得 10 个最优或并列最优，但直接前作 OPID 未进入主表，且证据缺少多随机种子、技能正确性评测与总训练成本对齐。 |

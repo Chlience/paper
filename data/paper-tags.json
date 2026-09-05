@@ -1,4 +1,5 @@
 {
+  "2609.03501-statistical-understanding-mixture-of-experts": ["moe-architecture"],
   "2510.25741-scaling-latent-reasoning-looped-language-models": ["reasoning-analysis", "scaling-laws", "training-stability", "kv-cache"],
   "2609.01343-smelt-compute-matched-moe-looped-transformers": ["moe-architecture", "scaling-laws"],
   "2026-08-26-qwen3-8-flash-next-architecture": ["sparse-attention", "linear-attention", "training-stability", "moe-architecture"],
