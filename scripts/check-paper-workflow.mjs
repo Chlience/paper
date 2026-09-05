@@ -10,10 +10,12 @@ import {
   validatePaperRecord,
 } from './content/paper-workflow.mjs';
 import { authorsFile, repoRoot, readPaperEntries } from './content/repository.mjs';
+import { validateV21Compatibility } from './content/paper-reading-contract.mjs';
 import { validateTagConfiguration } from './content/tagging.mjs';
 
 const indexPath = path.join(repoRoot, 'content', 'utility', 'papers-index.md');
 const legacyManifestPath = path.join(repoRoot, 'internal', 'paper-workflow-legacy-slugs.json');
+const v21ManifestPath = path.join(repoRoot, 'internal', 'paper-workflow-v21-slugs.json');
 const v2ManifestPath = path.join(repoRoot, 'internal', 'paper-workflow-v2-slugs.json');
 const methodOverviewBaselinePath = path.join(
   repoRoot,
@@ -24,6 +26,7 @@ const entries = await readPaperEntries();
 const indexMarkdown = await fs.readFile(indexPath, 'utf8');
 const profiles = JSON.parse(await fs.readFile(authorsFile, 'utf8'));
 const legacyManifest = JSON.parse(await fs.readFile(legacyManifestPath, 'utf8'));
+const v21Manifest = JSON.parse(await fs.readFile(v21ManifestPath, 'utf8'));
 const v2Manifest = JSON.parse(await fs.readFile(v2ManifestPath, 'utf8'));
 const methodOverviewBaselineManifest = JSON.parse(
   await fs.readFile(methodOverviewBaselinePath, 'utf8'),
@@ -35,6 +38,8 @@ if (!Array.isArray(v2Manifest.slugs)) {
   throw new TypeError('internal/paper-workflow-v2-slugs.json must contain a slugs array.');
 }
 const legacyPaperSlugs = new Set(legacyManifest.slugs);
+if (!Array.isArray(v21Manifest.slugs)) throw new TypeError('v2.1 compatibility slugs must be an array.');
+const v21PaperSlugs = new Set(v21Manifest.slugs);
 const v2PaperSlugs = new Set(v2Manifest.slugs);
 const methodOverviewBaseline = methodOverviewBaselineCompatibilityMap(
   methodOverviewBaselineManifest,
@@ -66,6 +71,7 @@ for (const record of records) {
     knownPaperSlugs,
     legacyPaperSlugs,
     v2PaperSlugs,
+    v21PaperSlugs,
     methodOverviewBaseline,
     imageExists: exists,
   });
@@ -84,6 +90,7 @@ const methodOverviewBaselineResult = validateMethodOverviewBaseline({
   manifest: methodOverviewBaselineManifest,
 });
 errors.push(...methodOverviewBaselineResult.errors);
+errors.push(...validateV21Compatibility({ records, manifest: v21Manifest }).errors);
 
 for (const item of errors) {
   console.error(`ERROR [${item.code}] ${item.subject}: ${item.message}`);

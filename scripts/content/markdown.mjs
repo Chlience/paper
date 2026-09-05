@@ -290,7 +290,7 @@ export const stripPublicUtilityMaintenance = (markdown = '') =>
 
 const publicPaperMaintenanceExemptionPatterns = [
   /^-[ \t]+Page type:[ \t]*not-found[ \t]*$/i,
-  /^-[ \t]+Review status:[ \t]*page-type=not-found;[ \t]*match-confidence=(?:high|medium|low);[ \t]*observed-at=\d{4}-\d{2}-\d{2};[ \t]*venue-status=\S.*$/i,
+  /^-[ \t]+Review status:[ \t]*page-type=not-found;[ \t]*match-confidence=(?:high|medium|low|not-applicable);[ \t]*observed-at=\d{4}-\d{2}-\d{2};[ \t]*venue-status=\S.*$/i,
 ];
 
 export const isPublicPaperMaintenanceExemption = (line) =>

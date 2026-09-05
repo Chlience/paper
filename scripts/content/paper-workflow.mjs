@@ -9,6 +9,13 @@ import {
 import { getFirstArchivedAt, getSection, getSourceField, getSourceFieldRaw, getTopLevelField } from './markdown.mjs';
 import { PAPER_REVIEW_STATUSES } from '../../src/lib/paper-review.mjs';
 
+import {
+  CURRENT_PAPER_WORKFLOW_VERSION,
+  getContractField,
+  validateV3ReadingContract,
+  visibleContractMarkdown,
+} from './paper-reading-contract.mjs';
+
 export const REQUIRED_SECTION_GROUPS = [
   { name: 'Source', headings: ['Source'] },
   { name: '作者与关系', headings: ['作者与关系'] },
@@ -16,7 +23,7 @@ export const REQUIRED_SECTION_GROUPS = [
   { name: '论文脉络', headings: ['论文脉络'] },
   {
     name: '关键实验/定理',
-    headings: ['关键实验/定理', '关键实验结果', '主要实验结果', '关键定理', '文献扫描结果', '方法论论证'],
+    headings: ['关键实验/定理', '关键证据', '关键实验结果', '主要实验结果', '关键定理', '文献扫描结果', '方法论论证'],
   },
   { name: '局限', headings: ['局限', '局限与待验证问题'] },
   { name: '跨论文关系', headings: ['跨论文关系'] },
@@ -610,16 +617,22 @@ export const validatePaperRecord = async ({
   knownPaperSlugs,
   legacyPaperSlugs = new Set(),
   v2PaperSlugs = new Set(),
+  v21PaperSlugs = new Set(),
   methodOverviewBaseline = new Map(),
   imageExists,
 }) => {
   const errors = [];
   const advisories = [];
+  if (workflowVersionFor(markdown).toLowerCase() === CURRENT_PAPER_WORKFLOW_VERSION) {
+    markdown = visibleContractMarkdown(markdown);
+  }
   const source = getSection(markdown, 'Source');
   const workflowVersion = scalarValue(getSourceFieldRaw(source, 'Workflow version'));
   const isV2 = workflowVersion.toLowerCase() === 'v2';
   const isV21 = workflowVersion.toLowerCase() === 'v2.1';
-  const isStructured = isV2 || isV21;
+  const isV3 = workflowVersion.toLowerCase() === CURRENT_PAPER_WORKFLOW_VERSION;
+  const isStructured = isV2 || isV21 || isV3;
+  const isModern = isV21 || isV3;
   const materialType = scalarValue(getSourceFieldRaw(source, 'Material type'));
   const canonicalSource = canonicalValue(getSourceFieldRaw(source, 'Canonical source'));
   const firstArchivedAt = getFirstArchivedAt(markdown);
@@ -630,11 +643,11 @@ export const validatePaperRecord = async ({
   const conclusion = getSection(markdown, '一句话结论');
 
   if (!workflowVersion && !legacyPaperSlugs.has(slug)) {
-    errors.push(issue('missing-workflow-version', slug, 'New notes must declare Workflow version: v2.1.'));
+    errors.push(issue('missing-workflow-version', slug, 'New notes must declare Workflow version: v3.'));
   } else if (workflowVersion && !isStructured) {
     errors.push(issue('unsupported-workflow-version', slug, `Unsupported Workflow version: ${workflowVersion}.`));
-  } else if (isV2 && !legacyPaperSlugs.has(slug) && !v2PaperSlugs.has(slug)) {
-    errors.push(issue('deprecated-workflow-version', slug, 'New notes must use Workflow version: v2.1.'));
+  } else if ((isV2 && !legacyPaperSlugs.has(slug) && !v2PaperSlugs.has(slug)) || (isV21 && !v21PaperSlugs.has(slug))) {
+    errors.push(issue('deprecated-workflow-version', slug, 'New notes must use Workflow version: v3.'));
   }
 
   if (!firstArchivedAt || !updatedAt) {
@@ -661,7 +674,7 @@ export const validatePaperRecord = async ({
     );
   }
 
-  const requiredSectionGroups = isV21 ? REQUIRED_SECTION_GROUPS : V2_REQUIRED_SECTION_GROUPS;
+  const requiredSectionGroups = isModern ? REQUIRED_SECTION_GROUPS : V2_REQUIRED_SECTION_GROUPS;
   for (const group of requiredSectionGroups) {
     if (!sectionForGroup(markdown, group)) {
       errors.push(issue('missing-core-section', slug, `Missing or empty section: ${group.name}.`));
@@ -714,13 +727,15 @@ export const validatePaperRecord = async ({
     !isValidMinute(firstArchivedAt) ||
     !isValidMinute(updatedAt)
   ) {
-    errors.push(issue('v2-time-format', slug, 'v2 timestamps must use YYYY-MM-DD HH:mm.'));
+    errors.push(issue('v2-time-format', slug, 'Structured timestamps must use YYYY-MM-DD HH:mm.'));
   } else if (updatedAt < firstArchivedAt) {
     errors.push(issue('v2-time-order', slug, 'Updated-At must not precede First-Archived-At.'));
   }
 
   if (isStructured) {
-    const sourceField = (names) => scalarValue(getSourceFieldRaw(source, names));
+    const sourceField = (names) => scalarValue(isV3
+      ? (Array.isArray(names) ? names : [names]).map((name) => getContractField(source, name)).find(Boolean) ?? ''
+      : getSourceFieldRaw(source, names));
     const accessed = sourceField('Accessed');
     const requiredFields = [
       ['Material type', materialType],
@@ -742,7 +757,7 @@ export const validatePaperRecord = async ({
     ];
 
     for (const [name, value] of requiredFields) {
-      if (!value) errors.push(issue('v2-source-field', slug, `Missing v2 Source field: ${name}.`));
+      if (!value) errors.push(issue('v2-source-field', slug, `Missing Source field: ${name}.`));
     }
     if (!MATERIAL_TYPES.has(materialType)) {
       errors.push(issue('v2-material-type', slug, 'Material type is outside the supported v2 set.'));
@@ -761,9 +776,9 @@ export const validatePaperRecord = async ({
     }
 
     const modules = analysisModulesValue(sourceField('Analysis modules'));
-    if (isV21) {
+    if (isModern) {
       if (modules.length === 0) {
-        errors.push(issue('v21-analysis-modules', slug, 'v2.1 notes must declare at least one Analysis module.'));
+        errors.push(issue('v21-analysis-modules', slug, 'Notes must declare at least one Analysis module.'));
       }
       if (new Set(modules).size !== modules.length) {
         errors.push(issue('v21-analysis-modules', slug, 'Analysis modules must not contain duplicates.'));
@@ -776,7 +791,7 @@ export const validatePaperRecord = async ({
 
     }
 
-    for (const block of resultBlocks(sectionForGroup(markdown, evidenceSectionGroup))) {
+    for (const block of isV3 ? [] : resultBlocks(sectionForGroup(markdown, evidenceSectionGroup))) {
       const locator = evidenceValue(block.body);
       if (!locator || !hasEvidenceLocator(locator)) {
         errors.push(issue('v2-evidence-location', slug, `Missing evidence location in ${block.title}.`));
@@ -871,6 +886,9 @@ export const validatePaperRecord = async ({
         );
       }
 
+    }
+
+    if (isModern) {
       const keyFigureDecision = sourceField('Key figure decision').toLowerCase();
       const keyFigureRationale = sourceField('Key figure rationale');
       const expectedImagePrefix = `/images/papers/${slug}/`;
@@ -912,6 +930,15 @@ export const validatePaperRecord = async ({
         );
       }
 
+    }
+
+    if (isV3) {
+      errors.push(...validateV3ReadingContract({
+        markdown, slug, sectionGroups: REQUIRED_SECTION_GROUPS, hasEvidenceLocator,
+      }).errors);
+    }
+
+    if (isV21) {
       const reviewStatus = reviewStatusValue(sourceField('Review status'));
       const pageType = reviewStatus.get('page-type') ?? '';
       const matchConfidence = reviewStatus.get('match-confidence') ?? '';
@@ -1141,6 +1168,8 @@ export const validateArchiveTimes = (records) => {
   const times = new Map();
 
   for (const record of records) {
+    // v3 preserves real minute precision; paper identity and sort ties use the slug.
+    if (workflowVersionFor(record.markdown).toLowerCase() === CURRENT_PAPER_WORKFLOW_VERSION) continue;
     const value = getFirstArchivedAt(record.markdown);
     const group = times.get(value) ?? [];
     group.push(record);

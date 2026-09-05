@@ -13,7 +13,7 @@
     "dev": "npm run build:content && npm run build:mainlines && astro dev",
     "build": "npm run build:content && npm run build:mainlines && astro build",
     "test:unit": "node --test scripts/*.test.mjs",
-    "test:workflow": "node --test scripts/check-archive-contract.test.mjs scripts/check-author-contract.test.mjs scripts/check-markdown-maintenance.test.mjs scripts/check-paper-record.test.mjs scripts/check-tagging-review.test.mjs",
+    "test:workflow": "node --test scripts/check-paper-reading.test.mjs scripts/check-archive-contract.test.mjs scripts/check-author-contract.test.mjs scripts/check-markdown-maintenance.test.mjs scripts/check-paper-record.test.mjs scripts/check-tagging-review.test.mjs",
     "test:search": "node --test scripts/check-paper-search.test.mjs",
     "manual:browser": "npm run manual:figures && npm run manual:toc && npm run manual:dialog-scroll && npm run manual:dialog-interaction",
     "manual:figures": "node scripts/check-paper-figure-dialog.mjs",

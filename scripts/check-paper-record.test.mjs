@@ -365,7 +365,7 @@ test('new notes cannot enter compatibility mode without a workflow version', asy
 });
 
 test('unsupported workflow versions fail closed', async () => {
-  const invalid = v2Paper.replace('Workflow version: v2', 'Workflow version: v3');
+  const invalid = v2Paper.replace('Workflow version: v2', 'Workflow version: v99');
   const result = await validatePaperFixture('unsupported-workflow-version', invalid);
   assert.ok(result.errors.some((issue) => issue.code === 'unsupported-workflow-version'));
 });

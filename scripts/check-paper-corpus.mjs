@@ -10,6 +10,8 @@ import {
 } from './content/research-mainlines.mjs';
 import * as tagging from './content/tagging.mjs';
 import { validatePaperFixture } from './fixtures/paper-workflow.mjs';
+import { v3Paper } from './fixtures/paper-reading-v3.mjs';
+import { CURRENT_PAPER_WORKFLOW_VERSION, getContractField, visibleContractMarkdown, validateV21Compatibility } from './content/paper-reading-contract.mjs';
 
 test('controlled tags cover every archived paper and every defined route', async () => {
   const paperSlugs = (await fs.readdir('content/papers'))
@@ -144,75 +146,50 @@ test('the frozen method overview baseline matches current unmodified v2.1 migrat
   );
 });
 
-test('the public template exposes the v2.1 seven-section contract', async () => {
-  const template = await fs.readFile('content/utility/paper-note-template.md', 'utf8');
-  for (const fieldName of [
-    'Workflow version: v2.1',
-    'Material type',
-    'Analysis modules',
-    'Key figure decision',
-    'Key figure rationale',
-    'Canonical source',
-    'Responsible organization',
-    'Published / updated',
-    'Accessed',
-    'Review status',
-    'Review-Status: pending',
-    '证据定位',
-    '支持的最窄结论',
-    '索引核心信号',
-    '不使用公式或 TeX 数学定界符',
-  ]) {
-    assert.match(template, new RegExp(fieldName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
-  }
-  for (const heading of ['Source', '作者与关系', '一句话结论', '论文脉络', '关键实验/定理', '局限', '跨论文关系']) {
-    assert.match(template, new RegExp(`^## ${heading}$`, 'm'));
-  }
-  assert.match(template, /贡献全景与方法总览/);
-  assert.match(template, /^### 5\. 贡献全景与方法总览$/m);
-  assert.match(template, /^### 6\. <第一关键阶段：按执行或论证依赖命名>$/m);
-  assert.match(template, /^### 7\. 结论链条$/m);
-  assert.doesNotMatch(template, /^### 5\.\d+\s/m);
-  assert.match(template, /具体例子/);
-  assert.match(template, /端到端执行链或论证链/);
-  for (const requirement of [
-    '起点、输入或初始条件',
-    '关键阶段及其执行或依赖顺序',
-    '阶段间传递的数据',
-    '最终输出、训练信号或结论',
-    '后文增加关键角色',
-    '### 5. 方法总览与完整机制',
-  ]) {
-    assert.match(template, new RegExp(requirement.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
-  }
-  assert.match(template, /直接证据/);
-  assert.doesNotMatch(template, /^## Reference Intake Brief$/m);
+test('the v3 compatibility manifest matches the remaining v2.1 corpus', async () => {
+  const manifest = JSON.parse(await fs.readFile('internal/paper-workflow-v21-slugs.json', 'utf8'));
+  const files = (await fs.readdir('content/papers')).filter((name) => name.endsWith('.md'));
+  const records = await Promise.all(files.map(async (name) => ({
+    slug: name.replace(/\.md$/, ''), markdown: await fs.readFile(`content/papers/${name}`, 'utf8'),
+  })));
+  assert.deepEqual(validateV21Compatibility({ manifest, records }).errors, []);
+  assert.deepEqual([...manifest.slugs].sort(), records
+    .filter((record) => getContractField(markdown.getSection(record.markdown, 'Source'), 'Workflow version') === 'v2.1')
+    .map((record) => record.slug).sort());
 });
 
-test('the workflow documents define one aligned primary-insight construction process', async () => {
-  const [workflowDoc, template, agentInstructions, maintenanceSop] = await Promise.all([
-    fs.readFile('content/utility/paper-analysis-workflow.md', 'utf8'),
-    fs.readFile('content/utility/paper-note-template.md', 'utf8'),
-    fs.readFile('AGENTS.md', 'utf8'),
-    fs.readFile('internal/paper-archive-maintenance-sop.md', 'utf8'),
-  ]);
-
-  for (const document of [workflowDoc, template, agentInstructions, maintenanceSop]) {
-    for (const requirement of [
-      '首要启发',
-      '没有独立认识更新时省略本节',
-      '辅助启发',
-      '原有判断',
-      '区分性证据',
-      '抽象关系',
-      '可证伪预测',
-      '不预设数量上限或目标数量',
-    ]) {
-      assert.match(document, new RegExp(requirement));
-    }
-    assert.doesNotMatch(document, /一至三个|至多(?:保留|形成|写|构建)一条/);
-  }
-  assert.doesNotMatch(template, /^## 本地讨论补充$/m);
+test('the published template can be filled as a valid v3 note', async () => {
+  const template = visibleContractMarkdown(await fs.readFile('content/utility/paper-note-template.md', 'utf8'));
+  const source = markdown.getSection(v3Paper, 'Source');
+  assert.equal(getContractField(markdown.getSection(template, 'Source'), 'Workflow version'), CURRENT_PAPER_WORKFLOW_VERSION);
+  const values = {
+    '<Paper Title>': 'Deterministic parse cache — synthetic fixture',
+    '<official URL>': getContractField(source, 'Canonical source'),
+    '<title>': getContractField(source, 'Title'),
+    '<paper author block; use Responsible organization for team documents>': 'Fixture authors',
+    '<publication date>': '2026-09-05',
+    '<version and direct link; observation date for an unversioned page>': getContractField(source, 'Version / revision read'),
+    '<sections and appendices actually read; material gaps affecting the judgment>': getContractField(source, 'Reading scope'),
+    '<why text or tables suffice, or why the figure cannot be included>': getContractField(source, 'Key figure rationale'),
+    '<用自然语言写清首要贡献、区别性机制、主要结果与会改变真值的边界；不使用公式或 TeX 数学定界符。索引核心信号从本节提炼。>': markdown.getSection(v3Paper, '一句话结论'),
+    '<说明研究对象、用户关心的问题、已核验基线与剩余缺口；必要背景和核心假设可以合并。>': '相同输入的重复解析可能产生重复工作。该示意检查复用结果所需条件。',
+    '<说明首要贡献及必要辅助贡献；从输入或假设开始，按执行或依赖顺序交代关键对象、操作、传递关系和最终输出、训练信号或论证结论。先消歧角色与版本。只读本节应能复述完整链条。>': markdown.getSection(v3Paper, '论文脉络').split('### 贡献与方法总览')[1].split('####')[0].trim(),
+    '<首要机制或关键论证，按实际内容命名>': '缓存的等价条件',
+    '<解释关键操作如何工作、设计理由、成立条件和证据定位。公式解释用途、变量、方向与实现后果；需要时用对应原定义的具体例子。单阶段可合并进总览，多阶段按解释需要分节，不设固定编号或统一字数。>': 'Section 2：键包括文本、版本和配置；确定性与不可变性保证缓存返回结果和重算一致。未记录的外部状态会破坏保证。',
+    '<该证据检验的主张>': '相同键的重复调用可以复用解析结果',
+    '<同版本章节、图表、定理、页码或具体 URL / code path / commit>': getContractField(markdown.getSection(v3Paper, '关键实验/定理'), '证据定位'),
+    '<实际报告的结果及必要设置、比较对象与指标口径；区分作者报告、本地计算与独立复现>': getContractField(markdown.getSection(v3Paper, '关键实验/定理'), '观察'),
+    '<对照固定和改变了什么，能区分哪些解释，尚不能排除什么；理论说明假设与适用域>': getContractField(markdown.getSection(v3Paper, '关键实验/定理'), '判别性与局限'),
+    '<证据足以支持的判断，保留条件；可以是证据不足或负面结论>': getContractField(markdown.getSection(v3Paper, '关键实验/定理'), '支持的最窄结论'),
+    '<按受影响主张说明成立边界、混杂因素、访问或披露缺口及其判断后果；已展开的限制简短引用。>': markdown.getSection(v3Paper, '局限'),
+    '<按论文作者块记录论文时机构、顺序和明确角色；共同机构可合并。只检查本地同名、别名与已有 profile，机构无法映射到个人时明确说明。>': markdown.getSection(v3Paper, '作者与关系'),
+    '<只保留有证据且改变理解的引用、方法关系或本地比较；无可靠关系写“暂无高置信跨论文关系。”。本地论文用 /papers/<slug>/，作者用 /authors/<slug>/。>': markdown.getSection(v3Paper, '跨论文关系'),
+  };
+  let filled = template.replaceAll('YYYY-MM-DD HH:mm', '2026-09-05 09:00').replaceAll('YYYY-MM-DD', '2026-09-05');
+  for (const [placeholder, value] of Object.entries(values)) filled = filled.replaceAll(placeholder, value);
+  assert.doesNotMatch(filled, /<[^>]+>/);
+  assert.deepEqual((await validatePaperFixture('v3-template', filled)).errors, []);
+  assert.doesNotMatch(filled, /作者可能的思考路径/);
 });
 
 test('LRE keeps the three discussion insights in the canonical insight section', async () => {
@@ -286,126 +263,54 @@ test('LatentMoE is the strict primary-insight construction canary', async () => 
   );
 });
 
-test('public workflow and agent instructions expose one aligned v2.1 contract', async () => {
-  const workflowDoc = await fs.readFile('content/utility/paper-analysis-workflow.md', 'utf8');
-  const synthesisWorkflow = await fs.readFile('content/utility/research-synthesis-workflow.md', 'utf8');
-  const template = await fs.readFile('content/utility/paper-note-template.md', 'utf8');
-  const mainlineTemplate = await fs.readFile('content/utility/research-mainline-template.md', 'utf8');
-  const mainlinesDoc = await fs.readFile('content/utility/research-mainlines.md', 'utf8');
-  const agentInstructions = await fs.readFile('AGENTS.md', 'utf8');
-  const authorSop = await fs.readFile('internal/author-x-account-search-sop.md', 'utf8');
-  const maintenanceSop = await fs.readFile('internal/paper-archive-maintenance-sop.md', 'utf8');
-
-  for (const document of [
-    workflowDoc,
-    synthesisWorkflow,
-    template,
-    mainlineTemplate,
-    mainlinesDoc,
-    agentInstructions,
-    maintenanceSop,
-  ]) {
-    assert.doesNotMatch(document, /needs-review|需复审|待复审/);
-    assert.match(document, /pending/);
-    assert.match(document, /approved/);
-    assert.match(document, /Updated-At/);
-    assert.match(
-      document,
-      /保留原有(?:\s+`?Review-Status`?\s+和\s+`?Reviewed-At`?|审阅状态与审阅时间)/,
-    );
-  }
-
-  for (const snippet of [
-    '| 简称 | 时间 | 核心信号 |',
-    '索引核心信号',
-    '论文删除与反向清理',
-    '`orphan-author-profile`',
-    '`data/paper-tags.json`',
-    '`data/tag-taxonomy.json`',
-    'Workflow version: v2.1',
-    'Analysis modules',
-    'Key figure decision',
-    'Review-Status',
-    'Reviewed-At',
-    '五项人工语义门禁',
-  ]) {
-    assert.match(workflowDoc, new RegExp(snippet.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
-  }
-  assert.match(workflowDoc, /从新到旧/);
+test('workflow entry points route to one current reading contract and preserve publication boundaries', async () => {
+  const [workflowDoc, template, agentInstructions, maintenanceSop, modules] = await Promise.all([
+    fs.readFile('content/utility/paper-analysis-workflow.md', 'utf8'),
+    fs.readFile('content/utility/paper-note-template.md', 'utf8'),
+    fs.readFile('AGENTS.md', 'utf8'),
+    fs.readFile('internal/paper-archive-maintenance-sop.md', 'utf8'),
+    fs.readFile('internal/paper-analysis-modules.md', 'utf8'),
+  ]);
   for (const document of [workflowDoc, template, agentInstructions]) {
+    assert.match(document, new RegExp(`Workflow version: ${CURRENT_PAPER_WORKFLOW_VERSION}`));
+    assert.match(document, /analysis-only/);
+    assert.match(document, /archive-core/);
     assert.match(document, /\/synthesis-workflow\//);
     assert.match(document, /\/mainline-template\//);
   }
-  for (const snippet of [
-    'Workflow version: synthesis-v1',
-    'Material type: composite',
-    'Analysis modules',
-    'survey',
-    'Responsible organization',
-    'Search services',
-    'Search window',
-    '策略角色配置',
-    'Review-Status: pending',
-    '五项人工语义门禁',
-  ]) {
-    assert.match(synthesisWorkflow, new RegExp(snippet.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
+  for (const document of [agentInstructions, maintenanceSop, modules]) {
+    assert.match(document, /content\/utility\/paper-analysis-workflow\.md/);
   }
-  assert.match(agentInstructions, /核心信号/);
-  assert.match(agentInstructions, /不使用公式、TeX 定界符/);
-  assert.match(agentInstructions, /无剩余论文关联/);
-  assert.match(agentInstructions, /Review-Status/);
-  assert.match(agentInstructions, /Key figure rationale/);
-  assert.match(agentInstructions, /论文脉络.*最重要的分析正文/);
-  assert.match(agentInstructions, /具体例子/);
-  for (const document of [workflowDoc, agentInstructions]) {
-    assert.doesNotMatch(document, /20 分钟|35 分钟|60 分钟|耗时检查点/);
-  }
-  assert.match(workflowDoc, /核心贡献与方法/);
-  assert.match(workflowDoc, /从 `### 6\.` 开始至少展开首要机制/);
-  assert.match(agentInstructions, /从 `### 6\.` 开始至少展开首要机制/);
-  assert.match(maintenanceSop, /阶段详解从 `### 6\.` 开始.*至少展开首要机制/);
-  assert.match(workflowDoc, /具体例子/);
   for (const document of [workflowDoc, template, agentInstructions, maintenanceSop]) {
-    for (const requirement of ['首要启发', '区分性证据', '抽象关系', '可证伪预测']) {
-      assert.match(document, new RegExp(requirement));
-    }
+    assert.match(document, /pending/);
+    assert.match(document, /approved/);
+    assert.match(document, /保留原有\s+`?Review-Status`?\s+和\s+`?Reviewed-At`?/);
   }
-  assert.match(workflowDoc, /`本地讨论补充` 同样退出 v2\.1 的正式结构/);
-  assert.match(agentInstructions, /不再新增公开的 `本地讨论补充`/);
-  assert.match(maintenanceSop, /不再新增公开的 `本地讨论补充`/);
-  for (const document of [workflowDoc, template, agentInstructions, maintenanceSop]) {
-    assert.match(document, /完整执行链|端到端/);
-    assert.match(document, /不设统一字数/);
-    assert.match(document, /训练信号/);
-    assert.match(document, /失败条件|失败边界|成立边界/);
-    assert.match(document, /贡献全景与方法总览/);
-    assert.match(document, /方法总览与完整机制/);
-    assert.match(document, /只(?:读|阅读)(?:本节|第 5 节)/);
+  // Check the actual documented local commands, not a second copy of scientific prose.
+  const packageJson = JSON.parse(await fs.readFile('package.json', 'utf8'));
+  for (const match of workflowDoc.matchAll(/rtk npm run ([a-z:-]+)/g)) assert.ok(packageJson.scripts[match[1]]);
+  assert.match(workflowDoc, /internal\/paper-workflow-v21-slugs\.json/);
+  assert.match(agentInstructions, /Key figure decision: include\|omit/);
+  assert.match(maintenanceSop, /representativePapers/);
+
+  // Preserve the independent contracts whose documents are outside this revision.
+  const [synthesisWorkflow, mainlineTemplate, mainlinesDoc, authorSop] = await Promise.all([
+    fs.readFile('content/utility/research-synthesis-workflow.md', 'utf8'),
+    fs.readFile('content/utility/research-mainline-template.md', 'utf8'),
+    fs.readFile('content/utility/research-mainlines.md', 'utf8'),
+    fs.readFile('internal/author-x-account-search-sop.md', 'utf8'),
+  ]);
+  for (const document of [synthesisWorkflow, mainlineTemplate, mainlinesDoc]) {
+    assert.match(document, /pending/);
+    assert.match(document, /approved/);
+    assert.match(document, /保留原有(?:\s+`?Review-Status`?\s+和\s+`?Reviewed-At`?|审阅状态与审阅时间)/);
   }
-  for (const document of [workflowDoc, agentInstructions, maintenanceSop]) {
-    assert.match(document, /paper-workflow-method-overview-baseline\.json/);
+  for (const field of ['Workflow version: synthesis-v1', 'Material type: composite', 'Analysis modules', 'Search services', 'Search window', 'Responsible organization']) {
+    assert.ok(synthesisWorkflow.includes(field));
   }
-  assert.match(maintenanceSop, /Key figure decision: include/);
-  assert.match(maintenanceSop, /Key figure decision: omit/);
-  assert.match(maintenanceSop, /Key figure rationale/);
-  assert.match(maintenanceSop, /分析正文语义验收/);
-  assert.match(maintenanceSop, /具体例子/);
-  assert.doesNotMatch(agentInstructions, /`Reference Intake Brief`/);
-  assert.match(authorSop, /论文级采集的完成标准/);
-  assert.match(authorSop, /个人主页、机构页、GitHub、学术档案和社交账号不属于本层要求/);
-  for (const document of [workflowDoc, template, agentInstructions, authorSop]) {
-    assert.match(document, /作者顺序前两位/);
-    assert.match(document, /共同一作/);
-    assert.match(document, /通讯作者/);
-    assert.match(document, /普通作者[^。\n]*复用已有 profile/);
+  for (const requirement of ['作者顺序前两位', '共同一作', '通讯作者', 'representativePapers', 'selected、representative、featured', '不自动创建单篇论文笔记']) {
+    assert.ok(authorSop.includes(requirement));
   }
-  assert.match(authorSop, /稳定学术来源本身只完成身份核验/);
-  assert.match(authorSop, /X 或 profile 完善属于当前目标字段/);
-  for (const document of [workflowDoc, template, agentInstructions, authorSop, maintenanceSop]) {
-    assert.match(document, /representativePapers/);
-  }
-  assert.match(authorSop, /selected、representative、featured/);
-  assert.match(authorSop, /不自动创建单篇论文笔记/);
 });
 
 test('TacoMAS keeps ordinary coauthors at paper level under the core-profile contract', async () => {

@@ -16,6 +16,12 @@ internal/              analysis modules and private maintenance SOPs
 
 `scripts/build-paper-data.mjs` builds the paper, author, topic, and utility inventory. `scripts/build-mainline-data.mjs` independently validates and builds mainline articles. The Astro site combines both inventories for global search and generates paper-to-mainline backlinks from local paper links in each mainline article.
 
+## Paper Reading
+
+New notes follow the v3 reading contract in `content/utility/paper-analysis-workflow.md` and its companion template. The workflow starts with the reading question, reconstructs the mechanism, and distinguishes observations from interpretations and unresolved alternatives. `Reading scope` records what was actually read. Existing legacy, v2 and v2.1 notes keep their compatibility checks until a substantive update migrates them.
+
+The September 2026 audit and revision rationale are in `internal/paper-sop-v3-review.md`. Analysis modules define claim-specific questions; the maintenance SOP owns repository operations. Scientific validity remains a manual review responsibility.
+
 ## Local Development
 
 ```bash

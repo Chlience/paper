@@ -209,5 +209,6 @@ export const validatePaperFixture = (
     knownPaperSlugs: new Set([slug, 'source-paper']),
     legacyPaperSlugs: new Set([slug]),
     methodOverviewBaseline,
+    v21PaperSlugs: new Set([slug]),
     imageExists,
   });
