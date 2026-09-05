@@ -14,10 +14,10 @@ import {
   getFirstArchivedAt,
   getFirstHeading,
   getPinned,
+  getPaperSourceMetadata,
   getSection,
   getSourceField,
   getSourceFieldRaw,
-  getSourceUrl,
   getTopLevelField,
   getUpdatedAt,
   renderMarkdown,
@@ -40,11 +40,6 @@ import {
 } from '../src/lib/paper-review.mjs';
 
 const getSourceScalar = (markdown, names) => getSourceFieldRaw(markdown, names).trim();
-
-const getSourceHref = (markdown, names) => {
-  const value = getSourceScalar(markdown, names);
-  return value.match(/\[[^\]]+\]\(([^)]+)\)/)?.[1] ?? value;
-};
 
 const buildPaperRecords = async (paperEntries, coreSignals) => {
   const papers = [];
@@ -71,14 +66,12 @@ const buildPaperRecords = async (paperEntries, coreSignals) => {
       reviewStatus: normalizePaperReviewStatus(getTopLevelField(raw, 'Review-Status')),
       reviewedAt: getTopLevelField(raw, 'Reviewed-At'),
       pinned: getPinned(raw),
-      sourceUrl: getSourceUrl(raw),
-      canonicalSource: getSourceHref(raw, 'Canonical source'),
+      ...getPaperSourceMetadata(raw),
       materialType,
       authors,
       parsedAuthors: splitAuthorNames(authors),
       authorReferences: collectAuthorReferences(raw, authors),
       subjects: getSourceField(raw, 'Subjects'),
-      currentVersion: getSourceField(raw, 'Current version read'),
       tags: assignedTags.map((tag) => tag.label),
       tagIds: assignedTags.map((tag) => tag.id),
       tagAliases: [...new Set(assignedTags.flatMap((tag) => tag.aliases))],
@@ -88,7 +81,7 @@ const buildPaperRecords = async (paperEntries, coreSignals) => {
       conclusion: stripMarkdown(conclusionMarkdown),
       conclusionHtml: renderMarkdown(conclusionMarkdown),
       headings: collectHeadings(pageMarkdown),
-      html: renderMarkdown(pageMarkdown),
+      html: renderMarkdown(pageMarkdown, { foldPaperSource: true }),
     });
   }
 

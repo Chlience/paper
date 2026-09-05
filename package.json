@@ -27,8 +27,9 @@
     "check:source": "npm run test:unit && npm run check:corpus && npm run check:workflow && npm run check:mainlines && npm run check:metadata && npm run check:math",
     "check:generated": "node scripts/check-generated-content.mjs",
     "check:dist": "npm run check:generated && node scripts/check-paper-site.mjs",
+    "check:browser": "node scripts/check-paper-browser.mjs",
     "check:site": "npm run check:dist",
-    "check:all": "npm run check:source && npm run build && npm run check:dist",
+    "check:all": "npm run check:source && npm run build && npm run check:dist && npm run check:browser",
     "preview": "astro preview",
     "astro": "astro"
   },

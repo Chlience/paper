@@ -44,6 +44,8 @@ const visibleDateField = dateOptions.some(({ field }) => field === dateField) ? 
   data-paper-updated-at={paper.updatedAt ?? ''}
   data-paper-reviewed-at={paper.reviewedAt ?? ''}
   data-paper-pinned={paper.pinned ? 'true' : 'false'}
+  data-paper-authors={paper.authors ?? ''}
+  data-paper-tag-ids={paper.tagIds?.join(' ') ?? ''}
 >
   <div class="paper-row-date mono">
     {dateOptions.map(({ field, label, value }) => (

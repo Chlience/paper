@@ -26,9 +26,12 @@ const searchItems = buildPaperSearchItems(data.papers, mainlineData.mainlines);
       inputmode="search"
       autocomplete="off"
       spellcheck="false"
-      placeholder="标题、作者、分类框架或 slug"
+      placeholder="标题、作者、主题或论文编号"
       aria-describedby="paper-search-command-status"
       aria-controls="paper-search-command-results"
+      role="combobox"
+      aria-autocomplete="list"
+      aria-expanded="false"
     />
     <p id="paper-search-command-status" class="paper-search-command-status mono" data-paper-search-status>
       输入关键词搜索 {searchItems.length} 项内容
@@ -41,6 +44,7 @@ const searchItems = buildPaperSearchItems(data.papers, mainlineData.mainlines);
       aria-label="搜索结果"
     >
     </div>
+    <button class="paper-search-more" type="button" data-paper-search-more hidden>继续显示结果</button>
   </div>
 </dialog>
 
@@ -52,6 +56,7 @@ const searchItems = buildPaperSearchItems(data.papers, mainlineData.mainlines);
   const status = dialog?.querySelector('[data-paper-search-status]');
   const closeButton = dialog?.querySelector('[data-paper-search-close]');
   const resultsRoot = dialog?.querySelector('[data-paper-search-results]');
+  const moreButton = dialog?.querySelector('[data-paper-search-more]');
   const triggers = Array.from(document.querySelectorAll('[data-paper-search-open]'));
   const searchUrl = dialog?.getAttribute('data-search-url') || '';
   const expectedCount = Number(dialog?.getAttribute('data-search-count') || 0);
@@ -62,6 +67,7 @@ const searchItems = buildPaperSearchItems(data.papers, mainlineData.mainlines);
     status instanceof HTMLElement &&
     closeButton instanceof HTMLButtonElement &&
     resultsRoot instanceof HTMLElement &&
+    moreButton instanceof HTMLButtonElement &&
     searchUrl
   ) {
     let items = [];
@@ -69,6 +75,8 @@ const searchItems = buildPaperSearchItems(data.papers, mainlineData.mainlines);
     let loadFailed = false;
     let activeIndex = -1;
     let results = [];
+    let resultLimit = 12;
+    let lastTrigger;
     let lockedScrollY = 0;
     let lockedScrollbarWidth = 0;
     const idleStatus = `输入关键词搜索 ${expectedCount} 项内容`;
@@ -128,7 +136,8 @@ const searchItems = buildPaperSearchItems(data.papers, mainlineData.mainlines);
       window.scrollTo(0, lockedScrollY);
     };
 
-    const openSearch = () => {
+    const openSearch = (event) => {
+      lastTrigger = event?.currentTarget instanceof HTMLElement ? event.currentTarget : triggers[0];
       if (!dialog.open) {
         lockPageScroll();
         dialog.showModal();
@@ -151,9 +160,11 @@ const searchItems = buildPaperSearchItems(data.papers, mainlineData.mainlines);
     const setActiveResult = (nextIndex, shouldScroll = true) => {
       if (results.length === 0) {
         activeIndex = -1;
+        input.removeAttribute('aria-activedescendant');
         return;
       }
       activeIndex = (nextIndex + results.length) % results.length;
+      input.setAttribute('aria-activedescendant', `paper-search-result-${activeIndex}`);
       for (const result of resultsRoot.querySelectorAll('[data-paper-search-result]')) {
         const isActive = Number(result.getAttribute('data-index')) === activeIndex;
         result.classList.toggle('is-active', isActive);
@@ -164,12 +175,16 @@ const searchItems = buildPaperSearchItems(data.papers, mainlineData.mainlines);
 
     const renderResults = () => {
       const query = input.value.trim();
+      moreButton.hidden = true;
+      input.setAttribute('aria-expanded', 'false');
+      input.removeAttribute('aria-activedescendant');
       if (items.length === 0) {
         status.textContent = loadFailed ? '检索索引载入失败，请稍后重试' : '正在载入论文与主线索引…';
         resultsRoot.innerHTML = '';
         return;
       }
-      results = searchPaperItems(items, query, 12);
+      const matches = searchPaperItems(items, query, Infinity);
+      results = matches.slice(0, resultLimit);
       activeIndex = results.length > 0 ? 0 : -1;
 
       if (!query) {
@@ -178,7 +193,12 @@ const searchItems = buildPaperSearchItems(data.papers, mainlineData.mainlines);
         return;
       }
 
-      status.textContent = results.length > 0 ? `匹配 ${results.length} 项` : '没有匹配的内容';
+      status.textContent = matches.length > 0
+        ? `匹配 ${matches.length} 项 · 显示 ${results.length} 项`
+        : '没有匹配的内容';
+      moreButton.hidden = results.length >= matches.length;
+      moreButton.textContent = `继续显示结果（剩余 ${matches.length - results.length} 项）`;
+      input.setAttribute('aria-expanded', String(results.length > 0));
       resultsRoot.innerHTML =
         results.length > 0
           ? results
@@ -186,6 +206,7 @@ const searchItems = buildPaperSearchItems(data.papers, mainlineData.mainlines);
                 (item, index) => `
                   <a
                     class="paper-search-result${index === activeIndex ? ' is-active' : ''}"
+                    id="paper-search-result-${index}"
                     data-paper-search-result
                     data-index="${index}"
                     href="${escapeHtml(item.path)}"
@@ -203,6 +224,7 @@ const searchItems = buildPaperSearchItems(data.papers, mainlineData.mainlines);
               )
               .join('')
           : '<p class="paper-search-no-results">没有匹配的内容。</p>';
+      setActiveResult(activeIndex, false);
     };
 
     for (const trigger of triggers) {
@@ -210,7 +232,17 @@ const searchItems = buildPaperSearchItems(data.papers, mainlineData.mainlines);
     }
 
     closeButton.addEventListener('click', closeSearch);
-    input.addEventListener('input', renderResults);
+    input.addEventListener('input', () => {
+      resultLimit = 12;
+      renderResults();
+    });
+    moreButton.addEventListener('click', () => {
+      const nextIndex = results.length;
+      resultLimit += 12;
+      renderResults();
+      setActiveResult(nextIndex);
+      input.focus({ preventScroll: true });
+    });
     resultsRoot.addEventListener('pointermove', (event) => {
       const result = event.target instanceof Element ? event.target.closest('[data-paper-search-result]') : null;
       if (!(result instanceof HTMLElement)) return;
@@ -223,7 +255,7 @@ const searchItems = buildPaperSearchItems(data.papers, mainlineData.mainlines);
 
     dialog.addEventListener('close', () => {
       unlockPageScroll();
-      const trigger = triggers.find((item) => item instanceof HTMLElement);
+      const trigger = lastTrigger;
       if (trigger instanceof HTMLElement) trigger.focus();
     });
 
@@ -235,7 +267,7 @@ const searchItems = buildPaperSearchItems(data.papers, mainlineData.mainlines);
         return;
       }
 
-      if (!dialog.open) return;
+      if (!dialog.open || event.target !== input) return;
 
       if (event.key === 'ArrowDown') {
         event.preventDefault();
@@ -254,3 +286,29 @@ const searchItems = buildPaperSearchItems(data.papers, mainlineData.mainlines);
     });
   }
 </script>
+
+<style>
+  .paper-search-panel {
+    grid-template-rows: auto auto auto minmax(0, 1fr) auto;
+  }
+
+  .paper-search-results {
+    min-height: 0;
+  }
+
+  .paper-search-more {
+    flex-shrink: 0;
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--accent-soft);
+    color: var(--fg);
+    font: inherit;
+    cursor: pointer;
+  }
+
+  .paper-search-more[hidden] {
+    display: none;
+  }
+</style>

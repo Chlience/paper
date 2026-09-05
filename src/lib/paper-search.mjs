@@ -77,13 +77,22 @@ export const buildPaperSearchItems = (papers = [], mainlines = []) => [
 export const searchPaperItems = (items = [], query = '', limit = 12) => {
   const terms = getTerms(query);
   if (terms.length === 0) return [];
-
-  const results = [];
-  for (const item of items) {
-    if (!terms.every((term) => item.searchText.includes(term))) continue;
-    results.push(item);
-    if (results.length >= limit) break;
-  }
-
-  return results;
+  const phrase = normalize(query);
+  const score = (item) => {
+    const title = normalize(item.title);
+    const authors = normalize(item.authors).split(/\s*[,，;；]\s*/);
+    if (title === phrase) return 100;
+    if (authors.includes(phrase)) return 90;
+    if (title.startsWith(phrase)) return 80;
+    if (title.includes(phrase)) return 70;
+    if (terms.every((term) => title.includes(term))) return 60;
+    if ((item.tags ?? []).some((tag) => normalize(tag) === phrase)) return 50;
+    return 0;
+  };
+  return items
+    .filter((item) => terms.every((term) => item.searchText.includes(term)))
+    .map((item, index) => ({ item, index, score: score(item) }))
+    .sort((left, right) => right.score - left.score || left.index - right.index)
+    .slice(0, Math.max(0, limit))
+    .map(({ item }) => item);
 };

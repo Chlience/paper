@@ -38,7 +38,9 @@ npm run check:source
 git diff --check
 ```
 
-`check:source` runs pure unit tests and read-only corpus checks without generating ignored files. Use `npm run check:all` to run the same source checks, build the production site once, and verify generated data and `dist/`. Browser interaction checks remain explicit manual checks under `npm run manual:browser` and require a running local site.
+`check:source` runs pure unit tests and read-only corpus checks without generating ignored files. Use `npm run check:all` to run the source checks, build the production site once, verify generated data and `dist/`, and run browser regressions. `npm run check:browser` starts a temporary local server for the existing `dist/` and requires `google-chrome`; it covers the real v3 article and legacy figures, mobile anchors, complete search results, and directory filters and pagination. CI runs this check before packaging the deployment. The additional interaction checks under `npm run manual:browser` require a running local site.
+
+Paper and author directories support keyword filters and 24 entries per page. Paper filters preserve the existing pinned, archive-time and review-time ordering and combine with topics; author filters include profile scope and name ordering. Query parameters preserve the selected filters and page. Without JavaScript, the complete directories remain readable. Paper source details remain available in an expandable section and through the existing `#source` links.
 
 Generated `src/generated/` data and `dist/` are ignored and stay outside commits.
 

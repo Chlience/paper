@@ -72,3 +72,26 @@ test('paper search indexes paper and mainline fields without leaking internal da
   assert.equal(searchPaperItems(items, 'missing term').length, 0);
   assert.equal(searchPaperItems(items, 'training', 2).length, 2);
 });
+
+test('complete search results retain matches after the first page and include mainlines', () => {
+  const items = buildPaperSearchItems(
+    Array.from({ length: 21 }, (_, index) => ({ title: `MoE paper ${index}`, path: `/papers/${index}/` })),
+    [{ title: 'MoE timeline', path: '/mainlines/moe/', currentJudgment: 'MoE comparison' }],
+  );
+  assert.equal(searchPaperItems(items, 'MoE').length, 12);
+  const complete = searchPaperItems(items, 'MoE', Infinity);
+  assert.equal(complete.length, 22);
+  assert.ok(complete.some((item) => item.contentType === 'mainline'));
+  assert.equal(searchPaperItems(items, 'MoE timeline')[0].path, '/mainlines/moe/');
+});
+
+test('exact author names and titles rank ahead of incidental keyword matches', () => {
+  const items = buildPaperSearchItems([
+    { title: 'A reference to Bo Zheng', authors: 'Another Author', coreSignal: 'Bo Zheng' },
+    { title: 'Training', authors: 'Bo Zheng, A. Writer' },
+    { title: 'Bo Zheng', authors: 'A. Writer' },
+  ]);
+  assert.deepEqual(searchPaperItems(items, 'bo zheng').map((item) => item.title), [
+    'Bo Zheng', 'Training', 'A reference to Bo Zheng',
+  ]);
+});

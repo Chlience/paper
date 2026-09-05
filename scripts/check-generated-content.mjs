@@ -41,6 +41,12 @@ assert.equal(trace?.materialType, 'research-paper');
 assert.ok(!Object.hasOwn(trace ?? {}, 'searchWindow'));
 assert.match(trace?.html ?? '', /id="source"/);
 
+const firstV3 = paperData.papers.find((paper) => paper.slug === '2609.03501-statistical-understanding-mixture-of-experts');
+assert.equal(firstV3?.sourceUrl, firstV3?.canonicalSource);
+assert.match(firstV3?.currentVersion ?? '', /v1/);
+assert.match(firstV3?.html ?? '', /data-paper-source/);
+assert.equal((firstV3?.html.match(/data-paper-figure-open/g) ?? []).length, 2);
+
 for (const slug of ['nino-vieillard', 'gennady-pekhimenko', 'dongyang-ma-flashmemory']) {
   const author = paperData.authors.find((candidate) => candidate.slug === slug);
   assert.ok(author?.paperCount > 0, `Expected generated author ${slug} to retain linked papers.`);

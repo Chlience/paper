@@ -39,12 +39,12 @@ const relatedMainlines = mainlineData.mainlines.filter((mainline) => mainline.in
 >
   <article class="paper-page container">
     <header class="paper-header">
-        <p class="eyebrow mono">{paper.slug}</p>
+        <p class="eyebrow">阅读笔记</p>
         <h1>{paper.title}</h1>
         <div class="deck" set:html={paper.conclusionHtml} />
         {paper.authors && paper.authors !== 'Unknown' && (
           <p class="paper-authors">
-            <span class="paper-authors-label mono">Authors</span>
+            <span class="paper-authors-label">作者</span>
             <AuthorList authors={paper.authors} authorEntries={paper.authorEntries} />
           </p>
         )}
@@ -53,13 +53,13 @@ const relatedMainlines = mainlineData.mainlines.filter((mainline) => mainline.in
             <span class:list={['paper-meta-item', 'paper-review-badge', `is-${reviewStatus}`]}>
               {paperReviewLabel(reviewStatus)}
             </span>
-            {paper.pinned && <span class="paper-meta-item paper-pin">Pinned</span>}
-            {paper.firstArchivedAt && <span class="paper-meta-item">Archived {paper.firstArchivedAt}</span>}
+            {paper.pinned && <span class="paper-meta-item paper-pin">置顶</span>}
+            {paper.firstArchivedAt && <span class="paper-meta-item">归档 {paper.firstArchivedAt}</span>}
             {paper.updatedAt && paper.updatedAt !== paper.firstArchivedAt && (
-              <span class="paper-meta-item">Updated {paper.updatedAt}</span>
+              <span class="paper-meta-item">更新 {paper.updatedAt}</span>
             )}
-            {paper.reviewedAt && <span class="paper-meta-item">Reviewed {paper.reviewedAt}</span>}
-            {paper.sourceUrl && <a class="paper-meta-item" href={paper.sourceUrl}>Source</a>}
+            {paper.reviewedAt && <span class="paper-meta-item">审阅 {paper.reviewedAt}</span>}
+            {paper.sourceUrl && <a class="paper-meta-item" data-paper-source-link href={paper.sourceUrl}>原文 ↗</a>}
           </div>
           {paper.tags.length > 0 && (
             <div class="paper-meta-line paper-meta-topics" role="group" aria-label="论文主题">
@@ -69,6 +69,7 @@ const relatedMainlines = mainlineData.mainlines.filter((mainline) => mainline.in
             </div>
           )}
         </div>
+        {paper.currentVersion && <p class="paper-version"><span>所读版本</span> {paper.currentVersion}</p>}
     </header>
 
     <div class="paper-layout">
@@ -91,3 +92,36 @@ const relatedMainlines = mainlineData.mainlines.filter((mainline) => mainline.in
   </article>
 
 </Layout>
+
+<style>
+  .paper-header {
+    padding: 40px 0 32px;
+  }
+
+  .paper-header h1 {
+    font-size: clamp(32px, 4.4vw, 52px);
+  }
+
+  .paper-version {
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.6;
+    margin: 12px 0 0;
+  }
+
+  .paper-version span {
+    font-weight: 700;
+  }
+
+  @media (max-width: 900px) {
+    .paper-layout {
+      gap: 20px;
+    }
+  }
+
+  @media (max-width: 680px) {
+    .paper-header {
+      padding-top: 28px;
+    }
+  }
+</style>

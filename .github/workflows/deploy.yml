@@ -48,6 +48,9 @@ jobs:
           npm run build
           npm run check:dist
 
+      - name: Verify browser reading and navigation
+        run: npm run check:browser
+
       - name: Pack static artifact
         run: tar -C dist -czf "$ARTIFACT_NAME" .
 

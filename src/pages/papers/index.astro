@@ -1,5 +1,7 @@
 ---
 import PaperRow from '../../components/PaperRow.astro';
+import DirectoryPagination from '../../components/DirectoryPagination.astro';
+import '../../styles/directory.css';
 import Layout from '../../layouts/Layout.astro';
 import data from '../../generated/paper-data.json';
 import { countPaperReviewStatuses, PAPER_REVIEW_DEFINITIONS } from '../../lib/paper-review.mjs';
@@ -9,7 +11,7 @@ const reviewCounts = countPaperReviewStatuses(data.papers);
 
 <Layout active="papers" title="Papers | Chlience Paper Archive" canonicalPath="/papers/">
   <section class="page-header container">
-    <p class="eyebrow mono">All notes</p>
+    <p class="eyebrow">全部笔记</p>
     <h1>论文笔记</h1>
     <p class="deck">当前收录 {data.papers.length} 篇论文或技术文章。全部与待审阅按归档时间、已审阅按审阅时间排列，均为最新优先。</p>
   </section>
@@ -35,14 +37,28 @@ const reviewCounts = countPaperReviewStatuses(data.papers);
         </p>
       </div>
 
+      <div class="directory-controls" data-directory-controls hidden>
+        <label class="directory-query">搜索笔记
+          <input type="search" data-directory-query placeholder="标题、作者或关键词" aria-label="搜索论文笔记" />
+        </label>
+        <label>研究主题
+          <select data-directory-tag aria-label="筛选研究主题">
+            <option value="">全部主题</option>
+            {data.tagRoutes.map((tag) => <option value={tag.id}>{tag.label} · {tag.count}</option>)}
+          </select>
+        </label>
+      </div>
+
       <div class="paper-list">
         {data.papers.map((paper) => <PaperRow paper={paper} />)}
       </div>
       <p class="paper-review-empty" data-paper-review-empty hidden>当前筛选下没有论文。</p>
+      <DirectoryPagination />
     </div>
   </section>
 
 <script>
+  import { matchesDirectoryQuery, paginateDirectory } from '../../lib/directory.mjs';
   import {
     comparePapersForReviewFilter,
     normalizePaperReviewFilter,
@@ -58,6 +74,18 @@ const reviewCounts = countPaperReviewStatuses(data.papers);
     const list = root.querySelector('.paper-list');
     const summary = root.querySelector('[data-paper-review-summary]');
     const empty = root.querySelector('[data-paper-review-empty]');
+    const queryInput = root.querySelector('[data-directory-query]') as HTMLInputElement;
+    const tagInput = root.querySelector('[data-directory-tag]') as HTMLSelectElement;
+    const pagination = root.querySelector('[data-directory-pagination]') as HTMLElement;
+    const previous = root.querySelector('[data-directory-prev]') as HTMLButtonElement;
+    const next = root.querySelector('[data-directory-next]') as HTMLButtonElement;
+    const pageSummary = root.querySelector('[data-directory-page-summary]') as HTMLElement;
+    root.querySelector('[data-directory-controls]')?.removeAttribute('hidden');
+    let currentPage = 1;
+    let currentFilter = 'all';
+    const searchText = new Map(rows.map((row) => [row,
+      `${row.textContent} ${row.getAttribute('data-paper-authors') ?? ''}`,
+    ]));
 
     const paperFromRow = (row) => ({
       slug: row.getAttribute('data-paper-slug') ?? '',
@@ -80,21 +108,28 @@ const reviewCounts = countPaperReviewStatuses(data.papers);
       }
     };
 
-    const applyFilter = (value, updateHistory = false) => {
+    const applyFilter = (value, updateHistory: false | 'push' | 'replace' = false, requestedPage = 1) => {
       const filter = normalizePaperReviewFilter(value);
+      currentFilter = filter;
       const sortDefinition = paperReviewSortDefinition(filter);
       const sortedRows = [...rows].sort((left, right) =>
         comparePapersForReviewFilter(paperFromRow(left), paperFromRow(right), filter),
       );
-      let visibleCount = 0;
+      const matches = sortedRows.filter((row) =>
+        (filter === 'all' || row.getAttribute('data-paper-review-status') === filter) &&
+        (!tagInput.value || row.getAttribute('data-paper-tag-ids')?.split(' ').includes(tagInput.value)) &&
+        matchesDirectoryQuery(searchText.get(row), queryInput.value),
+      );
+      const page = paginateDirectory(matches, requestedPage);
+      currentPage = page.page;
+      const visibleRows = new Set(page.items);
 
       if (list instanceof HTMLElement) list.append(...sortedRows);
 
       for (const row of sortedRows) {
-        const visible = filter === 'all' || row.getAttribute('data-paper-review-status') === filter;
+        const visible = visibleRows.has(row);
         row.toggleAttribute('hidden', !visible);
         showDateField(row, sortDefinition.field);
-        if (visible) visibleCount += 1;
       }
 
       for (const link of filters) {
@@ -102,21 +137,35 @@ const reviewCounts = countPaperReviewStatuses(data.papers);
         link.classList.toggle('is-active', active);
         if (active) link.setAttribute('aria-current', 'true');
         else link.removeAttribute('aria-current');
+        const target = new URL('/papers/', window.location.origin);
+        const review = link.getAttribute('data-paper-review-filter');
+        if (review !== 'all') target.searchParams.set('review', review);
+        if (queryInput.value.trim()) target.searchParams.set('q', queryInput.value.trim());
+        if (tagInput.value) target.searchParams.set('tag', tagInput.value);
+        link.setAttribute('href', `${target.pathname}${target.search}`);
       }
 
       if (summary instanceof HTMLElement) {
-        summary.textContent = `显示 ${visibleCount} / ${rows.length} 篇 · ${paperReviewLabel(filter)} · 按${sortDefinition.label}`;
+        summary.textContent = `匹配 ${page.total} / ${rows.length} 篇 · 本页 ${page.items.length} 篇 · ${paperReviewLabel(filter)} · 按${sortDefinition.label}`;
       }
       if (empty instanceof HTMLElement) {
-        empty.hidden = visibleCount > 0;
-        empty.textContent = `${paperReviewLabel(filter)}中暂无论文。`;
+        empty.hidden = page.total > 0;
+        empty.textContent = '当前筛选下没有论文，请调整关键词、主题或审阅状态。';
       }
+      pagination.hidden = page.pageCount <= 1;
+      previous.disabled = page.page <= 1;
+      next.disabled = page.page >= page.pageCount;
+      pageSummary.textContent = `第 ${page.page} / ${page.pageCount} 页`;
 
       if (updateHistory) {
         const url = new URL(window.location.href);
         if (filter === 'all') url.searchParams.delete('review');
         else url.searchParams.set('review', filter);
-        window.history.pushState({ review: filter }, '', url);
+        for (const [key, value] of [['q', queryInput.value.trim()], ['tag', tagInput.value], ['page', page.page > 1 ? String(page.page) : '']]) {
+          if (value) url.searchParams.set(key, value);
+          else url.searchParams.delete(key);
+        }
+        window.history[updateHistory === 'push' ? 'pushState' : 'replaceState']({}, '', url);
       }
     };
 
@@ -133,7 +182,7 @@ const reviewCounts = countPaperReviewStatuses(data.papers);
           return;
         }
         event.preventDefault();
-        applyFilter(link.getAttribute('data-paper-review-filter'), true);
+        applyFilter(link.getAttribute('data-paper-review-filter'), 'push');
       });
     }
 
@@ -144,11 +193,46 @@ const reviewCounts = countPaperReviewStatuses(data.papers);
         url.searchParams.delete('review');
         window.history.replaceState({ review: filter }, '', url);
       }
-      applyFilter(filter);
+      queryInput.value = url.searchParams.get('q') ?? '';
+      const tag = url.searchParams.get('tag') ?? '';
+      tagInput.value = Array.from(tagInput.options).some((option) => option.value === tag) ? tag : '';
+      applyFilter(filter, 'replace', Number(url.searchParams.get('page') ?? 1));
     };
+
+    queryInput.addEventListener('input', () => applyFilter(currentFilter, 'replace'));
+    tagInput.addEventListener('change', () => applyFilter(currentFilter, 'push'));
+    const changePage = (page) => {
+      applyFilter(currentFilter, 'push', page);
+      root.scrollIntoView({ block: 'start' });
+      (list?.querySelector('.paper-row:not([hidden]) h3 a') as HTMLElement)?.focus({ preventScroll: true });
+    };
+    previous.addEventListener('click', () => changePage(currentPage - 1));
+    next.addEventListener('click', () => changePage(currentPage + 1));
 
     window.addEventListener('popstate', applyUrlFilter);
     applyUrlFilter();
   }
 </script>
 </Layout>
+
+<style>
+  .page-header {
+    padding: 36px 0 28px;
+  }
+
+  .page-header h1 {
+    font-size: clamp(32px, 5vw, 52px);
+  }
+
+  @media (max-width: 680px) {
+    .paper-review-filter {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .paper-review-filter a {
+      padding-inline: 10px;
+      gap: 6px;
+      font-size: 13px;
+    }
+  }
+</style>

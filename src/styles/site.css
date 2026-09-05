@@ -48,6 +48,8 @@
 
   --page-width: 1160px;
   --content-width: 760px;
+  --site-header-height: 64px;
+  --anchor-offset: calc(var(--site-header-height) + 24px);
   --radius: 8px;
   --space-xs: 8px;
   --space-sm: 12px;
@@ -899,7 +901,7 @@ h3 {
 }
 
 .route-facet {
-  scroll-margin-top: 84px;
+  scroll-margin-top: var(--anchor-offset);
   display: grid;
   grid-template-columns: minmax(180px, 0.28fr) minmax(0, 1fr);
   gap: var(--space-lg);
@@ -925,7 +927,7 @@ h3 {
 }
 
 .theme-section {
-  scroll-margin-top: 84px;
+  scroll-margin-top: var(--anchor-offset);
   padding: 16px 0;
   border-top: 1px solid var(--border);
 }
@@ -1063,7 +1065,7 @@ h3 {
   display: grid;
   gap: var(--space-md);
   position: sticky;
-  top: 88px;
+  top: var(--anchor-offset);
 }
 
 .author-side section {
@@ -1250,7 +1252,7 @@ h3 {
 
 .toc {
   position: sticky;
-  top: 88px;
+  top: var(--anchor-offset);
   padding: 14px 6px 14px 0;
   border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
@@ -1425,7 +1427,7 @@ h3 {
 .prose h3,
 .prose h4 {
   margin: 2.1em 0 0.7em;
-  scroll-margin-top: 86px;
+  scroll-margin-top: var(--anchor-offset);
 }
 
 .prose h1 {
@@ -1441,6 +1443,36 @@ h3 {
 .prose h3 {
   font-size: 21px;
 }
+
+.paper-source {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  margin-bottom: 28px;
+}
+
+.paper-source > summary {
+  padding: 14px 16px;
+  cursor: pointer;
+}
+
+.prose .paper-source > summary h2 {
+  display: inline;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 16px;
+}
+
+.paper-source > summary h2::after {
+  content: ' · 版本与阅读范围';
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.paper-source > summary .heading-anchor { display: none; }
+.paper-source-body { padding: 0 16px 12px; font-size: 14px; }
 
 .heading-anchor {
   margin-left: 8px;
@@ -2210,6 +2242,7 @@ html.is-figure-dialog-open body {
 }
 
 @media (max-width: 900px) {
+  .paper-layout { --anchor-offset: calc(var(--site-header-height) + 72px); }
   .home-hero,
   .paper-layout,
   .author-layout {

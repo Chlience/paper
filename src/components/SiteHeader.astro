@@ -26,7 +26,7 @@ const navItems = [
       <span>Paper Archive</span>
     </a>
 
-    <nav class="site-nav" aria-label="站点导航">
+    <nav id="site-navigation" class="site-nav" aria-label="站点导航">
       {navItems.map((item) => (
         <a
           href={item.href}
@@ -37,11 +37,125 @@ const navItems = [
         </a>
       ))}
       <a href={paths.mainSite}>主站</a>
+    </nav>
+    <div class="site-header-actions">
+      <a class="mobile-quick-link" href={paths.papers} aria-current={active === 'papers' ? 'page' : undefined}>论文</a>
+      <a class="mobile-quick-link" href={paths.mainlines} aria-current={active === 'mainlines' ? 'page' : undefined}>主线</a>
       <button type="button" class="site-search-trigger" data-paper-search-open>
         <span>搜索</span>
         <kbd>⌘K</kbd>
       </button>
-    </nav>
+      <button type="button" class="site-nav-toggle" data-site-nav-toggle aria-controls="site-navigation" aria-expanded="false" hidden>菜单</button>
+    </div>
     <PaperSearchDialog />
   </div>
 </header>
+
+<script>
+  const header = document.querySelector('.site-header');
+  const toggle = header?.querySelector('[data-site-nav-toggle]');
+  if (header instanceof HTMLElement && toggle instanceof HTMLButtonElement) {
+    const setOpen = (open: boolean) => {
+      header.toggleAttribute('data-nav-open', open);
+      toggle.setAttribute('aria-expanded', String(open));
+    };
+    header.setAttribute('data-nav-ready', '');
+    toggle.hidden = false;
+    toggle.addEventListener('click', () => setOpen(toggle.getAttribute('aria-expanded') !== 'true'));
+    header.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') {
+        setOpen(false);
+        toggle.focus();
+      }
+    });
+    const updateHeight = () => document.documentElement.style.setProperty(
+      '--site-header-height', `${header.getBoundingClientRect().height}px`,
+    );
+    new ResizeObserver(updateHeight).observe(header);
+    updateHeight();
+  }
+</script>
+
+<style>
+  .site-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .mobile-quick-link, .site-nav-toggle {
+    display: none;
+  }
+
+  .site-header-inner {
+    gap: 12px;
+  }
+
+  .site-nav {
+    margin-left: auto;
+  }
+
+  @media (max-width: 820px) {
+    .site-header-inner {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      padding: 10px 0;
+      gap: 8px;
+      min-height: 62px;
+      align-items: center;
+    }
+    .brand {
+      font-size: 14px;
+      gap: 6px;
+    }
+    .brand-mark {
+      width: 14px;
+      height: 14px;
+    }
+    .site-nav {
+      grid-column: 1 / -1;
+      grid-row: 2;
+      margin: 0;
+    }
+    .site-header[data-nav-ready]:not([data-nav-open]) .site-nav {
+      display: none;
+    }
+    .mobile-quick-link, .site-nav-toggle {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 40px;
+      padding: 0 5px;
+      font: inherit;
+      font-size: 13px;
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      border-radius: var(--radius);
+    }
+    .site-nav-toggle[hidden] {
+      display: none;
+    }
+    .site-nav-toggle {
+      cursor: pointer;
+    }
+    .mobile-quick-link[aria-current] {
+      background: var(--accent-soft);
+      color: var(--fg);
+    }
+    .site-search-trigger {
+      padding: 0 5px;
+      min-height: 40px;
+      font-size: 13px;
+    }
+    .site-search-trigger kbd {
+      display: none;
+    }
+  }
+
+  @media (max-width: 360px) {
+    .mobile-quick-link {
+      display: none;
+    }
+  }
+</style>

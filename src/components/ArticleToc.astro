@@ -32,7 +32,8 @@ for (const heading of headings) {
 
 {groups.length > 0 && (
   <aside class="toc" aria-label={label} data-article-toc>
-    <strong>{label}</strong>
+    <details class="toc-disclosure" data-toc-disclosure open>
+    <summary><strong>{label}</strong><span data-toc-current></span></summary>
     <nav data-article-toc-nav>
       {groups.map((group, groupIndex) => (
         <div
@@ -73,6 +74,7 @@ for (const heading of headings) {
         </div>
       ))}
     </nav>
+    </details>
   </aside>
 )}
 
@@ -92,6 +94,17 @@ for (const heading of headings) {
     if (!(toc instanceof HTMLElement)) continue;
 
     const nav = toc.querySelector('[data-article-toc-nav]');
+    const disclosure = toc.querySelector('[data-toc-disclosure]');
+    const currentLabel = toc.querySelector('[data-toc-current]');
+    const desktop = window.matchMedia('(min-width: 901px)');
+    const updateDisclosure = () => {
+      if (disclosure instanceof HTMLDetailsElement) disclosure.open = desktop.matches;
+    };
+    updateDisclosure();
+    desktop.addEventListener('change', updateDisclosure);
+    disclosure?.querySelector('summary')?.addEventListener('click', (event) => {
+      if (desktop.matches) event.preventDefault();
+    });
     const groups = Array.from(toc.querySelectorAll('[data-toc-group]')).filter(
       (group): group is HTMLElement => group instanceof HTMLElement,
     );
@@ -137,6 +150,7 @@ for (const heading of headings) {
     const activate = (entry: (typeof entries)[number]) => {
       if (entry.heading.id === activeId) return;
       activeId = entry.heading.id;
+      if (currentLabel instanceof HTMLElement) currentLabel.textContent = entry.link.textContent;
 
       for (const group of groups) {
         const children = group.querySelector('[data-toc-children]');
@@ -166,7 +180,8 @@ for (const heading of headings) {
 
     const updateActiveHeading = () => {
       frame = 0;
-      const headingOffset = 104;
+      const anchorOffset = Number.parseFloat(getComputedStyle(entries[0].heading).scrollMarginTop) || 88;
+      const headingOffset = anchorOffset + 18;
       const pageBottom = window.scrollY + window.innerHeight;
       const documentBottom = document.documentElement.scrollHeight;
       let active = entries[0];
@@ -189,8 +204,22 @@ for (const heading of headings) {
     };
 
     for (const entry of entries) {
-      entry.link.addEventListener('click', () => activate(entry));
+      entry.link.addEventListener('click', () => {
+        const source = entry.heading.closest('[data-paper-source]');
+        if (source instanceof HTMLDetailsElement) source.open = true;
+        activate(entry);
+        if (!desktop.matches && disclosure instanceof HTMLDetailsElement) disclosure.open = false;
+      });
     }
+
+    const openFragmentSource = () => {
+      if (window.location.hash === '#source') {
+        const source = document.querySelector('[data-paper-source]');
+        if (source instanceof HTMLDetailsElement) source.open = true;
+      }
+    };
+    openFragmentSource();
+    window.addEventListener('hashchange', openFragmentSource);
 
     toc.setAttribute('data-toc-ready', '');
     window.addEventListener('scroll', scheduleUpdate, { passive: true });
@@ -199,3 +228,70 @@ for (const heading of headings) {
     scheduleUpdate();
   }
 </script>
+
+<style>
+  .toc-disclosure > summary {
+    list-style: none;
+  }
+
+  .toc-disclosure > summary::-webkit-details-marker {
+    display: none;
+  }
+
+  [data-toc-current] {
+    display: none;
+  }
+
+  @media (max-width: 900px) {
+    .toc {
+      position: sticky;
+      top: calc(var(--site-header-height) + 8px);
+      z-index: 15;
+      padding: 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+    }
+    .toc-disclosure > summary {
+      min-height: 44px;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+    }
+    .toc strong {
+      display: inline;
+      margin: 0;
+      flex-shrink: 0;
+    }
+    [data-toc-current] {
+      display: block;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .toc-disclosure > summary::after {
+      content: '⌄';
+      margin-left: auto;
+    }
+    .toc-disclosure[open] > summary::after {
+      content: '⌃';
+    }
+    .toc nav {
+      position: absolute;
+      left: -1px;
+      right: -1px;
+      top: 100%;
+      padding: 8px;
+      max-height: min(60vh, calc(100dvh - var(--site-header-height) - 80px));
+      overflow: auto;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 0 0 var(--radius) var(--radius);
+      box-shadow: 0 8px 20px rgb(0 0 0 / 0.08);
+    }
+  }
+</style>

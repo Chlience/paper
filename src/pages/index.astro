@@ -27,21 +27,26 @@ const routeGroups = data.tagFacets.map((facet) => ({
       <p class="deck">
         面向训练、推理、架构、Agent、评测、安全与理论的论文阅读档案。每篇笔记保留来源、作者关系、证据边界、局限，以及它和其它论文的连接。
       </p>
+      <div class="home-actions">
+        <a class="home-primary-action" href="/papers/">浏览论文 →</a>
+        <a href="/mainlines/">研究主线</a>
+        <button type="button" data-paper-search-open>搜索笔记</button>
+      </div>
     </div>
     <div class="archive-panel" aria-label="Archive reading contract">
-      <h2>Reading Contract</h2>
-      <p>每篇笔记都把论文主张、本地判断和后续讨论分开记录。</p>
+      <h2>阅读档案</h2>
+      <p>围绕研究问题重建方法，以证据限定结论，并保留来源与阅读范围。</p>
       <dl>
         <div>
-          <dt>{data.papers.length} notes</dt>
-          <dd>独立 Markdown 档案</dd>
+          <dt>{data.papers.length} 篇</dt>
+          <dd>论文笔记</dd>
         </div>
         <div>
-          <dt>{data.tagRoutes.length} routes</dt>
+          <dt>{data.tagRoutes.length} 个</dt>
           <dd>主题入口</dd>
         </div>
         <div>
-          <dt>{data.authors.length} authors</dt>
+          <dt>{data.authors.length} 位</dt>
           <dd>作者档案</dd>
         </div>
         <div>
@@ -55,10 +60,10 @@ const routeGroups = data.tagFacets.map((facet) => ({
   <section class="section home-mainlines">
     <div class="container section-header">
       <div>
-        <h2>Research Mainlines</h2>
+        <h2>研究主线</h2>
         <p>跨材料问题的长期分析入口。每条主线保留自己的检索窗口、分类框架和逐结论证据强度。</p>
       </div>
-      <a class="section-link" href="/mainlines/">View all mainlines</a>
+      <a class="section-link" href="/mainlines/">全部主线 →</a>
     </div>
     <ul class="container home-mainline-index">
       {mainlineData.mainlines.map((mainline) => (
@@ -91,7 +96,7 @@ const routeGroups = data.tagFacets.map((facet) => ({
   <section class="section">
     <div class="container section-header">
       <div>
-        <h2>Latest Reviewed Notes</h2>
+        <h2>最近审阅</h2>
         <p>置顶条目优先，其余按审阅时间列出最近完成本地审阅的论文和技术文章。</p>
       </div>
       <div class="section-header-actions" aria-label="论文审阅入口">
@@ -100,7 +105,7 @@ const routeGroups = data.tagFacets.map((facet) => ({
             {reviewCounts.pending} 篇待审阅
           </a>
         )}
-        <a class="section-link" href="/papers/?review=approved">View all reviewed</a>
+        <a class="section-link" href="/papers/?review=approved">全部已审阅笔记 →</a>
       </div>
     </div>
     <div class="container paper-list">
@@ -111,10 +116,10 @@ const routeGroups = data.tagFacets.map((facet) => ({
   <section class="section">
     <div class="container section-header">
       <div>
-        <h2>Research Routes</h2>
+        <h2>研究主题</h2>
         <p>主题入口用于快速进入同一问题域，数量来自当前归档。</p>
       </div>
-      <a class="section-link" href="/topics/">View all topics</a>
+      <a class="section-link" href="/topics/">全部主题 →</a>
     </div>
     <div class="container route-index">
       {routeGroups.map((group) => (
@@ -137,3 +142,85 @@ const routeGroups = data.tagFacets.map((facet) => ({
     </div>
   </section>
 </Layout>
+
+<style>
+  .home-hero {
+    padding: 40px 0 32px;
+    gap: 36px;
+  }
+
+  .home-hero h1 {
+    font-size: clamp(32px, 5vw, 60px);
+  }
+
+  .home-hero .deck {
+    font-size: 18px;
+  }
+
+  .home-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    margin-top: 24px;
+  }
+
+  .home-actions a, .home-actions button {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+    color: var(--fg);
+    font: inherit;
+    font-size: 14px;
+    cursor: pointer;
+  }
+
+  .home-actions .home-primary-action {
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent);
+  }
+
+  .archive-panel dl {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 12px;
+  }
+
+  .archive-panel dt {
+    font-size: 14px;
+  }
+
+  @media (max-width: 900px) {
+    .home-hero {
+      gap: 24px;
+    }
+    .archive-panel {
+      padding-top: 12px;
+    }
+    .archive-panel h2, .archive-panel > p {
+      display: none;
+    }
+    .archive-panel dl {
+      margin-top: 0;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 580px) {
+    .home-hero {
+      padding-top: 28px;
+    }
+    .home-hero .deck {
+      font-size: 16px;
+      line-height: 1.65;
+    }
+    .archive-panel dl {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>

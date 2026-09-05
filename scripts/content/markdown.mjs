@@ -64,7 +64,7 @@ const getPlainInlineText = (inlineToken) =>
     .trim();
 
 const isFigureCaption = (inlineToken) =>
-  /^(Figure|Fig\.|图)\s*[A-Za-z0-9一二三四五六七八九十.:-]*/i.test(getPlainInlineText(inlineToken));
+  /^(?:Figure|Fig\.|图|Image Source\s*[:：])/i.test(getPlainInlineText(inlineToken));
 
 const isSingleImageParagraph = (inlineToken) => {
   const children = inlineToken?.children ?? [];
@@ -229,7 +229,7 @@ export const getSourceFieldRaw = (markdown, names) => {
   const labels = Array.isArray(names) ? names : [names];
   for (const label of labels) {
     const escaped = escapeRegExp(label);
-    const value = markdown.match(new RegExp(`^-\\s+${escaped}:\\s*(.+)$`, 'mi'))?.[1]?.trim();
+    const value = markdown.match(new RegExp(`^-[ \\t]+${escaped}[:：][ \\t]*([^\\n]+)$`, 'mi'))?.[1]?.trim();
     if (value) return value;
   }
   return '';
@@ -244,6 +244,7 @@ export const getSourceUrl = (markdown) => {
     ['PDF', getSourceFieldRaw(markdown, 'PDF')],
     ['Source', getSourceFieldRaw(markdown, 'Source')],
     ['DOI', getSourceFieldRaw(markdown, 'DOI')],
+    ['Canonical source', getSourceFieldRaw(markdown, 'Canonical source')],
   ];
 
   for (const [label, rawValue] of candidates) {
@@ -267,6 +268,16 @@ export const getSourceUrl = (markdown) => {
   }
 
   return '';
+};
+
+export const getPaperSourceMetadata = (markdown) => {
+  const source = getSection(markdown, 'Source');
+  const canonical = getSourceFieldRaw(source, 'Canonical source');
+  return {
+    sourceUrl: getSourceUrl(source),
+    canonicalSource: canonical.match(/\[[^\]]+\]\(([^)]+)\)/)?.[1] ?? canonical,
+    currentVersion: getSourceField(source, ['Version / revision read', 'Current version read']),
+  };
 };
 
 export const stripPageChrome = (markdown) =>
@@ -359,7 +370,23 @@ export const collectHeadings = (markdown) => {
   return headings;
 };
 
-export const renderMarkdown = (markdown) => {
+export const renderMarkdown = (markdown, { foldPaperSource = false } = {}) => {
   slugCounts.clear();
-  return md.render(markdown);
+  const tokens = md.parse(markdown, {});
+  if (foldPaperSource) {
+    const start = tokens.findIndex((token, index) =>
+      token.type === 'heading_open' && token.tag === 'h2' && tokens[index + 1]?.content === 'Source',
+    );
+    if (start >= 0) {
+      const nextHeading = tokens.findIndex((token, index) =>
+        index > start && token.type === 'heading_open' && token.tag === 'h2',
+      );
+      const htmlToken = (content) => ({ type: 'html_block', content, level: 0 });
+      const end = nextHeading < 0 ? tokens.length : nextHeading;
+      tokens.splice(end, 0, htmlToken('</div></details>\n'));
+      tokens.splice(start + 3, 0, htmlToken('</summary><div class="paper-source-body">\n'));
+      tokens.splice(start, 0, htmlToken('<details class="paper-source" data-paper-source><summary aria-label="来源、版本与阅读范围">\n'));
+    }
+  }
+  return md.renderer.render(tokens, md.options, {});
 };
